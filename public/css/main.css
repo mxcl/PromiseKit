@@ -1,0 +1,70 @@
+html, body {
+  margin: 0;
+}
+
+html {
+  font-family: "PT Serif", Georgia, "Times New Roman", serif;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+  color: #515151;
+}
+
+body {
+  padding: 3rem 0;
+}
+
+code, pre {
+  font-family: Menlo, Monaco, "Courier New", monospace;
+}
+code {
+  padding: .25em .5em;
+  color: #bf616a;
+  background-color: #f9f9f9;
+}
+pre {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+pre, code {
+  font-size: 0.8rem;
+}
+pre code {
+  padding: 0;
+  color: inherit;
+  background-color: transparent;
+}
+.highlight {
+  margin-bottom: 1rem;
+  border-radius: 4px;
+}
+.highlight pre {
+  margin-bottom: 0;
+}
+
+.github {
+  padding: 0.8rem 1rem;
+  border-radius: 4px;
+  color: #fff;
+  opacity: 0.8;
+  margin: 0 0 0.5rem 0;
+  display: inline-block;
+
+  background: #268bd2;
+  background: -moz-linear-gradient(top, rgb(52,159,226) 0%, rgb(0,48,191) 100%);
+  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgb(52,159,226)), color-stop(100%, rgb(0,48,191)));
+  background: -webkit-linear-gradient(top, rgb(52,159,226) 0%, rgb(0,48,191) 100%);
+  background: -o-linear-gradient(top, rgb(52,159,226) 0%, rgb(0,48,191) 100%);
+  background: -ms-linear-gradient(top, rgb(52,159,226) 0%, rgb(0,48,191) 100%);
+  background: linear-gradient(to bottom, rgb(52,159,226) 0%, rgb(0,48,191) 100%); 
+}
+.github:hover {
+  text-decoration: none;
+  background-color: #268bd2;
+  opacity: 1;
+}
+
+#pulse {
+  display: inline-block;
+  color: #9a9a9a;
+  margin: 0.75rem;
+}

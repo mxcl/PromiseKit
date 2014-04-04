@@ -1,0 +1,768 @@
+---
+category: hello
+---
+
+Modern development is highly asynchronous: isn’t it about time iOS developers had tools that made programming asynchronously powerful, easy and delightful?
+
+PromiseKit is not just a [Promises](http://wikipedia.org/wiki/Promise_%28programming%29) implementation, it is also a collection of helper functions that make the typical asynchronous patterns we use in iOS development delightful *too*.
+
+PromiseKit is also designed to be integrated into other CocoaPods. If your library has asynchronous operations and you like PromiseKit, then add an opt-in subspec that provides Promises for your users. Documentation to help you integrate PromiseKit into your own pods is provided later in this guide.
+
+<script>
+function foo(rsp) {
+  if (rsp.meta.status == 200) {
+    var pulse = document.getElementById("pulse");
+    pulse.innerHTML = "★" + rsp.data.stargazers_count;
+  }
+}
+
+var script = document.createElement('script');
+script.src = 'https://api.github.com/repos/mxcl/PromiseKit?access_token=c826b3e99f4be66fd134ebabd070e61159ab4d7a&callback=foo';
+
+document.getElementsByTagName('head')[0].appendChild(script);
+</script>
+
+<a class="github" href="https://github.com/mxcl/PromiseKit">PromiseKit on GitHub</a> <span id="pulse"></span>
+
+#Importing PromiseKit
+
+In your [Podfile](http://guides.cocoapods.org/using/using-cocoapods.html):
+
+{% highlight ruby %}
+pod 'PromiseKit'
+{% endhighlight %}
+
+In your `.m` files:
+
+{% highlight c %}
+#import "PromiseKit.h"
+{% endhighlight %}
+
+PromiseKit is modulized; if you only want `Promise` and none of our category additions:
+
+{% highlight ruby %}
+pod 'PromiseKit/base'
+{% endhighlight %}
+
+Or if you only want some of our categories:
+
+{% highlight ruby %}
+pod 'PromiseKit/Foundation'
+pod 'PromiseKit/UIKit'
+pod 'PromiseKit/CoreLocation'
+pod 'PromiseKit/MapKit'
+{% endhighlight %}
+
+#Why Promises?
+
+Synchronous code is clean code. For example, here's the synchronous code to show a gravatar image:
+
+{% highlight objectivec %}
+id md5 = md5(email);
+id url = [@"http://gravatar.com/" stringByAppendingString:md5];
+id data = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
+self.imageView.image = [UIImage imageWithData:data];
+{% endhighlight %}
+
+Clean but blocking: the UI lags: the user rates you one star.
+
+The asynchronous analog suffers from *rightward-drift*:
+
+{% highlight objectivec %}
+id q1 = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
+id q2 = [NSOperationQueue new];
+dispatch_async(q1, ^{
+    id md5 = md5(email);
+    id url = [@"http://gravatar.com/" stringByAppendingString:md5];
+    id rq = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+    [NSURLConnection sendAsynchronousRequest:rq queue:q2
+                           completionHandler:^(id rsp, id data, id err) {
+        UIImage *gravatarImage = [UIImage imageWithData:data];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            self.imageView.image = gravatarImage;
+        });
+    }];
+});
+{% endhighlight %}
+
+The code that does the actual work is now buried inside asynchronicity boilerplate. It is harder to read. The code is less clean.
+
+Promises are chainable, standardized representations of asynchronous tasks. The equivalent code with PromiseKit looks like this:
+
+{% highlight objectivec %}
+#import "PromiseKit.h"
+
+dispatch_promise(^{
+    return md5(email);
+}).then(^(NSString *md5){
+    return [NSURLConnection GET:@"http://gravatar.com/%@", md5];
+}).then(^(UIImage *gravatarImage){
+    self.imageView.image = gravatarImage;
+});
+{% endhighlight %}
+
+Code with promises is about as close as we can get to the minimal cleanliness of synchronous code.
+
+##Explaining That Promises Code
+
+A `Promise` represents the *future* value of an asynchronous task. To obtain the value of that future, we `then` off the Promise.
+
+{% highlight objectivec %}
+Promise *promise = dispatch_promise(^{
+    // we’re in a background thread
+    return md5(email);
+});
+
+// `dispatch_promise` returns a promise representing the
+// future value of the block it executes. You can `then`
+// off any Promise object and it will receive the previous
+// Promise’s value as its parameter.
+
+promise = promise.then(^(NSString *md5){
+    // we’re back in the main thread
+    return [NSURLConnection GET:@"http://gravatar.com/%@", md5];
+});
+
+// Returning a promise from a `then` handler effectively
+// splices that promise into the chain.
+
+promise.then(^(UIImage *gravatarImage){
+    // The NSURLConnection promise resolved to a UIImage
+    self.imageView.image = gravatarImage;
+});
+{% endhighlight %}
+
+#Error Handling
+
+Synchronous code has simple, clean error handling:
+
+{% highlight objectivec %}
+@try {
+    id md5 = md5(email);
+    id url = [@"http://gravatar.com/" stringByAppendingString:md5];
+    url = [NSURL URLWithString:url];
+    id error;
+    id data = [NSData dataWithContentsOfURL:url options:0 error:&error];
+    if (error) @throw error;
+    self.imageView.image = [UIImage imageWithData:data];
+} @catch (id thrownObject) {
+    //…
+}
+{% endhighlight %}
+
+Error handling with asynchronous code is notoriously tricky. Here's an example using `NSURLConnection`, CoreLocation and MapKit:
+
+{% highlight objectivec %}
+void (^errorHandler)(NSError *) = ^(NSError *error){
+    //…
+};
+
+id url = [NSURL URLWithString:@"http://example.com/user.json"];
+id rq = [NSURLRequest requestWithURL:url];
+id q = [NSOperationQueue new];
+
+[NSURLConnection sendAsynchronousRequest:rq queue:q
+                       completionHandler:^(id rsp, id data, id error) {
+    if (error)
+        return errorHandler(error);
+    id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
+    if (error)
+        return errorHandler(error);
+    id home = [json valueForKeyPath:@"user.home.address"];
+    [[CLGeocoder new] geocodeAddressString:home
+                         completionHandler:^(id placemarks, id error) {
+        if (error)
+            return errorHandler(error);
+        id placemark = [[MKPlacemark alloc] initWithPlacemark:placemarks[0]];
+        MKDirectionsRequest *rq = [MKDirectionsRequest new];
+        rq.source = [MKMapItem mapItemForCurrentLocation];
+        rq.destination = [[MKMapItem alloc] initWithPlacemark:placemark];
+        id directions = [[MKDirections alloc] initWithRequest:rq];
+        [directions calculateDirectionsWithCompletionHandler:^(id rsp, id error) {
+            if (error) {
+                errorHandler(error);
+            } else {
+                //…
+            }
+        }];
+    }];
+}];
+{% endhighlight %}
+
+All the explicit error handling clutters the code.
+
+##Promises Have Elegant Error Handling
+
+{% highlight objectivec %}
+#import "PromiseKit.h"
+
+[NSURLConnection GET:@"http://example.com/user.json"].then(^(id json){
+    id home = [json valueForKeyPath:@"user.home.address"];
+    return [CLGeocoder geocode:home];
+}).then(^(CLPlacemark *placemark){
+    MKDirectionsRequest *rq = [MKDirectionsRequest new];
+    rq.source = [MKMapItem mapItemForCurrentLocation];
+    rq.destination = [[MKMapItem alloc] initWithPlacemark:placemark];
+    return [MKDirections promise:rq];
+}).then(^(MKDirectionsResponse *directions){
+    //…
+}).catch(^(NSError *error){
+    //…
+});
+{% endhighlight %}
+
+Errors and exceptions break the chain of promises and bubble up to the next `catch` handler. Any exceptions are caught and wrapped in an NSError object. The original exception is accessible via `error.userInfo[PMKThrown]`.
+
+This tends to work well for asynchronous chains because typically you want to know if the whole chain succeeded or the whole chain failed. You don’t want to micromanage the error handling every step of the way.
+
+The above makes use of PromiseKit’s category additions to the iOS SDK. Mostly PromiseKit’s categories are logical conversions of block-based or delegate-based asynchronous patterns to Promises. `NSURLConnection+PromiseKit` additionally detects that the response is JSON (from the HTTP headers) and deserializes that JSON in a background thread. All of PromiseKit’s categories are optional CocoaPods subspecs.
+
+
+#Say Goodbye to Asynchronous State Machines
+
+Promises represent the future value of a task. You can add more than one `then` handler to a promise. Even after the promise has been fulfilled. If the promise already has a value the then handler is called immediately:
+
+{% highlight objectivec %}
+@implementation MyViewController {
+    Promise *gravatar;
+}
+
+- (void)viewDidLoad {
+    gravatar = dispatch_promise(^{
+        return md5(email);
+    }).then(^(NSString *md5){
+        return [NSURLConnection GET:@"http://gravatar.com/%@", md5];
+    });
+
+    gravatar.then(^(UIImage *image){
+        self.imageView.image = image;
+    });
+}
+
+- (void)someTimeLater {
+    gravatar.then(^(UIImage *image){
+        // Called immediately, or later. Either way: we’re covered.
+        self.otherImageView.image = image;
+    });
+}
+
+@end
+{% endhighlight %}
+
+Promises can only exist in two states, *pending* or *resolved*. The resolved state is either fulfilled or rejected (an `NSError` object). A Promise can move from pending to resolved **exactly once**. Whichever state the Promise is in, you can `then` off it.
+
+
+#Waiting on Multiple Asynchronous Operations
+
+One common reason to use asynchronous variants is so we can do two or more asynchronous operations simultaneously. However writing code that acts when all the simultaneous operations have completed is tricky and bug-prone. Not so with PromiseKit:
+
+{% highlight objectivec %}
+Promise *grabcat = [NSURLConnection GET:@"http://placekitten.org/%d/%d", w, h];
+Promise *locater = [CLLocationManager promise];
+
+[Promise when:@[grabcat, locater]].then(^(NSArray *results){
+    // results[0] is the `UIImage *` from grabcat
+    // results[1] is the `CLLocation *` from locater
+}).catch(^(NSError *error){
+    // if any Promises fail, the `catch` handler is executed
+    // immediately any other Promises are discarded
+    
+});
+{% endhighlight %}
+
+
+#Unusually Tolerant Syntax
+
+The block you pass to `then` or `catch` can have return type of `Promise`, or any object, or nothing. And it can have a parameter of `id`, or a specific class type, or nothing.
+
+So all of these are valid:
+
+{% highlight objectivec %}
+myPromise.then(^{
+    // no return
+});
+
+myPromise.then(^(id obj){
+    // no return
+});
+
+myPromise.then(^(id obj){
+    return @1;
+});
+
+myPromise.then(^{
+    return @2;
+});
+{% endhighlight %}
+
+Clang is smart so you don’t (usually) have to specify a return type for your block.
+
+This is not usual to Objective-C or blocks. Usually everything is very explicit. We are using introspection to determine what arguments and return types you are working with. Thus, programming with PromiseKit has similarities to programming with (more) modern languages like Ruby or Javascript.
+
+In fact these (and more) are also fine:
+
+{% highlight objectivec %}
+myPromise.then(^{
+    return 1;
+}).then(^(NSNumber *n){
+    assert([n isEqual:@1]);
+});
+
+myPromise.then(^{
+    return false;
+}).then(^(NSNumber *n){
+    assert([n isEqual:@NO]);
+});
+{% endhighlight %}
+
+
+#The Category Additions
+
+PromiseKit aims to provide a category analog for all one-time asynchronous operations in the iOS SDK.
+
+Notably we don’t provide a Promise for eg. `UIButton` actions. Promises can only resolve once, and buttons can be pushed again and again.
+
+
+##NSURLConnection+PromiseKit
+
+{% highlight objectivec %}
+#import "PromiseKit+Foundation.h"
+
+[NSURLConnection GET:@"http://promisekit.org"].then(^(NSData *data){
+    
+}).catch(^(NSError *error){
+    NSHTTPURLResponse *rsp = error.userInfo[PMKURLErrorFailingURLResponse];
+    int HTTPStatusCode = rsp.statusCode;
+});
+{% endhighlight %}
+
+And a convenience string format variant:
+
+{% highlight objectivec %}
+[NSURLConnection GET:@"http://example.com/%@", folder].then(^{
+    //…
+});
+{% endhighlight %}
+
+And a variant that constructs a correctly URL encoded query string from a dictionary:
+
+{% highlight objectivec %}
+[NSURLConnection GET:@"http://example.com" query:@{@"foo": @"bar"}].then(^{
+    //…
+});
+{% endhighlight %}
+
+And a POST variant:
+
+{% highlight objectivec %}
+[NSURLConnection POST:@"http://example.com" formURLEncodedParameters:@{@"key": @"value"}].then(^{
+    //…
+});
+{% endhighlight %}
+
+PromiseKit reads the response headers and decodes the result you actually wanted (in a background thread):
+
+{% highlight objectivec %}
+[NSURLConnection GET:@"http://example.com/some.json"].then(^(NSDictionary *json){
+    assert([json isKindOfClass:[NSDictionary class]]);
+});
+
+[NSURLConnection GET:@"http://placekitten.org/100/100"].then(^(UIImage *image){
+    assert([image isKindOfClass:[UIImage class]]);
+});
+{% endhighlight %}
+
+Otherwise we return the raw `NSData`.
+
+And of course a variant that takes an `NSURLRequest *`:
+
+{% highlight objectivec %}
+NSMutableURLRequest *rq = [NSMutableURLRequest requestWithURL:url];
+[rq addValue:@"PromiseKit" forHTTPHeader:@"User-Agent"]; 
+[NSURLConnection promise:rq].then(^(NSData *data){
+    //…
+})
+{% endhighlight %}
+
+
+##CLLocationManager+PromiseKit
+
+A Promise to get the user’s location:
+
+{% highlight objectivec %}
+#import "PromiseKit+CoreLocation.h"
+
+[CLLocationManager promise].then(^(CLLocation *currentUserLocation){
+    //…
+}).catch(^(NSError *error){
+    //…
+});
+{% endhighlight %}
+
+
+##CLGeocoder+PromiseKit
+
+{% highlight objectivec %}
+#import "PromiseKit+CoreLocation.h"
+
+[CLGeocoder geocode:@"mount rushmore"].then(^(CLPlacemark *firstPlacemark){
+    //…
+}).catch(^(NSError *error){
+    //…
+});
+
+CLLocation *someLocation = …;
+[CLGeocoder reverseGeocode:someLocation].then(^(CLPlacemark *firstPlacemark){
+    //…
+}).catch(^(NSError *error){
+    //…
+});
+{% endhighlight %}
+
+`CLGeocoders` asynchronously return one or *more* placemarks. The Promise thens the first placemark, and as the optional second parameter, all the placemarks (which often is just an array of one item). So if you want to check all placemarks, ensure you `then` two parameters.
+
+
+##UIAlertView+PromiseKit
+
+A promise for showing a `UIAlertView`:
+
+{% highlight objectivec %}
+#import "PromiseKit+UIKit.h"
+
+UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You Didn’t Save!"
+                      message:@"You will lose changes."
+                     delegate:nil
+            cancelButtonTitle:@"Cancel"
+            otherButtonTitles:@"Lose Changes", @"Panic", nil];
+
+alert.promise.then(^(NSNumber *dismissedIndex){
+    //…
+});
+{% endhighlight %}
+
+This promise will not trigger a `catch` handler. At one point we had the cancel button trigger `catch`, but this led to unreliable error handling. **Only errors trigger `catch` handlers**.
+
+The promise optionally thens the `UIAlertView` instance as the second parameter, should you need it.
+
+
+##UIActionSheet+PromiseKit
+
+Same pattern as for `UIAlertView`.
+
+
+##UIViewController+PromiseKit
+
+We provide a pattern for modally presenting ViewControllers and getting back a result:
+
+{% highlight objectivec %}
+#import "PromiseKit+UIKit.h"
+
+@implementation MyRootViewController
+
+- (void)foo {
+    UIViewController *vc = [MyDetailViewController new];
+    [self promiseViewController:vc animated:YES completion:nil].then(^(id result){
+        // the result from below in `someTimeLater`
+        // PromiseKit automatically dismisses the MyDetailViewController
+    });
+}
+
+@end
+
+@implementation MyDetailViewController
+
+- (void)someTimeLater {
+    [self fulfill:someResult];
+    
+    // if you want to trigger the `catch` use `[self reject:foo]`
+}
+
+@end
+{% endhighlight %}
+
+As a bonus if you pass a `MFMailComposeViewController` we handle its delegation behind the scenes and convert it into a Promise:
+
+{% highlight objectivec %}
+id mailer = [MFMailComposerViewController new];
+[self promiseViewController:mailer animated:YES completion:nil].then(^(NSNumber *n){
+    // num is the result passed from the MFMailComposeViewControllerDelegate
+}).catch(^{
+    // the error from the delegate if that happened
+});
+{% endhighlight %}
+
+Please submit equivalents for eg. `UIImagePickerController`.
+
+
+##MKDirections+PromiseKit
+
+{% highlight objectivec %}
+#import "PromiseKit+MapKit.h"
+
+MKDirectionsRequest *rq = [MKDirectionsRequest new];
+rq.source = [MKMapItem mapItemForCurrentLocation];
+rq.destination = …;
+[MKDirections promise:rq].then(^(MKDirectionsResponse *rsp){
+    //…
+}).catch(^{
+    //…
+});
+
+[MKDirections promiseETA:rq].then(^(MKETAResponse *rsp){
+    //…
+}).catch(^{
+    //…
+});
+{% endhighlight %}
+
+
+##MKMapSnapshotter+PromiseKit
+
+{% highlight objectivec %}
+#import "PromiseKit+MapKit.h"
+
+MKSnapshotter *snapshotter = [MKSnapshotter new];
+snapshotter.region = …;
+[snapshotter promise].then(^(MKMapSnapshot *snapshot){
+    //…
+}).catch(^{
+    //…
+});
+{% endhighlight %}
+
+
+##SocialFramework+PromiseKit
+
+Available! See the headers.
+
+#More Documentation
+
+Check out [Promise.h](https://github.com/mxcl/PromiseKit/blob/master/PromiseKit/Promise.h) and the rest of the sources.
+
+###Guides
+
+* [Promises Pay](http://blog.popularpays.com/tech/2014/4/28/popular-promises)
+
+
+#Promisizing Your Codebase
+
+This:
+
+{% highlight objectivec %}
+- (void)calculateTenThousandRandomNumbersWithCompletionBlock:(void(^)(NSArray *))completionBlock {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+        NSMutableArray *numbers = [NSMutableArray new];
+        for (int x = 0; x < 10000; x++)
+            [numbers addObject:@(arc4random())];
+        dispatch_async(dispatch_get_main_queue(), ^{
+            completionBlock(numbers);
+        });
+    });
+}
+
+- (void)viewDidLoad {
+    [self calculateTenThousandRandomNumbersWithCompletionBlock:^(NSArray *numbers){
+        //…
+    }];
+}
+{% endhighlight %}
+
+Becomes this:
+
+{% highlight objectivec %}
+- (Promise *)tenThousandRandomNumbers {
+    return dispatch_promise(^{
+        NSMutableArray *numbers = [NSMutableArray new];
+        for (int x = 0; x < 10000; x++)
+            [numbers addObject:@(arc4random())];
+        return numbers;
+    });
+}
+
+- (void)viewDidLoad {
+    self.tenThousandRandomNumbers.then(^(NSArray *numbers){
+        //…
+    }];
+}
+{% endhighlight %}
+
+
+##Wrapping e.g. Parse
+
+{% highlight objectivec %}
+- (Promise *)allUsers {
+    return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter){
+        PFQuery *query = [PFQuery queryWithClassName:@"User"];
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (!error) {
+                fulfiller(objects);
+            } else {
+                rejecter(error);
+            }
+        }];
+    }];
+}
+{% endhighlight %}
+
+`PromiseResolver` is `typedef void (^PromiseResolver)(id)`, i.e. a block that takes a parameter of `id` and returns `void`.
+
+For the community’s benefit, someone should create a `Parse+PromiseKit` pod.
+
+
+##Wrapping eg. `AFNetworking`
+
+{% highlight objectivec %}
+@interface AFHTTPRequestOperation (PromiseKit)
+
+- (Promise *)promise {
+    return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter){
+        [self setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *op, id responseObject){
+
+            // PMKManifold allows you to fulfill promises with
+            // multiple parameters.
+            fulfiller(PMKManifold(responseObject, op));
+
+            // We inverted the parameter order relative to the
+            // AFNetworking completionBlock because promises order
+            // their parameters from most to least important. Thus
+            // consumers can `then` without the second parameter
+            // if they don’t need it.
+
+        }) failure:^(AFHTTPRequestOperation *op , NSError *error){
+            rejecter(error);
+        }];
+    }];
+}
+
+@end
+{% endhighlight %}
+
+For the community’s benefit, someone should create an `AFNetworking+PromiseKit` pod.
+
+
+#Adding Promises to Third Party Libraries
+
+It would be great if every library with asynchronous functionality would offer opt-in `Promise *` variants for the asynchronous mechanisms.
+
+Should you want to add PromiseKit integration to your library, the general premise is to add an opt-in `subspec` to your `podspec` that provides methods that return `Promise`s. For example if we imagine a library that overlays a kitten on an image:
+
+{% highlight objectivec %}
+@interface ABCKitten
+- (instancetype)initWithImage:(UIImage *)image;
+- (void)overlayKittenWithCompletionBlock:(void)(^)(UIImage *, NSError *))completionBlock;
+@end
+{% endhighlight %}
+
+Opt-in PromiseKit support would include a new file `ABCKitten+PromiseKit.h`:
+
+{% highlight objectivec %}
+#import <PromiseKit/Promise.h>
+#import "ABCKitten.h"
+
+
+@interface ABCKitten (PromiseKit)
+
+/**
+ * Returns a Promise that overlays a kitten image.
+ * @return A Promise that will `then` a `UIImage *` object.
+ */
+- (Promise *)overlayKitten;
+
+@end
+{% endhighlight %}
+
+It's crucially important to document your Promise methods [properly](http://nshipster.com/documentation/), because subsequent `then`s are not strongly typed, thus the only clue the user has is how you named your method and the documentation they can get when **⌥** clicking that method.
+
+Consumers of your library would then include in their `Podfile`:
+
+{% highlight ruby %}
+pod 'ABCKitten/PromiseKit'
+{% endhighlight %}
+
+This is the “opt-in” step.
+
+Finally you need to modify your `podspec`. If it was something like this:
+
+{% highlight ruby %}
+Pod::Spec.new do |s|
+  s.name         = "ABCKitten"
+  s.version      = "1.1"
+  s.source_files = 'ABCKitten.{m,h}'
+end
+{% endhighlight %}
+
+Then you would need to convert it to the following:
+
+{% highlight ruby %}
+Pod::Spec.new do |s|
+  s.name         = "ABCKitten"
+  s.version      = "1.1"
+
+  s.default_subspec = 'base'  # ensures that the PromiseKit additions are opt-in
+
+  s.subspec 'base' do |ss|
+    ss.source_files = 'ABCKitten.{m,h}'
+  end
+
+  s.subspec 'PromiseKit' do |ss|
+    ss.dependency 'PromiseKit/base', 'ABCKitten/base'
+    ss.source_files = 'ABCKitten+PromiseKit.{m,h}'
+  end
+end
+{% endhighlight %}
+
+##Adding PromiseKit to Someone Else’s Pod
+
+Firstly you should try submitting the above to the project itself. If they won’t add it then you'll need to make your own pod. Use the naming scheme: `ABCKitten+PromiseKit`.
+
+
+#Why PromiseKit?
+
+There are other Promise implementations for iOS, but in this author’s opinion, none of them are as pleasant to use as PromiseKit.
+
+* [Bolts](https://github.com/BoltsFramework/Bolts-iOS) was the inspiration for PromiseKit. I thought that—finally—someone had written a decent Promises implementation for iOS. The lack of dedicated `catch` handler, the (objectively) ugly syntax and the overly complex design was a disappointment. To be fair Bolts is not a Promise implementation, it’s…something else. You may like it, and certainly it is backed by big names™. Fundamentally, Promise-type implementations are not hard to write, so really you’re making a decision based on how flexible the API is while simulatenously producing readable, clean code. I have worked hard to make PromiseKit the best choice.
+* [RXPromise](https://github.com/couchdeveloper/RXPromise) is an excellent Promise implementation that is not quite perfect (IMHO). By default thens are executed in background threads, which usually is inconvenient. `then` always return `id` and always take `id`, which makes code less elegant. There is no explicit `catch`, instead `then` always takes two blocks, the second being the error handler, which is ugly. The interface for `Promise` allows any caller to resolve it breaking encapsulation. Otherwise an excellent implementation.
+* [CollapsingFutures](https://github.com/Strilanc/ObjC-CollapsingFutures) looks good, but is not thoroughly documented so a thorough review would require further experimentation.
+* [Many others](http://cocoapods.org/?q=promise)
+
+PromiseKit is well tested, and inside apps on the store. It also is fully documented, even within Xcode (⌥ click any method).
+
+
+#Caveats
+
+* We are version 0.9 and thus reserve the right to remove/change API before 1.0. Probably we won’t; we’re just being prudent by stating this advisory.
+* PromiseKit is not thread-safe. This is not intentional, we will fix that. However, in practice the only way to compromise PromiseKit is to keep a pointer to an pending Promise and use that from multiple threads. You can execute thens in many different contexts and the underlying immutability of Promises means PromiseKit is inherently thread-safe.
+* If you don't have at least one catch handler in your chain then errors are silently absorbed which may cause you confusion. We intend to log unhandled errors, (with an opt-in method to have them get thrown and thus crash your app in cases where that is desired).
+
+
+#Promises/A+ Compliance
+
+PromiseKit is [compliant](http://promisesaplus.com) excluding:
+
+* Our `then` does not take a failure handler, instead we have a dedicated `catch`
+
+If you find further non-compliance please open a [ticket](https://github.com/mxcl/PromiseKit/issues/new).
+
+
+#Terminology
+
+* Promises start in a **pending** state.
+* Promises **resolve** to become **fulfilled** or **rejected**.
+
+
+#The Fine Print
+
+The fine print of PromiseKit is mostly exactly what you would expect, so don’t confuse yourself: only come back here when you find yourself curious about more advanced techniques.
+
+* Returning a Promise as the value of a `then` (or `catch`) handler will cause any subsequent handlers to wait for that Promise to resolve.
+* Returning an instance of `NSError` or throwing an exception within a then block will cause PromiseKit to bubble that object up to the nearest catch handler.
+* `catch` handlers are always passed an `NSError` object.
+* Returning something other than an `NSError` from a `catch` handler causes PromiseKit to consider the error “corrected”, and execution will continue at the next `then` handler using the object you returned as the input.
+* Not returning from a `catch` handler (or returning nil) causes PromiseKit to consider the Promise complete. No further bubbling occurs.
+* Nothing happens if you add a `then` to a failed Promise (unless you subsequently add a `catch` handler to the Promise returned from that `then`)
+* Adding a `catch` handler to a failed Promise will execute that fail handler: this is converse to adding the same to a **pending** Promise that has a higher `catch` than the one you just added.
+
+
+#Cancellation & Progress
+
+A good asynchronous framework provides cancellation and progress information. Our thinking with PromiseKit is that `NSProgress` is the right tool. Feel free to submit issues that discuss how this might work.

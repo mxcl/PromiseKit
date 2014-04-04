@@ -1,0 +1,65 @@
+p, h1, h2, h3, .post-date, ul, pre {
+  margin-left: auto;
+  margin-right: auto;
+}
+pre {
+  background-color: #f9f9f9;
+  overflow-x: scroll;
+}
+
+@media (min-width: 320px) {
+  html {
+    font-size: 12px;
+  }
+  p, h1, h2, h3, .post-date, ul {
+    margin-left: 16px;
+    margin-right: 16px;
+  }
+  pre {
+    padding: 16px;
+  }
+}
+@media (min-width: 320px) and (orientation: landscape) {
+  p, h1, h2, h3, .post-date, ul {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  pre {
+    padding: 20px;
+    line-height: 1.7;
+  }
+}
+@media (min-width: 640px) {
+  html {
+    font-size: 20px;
+  }
+  body {
+    padding: 5rem 0;
+  }
+  p, h1, h2, h3, .post-date, ul {
+    max-width: 30rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  pre {
+    min-width: 28rem;
+    display: inline-block;
+    text-align: left;
+    padding: 1rem;
+    line-height: 1.4;
+  }
+  .highlight {
+    text-align: center;
+  }  
+}
+@media (min-width: 800px) {
+  html {
+    font-size: 20px;
+  }
+  p, h1, h2, h3, .post-date, ul {
+    max-width: 38rem;
+  }
+  pre {
+    min-width: 36rem;
+  }
+}

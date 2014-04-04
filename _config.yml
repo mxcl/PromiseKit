@@ -1,0 +1,4 @@
+permalink:  /:title
+pygments:   true
+paginate:   4
+markdown:   kramdown
