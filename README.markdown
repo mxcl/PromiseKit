@@ -2,7 +2,7 @@ Modern development is highly asynchronous; isn’t it about time iOS developers 
 
 PromiseKit is not just a Promises implementation, it is also a collection of helper functions that make the typical asynchronous patterns we use in iOS development delightful *too*.
 
-PromiseKit is also designed to be integrated into other CocoaPods. If your library has asyncronous operations and you like PromiseKit, then add an opt-in subspec that provides Promises for your users. HOWTO provided later in this README.
+PromiseKit is also designed to be integrated into other CocoaPods. If your library has asynchronous operations and you like PromiseKit, then add an opt-in subspec that provides Promises for your users. Documentation to help you integrate PromiseKit into your own pods is provided later in this README.
 
 
 #Using PromiseKit
