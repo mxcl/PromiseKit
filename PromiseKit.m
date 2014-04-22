@@ -12,6 +12,7 @@
 #define NSErrorWithThrown(e) [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeThrown userInfo:@{PMKThrown: e}]
 #define IsPromise(o) ([o isKindOfClass:[Promise class]])
 #define IsPending(o) (((Promise *)o)->result == nil)
+#define PMKE(txt) [NSException exceptionWithName:@"PromiseKit" reason:@"PromiseKit: " txt userInfo:@""]
 
 static const id PMKNull = @"PMKNull";
 
@@ -24,7 +25,7 @@ static void ResolveRecursively(Promise *);
  */
 static id safely_call_block(id frock, id result) {
     if (!frock)
-        @throw @"PromiseKit: Internal error!";
+        @throw PMKE(@"Internal error");
 
     if (result == PMKNull)
         result = nil;
@@ -306,11 +307,11 @@ static void RejectRecursively(Promise *promise) {
 
 - (void)resolve:(id)value {
     if (promise->result)
-        @throw @"PromiseKit: Deferred already rejected or resolved!";
+        @throw PMKE(@"Deferred already resolved");
     if ([value isKindOfClass:[Promise class]])
-        @throw @"PromiseKit: You may not pass a Promise to [Deferred resolve:]";
+        @throw PMKE(@"You may not pass a Promise to [Deferred resolve:]");
     if ([value isKindOfClass:[NSError class]])
-        @throw @"PromiseKit: You may not pass an NSError to [Deferred resolve:]";
+        @throw PMKE(@"You may not pass an NSError to [Deferred resolve:]");
     if (!value)
         value = PMKNull;
 
@@ -320,9 +321,9 @@ static void RejectRecursively(Promise *promise) {
 
 - (void)reject:(id)error {
     if (promise->result)
-        @throw @"PromiseKit: Deferred already rejected or resolved!";
+        @throw PMKE(@"Deferred already resolved");
     if ([error isKindOfClass:[Promise class]])
-        @throw @"PromiseKit: You may not pass a Promise to [Deferred reject:]";
+        @throw PMKE(@"You may not pass a Promise to [Deferred reject:]");
     if (!error)
         error = [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeUnknown userInfo:nil];
     if (![error isKindOfClass:[NSError class]])
