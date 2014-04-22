@@ -1,4 +1,4 @@
-#import "macros.m"
+#import "Private/macros.m"
 #import "PromiseKit/Deferred.h"
 #import "PromiseKit/Promise.h"
 #import "PromiseKit+UIKit.h"

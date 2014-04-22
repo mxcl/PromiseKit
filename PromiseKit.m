@@ -5,9 +5,9 @@
 @import Foundation.NSKeyValueCoding;
 @import Foundation.NSMethodSignature;
 @import Foundation.NSPointerArray;
+#import "Private/NSMethodSignatureForBlock.m"
 #import "PromiseKit/Promise.h"
 #import "PromiseKit/Deferred.h"
-#import "NSMethodSignatureForBlock.m"
 
 #define NSErrorWithThrown(e) [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeThrown userInfo:@{PMKThrown: e}]
 static const id PMKNull = @"PMKNull";

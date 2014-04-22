@@ -506,4 +506,4 @@ Promise *gcdreject() {
 
 __EOBJC__
 
-require_relative '.libtests.rb'
+require_relative 'Private/xctest.rb'

@@ -1,5 +1,5 @@
 @import CoreLocation.CLLocationManagerDelegate;
-#import "macros.m"
+#import "Private/macros.m"
 #import "PromiseKit+CoreLocation.h"
 #import "PromiseKit/Deferred.h"
 #import "PromiseKit/Promise.h"

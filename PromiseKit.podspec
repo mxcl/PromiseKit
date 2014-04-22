@@ -1,5 +1,5 @@
 Pod::Spec.new do |s|
-  preserved =  %w{macros.m NSMethodSignatureForBlock.m PromiseKit}
+  preserved =  %w{Private PromiseKit}
 
   s.name = "PromiseKit"
   s.version = "0"
