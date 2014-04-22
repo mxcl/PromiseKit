@@ -2,7 +2,7 @@ Modern development is highly asynchronous; isn’t it about time iOS developers 
 
 PromiseKit is not just a Promises implementation, it is also a collection of helper functions that make the typical asynchronous patterns we use in iOS development delightful *too*.
 
-PromiseKit is also designed to be integrated into other CocoaPods. If your library has asyncronous operations and you like PromiseKit, then add an opt-in subspec that provides Promises for your users. HOWTO provided later in this README.
+PromiseKit is also designed to be integrated into other CocoaPods. If your library has asynchronous operations and you like PromiseKit, then add an opt-in subspec that provides Promises for your users. Documentation to help you integrate PromiseKit into your own pods is provided later in this README.
 
 
 #Using PromiseKit
@@ -28,9 +28,9 @@ pod 'PromiseKit/CoreLocation'
 ```
 
 
-#What is a Promise?
+#What’s This All About?
 
-Synchronous code is clean code. For example, showing a gravatar image:
+Synchronous code is clean code. For example, here's the synchronous code to show a gravatar image:
 
 ```objc
 NSString *md5 = md5(email);
@@ -42,7 +42,6 @@ self.imageView.image = [UIImage imageWithData:data];
 Clean but blocking: the UI lags: the user rates you one star.
 
 The asynchronous analog suffers from *rightward-drift*:
-
 
 ```objc
 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -74,8 +73,9 @@ dispatch_promise(^{
 });
 ```
 
-Code with promises is about as close as we can get to clean, synchronous code (at least until Apple give us `@await`…).
+Code with promises is about as close as we can get to the minimal cleanliness of synchronous code (at least until Apple give us `@await`…).
 
+The above code dispatches a promise to a background queue (where it computes the md5), the md5 is then input to the next Promise which returns a new Promise that downloads the gravatar. If you return a Promise from a `then` block the next Promise (ie. the Promise returned by the `then`) waits (asynchronously) for that Promise to fulfill before it executes its `then` blocks. PromiseKit’s `NSURLConnection` category methods automatically decode images in a background thread before passing them to the next Promise.
 
 #Error Handling
 
@@ -184,12 +184,12 @@ A key understanding is that Promises can only exist in two states, *pending* or 
 One powerful reason to use asynchronous variants is so we can do two or more asynchronous operations simultaneously. However writing code that acts when the simultaneous operations have all completed is hard. Not so with PromiseKit:
 
 ```objc
-id a = [NSURLConnection GET:url1];
-id b = [NSURLConnection GET:url2];
+id grabcat = [NSURLConnection GET:@"http://placekitten.org/%d/%d", w, h];
+id locater = [CLLocationManater promise];
 
-[Promise when:@[a, b]].then(^(NSArray *results){
-    // results[0] is the result from a
-    // results[1] is the result from b
+[Promise when:@[grabcat, locater]].then(^(NSArray *results){
+    // results[0] is the `UIImage *` from grabcat
+    // results[1] is the `CLLocation *` from locater
 }).catch(^(NSError *error){
     // with `when`, if any of the Promises fail, the `catch` handler is executed
     NSArray *suberrors = error.userInfo[PMKThrown];
@@ -205,6 +205,28 @@ id b = [NSURLConnection GET:url2];
 #Forgiving Syntax
 
 In case you didn't notice, the block you pass to `then` or `catch` can have return type of `Promise`, or any object, or nothing. And it can have a parameter of `id`, or a specific class type, or nothing.
+
+So, these are all valid:
+
+```objc
+myPromise.then(^{
+    //noop
+});
+
+myPromise.then(^(id obj){
+    //noop
+});
+
+myPromise.then(^(id obj){
+    return @1;
+});
+
+myPromise.then(^{
+    return @2;
+});
+```
+
+Clang is smart so you don’t (usually) have to specify a return type for your block.
 
 This is not usual to Objective-C or blocks. Usually everything is very explicit. We are using introspection to determine what arguments and return types you are working with. Thus, programming with PromiseKit has similarities to programming with more modern languages like Ruby or Javascript.
 
@@ -270,6 +292,16 @@ PromiseKit reads the response headers and tries to be helpful:
 ```
 
 Otherwise we return the raw `NSData`.
+
+And of course a variant that just takes an `NSURLRequest *`:
+
+```objc
+NSMutableURLRequest *rq = [NSMutableURLRequest requestWithURL:url];
+[rq addValue:@"PromiseKit" forHTTPHeader:@"User-Agent"]; 
+[NSURLConnetion promise:rq].then(^(NSData *data){
+    //…
+})
+```
 
 
 ##NSURLCache+PromiseKit
@@ -535,7 +567,7 @@ Firstly you should try submitting the above to the project itself. If they won�
 
 There are other Promise implementations for iOS, but in this author’s opinion, none of them are as pleasant to use as PromiseKit.
 
-* [Bolts](https://github.com/BoltsFramework/Bolts-iOS) was the inspiration for PromiseKit. I thought that—finally—someone had written a decent Promises implementation for iOS. The lack of dedicated `catch` handler, the very ugly syntax and the overly complex design was a disappointment. You may like it, and certainly it is backed by big names™. Fundamentally, Promise-type implementations are not hard to write, so you really are making a decision based on how flexible the API is while simulatenously producing readable, clean code. I have worked hard to make PromiseKit the best choice.
+* [Bolts](https://github.com/BoltsFramework/Bolts-iOS) was the inspiration for PromiseKit. I thought that—finally—someone had written a decent Promises implementation for iOS. The lack of dedicated `catch` handler, the (objectively) ugly syntax and the overly complex design was a disappointment. To be fair Bolts is not a Promise implementation, it’s… something else. You may like it, and certainly it is backed by big names™. Fundamentally, Promise-type implementations are not hard to write, so you really are making a decision based on how flexible the API is while simulatenously producing readable, clean code. I have worked hard to make PromiseKit the best choice.
 * [RXPromise](https://github.com/couchdeveloper/RXPromise) is an excellent Promise implementation that is mostly let down by syntax choices. By default thens are executed in background threads, which usually is inconvenient. `then` always return `id` and always take `id`, which makes code less elegant. There is no explicit `catch`, instead `then` always takes two blocks, the second being the error handler, which is ugly. The interface for `Promise` allows any caller to resolve it breaking encapsulation. Otherwise an excellent implementation.
 * [Many others](http://cocoapods.org/?q=promise)
 
