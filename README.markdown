@@ -210,11 +210,11 @@ So, these are all valid:
 
 ```objc
 myPromise.then(^{
-    //noop
+    //…
 });
 
 myPromise.then(^(id obj){
-    //noop
+    //…
 });
 
 myPromise.then(^(id obj){
@@ -247,7 +247,7 @@ An additional important consideration is that we only trigger the catch handler 
     
 }).catch(^(NSError *error){
     NSHTTPURLResponse *rsp = error.userInfo[PMKURLErrorFailingURLResponse];
-    int HTTPStatusCode = rsp.statuscode;
+    int HTTPStatusCode = rsp.statusCode;
 });
 ```
 
@@ -279,15 +279,11 @@ PromiseKit reads the response headers and tries to be helpful:
 
 ```objc
 [NSURLConnection GET:@"http://example.com/some.json"].then(^(NSDictionary *json){
-    if ([json isKindOfClass:[NSDictionary class]]) {
-        NSLog(@"Yes! Indeed, we converted the JSON data into an NSDictionary for you!");
-    }
+    assert([json isKindOfClass:[NSDictionary class]]);
 });
 
 [NSURLConnection GET:@"http://placekitten.org/100/100"].then(^(UIImage *image){
-    if ([image isKindOfClass:[UIImage class]]) {
-        NSLog(@"Yes! Indeed, we converted the data into a UIImage for you!");
-    }
+    assert([image isKindOfClass:[UIImage class]]);
 });
 ```
 
@@ -400,13 +396,6 @@ id mailer = [MFMailComposerViewController new];
 ```
 
 Note that simply importing `PromiseKit.h` will import everything.
-
-
-#Promise Factories
-
-With the next version of Promise Kit we plan to add a Promise-Factory type feature so we can have promises generated from `NSNotificationCenter` and `UIControl`s and that sort of thing. It doesn't make sense to have plain promises because Promises can only be fulfilled once.
-
-PromiseKit aims to be a complete and delightful addition to your toolkit.
 
 
 #Deferred

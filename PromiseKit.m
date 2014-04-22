@@ -10,13 +10,19 @@
 #import "PromiseKit/Deferred.h"
 
 #define NSErrorWithThrown(e) [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeThrown userInfo:@{PMKThrown: e}]
+#define IsPromise(o) ([o isKindOfClass:[Promise class]])
+#define IsPending(o) (((Promise *)o)->result == nil)
+
 static const id PMKNull = @"PMKNull";
 
 static void RejectRecursively(Promise *);
 static void ResolveRecursively(Promise *);
 
-
-static id voodoo(id frock, id result) {
+/**
+ `then` and `catch` are method-signature tolerant, this function calls
+ the block correctly and normalizes the return value to `id`.
+ */
+static id safely_call_block(id frock, id result) {
     if (!frock)
         @throw @"PromiseKit: Internal error!";
 
@@ -51,11 +57,13 @@ static id voodoo(id frock, id result) {
     }
 }
 
-#define IsPromise(o) ([o isKindOfClass:[Promise class]])
-#define IsPending(o) (((Promise *)o)->result == nil)
 
 
-
+/**
+ We have public instance variables so Deferred, ResolveRecursively and
+ RejectRecursively can fulfill promises. Think of it like the C++
+ `friend` keyword.
+ */
 @implementation Promise {
 @public
     NSMutableArray *pendingPromises;
@@ -81,7 +89,7 @@ static id voodoo(id frock, id result) {
         };
 
     if (result) return ^id(id block) {
-        id rv = voodoo(block, result);
+        id rv = safely_call_block(block, result);
         if ([rv isKindOfClass:[Promise class]])
             return rv;
         return [Promise promiseWithValue:rv];
@@ -90,9 +98,9 @@ static id voodoo(id frock, id result) {
     return ^(id block) {
         Promise *next = [Promise new];
         [pendingPromises addObject:next];
+        // avoiding retain cycle by passing self->result as block parameter
         [thens addObject:^(id selfDotResult){
-            // our result has been set, we avoid retain cycle by passing it as a parameter
-            next->result = voodoo(block, selfDotResult);
+            next->result = safely_call_block(block, selfDotResult);
             return next;
         }];
         return next;
@@ -109,7 +117,7 @@ static id voodoo(id frock, id result) {
         };
 
     if (result) return ^id(id block){
-        id rv = voodoo(block, result);
+        id rv = safely_call_block(block, result);
         return [rv isKindOfClass:[Promise class]]
              ? rv
              : [Promise promiseWithValue:rv];
@@ -118,9 +126,9 @@ static id voodoo(id frock, id result) {
     return ^(id block) {
         Promise *next = [Promise new];
         [pendingPromises addObject:next];
+        // avoiding retain cycle by passing self->result as block parameter
         [fails addObject:^(id selfDotResult){
-            // our result has been set, we avoid retain cycle by passing it as a parameter
-            next->result = voodoo(block, selfDotResult);
+            next->result = safely_call_block(block, selfDotResult);
             return next;
         }];
         return next;
@@ -171,8 +179,8 @@ static id voodoo(id frock, id result) {
 + (Promise *)until:(id (^)(void))blockReturningPromises catch:(id)failHandler {
     Deferred *deferred = [Deferred new];
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-retain-cycles"
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Warc-retain-cycles"
 
     __block void (^block)() = ^{
         id promises = blockReturningPromises();
@@ -180,7 +188,7 @@ static id voodoo(id frock, id result) {
             [deferred resolve:o];
             block = nil;  // break retain cycle
         }).catch(^(id e){
-            Promise *rv = voodoo(failHandler, e);
+            Promise *rv = safely_call_block(failHandler, e);
             if ([rv isKindOfClass:[Promise class]])
                 rv.then(block);
             else if (![rv isKindOfClass:[NSError class]])
@@ -189,7 +197,7 @@ static id voodoo(id frock, id result) {
     };
     block();
 
-#pragma clang diagnostic pop
+  #pragma clang diagnostic pop
 
     return deferred.promise;
 }
@@ -203,9 +211,16 @@ static id voodoo(id frock, id result) {
 @end
 
 
-
+/**
+ Static C functions rather that methods on Promise to enforce strict
+ encapsulation and immutability on Promise objects. This may seem strict,
+ but it fits well with the ideals of the Promise pattern. You can be
+ completely certain that third-party libraries and end-users of your
+ Promise based API did not modify your Promises.
+ */
 static void ResolveRecursively(Promise *promise) {
     assert(promise->result);
+    assert(![promise->result isKindOfClass:[NSError class]]);
 
     for (id (^then)(id) in promise->thens) {
         Promise *next = then(promise->result);
@@ -294,6 +309,8 @@ static void RejectRecursively(Promise *promise) {
         @throw @"PromiseKit: Deferred already rejected or resolved!";
     if ([value isKindOfClass:[Promise class]])
         @throw @"PromiseKit: You may not pass a Promise to [Deferred resolve:]";
+    if ([value isKindOfClass:[NSError class]])
+        @throw @"PromiseKit: You may not pass an NSError to [Deferred resolve:]";
     if (!value)
         value = PMKNull;
 
@@ -327,7 +344,7 @@ Promise *dispatch_promise(id block) {
 Promise *dispatch_promise_on(dispatch_queue_t queue, id block) {
     Deferred *deferred = [Deferred new];
     dispatch_async(queue, ^{
-        id result = voodoo(block, nil);
+        id result = safely_call_block(block, nil);
         dispatch_async(dispatch_get_main_queue(), ^{
             if ([result isKindOfClass:[NSError class]])
                 [deferred reject:result];
