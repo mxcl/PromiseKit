@@ -34,7 +34,7 @@ Synchronous code is clean code. For example, showing a gravatar image:
 
 ```objc
 NSString *md5 = md5(email);
-NSString *url = [@"http://gravatar.com/avatar/%@" stringByAppendingString:md5];
+NSString *url = [@"http://gravatar.com/avatar/" stringByAppendingString:md5];
 NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
 self.imageView.image = [UIImage imageWithData:data];
 ```
@@ -47,7 +47,7 @@ The asynchronous analog suffers from *rightward-drift*:
 ```objc
 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     NSString *md5 = md5(email);
-    NSString *url = [@"http://gravatar.com/avatar/%@" stringByAppendingString:md5];
+    NSString *url = [@"http://gravatar.com/avatar/" stringByAppendingString:md5];
     NSURLRequest *rq = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
     [NSURLConnection sendAsynchronousRequest:rq queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         UIImage *gravatarImage = [UIImage imageWithData:data];
@@ -84,7 +84,7 @@ Synchronous code has simple, clean error handling:
 ```objc
 @try {
     NSString *md5 = md5(email);
-    NSString *url = [@"http://gravatar.com/avatar/%@" stringByAppendingString:md5];
+    NSString *url = [@"http://gravatar.com/avatar/" stringByAppendingString:md5];
     NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
     self.imageView.image = [UIImage imageWithData:data];
 } @catch (NSError *error) {
@@ -102,7 +102,7 @@ void (^errorHandler)(NSError *) = ^(NSError *error){
 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     @try {
         NSString *md5 = md5(email);
-        NSString *url = [@"http://gravatar.com/avatar/%@" stringByAppendingString:md5];
+        NSString *url = [@"http://gravatar.com/avatar/" stringByAppendingString:md5];
         NSURLRequest *rq = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
         [NSURLConnection sendAsynchronousRequest:rq queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
 
