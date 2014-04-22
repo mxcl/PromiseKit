@@ -66,6 +66,7 @@ An example usage is an app starting up that must get data from the Internet befo
 #define PMKErrorCodeUnknown 2
 
 
+
 /**
 Executes @param block via `dispatch_async` with `DISPATCH_QUEUE_PRIORITY_DEFAULT`.
 
@@ -75,3 +76,13 @@ The returned `Promise` is resolved with the value returned from @param block (if
 @return A new `Promise` to be executed after @param block.
 */
 Promise *dispatch_promise(id block);
+
+
+
+@import Dispatch.queue;
+
+/**
+ Executes @param block via `dispatch_async` on the specified queue.
+ @see dispatch_promise
+ */
+Promise *dispatch_promise_on(dispatch_queue_t q, id block);

@@ -321,8 +321,12 @@ static void RejectRecursively(Promise *promise) {
 
 
 Promise *dispatch_promise(id block) {
+    return dispatch_promise_on(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), block);
+}
+
+Promise *dispatch_promise_on(dispatch_queue_t queue, id block) {
     Deferred *deferred = [Deferred new];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+    dispatch_async(queue, ^{
         id result = voodoo(block, nil);
         dispatch_async(dispatch_get_main_queue(), ^{
             if ([result isKindOfClass:[NSError class]])

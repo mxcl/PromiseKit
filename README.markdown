@@ -455,7 +455,7 @@ Although for the common case of an operation that runs in the background we offe
 }
 ```
 
-`dispatch_promise` runs on `DISPATCH_QUEUE_PRIORITY_DEFAULT`. If you want other queue priorities then write your own dispatch wrapper around a `Deferred`.
+`dispatch_promise` runs on `DISPATCH_QUEUE_PRIORITY_DEFAULT`. If you need another queue we also provide: `dispatch_promise_on`.
 
 
 #The Fine Print
