@@ -7,7 +7,6 @@ Pod::Spec.new do |s|
   s.license = 'MIT'
   s.summary = 'A delightful Promises implementation for iOS.'
   s.requires_arc = true
-  s.source_files = "PromiseKit/*.h", "PromiseKit.h"
 
   s.homepage = 'http://promisekit.org'
   s.social_media_url = 'https://twitter.com/mxcl'
@@ -17,7 +16,7 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = '10.7'
 
   s.subspec 'base' do |ss|
-    ss.source_files = "PromiseKit.m"
+    ss.source_files = 'PromiseKit/*.h', 'PromiseKit.{h,m}'
     ss.preserve_paths = preserved
     ss.frameworks = 'Foundation'
   end
