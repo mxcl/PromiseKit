@@ -1,4 +1,4 @@
-Modern development is highly asynchronous; isn’t it about time iOS developers had tools that made programming asynchronously powerful, easy and delightful?
+Modern development is highly asynchronous: isn’t it about time iOS developers had tools that made programming asynchronously powerful, easy and delightful?
 
 PromiseKit is not just a Promises implementation, it is also a collection of helper functions that make the typical asynchronous patterns we use in iOS development delightful *too*.
 
@@ -13,7 +13,7 @@ In your [Podfile](http://guides.cocoapods.org/using/the-podfile.html):
 pod 'PromiseKit'
 ```
 
-PromiseKit is modulized. If you don’t want any of our category additions:
+PromiseKit is modulized; if you don’t want any of our category additions:
 
 ```ruby
 pod 'PromiseKit/base'
@@ -73,22 +73,31 @@ dispatch_promise(^{
 });
 ```
 
-Code with promises is about as close as we can get to the minimal cleanliness of synchronous code (at least until Apple give us `@await`…).
+Code with promises is about as close as we can get to the minimal cleanliness of synchronous code. PromiseKit also provides Promise solutions for iOS components that otherwise have no synchronous analog, like `CLLocationManager` and `UIAlertView` which usually require a delegation pattern.
 
-The above code dispatches a promise to a background queue (where it computes the md5), the md5 is then input to the next Promise which returns a new Promise that downloads the gravatar. If you return a Promise from a `then` block the next Promise (ie. the Promise returned by the `then`) waits (asynchronously) for that Promise to fulfill before it executes its `then` blocks. PromiseKit’s `NSURLConnection` category methods automatically decode images in a background thread before passing them to the next Promise.
+*The above code dispatches a promise to a background queue (where it computes the md5), the md5 is then input to the next Promise which returns a new Promise that downloads the gravatar. If you return a Promise from a `then` block the next Promise (ie. the Promise returned by the `then`) waits (asynchronously) for that Promise to fulfill before it executes its `then` blocks. PromiseKit’s `NSURLConnection` category methods automatically decode images in a background thread before passing them to the next Promise.*
 
 #Error Handling
 
 Synchronous code has simple, clean error handling:
 
 ```objc
+extern id download(id url);
+
 @try {
-    NSString *md5 = md5(email);
-    NSString *url = [@"http://gravatar.com/avatar/" stringByAppendingString:md5];
-    NSData *data = [NSData dataWithContentsOfURL:[NSURL URLWithString:url]];
-    self.imageView.image = [UIImage imageWithData:data];
+    id json1 = download(@"http://api.service.com/user/me");
+    id uname = [json1 valueForKeyPath:@"user.name"];
+    id json2 = download([NSString stringWithFormat:@"http://api.service.com/followers/%@", uname]);
+    self.userLabel.text = @(json2[@"count"]).description;
 } @catch (NSError *error) {
-    //TODO
+    //…
+}
+
+id download(id url) {
+    id url = [NSURL URLWithString:@"http://api.service.com/user/me"]
+    id data = [NSData dataWithContentsOfURL:self.url];
+    id json = [NSJSONSerialization JSONObjectWithData:data error:&error];
+    if (error) @throw error;
 }
 ```
 
@@ -96,53 +105,69 @@ Error handling with asynchronous code is notoriously tricky:
 
 ```objc
 void (^errorHandler)(NSError *) = ^(NSError *error){
-    //TODO
+    //…
 };
 
-dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    @try {
-        NSString *md5 = md5(email);
-        NSString *url = [@"http://gravatar.com/avatar/" stringByAppendingString:md5];
-        NSURLRequest *rq = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-        [NSURLConnection sendAsynchronousRequest:rq queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-
-            // the code is now misleading since exceptions thrown in this
-            // block will not bubble up to our @catch
-
-            if (connectionError) {
-                errorHandler(connectionError);
-            } else {
-                UIImage *img = [UIImage imageWithData:data];
-                dispatch_async(dispatch_get_main_queue(), ^{
-                    self.imageView.image = img;
-                });
-            }
-        }];
-    } @catch (NSError *err) {
-        errorHandler(err);
+id url = @"http://api.service.com/user/me";
+id rq = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+[NSURLConnection sendAsynchronousRequest:rq queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+    if (connectionError) {
+        errorHandler(connectionError);
+    } else {
+        dispatch_async(bgq, ^{
+            id jsonError = nil;
+            id json = [NSJSONSerialization JSONObjectWithData:data error:&jsonError]
+            dispatch_async(mainq, ^{
+                if (jsonError) {
+                    errorHandler(jsonError);
+                } else {
+                    id uname = [json valueForKeyPath:@"user.name"];
+                    id url = [NSString stringWithFormat:@"http://api.service.com/followers/%@", uname];
+                    id rq = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
+                    [NSURLConnection sendAsynchronousRequest:rq queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+                        if (connectionError) {
+                            errorHandler(connectionError);
+                        } else {
+                            dispatch_async(bgq, ^{
+                                id jsonError = nil;
+                                id json = [NSJSONSerialization JSONObjectWithData:data error:&jsonError]
+                                dispatch_async(mainq, ^{
+                                    if (jsonError) {
+                                        errorHandler(jsonError);
+                                    } else {
+                                        self.userLabel.text = @(json2[@"count"]).description;
+                                    }
+                                });
+                            });
+                        }
+                    }
+                }
+            });
+        });
     }
-});
+}];
 ```
 
-Yuck! Hideous! And *even more* rightward-drift.
+Wow! Such rightward-drift. To be fair the above could be simplified, but without creating your own `NSOperationQueue` and without using early-return statements and without DRYing out something as common as deserialzing some downloaded JSON, this is what you get. In fact standard asynchronicity handling in iOS practically encourages you to deserialize the JSON on the main thread—simply to avoid rightward-drift.
 
-Promises have elegant error handling:
+##Promises Have Elegant Error Handling
 
 ```objc
 #import "PromiseKit.h"
 
-dispatch_promise(^{
-    return md5(email);
-}).then(^(NSString *md5){
-    return [NSURLConnection GET:@"http://gravatar.com/avatar/%@", md5];
-}).then(^(UIImage *gravatarImage){
-    self.imageView.image = gravatarImage;
+[NSURLConnection GET:@"http://api.service.com/user/me"].then(^(id json){
+    id name = [json valueForKeyPath:@"user.name"];
+    return [NSURLConnection GET:@"http://api.service.com/followers/%@", name];
+}).then(^(id json){
+    self.userLabel.text = @(json[@"count"]).description;
 }).catch(^(NSError *error){
-    //TODO
+    //…
 });
 ```
 
-Errors bubble up to the first `catch` handler in the chain.
+Raised exceptions or `NSError` objects returned from handlers bubble up to the first `catch` handler in the chain.
+
+PromiseKit’s `NSURLConnection` additions correctly propogate errors for you (as well as decoding the JSON automatically in a background thread based on the mime-type the server returns).
 
 
 #Say Goodbye to Asynchronous State Machines
@@ -185,7 +210,7 @@ One powerful reason to use asynchronous variants is so we can do two or more asy
 
 ```objc
 id grabcat = [NSURLConnection GET:@"http://placekitten.org/%d/%d", w, h];
-id locater = [CLLocationManater promise];
+id locater = [CLLocationManager promise];
 
 [Promise when:@[grabcat, locater]].then(^(NSArray *results){
     // results[0] is the `UIImage *` from grabcat
@@ -395,7 +420,7 @@ id mailer = [MFMailComposerViewController new];
 })
 ```
 
-Note that simply importing `PromiseKit.h` will import everything.
+Check out [Promise.h](Private/Promise.h) for more documentation.
 
 
 #Deferred
@@ -518,7 +543,7 @@ Pod::Spec.new do |s|
   s.name         = "ABCKitten"
   s.version      = "1.1"
 
-  s.default_subspec = 'base'
+  s.default_subspec = 'base'  # ensures that we are opt-in
 
   s.subspec 'base' do |ss|
     ss.source_files = 'ABCKitten.{m,h}'
@@ -565,5 +590,5 @@ PromiseKit is well tested, and inside apps on the store. It also is fully docume
 
 #Caveats
 
-* We are version 0.9 and thus reserve the right to remove API before 1.0. Probably we won’t; we’re just being prudent by stating this advisory.
+* We are version 0.9 and thus reserve the right to remove/change API before 1.0. Probably we won’t; we’re just being prudent by stating this advisory.
 * PromiseKit is not thread-safe. This is not intentional, we will fix that. However, in practice the only way to compromise PromiseKit is to keep a pointer to an unresolved Promise and use that from multiple threads. You can execute thens in many different contexts and the underlying immutability of Promises means PromiseKit is inherently thread-safe.

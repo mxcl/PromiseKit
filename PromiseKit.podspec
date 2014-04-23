@@ -2,10 +2,16 @@ Pod::Spec.new do |s|
   preserved =  %w{Private PromiseKit}
 
   s.name = "PromiseKit"
-  s.version = "0"
+  s.version = "0.9.1"
+  s.source = { :git => "https://github.com/mxcl/#{s.name}.git", :tag => s.version }
+  s.license = 'MIT'
+  s.summary = 'A delightful Promises implementation for iOS.'
   s.requires_arc = true
-  s.dependency "ChuzzleKit"
   s.source_files = "PromiseKit/*.h", "PromiseKit.h"
+
+  s.homepage = 'http://promisekit.org'
+  s.social_media_url = 'https://twitter.com/mxcl'
+  s.authors  = { 'Max Howell' => 'mxcl@me.com' }
 
   s.ios.deployment_target = '5.0'
   s.osx.deployment_target = '10.7'
@@ -22,6 +28,7 @@ Pod::Spec.new do |s|
     ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_FOUNDATION=1" }
     ss.preserve_paths = preserved
     ss.frameworks = 'Foundation'
+    ss.dependency "ChuzzleKit"
   end
 
   s.subspec 'UIKit' do |ss|
