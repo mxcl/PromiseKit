@@ -499,11 +499,28 @@ Promise *gcdreject() {
     XCTAssertEqual(x, 1);
 }
 
+- (void)test_30_dispatch_returns_pending_promise {
+    dispatch_promise(^{
+        return [NSURLConnection GET:URL];
+    }).then(^{
+        resolved = YES;
+    });
+    wait(0.1);
+    XCTAssertTrue(resolved);
+}
+
+- (void)test_31_dispatch_returns_promise {
+    dispatch_promise(^{
+        return [Promise promiseWithValue:@1];
+    }).then(^(id o){
+        XCTAssertEqualObjects(o, @1);
+        resolved = YES;
+    });
+    wait(0.1);
+    XCTAssertTrue(resolved);
+}
 
 @end
 
-
-
 __EOBJC__
-
 require_relative 'Private/xctest.rb'

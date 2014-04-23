@@ -345,8 +345,21 @@ Promise *dispatch_promise(id block) {
 Promise *dispatch_promise_on(dispatch_queue_t queue, id block) {
     Deferred *deferred = [Deferred new];
     dispatch_async(queue, ^{
-        id result = safely_call_block(block, nil);
+        __block id result = safely_call_block(block, nil);
         dispatch_async(dispatch_get_main_queue(), ^{
+            if (IsPromise(result)) {
+                Promise *rsvp = (Promise *)result;
+                Promise *next = deferred.promise;
+                if (IsPending(rsvp)) {
+                    [rsvp->thens addObject:^(id o){
+                        next->result = o;
+                        return next;
+                    }];
+                    [rsvp->pendingPromises addObject:next];
+                    return;
+                } else
+                    result = rsvp->result;
+            }
             if ([result isKindOfClass:[NSError class]])
                 [deferred reject:result];
             else
