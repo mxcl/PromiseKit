@@ -12,7 +12,7 @@
 #define NSErrorWithThrown(e) [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeThrown userInfo:@{PMKThrown: e}]
 #define IsPromise(o) ([o isKindOfClass:[Promise class]])
 #define IsPending(o) (((Promise *)o)->result == nil)
-#define PMKE(txt) [NSException exceptionWithName:@"PromiseKit" reason:@"PromiseKit: " txt userInfo:@""]
+#define PMKE(txt) [NSException exceptionWithName:@"PromiseKit" reason:@"PromiseKit: " txt userInfo:nil]
 
 static const id PMKNull = @"PMKNull";
 
