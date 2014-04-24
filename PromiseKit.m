@@ -35,23 +35,46 @@ static id safely_call_block(id frock, id result) {
         const NSUInteger nargs = sig.numberOfArguments;
         const char rtype = sig.methodReturnType[0];
 
-        if (nargs == 2 && rtype == 'v') {
-            void (^block)(id) = frock;
-            block(result);
-            return PMKNull;
-        }
-        if (nargs == 1 && rtype == 'v') {
-            void (^block)(void) = frock;
-            block();
-            return PMKNull;
-        }
-        if (nargs == 2) {
-            id (^block)(id) = frock;
-            return block(result) ?: PMKNull;
-        }
-        else {
-            id (^block)(void) = frock;
-            return block() ?: PMKNull;
+        #define call_block_with_rtype(type) @(nargs > 1 \
+            ? ((type (^)(id))frock)(result) \
+            : ((type (^)(void))frock)())
+
+        switch (rtype) {
+            case 'v':
+                if (nargs > 1) {
+                    void (^block)(id) = frock;
+                    block(result);
+                } else {
+                    void (^block)(void) = frock;
+                    block();
+                }
+                return PMKNull;
+            case '@':
+                return nargs > 1
+                    ? ((id (^)(id))frock)(result)
+                    : ((id (^)(void))frock)()
+                ?: PMKNull;
+            case '*': {
+                char *str = nargs > 1
+                    ? ((char *(^)(id))frock)(result)
+                    : ((char *(^)(void))frock)();
+                return str ? @(str) : PMKNull;
+            }
+            case 'c': return call_block_with_rtype(char);
+            case 'i': return call_block_with_rtype(int);
+            case 's': return call_block_with_rtype(short);
+            case 'l': return call_block_with_rtype(long);
+            case 'q': return call_block_with_rtype(long long);
+            case 'C': return call_block_with_rtype(unsigned char);
+            case 'I': return call_block_with_rtype(unsigned int);
+            case 'S': return call_block_with_rtype(unsigned short);
+            case 'L': return call_block_with_rtype(unsigned long);
+            case 'Q': return call_block_with_rtype(unsigned long long);
+            case 'f': return call_block_with_rtype(float);
+            case 'd': return call_block_with_rtype(double);
+            case 'B': return call_block_with_rtype(_Bool);
+            default:
+                @throw PMKE(@"Unsupported method signature… Why not fork and fix?");
         }
     } @catch (id e) {
         return [e isKindOfClass:[NSError class]] ? e : NSErrorWithThrown(e);
