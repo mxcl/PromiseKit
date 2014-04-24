@@ -36,19 +36,22 @@
         IMP imp = [vc methodForSelector:selector];
         void (*func)(id, SEL, id) = (void *)imp;
         func(vc, selector, d);
-    } else if ([vc isKindOfClass:[UINavigationController class]]) {
-        vc = [(id)vc viewControllers].firstObject;
-    } else
-        [vc viewWillDefer:d];
+    } else {
+        if ([vc isKindOfClass:[UINavigationController class]])
+            vc = [(id)vc viewControllers].firstObject;
+        SEL viewWillDefer = NSSelectorFromString(@"viewWillDefer:");
+        if ([vc respondsToSelector:viewWillDefer]) {
+            IMP imp = [vc methodForSelector:viewWillDefer];
+            void (*func)(id, SEL, Deferred *) = (void *)imp;
+            func(vc, viewWillDefer, d);
+        } else
+            NSLog(@"You didn't implement viewWillDefer:! You should do that.");
+    }
 
     return d.promise.then(^(id o){
         [self dismissViewControllerAnimated:animated completion:nil];
         return o;
     });
-}
-
-- (void)viewWillDefer:(Deferred *)deferred {
-    NSLog(@"Base implementation of viewWillDefer: called, you probably want to override this.");
 }
 
 @end
