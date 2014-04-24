@@ -6,12 +6,13 @@ Pod::Spec.new do |s|
   s.source = { :git => "https://github.com/mxcl/#{s.name}.git", :tag => s.version }
   s.license = 'MIT'
   s.summary = 'A delightful Promises implementation for iOS.'
-  s.requires_arc = true
 
   s.homepage = 'http://promisekit.org'
   s.social_media_url = 'https://twitter.com/mxcl'
   s.authors  = { 'Max Howell' => 'mxcl@me.com' }
 
+  s.requires_arc = true
+  s.compiler_flags = '-fmodules'
   s.ios.deployment_target = '5.0'
   s.osx.deployment_target = '10.7'
 
