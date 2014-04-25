@@ -521,13 +521,28 @@ Promise *gcdreject() {
 }
 
 - (void)test_32_return_primitive {
-    d.promise.then(^{
+    d.promise.then(^(id o){
+        XCTAssertEqualObjects(o, @32);
         return 3;
     }).then(^(id o){
         XCTAssertEqualObjects(@3, o);
         resolved = true;
     });
     [d resolve:@32];
+    XCTAssertTrue(resolved);
+}
+
+- (void)test_33_return_nil {
+    d.promise.then(^(id o){
+        XCTAssertEqualObjects(o, @"HI");
+        return nil;
+    }).then(^{
+        return nil;
+    }).then(^(id o){
+        XCTAssertNil(o);
+        resolved = YES;
+    });
+    [d resolve:@"HI"];
     XCTAssertTrue(resolved);
 }
 

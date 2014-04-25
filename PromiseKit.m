@@ -73,6 +73,10 @@ static id safely_call_block(id frock, id result) {
             case 'f': return call_block_with_rtype(float);
             case 'd': return call_block_with_rtype(double);
             case 'B': return call_block_with_rtype(_Bool);
+            case '^':
+                if (strcmp(sig.methodReturnType, "^v") == 0)
+                    return PMKNull;
+                // else fall through!
             default:
                 @throw PMKE(@"Unsupported method signature… Why not fork and fix?");
         }
