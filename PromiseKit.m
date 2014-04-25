@@ -50,9 +50,9 @@ static id safely_call_block(id frock, id result) {
                 }
                 return PMKNull;
             case '@':
-                return nargs > 1
+                return (nargs > 1
                     ? ((id (^)(id))frock)(result)
-                    : ((id (^)(void))frock)()
+                    : ((id (^)(void))frock)())
                 ?: PMKNull;
             case '*': {
                 char *str = nargs > 1
