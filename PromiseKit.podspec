@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
   preserved =  %w{Private PromiseKit}
 
   s.name = "PromiseKit"
-  s.version = "0.9.1"
+  s.version = "0.9.2"
   s.source = { :git => "https://github.com/mxcl/#{s.name}.git", :tag => s.version }
   s.license = 'MIT'
   s.summary = 'A delightful Promises implementation for iOS.'

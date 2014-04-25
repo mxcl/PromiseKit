@@ -15,12 +15,8 @@
 + (Promise *)promise:(NSURLRequest *)rq;
 @end
 
+
+
 // ideally this would be from a pod, but I looked and all the pods imposed
 // too much symbol overhead or used catgeories
 NSString *NSDictionaryToURLQueryString(NSDictionary *parameters);
-
-
-
-@interface NSURLCache (PromiseKit)
-- (Promise *)promisedResponseForRequest:(NSURLRequest *)rq;
-@end

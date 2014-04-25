@@ -177,23 +177,3 @@ static void ProcessURLResponse(NSHTTPURLResponse *rsp, NSData *data, Deferred *d
 }
 
 @end
-
-
-
-@implementation NSURLCache (PromiseKit)
-
-- (Promise *)promisedResponseForRequest:(NSURLRequest *)rq {
-    Deferred *deferred = [Deferred new];
-    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-        NSCachedURLResponse *rsp = [self cachedResponseForRequest:rq];
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (!rsp || [(id)rsp.response statusCode] != 200) {
-                [deferred resolve:nil];
-            } else
-                ProcessURLResponse((id)rsp.response, rsp.data, deferred);
-        });
-    });
-    return deferred.promise;
-}
-
-@end
