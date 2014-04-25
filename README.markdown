@@ -1,11 +1,11 @@
 Modern development is highly asynchronous: isn’t it about time iOS developers had tools that made programming asynchronously powerful, easy and delightful?
 
-PromiseKit is not just a Promises implementation, it is also a collection of helper functions that make the typical asynchronous patterns we use in iOS development delightful *too*.
+PromiseKit is not just a [Promises](http://wikipedia.org/wiki/Promise_%28programming%29) implementation, it is also a collection of helper functions that make the typical asynchronous patterns we use in iOS development delightful *too*.
 
 PromiseKit is also designed to be integrated into other CocoaPods. If your library has asynchronous operations and you like PromiseKit, then add an opt-in subspec that provides Promises for your users. Documentation to help you integrate PromiseKit into your own pods is provided later in this README.
 
 
-#Using PromiseKit
+#Importing PromiseKit
 
 In your [Podfile](http://guides.cocoapods.org/using/the-podfile.html):
 
@@ -13,7 +13,7 @@ In your [Podfile](http://guides.cocoapods.org/using/the-podfile.html):
 pod 'PromiseKit'
 ```
 
-PromiseKit is modulized; if you don’t want any of our category additions:
+PromiseKit is modulized; if you only want `Promise` and none of our category additions:
 
 ```ruby
 pod 'PromiseKit/base'
@@ -28,7 +28,7 @@ pod 'PromiseKit/CoreLocation'
 ```
 
 
-#What’s This All About?
+#Why Promises?
 
 Synchronous code is clean code. For example, here's the synchronous code to show a gravatar image:
 
@@ -48,7 +48,7 @@ dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     NSString *md5 = md5(email);
     NSString *url = [@"http://gravatar.com/avatar/" stringByAppendingString:md5];
     NSURLRequest *rq = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-    [NSURLConnection sendAsynchronousRequest:rq queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+    [NSURLConnection sendAsynchronousRequest:rq queue:[NSOperationQueue currentQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
         UIImage *gravatarImage = [UIImage imageWithData:data];
         dispatch_async(dispatch_get_main_queue(), ^{
             self.imageView.image = gravatarImage;
@@ -59,7 +59,7 @@ dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
 
 The code that does the actual work is now buried inside asynchronicity boilerplate. It is harder to read. The code is less clean.
 
-Promises are chainable, standardized representations of asynchronous tasks. The equivalent code with PromiseKit looks like:
+Promises are chainable, standardized representations of asynchronous tasks. The equivalent code with PromiseKit looks like this:
 
 ```objc
 #import "PromiseKit.h"
@@ -73,9 +73,28 @@ dispatch_promise(^{
 });
 ```
 
-Code with promises is about as close as we can get to the minimal cleanliness of synchronous code. PromiseKit also provides Promise solutions for iOS components that otherwise have no synchronous analog, like `CLLocationManager` and `UIAlertView` which usually require a delegation pattern.
+Code with promises is about as close as we can get to the minimal cleanliness of synchronous code.
 
-*The above code dispatches a promise to a background queue (where it computes the md5), the md5 is then input to the next Promise which returns a new Promise that downloads the gravatar. If you return a Promise from a `then` block the next Promise (ie. the Promise returned by the `then`) waits (asynchronously) for that Promise to fulfill before it executes its `then` blocks. PromiseKit’s `NSURLConnection` category methods automatically decode images in a background thread before passing them to the next Promise.*
+##Explaining That Promise Code
+
+A `Promise` object itself represents the *future* value of an asynchronous task.
+
+```objc
+dispatch_promise(^{
+    // we’re in a background thread
+    return md5(email);
+}).then(^(NSString *md5){
+    // we’re back in the main thread
+    // this next line returns a `Promise *`
+    return [NSURLConnection GET:@"http://gravatar.com/avatar/%@", md5];
+}).then(^(UIImage *gravatarImage){
+    // since the last `then` block returned a Promise,
+    // PromiseKit waited for it to complete before we
+    // were executed. But now we're done with its result,
+    // so let’s set that Gravatar image.
+    self.imageView.image = gravatarImage;
+});
+```
 
 #Error Handling
 
@@ -96,6 +115,7 @@ extern id download(id url);
 id download(id url) {
     id url = [NSURL URLWithString:@"http://api.service.com/user/me"]
     id data = [NSData dataWithContentsOfURL:self.url];
+    id error = nil;
     id json = [NSJSONSerialization JSONObjectWithData:data error:&error];
     if (error) @throw error;
 }
@@ -148,7 +168,7 @@ id rq = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 }];
 ```
 
-Wow! Such rightward-drift. To be fair the above could be simplified, but without creating your own `NSOperationQueue` and without using early-return statements and without DRYing out something as common as deserialzing some downloaded JSON, this is what you get. In fact standard asynchronicity handling in iOS practically encourages you to deserialize the JSON on the main thread—simply to avoid rightward-drift.
+Wow! Such rightward-drift. To be fair the above [could be simplified](https://gist.github.com/mxcl/11267639), but without creating your own `NSOperationQueue` and without using early-return statements and without DRYing out something as common as deserialzing some downloaded JSON, this is what you get. In fact standard asynchronicity handling in iOS practically encourages you to deserialize the JSON on the main thread—simply to avoid rightward-drift.
 
 ##Promises Have Elegant Error Handling
 
@@ -209,8 +229,8 @@ A key understanding is that Promises can only exist in two states, *pending* or 
 One powerful reason to use asynchronous variants is so we can do two or more asynchronous operations simultaneously. However writing code that acts when the simultaneous operations have all completed is hard. Not so with PromiseKit:
 
 ```objc
-id grabcat = [NSURLConnection GET:@"http://placekitten.org/%d/%d", w, h];
-id locater = [CLLocationManager promise];
+Promise *grabcat = [NSURLConnection GET:@"http://placekitten.org/%d/%d", w, h];
+Promise *locater = [CLLocationManager promise];
 
 [Promise when:@[grabcat, locater]].then(^(NSArray *results){
     // results[0] is the `UIImage *` from grabcat
@@ -256,11 +276,11 @@ Clang is smart so you don’t (usually) have to specify a return type for your b
 This is not usual to Objective-C or blocks. Usually everything is very explicit. We are using introspection to determine what arguments and return types you are working with. Thus, programming with PromiseKit has similarities to programming with more modern languages like Ruby or Javascript.
 
 
-#The Niceties
+#The Category Additions
 
-PromiseKit aims to provide a category analog for all one-time asynchronous features in the iOS SDK (eg. not for UIButton actions, Promises fulfill ***once*** so some parts of the SDK don’t make sense as Promises).
+PromiseKit aims to provide a category analog for all one-time asynchronous operations in the iOS SDK.
 
-An additional important consideration is that we only trigger the catch handler for errors. Thus `UIAlertView` does not trigger the catch handler for cancel button pushes. Initially we had it that way, and it led to error handling code that was messy and unreliable. The error path is **only** for errors.
+Notably we don’t provide a Promise for eg. `UIButton` actions. Promises can only resolve once, and buttons can be pushed again and again.
 
 
 ##NSURLConnection+PromiseKit
@@ -325,27 +345,15 @@ NSMutableURLRequest *rq = [NSMutableURLRequest requestWithURL:url];
 ```
 
 
-##NSURLCache+PromiseKit
-
-Sometimes you just want to query the `NSURLCache` because doing an `NSURLConnection` will take too long and just return the same data anyway. We perform the same header analysis as the `NSURLConnection` categories, so eg. you will get back a `UIImage *` or whatever. If there is nothing in the cache, then you get back `nil`.
-
-```objc
-#import "PromiseKit+Foundation.h"
-
-[[NSURLCache sharedURLCache] promisedResponseForRequest:rq].then(^(id o){
-    return o ?: [NSURLConnection GET:rq];
-});
-```
-
-
 ##CLLocationManager+PromiseKit
 
-A promise for a one time update of the user’s location:
+A Promise to get the user’s location:
 
 ```objc
 #import "PromiseKit+CoreLocation.h"
 
 [CLLocationManager promise].then(^(CLLocation *currentUserLocation){
+    //…
 });
 ```
 
@@ -368,6 +376,7 @@ alert.promise.then(^(NSNumber *dismissedIndex){
 });
 ```
 
+This Promise will not trigger a `catch` handler. At one point we had the cancel button trigger `catch`, but this led to unreliable error handling. Only errors trigger `catch` handlers.
 
 ##UIActionSheet+PromiseKit
 
@@ -388,7 +397,7 @@ We provide a pattern for modally presenting ViewControllers and getting back a r
     [self promiseViewController:vc animated:YES completion:nil].then(^(id result){
         // the result from below in `someTimeLater`
         // PromiseKit dismisses the MyDetailViewController instance when the
-        // Deferred is resolved
+        // `Deferred` is resolved
     });
 }
 
@@ -398,7 +407,8 @@ We provide a pattern for modally presenting ViewControllers and getting back a r
 @property Deferred *deferred;
 
 - (void)viewWillDefer:(Deferred *)deferMe {
-    // Deferred is documented below this section
+    // PromiseKit calls this so you can control the presentation
+    // of this ViewController. Deferred is documented below.
     _deferred = deferMe;
 }
 
@@ -409,7 +419,7 @@ We provide a pattern for modally presenting ViewControllers and getting back a r
 @end
 ```
 
-As a bonus we handle some of the tedious special ViewController types for you so you don't have to delegate. Currently just `MFMailComposeViewController`. So you can `then` off of it without having to write any delegate code:
+As a bonus if you pass a `MFMailComposeViewController` we handle its delegation behind the scenes and convert it into a Promise:
 
 ```objc
 id mailer = [MFMailComposerViewController new];
@@ -420,7 +430,12 @@ id mailer = [MFMailComposerViewController new];
 })
 ```
 
-Check out [Promise.h](Private/Promise.h) for more documentation.
+Please submit equivalents for eg. `UIImagePickerController`.
+
+
+#More Documentation
+
+Check out [Promise.h](PromiseKit/Promise.h) and the rest of the sources.
 
 
 #Deferred
@@ -583,6 +598,7 @@ There are other Promise implementations for iOS, but in this author’s opinion,
 
 * [Bolts](https://github.com/BoltsFramework/Bolts-iOS) was the inspiration for PromiseKit. I thought that—finally—someone had written a decent Promises implementation for iOS. The lack of dedicated `catch` handler, the (objectively) ugly syntax and the overly complex design was a disappointment. To be fair Bolts is not a Promise implementation, it’s… something else. You may like it, and certainly it is backed by big names™. Fundamentally, Promise-type implementations are not hard to write, so you really are making a decision based on how flexible the API is while simulatenously producing readable, clean code. I have worked hard to make PromiseKit the best choice.
 * [RXPromise](https://github.com/couchdeveloper/RXPromise) is an excellent Promise implementation that is mostly let down by syntax choices. By default thens are executed in background threads, which usually is inconvenient. `then` always return `id` and always take `id`, which makes code less elegant. There is no explicit `catch`, instead `then` always takes two blocks, the second being the error handler, which is ugly. The interface for `Promise` allows any caller to resolve it breaking encapsulation. Otherwise an excellent implementation.
+* [CollapsingFutures](https://github.com/Strilanc/ObjC-CollapsingFutures) looks good, but not thoroughly documented so hard to say without more experimentation.
 * [Many others](http://cocoapods.org/?q=promise)
 
 PromiseKit is well tested, and inside apps on the store. It also is fully documented, even within Xcode (⌥ click any method).
