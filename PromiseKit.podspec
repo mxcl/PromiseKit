@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
   preserved =  %w{Private PromiseKit}
 
   s.name = "PromiseKit"
-  s.version = "0.9.2"
+  s.version = "0.9.3"
   s.source = { :git => "https://github.com/mxcl/#{s.name}.git", :tag => s.version }
   s.license = 'MIT'
   s.summary = 'A delightful Promises implementation for iOS and OS X.'
@@ -46,6 +46,14 @@ Pod::Spec.new do |s|
     ss.source_files = 'PromiseKit+CoreLocation.{h,m}'
     ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_CORELOCATION=1" }
     ss.frameworks = 'CoreLocation'
+    ss.preserve_paths = preserved
+  end
+
+  s.subspec 'MapKit' do |ss|
+    ss.dependency 'PromiseKit/base'
+    ss.source_files = 'PromiseKit+MapKit.{h,m}'
+    ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_MAPKIT=1" }
+    ss.frameworks = 'MapKit'
     ss.preserve_paths = preserved
   end
 end

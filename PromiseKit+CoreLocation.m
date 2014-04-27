@@ -47,3 +47,36 @@
 }
 
 @end
+
+
+
+@implementation CLGeocoder (PromiseKit)
+
++ (Promise *)reverseGeocode:(CLLocation *)location {
+    return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter) {
+       [[CLGeocoder new] reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
+            if (error) {
+                rejecter(error);
+            } else
+                fulfiller(placemarks);
+        }];
+    }];
+}
+
++ (Promise *)geocode:(id)address {
+    return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter) {
+        id handler = ^(NSArray *placemarks, NSError *error) {
+            if (error) {
+                rejecter(error);
+            } else
+                fulfiller(placemarks);
+        };
+        if ([address isKindOfClass:[NSDictionary class]]) {
+            [[CLGeocoder new] geocodeAddressDictionary:address completionHandler:handler];
+        } else {
+            [[CLGeocoder new] geocodeAddressString:address completionHandler:handler];
+        }
+    }];
+}
+
+@end

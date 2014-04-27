@@ -25,6 +25,7 @@ Or if you only want some of our categories:
 pod 'PromiseKit/Foundation'
 pod 'PromiseKit/UIKit'
 pod 'PromiseKit/CoreLocation'
+pod 'PromiseKit/MapKit'
 ```
 
 
@@ -95,7 +96,6 @@ promise = promise.then(^(NSString *md5){
     return [NSURLConnection GET:@"http://gravatar.com/avatar/%@", md5];
 });
 
-// .2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0
 // The previous `then` returned a Promise. The next Promise
 // will not execute any `then`s until that Promise is fulfilled.
 
@@ -111,86 +111,75 @@ promise.then(^(UIImage *gravatarImage){
 Synchronous code has simple, clean error handling:
 
 ```objc
-id download(id url);
-
 @try {
-    id json1 = download(@"http://api.service.com/user/me");
-    id uname = [json1 valueForKeyPath:@"user.name"];
-    id json2 = download([NSString stringWithFormat:@"http://api.service.com/followers/%@", uname]);
-    self.userLabel.text = @(json2[@"count"]).description;
-} @catch (NSError *error) {
+    id md5 = md5(email);
+    id url = [@"http://gravatar.com/avatar/" stringByAppendingString:md5];
+    url = [NSURL URLWithString:url];
+    id error;
+    id data = [NSData dataWithContentsOfURL:url options:0 error:&error];
+    if (error) @throw error;
+    self.imageView.image = [UIImage imageWithData:data];
+} @catch (id thrownObject) {
     //…
-}
-
-id download(id url) {
-    id url = [NSURL URLWithString:@"http://api.service.com/user/me"];
-    id error = nil;
-    id data = [NSData dataWithContentsOfURL:self.url options:0 error:&error];
-    if (error) @throw error;
-    id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
-    if (error) @throw error;
 }
 ```
 
-Error handling with asynchronous code is notoriously tricky:
+Error handling with asynchronous code is notoriously tricky. Here's an example using `NSURLConnection`, CoreLocation and MapKit:
 
 ```objc
 void (^errorHandler)(NSError *) = ^(NSError *error){
     //…
 };
 
-id url = @"http://api.service.com/user/me";
-id rq = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
 [NSURLConnection sendAsynchronousRequest:rq queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
     if (connectionError) {
         errorHandler(connectionError);
     } else {
-        dispatch_async(bgq, ^{
-            id jsonError = nil;
-            id json = [NSJSONSerialization JSONObjectWithData:data error:&jsonError]
-            dispatch_async(mainq, ^{
-                if (jsonError) {
-                    errorHandler(jsonError);
+        id jsonError;
+        id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+        if (jsonError) {
+            errorHandler(jsonError);
+        } else {
+            id home = [json valueForKeyPath:@"user.home.address"];
+            [[CLGeocoder new] geocodeAddressString:home completionHandler:^(NSArray *placemarks, NSError *error) {
+                if (error) {
+                    errorHandler(error);
                 } else {
-                    id uname = [json valueForKeyPath:@"user.name"];
-                    id url = [NSString stringWithFormat:@"http://api.service.com/followers/%@", uname];
-                    id rq = [NSURLRequest requestWithURL:[NSURL URLWithString:url]];
-                    [NSURLConnection sendAsynchronousRequest:rq queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
-                        if (connectionError) {
-                            errorHandler(connectionError);
+                    MKDirectionsRequest *rq = [MKDirectionsRequest new];
+                    rq.source = [MKMapItem mapItemForCurrentLocation];
+                    rq.destination = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithPlacemark:placemarks[0]]];
+                    MKDirections *directions = [[MKDirections alloc] initWithRequest:rq];
+                    [directions calculateDirectionsWithCompletionHandler:^(MKDirectionsResponse *response, NSError *error) {
+                        if (error) {
+                            errorHandler(error);
                         } else {
-                            dispatch_async(bgq, ^{
-                                id jsonError = nil;
-                                id json = [NSJSONSerialization JSONObjectWithData:data error:&jsonError]
-                                dispatch_async(mainq, ^{
-                                    if (jsonError) {
-                                        errorHandler(jsonError);
-                                    } else {
-                                        self.userLabel.text = @(json2[@"count"]).description;
-                                    }
-                                });
-                            });
+                            //…
                         }
-                    }
+                    }];
                 }
-            });
-        });
+            }];
+        }
     }
 }];
 ```
 
-Wow! Such rightward-drift. To be fair the above [could be simplified](https://gist.github.com/mxcl/11267639), but without creating your own `NSOperationQueue` and without using early-return statements and without DRYing out something as common as deserialzing some downloaded JSON, this is what you get. In fact standard asynchronicity handling in iOS practically encourages you to deserialize the JSON on the main thread—simply to avoid rightward-drift.
+Not only does this code drift ever rightwards, reducing readability, but it doesn't even handle exceptions that might be thrown (like if there are zero placemarks in the `placemarks` array). The code doesn’t even decode the JSON in a background thread, which may introduce UI lag. But who would want to add *another* closure?
 
 ##Promises Have Elegant Error Handling
 
 ```objc
 #import "PromiseKit.h"
 
-[NSURLConnection GET:@"http://api.service.com/user/me"].then(^(id json){
-    id name = [json valueForKeyPath:@"user.name"];
-    return [NSURLConnection GET:@"http://api.service.com/followers/%@", name];
-}).then(^(id json){
-    self.userLabel.text = @(json[@"count"]).description;
+[NSURLConnection promise:rq].then(^(id json){
+    id home = [json valueForKeyPath:@"user.home.address"];
+    return [CLGeocoder geocode:home];
+}).then(^(NSArray *placemarks){
+    MKDirectionsRequest *rq = [MKDirectionsRequest new];
+    rq.source = [MKMapItem mapItemForCurrentLocation];
+    rq.destination = [[MKMapItem alloc] initWithPlacemark:[[MKPlacemark alloc] initWithPlacemark:placemarks[0]]];
+    return [MKDirections promise:rq];
+}).then(^(MKDirectionsResponse *directions){
+    //…
 }).catch(^(NSError *error){
     //…
 });
@@ -198,7 +187,7 @@ Wow! Such rightward-drift. To be fair the above [could be simplified](https://gi
 
 Raised exceptions or `NSError` objects returned from handlers bubble up to the first `catch` handler in the chain.
 
-PromiseKit’s (optional) `NSURLConnection` additions correctly propogate errors for you (as well as decoding the JSON automatically in a background thread based on the mime-type the server returns).
+The above makes heavy use of PromiseKit’s category additions to the iOS SDK. Mostly PromiseKit’s categories are logical conversions of block-based or delegation-based patterns to Promises. The exception here is `NSURLConnection+PromiseKit` which detects that the response in JSON (from the HTTP headers) and deserializes the JSON for you in a background thread. All of PromiseKit’s categories are optional CocoaPods subspecs.
 
 
 #Say Goodbye to Asynchronous State Machines
@@ -258,7 +247,7 @@ Promise *locater = [CLLocationManager promise];
 ```
 
 
-#Forgiving Syntax
+#Tolerant to the Max
 
 The block you pass to `then` or `catch` can have return type of `Promise`, or any object, or nothing. And it can have a parameter of `id`, or a specific class type, or nothing.
 
@@ -285,6 +274,22 @@ myPromise.then(^{
 Clang is smart so you don’t (usually) have to specify a return type for your block.
 
 This is not usual to Objective-C or blocks. Usually everything is very explicit. We are using introspection to determine what arguments and return types you are working with. Thus, programming with PromiseKit has similarities to programming with (more) modern languages like Ruby or Javascript.
+
+In fact these (and more) are also fine:
+
+```objc
+myPromise.then(^{
+    return 1;
+}).then(^(NSNumber *n){
+    assert([n isEqual:@1]);
+});
+
+myPromise.then(^{
+    return false;
+}).then(^(NSNumber *n){
+    assert([n isEqual:@NO]);
+});
+```
 
 
 #The Category Additions
@@ -365,6 +370,28 @@ A Promise to get the user’s location:
 
 [CLLocationManager promise].then(^(CLLocation *currentUserLocation){
     //…
+}).catch(^(NSError *error){
+    //…
+});
+```
+
+
+##CLGeocoder+PromiseKit
+
+```objc
+#import "PromiseKit+CoreLocation.h"
+
+[CLGeocoder geocode:@"mount rushmore"].then(^(NSArray *placemarks){
+    //…
+}).catch(^(NSError *error){
+    //…
+});
+
+CLLocation *someLocation = …;
+[CLGeocoder reverseGeocode:someLocation].then(^(NSArray *placemarks){
+    //…
+}).catch(^(NSError *error){
+    //…
 });
 ```
 
@@ -436,6 +463,28 @@ id mailer = [MFMailComposerViewController new];
 ```
 
 Please submit equivalents for eg. `UIImagePickerController`.
+
+
+##MKDirections+PromiseKit
+
+```objc
+#import "PromiseKit+MapKit.h"
+
+MKDirectionsRequest *rq = [MKDirectionsRequest new];
+rq.source = [MKMapItem mapItemForCurrentLocation];
+rq.destination = …;
+[MKDirections promise:rq].then(^(MKDirectionsResponse *rsp){
+    //…
+}).catch(^{
+    //…
+});
+
+[MKDirections promiseETA:rq].then(^(MKETAResponse *rsp){
+    //…
+}).catch(^{
+    //…
+});
+```
 
 
 #More Documentation

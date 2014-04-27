@@ -8,3 +8,6 @@
 #ifdef PMK_UIKIT
 #import "PromiseKit+UIKit.h"
 #endif
+#ifdef PMK_MAPKIT
+#import "PromiseKit+MapKit.h"
+#endif
