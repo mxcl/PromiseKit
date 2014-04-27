@@ -97,10 +97,10 @@ promise = promise.then(^(NSString *md5){
 
 // .2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0
 // The previous `then` returned a Promise. The next Promise
-// will not execute any `then`s until that Promise is resolved.
+// will not execute any `then`s until that Promise is fulfilled.
 
 promise.then(^(UIImage *gravatarImage){
-    // The previous promise has resolved and provided
+    // The previous promise has fulfilled and provided
     // a `UIImage`. So lets finish and set the Gravatar.
     self.imageView.image = gravatarImage;
 });
@@ -504,18 +504,6 @@ Becomes this:
 
 `PromiseResolver` is `typedef void (^PromiseResolver)(id)`, i.e. a block that takes a parameter of `id` and returns `void`.
 
-#The Fine Print
-
-The fine print of PromiseKit is mostly exactly what you would expect, so don’t confuse yourself: only come back here when you find yourself curious about more advanced techniques.
-
-* Returning a Promise as the value of a `then` (or `catch`) handler will cause any subsequent handlers to wait for that Promise to resolve.
-* Returning an instance of `NSError` or throwing an exception within a then block will cause PromiseKit to bubble that object up to the nearest catch handler.
-* `catch` handlers always are passed an `NSError` object.
-* Returning something other than an `NSError` from a `catch` handler causes PromiseKit to consider the error “corrected”, and execution will continue at the next `then` handler using the object you returned as the input.
-* Not returning from a `catch` handler (or returning nil) causes PromiseKit to consider the Promise complete. No further bubbling occurs.
-* Nothing happens if you add a `then` to a failed Promise (unless you subsequently add a `catch` handler to the Promise returned from that `then`)
-* Adding a `catch` handler to a failed Promise will execute that fail handler: this is converse to adding the same to a **pending** Promise that has a higher `catch` than the one you just added.
-
 
 #Adding Promises to Third Party Libraries
 
@@ -588,7 +576,7 @@ Pod::Spec.new do |s|
 end
 ```
 
-#Adding PromiseKit to Someone Else’s Pod
+##Adding PromiseKit to Someone Else’s Pod
 
 Firstly you should try submitting the above to the project itself. If they won’t add it then you'll need to make your own pod. Use the naming scheme: `ABCKitten+PromiseKit`.
 
@@ -608,5 +596,33 @@ PromiseKit is well tested, and inside apps on the store. It also is fully docume
 #Caveats
 
 * We are version 0.9 and thus reserve the right to remove/change API before 1.0. Probably we won’t; we’re just being prudent by stating this advisory.
-* PromiseKit is not thread-safe. This is not intentional, we will fix that. However, in practice the only way to compromise PromiseKit is to keep a pointer to an unresolved Promise and use that from multiple threads. You can execute thens in many different contexts and the underlying immutability of Promises means PromiseKit is inherently thread-safe.
+* PromiseKit is not thread-safe. This is not intentional, we will fix that. However, in practice the only way to compromise PromiseKit is to keep a pointer to an pending Promise and use that from multiple threads. You can execute thens in many different contexts and the underlying immutability of Promises means PromiseKit is inherently thread-safe.
 * If you don't have at least one catch handler in your chain then errors are silently absorbed which may cause you confusion. We intend to log unhandled errors, (with an opt-in method to have them get thrown and thus crash your app in cases where that is desired).
+
+
+#Promises/A+ Compliance
+
+PromiseKit is [compliant](http://promisesaplus.com) excluding:
+
+* Our `then` does not take a failure handler, instead we have a dedicated `catch`
+
+If you find further non-compliance please open a [ticket](https://github.com/mxcl/PromiseKit/issues/new).
+
+
+#Terminology
+
+* Promises start in a **pending** state.
+* Promises **resolve** to become **fulfilled** or **rejected**.
+
+
+#The Fine Print
+
+The fine print of PromiseKit is mostly exactly what you would expect, so don’t confuse yourself: only come back here when you find yourself curious about more advanced techniques.
+
+* Returning a Promise as the value of a `then` (or `catch`) handler will cause any subsequent handlers to wait for that Promise to resolve.
+* Returning an instance of `NSError` or throwing an exception within a then block will cause PromiseKit to bubble that object up to the nearest catch handler.
+* `catch` handlers always are passed an `NSError` object.
+* Returning something other than an `NSError` from a `catch` handler causes PromiseKit to consider the error “corrected”, and execution will continue at the next `then` handler using the object you returned as the input.
+* Not returning from a `catch` handler (or returning nil) causes PromiseKit to consider the Promise complete. No further bubbling occurs.
+* Nothing happens if you add a `then` to a failed Promise (unless you subsequently add a `catch` handler to the Promise returned from that `then`)
+* Adding a `catch` handler to a failed Promise will execute that fail handler: this is converse to adding the same to a **pending** Promise that has a higher `catch` than the one you just added.
