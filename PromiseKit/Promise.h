@@ -1,5 +1,8 @@
 @import Foundation.NSObject;
 
+
+typedef void (^PromiseResolver)(id);
+
 /**
 A `Promise` represents the future value of a task.
 
@@ -53,6 +56,13 @@ An example usage is an app starting up that must get data from the Internet befo
 */
 + (Promise *)until:(id(^)(void))blockReturningPromiseOrArrayOfPromises catch:(id)catchHandler;
 
+/**
+ Create a new root Promise.
+
+ Pass a block to this constructor, the block must take two arguments that point to the `fulfiller` and `rejecter` of this Promise. Fulfill or reject this Promise using those blocks and the Promise chain that roots to this Promise will be resolved accordingly.
+*/
++ (Promise *)new:(void(^)(PromiseResolver fulfiller, PromiseResolver rejecter))block;
+
 /** 
 @return A new `Promise` that is already resolved with @param value. Calling `then` on a resolved `Promise` executes the provided block immediately.
 */
@@ -64,6 +74,7 @@ An example usage is an app starting up that must get data from the Internet befo
 #define PMKThrown @"PMKThrown"
 #define PMKErrorCodeThrown 1
 #define PMKErrorCodeUnknown 2
+#define PMKErrorCodeInvalidUsage 3
 
 
 

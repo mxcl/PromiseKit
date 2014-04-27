@@ -1,13 +1,13 @@
 #import "assert.h"
 @import Dispatch.introspection;
 @import Foundation.NSDictionary;
+@import Foundation.NSError;
 @import Foundation.NSException;
 @import Foundation.NSKeyValueCoding;
 @import Foundation.NSMethodSignature;
 @import Foundation.NSPointerArray;
 #import "Private/NSMethodSignatureForBlock.m"
 #import "PromiseKit/Promise.h"
-#import "PromiseKit/Deferred.h"
 
 #define NSErrorWithThrown(e) [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeThrown userInfo:@{PMKThrown: e}]
 #define IsPromise(o) ([o isKindOfClass:[Promise class]])
@@ -17,7 +17,7 @@
 static const id PMKNull = @"PMKNull";
 
 static void RejectRecursively(Promise *);
-static void ResolveRecursively(Promise *);
+static void FulfillRecursively(Promise *);
 
 /**
  `then` and `catch` are method-signature tolerant, this function calls
@@ -88,9 +88,9 @@ static id safely_call_block(id frock, id result) {
 
 
 /**
- We have public instance variables so Deferred, ResolveRecursively and
- RejectRecursively can fulfill promises. Think of it like the C++
- `friend` keyword.
+ We have public @implementation instance variables so ResolveRecursively
+ and RejectRecursively can fulfill promises. It’s like the C++ `friend`
+ keyword.
  */
 @implementation Promise {
 @public
@@ -172,68 +172,114 @@ static id safely_call_block(id frock, id result) {
 
     NSPointerArray *results = [NSPointerArray strongObjectsPointerArray];
     results.count = promises.count;
-    Deferred *deferred = [Deferred new];
 
-    __block int x = 0;
-    __block BOOL failed = NO;
-    void (^both)(NSUInteger, id) = ^(NSUInteger ii, id o){
-        [results replacePointerAtIndex:ii withPointer:(__bridge void *)(o ?: PMKNull)];
+    return [Promise new:^(void(^fulfiller)(id), void(^rejecter)(id)){
+        __block int x = 0;
+        __block BOOL failed = NO;
+        void (^both)(NSUInteger, id) = ^(NSUInteger ii, id o){
+            [results replacePointerAtIndex:ii withPointer:(__bridge void *)(o ?: PMKNull)];
 
-        if (++x != promises.count)
-            return;
+            if (++x != promises.count)
+                return;
 
-        NSArray *objs = results.allObjects;
-        id passme = wasarray ? objs : objs[0];
+            NSArray *objs = results.allObjects;
+            id passme = wasarray ? objs : objs[0];
 
-        if (failed) {
-            [deferred reject:passme];
-        } else {
-            [deferred resolve:passme];
-        }
-    };
-    [promises enumerateObjectsUsingBlock:^(Promise *promise, NSUInteger ii, BOOL *stop) {
-        promise.catch(^(id o){
-            failed = YES;
-            both(ii, o);
-        });
-        promise.then(^(id o){
-            both(ii, o);
-        });
+            if (failed) {
+                rejecter(passme);
+            } else
+                fulfiller(passme);
+        };
+        [promises enumerateObjectsUsingBlock:^(Promise *promise, NSUInteger ii, BOOL *stop) {
+            promise.catch(^(id o){
+                failed = YES;
+                both(ii, o);
+            });
+            promise.then(^(id o){
+                both(ii, o);
+            });
+        }];
     }];
-    
-    return deferred.promise;
 }
 
-+ (Promise *)until:(id (^)(void))blockReturningPromises catch:(id)failHandler {
-    Deferred *deferred = [Deferred new];
-
-  #pragma clang diagnostic push
-  #pragma clang diagnostic ignored "-Warc-retain-cycles"
-
-    __block void (^block)() = ^{
-        id promises = blockReturningPromises();
-        [self when:promises].then(^(id o){
-            [deferred resolve:o];
-            block = nil;  // break retain cycle
-        }).catch(^(id e){
-            Promise *rv = safely_call_block(failHandler, e);
-            if ([rv isKindOfClass:[Promise class]])
-                rv.then(block);
-            else if (![rv isKindOfClass:[NSError class]])
-                block();
-        });
-    };
-    block();
-
-  #pragma clang diagnostic pop
-
-    return deferred.promise;
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Warc-retain-cycles"
++ (Promise *)until:(id (^)(void))blockReturningPromises catch:(id)failHandler
+{
+    return [Promise new:^(void(^fulfiller)(id), id rejecter){
+        __block void (^block)() = ^{
+            id promises = blockReturningPromises();
+            [self when:promises].then(^(id o){
+                fulfiller(o);
+                block = nil;  // break retain cycle
+            }).catch(^(id e){
+                Promise *rv = safely_call_block(failHandler, e);
+                if ([rv isKindOfClass:[Promise class]])
+                    rv.then(block);
+                else if (![rv isKindOfClass:[NSError class]])
+                    block();
+            });
+        };
+        block();
+    }];
 }
+#pragma clang diagnostic pop
 
 + (Promise *)promiseWithValue:(id)value {
     Promise *p = [Promise new];
     p->result = value;
     return p;
+}
+
++ (Promise *)new:(void(^)(PromiseResolver, PromiseResolver))block {
+    Promise *promise = [Promise new];
+
+    id fulfiller = ^(id value){
+        if (promise->result)
+            @throw PMKE(@"Promise already fulfilled/rejected");
+        if ([value isKindOfClass:[NSError class]])
+            @throw PMKE(@"You may not fulfill a Promise with an NSError");
+        if (!value)
+            value = PMKNull;
+
+        if (IsPromise(value)) {
+            Promise *rsvp = (Promise *)value;
+            Promise *next = promise;
+            if (IsPending(rsvp)) {
+                [rsvp->thens addObject:^(id o){
+                    next->result = o;
+                    return next;
+                }];
+                [rsvp->pendingPromises addObject:next];
+                return;
+            } else
+                promise->result = rsvp->result;
+        } else
+            promise->result = value;
+
+        FulfillRecursively(promise);
+    };
+    id rejecter = ^(id error){
+        if (promise->result)
+            @throw PMKE(@"Promise already fulfilled/rejected");
+        if ([error isKindOfClass:[Promise class]])
+            @throw PMKE(@"You may not reject a Promise");
+        if (!error)
+            error = [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeUnknown userInfo:nil];
+        if (![error isKindOfClass:[NSError class]])
+            error = NSErrorWithThrown(error);
+
+        promise->result = error;
+        RejectRecursively(promise);
+    };
+
+    @try {
+        block(fulfiller, rejecter);
+    } @catch (id e) {
+        promise->result = NSErrorWithThrown(e);
+    }
+
+    return promise;
 }
 
 @end
@@ -246,7 +292,7 @@ static id safely_call_block(id frock, id result) {
  completely certain that third-party libraries and end-users of your
  Promise based API did not modify your Promises.
  */
-static void ResolveRecursively(Promise *promise) {
+static void FulfillRecursively(Promise *promise) {
     assert(promise->result);
     assert(![promise->result isKindOfClass:[NSError class]]);
 
@@ -268,15 +314,15 @@ static void ResolveRecursively(Promise *promise) {
         }
         else if (IsPromise(next->result) && !IsPending(next->result)) {
             next->result = ((Promise *)next->result)->result;
-            ResolveRecursively(next);
+            FulfillRecursively(next);
         } else
-            ResolveRecursively(next);
+            FulfillRecursively(next);
     }
 
     // search through fails for thens
     for (Promise *pending in promise->pendingPromises) {
         pending->result = promise->result;
-        ResolveRecursively(pending);
+        FulfillRecursively(pending);
     }
 
     promise->thens = promise->fails = promise->pendingPromises = nil;
@@ -311,7 +357,7 @@ static void RejectRecursively(Promise *promise) {
             // bubble again!
             RejectRecursively(next);
         else
-            ResolveRecursively(next);
+            FulfillRecursively(next);
     }
 
     // search through thens for fails
@@ -325,73 +371,20 @@ static void RejectRecursively(Promise *promise) {
 
 
 
-@implementation Deferred
-
-- (instancetype)init {
-    promise = [Promise new];
-    return self;
-}
-
-- (void)resolve:(id)value {
-    if (promise->result)
-        @throw PMKE(@"Deferred already resolved");
-    if ([value isKindOfClass:[Promise class]])
-        @throw PMKE(@"You may not pass a Promise to [Deferred resolve:]");
-    if ([value isKindOfClass:[NSError class]])
-        @throw PMKE(@"You may not pass an NSError to [Deferred resolve:]");
-    if (!value)
-        value = PMKNull;
-
-    promise->result = value;
-    ResolveRecursively(promise);
-}
-
-- (void)reject:(id)error {
-    if (promise->result)
-        @throw PMKE(@"Deferred already resolved");
-    if ([error isKindOfClass:[Promise class]])
-        @throw PMKE(@"You may not pass a Promise to [Deferred reject:]");
-    if (!error)
-        error = [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeUnknown userInfo:nil];
-    if (![error isKindOfClass:[NSError class]])
-        error = NSErrorWithThrown(error);
-
-    promise->result = error;
-    RejectRecursively(promise);
-}
-
-@synthesize promise;
-@end
-
-
-
 Promise *dispatch_promise(id block) {
     return dispatch_promise_on(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), block);
 }
 
 Promise *dispatch_promise_on(dispatch_queue_t queue, id block) {
-    Deferred *deferred = [Deferred new];
-    dispatch_async(queue, ^{
-        __block id result = safely_call_block(block, nil);
-        dispatch_async(dispatch_get_main_queue(), ^{
-            if (IsPromise(result)) {
-                Promise *rsvp = (Promise *)result;
-                Promise *next = deferred.promise;
-                if (IsPending(rsvp)) {
-                    [rsvp->thens addObject:^(id o){
-                        next->result = o;
-                        return next;
-                    }];
-                    [rsvp->pendingPromises addObject:next];
-                    return;
-                } else
-                    result = rsvp->result;
-            }
-            if ([result isKindOfClass:[NSError class]])
-                [deferred reject:result];
-            else
-                [deferred resolve:result];            
+    return [Promise new:^(void(^fulfiller)(id), void(^rejecter)(id)){
+        dispatch_async(queue, ^{
+            __block id result = safely_call_block(block, nil);
+            dispatch_async(dispatch_get_main_queue(), ^{
+                if ([result isKindOfClass:[NSError class]])
+                    rejecter(result);
+                else
+                    fulfiller(result);
+            });
         });
-    });
-    return deferred.promise;
+    }];
 }

@@ -1,19 +1,19 @@
+#import <objc/runtime.h>
 #import "Private/macros.m"
-#import "PromiseKit/Deferred.h"
 #import "PromiseKit/Promise.h"
 #import "PromiseKit+UIKit.h"
 @import UIKit.UINavigationController;
 
-@interface PMKMFDeferred : Deferred
+@interface PMKMFDelegater : NSObject
 @end
 
-@implementation PMKMFDeferred
+@implementation PMKMFDelegater
 
 - (void)mailComposeController:(id)controller didFinishWithResult:(int)result error:(NSError *)error {
     if (error)
-        [self reject:error];
+        [controller reject:error];
     else
-        [self resolve:@(result)];
+        [controller fulfill:@(result)];
 
     __anti_arc_release(self);
 }
@@ -27,43 +27,56 @@
 {
     [self presentViewController:vc animated:animated completion:block];
 
-    Deferred *d = [Deferred new];
-
     if ([vc isKindOfClass:NSClassFromString(@"MFMailComposeViewController")]) {
-        d = [PMKMFDeferred new];
-        __anti_arc_retain(d);
+        PMKMFDelegater *delegater = [PMKMFDelegater new];
+
+        __anti_arc_retain(delegater);
+
         SEL selector = NSSelectorFromString(@"setMailComposeDelegate:");
         IMP imp = [vc methodForSelector:selector];
         void (*func)(id, SEL, id) = (void *)imp;
-        func(vc, selector, d);
-    } else {
-        if ([vc isKindOfClass:[UINavigationController class]])
-            vc = [(id)vc viewControllers].firstObject;
-        SEL viewWillDefer = NSSelectorFromString(@"viewWillDefer:");
-        if ([vc respondsToSelector:viewWillDefer]) {
-            IMP imp = [vc methodForSelector:viewWillDefer];
-            void (*func)(id, SEL, Deferred *) = (void *)imp;
-            func(vc, viewWillDefer, d);
-        } else
-            NSLog(@"You didn't implement viewWillDefer:! You should do that.");
+        func(vc, selector, delegater);
     }
-
-    return d.promise.then(^(id o){
+    else if ([vc isKindOfClass:[UINavigationController class]])
+        vc = [(id)vc viewControllers].firstObject;
+    
+    if (!vc) {
+        id err = [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeInvalidUsage userInfo:@{NSLocalizedDescriptionKey: @"Cannot promise a `nil` viewcontroller"}];
+        return [Promise promiseWithValue:err];
+    }
+    
+    return [Promise new:^(id fulfiller, id rejecter){
+        objc_setAssociatedObject(vc, @selector(fulfill:), fulfiller, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(vc, @selector(reject:), rejecter, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }].then(^(id o){
         [self dismissViewControllerAnimated:animated completion:nil];
         return o;
     });
+}
+
+- (void)fulfill:(id)result {
+    void (^fulfiller)(id) = objc_getAssociatedObject(self, _cmd);
+    fulfiller(result);
+}
+
+- (void)reject:(NSError *)error {
+    void (^rejecter)(id) = objc_getAssociatedObject(self, _cmd);
+    rejecter(error);
 }
 
 @end
 
 
 
-@interface PMKAlertViewDelegate : Deferred <UIAlertViewDelegate>
+@interface PMKAlertViewDelegater : NSObject <UIAlertViewDelegate> {
+@public
+    void (^fulfiller)(id);
+}
 @end
 
-@implementation PMKAlertViewDelegate
+@implementation PMKAlertViewDelegater
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    [self resolve:@(buttonIndex)];
+    fulfiller(@(buttonIndex));
     __anti_arc_release(self);
 }
 @end
@@ -71,11 +84,13 @@
 @implementation UIAlertView (PromiseKit)
 
 - (Promise *)promise {
-    PMKAlertViewDelegate *d = [PMKAlertViewDelegate new];
+    PMKAlertViewDelegater *d = [PMKAlertViewDelegater new];
     __anti_arc_retain(d);
     self.delegate = d;
     [self show];
-    return d.promise;
+    return [Promise new:^(id fulfiller, id rejecter){
+        d->fulfiller = fulfiller;
+    }];
 }
 
 @end
@@ -83,12 +98,15 @@
 
 
 
-@interface PMKActionSheetDelegate : Deferred <UIActionSheetDelegate>
+@interface PMKActionSheetDelegater : NSObject <UIActionSheetDelegate> {
+@public
+    void (^fulfiller)(id);
+}
 @end
 
-@implementation PMKActionSheetDelegate
+@implementation PMKActionSheetDelegater
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    [self resolve:@(buttonIndex)];
+    fulfiller(@(buttonIndex));
     __anti_arc_release(self);
 }
 @end
@@ -96,11 +114,13 @@
 @implementation UIActionSheet (PromiseKit)
 
 - (Promise *)promiseInView:(UIView *)view {
-    PMKActionSheetDelegate *d = [PMKActionSheetDelegate new];
+    PMKActionSheetDelegater *d = [PMKActionSheetDelegater new];
     __anti_arc_retain(d);
     self.delegate = d;
     [self showInView:view];
-    return d.promise;
+    return [Promise new:^(id fulfiller, id rejecter){
+        d->fulfiller = fulfiller;
+    }];
 }
 
 @end

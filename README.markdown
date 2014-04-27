@@ -2,7 +2,7 @@ Modern development is highly asynchronous: isn’t it about time iOS developers 
 
 PromiseKit is not just a [Promises](http://wikipedia.org/wiki/Promise_%28programming%29) implementation, it is also a collection of helper functions that make the typical asynchronous patterns we use in iOS development delightful *too*.
 
-PromiseKit is also designed to be integrated into other CocoaPods. If your library has asynchronous operations and you like PromiseKit, then add an opt-in subspec that provides Promises for your users. Documentation to help you integrate PromiseKit into your own pods is provided later in this README.
+PromiseKit is also designed to be integrated into other CocoaPods. If your library has asynchronous operations and you like PromiseKit, then add an opt-in subspec that provides Promises for your users. Documentation to help you integrate PromiseKit into your own pods is provided later in this guide.
 
 
 #Importing PromiseKit
@@ -77,21 +77,31 @@ Code with promises is about as close as we can get to the minimal cleanliness of
 
 ##Explaining That Promise Code
 
-A `Promise` object itself represents the *future* value of an asynchronous task.
+A `Promise` represents the *future* value of an asynchronous task. To obtain the value of that future, we `then` off the Promise.
 
 ```objc
-dispatch_promise(^{
+Promise *promise = dispatch_promise(^{
     // we’re in a background thread
     return md5(email);
-}).then(^(NSString *md5){
+});
+
+// `dispatch_promise` returns a promise representing the future
+// value of the block it executes. You can `then` off any
+// Promise object and it will receive the previous Promise’s
+// value as its parameter.
+
+promise = promise.then(^(NSString *md5){
     // we’re back in the main thread
-    // this next line returns a `Promise *`
     return [NSURLConnection GET:@"http://gravatar.com/avatar/%@", md5];
-}).then(^(UIImage *gravatarImage){
-    // since the last `then` block returned a Promise,
-    // PromiseKit waited for it to complete before we
-    // were executed. But now we're done with its result,
-    // so let’s set that Gravatar image.
+});
+
+// .2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0
+// The previous `then` returned a Promise. The next Promise
+// will not execute any `then`s until that Promise is resolved.
+
+promise.then(^(UIImage *gravatarImage){
+    // The previous promise has resolved and provided
+    // a `UIImage`. So lets finish and set the Gravatar.
     self.imageView.image = gravatarImage;
 });
 ```
@@ -101,7 +111,7 @@ dispatch_promise(^{
 Synchronous code has simple, clean error handling:
 
 ```objc
-extern id download(id url);
+id download(id url);
 
 @try {
     id json1 = download(@"http://api.service.com/user/me");
@@ -113,10 +123,11 @@ extern id download(id url);
 }
 
 id download(id url) {
-    id url = [NSURL URLWithString:@"http://api.service.com/user/me"]
-    id data = [NSData dataWithContentsOfURL:self.url];
+    id url = [NSURL URLWithString:@"http://api.service.com/user/me"];
     id error = nil;
-    id json = [NSJSONSerialization JSONObjectWithData:data error:&error];
+    id data = [NSData dataWithContentsOfURL:self.url options:0 error:&error];
+    if (error) @throw error;
+    id json = [NSJSONSerialization JSONObjectWithData:data options:0 error:&error];
     if (error) @throw error;
 }
 ```
@@ -187,7 +198,7 @@ Wow! Such rightward-drift. To be fair the above [could be simplified](https://gi
 
 Raised exceptions or `NSError` objects returned from handlers bubble up to the first `catch` handler in the chain.
 
-PromiseKit’s `NSURLConnection` additions correctly propogate errors for you (as well as decoding the JSON automatically in a background thread based on the mime-type the server returns).
+PromiseKit’s (optional) `NSURLConnection` additions correctly propogate errors for you (as well as decoding the JSON automatically in a background thread based on the mime-type the server returns).
 
 
 #Say Goodbye to Asynchronous State Machines
@@ -221,12 +232,12 @@ Promises represent the future value of a task. You can add more than one `then` 
 @end
 ```
 
-A key understanding is that Promises can only exist in two states, *pending* or *fulfilled*. The fulfilled state is either a value or an `NSError` object. A Promise can move from pending to fulfilled **exactly once**.
+A key understanding is that Promises can only exist in two states, *pending* or *fulfilled*. The fulfilled state is either a value or an `NSError` object. A Promise can move from pending to fulfilled **exactly once**. Whichever state the Promise is in, you can `then` off it.
 
 
 #Waiting on Multiple Asynchronous Operations
 
-One powerful reason to use asynchronous variants is so we can do two or more asynchronous operations simultaneously. However writing code that acts when the simultaneous operations have all completed is hard. Not so with PromiseKit:
+One common reason to use asynchronous variants is so we can do two or more asynchronous operations simultaneously. However writing code that acts when all the simultaneous operations have completed is tricky and bug-prone. Not so with PromiseKit:
 
 ```objc
 Promise *grabcat = [NSURLConnection GET:@"http://placekitten.org/%d/%d", w, h];
@@ -249,9 +260,9 @@ Promise *locater = [CLLocationManager promise];
 
 #Forgiving Syntax
 
-In case you didn't notice, the block you pass to `then` or `catch` can have return type of `Promise`, or any object, or nothing. And it can have a parameter of `id`, or a specific class type, or nothing.
+The block you pass to `then` or `catch` can have return type of `Promise`, or any object, or nothing. And it can have a parameter of `id`, or a specific class type, or nothing.
 
-So, these are all valid:
+So all of these are valid:
 
 ```objc
 myPromise.then(^{
@@ -273,7 +284,7 @@ myPromise.then(^{
 
 Clang is smart so you don’t (usually) have to specify a return type for your block.
 
-This is not usual to Objective-C or blocks. Usually everything is very explicit. We are using introspection to determine what arguments and return types you are working with. Thus, programming with PromiseKit has similarities to programming with more modern languages like Ruby or Javascript.
+This is not usual to Objective-C or blocks. Usually everything is very explicit. We are using introspection to determine what arguments and return types you are working with. Thus, programming with PromiseKit has similarities to programming with (more) modern languages like Ruby or Javascript.
 
 
 #The Category Additions
@@ -320,7 +331,7 @@ And a POST variant:
 });
 ```
 
-PromiseKit reads the response headers and tries to be helpful:
+PromiseKit reads the response headers and decodes the result you actually wanted (in a background thread):
 
 ```objc
 [NSURLConnection GET:@"http://example.com/some.json"].then(^(NSDictionary *json){
@@ -339,7 +350,7 @@ And of course a variant that just takes an `NSURLRequest *`:
 ```objc
 NSMutableURLRequest *rq = [NSMutableURLRequest requestWithURL:url];
 [rq addValue:@"PromiseKit" forHTTPHeader:@"User-Agent"]; 
-[NSURLConnetion promise:rq].then(^(NSData *data){
+[NSURLConnection promise:rq].then(^(NSData *data){
     //…
 })
 ```
@@ -396,24 +407,18 @@ We provide a pattern for modally presenting ViewControllers and getting back a r
     UIViewController *vc = [MyDetailViewController new];
     [self promiseViewController:vc animated:YES completion:nil].then(^(id result){
         // the result from below in `someTimeLater`
-        // PromiseKit dismisses the MyDetailViewController instance when the
-        // `Deferred` is resolved
+        // PromiseKit automatically dismisses the MyDetailViewController
     });
 }
 
 @end
 
 @implementation MyDetailViewController
-@property Deferred *deferred;
-
-- (void)viewWillDefer:(Deferred *)deferMe {
-    // PromiseKit calls this so you can control the presentation
-    // of this ViewController. Deferred is documented below.
-    _deferred = deferMe;
-}
 
 - (void)someTimeLater {
-    [_deferred resolve:someResult];
+    [self fulfill:someResult];
+    
+    // if you want to trigger the `catch` use `[self reject:foo]`
 }
 
 @end
@@ -438,40 +443,30 @@ Please submit equivalents for eg. `UIImagePickerController`.
 Check out [Promise.h](PromiseKit/Promise.h) and the rest of the sources.
 
 
-#Deferred
+#Promizing Your Codebase
 
-If you want to write your own methods that return Promises then often you will need a `Deferred` object. Promises are deliberately opaque: you can't directly modify them, only their parent promise can.
-
-A `Deferred` has a promise, and using a `Deferred` you can set that Promise's value, the Deferred then recursively calls any sub-promises. For example:
+This:
 
 ```objc
-- (Promise *)tenThousandRandomNumbers {
-    Deferred *d = [Deferred new];
-
-    dispatch_async(q, ^{
+- (void)calculateTenThousandRandomNumbersWithCompletionBlock:(void(^)(NSArray *))completionBlock {
+    dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
         NSMutableArray *numbers = [NSMutableArray new];
         for (int x = 0; x < 10000; x++)
             [numbers addObject:@(arc4random())];
         dispatch_async(dispatch_get_main_queue(), ^{
-            if (logic) {
-                [d resolve:numbers];
-            } else {
-                [d reject:[NSError errorWith…]];
-            }
+            completionBlock(numbers);
         });
     });
-
-    return d.promise;
 }
 
 - (void)viewDidLoad {
-    [self tenThousandRandomNumbers].then(^(NSMutableArray *numbers){
+    [self calculateTenThousandRandomNumbersWithCompletionBlock:^(NSArray *numbers){
         //…
-    });
+    }];
 }
 ```
 
-Although for the common case of an operation that runs in the background we offer the convenience function `dispatch_promise`, which is like `dispatch_async`, but returns a Promise (which continues on the main queue). So the above would be:
+Becomes this:
 
 ```objc
 - (Promise *)tenThousandRandomNumbers {
@@ -482,22 +477,44 @@ Although for the common case of an operation that runs in the background we offe
         return numbers;
     });
 }
+
+- (void)viewDidLoad {
+    self.tenThousandRandomNumbers.then(^(NSArray *numbers){
+        //…
+    }];
+}
 ```
 
-`dispatch_promise` runs on `DISPATCH_QUEUE_PRIORITY_DEFAULT`. If you need another queue we also provide: `dispatch_promise_on`.
+##Wrapping e.g. Parse
 
+```objc
+- (Promise *)allUsers {
+    return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter){
+        PFQuery *query = [PFQuery queryWithClassName:@"User"];
+        [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
+            if (!error) {
+                fulfiller(objects);
+            } else {
+                rejecter(error);
+            }
+        }];
+    }];
+}
+```
+
+`PromiseResolver` is `typedef void (^PromiseResolver)(id)`, i.e. a block that takes a parameter of `id` and returns `void`.
 
 #The Fine Print
 
 The fine print of PromiseKit is mostly exactly what you would expect, so don’t confuse yourself: only come back here when you find yourself curious about more advanced techniques.
 
-* Returning a Promise as the value of a `then` (or `catch`) handler will cause any subsequent handlers to wait for that Promise to fulfill.
+* Returning a Promise as the value of a `then` (or `catch`) handler will cause any subsequent handlers to wait for that Promise to resolve.
 * Returning an instance of `NSError` or throwing an exception within a then block will cause PromiseKit to bubble that object up to the nearest catch handler.
 * `catch` handlers always are passed an `NSError` object.
-* Returning something other than an `NSError` from a `catch` handler causes PromiseKit to consider the error resolved, and execution will continue at the next `then` handler using the object you returned as the input.
+* Returning something other than an `NSError` from a `catch` handler causes PromiseKit to consider the error “corrected”, and execution will continue at the next `then` handler using the object you returned as the input.
 * Not returning from a `catch` handler (or returning nil) causes PromiseKit to consider the Promise complete. No further bubbling occurs.
-* Nothing happens if you add a `then` to a failed Promise
-* Adding a `catch` handler to a failed Promise will execute that fail handler: this is converse to adding the same to a **pending** Promise.
+* Nothing happens if you add a `then` to a failed Promise (unless you subsequently add a `catch` handler to the Promise returned from that `then`)
+* Adding a `catch` handler to a failed Promise will execute that fail handler: this is converse to adding the same to a **pending** Promise that has a higher `catch` than the one you just added.
 
 
 #Adding Promises to Third Party Libraries
@@ -524,14 +541,14 @@ Opt-in PromiseKit support would include a new file `ABCKitten+PromiseKit.h`:
 
 /**
  * Returns a Promise that overlays a kitten image.
- * @return A Promise that will then a `UIImage *` object.
+ * @return A Promise that will `then` a `UIImage *` object.
  */
 - (Promise *)overlayKitten;
 
 @end
 ```
 
-It's crucially important to document your Promise methods [properly](http://nshipster.com/documentation/), because the result of a Promise can be any object type and your users need to be able to easily look up the types by ⌥ clicking the method.
+It's crucially important to document your Promise methods [properly](http://nshipster.com/documentation/), because subsequent `then`s are not strongly typed, thus the only clue the user has is how you named your method and the documentation they can get when **⌥** clicking that method.
 
 Consumers of your library would then include in their `Podfile`:
 
@@ -558,7 +575,7 @@ Pod::Spec.new do |s|
   s.name         = "ABCKitten"
   s.version      = "1.1"
 
-  s.default_subspec = 'base'  # ensures that we are opt-in
+  s.default_subspec = 'base'  # ensures that the PromiseKit additions are opt-in
 
   s.subspec 'base' do |ss|
     ss.source_files = 'ABCKitten.{m,h}'
@@ -571,22 +588,6 @@ Pod::Spec.new do |s|
 end
 ```
 
-As a further example, the actual implementation of `- (Promise *)overlayKitten` would likely be as simple as this:
-
-```objc
-- (Promise *)overlayKitten {
-    Deferred *deferred = [Deferred new];
-    [self overlayKittenWithCompletionBlock:^(UIImage *img, NSError *err){
-        if (err)
-            [deferred reject:err];
-        else
-            [deferred resolve:img];
-    }];
-    return deferred.promise;
-}
-```
-
-
 #Adding PromiseKit to Someone Else’s Pod
 
 Firstly you should try submitting the above to the project itself. If they won’t add it then you'll need to make your own pod. Use the naming scheme: `ABCKitten+PromiseKit`.
@@ -596,9 +597,9 @@ Firstly you should try submitting the above to the project itself. If they won�
 
 There are other Promise implementations for iOS, but in this author’s opinion, none of them are as pleasant to use as PromiseKit.
 
-* [Bolts](https://github.com/BoltsFramework/Bolts-iOS) was the inspiration for PromiseKit. I thought that—finally—someone had written a decent Promises implementation for iOS. The lack of dedicated `catch` handler, the (objectively) ugly syntax and the overly complex design was a disappointment. To be fair Bolts is not a Promise implementation, it’s… something else. You may like it, and certainly it is backed by big names™. Fundamentally, Promise-type implementations are not hard to write, so you really are making a decision based on how flexible the API is while simulatenously producing readable, clean code. I have worked hard to make PromiseKit the best choice.
-* [RXPromise](https://github.com/couchdeveloper/RXPromise) is an excellent Promise implementation that is mostly let down by syntax choices. By default thens are executed in background threads, which usually is inconvenient. `then` always return `id` and always take `id`, which makes code less elegant. There is no explicit `catch`, instead `then` always takes two blocks, the second being the error handler, which is ugly. The interface for `Promise` allows any caller to resolve it breaking encapsulation. Otherwise an excellent implementation.
-* [CollapsingFutures](https://github.com/Strilanc/ObjC-CollapsingFutures) looks good, but not thoroughly documented so hard to say without more experimentation.
+* [Bolts](https://github.com/BoltsFramework/Bolts-iOS) was the inspiration for PromiseKit. I thought that—finally—someone had written a decent Promises implementation for iOS. The lack of dedicated `catch` handler, the (objectively) ugly syntax and the overly complex design was a disappointment. To be fair Bolts is not a Promise implementation, it’s…something else. You may like it, and certainly it is backed by big names™. Fundamentally, Promise-type implementations are not hard to write, so really you’re making a decision based on how flexible the API is while simulatenously producing readable, clean code. I have worked hard to make PromiseKit the best choice.
+* [RXPromise](https://github.com/couchdeveloper/RXPromise) is an excellent Promise implementation that is not quite perfect (IMHO). By default thens are executed in background threads, which usually is inconvenient. `then` always return `id` and always take `id`, which makes code less elegant. There is no explicit `catch`, instead `then` always takes two blocks, the second being the error handler, which is ugly. The interface for `Promise` allows any caller to resolve it breaking encapsulation. Otherwise an excellent implementation.
+* [CollapsingFutures](https://github.com/Strilanc/ObjC-CollapsingFutures) looks good, but is not thoroughly documented so a thorough review would require further experimentation.
 * [Many others](http://cocoapods.org/?q=promise)
 
 PromiseKit is well tested, and inside apps on the store. It also is fully documented, even within Xcode (⌥ click any method).
@@ -608,3 +609,4 @@ PromiseKit is well tested, and inside apps on the store. It also is fully docume
 
 * We are version 0.9 and thus reserve the right to remove/change API before 1.0. Probably we won’t; we’re just being prudent by stating this advisory.
 * PromiseKit is not thread-safe. This is not intentional, we will fix that. However, in practice the only way to compromise PromiseKit is to keep a pointer to an unresolved Promise and use that from multiple threads. You can execute thens in many different contexts and the underlying immutability of Promises means PromiseKit is inherently thread-safe.
+* If you don't have at least one catch handler in your chain then errors are silently absorbed which may cause you confusion. We intend to log unhandled errors, (with an opt-in method to have them get thrown and thus crash your app in cases where that is desired).

@@ -1,4 +1,3 @@
-#import "PromiseKit/Deferred.h"
 #import "PromiseKit/Promise.h"
 #ifdef PMK_CORELOCATION
 #import "PromiseKit+CoreLocation.h"

@@ -2,7 +2,6 @@
 @import UIKit.UIAlertView;
 @import UIKit.UIActionSheet;
 @class Promise;
-@class Deferred;
 
 
 
@@ -23,11 +22,11 @@
  
  We should handle any other speciality controllers also, but we may
  require you submit those as pull requests.
-
- Important: you need to implement viewWillDefer: in your presentedViewController
- in order to get the Deferred object that controls the presentation.
 */
 - (Promise *)promiseViewController:(UIViewController *)vc animated:(BOOL)animated completion:(void(^)(void))block;
+
+- (void)fulfill:(id)result;
+- (void)reject:(NSError *)error;
 
 @end
 

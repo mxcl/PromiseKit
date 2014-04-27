@@ -5,7 +5,7 @@ Pod::Spec.new do |s|
   s.version = "0.9.2"
   s.source = { :git => "https://github.com/mxcl/#{s.name}.git", :tag => s.version }
   s.license = 'MIT'
-  s.summary = 'A delightful Promises implementation for iOS.'
+  s.summary = 'A delightful Promises implementation for iOS and OS X.'
 
   s.homepage = 'http://promisekit.org'
   s.social_media_url = 'https://twitter.com/mxcl'
