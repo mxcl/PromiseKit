@@ -182,8 +182,12 @@ static id safely_call_block(id frock, id result) {
             if (++x != promises.count)
                 return;
 
-            NSArray *objs = results.allObjects;
-            id passme = wasarray ? objs : objs[0];
+            id passme = wasarray ? ({
+                for (int x = 0; x < results.count; ++x)
+                    if ([results pointerAtIndex:x] == (__bridge void *)PMKNull)
+                        [results replacePointerAtIndex:x withPointer:kCFNull];
+                results.allObjects;
+            }) : results.allObjects[0];
 
             if (failed) {
                 rejecter(passme);
@@ -227,7 +231,7 @@ static id safely_call_block(id frock, id result) {
 
 + (Promise *)promiseWithValue:(id)value {
     Promise *p = [Promise new];
-    p->result = value;
+    p->result = value ?: PMKNull;
     return p;
 }
 

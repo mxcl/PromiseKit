@@ -526,6 +526,28 @@ Promise *gcdreject() {
     XCTAssertTrue(resolved);
 }
 
+- (void)test_35_when_nil {
+    promise = promise.then(^{ return nil; });
+    [Promise when:@[[NSURLConnection GET:URL], [Promise promiseWithValue:nil], promise]].then(^(NSArray *results){
+        XCTAssertEqual(results.count, 3ul);
+        XCTAssertEqualObjects(results[1], [NSNull null]);
+        resolved = YES;
+    }).catch(^(NSError *err){
+        NSLog(@"%@", err);
+    });
+    fulfiller(@"35");
+    wait(0.1);
+    XCTAssertTrue(resolved);
+}
+
+- (void)test_36_promise_with_value_nil {
+    [Promise promiseWithValue:nil].then(^(id o){
+        XCTAssertNil(o);
+        resolved = YES;
+    });
+    XCTAssertTrue(resolved);
+}
+
 @end
 
 __EOBJC__

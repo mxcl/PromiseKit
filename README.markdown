@@ -131,6 +131,9 @@ void (^errorHandler)(NSError *) = ^(NSError *error){
     //…
 };
 
+id url = [NSURL URLWithString:@"http://example.com/user.json"];
+id rq = [NSURLRequest requestWithURL:url];
+
 [NSURLConnection sendAsynchronousRequest:rq queue:[NSOperationQueue mainQueue] completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
     if (connectionError) {
         errorHandler(connectionError);
@@ -163,14 +166,14 @@ void (^errorHandler)(NSError *) = ^(NSError *error){
 }];
 ```
 
-Not only does this code drift ever rightwards, reducing readability, but it doesn't even handle exceptions that might be thrown (like if there are zero placemarks in the `placemarks` array). The code doesn’t even decode the JSON in a background thread, which may introduce UI lag. But who would want to add *another* closure?
+Not only does this code drift ever rightwards, reducing readability, but it doesn't handle exceptions that might be thrown (like if there are zero placemarks in the `placemarks` array). The code doesn’t even decode the JSON in a background thread (which may introduce UI lag). But who would want to add *yet another* closure?
 
 ##Promises Have Elegant Error Handling
 
 ```objc
 #import "PromiseKit.h"
 
-[NSURLConnection promise:rq].then(^(id json){
+[NSURLConnection GET:@"http://example.com/user.json"].then(^(id json){
     id home = [json valueForKeyPath:@"user.home.address"];
     return [CLGeocoder geocode:home];
 }).then(^(NSArray *placemarks){
@@ -187,7 +190,7 @@ Not only does this code drift ever rightwards, reducing readability, but it does
 
 Raised exceptions or `NSError` objects returned from handlers bubble up to the first `catch` handler in the chain.
 
-The above makes heavy use of PromiseKit’s category additions to the iOS SDK. Mostly PromiseKit’s categories are logical conversions of block-based or delegation-based patterns to Promises. The exception here is `NSURLConnection+PromiseKit` which detects that the response in JSON (from the HTTP headers) and deserializes the JSON for you in a background thread. All of PromiseKit’s categories are optional CocoaPods subspecs.
+The above makes heavy use of PromiseKit’s category additions to the iOS SDK. Mostly PromiseKit’s categories are logical conversions of block-based or delegation-based patterns to Promises. The exception here is `NSURLConnection+PromiseKit` which detects that the response is JSON (from the HTTP headers) and deserializes that JSON in a background thread. All of PromiseKit’s categories are optional CocoaPods subspecs.
 
 
 #Say Goodbye to Asynchronous State Machines
@@ -221,7 +224,7 @@ Promises represent the future value of a task. You can add more than one `then` 
 @end
 ```
 
-A key understanding is that Promises can only exist in two states, *pending* or *fulfilled*. The fulfilled state is either a value or an `NSError` object. A Promise can move from pending to fulfilled **exactly once**. Whichever state the Promise is in, you can `then` off it.
+A key understanding is that Promises can only exist in two states, *pending* or *resolved*. The resolved state is either fulfilled or rejected (an `NSError` object). A Promise can move from pending to resolved **exactly once**. Whichever state the Promise is in, you can `then` off it.
 
 
 #Waiting on Multiple Asynchronous Operations
