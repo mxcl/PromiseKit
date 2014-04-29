@@ -27,3 +27,20 @@
 }
 
 @end
+
+
+
+@implementation MKMapSnapshotter (PromiseKit)
+
+- (Promise *)promise {
+    return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter) {
+        [self startWithCompletionHandler:^(MKMapSnapshot *snapshot, NSError *error) {
+            if (error)
+                rejecter(error);
+            else
+                fulfiller(snapshot);
+        }];
+    }];
+}
+
+@end
