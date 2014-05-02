@@ -132,8 +132,22 @@ NSString *NSDictionaryToURLQueryString(NSDictionary *params) {
     return [self promise:rq];
 }
 
-+ (Promise *)promise:(NSURLRequest *)rq {
+static NSString *useragent() {
+    static NSString *s;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        s = [NSString stringWithFormat:@"%@/%@ (%@; iOS %@; Scale/%0.2f)", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"] ?: [[[NSBundle mainBundle] infoDictionary] objectForKey:(__bridge NSString *)kCFBundleIdentifierKey], (__bridge id)CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(), kCFBundleVersionKey) ?: [[[NSBundle mainBundle] infoDictionary] objectForKey:(__bridge NSString *)kCFBundleVersionKey], [[UIDevice currentDevice] model], [[UIDevice currentDevice] systemVersion], ([[UIScreen mainScreen] respondsToSelector:@selector(scale)] ? [[UIScreen mainScreen] scale] : 1.0f)];
+    });
+    return s;
+}
+
++ (Promise *)promise:(NSMutableURLRequest *)rq {
     id q = [NSOperationQueue currentQueue] ?: [NSOperationQueue mainQueue];
+
+    if (![rq valueForHTTPHeaderField:@"User-Agent"]) {
+        rq = rq.mutableCopy;
+        [rq setValue:useragent() forHTTPHeaderField:@"User-Agent"];
+    }
 
     #define NSURLError(x, desc) [NSError errorWithDomain:NSURLErrorDomain code:x userInfo:NSDictionaryExtend(@{PMKURLErrorFailingURLResponse: rsp, NSLocalizedDescriptionKey: desc}, error.userInfo)]
 
