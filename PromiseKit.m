@@ -174,7 +174,7 @@ static id safely_call_block(id frock, id result) {
     results.count = promises.count;
 
     return [Promise new:^(void(^fulfiller)(id), void(^rejecter)(id)){
-        __block int x = 0;
+        __block NSUInteger x = 0;
         __block BOOL failed = NO;
         void (^both)(NSUInteger, id) = ^(NSUInteger ii, id o){
             [results replacePointerAtIndex:ii withPointer:(__bridge void *)(o ?: PMKNull)];
@@ -183,7 +183,7 @@ static id safely_call_block(id frock, id result) {
                 return;
 
             id passme = wasarray ? ({
-                for (int x = 0; x < results.count; ++x)
+                for (NSUInteger x = 0; x < results.count; ++x)
                     if ([results pointerAtIndex:x] == (__bridge void *)PMKNull)
                         [results replacePointerAtIndex:x withPointer:kCFNull];
                 results.allObjects;
