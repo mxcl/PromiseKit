@@ -185,7 +185,7 @@ static id safely_call_block(id frock, id result) {
             id passme = wasarray ? ({
                 for (NSUInteger x = 0; x < results.count; ++x)
                     if ([results pointerAtIndex:x] == (__bridge void *)PMKNull)
-                        [results replacePointerAtIndex:x withPointer:kCFNull];
+                        [results replacePointerAtIndex:x withPointer:NULL];
                 results.allObjects;
             }) : results.allObjects[0];
 
