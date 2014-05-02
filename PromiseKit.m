@@ -6,7 +6,6 @@
 @import Foundation.NSKeyValueCoding;
 @import Foundation.NSMethodSignature;
 @import Foundation.NSPointerArray;
-@import Foundation.NSNull;
 #import "Private/NSMethodSignatureForBlock.m"
 #import "PromiseKit/Promise.h"
 
@@ -186,7 +185,7 @@ static id safely_call_block(id frock, id result) {
             id passme = wasarray ? ({
                 for (NSUInteger x = 0; x < results.count; ++x)
                     if ([results pointerAtIndex:x] == (__bridge void *)PMKNull)
-                        [results replacePointerAtIndex:x withPointer:CFBridgingRetain([NSNull null])];
+                        [results replacePointerAtIndex:x withPointer:(void *)kCFNull];
                 results.allObjects;
             }) : results.allObjects[0];
 
