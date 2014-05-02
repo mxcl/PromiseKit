@@ -92,6 +92,9 @@ NSString *NSDictionaryToURLQueryString(NSDictionary *params) {
 @implementation NSURLConnection (PromiseKit)
 
 + (Promise *)GET:(id)urlFormat, ... {
+    if (!urlFormat)
+        return [Promise promiseWithValue:[NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeInvalidUsage userInfo:nil]];
+
     if ([urlFormat isKindOfClass:[NSURL class]])
         return [self GET:urlFormat query:nil];
     va_list arguments;
