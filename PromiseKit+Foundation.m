@@ -122,6 +122,7 @@ NSString *NSDictionaryToURLQueryString(NSDictionary *params) {
         url = [NSURL URLWithString:url];
 
     NSMutableURLRequest *rq = [[NSMutableURLRequest alloc] initWithURL:url];
+    rq.HTTPMethod = @"POST";
 
     if (params.chuzzle) {
         [rq addValue:@"application/x-www-form-urlencoded; charset=utf-8" forHTTPHeaderField:@"Content-Type"];

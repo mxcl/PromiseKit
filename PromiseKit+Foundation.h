@@ -11,7 +11,7 @@
 @interface NSURLConnection (PromiseKit)
 + (Promise *)GET:(id)stringFormatOrNSURL, ...;
 + (Promise *)GET:(id)stringOrURL query:(NSDictionary *)parameters;
-+ (Promise *)POST:(id)strigOrURL formURLEncodedParameters:(NSDictionary *)parameters;
++ (Promise *)POST:(id)stringOrURL formURLEncodedParameters:(NSDictionary *)parameters;
 + (Promise *)promise:(NSURLRequest *)rq;
 @end
 
