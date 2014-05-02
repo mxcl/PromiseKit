@@ -273,6 +273,8 @@ static id safely_call_block(id frock, id result) {
         if (![error isKindOfClass:[NSError class]])
             error = NSErrorWithThrown(error);
 
+        NSLog(@"PromiseKit: %@", error);  // we refuse to let errors die silently
+
         promise->result = error;
         RejectRecursively(promise);
     };
