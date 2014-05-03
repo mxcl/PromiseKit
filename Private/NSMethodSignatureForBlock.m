@@ -15,7 +15,7 @@ struct PMKBlockLiteral {
     // imported variables
 };
 
-enum PMKBlockDescriptionFlags {
+typedef NS_OPTIONS(NSUInteger, PMKBlockDescriptionFlags) {
     PMKBlockDescriptionFlagsHasCopyDispose = (1 << 25),
     PMKBlockDescriptionFlagsHasCtor = (1 << 26), // helpers have C++ code
     PMKBlockDescriptionFlagsIsGlobal = (1 << 28),
@@ -28,7 +28,7 @@ static NSMethodSignature *NSMethodSignatureForBlock(id block) {
         return nil;
 
     struct PMKBlockLiteral *blockRef = (__bridge struct PMKBlockLiteral *)block;
-    enum PMKBlockDescriptionFlags flags = blockRef->flags;
+    PMKBlockDescriptionFlags flags = blockRef->flags;
 
     if (flags & PMKBlockDescriptionFlagsHasSignature) {
         void *signatureLocation = blockRef->descriptor;
