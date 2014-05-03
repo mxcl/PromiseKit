@@ -51,17 +51,24 @@ def test!
   end
 end
 
-def compile!
+def prepare!
+  Dir.chdir "/tmp" do
+    system "git clone https://github.com/mxcl/ChuzzleKit"
+  end unless File.directory? "/tmp/ChuzzleKit"
+
   File.open('/tmp/PromiseKitTests.m', 'w') do |f|
-    f.puts("\n\n")  # make line numbers line up
+    f.puts("\n\n")  # make line numbers correlate
     f.puts(OBJC)
   end
+end
+
+def compile!
   abort unless system <<-EOS
     clang -g -O0 -ObjC -F#{FRAMEWORKS} -I. -fmodules -fobjc-arc \
           -framework XCTest \
-          -I../YOLOKit -I../ChuzzleKit \
+          -I/tmp/ChuzzleKit \
           /tmp/PromiseKitTests.m \
-          PromiseKit+Foundation.m PromiseKit.m ../ChuzzleKit/*.m \
+          /tmp/ChuzzleKit/*.m \
           -w -o /tmp/PromiseKitTests
   EOS
   abort unless system <<-EOS
@@ -72,13 +79,18 @@ def compile!
   EOS
 end
 
+prepare!
 compile!
 
 exec "lldb", "/tmp/PromiseKitTests" if ARGV.include? '-d'
-              
-require 'webrick'
-require 'sinatra/base'
-require 'logger'
+
+begin              
+  require 'webrick'
+  require 'sinatra/base'
+  require 'logger'
+rescue LoadError
+  abort "gem install sinatra webrick"
+end
 
 class PMKHTTPD < Sinatra::Base
   set :port, 61231

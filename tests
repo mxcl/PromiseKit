@@ -1,10 +1,14 @@
 #!/usr/bin/ruby
 OBJC = <<-__EOBJC__
 
-#import "CommonCrypto/CommonCrypto.h"
-#import "PromiseKit+Foundation.h"
-#import "PromiseKit/Promise.h"
+#import <CommonCrypto/CommonCrypto.h>
+#import "PromiseKit+Foundation.m"
 #import <XCTest/XCTest.h>
+
+#define NSLog(...)
+// prevent error logging here
+#import "PromiseKit.m"
+#undef NSLog
     
 #define URL @"http://localhost:61231"
 #define wait(t) [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:t]]
