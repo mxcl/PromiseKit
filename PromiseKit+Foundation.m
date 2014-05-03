@@ -1,6 +1,7 @@
 #import "Chuzzle.h"
 @import CoreFoundation.CFString;
 @import CoreFoundation.CFURL;
+@import Foundation.NSBundle;
 @import Foundation.NSError;
 @import Foundation.NSJSONSerialization;
 @import Foundation.NSOperation;
@@ -132,21 +133,30 @@ NSString *NSDictionaryToURLQueryString(NSDictionary *params) {
     return [self promise:rq];
 }
 
-static NSString *useragent() {
-    static NSString *s;
+NSString *PMKUserAgent() {
+    static NSString *ua;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        s = [NSString stringWithFormat:@"%@/%@ (%@; iOS %@; Scale/%0.2f)", [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleDisplayName"] ?: [[[NSBundle mainBundle] infoDictionary] objectForKey:(__bridge NSString *)kCFBundleIdentifierKey], (__bridge id)CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(), kCFBundleVersionKey) ?: [[[NSBundle mainBundle] infoDictionary] objectForKey:(__bridge NSString *)kCFBundleVersionKey], [[UIDevice currentDevice] model], [[UIDevice currentDevice] systemVersion], ([[UIScreen mainScreen] respondsToSelector:@selector(scale)] ? [[UIScreen mainScreen] scale] : 1.0f)];
+        id info = [NSBundle mainBundle].infoDictionary;
+        id name = info[@"CFBundleDisplayName"] ?: info[(__bridge NSString *)kCFBundleIdentifierKey];
+        id vers = (__bridge id)CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(), kCFBundleVersionKey) ?: info[(__bridge NSString *)kCFBundleVersionKey];
+      #ifdef UIKIT_EXTERN
+        float scale = ([[UIScreen mainScreen] respondsToSelector:@selector(scale)] ? [UIScreen mainScreen].scale : 1.0f);
+        ua = [NSString stringWithFormat:@"%@/%@ (%@; iOS %@; Scale/%0.2f)", name, vers, [UIDevice currentDevice].model, [UIDevice currentDevice].systemVersion, scale];
+      #else
+        ua = [NSString stringWithFormat:@"%@/%@", name, vers];
+      #endif
     });
-    return s;
+    return ua;
 }
 
 + (Promise *)promise:(NSMutableURLRequest *)rq {
     id q = [NSOperationQueue currentQueue] ?: [NSOperationQueue mainQueue];
 
     if (![rq valueForHTTPHeaderField:@"User-Agent"]) {
-        rq = rq.mutableCopy;
-        [rq setValue:useragent() forHTTPHeaderField:@"User-Agent"];
+        if (![rq respondsToSelector:@selector(setValue:forHTTPHeaderField:)])
+            rq = rq.mutableCopy;
+        [rq setValue:PMKUserAgent() forHTTPHeaderField:@"User-Agent"];
     }
 
     #define NSURLError(x, desc) [NSError errorWithDomain:NSURLErrorDomain code:x userInfo:NSDictionaryExtend(@{PMKURLErrorFailingURLResponse: rsp, NSLocalizedDescriptionKey: desc}, error.userInfo)]

@@ -20,3 +20,10 @@
 // ideally this would be from a pod, but I looked and all the pods imposed
 // too much symbol overhead or used catgeories
 NSString *NSDictionaryToURLQueryString(NSDictionary *parameters);
+
+
+/**
+ A sensible User-Agent string, that by default we set on your requests if you
+ didn’t set your own.
+*/
+NSString *PMKUserAgent();
