@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
   preserved =  %w{Private PromiseKit}
 
   s.name = "PromiseKit"
-  s.version = "0.9.3"
+  s.version = "0.9.4"
   s.source = { :git => "https://github.com/mxcl/#{s.name}.git", :tag => s.version }
   s.license = 'MIT'
   s.summary = 'A delightful Promises implementation for iOS and OS X.'
@@ -13,13 +13,16 @@ Pod::Spec.new do |s|
 
   s.requires_arc = true
   s.compiler_flags = '-fmodules'
-  s.ios.deployment_target = '5.0'
-  s.osx.deployment_target = '10.7'
+
+  s.ios.deployment_target = '7.0'
+  s.osx.deployment_target = '10.9'
 
   s.subspec 'base' do |ss|
     ss.source_files = 'PromiseKit/*.h', 'PromiseKit.{h,m}'
     ss.preserve_paths = preserved
     ss.frameworks = 'Foundation'
+    ss.ios.deployment_target = '5.0'
+    ss.osx.deployment_target = '10.7'
   end
 
   s.subspec 'Foundation' do |ss|
@@ -29,16 +32,17 @@ Pod::Spec.new do |s|
     ss.preserve_paths = preserved
     ss.frameworks = 'Foundation'
     ss.dependency "ChuzzleKit"
+    ss.ios.deployment_target = '5.0'
+    ss.osx.deployment_target = '10.7'
   end
 
   s.subspec 'UIKit' do |ss|
     ss.dependency 'PromiseKit/base'
     ss.ios.source_files = 'PromiseKit+UIKit.{h,m}'
-    ss.osx.source_files = ''
+    ss.ios.deployment_target = '5.0'
+    ss.ios.frameworks = 'UIKit'
     ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_UIKIT=1" }
     ss.preserve_paths = preserved
-    ss.ios.frameworks = 'UIKit'
-    ss.ios.deployment_target = '5.0'
   end
 
   s.subspec 'CoreLocation' do |ss|
@@ -47,6 +51,8 @@ Pod::Spec.new do |s|
     ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_CORELOCATION=1" }
     ss.frameworks = 'CoreLocation'
     ss.preserve_paths = preserved
+    ss.ios.deployment_target = '5.0'
+    ss.osx.deployment_target = '10.7'
   end
 
   s.subspec 'MapKit' do |ss|
