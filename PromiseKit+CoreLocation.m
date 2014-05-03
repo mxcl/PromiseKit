@@ -20,7 +20,7 @@
     __anti_arc_release(self);
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-    fulfiller(locations.count == 1 ? locations[0] : locations);
+    fulfiller(locations.firstObject);
     PMKLocationManagerCleanup();
 }
 
