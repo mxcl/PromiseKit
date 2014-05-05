@@ -14,15 +14,13 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.compiler_flags = '-fmodules'
 
-  s.ios.deployment_target = '7.0'
-  s.osx.deployment_target = '10.9'
+  s.ios.deployment_target = '5.0'
+  s.osx.deployment_target = '10.7'
 
   s.subspec 'base' do |ss|
     ss.source_files = 'PromiseKit/*.h', 'PromiseKit.{h,m}'
     ss.preserve_paths = preserved
     ss.frameworks = 'Foundation'
-    ss.ios.deployment_target = '5.0'
-    ss.osx.deployment_target = '10.7'
   end
 
   s.subspec 'Foundation' do |ss|
@@ -32,8 +30,6 @@ Pod::Spec.new do |s|
     ss.preserve_paths = preserved
     ss.frameworks = 'Foundation'
     ss.dependency "ChuzzleKit"
-    ss.ios.deployment_target = '5.0'
-    ss.osx.deployment_target = '10.7'
   end
 
   s.subspec 'UIKit' do |ss|
@@ -51,13 +47,9 @@ Pod::Spec.new do |s|
     ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_CORELOCATION=1" }
     ss.frameworks = 'CoreLocation'
     ss.preserve_paths = preserved
-    ss.ios.deployment_target = '5.0'
-    ss.osx.deployment_target = '10.7'
   end
 
   s.subspec 'MapKit' do |ss|
-    ss.ios.deployment_target = '7.0'
-    ss.osx.deployment_target = '10.9'
     ss.dependency 'PromiseKit/base'
     ss.source_files = 'PromiseKit+MapKit.{h,m}'
     ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_MAPKIT=1" }

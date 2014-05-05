@@ -2,6 +2,8 @@
 #import "PromiseKit+MapKit.h"
 
 
+#if PMK_DEPLOY_7
+
 @implementation MKDirections (PromiseKit)
 
 + (Promise *)promise:(MKDirectionsRequest *)request {
@@ -44,3 +46,5 @@
 }
 
 @end
+
+#endif
