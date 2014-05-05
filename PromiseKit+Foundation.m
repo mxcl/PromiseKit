@@ -160,9 +160,12 @@ NSString *PMKUserAgent() {
     }
 
     #define NSURLError(x, desc) [NSError errorWithDomain:NSURLErrorDomain code:x userInfo:NSDictionaryExtend(@{PMKURLErrorFailingURLResponse: rsp, NSLocalizedDescriptionKey: desc}, error.userInfo)]
+    #define fulfiller(obj) fulfiller(PMKManifold(obj, rsp, data))
 
-    return [Promise new:^(void(^fulfiller)(id), void(^rejecter)(id)){
+    return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter){
         [NSURLConnection sendAsynchronousRequest:rq queue:q completionHandler:^(id rsp, id data, NSError *error) {
+
+
             if (error) {
                 if (rsp) {
                     id dict = NSDictionaryExtend(@{PMKURLErrorFailingURLResponse: rsp}, error.userInfo);
@@ -202,6 +205,8 @@ NSString *PMKUserAgent() {
                 fulfiller(data);
         }];
     }];
+
+    #undef fulfiller
 }
 
 @end

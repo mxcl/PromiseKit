@@ -552,6 +552,28 @@ Promise *gcdreject() {
     XCTAssertTrue(resolved);
 }
 
+- (void)test_37_PMKMany_2 {
+    [NSURLConnection GET:URL].then(^(NSData *data, NSHTTPURLResponse *rsp){
+        XCTAssertNotNil(data);
+        XCTAssertNotNil(rsp);
+        resolved = YES;
+    });
+    wait(0.1);
+    XCTAssertTrue(resolved);
+}
+
+- (void)test_38_PMKMany_3 {
+    [NSURLConnection GET:URL].then(^(id data, id rsp, id originalData){
+        XCTAssertNotNil(data);
+        XCTAssertNotNil(rsp);
+        XCTAssertNotNil(originalData);
+        XCTAssertEqual(data, originalData);
+        resolved = YES;
+    });
+    wait(0.1);
+    XCTAssertTrue(resolved);
+}
+
 @end
 
 __EOBJC__

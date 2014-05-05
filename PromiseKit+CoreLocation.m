@@ -20,7 +20,7 @@
     __anti_arc_release(self);
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-    fulfiller(locations.firstObject);
+    fulfiller(PMKManifold(locations.firstObject, locations));
     PMKLocationManagerCleanup();
 }
 
@@ -58,7 +58,7 @@
             if (error) {
                 rejecter(error);
             } else
-                fulfiller(placemarks);
+                fulfiller(PMKManifold(placemarks.firstObject, placemarks));
         }];
     }];
 }
@@ -69,7 +69,7 @@
             if (error) {
                 rejecter(error);
             } else
-                fulfiller(placemarks);
+                fulfiller(PMKManifold(placemarks.firstObject, placemarks));
         };
         if ([address isKindOfClass:[NSDictionary class]]) {
             [[CLGeocoder new] geocodeAddressDictionary:address completionHandler:handler];

@@ -11,8 +11,8 @@ Modern development is highly asynchronous: isn’t it about time iOS developers 
     [alert addButtonWithTitle:@"Bye"];
     [alert addButtonWithTitle:@"Hi!"];
     return alert.promise;
-}).then(^(NSNumber *tappedButtonIndex){
-    if (tappedButtonIndex.intValue == 1) {
+}).then(^(NSNumber *tappedButtonIndex, UIAlertView *alert){
+    if (tappedButtonIndex.intValue == alert.cancelButtonIndex) {
         id vc = [HelloViewController new]
         return [self promiseViewController:vc animated:YES completion:nil];
     } else
@@ -24,7 +24,7 @@ Modern development is highly asynchronous: isn’t it about time iOS developers 
 });
 ```
 
-* PromiseKit is designed to be integrated into the other Pods you use.
-* PromiseKit is complete, well-tested and in apps in the store.
+* PromiseKit can and should be integrated into the other Pods you use.
+* PromiseKit is complete, well-tested and in apps on the store.
 
-For an introduction and complete documentation visit [promisekit.org](http://promisekit.org).
+For guides and complete documentation visit [promisekit.org](http://promisekit.org).

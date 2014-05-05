@@ -70,6 +70,21 @@ An example usage is an app starting up that must get data from the Internet befo
 @end
 
 
+
+/**
+ Use with `[Promise new:]` to fulfill a Promise with multiple arguments.
+
+ Consumers of your Promise are not compelled to consume any arguments and
+ in fact will often only consume the first parameter. Thus ensure the
+ order of parameters is: from most-important to least-important.
+
+ Note that attempts to reject with `PMKMany` will `@throw`.
+*/
+id PMKManifold(NSArray *arguments);
+#define PMKManifold(...) PMKManifold(@[__VA_ARGS__])
+
+
+
 #define PMKErrorDomain @"PMKErrorDomain"
 #define PMKThrown @"PMKThrown"
 #define PMKErrorCodeThrown 1

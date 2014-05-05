@@ -76,7 +76,7 @@
 
 @implementation PMKAlertViewDelegater
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    fulfiller(@(buttonIndex));
+    fulfiller(PMKManifold(@(buttonIndex), alertView));
     __anti_arc_release(self);
 }
 @end
@@ -106,7 +106,7 @@
 
 @implementation PMKActionSheetDelegater
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    fulfiller(@(buttonIndex));
+    fulfiller(PMKManifold(@(buttonIndex), actionSheet));
     __anti_arc_release(self);
 }
 @end
