@@ -8,21 +8,15 @@
 @interface UIViewController (PromiseKit)
 
 /**
- Presents with a promise.
+ .2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2
+ Calls `presentViewController:` such that the presentedViewController can
+ call `reject:` or `fulfill:` and resolve the promise. When resolved the
+ presentedViewController is dismissed.
 
- When you resolve the controller’s deferred we will dismiss the controller
- the dismissal will occur when the promise is resolved, so if you need
- the dismissal of the controller to occur later, instead chain another
- promise before resolving this deferred.
- 
- Bonus!
- 
- We detect MFMailComposeViewControllers and automatically convert the
- mailComposeDelegate into a promise.
- 
- We should handle any other speciality controllers also, but we may
- require you submit those as pull requests.
-*/
+ This method is smart and SDK provided ViewControllers like
+ `MFMailComposeViewController` will be automatically delegate into the
+ returned Promise.
+ */
 - (Promise *)promiseViewController:(UIViewController *)vc animated:(BOOL)animated completion:(void(^)(void))block;
 
 - (void)fulfill:(id)result;
@@ -33,11 +27,19 @@
 
 
 @interface UIAlertView (PromiseKit)
+/**
+ Thens the dismissedButtonIndex and the alertView itself as the second
+ parameter. This promise can not be rejected.
+ */
 - (Promise *)promise;
 @end
 
 
 
 @interface UIActionSheet (PromiseKit)
+/**
+ Thens the dismissedButtonIndex and the actionSheet itself as the second
+ parameter. This promise can not be rejected.
+ */
 - (Promise *)promiseInView:(UIView *)view;
 @end
