@@ -607,6 +607,28 @@ Promise *gcdreject() {
     wait(0.1);
     XCTAssertTrue(resolved);
 }
+
+- (void)test_42 {
+    [Promise promiseWithValue:@1].then(^{
+        return [NSURLConnection GET:URL];
+    }).then(^{
+        resolved = YES;
+    });
+    wait(0.1);
+    XCTAssertTrue(resolved);
+}
+
+- (void)test_43_return_promise_from_itself {
+    Promise *p = [NSURLConnection GET:URL];
+    p.then(^{
+        return p;
+    }).then(^{
+        resolved = YES;
+    });
+    wait(0.2);
+    XCTAssertTrue(resolved);
+}
+
 @end
 
 __EOBJC__
