@@ -182,8 +182,6 @@ static id safely_call_block(id frock, id result) {
     BOOL const wasarray = [promises isKindOfClass:[NSArray class]];
     if ([promises isKindOfClass:[Promise class]])
         promises = @[promises];
-    if (![promises isKindOfClass:[NSArray class]])
-        return [Promise promiseWithValue:promises];
 
     NSPointerArray *results = [NSPointerArray strongObjectsPointerArray];
     results.count = promises.count;
@@ -210,6 +208,9 @@ static id safely_call_block(id frock, id result) {
                 fulfiller(passme);
         };
         [promises enumerateObjectsUsingBlock:^(Promise *promise, NSUInteger ii, BOOL *stop) {
+            if (!IsPromise(promise))
+                promise = [Promise promiseWithValue:promise];
+
             promise.catch(^(id o){
                 failed = YES;
                 both(ii, o);

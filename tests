@@ -574,6 +574,39 @@ Promise *gcdreject() {
     XCTAssertTrue(resolved);
 }
 
+- (void)test_39_when_with_some_values {
+    id p = [NSURLConnection GET:URL];
+    id v = @1;
+    [Promise when:@[p, v]].then(^(NSArray *aa){
+        XCTAssertEqual(aa.count, 2ul);
+        XCTAssertEqualObjects(aa[1], @1);
+        resolved = YES;
+    });
+    wait(0.1);
+    XCTAssertTrue(resolved);
+}
+
+- (void)test_40_when_with_all_values {
+    [Promise when:@[@1, @2]].then(^(NSArray *aa){
+        XCTAssertEqualObjects(aa[0], @1);
+        XCTAssertEqualObjects(aa[1], @2);
+        resolved = YES;
+    });
+    XCTAssertTrue(resolved);
+}
+
+- (void)test_41_when_with_repeated_promises {
+    id p = [NSURLConnection GET:URL];
+    id v = @1;
+    [Promise when:@[p, v, p, v]].then(^(NSArray *aa){
+        XCTAssertEqual(aa.count, 4ul);
+        XCTAssertEqualObjects(aa[1], @1);
+        XCTAssertEqualObjects(aa[3], @1);
+        resolved = YES;
+    });
+    wait(0.1);
+    XCTAssertTrue(resolved);
+}
 @end
 
 __EOBJC__
