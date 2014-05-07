@@ -517,6 +517,20 @@ Promise *gcdreject() {
     XCTAssertTrue(resolved);
 }
 
+- (void)test_33a_return_nil {
+    promise.then(^(id o){
+        XCTAssertEqualObjects(o, @"HI");
+        return nil;
+    }).then(^{
+        return nil;
+    }).then(^{
+        resolved = YES;
+        return nil;
+    });
+    fulfiller(@"HI");
+    XCTAssertTrue(resolved);
+}
+
 - (void)test_34 {
     [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter){
         @throw @1;
