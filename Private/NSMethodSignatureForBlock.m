@@ -28,7 +28,7 @@ static NSMethodSignature *NSMethodSignatureForBlock(id block) {
         return nil;
 
     struct PMKBlockLiteral *blockRef = (__bridge struct PMKBlockLiteral *)block;
-    PMKBlockDescriptionFlags flags = blockRef->flags;
+    PMKBlockDescriptionFlags flags = (PMKBlockDescriptionFlags)blockRef->flags;
 
     if (flags & PMKBlockDescriptionFlagsHasSignature) {
         void *signatureLocation = blockRef->descriptor;
