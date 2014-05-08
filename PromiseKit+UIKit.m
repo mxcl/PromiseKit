@@ -1,5 +1,5 @@
 #import <objc/runtime.h>
-#import "Private/macros.m"
+#import "Private/PMKManualReference.h"
 #import "PromiseKit/Promise.h"
 #import "PromiseKit+UIKit.h"
 @import UIKit.UINavigationController;
@@ -15,7 +15,7 @@
     else
         [controller fulfill:@(result)];
 
-    __anti_arc_release(self);
+    [self pmk_breakReference];
 }
 @end
 
@@ -30,7 +30,7 @@
     if ([vc isKindOfClass:NSClassFromString(@"MFMailComposeViewController")]) {
         PMKMFDelegater *delegater = [PMKMFDelegater new];
 
-        __anti_arc_retain(delegater);
+        [delegater pmk_reference];
 
         SEL selector = NSSelectorFromString(@"setMailComposeDelegate:");
         IMP imp = [vc methodForSelector:selector];
@@ -77,7 +77,7 @@
 @implementation PMKAlertViewDelegater
 - (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
     fulfiller(PMKManifold(@(buttonIndex), alertView));
-    __anti_arc_release(self);
+    [self pmk_breakReference];
 }
 @end
 
@@ -85,7 +85,7 @@
 
 - (Promise *)promise {
     PMKAlertViewDelegater *d = [PMKAlertViewDelegater new];
-    __anti_arc_retain(d);
+    [d pmk_reference];
     self.delegate = d;
     [self show];
     return [Promise new:^(id fulfiller, id rejecter){
@@ -107,7 +107,7 @@
 @implementation PMKActionSheetDelegater
 - (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
     fulfiller(PMKManifold(@(buttonIndex), actionSheet));
-    __anti_arc_release(self);
+    [self pmk_breakReference];
 }
 @end
 
@@ -115,7 +115,7 @@
 
 - (Promise *)promiseInView:(UIView *)view {
     PMKActionSheetDelegater *d = [PMKActionSheetDelegater new];
-    __anti_arc_retain(d);
+    [d pmk_reference];
     self.delegate = d;
     [self showInView:view];
     return [Promise new:^(id fulfiller, id rejecter){

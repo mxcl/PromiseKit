@@ -1,5 +1,5 @@
 @import CoreLocation.CLLocationManagerDelegate;
-#import "Private/macros.m"
+#import "Private/PMKManualReference.h"
 #import "PromiseKit+CoreLocation.h"
 #import "PromiseKit/Promise.h"
 
@@ -17,7 +17,7 @@
 #define PMKLocationManagerCleanup() \
     [manager stopUpdatingLocation]; \
     self.delegate = nil; \
-    __anti_arc_release(self);
+    [self pmk_breakReference];
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     fulfiller(PMKManifold(locations.firstObject, locations));
@@ -39,7 +39,7 @@
     PMKLocationManager *manager = [PMKLocationManager new];
     manager.delegate = manager;
     [manager startUpdatingLocation];
-    __anti_arc_retain(manager);
+    [manager pmk_reference];
     return [Promise new:^(id fulfiller, id rejecter){
         manager->fulfiller = fulfiller;
         manager->rejecter = rejecter;
