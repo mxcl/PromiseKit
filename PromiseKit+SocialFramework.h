@@ -9,8 +9,6 @@
 
 #if PMK_DEPLOY_6
 
-#import <Foundation/Foundation.h>
-
 @import Social.SLRequest;
 @import Accounts;
 @class Promise;
