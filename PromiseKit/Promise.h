@@ -1,4 +1,5 @@
 @import Foundation.NSObject;
+@import Foundation.NSArray;
 
 
 typedef void (^PromiseResolver)(id);

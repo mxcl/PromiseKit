@@ -1,8 +1,9 @@
 #!/usr/bin/ruby
 OBJC = <<-__EOBJC__
 
-#import <CommonCrypto/CommonCrypto.h>
+#import "PromiseKit/Promise.h"
 #import "PromiseKit+Foundation.m"
+#import <CommonCrypto/CommonCrypto.h>
 #import <XCTest/XCTest.h>
 
 #define NSLog(...)
