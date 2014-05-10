@@ -300,7 +300,7 @@ static id safely_call_block(id frock, id result) {
     @try {
         block(fulfiller, rejecter);
     } @catch (id e) {
-        promise->result = NSErrorWithThrown(e);
+        promise->result = [e isKindOfClass:[NSError class]] ? e : NSErrorWithThrown(e);
     }
 
     return promise;
