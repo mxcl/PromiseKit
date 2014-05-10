@@ -6,7 +6,7 @@
 
 
 #import "PromiseKit+SocialFramework.h"
-#import "Promise.h"
+#import "PromiseKit/Promise.h"
 
 #ifdef PMK_DEPLOY_6
 
