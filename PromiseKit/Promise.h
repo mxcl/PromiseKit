@@ -68,6 +68,13 @@ An example usage is an app starting up that must get data from the Internet befo
 @return A new `Promise` that is already resolved with @param value. Calling `then` on a resolved `Promise` executes the provided block immediately.
 */
 + (Promise *)promiseWithValue:(id)value;
+
+
+- (BOOL)pending;
+- (BOOL)resolved;
+- (BOOL)fulfilled;
+- (BOOL)rejected;
+
 @end
 
 

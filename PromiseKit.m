@@ -306,6 +306,25 @@ static id safely_call_block(id frock, id result) {
     return promise;
 }
 
+- (BOOL)pending {
+    if (IsPromise(result)) {
+        return [result pending];
+    } else
+        return result == nil;
+}
+
+- (BOOL)resolved {
+    return result != nil;
+}
+
+- (BOOL)fulfilled {
+    return self.resolved && ![result isKindOfClass:[NSError class]];
+}
+
+- (BOOL)rejected {
+    return self.resolved && [result isKindOfClass:[NSError class]];
+}
+
 @end
 
 
@@ -317,8 +336,7 @@ static id safely_call_block(id frock, id result) {
  Promise based API did not modify your Promises.
  */
 static void FulfillRecursively(Promise *promise) {
-    assert(promise->result);
-    assert(![promise->result isKindOfClass:[NSError class]]);
+    assert(promise.fulfilled);
 
     for (id (^then)(id) in promise->thens) {
         Promise *next = then(promise->result);
@@ -353,8 +371,7 @@ static void FulfillRecursively(Promise *promise) {
 }
 
 static void RejectRecursively(Promise *promise) {
-    assert(promise->result);
-    assert([promise->result isKindOfClass:[NSError class]]);
+    assert(promise.rejected);
 
     for (id (^fail)(id) in promise->fails) {
         Promise *next = fail(promise->result);
