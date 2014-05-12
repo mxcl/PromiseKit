@@ -258,7 +258,7 @@ static id safely_call_block(id frock, id result) {
 
     id fulfiller = ^(id value){
         if (promise->result)
-            @throw PMKE(@"Promise already fulfilled/rejected");
+            return NSLog(@"PromiseKit: Promise already resolved");
         if ([value isKindOfClass:[NSError class]])
             @throw PMKE(@"You may not fulfill a Promise with an NSError");
         if (!value)
@@ -283,9 +283,9 @@ static id safely_call_block(id frock, id result) {
     };
     id rejecter = ^(id error){
         if (promise->result)
-            @throw PMKE(@"Promise already fulfilled/rejected");
+            return NSLog(@"PromiseKit: Promise already resolved");
         if ([error isKindOfClass:[Promise class]])
-            @throw PMKE(@"You may not reject a Promise");
+            @throw PMKE(@"You may not reject a Promise with a Promise");
         if (!error)
             error = [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeUnknown userInfo:nil];
         if (![error isKindOfClass:[NSError class]])

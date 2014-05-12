@@ -644,6 +644,17 @@ Promise *gcdreject() {
     XCTAssertTrue(resolved);
 }
 
+- (void)test_44_reseal {
+    [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter){
+        fulfiller(@123);
+        fulfiller(@234);
+    }].then(^(id o){
+        XCTAssertEqualObjects(o, @123);
+        resolved = YES;
+    });
+    XCTAssertTrue(resolved);
+}
+
 @end
 
 __EOBJC__
