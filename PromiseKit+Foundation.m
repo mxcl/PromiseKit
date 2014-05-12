@@ -172,7 +172,7 @@ NSString *PMKUserAgent() {
                     error = [NSError errorWithDomain:error.domain code:error.code userInfo:dict];
                 }
                 rejecter(error);
-            } else if ([rsp statusCode] != 200) {
+            } else if ([rsp statusCode] < 200 || [rsp statusCode] >= 300) {
                 id err = NSURLError(NSURLErrorBadServerResponse, @"bad HTTP response code");
                 rejecter(err);
             } else if (NSHTTPURLResponseIsJSON(rsp)) {
