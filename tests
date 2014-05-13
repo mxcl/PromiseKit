@@ -655,6 +655,17 @@ Promise *gcdreject() {
     XCTAssertTrue(resolved);
 }
 
+- (void)test_45_when_which_returns_void {
+    promise = promise.then(^{});
+    [Promise when:@[promise, [Promise promiseWithValue:@1]]].then(^(NSArray *stuff){
+        XCTAssertEqual(stuff.count, 2ul);
+        XCTAssertEqualObjects(stuff[0], [NSNull null]);
+        resolved = YES;
+    });
+    fulfiller(@1);
+    XCTAssertTrue(resolved); 
+}
+
 @end
 
 __EOBJC__
