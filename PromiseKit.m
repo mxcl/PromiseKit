@@ -325,6 +325,15 @@ static id safely_call_block(id frock, id result) {
     return self.resolved && [result isKindOfClass:[NSError class]];
 }
 
+- (id)value {
+    if (IsPromise(result))
+        return [result value];
+    if (result == PMKNull)
+        return nil;
+    else
+        return result;
+}
+
 @end
 
 

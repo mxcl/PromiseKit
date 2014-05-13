@@ -164,8 +164,6 @@ NSString *PMKUserAgent() {
 
     return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter){
         [NSURLConnection sendAsynchronousRequest:rq queue:q completionHandler:^(id rsp, id data, NSError *error) {
-
-
             if (error) {
                 if (rsp) {
                     id dict = NSDictionaryExtend(@{PMKURLErrorFailingURLResponse: rsp}, error.userInfo);

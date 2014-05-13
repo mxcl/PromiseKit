@@ -75,6 +75,8 @@ An example usage is an app starting up that must get data from the Internet befo
 - (BOOL)fulfilled;
 - (BOOL)rejected;
 
+- (id)value;
+
 @end
 
 
