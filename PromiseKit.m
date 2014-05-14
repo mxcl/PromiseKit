@@ -180,48 +180,43 @@ static id safely_call_block(id frock, id result) {
     };
 }
 
-+ (Promise *)when:(NSArray *)promises {
-    BOOL const wasarray = [promises isKindOfClass:[NSArray class]];
-    if ([promises isKindOfClass:[Promise class]])
-        promises = @[promises];
++ (Promise *)all:(id<NSFastEnumeration>)promises {
+    NSFastEnumerationState unused = {0};
+    __block NSUInteger count = [promises countByEnumeratingWithState:&unused objects:NULL count:0];
 
     NSPointerArray *results = [NSPointerArray strongObjectsPointerArray];
-    results.count = promises.count;
+    results.count = count;
 
-    return [Promise new:^(void(^fulfiller)(id), void(^rejecter)(id)){
-        __block NSUInteger x = 0;
-        __block BOOL failed = NO;
-        void (^both)(NSUInteger, id) = ^(NSUInteger ii, id o){
-            [results replacePointerAtIndex:ii withPointer:(__bridge void *)(o ?: PMKNull)];
-
-            if (++x != promises.count)
-                return;
-
-            id passme = wasarray ? ({
-                for (NSUInteger y = 0; y < results.count; ++y)
-                    if ([results pointerAtIndex:y] == (__bridge void *)PMKNull)
-                        [results replacePointerAtIndex:y withPointer:(void *)kCFNull];
-                results.allObjects;
-            }) : results.allObjects[0];
-
-            if (failed) {
-                rejecter(passme);
-            } else
-                fulfiller(passme);
-        };
-        [promises enumerateObjectsUsingBlock:^(Promise *promise, NSUInteger ii, BOOL *stop) {
+    return [Promise new:^(void(^fulfiller)(id), void(^rejecter)(id)){        
+        NSUInteger ii = 0;
+        for (__strong Promise *promise in promises) {
             if (!IsPromise(promise))
                 promise = [Promise promiseWithValue:promise];
 
-            promise.catch(^(id o){
-                failed = YES;
-                both(ii, o);
-            });
+            promise.catch(rejecter);
             promise.then(^(id o){
-                both(ii, o);
+                [results replacePointerAtIndex:ii withPointer:(__bridge void *)(o ?: PMKNull)];
+                if (--count == 0) {
+                    for (NSUInteger y = 0; y < results.count; ++y)
+                        if ([results pointerAtIndex:y] == (__bridge void *)PMKNull)
+                            [results replacePointerAtIndex:y withPointer:(void *)kCFNull];
+
+                    fulfiller(results.allObjects);
+                }
             });
-        }];
+            ++ii;
+        };
     }];
+}
+
++ (Promise *)when:(id)promises {
+    if ([promises conformsToProtocol:@protocol(NSFastEnumeration)]) {
+        return [self all:promises];
+    } else {
+        return [self all:@[promises]].then(^(NSArray *values){
+            return values[0];
+        });
+    }
 }
 
 #pragma clang diagnostic push

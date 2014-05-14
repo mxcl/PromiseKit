@@ -175,8 +175,8 @@ int main() {
 - (void)test_10_then_returns_resolved_promise {
     promise.then(^(id o){
         XCTAssertEqualObjects(@10, o);
-        return [Promise new:^(void (^fulfiller)(id), id r){
-            fulfiller(@100);
+        return [Promise new:^(PromiseResolver _fulfiller, id r){
+            _fulfiller(@100);
         }];
     }).then(^(id o){
         XCTAssertEqualObjects(@100, o);
@@ -314,7 +314,7 @@ int main() {
     [Promise when:c].then(^{
         XCTFail();
     }).catch(^(NSError *e){
-        XCTAssertEqual([e.userInfo[PMKThrown] count], 2ul);
+        XCTAssertEqualObjects(e.userInfo[PMKThrown], @NO);
         resolved = YES;
     });
     wait(0.1);
@@ -533,9 +533,9 @@ Promise *gcdreject() {
 }
 
 - (void)test_34 {
-    [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter){
+    [Promise new:^(PromiseResolver _fulfiller, id r){
         @throw @1;
-        fulfiller(@2);
+        _fulfiller(@2);
     }].then(^{
         XCTFail();
     }).catch(^(NSError *error){
@@ -552,10 +552,10 @@ Promise *gcdreject() {
         XCTAssertEqualObjects(results[1], [NSNull null]);
         resolved = YES;
     }).catch(^(NSError *err){
-        NSLog(@"%@", err);
+        abort();
     });
     fulfiller(@"35");
-    wait(0.1);
+    wait(0.2);
     XCTAssertTrue(resolved);
 }
 
@@ -645,9 +645,9 @@ Promise *gcdreject() {
 }
 
 - (void)test_44_reseal {
-    [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter){
-        fulfiller(@123);
-        fulfiller(@234);
+    [Promise new:^(PromiseResolver _fulfiller, id r){
+        _fulfiller(@123);
+        _fulfiller(@234);
     }].then(^(id o){
         XCTAssertEqualObjects(o, @123);
         resolved = YES;
