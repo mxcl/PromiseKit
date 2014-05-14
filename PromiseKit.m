@@ -327,7 +327,7 @@ static id safely_call_block(id frock, id result) {
 
 - (id)value {
     if (IsPromise(result))
-        return [result value];
+        return [(Promise*)result value];
     if (result == PMKNull)
         return nil;
     else
