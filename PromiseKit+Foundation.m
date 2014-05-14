@@ -40,8 +40,8 @@ static BOOL NSHTTPURLResponseIsImage(NSHTTPURLResponse *rsp) {
 }
 #endif
 
-static NSDictionary *NSDictionaryExtend(NSDictionary *add, NSDictionary *base) {
-    base = base.mutableCopy;
+static inline NSDictionary *NSDictionaryExtend(NSDictionary *add, NSDictionary *base) {
+    base = base.mutableCopy ?: [NSMutableDictionary new];
     [(id)base addEntriesFromDictionary:add];
     return base;
 }
