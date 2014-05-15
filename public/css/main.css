@@ -9,10 +9,6 @@ html {
   color: #515151;
 }
 
-body {
-  padding: 3rem 0;
-}
-
 code, pre {
   font-family: Menlo, Monaco, "Courier New", monospace;
 }
@@ -21,7 +17,7 @@ code {
   color: #bf616a;
   background-color: #f9f9f9;
 }
-pre {
+pre, aside {
   margin-top: 0;
   margin-bottom: 1rem;
 }
@@ -41,30 +37,53 @@ pre code {
   margin-bottom: 0;
 }
 
-.github {
-  padding: 0.8rem 1rem;
-  border-radius: 4px;
-  color: #fff;
-  opacity: 0.8;
-  margin: 0 0 0.5rem 0;
-  display: inline-block;
-
-  background: #268bd2;
-  background: -moz-linear-gradient(top, rgb(52,159,226) 0%, rgb(0,48,191) 100%);
-  background: -webkit-gradient(left top, left bottom, color-stop(0%, rgb(52,159,226)), color-stop(100%, rgb(0,48,191)));
-  background: -webkit-linear-gradient(top, rgb(52,159,226) 0%, rgb(0,48,191) 100%);
-  background: -o-linear-gradient(top, rgb(52,159,226) 0%, rgb(0,48,191) 100%);
-  background: -ms-linear-gradient(top, rgb(52,159,226) 0%, rgb(0,48,191) 100%);
-  background: linear-gradient(to bottom, rgb(52,159,226) 0%, rgb(0,48,191) 100%); 
-}
-.github:hover {
-  text-decoration: none;
-  background-color: #268bd2;
-  opacity: 1;
-}
-
 #pulse {
   display: inline-block;
   color: #9a9a9a;
-  margin: 0.75rem;
+  font-family: "PT Sans", Helvetica, Arial, sans-serif;
+}
+
+aside {
+  background: #f9f9f9;
+  border: 10px solid darkgray;
+  border-width: 0 1rem;
+  color: darkgray;
+  font-size: 0.9rem;
+  padding: 1rem;
+  display: block;
+  text-align:justify;
+  text-justify:inter-word;
+}
+aside:before {
+  content: "Oh! BTW…";
+  color: darkgray;
+  display: block;
+  font-weight: bold;
+}
+
+.post:not(:last-child) {
+  border-bottom: 3px dashed lightgray;
+}
+
+nav {
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  padding: 0 1rem;
+  text-align: center;
+}
+nav a {
+  display: inline-block;
+  padding: 1rem;
+  text-decoration: none;
+  font-family: "PT Sans", Helvetica, Arial, sans-serif;
+}
+nav a:hover {
+  text-decoration: underline;
+}
+
+#elephants {
+  margin-top: -1rem;
+  width: 100%;
 }

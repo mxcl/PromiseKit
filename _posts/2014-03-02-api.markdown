@@ -1,0 +1,250 @@
+---
+category: docs
+layout: default
+---
+
+# API Overview
+
+PromiseKit aims to provide a category analog for all one-time asynchronous operations in the iOS SDK.
+
+Notably we don’t provide a Promise for eg. `UIButton` actions. Promises can only resolve once, and buttons can be pushed again and again.
+
+⌥ click any PromiseKit method in Xcode for full documentation.
+
+
+## NSURLConnection+PromiseKit
+
+{% highlight objectivec %}
+#import "PromiseKit+Foundation.h"
+
+[NSURLConnection GET:@"http://promisekit.org"].then(^(NSData *data){
+    
+}).catch(^(NSError *error){
+    NSHTTPURLResponse *rsp = error.userInfo[PMKURLErrorFailingURLResponseKey];
+    int HTTPStatusCode = rsp.statusCode;
+});
+{% endhighlight %}
+
+And a convenience string format variant:
+
+{% highlight objectivec %}
+[NSURLConnection GET:@"http://example.com/%@", folder].then(^{
+    //…
+});
+{% endhighlight %}
+
+And a variant that constructs a correctly URL encoded query string from a dictionary:
+
+{% highlight objectivec %}
+[NSURLConnection GET:@"http://example.com" query:@{@"foo": @"bar"}].then(^{
+    //…
+});
+{% endhighlight %}
+
+And a POST variant:
+
+{% highlight objectivec %}
+[NSURLConnection POST:@"http://example.com" formURLEncodedParameters:@{@"key": @"value"}].then(^{
+    //…
+});
+{% endhighlight %}
+
+PromiseKit reads the response headers and decodes the result you actually wanted (in a background thread):
+
+{% highlight objectivec %}
+[NSURLConnection GET:@"http://example.com/some.json"].then(^(NSDictionary *json){
+    assert([json isKindOfClass:[NSDictionary class]]);
+});
+
+[NSURLConnection GET:@"http://placekitten.org/100/100"].then(^(UIImage *image){
+    assert([image isKindOfClass:[UIImage class]]);
+});
+{% endhighlight %}
+
+If the mime-type is textual, we return an `NSString`. Otherwise the first parameter will be the raw undecoded `NSData`. Whatever the mimetype the `then` has three optional parameters: the first is the decoded data, the second the `NSHTTPURLResponse` and the third the raw undecoded data.
+
+Finally we provide a variant that takes an `NSURLRequest *`:
+
+{% highlight objectivec %}
+NSMutableURLRequest *rq = [NSMutableURLRequest requestWithURL:url];
+[rq addValue:@"PromiseKit" forHTTPHeader:@"User-Agent"]; 
+[NSURLConnection promise:rq].then(^(NSData *data){
+    //…
+})
+{% endhighlight %}
+
+PromiseKit depends on [OMGHTTPURLRQ](https://github.com/mxcl/OMHGTTPURLRQ) so if you need to POST, but first you want to adjust some other parameters of the `URLRequest` (eg. the timeout or cachePolicy) then `#import <OMGHTTPURLRQ.h>` (you have it because PromiseKit depends on it) and construct the `NSMutableURLRequest` yourself first:
+
+{% highlight objectivec %}
+NSMutableURLRequest *rq = [OMGHTTPURLRQ POST:url:@{@"key": @"value"}];
+rq.timeoutInterval = 20;
+[NSURLConnection promise:rq].then(^{…});
+{% endhighlight %}
+
+OMGHTTPURLRQ also makes it easy to send multipartForm POSTs:
+
+{% highlight objectivec %}
+NSMutableURLRequest *rq = [OMGHTTPURLRQ POST:url multipartForm:^(void (^addFile)(NSData *, NSString *name, NSString *filename)){
+    addFile(data1, @"file1", @"file1.png");
+    addFile(data2, @"file2", @"file2.png");
+}];
+[NSURLConnection promise:rq].then(^{…});
+{% endhighlight %}
+
+
+
+##CLLocationManager+PromiseKit
+
+A Promise to get the user’s location:
+
+{% highlight objectivec %}
+#import "PromiseKit+CoreLocation.h"
+
+[CLLocationManager promise].then(^(CLLocation *currentUserLocation){
+    //…
+}).catch(^(NSError *error){
+    //…
+});
+{% endhighlight %}
+
+The `then` has an optional second parameter that is the full array of returned locations. Which usually is an array of one location. The first parameter is the most recent location.
+
+
+##CLGeocoder+PromiseKit
+
+{% highlight objectivec %}
+#import "PromiseKit+CoreLocation.h"
+
+[CLGeocoder geocode:@"mount rushmore"].then(^(CLPlacemark *firstPlacemark){
+    //…
+}).catch(^(NSError *error){
+    //…
+});
+
+CLLocation *someLocation = …;
+[CLGeocoder reverseGeocode:someLocation].then(^(CLPlacemark *firstPlacemark){
+    //…
+}).catch(^(NSError *error){
+    //…
+});
+{% endhighlight %}
+
+`CLGeocoders` asynchronously return one or *more* placemarks. The Promise thens the first placemark, and as the optional second parameter, all the placemarks (which often is just an array of one item). So if you want to check all placemarks, ensure you `then` two parameters.
+
+
+##UIAlertView+PromiseKit
+
+A promise for showing a `UIAlertView`:
+
+{% highlight objectivec %}
+#import "PromiseKit+UIKit.h"
+
+UIAlertView *alert = [[UIAlertView alloc] initWithTitle:@"You Didn’t Save!"
+                      message:@"You will lose changes."
+                     delegate:nil
+            cancelButtonTitle:@"Cancel"
+            otherButtonTitles:@"Lose Changes", @"Panic", nil];
+
+alert.promise.then(^(NSNumber *dismissedIndex){
+    //…
+});
+{% endhighlight %}
+
+This promise will not trigger a `catch` handler. At one point we had the cancel button trigger `catch`, but this led to unreliable error handling. **Only errors trigger `catch` handlers**.
+
+The promise optionally thens the `UIAlertView` instance as the second parameter, should you need it.
+
+
+##UIActionSheet+PromiseKit
+
+Same pattern as for `UIAlertView`.
+
+
+##UIViewController+PromiseKit
+
+We provide a pattern for modally presenting ViewControllers and getting back a result:
+
+{% highlight objectivec %}
+#import "PromiseKit+UIKit.h"
+
+@implementation MyRootViewController
+
+- (void)foo {
+    UIViewController *vc = [MyDetailViewController new];
+    [self promiseViewController:vc animated:YES completion:nil].then(^(id result){
+        // the result from below in `someTimeLater`
+        // PromiseKit automatically dismisses the MyDetailViewController
+    });
+}
+
+@end
+
+@implementation MyDetailViewController
+
+- (void)someTimeLater {
+    [self fulfill:someResult];
+    
+    // if you want to trigger the `catch` use `[self reject:foo]`
+}
+
+@end
+{% endhighlight %}
+
+As a bonus if you pass a `MFMailComposeViewController` we handle its delegation behind the scenes and convert it into a Promise:
+
+{% highlight objectivec %}
+id mailer = [MFMailComposerViewController new];
+[self promiseViewController:mailer animated:YES completion:nil].then(^(NSNumber *n){
+    // num is the result passed from the MFMailComposeViewControllerDelegate
+}).catch(^{
+    // the error from the delegate if that happened
+});
+{% endhighlight %}
+
+Please submit equivalents for eg. `UIImagePickerController`.
+
+
+##MKDirections+PromiseKit
+
+{% highlight objectivec %}
+#import "PromiseKit+MapKit.h"
+
+MKDirectionsRequest *rq = [MKDirectionsRequest new];
+rq.source = [MKMapItem mapItemForCurrentLocation];
+rq.destination = …;
+[MKDirections promise:rq].then(^(MKDirectionsResponse *rsp){
+    //…
+}).catch(^{
+    //…
+});
+
+[MKDirections promiseETA:rq].then(^(MKETAResponse *rsp){
+    //…
+}).catch(^{
+    //…
+});
+{% endhighlight %}
+
+
+##MKMapSnapshotter+PromiseKit
+
+{% highlight objectivec %}
+#import "PromiseKit+MapKit.h"
+
+MKSnapshotter *snapshotter = [MKSnapshotter new];
+snapshotter.region = …;
+[snapshotter promise].then(^(MKMapSnapshot *snapshot){
+    //…
+}).catch(^{
+    //…
+});
+{% endhighlight %}
+
+
+## And…
+
+These are less complete, but started:
+
+* [Social+PromiseKit](https://github.com/mxcl/PromiseKit/blob/master/objc/PromiseKit%2BSocial.h)
+* [StoreKit+PromiseKit](https://github.com/mxcl/PromiseKit/blob/master/objc/PromiseKit%2BStoreKit.h)
+* [AVFoundation+PromiseKit](https://github.com/mxcl/PromiseKit/blob/master/objc/PromiseKit%2BAVFoundation.h)

@@ -1,0 +1,58 @@
+---
+category: home
+layout: default
+---
+
+# Importing PromiseKit
+
+In your [Podfile](http://guides.cocoapods.org/using/using-cocoapods.html):
+
+{% highlight ruby %}
+pod 'PromiseKit'
+{% endhighlight %}
+
+In your `.m` files:
+
+{% highlight c %}
+#import <PromiseKit.h>
+{% endhighlight %}
+
+In your `.swift` files:
+{% highlight swift %}
+import PromiseKit
+{% endhighlight %}
+
+PromiseKit is modulized; if you only want `PMKPromise` and none of our category additions:
+
+{% highlight ruby %}
+pod 'PromiseKit/Promise'
+{% endhighlight %}
+
+Or if you only want some of our categories:
+
+{% highlight ruby %}
+pod 'PromiseKit/NSURLConnection'
+pod 'PromiseKit/UIActionSheet'
+pod 'PromiseKit/UIAlertView'
+# et cetera
+{% endhighlight %}
+
+There is a CocoaPods subspec for every category and an umbrella subspec for every framework (eg. `Promisekit/Foundation`, `Promisekit/UIKit`, etc.). If you don’t want to think about it then choose `pod 'PromiseKit'` or `pod 'PromiseKit/all'`; `all` is *everything*. 
+
+<aside>
+Asking for just the `PromiseKit` pod gives you the 80% most people want, ie. `PMKPromise`, the `NSURLConnection` & `NSNotifcationCenter` category additions and the `UIKit` category additions.
+</aside>
+
+
+## Without CocoaPods
+
+If you don’t want to use CocoaPods you can use [CocoaPods Packager](https://github.com/CocoaPods/cocoapods-packager) to generate a static version of PromiseKit and just embed that.
+
+Please update regularly though, currently PromiseKit is updated *twice a week*.
+
+
+## Swift
+
+Currently CocoaPods does not have good Swift support. To use PromiseKit in your Swift project, add all of the `swift` directory to your sources and in your `xcodeproj` drag and drop `PromiseKit.xcodeproj` into your sources. Next configure your project to depend on PromiseKit and to link to it and to embed it into your final app.
+
+Alternatively directly compile all the sources into your sources. If you do this, `Promise` will be available without having to `import PromiseKit` in your `.swift` files.
