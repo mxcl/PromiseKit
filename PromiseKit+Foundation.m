@@ -150,13 +150,13 @@ NSString *PMKUserAgent() {
     return ua;
 }
 
-+ (Promise *)promise:(NSMutableURLRequest *)rq {
++ (Promise *)promise:(NSURLRequest *)rq {
     id q = [NSOperationQueue currentQueue] ?: [NSOperationQueue mainQueue];
 
     if (![rq valueForHTTPHeaderField:@"User-Agent"]) {
         if (![rq respondsToSelector:@selector(setValue:forHTTPHeaderField:)])
             rq = rq.mutableCopy;
-        [rq setValue:PMKUserAgent() forHTTPHeaderField:@"User-Agent"];
+        [(id)rq setValue:PMKUserAgent() forHTTPHeaderField:@"User-Agent"];
     }
 
     #define NSURLError(x, desc) [NSError errorWithDomain:NSURLErrorDomain code:x userInfo:NSDictionaryExtend(@{PMKURLErrorFailingURLResponse: rsp, NSLocalizedDescriptionKey: desc}, error.userInfo)]
@@ -175,11 +175,11 @@ NSString *PMKUserAgent() {
                 rejecter(err);
             } else if (NSHTTPURLResponseIsJSON(rsp)) {
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    id error = nil;
-                    id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&error];
+                    id err = nil;
+                    id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&err];
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        if (error)
-                            rejecter(error);
+                        if (err)
+                            rejecter(err);
                         else
                             fulfiller(json);
                     });

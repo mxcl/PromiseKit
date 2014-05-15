@@ -20,7 +20,6 @@ static void RejectRecursively(Promise *);
 static void FulfillRecursively(Promise *);
 
 @interface PMKArray : NSObject
-{ @public NSArray *objs; }
 @end
 
 
@@ -437,6 +436,7 @@ Promise *dispatch_promise_on(dispatch_queue_t queue, id block) {
 
 
 @implementation PMKArray
+{ @public NSArray *objs; }
 
 - (id)objectAtIndexedSubscript:(NSUInteger)idx {
     return objs.count >= idx+1 ? objs[idx] : nil;

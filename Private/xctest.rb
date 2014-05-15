@@ -69,7 +69,14 @@ def compile!
           -I/tmp/ChuzzleKit \
           /tmp/PromiseKitTests.m \
           /tmp/ChuzzleKit/*.m \
-          -w -o /tmp/PromiseKitTests
+          -Wall -Weverything -Wno-unused-parameter -Wno-missing-field-initializers \
+          -Wno-documentation -Wno-gnu-conditional-omitted-operand \
+          -Wno-pointer-arith -Wno-disabled-macro-expansion \
+          -Wno-gnu-statement-expression -Wno-strict-selector-match -Wno-vla \
+          -Wno-selector -Wno-missing-prototypes -Wno-direct-ivar-access \
+          -Wno-missing-noreturn -Wno-pedantic \
+          -Wno-format-nonliteral \
+          -o /tmp/PromiseKitTests
   EOS
   abort unless system <<-EOS
       install_name_tool -change \

@@ -4,7 +4,17 @@ OBJC = <<-__EOBJC__
 #import "PromiseKit/Promise.h"
 #import "PromiseKit+Foundation.m"
 #import <CommonCrypto/CommonCrypto.h>
-#import <XCTest/XCTest.h>
+    
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wgnu-zero-variadic-macro-arguments"
+@import XCTest;
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wimplicit-retain-self"
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wunreachable-code"
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wgnu-zero-variadic-macro-arguments"
 
 #define NSLog(...)
 // prevent error logging here
@@ -20,17 +30,17 @@ int main() {
     }
 }
 
-@interface Tests : XCTestCase {
+@interface Tests : XCTestCase
+@end
+
+
+@implementation Tests {
     __block BOOL resolved;
     __block BOOL failme;
     Promise *promise;
     void (^fulfiller)(id);
     void (^rejecter)(id);
 }
-@end
-
-
-@implementation Tests
 
 - (void)setUp {
     [super setUp];
