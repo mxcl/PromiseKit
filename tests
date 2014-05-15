@@ -471,7 +471,10 @@ Promise *gcdreject() {
         return [NSURLConnection GET:@"http://localhost:61231/404"];
     }).then(^{
         XCTFail();
-    }).catch(^{
+    }).catch(^(NSError *error){
+        NSHTTPURLResponse *rsp = error.userInfo[PMKURLErrorFailingURLResponse];
+        XCTAssertTrue([rsp isKindOfClass:[NSHTTPURLResponse class]]);
+        XCTAssertEqual(rsp.statusCode, 404);
         resolved = YES;
     }).catch(^{
         XCTFail();
