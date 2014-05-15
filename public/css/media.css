@@ -1,4 +1,11 @@
-p, h1, h2, h3, .post-date, ul, pre {
+body {
+  padding: 2.5rem 0;
+}
+.post {
+  padding: 2.5rem 0;
+}
+
+p, h1, h2, h3, ol, ul, pre, aside {
   margin-left: auto;
   margin-right: auto;
 }
@@ -11,7 +18,7 @@ pre {
   html {
     font-size: 12px;
   }
-  p, h1, h2, h3, .post-date, ul {
+  p, h1, h2, h3, ol, ul, aside {
     margin-left: 16px;
     margin-right: 16px;
   }
@@ -20,7 +27,7 @@ pre {
   }
 }
 @media (min-width: 320px) and (orientation: landscape) {
-  p, h1, h2, h3, .post-date, ul {
+  p, h1, h2, h3, ol, ul, aside {
     margin-left: 20px;
     margin-right: 20px;
   }
@@ -33,10 +40,7 @@ pre {
   html {
     font-size: 20px;
   }
-  body {
-    padding: 5rem 0;
-  }
-  p, h1, h2, h3, .post-date, ul {
+  p, h1, h2, h3, ol, ul, aside {
     max-width: 30rem;
     margin-left: auto;
     margin-right: auto;
@@ -50,16 +54,22 @@ pre {
   }
   .highlight {
     text-align: center;
-  }  
+  }
 }
 @media (min-width: 800px) {
   html {
     font-size: 20px;
   }
-  p, h1, h2, h3, .post-date, ul {
+  p, h1, h2, h3, ol, ul {
     max-width: 38rem;
   }
   pre {
     min-width: 36rem;
+  }
+  aside {
+    min-width: 34rem;
+  }
+  #elephants {
+    width: auto;
   }
 }

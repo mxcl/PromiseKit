@@ -1,0 +1,70 @@
+---
+category: examples
+layout: default
+---
+
+#  Examples
+
+## 1. Continuation
+
+Eventually one wonders if a `then` that follows a `catch` that has already executed runs:
+
+{% highlight objectivec %}
+self.kitten.then(^(UIImage *image){
+    
+}).finally(^{
+    // always executes
+}).catch(^{
+    
+}).then(^{
+    // provided the above catch did not throw or return an
+    // `NSError` this then will always execute
+});
+{% endhighlight %}
+
+The answer is: yes, it does. If you need the `catch` to completely stop your chain you must either throw again (often: a code smell), or restructure your promises; probably you didn’t want them to chain in this manner.
+
+
+## 2. Semi-recoverability
+
+Sometimes you have promises that are semi-recoverable. Rather than lump all error handling together and figure out the error with if statements instead add a `catch` to that promise directly. It leads to a little rightward-drift, but it is the best way to implement semi-recoverability.
+
+{% highlight objectivec %}
+self.fetch.then(^(id json){
+    return [CLLocationManager promise].catch(^id(NSError *err){
+        if (err.code == kCLErrorLocationUnknown)
+            return self.chicagoLocation;
+        return err;  // “re-throw”
+    });
+}).then(^{
+    //…
+});
+{% endhighlight %}
+
+This can be especially important when using `when`/`all` since those methods will immediately reject their promise if any of the promises provided them rejects, often one can recover at least some of the provided promises.
+
+Note that we had to change the above block’s return to `id` so that it could return two different types.
+
+
+## 3. Cache & Fetch
+
+In the case where you have the persisted, cached value for some asynchronous object and you want to show the user that, but also fetch the fresh data and then show the user that:
+
+{% highlight objectivec %}
+- (PMKPromise *)fetch {
+    return [Promise new:^(PMKPromiseFulfiller fulfill, PMKPromiseRejecter rejct){
+        id fresh = [NSURLConnection GET:self.fetchURL];  // start fetching ASAP
+        id cached = [NSData dataWithContentsOfFile:…];
+        fulfill(PMKManifold(cached, fresh));
+    }];
+}
+
+- (void)go {
+    self.fetch.then(^(NSData *cachedData, PMKPromise *freshData) {
+        [self updateWithData:cachedData];
+        return freshData;
+    }).then(^(NSData *freshData){
+        [self updateWithData:freshData];
+    });
+}
+{% endhighlight %}
