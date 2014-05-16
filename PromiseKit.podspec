@@ -23,6 +23,10 @@ Pod::Spec.new do |s|
     ss.frameworks = 'Foundation'
   end
 
+  s.subspec 'private' do |ss|
+    ss.source_files = 'Private/PMKManualReference.m'
+  end
+
   s.subspec 'Foundation' do |ss|
     ss.dependency 'PromiseKit/base'
     ss.source_files = 'PromiseKit+Foundation.{h,m}'
@@ -43,6 +47,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'CoreLocation' do |ss|
     ss.dependency 'PromiseKit/base'
+    ss.dependency 'PromiseKit/private'
     ss.source_files = 'PromiseKit+CoreLocation.{h,m}'
     ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_CORELOCATION=1" }
     ss.frameworks = 'CoreLocation'
