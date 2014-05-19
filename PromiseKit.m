@@ -11,13 +11,10 @@
 
 #define NSErrorWithThrown(e) [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeThrown userInfo:@{PMKThrown: e}]
 #define IsPromise(o) ([o isKindOfClass:[Promise class]])
-#define IsPending(o) (((Promise *)o)->result == nil)
+#define IsError(o) ([o isKindOfClass:[NSError class]])
 #define PMKE(txt) [NSException exceptionWithName:@"PromiseKit" reason:@"PromiseKit: " txt userInfo:nil]
 
 static const id PMKNull = @"PMKNull";
-
-static void RejectRecursively(Promise *);
-static void FulfillRecursively(Promise *);
 
 @interface PMKArray : NSObject
 @end
@@ -110,70 +107,94 @@ static id safely_call_block(id frock, id result) {
  */
 @implementation Promise {
 @public
-    NSMutableArray *pendingPromises;
-    NSMutableArray *thens;
-    NSMutableArray *fails;
+    NSMutableArray *handlers;
     id result;
 }
 
 - (instancetype)init {
-    thens = [NSMutableArray new];
-    fails = [NSMutableArray new];
-    pendingPromises = [NSMutableArray new];
+    handlers = [NSMutableArray new];
     return self;
 }
 
 - (Promise *(^)(id))then {
-    if ([result isKindOfClass:[Promise class]])
-        return ((Promise *)result).then;
+    return ^(id block){
+        return self.thenOn(dispatch_get_main_queue(), block);
+    };
+}
+
+- (Promise *(^)(dispatch_queue_t, id))thenOn {
+    if (IsPromise(result))
+        return ((Promise *)result).thenOn;
 
     if ([result isKindOfClass:[NSError class]])
-        return ^(id block) {
+        return ^(dispatch_queue_t q, id b){
             return [Promise promiseWithValue:result];
         };
 
-    if (result) return ^id(id block) {
-        id rv = safely_call_block(block, result);
-        if ([rv isKindOfClass:[Promise class]])
-            return rv;
-        return [Promise promiseWithValue:rv];
+    if (result) return ^(dispatch_queue_t q, id block) {
+        return dispatch_promise_on(q, ^{   // don’t release Zalgo
+            return safely_call_block(block, result);
+        });
     };
 
-    return ^(id block) {
-        Promise *next = [Promise new];
-        [pendingPromises addObject:next];
-        // avoiding retain cycle by passing self->result as block parameter
-        [thens addObject:^(id selfDotResult){
-            next->result = safely_call_block(block, selfDotResult);
-            return next;
+    return ^(dispatch_queue_t q, id block){
+        __block PromiseResolver fulfiller;
+        __block PromiseResolver rejecter;
+        Promise *next = [Promise new:^(PromiseResolver fluff, PromiseResolver rejunk) {
+            fulfiller = fluff;
+            rejecter = rejunk;
+        }];
+        [handlers addObject:^(id selfDotResult){
+            if (IsError(selfDotResult)) {
+                next->result = selfDotResult;
+                PMKResolve(next);
+            }
+            else dispatch_async(q, ^{
+                id rv = safely_call_block(block, selfDotResult);
+                if (IsError(rv))
+                    rejecter(rv);
+                else
+                    fulfiller(rv);
+            });
         }];
         return next;
     };
 }
 
 - (Promise *(^)(id))catch {
-    if ([result isKindOfClass:[Promise class]])
+    if (IsPromise(result))
         return ((Promise *)result).catch;
 
-    if (result && ![result isKindOfClass:[NSError class]])
-        return ^(id block){
-            return [Promise promiseWithValue:result];
-        };
-
-    if (result) return ^id(id block){
-        id rv = safely_call_block(block, result);
-        return [rv isKindOfClass:[Promise class]]
-             ? rv
-             : [Promise promiseWithValue:rv];
+    if (IsError(result)) return ^(id block) {
+        return dispatch_promise_on(dispatch_get_main_queue(), ^{   // don’t release Zalgo
+            return safely_call_block(block, result);
+        });
     };
 
-    return ^(id block) {
-        Promise *next = [Promise new];
-        [pendingPromises addObject:next];
-        // avoiding retain cycle by passing self->result as block parameter
-        [fails addObject:^(id selfDotResult){
-            next->result = safely_call_block(block, selfDotResult);
-            return next;
+    if (result) return ^id(id block){
+        return [Promise promiseWithValue:result];
+    };
+
+     return ^(id block){
+        __block PromiseResolver fulfiller;
+        __block PromiseResolver rejecter;
+        Promise *next = [Promise new:^(PromiseResolver fluff, PromiseResolver rejunk) {
+            fulfiller = fluff;
+            rejecter = rejunk;
+        }];
+        [handlers addObject:^(id selfDotResult){
+            if (IsError(selfDotResult)) {
+                dispatch_async(dispatch_get_main_queue(), ^{
+                    id rv = safely_call_block(block, selfDotResult);
+                    if (IsError(rv))
+                        rejecter(rv);
+                    else if (rv)
+                        fulfiller(rv);
+                });
+            } else {
+                next->result = selfDotResult;
+                PMKResolve(next);
+            }
         }];
         return next;
     };
@@ -218,10 +239,11 @@ static id safely_call_block(id frock, id result) {
     }
 }
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-retain-cycles"
 + (Promise *)until:(id (^)(void))blockReturningPromises catch:(id)failHandler
 {
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Warc-retain-cycles"
+
     return [Promise new:^(void(^fulfiller)(id), id rejecter){
         __block void (^block)() = ^{
             id promises = blockReturningPromises();
@@ -238,8 +260,10 @@ static id safely_call_block(id frock, id result) {
         };
         block();
     }];
+
+  #pragma clang diagnostic pop
 }
-#pragma clang diagnostic pop
+
 
 + (Promise *)promiseWithValue:(id)value {
     Promise *p = [Promise new];
@@ -247,57 +271,67 @@ static id safely_call_block(id frock, id result) {
     return p;
 }
 
+
+static void PMKResolve(Promise *this) {
+    id const value = ({
+        Promise *rv = this->result;
+        if (IsPromise(rv) && !rv.pending)
+            rv = rv.value ?: PMKNull;
+        rv;
+    });
+
+    if (IsPromise(value)) {
+        Promise *rsvp = (Promise *)value;
+        [rsvp->handlers addObject:^(id o){
+            this->result = o;
+            PMKResolve(this);
+        }];
+    } else {
+        for (void (^handler)(id) in this->handlers)
+            handler(value);
+        this->handlers = nil;
+    }
+}
+
+
 + (Promise *)new:(void(^)(PromiseResolver, PromiseResolver))block {
-    Promise *promise = [Promise new];
+    Promise *this = [Promise new];
 
     id fulfiller = ^(id value){
-        if (promise->result)
+        if (this->result)
             return NSLog(@"PromiseKit: Promise already resolved");
-        if ([value isKindOfClass:[NSError class]])
+        if (IsError(value))
             @throw PMKE(@"You may not fulfill a Promise with an NSError");
         if (!value)
             value = PMKNull;
 
-        if (IsPromise(value)) {
-            Promise *rsvp = (Promise *)value;
-            Promise *next = promise;
-            if (IsPending(rsvp)) {
-                [rsvp->thens addObject:^(id o){
-                    next->result = o;
-                    return next;
-                }];
-                [rsvp->pendingPromises addObject:next];
-                return;
-            } else
-                promise->result = rsvp->result;
-        } else
-            promise->result = value;
-
-        FulfillRecursively(promise);
+        this->result = value;
+        PMKResolve(this);
     };
+
     id rejecter = ^(id error){
-        if (promise->result)
+        if (this->result)
             return NSLog(@"PromiseKit: Promise already resolved");
-        if ([error isKindOfClass:[Promise class]])
+        if (IsPromise(error))
             @throw PMKE(@"You may not reject a Promise with a Promise");
         if (!error)
             error = [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeUnknown userInfo:nil];
         if (![error isKindOfClass:[NSError class]])
-            error = NSErrorWithThrown(error);
+            error = NSErrorWithThrown(error);  // TODO not with thrown in this case, have own error code & userInfo
 
         NSLog(@"PromiseKit: %@", error);  // we refuse to let errors die silently
 
-        promise->result = error;
-        RejectRecursively(promise);
+        this->result = error;
+        PMKResolve(this);
     };
 
     @try {
         block(fulfiller, rejecter);
     } @catch (id e) {
-        promise->result = [e isKindOfClass:[NSError class]] ? e : NSErrorWithThrown(e);
+        this->result = [e isKindOfClass:[NSError class]] ? e : NSErrorWithThrown(e);
     }
 
-    return promise;
+    return this;
 }
 
 - (BOOL)pending {
@@ -331,89 +365,6 @@ static id safely_call_block(id frock, id result) {
 @end
 
 
-/**
- Static C functions rather that methods on Promise to enforce strict
- encapsulation and immutability on Promise objects. This may seem strict,
- but it fits well with the ideals of the Promise pattern. You can be
- completely certain that third-party libraries and end-users of your
- Promise based API did not modify your Promises.
- */
-static void FulfillRecursively(Promise *promise) {
-    assert(promise.fulfilled);
-
-    for (id (^then)(id) in promise->thens) {
-        Promise *next = then(promise->result);
-        [promise->pendingPromises removeObject:next];
-
-        // next was resolved in the then block
-
-        if ([next->result isKindOfClass:[NSError class]])
-            RejectRecursively(next);
-        else if (IsPromise(next->result) && IsPending(next->result)) {
-            Promise *rsvp = next->result;
-            [rsvp->thens addObject:^(id o){
-                next->result = o;
-                return next;
-            }];
-            [rsvp->pendingPromises addObject:next];
-        }
-        else if (IsPromise(next->result) && !IsPending(next->result)) {
-            next->result = ((Promise *)next->result)->result;
-            FulfillRecursively(next);
-        } else
-            FulfillRecursively(next);
-    }
-
-    // search through fails for thens
-    for (Promise *pending in promise->pendingPromises) {
-        pending->result = promise->result;
-        FulfillRecursively(pending);
-    }
-
-    promise->thens = promise->fails = promise->pendingPromises = nil;
-}
-
-static void RejectRecursively(Promise *promise) {
-    assert(promise.rejected);
-
-    for (id (^fail)(id) in promise->fails) {
-        Promise *next = fail(promise->result);
-        [promise->pendingPromises removeObject:next];
-
-        // next was resolved in the catch block
-
-        if (IsPromise(next->result) && IsPending(next->result)) {
-            Promise *rsvp = next->result;
-            [rsvp->thens addObject:^(id o){
-                next->result = o;
-                return next;
-            }];
-            [rsvp->pendingPromises addObject:next];
-            continue;
-        }
-        if (IsPromise(next->result) && !IsPending(next->result))
-            next->result = ((Promise *)next->result)->result;
-
-        if (next->result == PMKNull)
-            // we're done
-            continue;
-        if ([next->result isKindOfClass:[NSError class]])
-            // bubble again!
-            RejectRecursively(next);
-        else
-            FulfillRecursively(next);
-    }
-
-    // search through thens for fails
-    for (Promise *pending in promise->pendingPromises) {
-        pending->result = promise->result;
-        RejectRecursively(pending);
-    }
-
-    promise->thens = promise->fails = promise->pendingPromises = nil;
-}
-
-
 
 Promise *dispatch_promise(id block) {
     return dispatch_promise_on(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), block);
@@ -422,13 +373,11 @@ Promise *dispatch_promise(id block) {
 Promise *dispatch_promise_on(dispatch_queue_t queue, id block) {
     return [Promise new:^(void(^fulfiller)(id), void(^rejecter)(id)){
         dispatch_async(queue, ^{
-            __block id result = safely_call_block(block, nil);
-            dispatch_async(dispatch_get_main_queue(), ^{
-                if ([result isKindOfClass:[NSError class]])
-                    rejecter(result);
-                else
-                    fulfiller(result);
-            });
+            id result = safely_call_block(block, nil);
+            if ([result isKindOfClass:[NSError class]])
+                rejecter(result);
+            else
+                fulfiller(result);
         });
     }];
 }

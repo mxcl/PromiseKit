@@ -1,3 +1,4 @@
+@import Dispatch.introspection;
 @import Foundation.NSObject;
 @import Foundation.NSArray;
 
@@ -24,12 +25,20 @@ Returning from your block will resolve the next `Promise` with that value.
 
 If an exception is thrown inside your block, or you return an `NSError` object the next `Promise` will be rejected. @see `catch` for documentation on error handling.
 
+Then is always executed on the main dispatch queue (i.e the main/UI thread).
+
 @return A new `Promise` to be executed after the block passed to this `then`
 */
 - (Promise *(^)(id))then;
 
 
 - (Promise *(^)(id))catch;
+
+/**
+/**
+ The provided block is executed on the dispatch queue of your choice.
+**/
+- (Promise *(^)(dispatch_queue_t, id))thenOn;
 
 /**
 Returns a new Promise that is resolved when all passed Promises are resolved.
@@ -117,8 +126,6 @@ The returned `Promise` is resolved with the value returned from @param block (if
 Promise *dispatch_promise(id block);
 
 
-
-@import Dispatch.queue;
 
 /**
  Executes @param block via `dispatch_async` on the specified queue.

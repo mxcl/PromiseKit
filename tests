@@ -60,6 +60,7 @@ int main() {
         XCTFail();
     });
     fulfiller(@1);
+    wait(0.05);
     XCTAssertTrue(resolved);
 }
 
@@ -72,6 +73,7 @@ int main() {
         resolved = YES;
     });
     rejecter(@2);
+    wait(0.05);
     XCTAssertTrue(resolved);
 }
 
@@ -86,6 +88,7 @@ int main() {
         XCTFail();
     });
     fulfiller(@1);
+    wait(0.05);
     XCTAssertTrue(resolved);
 }
 
@@ -101,7 +104,7 @@ int main() {
     nextPromise.catch(^{
         resolved = YES;
     });
-
+    wait(0.05);
     XCTAssertTrue(resolved);
     XCTAssertFalse(failme);
 }
@@ -115,6 +118,7 @@ int main() {
         resolved = YES;
     });
     fulfiller(@5);
+    wait(0.05);
     XCTAssertTrue(resolved);
 }
 
@@ -128,6 +132,7 @@ int main() {
         XCTAssertEqualObjects(e.userInfo[PMKThrown], @5);
     });
     fulfiller(@1);
+    wait(0.05);
     XCTAssertTrue(resolved);
 }
 
@@ -138,6 +143,7 @@ int main() {
         resolved = YES;
     });
     fulfiller(@1);
+    wait(0.05);
     XCTAssertTrue(resolved);
 }
 
@@ -147,6 +153,7 @@ int main() {
         resolved = YES;
         XCTAssertEqualObjects(@1, o);
     });
+    wait(0.05);
     XCTAssertTrue(resolved);
 }
 
@@ -156,6 +163,7 @@ int main() {
         resolved = YES;
         XCTAssertEqualObjects(@1, e.userInfo[PMKThrown]);
     });
+    wait(0.05);
     XCTAssertTrue(resolved);
 }
 
@@ -193,6 +201,7 @@ int main() {
         resolved = YES;
     });
     fulfiller(@10);
+    wait(0.05);
     XCTAssertTrue(resolved);
 }
 
@@ -261,6 +270,7 @@ int main() {
         resolved = YES;
     });
     fulfiller(@1);
+    wait(0.05);
     XCTAssertTrue(resolved);
 }
 
@@ -347,7 +357,8 @@ int main() {
     }).catch(^{
         x++;
     });
-        
+
+    wait(0.1);
     XCTAssertEqual(x, 2);
 }
 
@@ -368,7 +379,8 @@ int main() {
         XCTAssertEqualObjects(e.userInfo[PMKThrown], @23);
         x++;
     });
-        
+
+    wait(0.1);
     XCTAssertEqual(x, 2);
 }
 
@@ -514,6 +526,7 @@ Promise *gcdreject() {
         resolved = true;
     });
     fulfiller(@32);
+    wait(0.1);
     XCTAssertTrue(resolved);
 }
 
@@ -528,20 +541,26 @@ Promise *gcdreject() {
         resolved = YES;
     });
     fulfiller(@"HI");
+    wait(0.1);
     XCTAssertTrue(resolved);
 }
 
 - (void)test_33a_return_nil {
+    __block int x = 0;
     promise.then(^(id o){
         XCTAssertEqualObjects(o, @"HI");
+        x++;
         return nil;
     }).then(^{
         return nil;
     }).then(^{
+        x++;
         resolved = YES;
         return nil;
     });
     fulfiller(@"HI");
+    wait(0.1);
+    XCTAssertEqual(x, 2);
     XCTAssertTrue(resolved);
 }
 
@@ -555,6 +574,7 @@ Promise *gcdreject() {
         resolved = YES;
         XCTAssertEqualObjects(error.userInfo[PMKThrown], @1);
     });
+    wait(0.1);
     XCTAssertTrue(resolved);
 }
 
@@ -577,6 +597,7 @@ Promise *gcdreject() {
         XCTAssertNil(o);
         resolved = YES;
     });
+    wait(0.1);
     XCTAssertTrue(resolved);
 }
 
@@ -620,6 +641,7 @@ Promise *gcdreject() {
         XCTAssertEqualObjects(aa[1], @2);
         resolved = YES;
     });
+    wait(0.1);
     XCTAssertTrue(resolved);
 }
 
@@ -665,6 +687,7 @@ Promise *gcdreject() {
         XCTAssertEqualObjects(o, @123);
         resolved = YES;
     });
+    wait(0.1);
     XCTAssertTrue(resolved);
 }
 
@@ -676,7 +699,29 @@ Promise *gcdreject() {
         resolved = YES;
     });
     fulfiller(@1);
+    wait(0.1);
     XCTAssertTrue(resolved); 
+}
+
+- (void)test_46_test_then_on {
+    dispatch_queue_t q1 = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0);
+    dispatch_queue_t q2 = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+    promise.thenOn(q1, ^{
+        XCTAssertFalse([NSThread isMainThread]);
+        return dispatch_get_current_queue();
+    }).thenOn(q2, ^(id q){
+        XCTAssertFalse([NSThread isMainThread]);
+        XCTAssertNotEqualObjects(q, dispatch_get_current_queue());
+        resolved = YES;
+    });
+#pragma clang diagnostic pop
+
+    fulfiller(@1);
+    wait(0.1);
+    XCTAssertTrue(resolved);
 }
 
 @end
