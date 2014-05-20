@@ -53,6 +53,8 @@ The returned `Promise` is resolved with an array of results indexed as the origi
 
 /**
  Same as when, though only takes an object that implements `NSFastEnumeration` (`NSArray` implements `NSFastEnumeration`)
+
+ Alias provided due to ES6 specifications.
 */
 + (Promise *)all:(id<NSFastEnumeration>)enumerable;
 
@@ -83,10 +85,20 @@ An example usage is an app starting up that must get data from the Internet befo
 
 
 - (BOOL)pending;
+
+/**
+ A resolved promise is not pending. It is either fulfilled, or
+ rejected.
+**/
 - (BOOL)resolved;
 - (BOOL)fulfilled;
 - (BOOL)rejected;
 
+/**
+ A promise has a nil value if it is pending. A promise is still
+ pending if the `then` or `catch` that created this promise
+ returned a `Promise`.
+*/
 - (id)value;
 
 @end
