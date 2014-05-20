@@ -38,10 +38,10 @@ def test!
     when /^(Executed(.?)+)$/
       if stderr.eof?
         summary = $1
-        if /(\d) failures?/.match(summary)[1] == "0"
-          summary.gsub!(/(\d failures?)/, green('\1'))
+        if /(\d+) failures?/.match(summary)[1] == "0"
+          summary.gsub!(/(\d+ failures?)/, green('\1'))
         else
-          summary.gsub!(/(\d failures?)/, red('\1'))
+          summary.gsub!(/(\d+ failures?)/, red('\1'))
         end
         log summary
       end
