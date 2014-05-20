@@ -364,6 +364,17 @@ static void PMKResolve(Promise *this) {
         return result;
 }
 
+- (NSString *)description {
+    if (self.pending)
+        return [NSString stringWithFormat:@"Promise: %lu pending handlers", (unsigned long)handlers.count];
+    if (self.rejected)
+        return [NSString stringWithFormat:@"Promise: rejected: %@", result];
+
+    assert(self.fulfilled);
+
+    return [NSString stringWithFormat:@"Promise: fulfilled: %@", result];
+}
+
 @end
 
 
