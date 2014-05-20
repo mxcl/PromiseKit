@@ -10,6 +10,7 @@ Pod::Spec.new do |s|
   s.homepage = 'http://promisekit.org'
   s.social_media_url = 'https://twitter.com/mxcl'
   s.authors  = { 'Max Howell' => 'mxcl@me.com' }
+  s.documentation_url = 'http://promisekit.org'
 
   s.requires_arc = true
   s.compiler_flags = '-fmodules'
