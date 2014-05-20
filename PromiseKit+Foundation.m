@@ -40,12 +40,6 @@ static BOOL NSHTTPURLResponseIsImage(NSHTTPURLResponse *rsp) {
 }
 #endif
 
-static inline NSDictionary *NSDictionaryExtend(NSDictionary *add, NSDictionary *base) {
-    base = base.mutableCopy ?: [NSMutableDictionary new];
-    [(id)base addEntriesFromDictionary:add];
-    return base;
-}
-
 static NSArray *DoQueryMagic(NSString *key, id value) {
     NSMutableArray *parts = [NSMutableArray new];
 
@@ -159,19 +153,29 @@ NSString *PMKUserAgent() {
         [(id)rq setValue:PMKUserAgent() forHTTPHeaderField:@"User-Agent"];
     }
 
-    #define NSURLError(x, desc) [NSError errorWithDomain:NSURLErrorDomain code:x userInfo:NSDictionaryExtend(@{PMKURLErrorFailingURLResponse: rsp, NSLocalizedDescriptionKey: desc}, error.userInfo)]
-    #define fulfiller(obj) fulfiller(PMKManifold(obj, rsp, data))
+    return [Promise new:^(PromiseFulfiller fluff, PromiseRejecter rejunk){
+        [NSURLConnection sendAsynchronousRequest:rq queue:q completionHandler:^(id rsp, id data, NSError *urlError) {
 
-    return [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter){
-        [NSURLConnection sendAsynchronousRequest:rq queue:q completionHandler:^(id rsp, id data, NSError *error) {
-            if (error) {
-                if (rsp) {
-                    id dict = NSDictionaryExtend(@{PMKURLErrorFailingURLResponse: rsp}, error.userInfo);
-                    error = [NSError errorWithDomain:error.domain code:error.code userInfo:dict];
-                }
-                rejecter(error);
+            PromiseFulfiller fulfiller = ^(id responseObject){
+                fluff(PMKManifold(responseObject, rsp, data));
+            };
+            PromiseRejecter rejecter = ^(NSError *error){
+                id userInfo = error.userInfo.mutableCopy ?: [NSMutableDictionary new];
+                if (data) userInfo[PMKURLErrorFailingDataKey] = data;
+                if (rsp) userInfo[PMKURLErrorFailingURLResponseKey] = rsp;
+                error = [NSError errorWithDomain:error.domain code:error.code userInfo:userInfo];
+                rejunk(error);
+            };
+
+            if (urlError) {
+                rejecter(urlError);
             } else if ([rsp statusCode] < 200 || [rsp statusCode] >= 300) {
-                id err = NSURLError(NSURLErrorBadServerResponse, @"bad HTTP response code");
+                id info = @{
+                    NSLocalizedDescriptionKey: @"The server returned a bad HTTP response code",
+                    NSURLErrorFailingURLStringErrorKey: rq.URL.absoluteString,
+                    NSURLErrorFailingURLErrorKey: rq.URL
+                };
+                id err = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorBadServerResponse userInfo:info];
                 rejecter(err);
             } else if (NSHTTPURLResponseIsJSON(rsp)) {
                 dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
@@ -193,7 +197,12 @@ NSString *PMKUserAgent() {
                         if (image)
                             fulfiller(image);
                         else {
-                            id err = NSURLError(NSURLErrorBadServerResponse, @"invalid image data");
+                            id info = @{
+                                NSLocalizedDescriptionKey: @"The server returned invalid image data",
+                                NSURLErrorFailingURLStringErrorKey: rq.URL.absoluteString,
+                                NSURLErrorFailingURLErrorKey: rq.URL
+                            };
+                            id err = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorBadServerResponse userInfo:info];
                             rejecter(err);
                         }
                     });

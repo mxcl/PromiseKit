@@ -9,7 +9,6 @@
 #import "Private/NSMethodSignatureForBlock.m"
 #import "PromiseKit/Promise.h"
 
-#define NSErrorWithThrown(e) [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeThrown userInfo:@{PMKThrown: e}]
 #define IsPromise(o) ([o isKindOfClass:[Promise class]])
 #define IsError(o) ([o isKindOfClass:[NSError class]])
 #define PMKE(txt) [NSException exceptionWithName:@"PromiseKit" reason:@"PromiseKit: " txt userInfo:nil]
@@ -18,6 +17,18 @@ static const id PMKNull = @"PMKNull";
 
 @interface PMKArray : NSObject
 @end
+
+
+
+static inline NSError *NSErrorWithThrown(id e) {
+    id userInfo = [NSMutableDictionary new];
+    userInfo[PMKUnderlyingExceptionKey] = e;
+    if ([e isKindOfClass:[NSException class]])
+        userInfo[NSLocalizedDescriptionKey] = [e reason];
+    else
+        userInfo[NSLocalizedDescriptionKey] = [e description];
+    return [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeThrown userInfo:userInfo];
+}
 
 
 
@@ -317,8 +328,10 @@ static void PMKResolve(Promise *this) {
         if (!error)
             error = [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeUnknown userInfo:nil];
         if (![error isKindOfClass:[NSError class]]) {
-            NSLog(@"PromiseKit: Warning: You should reject with NSError objects");
-            error = NSErrorWithThrown(error);  // TODO not with thrown in this case, have own error code & userInfo
+            NSLog(@"PromiseKit: Warning: You should reject with proper NSError objects!");
+            error = [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeInvalidUsage userInfo:@{
+                NSLocalizedDescriptionKey: [error description]
+            }];
         }
 
         NSLog(@"PromiseKit: %@", error);  // we refuse to let errors die silently

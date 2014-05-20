@@ -4,8 +4,8 @@
 @import Foundation.NSURLRequest;
 @class Promise;
 
-#define PMKURLErrorFailingURLResponse @"PMKURLErrorFailingURLResponse"
-
+#define PMKURLErrorFailingURLResponseKey @"PMKURLErrorFailingURLResponseKey"
+#define PMKURLErrorFailingDataKey @"PMKURLErrorFailingDataKey"
 
 
 @interface NSURLConnection (PromiseKit)

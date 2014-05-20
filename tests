@@ -69,7 +69,7 @@ int main() {
         XCTFail();
     });
     promise.catch(^(NSError *error){
-        XCTAssertEqualObjects(error.userInfo[PMKThrown], @2);
+        XCTAssertEqualObjects(error.localizedDescription, @"2");
         resolved = YES;
     });
     rejecter(@2);
@@ -82,7 +82,7 @@ int main() {
         @throw @1;
     }).catch(^(NSError *e){
         resolved = YES;
-        XCTAssertEqualObjects(@1, e.userInfo[PMKThrown]);
+        XCTAssertEqualObjects(@1, e.userInfo[PMKUnderlyingExceptionKey]);
     });
     promise.catch(^{
         XCTFail();
@@ -114,7 +114,7 @@ int main() {
         XCTAssertEqual(5, [ii intValue]);
         @throw ii;
     }).catch(^(NSError *e){
-        XCTAssertEqualObjects(e.userInfo[PMKThrown], @5);
+        XCTAssertEqualObjects(e.userInfo[PMKUnderlyingExceptionKey], @5);
         resolved = YES;
     });
     fulfiller(@5);
@@ -129,7 +129,7 @@ int main() {
         //NOOP
     }).catch(^(NSError *e){
         resolved = YES;
-        XCTAssertEqualObjects(e.userInfo[PMKThrown], @5);
+        XCTAssertEqualObjects(e.userInfo[PMKUnderlyingExceptionKey], @5);
     });
     fulfiller(@1);
     wait(0.05);
@@ -161,7 +161,7 @@ int main() {
     rejecter(@1);
     promise.catch(^(NSError *e){
         resolved = YES;
-        XCTAssertEqualObjects(@1, e.userInfo[PMKThrown]);
+        XCTAssertEqualObjects(@"1", e.localizedDescription);
     });
     wait(0.05);
     XCTAssertTrue(resolved);
@@ -252,7 +252,7 @@ int main() {
     }).then(^{
         XCTFail();
     }).catch(^(NSError *e){
-        XCTAssertEqualObjects(e.userInfo[PMKThrown], @1);
+        XCTAssertEqualObjects(e.userInfo[PMKUnderlyingExceptionKey], @1);
         resolved = YES;
     });
     wait(0.2);
@@ -263,7 +263,7 @@ int main() {
     promise.then(^{
         @throw @1;
     }).catch(^(NSError *e){
-        XCTAssertEqualObjects(e.userInfo[PMKThrown], @1);
+        XCTAssertEqualObjects(e.userInfo[PMKUnderlyingExceptionKey], @1);
         return @2;
     }).then(^(id o){
         XCTAssertEqualObjects(o, @2);
@@ -334,7 +334,7 @@ int main() {
     [Promise when:c].then(^{
         XCTFail();
     }).catch(^(NSError *e){
-        XCTAssertEqualObjects(e.userInfo[PMKThrown], @NO);
+        XCTAssertEqualObjects(e.userInfo[PMKUnderlyingExceptionKey], @NO);
         resolved = YES;
     });
     wait(0.1);
@@ -347,7 +347,7 @@ int main() {
     promise.then(^{
         XCTFail();
     }).catch(^(NSError *e){
-        XCTAssertEqualObjects(e.userInfo[PMKThrown], @22);
+        XCTAssertEqualObjects(e.localizedDescription, @"22");
         x++;
     });
     rejecter(@22);
@@ -368,7 +368,7 @@ int main() {
     promise.then(^{
         XCTFail();
     }).catch(^(NSError *e){
-        XCTAssertEqualObjects(e.userInfo[PMKThrown], @23);
+        XCTAssertEqualObjects(e.localizedDescription, @"23");
         x++;
     });
     rejecter(@23);
@@ -376,7 +376,7 @@ int main() {
     promise.then(^{
         XCTFail();
     }).catch(^(NSError *e){
-        XCTAssertEqualObjects(e.userInfo[PMKThrown], @23);
+        XCTAssertEqualObjects(e.localizedDescription, @"23");
         x++;
     });
 
@@ -484,7 +484,7 @@ Promise *gcdreject() {
     }).then(^{
         XCTFail();
     }).catch(^(NSError *error){
-        NSHTTPURLResponse *rsp = error.userInfo[PMKURLErrorFailingURLResponse];
+        NSHTTPURLResponse *rsp = error.userInfo[PMKURLErrorFailingURLResponseKey];
         XCTAssertTrue([rsp isKindOfClass:[NSHTTPURLResponse class]]);
         XCTAssertEqual(rsp.statusCode, 404);
         resolved = YES;
@@ -572,7 +572,7 @@ Promise *gcdreject() {
         XCTFail();
     }).catch(^(NSError *error){
         resolved = YES;
-        XCTAssertEqualObjects(error.userInfo[PMKThrown], @1);
+        XCTAssertEqualObjects(error.userInfo[PMKUnderlyingExceptionKey], @1);
     });
     wait(0.1);
     XCTAssertTrue(resolved);

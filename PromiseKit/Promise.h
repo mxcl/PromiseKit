@@ -121,7 +121,7 @@ id PMKManifold(NSArray *arguments);
 
 
 #define PMKErrorDomain @"PMKErrorDomain"
-#define PMKThrown @"PMKThrown"
+#define PMKUnderlyingExceptionKey @"PMKUnderlyingExceptionKey"
 #define PMKErrorCodeThrown 1
 #define PMKErrorCodeUnknown 2
 #define PMKErrorCodeInvalidUsage 3
