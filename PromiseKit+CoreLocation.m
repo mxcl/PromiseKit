@@ -53,7 +53,7 @@
 @implementation CLGeocoder (PromiseKit)
 
 + (Promise *)reverseGeocode:(CLLocation *)location {
-    return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter) {
+    return [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter) {
        [[CLGeocoder new] reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
             if (error) {
                 rejecter(error);
@@ -64,7 +64,7 @@
 }
 
 + (Promise *)geocode:(id)address {
-    return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter) {
+    return [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter) {
         id handler = ^(NSArray *placemarks, NSError *error) {
             if (error) {
                 rejecter(error);

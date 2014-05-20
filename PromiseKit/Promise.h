@@ -1,9 +1,11 @@
 @import Dispatch.introspection;
-@import Foundation.NSObject;
 @import Foundation.NSArray;
+@import Foundation.NSError;
 
 
-typedef void (^PromiseResolver)(id);
+typedef void (^PromiseResolver)(id) __attribute__((deprecated));
+typedef void (^PromiseFulfiller)(id);
+typedef void (^PromiseRejecter)(NSError *);
 
 /**
 A `Promise` represents the future value of a task.
@@ -35,9 +37,8 @@ Then is always executed on the main dispatch queue (i.e the main/UI thread).
 - (Promise *(^)(id))catch;
 
 /**
-/**
  The provided block is executed on the dispatch queue of your choice.
-**/
+*/
 - (Promise *(^)(dispatch_queue_t, id))thenOn;
 
 /**
@@ -76,7 +77,7 @@ An example usage is an app starting up that must get data from the Internet befo
 
  Pass a block to this constructor, the block must take two arguments that point to the `fulfiller` and `rejecter` of this Promise. Fulfill or reject this Promise using those blocks and the Promise chain that roots to this Promise will be resolved accordingly.
 */
-+ (Promise *)new:(void(^)(PromiseResolver fulfiller, PromiseResolver rejecter))block;
++ (Promise *)new:(void(^)(PromiseFulfiller fulfiller, PromiseRejecter rejecter))block;
 
 /** 
 @return A new `Promise` that is already resolved with @param value. Calling `then` on a resolved `Promise` executes the provided block immediately.

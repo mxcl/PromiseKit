@@ -7,7 +7,7 @@
 @implementation MKDirections (PromiseKit)
 
 + (Promise *)promise:(MKDirectionsRequest *)request {
-    return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter) {
+    return [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter) {
         [[[MKDirections alloc] initWithRequest:request] calculateDirectionsWithCompletionHandler:^(MKDirectionsResponse *response, NSError *error) {
             if (error) {
                 rejecter(error);
@@ -18,7 +18,7 @@
 }
 
 + (Promise *)promiseETA:(MKDirectionsRequest *)request {
-    return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter) {
+    return [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter) {
         [[[MKDirections alloc] initWithRequest:request] calculateETAWithCompletionHandler:^(MKETAResponse *response, NSError *error) {
             if (error) {
                 rejecter(error);
@@ -35,7 +35,7 @@
 @implementation MKMapSnapshotter (PromiseKit)
 
 - (Promise *)promise {
-    return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter) {
+    return [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter) {
         [self startWithCompletionHandler:^(MKMapSnapshot *snapshot, NSError *error) {
             if (error)
                 rejecter(error);

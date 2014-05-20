@@ -19,7 +19,7 @@ NSString *const SLRequestPromiseKitResponseDataAsTextKey = @"SLRequestPromiseKit
 @implementation SLRequest (PromiseKit)
 + (Promise *)promise:(SLRequest *)request
 {
-  return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter) {
+  return [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter) {
     [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
       dispatch_async(dispatch_get_main_queue(), ^{
         if (!responseData) {
@@ -64,7 +64,7 @@ NSString *const SLRequestPromiseKitResponseDataAsTextKey = @"SLRequestPromiseKit
 @implementation ACAccountStore (PromiseKit)
 - (Promise *)promiseForAccountsWithType:(ACAccountType *)type options:(NSDictionary *)options
 {
-  return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter) {
+  return [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter) {
     [self requestAccessToAccountsWithType:type options:options completion:^(BOOL granted, NSError *error) {
       dispatch_async(dispatch_get_main_queue(), ^{
         if (!granted) {
@@ -80,7 +80,7 @@ NSString *const SLRequestPromiseKitResponseDataAsTextKey = @"SLRequestPromiseKit
 
 - (Promise *)promiseForCredentialsRenewalWithAccount:(ACAccount *)account
 {
-  return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter) {
+  return [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter) {
     [self renewCredentialsForAccount:account completion:^(ACAccountCredentialRenewResult renewResult, NSError *error) {
       dispatch_async(dispatch_get_main_queue(), ^{
         if (error) {
@@ -96,7 +96,7 @@ NSString *const SLRequestPromiseKitResponseDataAsTextKey = @"SLRequestPromiseKit
 
 - (Promise *)promiseForAccountSave:(ACAccount *)account
 {
-  return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter) {
+  return [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter) {
     [self saveAccount:account withCompletionHandler:^(BOOL success, NSError *error) {
       dispatch_async(dispatch_get_main_queue(), ^{
         if (!success) {
@@ -112,7 +112,7 @@ NSString *const SLRequestPromiseKitResponseDataAsTextKey = @"SLRequestPromiseKit
 
 - (Promise *)promiseForAccountRemoval:(ACAccount *)account
 {
-  return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter) {
+  return [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter) {
     [self removeAccount:account withCompletionHandler:^(BOOL success, NSError *error) {
       dispatch_async(dispatch_get_main_queue(), ^{
         if (!success) {

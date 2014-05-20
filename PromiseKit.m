@@ -138,9 +138,9 @@ static id safely_call_block(id frock, id result) {
     };
 
     return ^(dispatch_queue_t q, id block){
-        __block PromiseResolver fulfiller;
-        __block PromiseResolver rejecter;
-        Promise *next = [Promise new:^(PromiseResolver fluff, PromiseResolver rejunk) {
+        __block PromiseFulfiller fulfiller;
+        __block PromiseRejecter rejecter;
+        Promise *next = [Promise new:^(PromiseFulfiller fluff, PromiseRejecter rejunk) {
             fulfiller = fluff;
             rejecter = rejunk;
         }];
@@ -176,9 +176,9 @@ static id safely_call_block(id frock, id result) {
     };
 
      return ^(id block){
-        __block PromiseResolver fulfiller;
-        __block PromiseResolver rejecter;
-        Promise *next = [Promise new:^(PromiseResolver fluff, PromiseResolver rejunk) {
+        __block PromiseFulfiller fulfiller;
+        __block PromiseRejecter rejecter;
+        Promise *next = [Promise new:^(PromiseFulfiller fluff, PromiseRejecter rejunk) {
             fulfiller = fluff;
             rejecter = rejunk;
         }];
@@ -294,7 +294,7 @@ static void PMKResolve(Promise *this) {
 }
 
 
-+ (Promise *)new:(void(^)(PromiseResolver, PromiseResolver))block {
++ (Promise *)new:(void(^)(PromiseFulfiller, PromiseRejecter))block {
     Promise *this = [Promise new];
 
     id fulfiller = ^(id value){
@@ -316,8 +316,10 @@ static void PMKResolve(Promise *this) {
             @throw PMKE(@"You may not reject a Promise with a Promise");
         if (!error)
             error = [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeUnknown userInfo:nil];
-        if (![error isKindOfClass:[NSError class]])
+        if (![error isKindOfClass:[NSError class]]) {
+            NSLog(@"PromiseKit: Warning: You should reject with NSError objects");
             error = NSErrorWithThrown(error);  // TODO not with thrown in this case, have own error code & userInfo
+        }
 
         NSLog(@"PromiseKit: %@", error);  // we refuse to let errors die silently
 
