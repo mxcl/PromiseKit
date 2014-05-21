@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
   preserved =  %w{Private PromiseKit}
 
   s.name = "PromiseKit"
-  s.version = "0.9.6"
+  s.version = "0.9.7"
   s.source = { :git => "https://github.com/mxcl/#{s.name}.git", :tag => s.version }
   s.license = 'MIT'
   s.summary = 'A delightful Promises implementation for iOS and OS X.'
@@ -26,6 +26,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'private' do |ss|
     ss.source_files = 'Private/PMKManualReference.m'
+    ss.preserve_paths = preserved
   end
 
   s.subspec 'Foundation' do |ss|
@@ -68,6 +69,15 @@ Pod::Spec.new do |s|
     ss.source_files = 'PromiseKit+SocialFramework.{h,m}'
     ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_SOCIALFRAMEWORK=1" }
     ss.frameworks = 'Social', 'Accounts'
+    ss.preserve_paths = preserved
+  end
+
+  s.subspec 'StoreKit' do |ss|
+    ss.dependency 'PromiseKit/base'
+    ss.dependency 'PromiseKit/private'
+    ss.source_files = 'PromiseKit+StoreKit.{h,m}'
+    ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_STOREKIT=1" }
+    ss.frameworks = 'StoreKit'
     ss.preserve_paths = preserved
   end
 end

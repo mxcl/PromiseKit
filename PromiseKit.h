@@ -14,3 +14,6 @@
 #ifdef PMK_SOCIALFRAMEWORK
 #import "PromiseKit+SocialFramework.h"
 #endif
+#ifdef PMK_STOREKIT
+#import "PromiseKit+StoreKit.h"
+#endif
