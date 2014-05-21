@@ -211,7 +211,7 @@ All the explicit error handling clutters the code.
 });
 {% endhighlight %}
 
-Errors and exceptions break the chain of promises and bubble up to the next `catch` handler. Any exceptions are caught and wrapped in an NSError object. The original exception is accessible via `error.userInfo[PMKThrown]`.
+Errors and exceptions break the chain of promises and bubble up to the next `catch` handler. Any thrown objects are caught and wrapped in an NSError object. The original thrown object is accessible via `error.userInfo[PMKUnderlyingExceptionKey]`.
 
 This tends to work well for asynchronous chains because typically you want to know if the whole chain succeeded or the whole chain failed. You don’t want to micromanage the error handling every step of the way.
 
@@ -331,7 +331,7 @@ Notably we don’t provide a Promise for eg. `UIButton` actions. Promises can on
 [NSURLConnection GET:@"http://promisekit.org"].then(^(NSData *data){
     
 }).catch(^(NSError *error){
-    NSHTTPURLResponse *rsp = error.userInfo[PMKURLErrorFailingURLResponse];
+    NSHTTPURLResponse *rsp = error.userInfo[PMKURLErrorFailingURLResponseKey];
     int HTTPStatusCode = rsp.statusCode;
 });
 {% endhighlight %}
@@ -788,9 +788,16 @@ PromiseKit is well tested, and inside apps on the store. It also is fully docume
 PromiseKit is [compliant](http://promisesaplus.com) excluding:
 
 * Our `then` does not take a failure handler, instead we have a dedicated `catch`
+* Returning an `NSError *` from a `then` or `catch` rejects the returned `Promise`
 
 If you find further non-compliance please open a [ticket](https://github.com/mxcl/PromiseKit/issues/new).
 
+
+## Beyond Promises/A+
+
+* Promises can be fulfilled with multiple arguments which are then passed to the next `then`
+* We offer a `when`/`all`
+* We offer an `until`
 
 #Terminology
 
