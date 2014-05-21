@@ -13,14 +13,26 @@
 @interface PMKSKProductsRequestDelegater : NSObject <SKProductsRequestDelegate> {
 @public
     void (^fulfiller)(id);
+    void (^rejecter)(id);
 }
 @end
 
 @implementation PMKSKProductsRequestDelegater
 - (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response {
-    fulfiller(PMKManifold(request, response));
+    fulfiller(response);
+}
+
+- (void)requestDidFinish:(SKRequest *)request {
+    request.delegate = nil;
     [self pmk_breakReference];
 }
+
+- (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
+    rejecter(error);
+    request.delegate = nil;
+    [self pmk_breakReference];
+}
+
 @end
 
 @implementation SKProductsRequest (PromiseKit)
@@ -32,6 +44,7 @@
     [self start];
     return [Promise new:^(id fulfiller, id rejecter){
         d->fulfiller = fulfiller;
+        d->rejecter = rejecter;
     }];
 }
 

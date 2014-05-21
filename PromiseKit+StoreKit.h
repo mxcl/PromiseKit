@@ -6,3 +6,6 @@
 
 @class Promise;
 
+@interface SKProductsRequest (PromiseKit)
+- (Promise *)promise;
+@end
