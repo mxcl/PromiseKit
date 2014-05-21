@@ -105,6 +105,22 @@ static id safely_call_block(id frock, id result) {
                 @throw PMKE(@"Unsupported method signature… Why not fork and fix?");
         }
     } @catch (id e) {
+      #ifdef PMK_RETHROW_LIKE_A_MOFO
+        if ([e isKindOfClass:[NSException class]] && (
+            [e name] == NSGenericException ||
+            [e name] == NSRangeException ||
+            [e name] == NSInvalidArgumentException ||
+            [e name] == NSInternalInconsistencyException ||
+            [e name] == NSObjectInaccessibleException ||
+            [e name] == NSObjectNotAvailableException ||
+            [e name] == NSDestinationInvalidException ||
+            [e name] == NSPortTimeoutException ||
+            [e name] == NSInvalidSendPortException ||
+            [e name] == NSInvalidReceivePortException ||
+            [e name] == NSPortSendException ||
+            [e name] == NSPortReceiveException))
+                @throw e;
+      #endif
         return [e isKindOfClass:[NSError class]] ? e : NSErrorWithThrown(e);
     }
 }
