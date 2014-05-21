@@ -202,7 +202,7 @@ static id safely_call_block(id frock, id result) {
         return [Promise promiseWithValue:result];
     };
 
-     return ^(id block){
+    return ^(id block){
         __block PromiseFulfiller fulfiller;
         __block PromiseRejecter rejecter;
         Promise *next = [Promise new:^(PromiseFulfiller fluff, PromiseRejecter rejunk) {
@@ -222,6 +222,36 @@ static id safely_call_block(id frock, id result) {
                 next->result = selfDotResult;
                 PMKResolve(next);
             }
+        }];
+        return next;
+    };
+}
+
+- (Promise *(^)(void(^)(void)))finally {
+    if (IsPromise(result))
+        return ((Promise *)result).finally;
+
+    if (result) return ^(void (^block)(void)) {
+        return dispatch_promise_on(dispatch_get_main_queue(), ^{
+            return result;
+        });
+    };
+
+    return ^(void (^block)(void)){
+        __block PromiseFulfiller fulfiller;
+        __block PromiseRejecter rejecter;
+        Promise *next = [Promise new:^(PromiseFulfiller fluff, PromiseRejecter rejunk) {
+            fulfiller = fluff;
+            rejecter = rejunk;
+        }];
+        [handlers addObject:^(id passthru){
+            dispatch_async(dispatch_get_main_queue(), ^{
+                block();
+                if (IsError(passthru))
+                    rejecter(passthru);
+                else
+                    fulfiller(passthru);
+            });
         }];
         return next;
     };

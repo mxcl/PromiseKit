@@ -724,6 +724,47 @@ Promise *gcdreject() {
     XCTAssertTrue(resolved);
 }
 
+- (void)test_47_finally_plus {
+    promise.then(^{
+        return @1;
+    }).finally(^{
+        resolved = YES;
+    });
+    fulfiller(@1);
+    wait(0.1);
+    XCTAssertTrue(resolved);
+}
+
+- (void)test_48_finally_negative {
+    promise.then(^{
+        @throw @1;
+    }).finally(^{
+        resolved = YES;
+    });
+    fulfiller(@1);
+    wait(0.1);
+    XCTAssertTrue(resolved);
+}
+
+- (void)test_49_finally_negative_later {
+    __block int x = 0;
+    
+    promise.then(^{
+        XCTAssertEqual(++x, 1);
+        @throw @1;
+    }).catch(^{
+        XCTAssertEqual(++x, 2);
+    }).then(^{
+        XCTAssertEqual(++x, 3);
+    }).finally(^{
+        XCTAssertEqual(++x, 4);
+        resolved = YES;
+    });
+    fulfiller(@1);
+    wait(0.1);
+    XCTAssertTrue(resolved);
+}
+
 @end
 
 __EOBJC__

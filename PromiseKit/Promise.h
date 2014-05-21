@@ -33,8 +33,15 @@ Then is always executed on the main dispatch queue (i.e the main/UI thread).
 */
 - (Promise *(^)(id))then;
 
-
+/**
+ The provided block always runs on the main queue.
+*/
 - (Promise *(^)(id))catch;
+
+/**
+ The provided block always runs on the main queue.
+*/
+- (Promise *(^)(void(^)(void)))finally;
 
 /**
  The provided block is executed on the dispatch queue of your choice.
