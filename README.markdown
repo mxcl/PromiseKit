@@ -12,13 +12,12 @@ Modern development is highly asynchronous: isn’t it about time iOS developers 
     [alert addButtonWithTitle:@"Hi!"];
     return alert.promise;
 }).then(^(NSNumber *tappedButtonIndex, UIAlertView *alert){
-    if (tappedButtonIndex.intValue == alert.cancelButtonIndex) {
-        id vc = [HelloViewController new]
-        return [self promiseViewController:vc animated:YES completion:nil];
-    } else
+    if (tappedButtonIndex.intValue == alert.cancelButtonIndex)
         return nil;
-}).then(^(id resultFromViewController){
-    //…
+    id vc = [HelloViewController new]
+    return [self promiseViewController:vc animated:YES completion:nil].then(^(id resultFromViewController){
+        //…
+    });
 }).catch(^(NSError *err){
     //…
 });
