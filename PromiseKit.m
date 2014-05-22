@@ -403,8 +403,6 @@ static void PMKResolve(Promise *this) {
             }];
         }
 
-        NSLog(@"PromiseKit: %@", error);  // we refuse to let errors die silently
-
         this->result = error;
         PMKResolve(this);
     };
