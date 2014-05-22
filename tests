@@ -332,6 +332,7 @@ int main() {
     [Promise when:c].then(^{
         XCTFail();
     }).catch(^(NSError *e){
+        XCTAssertEqualObjects(e.userInfo[PMKFailingPromiseIndexKey], @0);
         XCTAssertEqualObjects(e.userInfo[PMKUnderlyingExceptionKey], @NO);
         resolved = YES;
     });
@@ -808,6 +809,23 @@ Promise *gcdreject() {
     });
     id err = [NSError errorWithDomain:@"a" code:123 userInfo:nil];
     rejecter([Promise promiseWithValue:err]);
+    wait(0.1);
+    XCTAssertTrue(resolved);
+}
+
+- (void)test_55_all_dictionary {
+    id promises = @{
+        @1: @2,
+        @2: @"abc",
+        @"a": [NSURLConnection GET:URL]
+    };
+    [Promise all:promises].then(^(NSDictionary *dict){
+        XCTAssertEqual(dict.count, 3ul);
+        XCTAssertEqualObjects(dict[@1], @2);
+        XCTAssertEqualObjects(dict[@2], @"abc");
+        XCTAssertEqualObjects(dict[@"a"], @"hi");
+        resolved = YES;
+    });
     wait(0.1);
     XCTAssertTrue(resolved);
 }

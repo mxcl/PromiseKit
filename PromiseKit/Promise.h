@@ -64,7 +64,7 @@ The returned `Promise` is resolved with an array of results indexed as the origi
 
  Alias provided due to ES6 specifications.
 */
-+ (Promise *)all:(id<NSFastEnumeration>)enumerable;
++ (Promise *)all:(id<NSFastEnumeration, NSObject>)enumerable;
 
 /**
 Loops until one or more promises have resolved.
@@ -129,6 +129,7 @@ id PMKManifold(NSArray *arguments);
 
 #define PMKErrorDomain @"PMKErrorDomain"
 #define PMKUnderlyingExceptionKey @"PMKUnderlyingExceptionKey"
+#define PMKFailingPromiseIndexKey @"PMKFailingPromiseIndexKey"
 #define PMKErrorCodeThrown 1
 #define PMKErrorCodeUnknown 2
 #define PMKErrorCodeInvalidUsage 3

@@ -127,12 +127,11 @@ static id safely_call_block(id frock, id result) {
 
 
 
-/**
- We have public @implementation instance variables so ResolveRecursively
- and RejectRecursively can fulfill promises. It’s like the C++ `friend`
- keyword.
- */
 @implementation Promise {
+/**
+ We have public @implementation instance variables so PMKResolve
+ can fulfill promises. Our usage is like the C++ `friend` keyword.
+ */
 @public
     NSMutableArray *handlers;
     id result;
@@ -257,33 +256,53 @@ static id safely_call_block(id frock, id result) {
     };
 }
 
-+ (Promise *)all:(id<NSFastEnumeration>)promises {
-    NSFastEnumerationState unused = {0};
-    __block NSUInteger count = [promises countByEnumeratingWithState:&unused objects:NULL count:0];
++ (Promise *)all:(id<NSFastEnumeration, NSObject>)promises {
+    __block NSUInteger count = [(id)promises count];  // FIXME
 
-    NSPointerArray *results = [NSPointerArray strongObjectsPointerArray];
-    results.count = count;
+    #define rejecter(key) ^(NSError *err){ \
+        id userInfo = err.userInfo.mutableCopy; \
+        userInfo[PMKFailingPromiseIndexKey] = key; \
+        err = [NSError errorWithDomain:err.domain code:err.code userInfo:userInfo]; \
+        rejecter(err); \
+    }
 
-    return [Promise new:^(void(^fulfiller)(id), void(^rejecter)(id)){        
+    if ([promises isKindOfClass:[NSDictionary class]])
+        return [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter){
+            NSMutableDictionary *results = [NSMutableDictionary new];
+            for (id key in promises) {
+                Promise *promise = promises[key];
+                if (!IsPromise(promise))
+                    promise = [Promise promiseWithValue:promise];
+                promise.catch(rejecter(key));
+                promise.then(^(id o){
+                    if (o)
+                        results[key] = o;
+                    if (--count == 0)
+                        fulfiller(results);
+                });
+            }
+        }];
+
+    return [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter){
+        NSPointerArray *results = [NSPointerArray strongObjectsPointerArray];
+        results.count = count;
+
         NSUInteger ii = 0;
+
         for (__strong Promise *promise in promises) {
             if (!IsPromise(promise))
                 promise = [Promise promiseWithValue:promise];
-
-            promise.catch(rejecter);
+            promise.catch(rejecter(@(ii)));
             promise.then(^(id o){
-                [results replacePointerAtIndex:ii withPointer:(__bridge void *)(o ?: PMKNull)];
-                if (--count == 0) {
-                    for (NSUInteger y = 0; y < results.count; ++y)
-                        if ([results pointerAtIndex:y] == (__bridge void *)PMKNull)
-                            [results replacePointerAtIndex:y withPointer:(void *)kCFNull];
-
+                [results replacePointerAtIndex:ii withPointer:(__bridge_retained void *)(o ?: [NSNull null])];
+                if (--count == 0)
                     fulfiller(results.allObjects);
-                }
             });
-            ++ii;
-        };
+            ii++;
+        }
     }];
+
+    #undef rejecter
 }
 
 + (Promise *)when:(id)promises {
@@ -371,14 +390,14 @@ static void PMKResolve(Promise *this) {
             return NSLog(@"PromiseKit: Promise already resolved");
         if (IsPromise(error)) {
             if ([error rejected]) {
-                error = [error value];
+                error = ((Promise *)error).value;
             } else
                 @throw PMKE(@"You may not reject a Promise with a Promise");
         }
         if (!error)
             error = [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeUnknown userInfo:nil];
         if (![error isKindOfClass:[NSError class]]) {
-            NSLog(@"PromiseKit: Warning: You should reject with proper NSError objects!");
+            NSLog(@"PromiseKit: Warning, you should reject with proper NSError objects!");
             error = [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeInvalidUsage userInfo:@{
                 NSLocalizedDescriptionKey: [error description]
             }];
