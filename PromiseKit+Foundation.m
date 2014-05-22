@@ -29,6 +29,13 @@ static BOOL NSHTTPURLResponseIsJSON(NSHTTPURLResponse *rsp) {
     return [bits.chuzzle containsObject:@"application/json"];
 }
 
+static BOOL NSHTTPURLResponseIsText(NSHTTPURLResponse *rsp) {
+    NSString *type = rsp.allHeaderFields[@"Content-Type"];
+    NSArray *bits = [type componentsSeparatedByString:@";"].chuzzle;
+    id textTypes = @[@"text/plain", @"text/html", @"text/css"];
+    return [bits firstObjectCommonWithArray:textTypes] != nil;
+}
+
 #ifdef UIKIT_EXTERN
 static BOOL NSHTTPURLResponseIsImage(NSHTTPURLResponse *rsp) {
     NSString *type = rsp.allHeaderFields[@"Content-Type"];
@@ -207,6 +214,19 @@ NSString *PMKUserAgent() {
                     rejecter(err);
                 }
           #endif
+            } else if (NSHTTPURLResponseIsText(rsp)) {
+                id str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                if (str)
+                    fulfiller(str);
+                else {
+                    id info = @{
+                        NSLocalizedDescriptionKey: @"The server returned invalid string data",
+                        NSURLErrorFailingURLStringErrorKey: rq.URL.absoluteString,
+                        NSURLErrorFailingURLErrorKey: rq.URL
+                    };
+                    id err = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorBadServerResponse userInfo:info];
+                    rejecter(err);
+                }
             } else
                 fulfiller(data);
         }];

@@ -209,7 +209,6 @@ int main() {
     promise.then(^{
         return [NSURLConnection GET:URL];
     }).then(^(id o){
-        o = [[NSString alloc] initWithData:o encoding:NSUTF8StringEncoding];
         XCTAssertEqualObjects(@"hi", o);
         resolved = YES;
     });
@@ -280,7 +279,6 @@ int main() {
     }).catch(^{
         return [NSURLConnection GET:URL];
     }).then(^(id o){
-        o = [[NSString alloc] initWithData:o encoding:NSUTF8StringEncoding];
         XCTAssertEqualObjects(o, @"hi");
         resolved = YES;
     });
@@ -397,7 +395,6 @@ int main() {
 - (void)test_25_then_plus_deferred_plus_GCD {
     __block int x = 0;
     [NSURLConnection GET:URL].then(^(id o){
-        o = [[NSString alloc] initWithData:o encoding:NSUTF8StringEncoding];
         XCTAssertEqualObjects(@"hi", o);
         x++;
 
@@ -465,7 +462,6 @@ Promise *gcdreject() {
         x++;
         return [NSURLConnection GET:URL];
     }).then(^(id o){
-        o = [[NSString alloc] initWithData:o encoding:NSUTF8StringEncoding];
         XCTAssertEqualObjects(@"hi", o);
         resolved = YES;
     }).catch(^{
@@ -616,7 +612,7 @@ Promise *gcdreject() {
         XCTAssertNotNil(data);
         XCTAssertNotNil(rsp);
         XCTAssertNotNil(originalData);
-        XCTAssertEqual(data, originalData);
+        XCTAssertEqual(data, [[NSString alloc] initWithData:originalData encoding:NSUTF8StringEncoding]);
         resolved = YES;
     });
     wait(0.1);
