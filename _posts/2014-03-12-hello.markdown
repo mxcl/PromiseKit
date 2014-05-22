@@ -24,6 +24,7 @@ document.getElementsByTagName('head')[0].appendChild(script);
 
 <a class="github" href="https://github.com/mxcl/PromiseKit">PromiseKit on GitHub</a> <span id="pulse"></span>
 
+
 #Importing PromiseKit
 
 In your [Podfile](http://guides.cocoapods.org/using/using-cocoapods.html):
@@ -52,6 +53,7 @@ pod 'PromiseKit/UIKit'
 pod 'PromiseKit/CoreLocation'
 pod 'PromiseKit/MapKit'
 {% endhighlight %}
+
 
 #Why Promises?
 
@@ -103,6 +105,7 @@ dispatch_promise(^{
 
 Code with promises is about as close as we can get to the minimal cleanliness of synchronous code.
 
+
 ##Chaining Promises
 
 A `Promise` represents the *future* value of an asynchronous task. To obtain the value of that future, we `then` off the Promise.
@@ -113,14 +116,14 @@ Promise *promise = dispatch_promise(^{
     return md5(email);
 });
 
-// `dispatch_promise` returns a promise representing the
-// future value of the block it executes. You can `then`
-// off any Promise object and it will receive the previous
-// Promise’s value as its parameter once that block has
-// been executed.
+// `dispatch_promise` executes its block via `dispatch_async`.
+// It returns a Promise. When the block has executed it
+// fulfills its promise with the value you return from that
+// block.
 
 promise = promise.then(^(NSString *md5){
     // we’re back in the main thread
+    // the `md5` came from the above `dispatch_promise`
     return [NSURLConnection GET:@"http://gravatar.com/%@", md5];
 });
 
@@ -196,7 +199,7 @@ id q = [NSOperationQueue new];
 
 The repeated, explicit error handling clutters the code.
 
-##Promises Have Elegant Error Handling
+Promises have elegant error handling:
 
 {% highlight objectivec %}
 #import "PromiseKit.h"
@@ -216,16 +219,16 @@ The repeated, explicit error handling clutters the code.
 });
 {% endhighlight %}
 
-Errors and exceptions break the chain of promises and bubble up to the next `catch` handler. In the case of exceptions objects are caught and wrapped in an NSError object. The original thrown object is accessible via `error.userInfo[PMKUnderlyingExceptionKey]`.
+Errors and exceptions break the chain of promises and bubble up to the next `catch` handler. In the case of exceptions, objects are caught and wrapped in an NSError object. The original thrown object is accessible via `error.userInfo[PMKUnderlyingExceptionKey]`.
 
-This tends to work well for asynchronous chains because typically you want to know if the whole chain succeeded or the whole chain failed. You don’t want to micromanage the error handling every step of the way.
+This tends to work well for asynchronous chains; typically you want to know if the whole chain succeeded or the whole chain failed. You don’t want to micromanage the error handling every step of the way.
 
 The above makes use of PromiseKit’s category additions to the iOS SDK. Mostly PromiseKit’s categories are logical conversions of block-based or delegate-based asynchronous patterns to Promises. `NSURLConnection+PromiseKit` additionally detects that the response is JSON (from the HTTP headers) and deserializes that JSON in a background thread. All of PromiseKit’s categories are optional CocoaPods subspecs.
 
 
 #Say Goodbye to Asynchronous State Machines
 
-Promises represent the future value of a task. You can add more than one `then` handler to a promise. Even after the promise has been fulfilled. If the promise already has a value the then handler is called immediately:
+Promises represent the future value of a task. You can add more than one `then` handler to a promise. Even after the promise has been fulfilled. If the promise already has a value the then handler is called (almost) immediately:
 
 {% highlight objectivec %}
 @implementation MyViewController {
@@ -272,6 +275,23 @@ Promise *locater = [CLLocationManager promise];
     // if any Promises fail, the `catch` handler is executed
     // immediately any other Promises are discarded
     
+    NSNumber *indexOfPromiseThatFailed = error.userInfo[PMKFailingPromiseIndexKey];
+});
+{% endhighlight %}
+
+`when:` also takes an `NSDictionary`, and thus `then`s an `NSDictionary`:
+
+{% highlight objectivec %}
+id dict = @{
+    @"grabcat": grabcat,
+    @"locater": locater
+};
+
+[Promise when:dict].then(^(NSDictionary *results){
+    // results[@"grabcat"] is the `UIImage *` from grabcat
+    // results[@"locater"] is the `CLLocation *` from locater
+}).catch(^(NSError *error){
+    NSString *keyOfPromiseThatFailed = error.userInfo[PMKFailingPromiseIndexKey];
 });
 {% endhighlight %}
 
@@ -321,7 +341,7 @@ myPromise.then(^{
 {% endhighlight %}
 
 
-#`finally`
+#finally
 
 We also provide `finally` which runs if the Promise has been rejected or resolved:
 
@@ -335,7 +355,12 @@ self.kitten.then(^(UIImage *image){
 });
 {% endhighlight %}
 
-The block you pass to `finally` cannot take any arguments and can only return void.
+The block you pass to `finally` cannot take or return arguments: it cannot change the Promise.
+
+
+#thenOn
+
+`then` always runs on the main thread. Using `thenOn` allows you to choose the queue on which your block will continue. When in doubt: `then`.
 
 
 #The Category Additions
@@ -394,9 +419,9 @@ PromiseKit reads the response headers and decodes the result you actually wanted
 });
 {% endhighlight %}
 
-Otherwise we return the raw `NSData`.
+If the mime-type is textual, we return an `NSString`. Otherwise the first parameter will be the raw undecoded `NSData`. Whatever the mimetype the `then` has three optional parameters: the first is the decoded data, the second the `NSHTTPURLResponse` and the third the raw undecoded data.
 
-And of course a variant that takes an `NSURLRequest *`:
+Finally we provide a variant that takes an `NSURLRequest *`:
 
 {% highlight objectivec %}
 NSMutableURLRequest *rq = [NSMutableURLRequest requestWithURL:url];
@@ -420,6 +445,8 @@ A Promise to get the user’s location:
     //…
 });
 {% endhighlight %}
+
+The `then` has an optional second parameter that is the full array of returned locations. Which usually is an array of one location. The first parameter is the most recent location.
 
 
 ##CLGeocoder+PromiseKit
@@ -636,7 +663,7 @@ Becomes this:
 For the community’s benefit, someone should create a `Parse+PromiseKit` pod.
 
 
-##Wrapping eg. `AFNetworking`
+##Wrapping e.g. `AFNetworking`
 
 {% highlight objectivec %}
 @interface AFHTTPRequestOperation (PromiseKit)
@@ -686,8 +713,8 @@ Consequently PromiseKit doesn’t wrap many delegate patterns yet (eg. UITextFie
 @end
 
 @implementation PMKLocationManager {
-    void (^fulfiller)(id);
-    void (^rejecter)(id);
+    PromiseFulfiller fulfiller;  // void (^)(id)
+    PromiseRejecter rejecter;    // void (^)(NSError *)
 }
 
 + (Promise *)promise {
@@ -695,7 +722,7 @@ Consequently PromiseKit doesn’t wrap many delegate patterns yet (eg. UITextFie
     manager.delegate = manager;
     [manager startUpdatingLocation];
     [manager pmk_reference];  // anti ARC hack
-    return [Promise new:^(id fulfiller, id rejecter){
+    return [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter){
         manager->fulfiller = fulfiller;
         manager->rejecter = rejecter;
     }];
@@ -827,10 +854,11 @@ If you find further non-compliance please open a [ticket](https://github.com/mxc
 * We offer a `when`/`all`
 * We offer an `until`
 
+
 #Terminology
 
 * Promises start in a **pending** state.
-* Promises **resolve** to become **fulfilled** or **rejected**.
+* Promises **resolve** with a **value** to become **fulfilled** or **rejected**.
 
 
 #The Fine Print
@@ -841,7 +869,7 @@ The fine print of PromiseKit is mostly exactly what you would expect, so don’t
 * Returning an instance of `NSError` or throwing an exception within a then block will cause PromiseKit to bubble that object up to the *next* nearest catch handler.
 * `catch` handlers are *always* passed an `NSError` object.
 * `then` handlers that follow `catch` handlers **will** execute.
-* Returning an `NSError` (or ``@throw`ing) from a `catch` will “throw” to the next catch.
+* Returning an `NSError` (or `@throw`ing) from a `catch` will “throw” to the next catch.
 * Returning a non-error value from a `catch` will pass that value to the next `then`
 * Nothing happens if you add a `then` to a failed Promise (unless you subsequently add a `catch` handler to the Promise returned from that `then`)
 
@@ -860,8 +888,8 @@ self.kitten.then(^(UIImage *image){
 }).catch(^{
     
 }).then(^{
-    // provided the above catch did not throw or return a
-    // `NSError`: always executes
+    // provided the above catch did not throw or return an
+    // `NSError` this then will always execute
 })
 {% endhighlight %}
 
@@ -884,6 +912,30 @@ self.fetch.then(^(id json){
 {% endhighlight %}
 
 This can be especially important when using `when`/`all` since those methods will immediately reject their promise if any of the promises provided them rejects, often one can recover at least some of the provided promises.
+
+
+## 3. Cache & Fetch
+
+In the case where you have the persisted, cached value for some asynchronous object and you want to show the user that, but also fetch the fresh data and then show the user that:
+
+{% highlight objectivec %}
+- (Promise *)fetch {
+    return dispatch_promise(^{
+        id fresh = [NSURLConnection GET:self.fetchURL];  // start fetching ASAP
+        id cached = [NSData dataWithContentsOfFile:…];  // hence dispatch_…
+        return PMKManifold(cached, fresh);
+    });
+}
+
+- (void)go {
+    self.fetch.then(^(NSData *cachedData, Promise *freshData) {
+        [self updateWithData:cachedData];
+        return freshData;
+    }).then(^(NSData *freshData){
+        [self updateWithData:freshData];
+    });
+}
+{% endhighlight %}
 
 
 #Cancellation & Progress
