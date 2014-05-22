@@ -801,6 +801,17 @@ Promise *gcdreject() {
     XCTAssertTrue(resolved);
 }
 
+- (void)test_54_reject_with_rejected_promise {
+    promise.catch(^(NSError *err){
+        XCTAssertEqual(err.code, 123);
+        resolved = YES;
+    });
+    id err = [NSError errorWithDomain:@"a" code:123 userInfo:nil];
+    rejecter([Promise promiseWithValue:err]);
+    wait(0.1);
+    XCTAssertTrue(resolved);
+}
+
 @end
 
 __EOBJC__

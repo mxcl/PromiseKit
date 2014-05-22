@@ -369,8 +369,12 @@ static void PMKResolve(Promise *this) {
     id rejecter = ^(id error){
         if (this->result)
             return NSLog(@"PromiseKit: Promise already resolved");
-        if (IsPromise(error))
-            @throw PMKE(@"You may not reject a Promise with a Promise");
+        if (IsPromise(error)) {
+            if ([error rejected]) {
+                error = [error value];
+            } else
+                @throw PMKE(@"You may not reject a Promise with a Promise");
+        }
         if (!error)
             error = [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeUnknown userInfo:nil];
         if (![error isKindOfClass:[NSError class]]) {
