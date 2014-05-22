@@ -136,6 +136,7 @@ promise.then(^(UIImage *gravatarImage){
 });
 {% endhighlight %}
 
+
 #Error Handling
 
 Synchronous code has simple, clean error handling:
@@ -318,6 +319,23 @@ myPromise.then(^{
     assert([n isEqual:@NO]);
 });
 {% endhighlight %}
+
+
+#`finally`
+
+We also provide `finally` which runs if the Promise has been rejected or resolved:
+
+{% highlight objectivec %}
+self.kitten.then(^(UIImage *image){
+    // runs if kitten succeeded
+}).catch(^(NSError *err){
+    // runs if kitten failed
+}).finally(^{
+    // always runs
+});
+{% endhighlight %}
+
+The block you pass to `finally` cannot take any arguments and can only return void.
 
 
 #The Category Additions
@@ -842,11 +860,12 @@ self.kitten.then(^(UIImage *image){
 }).catch(^{
     
 }).then(^{
-    // always executes
+    // provided the above catch did not throw or return a
+    // `NSError`: always executes
 })
 {% endhighlight %}
 
-The answer is: yes, it does. If you need the catch to cause complete stoppage either throw again (often: a code smell), or restructure your promises, probably you didn’t want them to chain in this manner.
+The answer is: yes, it does. If you need the catch to completely stop your chain you must either throw again (often: a code smell), or restructure your promises; probably you didn’t want them to chain in this manner.
 
 
 ## 2. Semi-recoverability
