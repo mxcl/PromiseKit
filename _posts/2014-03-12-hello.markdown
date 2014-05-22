@@ -103,7 +103,7 @@ dispatch_promise(^{
 
 Code with promises is about as close as we can get to the minimal cleanliness of synchronous code.
 
-##Explaining That Promises Code
+##Chaining Promises
 
 A `Promise` represents the *future* value of an asynchronous task. To obtain the value of that future, we `then` off the Promise.
 
@@ -116,7 +116,8 @@ Promise *promise = dispatch_promise(^{
 // `dispatch_promise` returns a promise representing the
 // future value of the block it executes. You can `then`
 // off any Promise object and it will receive the previous
-// Promise’s value as its parameter.
+// Promise’s value as its parameter once that block has
+// been executed.
 
 promise = promise.then(^(NSString *md5){
     // we’re back in the main thread
@@ -127,7 +128,10 @@ promise = promise.then(^(NSString *md5){
 // splices that promise into the chain.
 
 promise.then(^(UIImage *gravatarImage){
-    // The NSURLConnection promise resolved to a UIImage
+    // Our NSURLConnection category addition determined the
+    // data represented an image by analysing the response
+    // headers and instantiated a `UIImage` in a background
+    // thread.
     self.imageView.image = gravatarImage;
 });
 {% endhighlight %}
@@ -189,7 +193,7 @@ id q = [NSOperationQueue new];
 }];
 {% endhighlight %}
 
-All the explicit error handling clutters the code.
+The repeated, explicit error handling clutters the code.
 
 ##Promises Have Elegant Error Handling
 
@@ -211,7 +215,7 @@ All the explicit error handling clutters the code.
 });
 {% endhighlight %}
 
-Errors and exceptions break the chain of promises and bubble up to the next `catch` handler. Any thrown objects are caught and wrapped in an NSError object. The original thrown object is accessible via `error.userInfo[PMKUnderlyingExceptionKey]`.
+Errors and exceptions break the chain of promises and bubble up to the next `catch` handler. In the case of exceptions objects are caught and wrapped in an NSError object. The original thrown object is accessible via `error.userInfo[PMKUnderlyingExceptionKey]`.
 
 This tends to work well for asynchronous chains because typically you want to know if the whole chain succeeded or the whole chain failed. You don’t want to micromanage the error handling every step of the way.
 
@@ -241,7 +245,7 @@ Promises represent the future value of a task. You can add more than one `then` 
 
 - (void)someTimeLater {
     gravatar.then(^(UIImage *image){
-        // Called immediately, or later. Either way: we’re covered.
+        // Called (almost) immediately, or later. Either way: we’re covered.
         self.otherImageView.image = image;
     });
 }
@@ -273,7 +277,7 @@ Promise *locater = [CLLocationManager promise];
 
 #Unusually Tolerant Syntax
 
-The block you pass to `then` or `catch` can have return type of `Promise`, or any object, or nothing. And it can have a parameter of `id`, or a specific class type, or nothing.
+The block you pass to `then` or `catch` can have return type of `Promise`, or any object, any primitive, or nothing. And it can have a parameter of `id`, or a specific class type, or nothing, or even multiple parameters (if the previous Promise fulfilled with multiple values).
 
 So all of these are valid:
 
@@ -535,6 +539,11 @@ snapshotter.region = …;
 
 Available! See the headers.
 
+##StoreKit+PromiseKit
+
+Available, though just a start. See the headers.
+
+
 #More Documentation
 
 Check out [Promise.h](https://github.com/mxcl/PromiseKit/blob/master/PromiseKit/Promise.h) and the rest of the sources.
@@ -788,7 +797,8 @@ PromiseKit is well tested, and inside apps on the store. It also is fully docume
 PromiseKit is [compliant](http://promisesaplus.com) excluding:
 
 * Our `then` does not take a failure handler, instead we have a dedicated `catch`
-* Returning an `NSError *` from a `then` or `catch` rejects the returned `Promise`
+* Returning an `NSError *` from a `then` or `catch` rejects the returned `Promise`, strictly the specification dictates that only throwing should reject a promise.
+* Strictly you should be able to fulfill a Promise with any object, however we do not allow you to fulfill a Promise with an `NSError` object. If you do, the Promise is rejected.
 
 If you find further non-compliance please open a [ticket](https://github.com/mxcl/PromiseKit/issues/new).
 
@@ -810,12 +820,51 @@ If you find further non-compliance please open a [ticket](https://github.com/mxc
 The fine print of PromiseKit is mostly exactly what you would expect, so don’t confuse yourself: only come back here when you find yourself curious about more advanced techniques.
 
 * Returning a Promise as the value of a `then` (or `catch`) handler will cause any subsequent handlers to wait for that Promise to resolve.
-* Returning an instance of `NSError` or throwing an exception within a then block will cause PromiseKit to bubble that object up to the nearest catch handler.
-* `catch` handlers are always passed an `NSError` object.
-* Returning something other than an `NSError` from a `catch` handler causes PromiseKit to consider the error “corrected”, and execution will continue at the next `then` handler using the object you returned as the input.
-* Not returning from a `catch` handler (or returning nil) causes PromiseKit to consider the Promise complete. No further bubbling occurs.
+* Returning an instance of `NSError` or throwing an exception within a then block will cause PromiseKit to bubble that object up to the *next* nearest catch handler.
+* `catch` handlers are *always* passed an `NSError` object.
+* `then` handlers that follow `catch` handlers **will** execute.
+* Returning an `NSError` (or ``@throw`ing) from a `catch` will “throw” to the next catch.
+* Returning a non-error value from a `catch` will pass that value to the next `then`
 * Nothing happens if you add a `then` to a failed Promise (unless you subsequently add a `catch` handler to the Promise returned from that `then`)
-* Adding a `catch` handler to a failed Promise will execute that fail handler: this is converse to adding the same to a **pending** Promise that has a higher `catch` than the one you just added.
+
+
+#Advanced Examples
+
+## 1. Continuation
+
+Eventually one wonders if a `then` that follows a `catch` that has triggered runs:
+
+{% highlight objectivec %}
+self.kitten.then(^(UIImage *image){
+    
+}).finally(^{
+    // always executes
+}).catch(^{
+    
+}).then(^{
+    // always executes
+})
+{% endhighlight %}
+
+The answer is: yes, it does. If you need the catch to cause complete stoppage either throw again (often: a code smell), or restructure your promises, probably you didn’t want them to chain in this manner.
+
+
+## 2. Semi-recoverability
+
+Sometimes you have promises that are semi-recoverable. Rather than lump all error handling together and figure out the error with `if` statements instead add a catch to that promise directly. It leads to a little rightward-drift, but it is the best way to implement semi-recoverability.
+
+{% highlight objectivec %}
+self.fetch.then(^(id json){
+    return [CLLocationManager promise].catch(^(NSError *err){
+        if (err.code == kCLErrorLocationUnknown)
+            return self.chicagoLocation;
+    });
+}).then(^{
+    //…
+})
+{% endhighlight %}
+
+This can be especially important when using `when`/`all` since those methods will immediately reject their promise if any of the promises provided them rejects, often one can recover at least some of the provided promises.
 
 
 #Cancellation & Progress
