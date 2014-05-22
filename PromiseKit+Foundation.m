@@ -6,6 +6,7 @@
 @import Foundation.NSJSONSerialization;
 @import Foundation.NSOperation;
 @import Foundation.NSSortDescriptor;
+@import Foundation.NSThread;
 @import Foundation.NSURL;
 @import Foundation.NSURLError;
 @import Foundation.NSURLResponse;
@@ -145,7 +146,11 @@ NSString *PMKUserAgent() {
 }
 
 + (Promise *)promise:(NSURLRequest *)rq {
-    id q = [NSOperationQueue currentQueue] ?: [NSOperationQueue mainQueue];
+    static NSOperationQueue *q;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        q = [NSOperationQueue new];
+    });
 
     if (![rq valueForHTTPHeaderField:@"User-Agent"]) {
         if (![rq respondsToSelector:@selector(setValue:forHTTPHeaderField:)])
@@ -155,6 +160,8 @@ NSString *PMKUserAgent() {
 
     return [Promise new:^(PromiseFulfiller fluff, PromiseRejecter rejunk){
         [NSURLConnection sendAsynchronousRequest:rq queue:q completionHandler:^(id rsp, id data, NSError *urlError) {
+
+            assert(![NSThread isMainThread]);
 
             PromiseFulfiller fulfiller = ^(id responseObject){
                 fluff(PMKManifold(responseObject, rsp, data));
@@ -178,35 +185,27 @@ NSString *PMKUserAgent() {
                 id err = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorBadServerResponse userInfo:info];
                 rejecter(err);
             } else if (NSHTTPURLResponseIsJSON(rsp)) {
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    id err = nil;
-                    id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&err];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        if (err)
-                            rejecter(err);
-                        else
-                            fulfiller(json);
-                    });
-                });
+                id err = nil;
+                id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&err];
+                if (err)
+                    rejecter(err);
+                else
+                    fulfiller(json);
           #ifdef UIKIT_EXTERN
             } else if (NSHTTPURLResponseIsImage(rsp)) {
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    UIImage *image = [[UIImage alloc] initWithData:data];
-                    image = [[UIImage alloc] initWithCGImage:[image CGImage] scale:image.scale orientation:image.imageOrientation];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        if (image)
-                            fulfiller(image);
-                        else {
-                            id info = @{
-                                NSLocalizedDescriptionKey: @"The server returned invalid image data",
-                                NSURLErrorFailingURLStringErrorKey: rq.URL.absoluteString,
-                                NSURLErrorFailingURLErrorKey: rq.URL
-                            };
-                            id err = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorBadServerResponse userInfo:info];
-                            rejecter(err);
-                        }
-                    });
-                });
+                UIImage *image = [[UIImage alloc] initWithData:data];
+                image = [[UIImage alloc] initWithCGImage:[image CGImage] scale:image.scale orientation:image.imageOrientation];
+                if (image)
+                    fulfiller(image);
+                else {
+                    id info = @{
+                        NSLocalizedDescriptionKey: @"The server returned invalid image data",
+                        NSURLErrorFailingURLStringErrorKey: rq.URL.absoluteString,
+                        NSURLErrorFailingURLErrorKey: rq.URL
+                    };
+                    id err = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorBadServerResponse userInfo:info];
+                    rejecter(err);
+                }
           #endif
             } else
                 fulfiller(data);
