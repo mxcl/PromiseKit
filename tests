@@ -761,6 +761,46 @@ Promise *gcdreject() {
     XCTAssertTrue(resolved);
 }
 
+- (void)test_50_fulfill_with_pending_promise {
+    promise.then(^(NSString *hi){
+        XCTAssertEqualObjects(hi, @"hi");
+        resolved = YES;
+    });
+    fulfiller([NSURLConnection GET:URL]);
+    wait(0.1);
+    XCTAssertTrue(resolved);
+}
+
+- (void)test_51_fulfill_with_fulfilled_promise {
+    promise.then(^(id o){
+        XCTAssertEqualObjects(o, @1);
+        resolved = YES;
+    });
+    fulfiller([Promise promiseWithValue:@1]);
+    wait(0.1);
+    XCTAssertTrue(resolved);
+}
+
+- (void)test_52_fulfill_with_rejected_promise {
+    promise.catch(^(NSError *err){
+        resolved = YES;
+    });
+    fulfiller([Promise promiseWithValue:[NSError new]]);
+    wait(0.1);
+    XCTAssertTrue(resolved);
+}
+
+- (void)test_53_return_rejected_promise {
+    promise.then(^{
+        return [Promise promiseWithValue:[NSError new]];
+    }).catch(^{
+        resolved = YES;
+    });
+    fulfiller(@1);
+    wait(0.1);
+    XCTAssertTrue(resolved);
+}
+
 @end
 
 __EOBJC__
