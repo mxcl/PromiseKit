@@ -20,7 +20,7 @@
     [self pmk_breakReference];
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-    fulfiller(PMKManifold(locations.firstObject, locations));
+    fulfiller(PMKManifold(locations.lastObject, locations));
     PMKLocationManagerCleanup();
 }
 
