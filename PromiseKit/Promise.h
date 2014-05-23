@@ -3,7 +3,7 @@
 @import Foundation.NSError;
 
 
-typedef void (^PromiseResolver)(id) __attribute__((deprecated));
+typedef void (^PromiseResolver)(id) __attribute__((deprecated("Use PromiseFulfiller or PromiseRejecter")));
 typedef void (^PromiseFulfiller)(id);
 typedef void (^PromiseRejecter)(NSError *);
 
@@ -134,6 +134,7 @@ id PMKManifold(NSArray *arguments);
 #define PMKErrorCodeUnknown 2
 #define PMKErrorCodeInvalidUsage 3
 
+extern NSString const*const PMKThrown __attribute__((deprecated("Use PMKUnderlyingExceptionKey")));
 
 
 /**

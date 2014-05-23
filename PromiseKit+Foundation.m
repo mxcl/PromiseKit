@@ -13,6 +13,10 @@
 #import "PromiseKit+Foundation.h"
 #import "PromiseKit/Promise.h"
 
+NSString const*const PMKURLErrorFailingURLResponse = PMKURLErrorFailingURLResponseKey;
+NSString const*const PMKURLErrorFailingData = PMKURLErrorFailingDataKey;
+
+
 
 static inline NSString *enc(NSString *in) {
 	return (__bridge_transfer  NSString *) CFURLCreateStringByAddingPercentEscapes(

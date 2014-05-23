@@ -18,6 +18,9 @@ static const id PMKNull = @"PMKNull";
 @interface PMKArray : NSObject
 @end
 
+// deprecated
+NSString const*const PMKThrown = PMKUnderlyingExceptionKey;
+
 
 
 static inline NSError *NSErrorWithThrown(id e) {
