@@ -64,10 +64,10 @@ Pod::Spec.new do |s|
     ss.preserve_paths = preserved
   end
 
-  s.subspec 'SocialFramework' do |ss|
+  s.subspec 'Social' do |ss|
     ss.dependency 'PromiseKit/base'
-    ss.source_files = 'PromiseKit+SocialFramework.{h,m}'
-    ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_SOCIALFRAMEWORK=1" }
+    ss.source_files = 'PromiseKit+Social.{h,m}'
+    ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_SOCIAL=1" }
     ss.frameworks = 'Social', 'Accounts'
     ss.preserve_paths = preserved
   end
