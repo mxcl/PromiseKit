@@ -45,6 +45,7 @@ Pod::Spec.new do |s|
     ss.ios.frameworks = 'UIKit'
     ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_UIKIT=1" }
     ss.preserve_paths = preserved
+    ss.weak_framework = 'AssetsLibrary'
   end
 
   s.subspec 'CoreLocation' do |ss|

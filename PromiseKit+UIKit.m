@@ -3,6 +3,10 @@
 #import "PromiseKit/Promise.h"
 #import "PromiseKit+UIKit.h"
 @import UIKit.UINavigationController;
+@import UIKit.UIImagePickerController;
+#import <AssetsLibrary/AssetsLibrary.h>
+
+
 
 @interface PMKMFDelegater : NSObject
 @end
@@ -17,6 +21,38 @@
 
     [self pmk_breakReference];
 }
+@end
+
+@interface PMKUIImagePickerControllerDelegate : NSObject <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
+@end
+
+@implementation PMKUIImagePickerControllerDelegate
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    id img = info[UIImagePickerControllerEditedImage] ?: info[UIImagePickerControllerOriginalImage];
+    id url = info[UIImagePickerControllerReferenceURL];
+
+    [[ALAssetsLibrary new] assetForURL:url resultBlock:^(ALAsset *asset) {
+        NSUInteger const N = (NSUInteger)asset.defaultRepresentation.size;
+        uint8_t bytes[N];
+        [asset.defaultRepresentation getBytes:bytes fromOffset:0 length:N error:nil];
+        id data = [NSData dataWithBytes:bytes length:N];
+
+        [picker fulfill:PMKManifold(img, data, info)];
+        [self pmk_breakReference];
+    }
+    failureBlock:^(NSError *error){
+        [picker reject:error];
+        [self pmk_breakReference];
+    }];
+}
+
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [picker fulfill:nil];
+    [self pmk_breakReference];
+}
+
 @end
 
 
@@ -36,6 +72,11 @@
         IMP imp = [vc methodForSelector:selector];
         void (*func)(id, SEL, id) = (void *)imp;
         func(vc, selector, delegater);
+    }
+    else if ([vc isKindOfClass:NSClassFromString(@"UIImagePickerController")]) {
+        PMKUIImagePickerControllerDelegate *delegator = [PMKUIImagePickerControllerDelegate new];
+        [delegator pmk_reference];
+        [(UIImagePickerController *)vc setDelegate:delegator];
     }
     else if ([vc isKindOfClass:[UINavigationController class]])
         vc = [(id)vc viewControllers].firstObject;
