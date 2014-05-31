@@ -89,9 +89,8 @@
     return [Promise new:^(id fulfiller, id rejecter){
         objc_setAssociatedObject(vc, @selector(fulfill:), fulfiller, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         objc_setAssociatedObject(vc, @selector(reject:), rejecter, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }].then(^(id o){
+    }].finally(^{
         [self dismissViewControllerAnimated:animated completion:nil];
-        return o;
     });
 }
 
