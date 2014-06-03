@@ -830,6 +830,26 @@ Promise *gcdreject() {
     XCTAssertTrue(resolved);
 }
 
+- (void)test_56_empty_array_when {
+    Promise* p = [Promise when:@[]];
+    p.then(^(NSArray *array){
+        XCTAssertEqual(array.count, 0ul);
+        resolved = YES;
+    });
+    wait(0.1);
+    XCTAssertTrue(resolved);
+}
+
+- (void)test_56_empty_array_all {
+    Promise* p = [Promise all:@[]];
+    p.then(^(NSArray *array){
+        XCTAssertEqual(array.count, 0ul);
+        resolved = YES;
+    });
+    wait(0.1);
+    XCTAssertTrue(resolved);
+}
+
 @end
 
 __EOBJC__
