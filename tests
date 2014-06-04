@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby
 OBJC = <<-__EOBJC__
 
 #import "PromiseKit/Promise.h"
@@ -172,7 +172,7 @@ int main() {
         resolved = YES;
     });
 
-    wait(0.1);
+    wait(0.2);
 
     XCTAssertTrue(resolved);    
 }
@@ -613,10 +613,13 @@ Promise *gcdreject() {
         XCTAssertNotNil(data);
         XCTAssertNotNil(rsp);
         XCTAssertNotNil(originalData);
-        XCTAssertEqual(data, [[NSString alloc] initWithData:originalData encoding:NSUTF8StringEncoding]);
+        XCTAssertTrue([originalData isKindOfClass:NSData.class]);
+        XCTAssertTrue([data isKindOfClass:NSString.class]);
+        id str = [[NSString alloc] initWithData:originalData encoding:NSUTF8StringEncoding];
+        XCTAssertEqualObjects(data, str);
         resolved = YES;
     });
-    wait(0.1);
+    wait(0.2);
     XCTAssertTrue(resolved);
 }
 

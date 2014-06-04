@@ -14,6 +14,7 @@ def each_test_line
     while line = stderr.gets
       yield line, stderr
     end
+    exit_status = wait_thr.value
   end
 end
 
@@ -76,6 +77,7 @@ def compile!
           -Wno-selector -Wno-missing-prototypes -Wno-direct-ivar-access \
           -Wno-missing-noreturn -Wno-pedantic \
           -Wno-format-nonliteral \
+          -Wno-incomplete-module \
           -o /tmp/PromiseKitTests
   EOS
   abort unless system <<-EOS
@@ -102,7 +104,7 @@ class PMKHTTPD < Sinatra::Base
   set :server_settings, {AccessLog: [], Logger: WEBrick::Log::new("/dev/null", 7)}
   set :logging, false
   get '/' do
-    content_type 'text/html', :charset => 'utf-8'
+    content_type 'text/plain', :charset => 'utf-8'
     'hi'
   end
 end
@@ -110,13 +112,12 @@ end
 PMKHTTPD.run! do
   Thread.new do
     if not ARGV.include? '-d'
-      test!
+      exit! test!.exitstatus
     else
       system "lldb /tmp/PromiseKitTests"
+      File.delete("/tmp/PromiseKitTests.m")
+      File.delete("/tmp/PromiseKitTests")
+      exit! 0
     end
-    exit! 0
   end
 end
-
-File.delete("/tmp/PromiseKitTests.m")
-File.delete("/tmp/PromiseKitTests")
