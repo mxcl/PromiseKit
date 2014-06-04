@@ -1,3 +1,2 @@
-script: ./tests
-rvm:
-  - 2.1.0
+language: objective-c
+script: ruby ./tests
