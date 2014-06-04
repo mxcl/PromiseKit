@@ -261,6 +261,9 @@ static id safely_call_block(id frock, id result) {
 
 + (Promise *)all:(id<NSFastEnumeration, NSObject>)promises {
     __block NSUInteger count = [(id)promises count];  // FIXME
+    
+    if (count == 0)
+        return [Promise promiseWithValue:@[]];
 
     #define rejecter(key) ^(NSError *err){ \
         id userInfo = err.userInfo.mutableCopy; \
