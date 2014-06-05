@@ -1,15 +1,7 @@
 #import "Chuzzle.h"
 @import CoreFoundation.CFString;
 @import CoreFoundation.CFURL;
-@import Foundation.NSBundle;
-@import Foundation.NSError;
-@import Foundation.NSJSONSerialization;
-@import Foundation.NSOperation;
-@import Foundation.NSSortDescriptor;
-@import Foundation.NSThread;
-@import Foundation.NSURL;
-@import Foundation.NSURLError;
-@import Foundation.NSURLResponse;
+@import Foundation;
 #import "PromiseKit+Foundation.h"
 #import "PromiseKit/Promise.h"
 
