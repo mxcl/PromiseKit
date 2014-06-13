@@ -5,16 +5,16 @@
 
 @import MapKit.MKMapSnapshotter;
 @import MapKit.MKDirections;
-@class Promise;
+@class PMKPromise;
 
 
 @interface MKDirections (PromiseKit)
-+ (Promise *)promise:(MKDirectionsRequest *)request;
-+ (Promise *)promiseETA:(MKDirectionsRequest *)request;
++ (PMKPromise *)promise:(MKDirectionsRequest *)request;
++ (PMKPromise *)promiseETA:(MKDirectionsRequest *)request;
 @end
 
 @interface MKMapSnapshotter (PromiseKit)
-- (Promise *)promise;
+- (PMKPromise *)promise;
 @end
 
 #endif

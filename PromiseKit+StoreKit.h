@@ -5,9 +5,9 @@
 //  Created by Josejulio Martínez on 16/05/14.
 
 @import StoreKit.SKProductsRequest;
-@class Promise;
+@class PMKPromise;
 
 
 @interface SKProductsRequest (PromiseKit)
-- (Promise *)promise;
+- (PMKPromise *)promise;
 @end

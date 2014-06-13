@@ -36,12 +36,12 @@
 
 @implementation SKProductsRequest (PromiseKit)
 
-- (Promise *)promise {
+- (PMKPromise *)promise {
     PMKSKProductsRequestDelegater *d = [PMKSKProductsRequestDelegater new];
     [d pmk_reference];
     self.delegate = d;
     [self start];
-    return [Promise new:^(id fulfiller, id rejecter){
+    return [PMKPromise new:^(id fulfiller, id rejecter){
         d->fulfiller = fulfiller;
         d->rejecter = rejecter;
     }];

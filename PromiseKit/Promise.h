@@ -4,8 +4,10 @@
 
 
 typedef void (^PromiseResolver)(id) __attribute__((deprecated("Use PromiseFulfiller or PromiseRejecter")));
-typedef void (^PromiseFulfiller)(id);
-typedef void (^PromiseRejecter)(NSError *);
+typedef void (^PromiseFulfiller)(id) __attribute__((deprecated("Use PMKPromiseFulfiller")));
+typedef void (^PromiseRejecter)(NSError *) __attribute__((deprecated("Use PMKPromiseRejecter")));
+typedef void (^PMKPromiseFulfiller)(id);
+typedef void (^PMKPromiseRejecter)(NSError *);
 
 /**
 A `Promise` represents the future value of a task.
@@ -16,7 +18,7 @@ Effective use of Promises involves chaining `then`s, where the return value from
 
 For a thorough overview of Promises, @see http://promisekit.org
 */
-@interface Promise : NSObject
+@interface PMKPromise : NSObject
 
 /**
 The pattern of Promises is defined by the method: `then`.
@@ -31,22 +33,22 @@ Then is always executed on the main dispatch queue (i.e the main/UI thread).
 
 @return A new `Promise` to be executed after the block passed to this `then`
 */
-- (Promise *(^)(id))then;
+- (PMKPromise *(^)(id))then;
 
 /**
  The provided block always runs on the main queue.
 */
-- (Promise *(^)(id))catch;
+- (PMKPromise *(^)(id))catch;
 
 /**
  The provided block always runs on the main queue.
 */
-- (Promise *(^)(void(^)(void)))finally;
+- (PMKPromise *(^)(void(^)(void)))finally;
 
 /**
  The provided block is executed on the dispatch queue of your choice.
 */
-- (Promise *(^)(dispatch_queue_t, id))thenOn;
+- (PMKPromise *(^)(dispatch_queue_t, id))thenOn;
 
 /**
 Returns a new Promise that is resolved when all passed Promises are resolved.
@@ -57,14 +59,14 @@ The returned `Promise` is resolved with an array of results indexed as the origi
 
 @param promiseOrArrayOfPromisesOrValue an array of Promises, a single Promise or a single value of any type.
 */
-+ (Promise *)when:(id)promiseOrArrayOfPromisesOrValue;
++ (PMKPromise *)when:(id)promiseOrArrayOfPromisesOrValue;
 
 /**
  Same as when, though only takes an object that implements `NSFastEnumeration` (`NSArray` implements `NSFastEnumeration`)
 
  Alias provided due to ES6 specifications.
 */
-+ (Promise *)all:(id<NSFastEnumeration, NSObject>)enumerable;
++ (PMKPromise *)all:(id<NSFastEnumeration, NSObject>)enumerable;
 
 /**
 Loops until one or more promises have resolved.
@@ -77,19 +79,19 @@ If the `catch` handler returns a Promise then re-execution of the loop is suspen
 
 An example usage is an app starting up that must get data from the Internet before the main ViewController can be shown. You can `until` the poll Promise and in the catch handler decide if the poll should be reattempted or not, perhaps returning a `UIAlertView.promise` allowing the user to choose if they continue or not.
 */
-+ (Promise *)until:(id(^)(void))blockReturningPromiseOrArrayOfPromises catch:(id)catchHandler;
++ (PMKPromise *)until:(id(^)(void))blockReturningPromiseOrArrayOfPromises catch:(id)catchHandler;
 
 /**
  Create a new root Promise.
 
  Pass a block to this constructor, the block must take two arguments that point to the `fulfiller` and `rejecter` of this Promise. Fulfill or reject this Promise using those blocks and the Promise chain that roots to this Promise will be resolved accordingly.
 */
-+ (Promise *)new:(void(^)(PromiseFulfiller fulfiller, PromiseRejecter rejecter))block;
++ (PMKPromise *)new:(void(^)(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter))block;
 
 /** 
 @return A new `Promise` that is already resolved with @param value. Calling `then` on a resolved `Promise` executes the provided block immediately.
 */
-+ (Promise *)promiseWithValue:(id)value;
++ (PMKPromise *)promiseWithValue:(id)value;
 
 
 - (BOOL)pending;
@@ -145,7 +147,7 @@ The returned `Promise` is resolved with the value returned from @param block (if
 @param block A block to be executed in the background.
 @return A new `Promise` to be executed after @param block.
 */
-Promise *dispatch_promise(id block);
+PMKPromise *dispatch_promise(id block);
 
 
 
@@ -153,4 +155,4 @@ Promise *dispatch_promise(id block);
  Executes @param block via `dispatch_async` on the specified queue.
  @see dispatch_promise
  */
-Promise *dispatch_promise_on(dispatch_queue_t q, id block);
+PMKPromise *dispatch_promise_on(dispatch_queue_t q, id block);

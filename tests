@@ -20,6 +20,7 @@ OBJC = <<-__EOBJC__
 // prevent error logging here
 #import "PromiseKit.m"
 #undef NSLog
+typedef PMKPromise Promise;
     
 #define URL @"http://localhost:61231"
 #define wait(t) [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:t]]
@@ -193,7 +194,7 @@ int main() {
 - (void)test_10_then_returns_resolved_promise {
     promise.then(^(id o){
         XCTAssertEqualObjects(@10, o);
-        return [Promise new:^(PromiseFulfiller _fulfiller, id r){
+        return [Promise new:^(PMKPromiseFulfiller _fulfiller, id r){
             _fulfiller(@100);
         }];
     }).then(^(id o){
@@ -562,7 +563,7 @@ Promise *gcdreject() {
 }
 
 - (void)test_34 {
-    [Promise new:^(PromiseFulfiller _fulfiller, id r){
+    [Promise new:^(PMKPromiseFulfiller _fulfiller, id r){
         @throw @1;
         _fulfiller(@2);
     }].then(^{
@@ -680,7 +681,7 @@ Promise *gcdreject() {
 }
 
 - (void)test_44_reseal {
-    [Promise new:^(PromiseFulfiller _fulfiller, id r){
+    [Promise new:^(PMKPromiseFulfiller _fulfiller, id r){
         _fulfiller(@123);
         _fulfiller(@234);
     }].then(^(id o){

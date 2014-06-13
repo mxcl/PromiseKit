@@ -90,9 +90,9 @@ NSString *NSDictionaryToURLQueryString(NSDictionary *params) {
 
 @implementation NSURLConnection (PromiseKit)
 
-+ (Promise *)GET:(id)urlFormat, ... {
++ (PMKPromise *)GET:(id)urlFormat, ... {
     if (!urlFormat || urlFormat == [NSNull null])
-        return [Promise promiseWithValue:[NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeInvalidUsage userInfo:nil]];
+        return [PMKPromise promiseWithValue:[NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeInvalidUsage userInfo:nil]];
 
     if ([urlFormat isKindOfClass:[NSURL class]])
         return [self GET:urlFormat query:nil];
@@ -103,7 +103,7 @@ NSString *NSDictionaryToURLQueryString(NSDictionary *params) {
     return [self GET:urlFormat query:nil];
 }
 
-+ (Promise *)GET:(id)url query:(NSDictionary *)params {
++ (PMKPromise *)GET:(id)url query:(NSDictionary *)params {
     if (params.chuzzle) {
         if ([url isKindOfClass:[NSURL class]])
             url = [url absoluteString];
@@ -116,7 +116,7 @@ NSString *NSDictionaryToURLQueryString(NSDictionary *params) {
     return [self promise:[NSURLRequest requestWithURL:url]];
 }
 
-+ (Promise *)POST:(id)url formURLEncodedParameters:(NSDictionary *)params {
++ (PMKPromise *)POST:(id)url formURLEncodedParameters:(NSDictionary *)params {
     if ([url isKindOfClass:[NSString class]])
         url = [NSURL URLWithString:url];
 
@@ -148,7 +148,7 @@ NSString *PMKUserAgent() {
     return ua;
 }
 
-+ (Promise *)promise:(NSURLRequest *)rq {
++ (PMKPromise *)promise:(NSURLRequest *)rq {
     static NSOperationQueue *q;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
@@ -161,15 +161,15 @@ NSString *PMKUserAgent() {
         [(id)rq setValue:PMKUserAgent() forHTTPHeaderField:@"User-Agent"];
     }
 
-    return [Promise new:^(PromiseFulfiller fluff, PromiseRejecter rejunk){
+    return [PMKPromise new:^(PMKPromiseFulfiller fluff, PMKPromiseRejecter rejunk){
         [NSURLConnection sendAsynchronousRequest:rq queue:q completionHandler:^(id rsp, id data, NSError *urlError) {
 
             assert(![NSThread isMainThread]);
 
-            PromiseFulfiller fulfiller = ^(id responseObject){
+            PMKPromiseFulfiller fulfiller = ^(id responseObject){
                 fluff(PMKManifold(responseObject, rsp, data));
             };
-            PromiseRejecter rejecter = ^(NSError *error){
+            PMKPromiseRejecter rejecter = ^(NSError *error){
                 id userInfo = error.userInfo.mutableCopy ?: [NSMutableDictionary new];
                 if (data) userInfo[PMKURLErrorFailingDataKey] = data;
                 if (rsp) userInfo[PMKURLErrorFailingURLResponseKey] = rsp;

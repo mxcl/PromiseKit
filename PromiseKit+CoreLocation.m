@@ -35,12 +35,12 @@
 
 @implementation CLLocationManager (PromiseKit)
 
-+ (Promise *)promise {
++ (PMKPromise *)promise {
     PMKLocationManager *manager = [PMKLocationManager new];
     manager.delegate = manager;
     [manager startUpdatingLocation];
     [manager pmk_reference];
-    return [Promise new:^(id fulfiller, id rejecter){
+    return [PMKPromise new:^(id fulfiller, id rejecter){
         manager->fulfiller = fulfiller;
         manager->rejecter = rejecter;
     }];
@@ -52,8 +52,8 @@
 
 @implementation CLGeocoder (PromiseKit)
 
-+ (Promise *)reverseGeocode:(CLLocation *)location {
-    return [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter) {
++ (PMKPromise *)reverseGeocode:(CLLocation *)location {
+    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
        [[CLGeocoder new] reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
             if (error) {
                 rejecter(error);
@@ -63,8 +63,8 @@
     }];
 }
 
-+ (Promise *)geocode:(id)address {
-    return [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter) {
++ (PMKPromise *)geocode:(id)address {
+    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
         id handler = ^(NSArray *placemarks, NSError *error) {
             if (error) {
                 rejecter(error);

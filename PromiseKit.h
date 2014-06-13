@@ -17,3 +17,7 @@
 #ifdef PMK_STOREKIT
 #import "PromiseKit+StoreKit.h"
 #endif
+
+#ifndef PMK_NO_UNPREFIXED_TYPEDEF
+typedef PMKPromise Promise;
+#endif

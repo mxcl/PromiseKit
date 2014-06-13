@@ -9,7 +9,7 @@
 #import "Private/NSMethodSignatureForBlock.m"
 #import "PromiseKit/Promise.h"
 
-#define IsPromise(o) ([o isKindOfClass:[Promise class]])
+#define IsPromise(o) ([o isKindOfClass:[PMKPromise class]])
 #define IsError(o) ([o isKindOfClass:[NSError class]])
 #define PMKE(txt) [NSException exceptionWithName:@"PromiseKit" reason:@"PromiseKit: " txt userInfo:nil]
 
@@ -130,7 +130,7 @@ static id safely_call_block(id frock, id result) {
 
 
 
-@implementation Promise {
+@implementation PMKPromise {
 /**
  We have public @implementation instance variables so PMKResolve
  can fulfill promises. Our usage is like the C++ `friend` keyword.
@@ -145,19 +145,19 @@ static id safely_call_block(id frock, id result) {
     return self;
 }
 
-- (Promise *(^)(id))then {
+- (PMKPromise *(^)(id))then {
     return ^(id block){
         return self.thenOn(dispatch_get_main_queue(), block);
     };
 }
 
-- (Promise *(^)(dispatch_queue_t, id))thenOn {
+- (PMKPromise *(^)(dispatch_queue_t, id))thenOn {
     if (IsPromise(result))
-        return ((Promise *)result).thenOn;
+        return ((PMKPromise *)result).thenOn;
 
     if ([result isKindOfClass:[NSError class]])
         return ^(dispatch_queue_t q, id b){
-            return [Promise promiseWithValue:result];
+            return [PMKPromise promiseWithValue:result];
         };
 
     if (result) return ^(dispatch_queue_t q, id block) {
@@ -167,9 +167,9 @@ static id safely_call_block(id frock, id result) {
     };
 
     return ^(dispatch_queue_t q, id block){
-        __block PromiseFulfiller fulfiller;
-        __block PromiseRejecter rejecter;
-        Promise *next = [Promise new:^(PromiseFulfiller fluff, PromiseRejecter rejunk) {
+        __block PMKPromiseFulfiller fulfiller;
+        __block PMKPromiseRejecter rejecter;
+        PMKPromise *next = [PMKPromise new:^(PMKPromiseFulfiller fluff, PMKPromiseRejecter rejunk) {
             fulfiller = fluff;
             rejecter = rejunk;
         }];
@@ -190,9 +190,9 @@ static id safely_call_block(id frock, id result) {
     };
 }
 
-- (Promise *(^)(id))catch {
+- (PMKPromise *(^)(id))catch {
     if (IsPromise(result))
-        return ((Promise *)result).catch;
+        return ((PMKPromise *)result).catch;
 
     if (IsError(result)) return ^(id block) {
         return dispatch_promise_on(dispatch_get_main_queue(), ^{   // don’t release Zalgo
@@ -201,13 +201,13 @@ static id safely_call_block(id frock, id result) {
     };
 
     if (result) return ^id(id block){
-        return [Promise promiseWithValue:result];
+        return [PMKPromise promiseWithValue:result];
     };
 
     return ^(id block){
-        __block PromiseFulfiller fulfiller;
-        __block PromiseRejecter rejecter;
-        Promise *next = [Promise new:^(PromiseFulfiller fluff, PromiseRejecter rejunk) {
+        __block PMKPromiseFulfiller fulfiller;
+        __block PMKPromiseRejecter rejecter;
+        PMKPromise *next = [PMKPromise new:^(PMKPromiseFulfiller fluff, PMKPromiseRejecter rejunk) {
             fulfiller = fluff;
             rejecter = rejunk;
         }];
@@ -229,9 +229,9 @@ static id safely_call_block(id frock, id result) {
     };
 }
 
-- (Promise *(^)(void(^)(void)))finally {
+- (PMKPromise *(^)(void(^)(void)))finally {
     if (IsPromise(result))
-        return ((Promise *)result).finally;
+        return ((PMKPromise *)result).finally;
 
     if (result) return ^(void (^block)(void)) {
         return dispatch_promise_on(dispatch_get_main_queue(), ^{
@@ -240,9 +240,9 @@ static id safely_call_block(id frock, id result) {
     };
 
     return ^(void (^block)(void)){
-        __block PromiseFulfiller fulfiller;
-        __block PromiseRejecter rejecter;
-        Promise *next = [Promise new:^(PromiseFulfiller fluff, PromiseRejecter rejunk) {
+        __block PMKPromiseFulfiller fulfiller;
+        __block PMKPromiseRejecter rejecter;
+        PMKPromise *next = [PMKPromise new:^(PMKPromiseFulfiller fluff, PMKPromiseRejecter rejunk) {
             fulfiller = fluff;
             rejecter = rejunk;
         }];
@@ -259,11 +259,11 @@ static id safely_call_block(id frock, id result) {
     };
 }
 
-+ (Promise *)all:(id<NSFastEnumeration, NSObject>)promises {
++ (PMKPromise *)all:(id<NSFastEnumeration, NSObject>)promises {
     __block NSUInteger count = [(id)promises count];  // FIXME
     
     if (count == 0)
-        return [Promise promiseWithValue:@[]];
+        return [PMKPromise promiseWithValue:@[]];
 
     #define rejecter(key) ^(NSError *err){ \
         id userInfo = err.userInfo.mutableCopy; \
@@ -273,12 +273,12 @@ static id safely_call_block(id frock, id result) {
     }
 
     if ([promises isKindOfClass:[NSDictionary class]])
-        return [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter){
+        return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter){
             NSMutableDictionary *results = [NSMutableDictionary new];
             for (id key in promises) {
-                Promise *promise = promises[key];
+                PMKPromise *promise = promises[key];
                 if (!IsPromise(promise))
-                    promise = [Promise promiseWithValue:promise];
+                    promise = [PMKPromise promiseWithValue:promise];
                 promise.catch(rejecter(key));
                 promise.then(^(id o){
                     if (o)
@@ -289,15 +289,15 @@ static id safely_call_block(id frock, id result) {
             }
         }];
 
-    return [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter){
+    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter){
         NSPointerArray *results = [NSPointerArray strongObjectsPointerArray];
         results.count = count;
 
         NSUInteger ii = 0;
 
-        for (__strong Promise *promise in promises) {
+        for (__strong PMKPromise *promise in promises) {
             if (!IsPromise(promise))
-                promise = [Promise promiseWithValue:promise];
+                promise = [PMKPromise promiseWithValue:promise];
             promise.catch(rejecter(@(ii)));
             promise.then(^(id o){
                 [results replacePointerAtIndex:ii withPointer:(__bridge_retained void *)(o ?: [NSNull null])];
@@ -311,7 +311,7 @@ static id safely_call_block(id frock, id result) {
     #undef rejecter
 }
 
-+ (Promise *)when:(id)promises {
++ (PMKPromise *)when:(id)promises {
     if ([promises conformsToProtocol:@protocol(NSFastEnumeration)]) {
         return [self all:promises];
     } else {
@@ -321,20 +321,20 @@ static id safely_call_block(id frock, id result) {
     }
 }
 
-+ (Promise *)until:(id (^)(void))blockReturningPromises catch:(id)failHandler
++ (PMKPromise *)until:(id (^)(void))blockReturningPromises catch:(id)failHandler
 {
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Warc-retain-cycles"
 
-    return [Promise new:^(void(^fulfiller)(id), id rejecter){
+    return [PMKPromise new:^(void(^fulfiller)(id), id rejecter){
         __block void (^block)() = ^{
             id promises = blockReturningPromises();
             [self when:promises].then(^(id o){
                 fulfiller(o);
                 block = nil;  // break retain cycle
             }).catch(^(id e){
-                Promise *rv = safely_call_block(failHandler, e);
-                if ([rv isKindOfClass:[Promise class]])
+                PMKPromise *rv = safely_call_block(failHandler, e);
+                if ([rv isKindOfClass:[PMKPromise class]])
                     rv.then(block);
                 else if (![rv isKindOfClass:[NSError class]])
                     block();
@@ -347,23 +347,23 @@ static id safely_call_block(id frock, id result) {
 }
 
 
-+ (Promise *)promiseWithValue:(id)value {
-    Promise *p = [Promise new];
++ (PMKPromise *)promiseWithValue:(id)value {
+    PMKPromise *p = [PMKPromise new];
     p->result = value ?: PMKNull;
     return p;
 }
 
 
-static void PMKResolve(Promise *this) {
+static void PMKResolve(PMKPromise *this) {
     id const value = ({
-        Promise *rv = this->result;
+        PMKPromise *rv = this->result;
         if (IsPromise(rv) && !rv.pending)
             rv = rv.value ?: PMKNull;
         rv;
     });
 
     if (IsPromise(value)) {
-        Promise *rsvp = (Promise *)value;
+        PMKPromise *rsvp = (PMKPromise *)value;
         [rsvp->handlers addObject:^(id o){
             this->result = o;
             PMKResolve(this);
@@ -376,8 +376,8 @@ static void PMKResolve(Promise *this) {
 }
 
 
-+ (Promise *)new:(void(^)(PromiseFulfiller, PromiseRejecter))block {
-    Promise *this = [Promise new];
++ (PMKPromise *)new:(void(^)(PMKPromiseFulfiller, PMKPromiseRejecter))block {
+    PMKPromise *this = [PMKPromise new];
 
     id fulfiller = ^(id value){
         if (this->result)
@@ -396,7 +396,7 @@ static void PMKResolve(Promise *this) {
             return NSLog(@"PromiseKit: Promise already resolved");
         if (IsPromise(error)) {
             if ([error rejected]) {
-                error = ((Promise *)error).value;
+                error = ((PMKPromise *)error).value;
             } else
                 @throw PMKE(@"You may not reject a Promise with a Promise");
         }
@@ -443,7 +443,7 @@ static void PMKResolve(Promise *this) {
 
 - (id)value {
     if (IsPromise(result))
-        return [(Promise*)result value];
+        return [(PMKPromise*)result value];
     if (result == PMKNull)
         return nil;
     else
@@ -465,12 +465,12 @@ static void PMKResolve(Promise *this) {
 
 
 
-Promise *dispatch_promise(id block) {
+PMKPromise *dispatch_promise(id block) {
     return dispatch_promise_on(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), block);
 }
 
-Promise *dispatch_promise_on(dispatch_queue_t queue, id block) {
-    return [Promise new:^(void(^fulfiller)(id), void(^rejecter)(id)){
+PMKPromise *dispatch_promise_on(dispatch_queue_t queue, id block) {
+    return [PMKPromise new:^(void(^fulfiller)(id), void(^rejecter)(id)){
         dispatch_async(queue, ^{
             id result = safely_call_block(block, nil);
             if ([result isKindOfClass:[NSError class]])

@@ -59,7 +59,7 @@
 
 @implementation UIViewController (PromiseKit)
 
-- (Promise *)promiseViewController:(UIViewController *)vc animated:(BOOL)animated completion:(void(^)(void))block
+- (PMKPromise *)promiseViewController:(UIViewController *)vc animated:(BOOL)animated completion:(void(^)(void))block
 {
     [self presentViewController:vc animated:animated completion:block];
 
@@ -83,10 +83,10 @@
     
     if (!vc) {
         id err = [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeInvalidUsage userInfo:@{NSLocalizedDescriptionKey: @"Cannot promise a `nil` viewcontroller"}];
-        return [Promise promiseWithValue:err];
+        return [PMKPromise promiseWithValue:err];
     }
     
-    return [Promise new:^(id fulfiller, id rejecter){
+    return [PMKPromise new:^(id fulfiller, id rejecter){
         objc_setAssociatedObject(vc, @selector(fulfill:), fulfiller, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
         objc_setAssociatedObject(vc, @selector(reject:), rejecter, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     }].finally(^{
@@ -123,12 +123,12 @@
 
 @implementation UIAlertView (PromiseKit)
 
-- (Promise *)promise {
+- (PMKPromise *)promise {
     PMKAlertViewDelegater *d = [PMKAlertViewDelegater new];
     [d pmk_reference];
     self.delegate = d;
     [self show];
-    return [Promise new:^(id fulfiller, id rejecter){
+    return [PMKPromise new:^(id fulfiller, id rejecter){
         d->fulfiller = fulfiller;
     }];
 }
@@ -153,12 +153,12 @@
 
 @implementation UIActionSheet (PromiseKit)
 
-- (Promise *)promiseInView:(UIView *)view {
+- (PMKPromise *)promiseInView:(UIView *)view {
     PMKActionSheetDelegater *d = [PMKActionSheetDelegater new];
     [d pmk_reference];
     self.delegate = d;
     [self showInView:view];
-    return [Promise new:^(id fulfiller, id rejecter){
+    return [PMKPromise new:^(id fulfiller, id rejecter){
         d->fulfiller = fulfiller;
     }];
 }

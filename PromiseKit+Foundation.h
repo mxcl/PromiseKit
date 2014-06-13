@@ -2,7 +2,7 @@
 @import Foundation.NSURLCache;
 @import Foundation.NSURLConnection;
 @import Foundation.NSURLRequest;
-@class Promise;
+@class PMKPromise;
 
 #define PMKURLErrorFailingURLResponseKey @"PMKURLErrorFailingURLResponseKey"
 #define PMKURLErrorFailingDataKey @"PMKURLErrorFailingDataKey"
@@ -13,10 +13,10 @@ extern NSString const*const PMKURLErrorFailingData __attribute__((deprecated("Us
 
 
 @interface NSURLConnection (PromiseKit)
-+ (Promise *)GET:(id)stringFormatOrNSURL, ...;
-+ (Promise *)GET:(id)stringOrURL query:(NSDictionary *)parameters;
-+ (Promise *)POST:(id)stringOrURL formURLEncodedParameters:(NSDictionary *)parameters;
-+ (Promise *)promise:(NSURLRequest *)rq;
++ (PMKPromise *)GET:(id)stringFormatOrNSURL, ...;
++ (PMKPromise *)GET:(id)stringOrURL query:(NSDictionary *)parameters;
++ (PMKPromise *)POST:(id)stringOrURL formURLEncodedParameters:(NSDictionary *)parameters;
++ (PMKPromise *)promise:(NSURLRequest *)rq;
 @end
 
 
