@@ -18,6 +18,9 @@
 #import "PromiseKit+StoreKit.h"
 #endif
 
-#ifndef PMK_NO_UNPREFIXED_TYPEDEF
-typedef PMKPromise Promise;
+#ifndef PMK_NO_UNPREFIXATION
+// I used a typedef but it broke the tests, turns out typedefs are new
+// types that have consequences with isKindOfClass and that
+// NOTE I will remove this at 1.0
+#define Promise PMKPromise
 #endif

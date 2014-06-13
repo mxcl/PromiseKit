@@ -20,7 +20,6 @@ OBJC = <<-__EOBJC__
 // prevent error logging here
 #import "PromiseKit.m"
 #undef NSLog
-typedef PMKPromise Promise;
     
 #define URL @"http://localhost:61231"
 #define wait(t) [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:t]]
@@ -38,14 +37,14 @@ int main() {
 @implementation Tests {
     __block BOOL resolved;
     __block BOOL failme;
-    Promise *promise;
+    PMKPromise *promise;
     void (^fulfiller)(id);
     void (^rejecter)(id);
 }
 
 - (void)setUp {
     [super setUp];
-    promise = [Promise new:^(id f, id r){
+    promise = [PMKPromise new:^(id f, id r){
         fulfiller = f;
         rejecter = r;
     }];
@@ -94,7 +93,7 @@ int main() {
 }
 
 - (void)test_04_throw_doesnt_compromise_result {
-    Promise *nextPromise = promise.then(^{
+    PMKPromise *nextPromise = promise.then(^{
         @throw @1;
     });
     fulfiller(@1);
@@ -194,7 +193,7 @@ int main() {
 - (void)test_10_then_returns_resolved_promise {
     promise.then(^(id o){
         XCTAssertEqualObjects(@10, o);
-        return [Promise new:^(PMKPromiseFulfiller _fulfiller, id r){
+        return [PMKPromise new:^(PMKPromiseFulfiller _fulfiller, id r){
             _fulfiller(@100);
         }];
     }).then(^(id o){
@@ -291,7 +290,7 @@ int main() {
 - (void)test_18_when {
     id a = [NSURLConnection GET:URL];
     id b = [NSURLConnection GET:URL];
-    [Promise when:@[a, b]].then(^(NSArray *objs){
+    [PMKPromise when:@[a, b]].then(^(NSArray *objs){
         XCTAssertEqual(objs.count, 2ul);
         XCTAssertEqualObjects(objs[0], objs[1]);
         resolved = YES;
@@ -329,8 +328,8 @@ int main() {
         @throw @NO;
     });
     id b = [NSURLConnection GET:URL];
-    id c = [Promise when:@[a, b]];
-    [Promise when:c].then(^{
+    id c = [PMKPromise when:@[a, b]];
+    [PMKPromise when:c].then(^{
         XCTFail();
     }).catch(^(NSError *e){
         XCTAssertEqualObjects(e.userInfo[PMKFailingPromiseIndexKey], @0);
@@ -352,7 +351,7 @@ int main() {
     });
     rejecter(@22);
     
-    [Promise when:promise].then(^{
+    [PMKPromise when:promise].then(^{
         XCTFail();
     }).catch(^{
         x++;
@@ -387,7 +386,7 @@ int main() {
 - (void)test_24_some_edge_case {
     id a = [NSURLConnection GET:URL].catch(^{});
     id b = [NSURLConnection GET:URL];
-    [Promise when:@[a, b]].then(^(NSArray *objs){
+    [PMKPromise when:@[a, b]].then(^(NSArray *objs){
         resolved = YES;
     });
     wait(0.1);
@@ -448,8 +447,8 @@ int main() {
     XCTAssertTrue(resolved);
 }
 
-Promise *gcdreject() {
-    return [Promise new:^(id f, void(^rejecter)(id)){
+PMKPromise *gcdreject() {
+    return [PMKPromise new:^(id f, void(^rejecter)(id)){
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             dispatch_async(dispatch_get_main_queue(), ^{
                 rejecter(nil);
@@ -506,7 +505,7 @@ Promise *gcdreject() {
 
 - (void)test_31_dispatch_returns_promise {
     dispatch_promise(^{
-        return [Promise promiseWithValue:@1];
+        return [PMKPromise promiseWithValue:@1];
     }).then(^(id o){
         XCTAssertEqualObjects(o, @1);
         resolved = YES;
@@ -563,7 +562,7 @@ Promise *gcdreject() {
 }
 
 - (void)test_34 {
-    [Promise new:^(PMKPromiseFulfiller _fulfiller, id r){
+    [PMKPromise new:^(PMKPromiseFulfiller _fulfiller, id r){
         @throw @1;
         _fulfiller(@2);
     }].then(^{
@@ -578,7 +577,7 @@ Promise *gcdreject() {
 
 - (void)test_35_when_nil {
     promise = promise.then(^{ return nil; });
-    [Promise when:@[[NSURLConnection GET:URL], [Promise promiseWithValue:nil], promise]].then(^(NSArray *results){
+    [PMKPromise when:@[[NSURLConnection GET:URL], [PMKPromise promiseWithValue:nil], promise]].then(^(NSArray *results){
         XCTAssertEqual(results.count, 3ul);
         XCTAssertEqualObjects(results[1], [NSNull null]);
         resolved = YES;
@@ -591,7 +590,7 @@ Promise *gcdreject() {
 }
 
 - (void)test_36_promise_with_value_nil {
-    [Promise promiseWithValue:nil].then(^(id o){
+    [PMKPromise promiseWithValue:nil].then(^(id o){
         XCTAssertNil(o);
         resolved = YES;
     });
@@ -627,7 +626,7 @@ Promise *gcdreject() {
 - (void)test_39_when_with_some_values {
     id p = [NSURLConnection GET:URL];
     id v = @1;
-    [Promise when:@[p, v]].then(^(NSArray *aa){
+    [PMKPromise when:@[p, v]].then(^(NSArray *aa){
         XCTAssertEqual(aa.count, 2ul);
         XCTAssertEqualObjects(aa[1], @1);
         resolved = YES;
@@ -637,7 +636,7 @@ Promise *gcdreject() {
 }
 
 - (void)test_40_when_with_all_values {
-    [Promise when:@[@1, @2]].then(^(NSArray *aa){
+    [PMKPromise when:@[@1, @2]].then(^(NSArray *aa){
         XCTAssertEqualObjects(aa[0], @1);
         XCTAssertEqualObjects(aa[1], @2);
         resolved = YES;
@@ -649,7 +648,7 @@ Promise *gcdreject() {
 - (void)test_41_when_with_repeated_promises {
     id p = [NSURLConnection GET:URL];
     id v = @1;
-    [Promise when:@[p, v, p, v]].then(^(NSArray *aa){
+    [PMKPromise when:@[p, v, p, v]].then(^(NSArray *aa){
         XCTAssertEqual(aa.count, 4ul);
         XCTAssertEqualObjects(aa[1], @1);
         XCTAssertEqualObjects(aa[3], @1);
@@ -660,7 +659,7 @@ Promise *gcdreject() {
 }
 
 - (void)test_42 {
-    [Promise promiseWithValue:@1].then(^{
+    [PMKPromise promiseWithValue:@1].then(^{
         return [NSURLConnection GET:URL];
     }).then(^{
         resolved = YES;
@@ -670,7 +669,7 @@ Promise *gcdreject() {
 }
 
 - (void)test_43_return_promise_from_itself {
-    Promise *p = [NSURLConnection GET:URL];
+    PMKPromise *p = [NSURLConnection GET:URL];
     p.then(^{
         return p;
     }).then(^{
@@ -681,7 +680,7 @@ Promise *gcdreject() {
 }
 
 - (void)test_44_reseal {
-    [Promise new:^(PMKPromiseFulfiller _fulfiller, id r){
+    [PMKPromise new:^(PMKPromiseFulfiller _fulfiller, id r){
         _fulfiller(@123);
         _fulfiller(@234);
     }].then(^(id o){
@@ -694,7 +693,7 @@ Promise *gcdreject() {
 
 - (void)test_45_when_which_returns_void {
     promise = promise.then(^{});
-    [Promise when:@[promise, [Promise promiseWithValue:@1]]].then(^(NSArray *stuff){
+    [PMKPromise when:@[promise, [PMKPromise promiseWithValue:@1]]].then(^(NSArray *stuff){
         XCTAssertEqual(stuff.count, 2ul);
         XCTAssertEqualObjects(stuff[0], [NSNull null]);
         resolved = YES;
@@ -781,7 +780,7 @@ Promise *gcdreject() {
         XCTAssertEqualObjects(o, @1);
         resolved = YES;
     });
-    fulfiller([Promise promiseWithValue:@1]);
+    fulfiller([PMKPromise promiseWithValue:@1]);
     wait(0.1);
     XCTAssertTrue(resolved);
 }
@@ -790,14 +789,14 @@ Promise *gcdreject() {
     promise.catch(^(NSError *err){
         resolved = YES;
     });
-    fulfiller([Promise promiseWithValue:[NSError new]]);
+    fulfiller([PMKPromise promiseWithValue:[NSError new]]);
     wait(0.1);
     XCTAssertTrue(resolved);
 }
 
 - (void)test_53_return_rejected_promise {
     promise.then(^{
-        return [Promise promiseWithValue:[NSError new]];
+        return [PMKPromise promiseWithValue:[NSError new]];
     }).catch(^{
         resolved = YES;
     });
@@ -812,7 +811,7 @@ Promise *gcdreject() {
         resolved = YES;
     });
     id err = [NSError errorWithDomain:@"a" code:123 userInfo:nil];
-    rejecter([Promise promiseWithValue:err]);
+    rejecter([PMKPromise promiseWithValue:err]);
     wait(0.1);
     XCTAssertTrue(resolved);
 }
@@ -823,7 +822,7 @@ Promise *gcdreject() {
         @2: @"abc",
         @"a": [NSURLConnection GET:URL]
     };
-    [Promise all:promises].then(^(NSDictionary *dict){
+    [PMKPromise all:promises].then(^(NSDictionary *dict){
         XCTAssertEqual(dict.count, 3ul);
         XCTAssertEqualObjects(dict[@1], @2);
         XCTAssertEqualObjects(dict[@2], @"abc");
@@ -835,7 +834,7 @@ Promise *gcdreject() {
 }
 
 - (void)test_56_empty_array_when {
-    Promise* p = [Promise when:@[]];
+    PMKPromise *p = [PMKPromise when:@[]];
     p.then(^(NSArray *array){
         XCTAssertEqual(array.count, 0ul);
         resolved = YES;
@@ -844,8 +843,8 @@ Promise *gcdreject() {
     XCTAssertTrue(resolved);
 }
 
-- (void)test_56_empty_array_all {
-    Promise* p = [Promise all:@[]];
+- (void)test_57_empty_array_all {
+    PMKPromise *p = [PMKPromise all:@[]];
     p.then(^(NSArray *array){
         XCTAssertEqual(array.count, 0ul);
         resolved = YES;
