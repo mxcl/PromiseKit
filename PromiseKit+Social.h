@@ -20,15 +20,15 @@ extern NSString *const SLRequestPromiseKitOriginalResponseDataKey;
 extern NSString *const SLRequestPromiseKitResponseDataAsTextKey;
 
 @interface SLRequest (PromiseKit)
-+ (PMKPromise *)promise:(SLRequest *)request;
++ (PMKPromise *)PMKPromise:(SLRequest *)request;
 - (PMKPromise *)promise;
 @end
 
 @interface ACAccountStore (PromiseKit)
 - (PMKPromise *)promiseForAccountsWithType:(ACAccountType *)type options:(NSDictionary *)options;
 - (PMKPromise *)promiseForCredentialsRenewalWithAccount:(ACAccount *)account;
-- (PMKPromise *)promiseForAccountSave:(ACAccount *)account;
-- (PMKPromise *)promiseForAccountRemoval:(ACAccount *)account;
+- (PMKPromise *)PMKPromiseForAccountSave:(ACAccount *)account;
+- (PMKPromise *)PMKPromiseForAccountRemoval:(ACAccount *)account;
 @end
 
 #endif
