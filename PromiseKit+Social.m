@@ -56,7 +56,7 @@ NSString *const SLRequestPromiseKitResponseDataAsTextKey = @"SLRequestPromiseKit
 
 - (PMKPromise *)promise
 {
-  return [SLRequest promise:self];
+  return [SLRequest PMKPromise:self];
 }
 
 @end
