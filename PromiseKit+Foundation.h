@@ -15,7 +15,11 @@ extern NSString const*const PMKURLErrorFailingData __attribute__((deprecated("Us
 @interface NSURLConnection (PromiseKit)
 + (PMKPromise *)GET:(id)stringFormatOrNSURL, ...;
 + (PMKPromise *)GET:(id)stringOrURL query:(NSDictionary *)parameters;
++ (PMKPromise *)GET:(id)stringOrURL query:(NSDictionary *)parameters cachePolicy:(NSURLRequestCachePolicy)policy timeoutInterval:(NSTimeInterval)interval;
+
 + (PMKPromise *)POST:(id)stringOrURL formURLEncodedParameters:(NSDictionary *)parameters;
++ (PMKPromise *)POST:(id)stringOrURL formURLEncodedParameters:(NSDictionary *)parameters cachePolicy:(NSURLRequestCachePolicy)policy timeoutInterval:(NSTimeInterval)interval;
+
 + (PMKPromise *)promise:(NSURLRequest *)rq;
 @end
 

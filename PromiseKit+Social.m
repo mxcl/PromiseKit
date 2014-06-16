@@ -17,46 +17,46 @@ NSString *const SLRequestPromiseKitOriginalResponseDataKey = @"SLRequestPromiseK
 NSString *const SLRequestPromiseKitResponseDataAsTextKey = @"SLRequestPromiseKitResponseDataAsTextKey";
 
 @implementation SLRequest (PromiseKit)
-+ (PMKPromise *)PMKPromise:(SLRequest *)request
++ (PMKPromise *)promise:(SLRequest *)request
 {
-  return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-    [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
-      dispatch_async(dispatch_get_main_queue(), ^{
-        if (!responseData) {
-          rejecter(error);
-          return;
-        }
-
-        NSInteger statusCode = urlResponse.statusCode;
-        if (statusCode < 200 || statusCode >= 300) {
-          NSString *localizedStatusCode = [NSHTTPURLResponse localizedStringForStatusCode:statusCode];
-
-          NSMutableDictionary *userInfo = [@{
-            SLRequestPromiseKitOriginalStatusCodeKey : @(statusCode),
-            SLRequestPromiseKitOriginalResponseDataKey : responseData ?: [NSNull null],
-            NSLocalizedDescriptionKey : localizedStatusCode
-          } mutableCopy];
-
-          if (responseData) {
-            NSString *responseDataAsText = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-            userInfo[SLRequestPromiseKitResponseDataAsTextKey] = responseDataAsText ?: [NSNull null];
-          }
-
-          rejecter([NSError errorWithDomain:SLRequestPromiseKitErrorDomain code:SLRequestPromiseKitServerStatusCodeErrorCode userInfo:userInfo]);
-          return;
-        }
-
-        fulfiller(PMKManifold(responseData, urlResponse));
-      });
-    }];
-  }
-
-  ];
+	return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
+		[request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
+			dispatch_async(dispatch_get_main_queue(), ^{
+				if (!responseData) {
+					rejecter(error);
+					return;
+				}
+				
+				NSInteger statusCode = urlResponse.statusCode;
+				if (statusCode < 200 || statusCode >= 300) {
+					NSString *localizedStatusCode = [NSHTTPURLResponse localizedStringForStatusCode:statusCode];
+					
+					NSMutableDictionary *userInfo = [@{
+													   SLRequestPromiseKitOriginalStatusCodeKey : @(statusCode),
+													   SLRequestPromiseKitOriginalResponseDataKey : responseData ?: [NSNull null],
+													   NSLocalizedDescriptionKey : localizedStatusCode
+													   } mutableCopy];
+					
+					if (responseData) {
+						NSString *responseDataAsText = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
+						userInfo[SLRequestPromiseKitResponseDataAsTextKey] = responseDataAsText ?: [NSNull null];
+					}
+					
+					rejecter([NSError errorWithDomain:SLRequestPromiseKitErrorDomain code:SLRequestPromiseKitServerStatusCodeErrorCode userInfo:userInfo]);
+					return;
+				}
+				
+				fulfiller(PMKManifold(responseData, urlResponse));
+			});
+		}];
+	}
+			
+			];
 }
 
 - (PMKPromise *)promise
 {
-  return [SLRequest PMKPromise:self];
+	return [SLRequest promise:self];
 }
 
 @end
@@ -64,66 +64,66 @@ NSString *const SLRequestPromiseKitResponseDataAsTextKey = @"SLRequestPromiseKit
 @implementation ACAccountStore (PromiseKit)
 - (PMKPromise *)promiseForAccountsWithType:(ACAccountType *)type options:(NSDictionary *)options
 {
-  return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-    [self requestAccessToAccountsWithType:type options:options completion:^(BOOL granted, NSError *error) {
-      dispatch_async(dispatch_get_main_queue(), ^{
-        if (!granted) {
-          rejecter(error);
-          return;
-        }
-
-        fulfiller([self accountsWithAccountType:type]);
-      });
-    }];
-  }];
+	return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
+		[self requestAccessToAccountsWithType:type options:options completion:^(BOOL granted, NSError *error) {
+			dispatch_async(dispatch_get_main_queue(), ^{
+				if (!granted) {
+					rejecter(error);
+					return;
+				}
+				
+				fulfiller([self accountsWithAccountType:type]);
+			});
+		}];
+	}];
 }
 
 - (PMKPromise *)promiseForCredentialsRenewalWithAccount:(ACAccount *)account
 {
-  return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-    [self renewCredentialsForAccount:account completion:^(ACAccountCredentialRenewResult renewResult, NSError *error) {
-      dispatch_async(dispatch_get_main_queue(), ^{
-        if (error) {
-          rejecter(error);
-          return;
-        }
-
-        fulfiller(@(renewResult));
-      });
-    }];
-  }];
+	return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
+		[self renewCredentialsForAccount:account completion:^(ACAccountCredentialRenewResult renewResult, NSError *error) {
+			dispatch_async(dispatch_get_main_queue(), ^{
+				if (error) {
+					rejecter(error);
+					return;
+				}
+				
+				fulfiller(@(renewResult));
+			});
+		}];
+	}];
 }
 
-- (PMKPromise *)PMKPromiseForAccountSave:(ACAccount *)account
+- (PMKPromise *)promiseForAccountSave:(ACAccount *)account
 {
-  return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-    [self saveAccount:account withCompletionHandler:^(BOOL success, NSError *error) {
-      dispatch_async(dispatch_get_main_queue(), ^{
-        if (!success) {
-          rejecter(error);
-          return;
-        }
-
-        fulfiller(nil);
-      });
-    }];
-  }];
+	return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
+		[self saveAccount:account withCompletionHandler:^(BOOL success, NSError *error) {
+			dispatch_async(dispatch_get_main_queue(), ^{
+				if (!success) {
+					rejecter(error);
+					return;
+				}
+				
+				fulfiller(nil);
+			});
+		}];
+	}];
 }
 
-- (PMKPromise *)PMKPromiseForAccountRemoval:(ACAccount *)account
+- (PMKPromise *)promiseForAccountRemoval:(ACAccount *)account
 {
-  return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-    [self removeAccount:account withCompletionHandler:^(BOOL success, NSError *error) {
-      dispatch_async(dispatch_get_main_queue(), ^{
-        if (!success) {
-          rejecter(error);
-          return;
-        }
-
-        fulfiller(nil);
-      });
-    }];
-  }];
+	return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
+		[self removeAccount:account withCompletionHandler:^(BOOL success, NSError *error) {
+			dispatch_async(dispatch_get_main_queue(), ^{
+				if (!success) {
+					rejecter(error);
+					return;
+				}
+				
+				fulfiller(nil);
+			});
+		}];
+	}];
 }
 
 @end
