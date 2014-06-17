@@ -22,5 +22,5 @@
 // I used a typedef but it broke the tests, turns out typedefs are new
 // types that have consequences with isKindOfClass and that
 // NOTE I will remove this at 1.0
-#define Promise PMKPromise
+typedef PMKPromise Promise __attribute__((deprecated("Use PMKPromise. Use of Promise is deprecated. This is a typedef, and since it is a typedef, there may be unintended side-effects.")));
 #endif

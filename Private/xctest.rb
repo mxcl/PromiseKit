@@ -77,7 +77,7 @@ def compile!
           -Wno-selector -Wno-missing-prototypes -Wno-direct-ivar-access \
           -Wno-missing-noreturn -Wno-pedantic \
           -Wno-format-nonliteral \
-          -Wno-incomplete-module \
+          -Wno-incomplete-module -Wno-objc-interface-ivars \
           -o /tmp/PromiseKitTests
   EOS
   abort unless system <<-EOS

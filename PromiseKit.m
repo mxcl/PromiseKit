@@ -235,6 +235,7 @@ static id safely_call_block(id frock, id result) {
 
     if (result) return ^(void (^block)(void)) {
         return dispatch_promise_on(dispatch_get_main_queue(), ^{
+            block();
             return result;
         });
     };

@@ -3,6 +3,8 @@ OBJC = <<-__EOBJC__
 
 #import "PromiseKit/Promise.h"
 #import "PromiseKit+Foundation.m"
+#import "PromiseKit+Social.m"  // test compiles
+#import "PromiseKit+StoreKit.m"  // test compiles
 #import <CommonCrypto/CommonCrypto.h>
     
 #pragma clang diagnostic push
@@ -23,6 +25,8 @@ OBJC = <<-__EOBJC__
     
 #define URL @"http://localhost:61231"
 #define wait(t) [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:t]]
+
+typedef PMKPromise Promise;
 
 int main() {
     @autoreleasepool {
@@ -851,6 +855,34 @@ PMKPromise *gcdreject() {
     });
     wait(0.1);
     XCTAssertTrue(resolved);
+}
+
+- (void)test_58_just_finally {
+    promise.finally(^{
+        resolved = YES;
+    });
+    fulfiller(nil);
+    wait(0.1);
+    XCTAssertTrue(resolved);
+    
+    resolved = NO;
+    promise.finally(^{
+        resolved = YES;
+    });
+    wait(0.1);
+    XCTAssertTrue(resolved);
+}
+
+- (void)test_59_typedef {
+    Promise *p1 = [Promise promiseWithValue:@1];
+    XCTAssertEqualObjects(p1.value, @1);
+    
+    p1.then(^(id o){
+        XCTAssertEqualObjects(o, @1);
+        resolved = YES;
+    });
+    wait(0.1);
+    XCTAssertTrue(resolved);    
 }
 
 @end
