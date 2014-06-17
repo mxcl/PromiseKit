@@ -97,7 +97,7 @@ static const char* kSegueRejecter = "kSegueRejecter";
     });
 }
 
-- (Promise *)promiseSegueWithIdentifier:(NSString*) identifier sender:(id) sender {
+- (PMKPromise *)promiseSegueWithIdentifier:(NSString*) identifier sender:(id) sender {
     // swizzle
     const char* prefix = "PromiseKitUIKitSegue_";
     Class klass = [self class];
@@ -124,7 +124,7 @@ static const char* kSegueRejecter = "kSegueRejecter";
         
     }
     
-    Promise* promise = [Promise new:^(id fulfiller, id rejecter){
+    PMKPromise* promise = [PMKPromise new:^(id fulfiller, id rejecter){
         objc_setAssociatedObject(self,
                                  kSegueFulfiller,
                                  fulfiller,
