@@ -18,6 +18,7 @@
  returned Promise.
  */
 - (PMKPromise *)promiseViewController:(UIViewController *)vc animated:(BOOL)animated completion:(void(^)(void))block;
+- (Promise *)promiseSegueWithIdentifier:(NSString*) identifier sender:(id) sender;
 
 - (void)fulfill:(id)result;
 - (void)reject:(NSError *)error;
