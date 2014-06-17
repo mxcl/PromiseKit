@@ -17,7 +17,7 @@ NSString *const SLRequestPromiseKitOriginalResponseDataKey = @"SLRequestPromiseK
 NSString *const SLRequestPromiseKitResponseDataAsTextKey = @"SLRequestPromiseKitResponseDataAsTextKey";
 
 @implementation SLRequest (PromiseKit)
-+ (PMKPromise *)PMKPromise:(SLRequest *)request
++ (PMKPromise *)promise:(SLRequest *)request
 {
   return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
     [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
@@ -94,7 +94,7 @@ NSString *const SLRequestPromiseKitResponseDataAsTextKey = @"SLRequestPromiseKit
   }];
 }
 
-- (PMKPromise *)PMKPromiseForAccountSave:(ACAccount *)account
+- (PMKPromise *)promiseForAccountSave:(ACAccount *)account
 {
   return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
     [self saveAccount:account withCompletionHandler:^(BOOL success, NSError *error) {
@@ -110,7 +110,7 @@ NSString *const SLRequestPromiseKitResponseDataAsTextKey = @"SLRequestPromiseKit
   }];
 }
 
-- (PMKPromise *)PMKPromiseForAccountRemoval:(ACAccount *)account
+- (PMKPromise *)promiseForAccountRemoval:(ACAccount *)account
 {
   return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
     [self removeAccount:account withCompletionHandler:^(BOOL success, NSError *error) {
