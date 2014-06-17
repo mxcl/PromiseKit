@@ -189,7 +189,8 @@ NSString *PMKUserAgent() {
                 rejecter(err);
             } else if (NSHTTPURLResponseIsJSON(rsp)) {
                 id err = nil;
-                id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments|NSJSONReadingMutableContainers error:&err];
+                NSUInteger opts = NSJSONReadingAllowFragments | NSJSONReadingMutableContainers;
+                id json = [NSJSONSerialization JSONObjectWithData:data options:(NSJSONReadingOptions)opts error:&err];
                 if (err)
                     rejecter(err);
                 else
