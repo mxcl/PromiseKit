@@ -3,6 +3,8 @@ OBJC = <<-__EOBJC__
 
 #import "PromiseKit/Promise.h"
 #import "PromiseKit+Foundation.m"
+#import "PromiseKit+Social.m"  // test compiles
+#import "PromiseKit+StoreKit.m"  // test compiles
 #import <CommonCrypto/CommonCrypto.h>
     
 #pragma clang diagnostic push
