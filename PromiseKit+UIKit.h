@@ -1,7 +1,7 @@
 @import UIKit.UIViewController;
 @import UIKit.UIAlertView;
 @import UIKit.UIActionSheet;
-@class Promise;
+@class PMKPromise;
 
 
 
@@ -17,7 +17,7 @@
  `MFMailComposeViewController` will be automatically delegate into the
  returned Promise.
  */
-- (Promise *)promiseViewController:(UIViewController *)vc animated:(BOOL)animated completion:(void(^)(void))block;
+- (PMKPromise *)promiseViewController:(UIViewController *)vc animated:(BOOL)animated completion:(void(^)(void))block;
 
 - (void)fulfill:(id)result;
 - (void)reject:(NSError *)error;
@@ -31,7 +31,7 @@
  Thens the dismissedButtonIndex and the alertView itself as the second
  parameter. This promise can not be rejected.
  */
-- (Promise *)promise;
+- (PMKPromise *)promise;
 @end
 
 
@@ -41,5 +41,5 @@
  Thens the dismissedButtonIndex and the actionSheet itself as the second
  parameter. This promise can not be rejected.
  */
-- (Promise *)promiseInView:(UIView *)view;
+- (PMKPromise *)promiseInView:(UIView *)view;
 @end

@@ -11,7 +11,7 @@
 
 @import Social.SLRequest;
 @import Accounts;
-@class Promise;
+@class PMKPromise;
 
 extern NSString *const SLRequestPromiseKitErrorDomain;
 extern const NSInteger SLRequestPromiseKitServerStatusCodeErrorCode;
@@ -20,15 +20,15 @@ extern NSString *const SLRequestPromiseKitOriginalResponseDataKey;
 extern NSString *const SLRequestPromiseKitResponseDataAsTextKey;
 
 @interface SLRequest (PromiseKit)
-+ (Promise *)promise:(SLRequest *)request;
-- (Promise *)promise;
++ (PMKPromise *)promise:(SLRequest *)request;
+- (PMKPromise *)promise;
 @end
 
 @interface ACAccountStore (PromiseKit)
-- (Promise *)promiseForAccountsWithType:(ACAccountType *)type options:(NSDictionary *)options;
-- (Promise *)promiseForCredentialsRenewalWithAccount:(ACAccount *)account;
-- (Promise *)promiseForAccountSave:(ACAccount *)account;
-- (Promise *)promiseForAccountRemoval:(ACAccount *)account;
+- (PMKPromise *)promiseForAccountsWithType:(ACAccountType *)type options:(NSDictionary *)options;
+- (PMKPromise *)promiseForCredentialsRenewalWithAccount:(ACAccount *)account;
+- (PMKPromise *)promiseForAccountSave:(ACAccount *)account;
+- (PMKPromise *)promiseForAccountRemoval:(ACAccount *)account;
 @end
 
 #endif

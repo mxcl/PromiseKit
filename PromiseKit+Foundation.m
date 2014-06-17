@@ -1,16 +1,13 @@
 #import "Chuzzle.h"
 @import CoreFoundation.CFString;
 @import CoreFoundation.CFURL;
-@import Foundation.NSBundle;
-@import Foundation.NSError;
-@import Foundation.NSJSONSerialization;
-@import Foundation.NSOperation;
-@import Foundation.NSSortDescriptor;
-@import Foundation.NSURL;
-@import Foundation.NSURLError;
-@import Foundation.NSURLResponse;
+@import Foundation;
 #import "PromiseKit+Foundation.h"
 #import "PromiseKit/Promise.h"
+
+NSString const*const PMKURLErrorFailingURLResponse = PMKURLErrorFailingURLResponseKey;
+NSString const*const PMKURLErrorFailingData = PMKURLErrorFailingDataKey;
+
 
 
 static inline NSString *enc(NSString *in) {
@@ -28,6 +25,13 @@ static BOOL NSHTTPURLResponseIsJSON(NSHTTPURLResponse *rsp) {
     return [bits.chuzzle containsObject:@"application/json"];
 }
 
+static BOOL NSHTTPURLResponseIsText(NSHTTPURLResponse *rsp) {
+    NSString *type = rsp.allHeaderFields[@"Content-Type"];
+    NSArray *bits = [type componentsSeparatedByString:@";"].chuzzle;
+    id textTypes = @[@"text/plain", @"text/html", @"text/css"];
+    return [bits firstObjectCommonWithArray:textTypes] != nil;
+}
+
 #ifdef UIKIT_EXTERN
 static BOOL NSHTTPURLResponseIsImage(NSHTTPURLResponse *rsp) {
     NSString *type = rsp.allHeaderFields[@"Content-Type"];
@@ -39,12 +43,6 @@ static BOOL NSHTTPURLResponseIsImage(NSHTTPURLResponse *rsp) {
     return NO;
 }
 #endif
-
-static inline NSDictionary *NSDictionaryExtend(NSDictionary *add, NSDictionary *base) {
-    base = base.mutableCopy ?: [NSMutableDictionary new];
-    [(id)base addEntriesFromDictionary:add];
-    return base;
-}
 
 static NSArray *DoQueryMagic(NSString *key, id value) {
     NSMutableArray *parts = [NSMutableArray new];
@@ -92,9 +90,9 @@ NSString *NSDictionaryToURLQueryString(NSDictionary *params) {
 
 @implementation NSURLConnection (PromiseKit)
 
-+ (Promise *)GET:(id)urlFormat, ... {
++ (PMKPromise *)GET:(id)urlFormat, ... {
     if (!urlFormat || urlFormat == [NSNull null])
-        return [Promise promiseWithValue:[NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeInvalidUsage userInfo:nil]];
+        return [PMKPromise promiseWithValue:[NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeInvalidUsage userInfo:nil]];
 
     if ([urlFormat isKindOfClass:[NSURL class]])
         return [self GET:urlFormat query:nil];
@@ -105,7 +103,7 @@ NSString *NSDictionaryToURLQueryString(NSDictionary *params) {
     return [self GET:urlFormat query:nil];
 }
 
-+ (Promise *)GET:(id)url query:(NSDictionary *)params {
++ (PMKPromise *)GET:(id)url query:(NSDictionary *)params {
     if (params.chuzzle) {
         if ([url isKindOfClass:[NSURL class]])
             url = [url absoluteString];
@@ -118,7 +116,7 @@ NSString *NSDictionaryToURLQueryString(NSDictionary *params) {
     return [self promise:[NSURLRequest requestWithURL:url]];
 }
 
-+ (Promise *)POST:(id)url formURLEncodedParameters:(NSDictionary *)params {
++ (PMKPromise *)POST:(id)url formURLEncodedParameters:(NSDictionary *)params {
     if ([url isKindOfClass:[NSString class]])
         url = [NSURL URLWithString:url];
 
@@ -150,8 +148,12 @@ NSString *PMKUserAgent() {
     return ua;
 }
 
-+ (Promise *)promise:(NSURLRequest *)rq {
-    id q = [NSOperationQueue currentQueue] ?: [NSOperationQueue mainQueue];
++ (PMKPromise *)promise:(NSURLRequest *)rq {
+    static NSOperationQueue *q;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        q = [NSOperationQueue new];
+    });
 
     if (![rq valueForHTTPHeaderField:@"User-Agent"]) {
         if (![rq respondsToSelector:@selector(setValue:forHTTPHeaderField:)])
@@ -159,46 +161,69 @@ NSString *PMKUserAgent() {
         [(id)rq setValue:PMKUserAgent() forHTTPHeaderField:@"User-Agent"];
     }
 
-    #define NSURLError(x, desc) [NSError errorWithDomain:NSURLErrorDomain code:x userInfo:NSDictionaryExtend(@{PMKURLErrorFailingURLResponse: rsp, NSLocalizedDescriptionKey: desc}, error.userInfo)]
-    #define fulfiller(obj) fulfiller(PMKManifold(obj, rsp, data))
+    return [PMKPromise new:^(PMKPromiseFulfiller fluff, PMKPromiseRejecter rejunk){
+        [NSURLConnection sendAsynchronousRequest:rq queue:q completionHandler:^(id rsp, id data, NSError *urlError) {
 
-    return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter){
-        [NSURLConnection sendAsynchronousRequest:rq queue:q completionHandler:^(id rsp, id data, NSError *error) {
-            if (error) {
-                if (rsp) {
-                    id dict = NSDictionaryExtend(@{PMKURLErrorFailingURLResponse: rsp}, error.userInfo);
-                    error = [NSError errorWithDomain:error.domain code:error.code userInfo:dict];
-                }
-                rejecter(error);
+            assert(![NSThread isMainThread]);
+
+            PMKPromiseFulfiller fulfiller = ^(id responseObject){
+                fluff(PMKManifold(responseObject, rsp, data));
+            };
+            PMKPromiseRejecter rejecter = ^(NSError *error){
+                id userInfo = error.userInfo.mutableCopy ?: [NSMutableDictionary new];
+                if (data) userInfo[PMKURLErrorFailingDataKey] = data;
+                if (rsp) userInfo[PMKURLErrorFailingURLResponseKey] = rsp;
+                error = [NSError errorWithDomain:error.domain code:error.code userInfo:userInfo];
+                rejunk(error);
+            };
+
+            if (urlError) {
+                rejecter(urlError);
             } else if ([rsp statusCode] < 200 || [rsp statusCode] >= 300) {
-                id err = NSURLError(NSURLErrorBadServerResponse, @"bad HTTP response code");
+                id info = @{
+                    NSLocalizedDescriptionKey: @"The server returned a bad HTTP response code",
+                    NSURLErrorFailingURLStringErrorKey: rq.URL.absoluteString,
+                    NSURLErrorFailingURLErrorKey: rq.URL
+                };
+                id err = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorBadServerResponse userInfo:info];
                 rejecter(err);
             } else if (NSHTTPURLResponseIsJSON(rsp)) {
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    id err = nil;
-                    id json = [NSJSONSerialization JSONObjectWithData:data options:NSJSONReadingAllowFragments error:&err];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        if (err)
-                            rejecter(err);
-                        else
-                            fulfiller(json);
-                    });
-                });
+                id err = nil;
+                NSUInteger opts = NSJSONReadingAllowFragments | NSJSONReadingMutableContainers;
+                id json = [NSJSONSerialization JSONObjectWithData:data options:(NSJSONReadingOptions)opts error:&err];
+                if (err)
+                    rejecter(err);
+                else
+                    fulfiller(json);
           #ifdef UIKIT_EXTERN
             } else if (NSHTTPURLResponseIsImage(rsp)) {
-                dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-                    UIImage *image = [[UIImage alloc] initWithData:data];
-                    image = [[UIImage alloc] initWithCGImage:[image CGImage] scale:image.scale orientation:image.imageOrientation];
-                    dispatch_async(dispatch_get_main_queue(), ^{
-                        if (image)
-                            fulfiller(image);
-                        else {
-                            id err = NSURLError(NSURLErrorBadServerResponse, @"invalid image data");
-                            rejecter(err);
-                        }
-                    });
-                });
+                UIImage *image = [[UIImage alloc] initWithData:data];
+                image = [[UIImage alloc] initWithCGImage:[image CGImage] scale:image.scale orientation:image.imageOrientation];
+                if (image)
+                    fulfiller(image);
+                else {
+                    id info = @{
+                        NSLocalizedDescriptionKey: @"The server returned invalid image data",
+                        NSURLErrorFailingURLStringErrorKey: rq.URL.absoluteString,
+                        NSURLErrorFailingURLErrorKey: rq.URL
+                    };
+                    id err = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorBadServerResponse userInfo:info];
+                    rejecter(err);
+                }
           #endif
+            } else if (NSHTTPURLResponseIsText(rsp)) {
+                id str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                if (str)
+                    fulfiller(str);
+                else {
+                    id info = @{
+                        NSLocalizedDescriptionKey: @"The server returned invalid string data",
+                        NSURLErrorFailingURLStringErrorKey: rq.URL.absoluteString,
+                        NSURLErrorFailingURLErrorKey: rq.URL
+                    };
+                    id err = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorBadServerResponse userInfo:info];
+                    rejecter(err);
+                }
             } else
                 fulfiller(data);
         }];

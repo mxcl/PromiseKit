@@ -14,6 +14,7 @@ def each_test_line
     while line = stderr.gets
       yield line, stderr
     end
+    exit_status = wait_thr.value
   end
 end
 
@@ -38,10 +39,10 @@ def test!
     when /^(Executed(.?)+)$/
       if stderr.eof?
         summary = $1
-        if /(\d) failures?/.match(summary)[1] == "0"
-          summary.gsub!(/(\d failures?)/, green('\1'))
+        if /(\d+) failures?/.match(summary)[1] == "0"
+          summary.gsub!(/(\d+ failures?)/, green('\1'))
         else
-          summary.gsub!(/(\d failures?)/, red('\1'))
+          summary.gsub!(/(\d+ failures?)/, red('\1'))
         end
         log summary
       end
@@ -76,6 +77,7 @@ def compile!
           -Wno-selector -Wno-missing-prototypes -Wno-direct-ivar-access \
           -Wno-missing-noreturn -Wno-pedantic \
           -Wno-format-nonliteral \
+          -Wno-incomplete-module -Wno-objc-interface-ivars \
           -o /tmp/PromiseKitTests
   EOS
   abort unless system <<-EOS
@@ -88,8 +90,6 @@ end
 
 prepare!
 compile!
-
-exec "lldb", "/tmp/PromiseKitTests" if ARGV.include? '-d'
 
 begin              
   require 'webrick'
@@ -104,17 +104,20 @@ class PMKHTTPD < Sinatra::Base
   set :server_settings, {AccessLog: [], Logger: WEBrick::Log::new("/dev/null", 7)}
   set :logging, false
   get '/' do
-    content_type 'text/html', :charset => 'utf-8'
+    content_type 'text/plain', :charset => 'utf-8'
     'hi'
   end
 end
 
 PMKHTTPD.run! do
   Thread.new do
-    test!
-    exit! 0
+    if not ARGV.include? '-d'
+      exit! test!.exitstatus
+    else
+      system "lldb /tmp/PromiseKitTests"
+      File.delete("/tmp/PromiseKitTests.m")
+      File.delete("/tmp/PromiseKitTests")
+      exit! 0
+    end
   end
 end
-
-File.delete("/tmp/PromiseKitTests.m")
-File.delete("/tmp/PromiseKitTests")

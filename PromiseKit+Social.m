@@ -5,7 +5,7 @@
 //
 
 
-#import "PromiseKit+SocialFramework.h"
+#import "PromiseKit+Social.h"
 #import "PromiseKit/Promise.h"
 
 #ifdef PMK_DEPLOY_6
@@ -17,9 +17,9 @@ NSString *const SLRequestPromiseKitOriginalResponseDataKey = @"SLRequestPromiseK
 NSString *const SLRequestPromiseKitResponseDataAsTextKey = @"SLRequestPromiseKitResponseDataAsTextKey";
 
 @implementation SLRequest (PromiseKit)
-+ (Promise *)promise:(SLRequest *)request
++ (PMKPromise *)promise:(SLRequest *)request
 {
-  return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter) {
+  return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
     [request performRequestWithHandler:^(NSData *responseData, NSHTTPURLResponse *urlResponse, NSError *error) {
       dispatch_async(dispatch_get_main_queue(), ^{
         if (!responseData) {
@@ -54,7 +54,7 @@ NSString *const SLRequestPromiseKitResponseDataAsTextKey = @"SLRequestPromiseKit
   ];
 }
 
-- (Promise *)promise
+- (PMKPromise *)promise
 {
   return [SLRequest promise:self];
 }
@@ -62,9 +62,9 @@ NSString *const SLRequestPromiseKitResponseDataAsTextKey = @"SLRequestPromiseKit
 @end
 
 @implementation ACAccountStore (PromiseKit)
-- (Promise *)promiseForAccountsWithType:(ACAccountType *)type options:(NSDictionary *)options
+- (PMKPromise *)promiseForAccountsWithType:(ACAccountType *)type options:(NSDictionary *)options
 {
-  return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter) {
+  return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
     [self requestAccessToAccountsWithType:type options:options completion:^(BOOL granted, NSError *error) {
       dispatch_async(dispatch_get_main_queue(), ^{
         if (!granted) {
@@ -78,9 +78,9 @@ NSString *const SLRequestPromiseKitResponseDataAsTextKey = @"SLRequestPromiseKit
   }];
 }
 
-- (Promise *)promiseForCredentialsRenewalWithAccount:(ACAccount *)account
+- (PMKPromise *)promiseForCredentialsRenewalWithAccount:(ACAccount *)account
 {
-  return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter) {
+  return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
     [self renewCredentialsForAccount:account completion:^(ACAccountCredentialRenewResult renewResult, NSError *error) {
       dispatch_async(dispatch_get_main_queue(), ^{
         if (error) {
@@ -94,9 +94,9 @@ NSString *const SLRequestPromiseKitResponseDataAsTextKey = @"SLRequestPromiseKit
   }];
 }
 
-- (Promise *)promiseForAccountSave:(ACAccount *)account
+- (PMKPromise *)promiseForAccountSave:(ACAccount *)account
 {
-  return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter) {
+  return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
     [self saveAccount:account withCompletionHandler:^(BOOL success, NSError *error) {
       dispatch_async(dispatch_get_main_queue(), ^{
         if (!success) {
@@ -110,9 +110,9 @@ NSString *const SLRequestPromiseKitResponseDataAsTextKey = @"SLRequestPromiseKit
   }];
 }
 
-- (Promise *)promiseForAccountRemoval:(ACAccount *)account
+- (PMKPromise *)promiseForAccountRemoval:(ACAccount *)account
 {
-  return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter) {
+  return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
     [self removeAccount:account withCompletionHandler:^(BOOL success, NSError *error) {
       dispatch_async(dispatch_get_main_queue(), ^{
         if (!success) {

@@ -1,14 +1,14 @@
 @import CoreLocation.CLLocationManager;
 @import CoreLocation.CLGeocoder;
-@class Promise;
+@class PMKPromise;
 
 
 @interface CLLocationManager (PromiseKit)
-+ (Promise *)promise;
++ (PMKPromise *)promise;
 @end
 
 
 @interface CLGeocoder (PromiseKit)
-+ (Promise *)reverseGeocode:(CLLocation *)location;
-+ (Promise *)geocode:(id)addressDictionaryOrAddressString;
++ (PMKPromise *)reverseGeocode:(CLLocation *)location;
++ (PMKPromise *)geocode:(id)addressDictionaryOrAddressString;
 @end
