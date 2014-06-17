@@ -645,7 +645,7 @@ Becomes this:
 
 {% highlight objectivec %}
 - (Promise *)allUsers {
-    return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter){
+    return [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter){
         PFQuery *query = [PFQuery queryWithClassName:@"User"];
         [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
             if (!error) {
@@ -658,7 +658,7 @@ Becomes this:
 }
 {% endhighlight %}
 
-`PromiseResolver` is `typedef void (^PromiseResolver)(id)`, i.e. a block that takes a parameter of `id` and returns `void`.
+`PromiseFulfiller` is `typedef void (^PromiseFulfiller)(id)`, i.e. a block that takes a parameter of `id` and returns `void`.
 
 For the community’s benefit, someone should create a `Parse+PromiseKit` pod.
 
@@ -669,7 +669,7 @@ For the community’s benefit, someone should create a `Parse+PromiseKit` pod.
 @interface AFHTTPRequestOperation (PromiseKit)
 
 - (Promise *)promise {
-    return [Promise new:^(PromiseResolver fulfiller, PromiseResolver rejecter){
+    return [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter){
         [self setCompletionBlockWithSuccess:^(AFHTTPRequestOperation *op, id responseObject){
 
             // PMKManifold allows you to fulfill promises with
