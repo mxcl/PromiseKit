@@ -133,8 +133,7 @@ static const char* kSegueRejecter = "kSegueRejecter";
                                  kSegueRejecter,
                                  rejecter,
                                  OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }];
-    promise.finally(^{
+    }].finally(^{
         [self dismissViewControllerAnimated:YES completion:nil];
     });
     
