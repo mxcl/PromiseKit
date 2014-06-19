@@ -1,5 +1,6 @@
 #import <objc/runtime.h>
 #import "Private/PMKManualReference.h"
+#import "Private/ClassSwizzling.m"
 #import "PromiseKit/Promise.h"
 #import "PromiseKit+UIKit.h"
 @import UIKit.UINavigationController;
@@ -98,32 +99,9 @@ static const char* kSegueRejecter = "kSegueRejecter";
 }
 
 - (PMKPromise *)promiseSegueWithIdentifier:(NSString*) identifier sender:(id) sender {
-    // swizzle
-    const char* prefix = "PromiseKitUIKitSegue_";
-    Class klass = [self class];
-    NSString* className = NSStringFromClass(klass);
-    if (strncmp(prefix, [className UTF8String], strlen(prefix)) != 0) {
-        NSString * subclassName = [NSString stringWithFormat:@"%s%@", prefix, className];
-        Class subclass = NSClassFromString(subclassName);
-        if (subclass == nil) {
-            subclass = objc_allocateClassPair(klass, [subclassName UTF8String], 0);
-            if (subclass != nil) {
-                SEL originalSelector = @selector(prepareForSegue:sender:);
-                SEL swizzledSelector = @selector(PromiseKitUIKit_prepareForSegue:sender:);
-                
-                Method originalMethod = class_getInstanceMethod(klass, originalSelector);
-                Method swizzledMethod = class_getInstanceMethod(klass, swizzledSelector);
-                
-                method_exchangeImplementations(originalMethod, swizzledMethod);
-                objc_registerClassPair(subclass);
-            }
-        }
-        if (subclass != nil) {
-            object_setClass(self, subclass);
-        }
-        
-    }
     
+    const char* prefix = "PromiseKitUIKitSegue_";
+    swizzleClass(prefix, self, @selector(prepareForSegue:sender:), @selector(PromiseKitUIKit_prepareForSegue:sender:));
     PMKPromise* promise = [PMKPromise new:^(id fulfiller, id rejecter){
         objc_setAssociatedObject(self,
                                  kSegueFulfiller,
