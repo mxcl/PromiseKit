@@ -8,6 +8,9 @@
 
 
 
+static const char* kSegueFulfiller = "kSegueFulfiller";
+static const char* kSegueRejecter = "kSegueRejecter";
+
 @interface PMKMFDelegater : NSObject
 @end
 
@@ -92,6 +95,66 @@
     }].finally(^{
         [self dismissViewControllerAnimated:animated completion:nil];
     });
+}
+
+- (PMKPromise *)promiseSegueWithIdentifier:(NSString*) identifier sender:(id) sender {
+    // swizzle
+    const char* prefix = "PromiseKitUIKitSegue_";
+    Class klass = [self class];
+    NSString* className = NSStringFromClass(klass);
+    if (strncmp(prefix, [className UTF8String], strlen(prefix)) != 0) {
+        NSString * subclassName = [NSString stringWithFormat:@"%s%@", prefix, className];
+        Class subclass = NSClassFromString(subclassName);
+        if (subclass == nil) {
+            subclass = objc_allocateClassPair(klass, [subclassName UTF8String], 0);
+            if (subclass != nil) {
+                SEL originalSelector = @selector(prepareForSegue:sender:);
+                SEL swizzledSelector = @selector(PromiseKitUIKit_prepareForSegue:sender:);
+                
+                Method originalMethod = class_getInstanceMethod(klass, originalSelector);
+                Method swizzledMethod = class_getInstanceMethod(klass, swizzledSelector);
+                
+                method_exchangeImplementations(originalMethod, swizzledMethod);
+                objc_registerClassPair(subclass);
+            }
+        }
+        if (subclass != nil) {
+            object_setClass(self, subclass);
+        }
+        
+    }
+    
+    PMKPromise* promise = [PMKPromise new:^(id fulfiller, id rejecter){
+        objc_setAssociatedObject(self,
+                                 kSegueFulfiller,
+                                 fulfiller,
+                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(self,
+                                 kSegueRejecter,
+                                 rejecter,
+                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }].finally(^{
+        [self dismissViewControllerAnimated:YES completion:nil];
+    });
+    
+    [self performSegueWithIdentifier:identifier sender:sender];
+    return promise;
+}
+
+
+-(void) PromiseKitUIKit_prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
+    id fulfiller = objc_getAssociatedObject(segue.sourceViewController, kSegueFulfiller);
+    id rejecter = objc_getAssociatedObject(segue.sourceViewController, kSegueRejecter);
+    objc_setAssociatedObject(self, kSegueFulfiller, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, kSegueRejecter, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+    
+    objc_setAssociatedObject(segue.destinationViewController, @selector(fulfill:), fulfiller, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(segue.destinationViewController, @selector(reject:), rejecter, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+    
+    [self PromiseKitUIKit_prepareForSegue:segue sender:sender];
 }
 
 - (void)fulfill:(id)result {
