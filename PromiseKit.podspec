@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
   preserved =  %w{Private PromiseKit}
 
   s.name = "PromiseKit"
-  s.version = "0.9.8"
+  s.version = "0.9.8.1"
   s.source = { :git => "https://github.com/mxcl/#{s.name}.git", :tag => s.version }
   s.license = 'MIT'
   s.summary = 'A delightful Promises implementation for iOS and OS X.'
@@ -40,6 +40,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'UIKit' do |ss|
     ss.dependency 'PromiseKit/base'
+    ss.dependency 'PromiseKit/private'
     ss.ios.source_files = 'PromiseKit+UIKit.{h,m}'
     ss.ios.deployment_target = '5.0'
     ss.ios.frameworks = 'UIKit'
