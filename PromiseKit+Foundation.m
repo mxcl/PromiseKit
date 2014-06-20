@@ -104,6 +104,10 @@ NSString *NSDictionaryToURLQueryString(NSDictionary *params) {
 }
 
 + (PMKPromise *)GET:(id)url query:(NSDictionary *)params {
+    return [self GET:url query:params cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
+}
+
++ (PMKPromise *)GET:(id)url query:(NSDictionary *)params cachePolicy:(NSURLRequestCachePolicy)policy timeoutInterval:(NSTimeInterval)interval {
     if (params.chuzzle) {
         if ([url isKindOfClass:[NSURL class]])
             url = [url absoluteString];
@@ -112,22 +116,27 @@ NSString *NSDictionaryToURLQueryString(NSDictionary *params) {
     }
     if ([url isKindOfClass:[NSString class]])
         url = [NSURL URLWithString:url];
-        
-    return [self promise:[NSURLRequest requestWithURL:url]];
+	
+    return [self promise:[NSURLRequest requestWithURL:url cachePolicy:policy timeoutInterval:interval]];
 }
 
 + (PMKPromise *)POST:(id)url formURLEncodedParameters:(NSDictionary *)params {
+	// Default cache policy
+	return [self POST:url formURLEncodedParameters:params cachePolicy:NSURLRequestUseProtocolCachePolicy timeoutInterval:60.0];
+}
+
++ (PMKPromise *)POST:(id)url formURLEncodedParameters:(NSDictionary *)params cachePolicy:(NSURLRequestCachePolicy)policy timeoutInterval:(NSTimeInterval)interval {
     if ([url isKindOfClass:[NSString class]])
         url = [NSURL URLWithString:url];
-
-    NSMutableURLRequest *rq = [[NSMutableURLRequest alloc] initWithURL:url];
+	
+    NSMutableURLRequest *rq = [[NSMutableURLRequest alloc] initWithURL:url cachePolicy:policy timeoutInterval:interval];
     rq.HTTPMethod = @"POST";
-
+	
     if (params.chuzzle) {
         [rq addValue:@"application/x-www-form-urlencoded; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
         rq.HTTPBody = [NSDictionaryToURLQueryString(params) dataUsingEncoding:NSUTF8StringEncoding];
     }
-
+	
     return [self promise:rq];
 }
 
