@@ -1,6 +1,6 @@
 //
 //  PromiseKit+StoreKit.h
-//  LedsRock
+//  Aluxoft SCP
 //
 //  Created by Josejulio Martínez on 16/05/14.
 
