@@ -131,6 +131,40 @@ NSString *NSDictionaryToURLQueryString(NSDictionary *params) {
     return [self promise:rq];
 }
 
++ (PMKPromise *)POST:(id)url multipartFormData:(NSData *)payload name:(NSString *)name {
+    if ([url isKindOfClass:[NSString class]])
+        url = [NSURL URLWithString:url];
+
+    NSMutableURLRequest *rq = [NSMutableURLRequest new];
+    NSString *charset = (NSString *)CFStringConvertEncodingToIANACharSetName(CFStringConvertNSStringEncodingToEncoding(NSUTF8StringEncoding));
+    rq.URL = url;
+    rq.HTTPMethod = @"POST";
+
+    id boundary1 = @"0xKhTmLbOuNdArY";
+    id boundary2 = [NSString stringWithFormat:@"\r\n--%@\r\n", boundary1];
+
+    id contentType = [NSString stringWithFormat:@"multipart/form-data; charset=%@; boundary=%@", charset, boundary1];
+    [rq addValue:contentType forHTTPHeaderField:@"Content-Type"];
+
+    NSMutableData *tempPostData = [NSMutableData data];
+    [tempPostData appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary1] dataUsingEncoding:NSUTF8StringEncoding]];
+
+    // Sample Key Value for data
+    [tempPostData appendData:[@"Content-Disposition: form-data; name=\"Key_Param\"\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    [tempPostData appendData:[@"Value_Param" dataUsingEncoding:NSUTF8StringEncoding]];
+    [tempPostData appendData:[boundary2 dataUsingEncoding:NSUTF8StringEncoding]];
+
+    // Sample file to send as data
+    [tempPostData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"file\"\r\n", name] dataUsingEncoding:NSUTF8StringEncoding]];
+    [tempPostData appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
+    [tempPostData appendData:payload];
+    [tempPostData appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary1] dataUsingEncoding:NSUTF8StringEncoding]];
+
+    rq.HTTPBody = tempPostData;
+
+    return [self promise:rq];
+}
+
 NSString *PMKUserAgent() {
     static NSString *ua;
     static dispatch_once_t onceToken;
