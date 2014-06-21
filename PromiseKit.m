@@ -141,8 +141,8 @@ static id safely_call_block(id frock, id result) {
 }
 
 - (instancetype)init {
-    handlers = [NSMutableArray new];
-    return self;
+    @throw PMKE(@"init is not a valid initializer for PMKPromise");
+    return nil;
 }
 
 - (PMKPromise *(^)(id))then {
@@ -349,7 +349,7 @@ static id safely_call_block(id frock, id result) {
 
 
 + (PMKPromise *)promiseWithValue:(id)value {
-    PMKPromise *p = [PMKPromise new];
+    PMKPromise *p = [PMKPromise alloc];
     p->result = value ?: PMKNull;
     return p;
 }
@@ -378,7 +378,8 @@ static void PMKResolve(PMKPromise *this) {
 
 
 + (PMKPromise *)new:(void(^)(PMKPromiseFulfiller, PMKPromiseRejecter))block {
-    PMKPromise *this = [PMKPromise new];
+    PMKPromise *this = [PMKPromise alloc];
+    this->handlers = [NSMutableArray new];
 
     id fulfiller = ^(id value){
         if (this->result)

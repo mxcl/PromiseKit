@@ -885,6 +885,10 @@ PMKPromise *gcdreject() {
     XCTAssertTrue(resolved);    
 }
 
+- (void)test_60_plain_new_is_rejected {
+    XCTAssertThrows([Promise new]);
+}
+
 @end
 
 __EOBJC__
