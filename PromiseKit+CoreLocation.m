@@ -1,6 +1,7 @@
 @import CoreLocation.CLLocationManagerDelegate;
 #import "Private/PMKManualReference.h"
 #import "PromiseKit+CoreLocation.h"
+#import "PromiseKit/fwd.h"
 #import "PromiseKit/Promise.h"
 
 @interface PMKLocationManager : CLLocationManager <CLLocationManagerDelegate>
@@ -29,6 +30,10 @@
     PMKLocationManagerCleanup();
 }
 
+- (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
+    [manager startUpdatingLocation];
+}
+
 @end
 
 
@@ -38,8 +43,18 @@
 + (PMKPromise *)promise {
     PMKLocationManager *manager = [PMKLocationManager new];
     manager.delegate = manager;
-    [manager startUpdatingLocation];
     [manager pmk_reference];
+
+  #if PMK_iOS8_ISH
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined && [manager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
+        [manager requestWhenInUseAuthorization];
+    } else {
+        [manager startUpdatingLocation];
+    }
+  #else
+    [manager startUpdatingLocation];
+  #endif
+
     return [PMKPromise new:^(id fulfiller, id rejecter){
         manager->fulfiller = fulfiller;
         manager->rejecter = rejecter;
