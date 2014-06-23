@@ -4,6 +4,7 @@
 @import Foundation;
 #import "PromiseKit+Foundation.h"
 #import "PromiseKit/Promise.h"
+#import "Private/PromiseKit.ph"
 
 NSString const*const PMKURLErrorFailingURLResponse = PMKURLErrorFailingURLResponseKey;
 NSString const*const PMKURLErrorFailingData = PMKURLErrorFailingDataKey;
@@ -17,12 +18,6 @@ static inline NSString *enc(NSString *in) {
             CFSTR("[]."),
             CFSTR(":/?&=;+!@#$()',*"),
             kCFStringEncodingUTF8);
-}
-
-static BOOL NSHTTPURLResponseIsJSON(NSHTTPURLResponse *rsp) {
-    NSString *type = rsp.allHeaderFields[@"Content-Type"];
-    NSArray *bits = [type componentsSeparatedByString:@";"];
-    return [bits.chuzzle containsObject:@"application/json"];
 }
 
 static BOOL NSHTTPURLResponseIsText(NSHTTPURLResponse *rsp) {
@@ -221,10 +216,9 @@ NSString *PMKUserAgent() {
                 };
                 id err = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorBadServerResponse userInfo:info];
                 rejecter(err);
-            } else if (NSHTTPURLResponseIsJSON(rsp)) {
+            } else if (PMKHTTPURLResponseIsJSON(rsp)) {
                 id err = nil;
-                NSUInteger opts = NSJSONReadingAllowFragments | NSJSONReadingMutableContainers;
-                id json = [NSJSONSerialization JSONObjectWithData:data options:(NSJSONReadingOptions)opts error:&err];
+                id json = [NSJSONSerialization JSONObjectWithData:data options:PMKJSONDeserializationOptions error:&err];
                 if (err)
                     rejecter(err);
                 else
