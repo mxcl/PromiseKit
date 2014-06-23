@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
   preserved =  %w{Private PromiseKit}
 
   s.name = "PromiseKit"
-  s.version = "0.9.8.1"
+  s.version = "0.9.9"
   s.source = { :git => "https://github.com/mxcl/#{s.name}.git", :tag => s.version }
   s.license = 'MIT'
   s.summary = 'A delightful Promises implementation for iOS and OS X.'
@@ -17,11 +17,18 @@ Pod::Spec.new do |s|
 
   s.ios.deployment_target = '5.0'
   s.osx.deployment_target = '10.7'
+  
+  s.default_subspec = 'defaults'
 
   s.subspec 'base' do |ss|
     ss.source_files = 'PromiseKit/*.h', 'PromiseKit.{h,m}'
     ss.preserve_paths = preserved
     ss.frameworks = 'Foundation'
+  end
+
+  s.subspec 'defaults' do |ss|
+    ss.dependency 'PromiseKit/Foundation'
+    ss.dependency 'PromiseKit/UIKit'
   end
 
   s.subspec 'private' do |ss|
@@ -88,6 +95,14 @@ Pod::Spec.new do |s|
     ss.source_files = 'PromiseKit+StoreKit.{h,m}'
     ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_STOREKIT=1" }
     ss.frameworks = 'StoreKit'
+    ss.preserve_paths = preserved
+  end
+
+  s.subspec 'AVFoundation' do |ss|
+    ss.dependency 'PromiseKit/base'
+    ss.ios.source_files = 'PromiseKit+AVFoundation.{h,m}'
+    ss.ios.deployment_target = '5.0'
+    ss.ios.frameworks = 'AVFoundation'
     ss.preserve_paths = preserved
   end
 end
