@@ -20,7 +20,7 @@ extern NSString *const SLRequestPromiseKitOriginalResponseDataKey;
 extern NSString *const SLRequestPromiseKitResponseDataAsTextKey;
 
 @interface SLRequest (PromiseKit)
-+ (PMKPromise *)promise:(SLRequest *)request;
++ (PMKPromise *)promise:(SLRequest *)request __attribute__((deprecated("Use `-promise`")));;
 - (PMKPromise *)promise;
 @end
 
