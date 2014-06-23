@@ -146,8 +146,8 @@ static id safely_call_block(id frock, id result) {
 }
 
 - (void)dealloc {
-    if (!result)
-        NSLog(@"PromiseKit: Promise about to be deallocated before it has been resolved! This is hugely a bug and you are likely to crash. @see https://github.com/mxcl/PromiseKit/issues/50");
+    if (!result && handlers.count)
+        NSLog(@"PromiseKit: Promise about to be deallocated before it has been resolved! This is likely a bug and you are likely to crash. @see https://github.com/mxcl/PromiseKit/issues/50");
 }
 
 - (PMKPromise *(^)(id))then {
