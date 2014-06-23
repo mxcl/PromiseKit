@@ -1,4 +1,4 @@
-#import <Availability.h>
+@import Darwin.Availability;
 
 
 @class PMKPromise;

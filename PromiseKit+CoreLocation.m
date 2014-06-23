@@ -46,13 +46,20 @@
     [manager pmk_reference];
 
   #if PMK_iOS8_ISH
-    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined && [manager respondsToSelector:@selector(requestWhenInUseAuthorization)]) {
-        [manager requestWhenInUseAuthorization];
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
+  #pragma clang diagnostic push
+  #pragma clang diagnostic ignored "-Wundeclared-selector"
+    SEL sel = @selector(requestWhenInUseAuthorization);
+    if ([CLLocationManager authorizationStatus] == kCLAuthorizationStatusNotDetermined && [manager respondsToSelector:sel]) {
+        [manager performSelector:sel];
     } else {
         [manager startUpdatingLocation];
     }
   #else
     [manager startUpdatingLocation];
+  #pragma clang diagnostic pop
+  #pragma clang diagnostic pop
   #endif
 
     return [PMKPromise new:^(id fulfiller, id rejecter){
