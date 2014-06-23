@@ -208,6 +208,8 @@ NSString *PMKUserAgent() {
 
             if (urlError) {
                 rejecter(urlError);
+            } else if (![rsp isKindOfClass:[NSHTTPURLResponse class]]) {
+                fulfiller(data);
             } else if ([rsp statusCode] < 200 || [rsp statusCode] >= 300) {
                 id info = @{
                     NSLocalizedDescriptionKey: @"The server returned a bad HTTP response code",
