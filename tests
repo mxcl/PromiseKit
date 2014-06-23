@@ -27,7 +27,6 @@ OBJC = <<-__EOBJC__
 #import "PromiseKit.m"
 #undef NSLog
 
-typedef PMKPromise Promise;
 #define wait(t) [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:t]]
 #define HI [@"hi" dataUsingEncoding:NSUTF8StringEncoding]
 #define URL
@@ -875,7 +874,7 @@ PMKPromise *gcdreject() {
 }
 
 - (void)test_59_typedef {
-    Promise *p1 = [Promise promiseWithValue:@1];
+    PMKPromise *p1 = [PMKPromise promiseWithValue:@1];
     XCTAssertEqualObjects(p1.value, @1);
     
     p1.then(^(id o){
@@ -887,7 +886,7 @@ PMKPromise *gcdreject() {
 }
 
 - (void)test_60_plain_new_is_rejected {
-    XCTAssertThrows([Promise new]);
+    XCTAssertThrows([PMKPromise new]);
 }
 
 @end
