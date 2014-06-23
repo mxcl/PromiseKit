@@ -17,6 +17,10 @@
 #ifdef PMK_STOREKIT
 #import "PromiseKit+StoreKit.h"
 #endif
+#ifdef PMK_AVFOUNDATION
+#import "PromiseKit+AVFoundation.h"
+#endif
+
 
 #ifndef PMK_NO_UNPREFIXATION
 // I used a typedef but it broke the tests, turns out typedefs are new
