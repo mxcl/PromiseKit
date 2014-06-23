@@ -58,8 +58,13 @@ def prepare!
   end unless File.directory? "/tmp/ChuzzleKit"
 
   File.open('/tmp/PromiseKitTests.m', 'w') do |f|
-    f.puts("\n\n")  # make line numbers correlate
-    f.puts(OBJC)
+    f.puts  # make line numbers correlate
+    f.puts
+    f.puts(OBJC.sub('#define URL', "#define URL @\"file:///tmp/hi.text\""))
+  end
+  
+  File.open('/tmp/hi.text', 'w') do |f|
+    f.print("hi")
   end
 end
 
@@ -91,33 +96,11 @@ end
 prepare!
 compile!
 
-begin              
-  require 'webrick'
-  require 'sinatra/base'
-  require 'logger'
-rescue LoadError
-  abort "gem install sinatra webrick"
-end
-
-class PMKHTTPD < Sinatra::Base
-  set :port, 61231
-  set :server_settings, {AccessLog: [], Logger: WEBrick::Log::new("/dev/null", 7)}
-  set :logging, false
-  get '/' do
-    content_type 'text/plain', :charset => 'utf-8'
-    'hi'
-  end
-end
-
-PMKHTTPD.run! do
-  Thread.new do
-    if not ARGV.include? '-d'
-      exit! test!.exitstatus
-    else
-      system "lldb /tmp/PromiseKitTests"
-      File.delete("/tmp/PromiseKitTests.m")
-      File.delete("/tmp/PromiseKitTests")
-      exit! 0
-    end
-  end
+if not ARGV.include? '-d'
+  exit! test!.exitstatus
+else
+  system "lldb /tmp/PromiseKitTests"
+  File.delete("/tmp/PromiseKitTests.m")
+  File.delete("/tmp/PromiseKitTests")
+  exit! 0
 end

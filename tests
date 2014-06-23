@@ -26,11 +26,11 @@ OBJC = <<-__EOBJC__
 // prevent error logging here
 #import "PromiseKit.m"
 #undef NSLog
-    
-#define URL @"http://localhost:61231"
-#define wait(t) [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:t]]
 
 typedef PMKPromise Promise;
+#define wait(t) [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:t]]
+#define HI [@"hi" dataUsingEncoding:NSUTF8StringEncoding]
+#define URL
 
 int main() {
     @autoreleasepool {
@@ -217,7 +217,7 @@ int main() {
     promise.then(^{
         return [NSURLConnection GET:URL];
     }).then(^(id o){
-        XCTAssertEqualObjects(@"hi", o);
+        XCTAssertEqualObjects(HI, o);
         resolved = YES;
     });
     fulfiller(@1);
@@ -287,7 +287,7 @@ int main() {
     }).catch(^{
         return [NSURLConnection GET:URL];
     }).then(^(id o){
-        XCTAssertEqualObjects(o, @"hi");
+        XCTAssertEqualObjects(o, HI);
         resolved = YES;
     });
     fulfiller(@1);
@@ -404,7 +404,7 @@ int main() {
 - (void)test_25_then_plus_deferred_plus_GCD {
     __block int x = 0;
     [NSURLConnection GET:URL].then(^(id o){
-        XCTAssertEqualObjects(@"hi", o);
+        XCTAssertEqualObjects(HI, o);
         x++;
 
         return dispatch_promise(^{
@@ -471,7 +471,7 @@ PMKPromise *gcdreject() {
         x++;
         return [NSURLConnection GET:URL];
     }).then(^(id o){
-        XCTAssertEqualObjects(@"hi", o);
+        XCTAssertEqualObjects(HI, o);
         resolved = YES;
     }).catch(^{
         XCTFail();
@@ -485,13 +485,10 @@ PMKPromise *gcdreject() {
     __block int x = 0;
     gcdreject().catch(^{
         x++;
-        return [NSURLConnection GET:@"http://localhost:61231/404"];
+        return [NSURLConnection GET:@"file:///tmp/blah/foasdo"];
     }).then(^{
         XCTFail();
     }).catch(^(NSError *error){
-        NSHTTPURLResponse *rsp = error.userInfo[PMKURLErrorFailingURLResponseKey];
-        XCTAssertTrue([rsp isKindOfClass:[NSHTTPURLResponse class]]);
-        XCTAssertEqual(rsp.statusCode, 404);
         resolved = YES;
     }).catch(^{
         XCTFail();
@@ -537,7 +534,7 @@ PMKPromise *gcdreject() {
 
 - (void)test_33_return_nil {
     promise.then(^(id o){
-        XCTAssertEqualObjects(o, @"HI");
+        XCTAssertEqualObjects(o, HI);
         return nil;
     }).then(^{
         return nil;
@@ -545,7 +542,7 @@ PMKPromise *gcdreject() {
         XCTAssertNil(o);
         resolved = YES;
     });
-    fulfiller(@"HI");
+    fulfiller(HI);
     wait(0.1);
     XCTAssertTrue(resolved);
 }
@@ -622,9 +619,9 @@ PMKPromise *gcdreject() {
         XCTAssertNotNil(rsp);
         XCTAssertNotNil(originalData);
         XCTAssertTrue([originalData isKindOfClass:NSData.class]);
-        XCTAssertTrue([data isKindOfClass:NSString.class]);
-        id str = [[NSString alloc] initWithData:originalData encoding:NSUTF8StringEncoding];
-        XCTAssertEqualObjects(data, str);
+        XCTAssertTrue([data isKindOfClass:NSData.class]);
+        XCTAssertEqualObjects(data, originalData);
+        XCTAssertEqual(data, originalData);
         resolved = YES;
     });
     wait(0.2);
@@ -774,8 +771,8 @@ PMKPromise *gcdreject() {
 }
 
 - (void)test_50_fulfill_with_pending_promise {
-    promise.then(^(NSString *hi){
-        XCTAssertEqualObjects(hi, @"hi");
+    promise.then(^(id hi){
+        XCTAssertEqualObjects(hi, HI);
         resolved = YES;
     });
     fulfiller([NSURLConnection GET:URL]);
@@ -834,7 +831,7 @@ PMKPromise *gcdreject() {
         XCTAssertEqual(dict.count, 3ul);
         XCTAssertEqualObjects(dict[@1], @2);
         XCTAssertEqualObjects(dict[@2], @"abc");
-        XCTAssertEqualObjects(dict[@"a"], @"hi");
+        XCTAssertEqualObjects(dict[@"a"], HI);
         resolved = YES;
     });
     wait(0.1);
