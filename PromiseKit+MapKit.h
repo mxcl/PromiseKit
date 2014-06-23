@@ -1,17 +1,21 @@
-#define PMK_DEPLOY_7 ((defined(__MAC_OS_X_VERSION_MAX_ALLOWED) && __MAC_OS_X_VERSION_MAX_ALLOWED >= 1090) \
-                   || (defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000))
+#import "PromiseKit/fwd.h"
 
-#if PMK_DEPLOY_7
 
-@import MapKit.MKMapSnapshotter;
+#if PMK_iOS6_ISH
+
 @import MapKit.MKDirections;
-@class PMKPromise;
-
 
 @interface MKDirections (PromiseKit)
 + (PMKPromise *)promise:(MKDirectionsRequest *)request;
 + (PMKPromise *)promiseETA:(MKDirectionsRequest *)request;
 @end
+
+#endif
+
+
+#if PMK_iOS7_ISH
+
+@import MapKit.MKMapSnapshotter;
 
 @interface MKMapSnapshotter (PromiseKit)
 - (PMKPromise *)promise;

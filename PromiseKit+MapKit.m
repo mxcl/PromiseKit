@@ -2,7 +2,7 @@
 #import "PromiseKit+MapKit.h"
 
 
-#if PMK_DEPLOY_7
+#if PMK_iOS6_ISH
 
 @implementation MKDirections (PromiseKit)
 
@@ -30,7 +30,10 @@
 
 @end
 
+#endif
 
+
+#if PMK_iOS7_ISH
 
 @implementation MKMapSnapshotter (PromiseKit)
 
