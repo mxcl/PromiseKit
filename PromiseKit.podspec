@@ -66,11 +66,19 @@ Pod::Spec.new do |s|
     ss.preserve_paths = preserved
   end
 
+  s.subspec 'Accounts' do |ss|
+    ss.dependency 'PromiseKit/base'
+    ss.source_files = 'PromiseKit+Accounts.{h,m}'
+    ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_ACCOUNTS=1" }
+    ss.frameworks = 'Accounts'
+    ss.preserve_paths = preserved
+  end
+
   s.subspec 'Social' do |ss|
     ss.dependency 'PromiseKit/base'
     ss.source_files = 'PromiseKit+Social.{h,m}'
     ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_SOCIAL=1" }
-    ss.frameworks = 'Social', 'Accounts'
+    ss.frameworks = 'Social'
     ss.preserve_paths = preserved
   end
 

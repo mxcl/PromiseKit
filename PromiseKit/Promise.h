@@ -135,6 +135,7 @@ id PMKManifold(NSArray *arguments);
 #define PMKErrorCodeThrown 1
 #define PMKErrorCodeUnknown 2
 #define PMKErrorCodeInvalidUsage 3
+#define PMKAccessDeniedError 4
 
 extern NSString const*const PMKThrown __attribute__((deprecated("Use PMKUnderlyingExceptionKey")));
 
