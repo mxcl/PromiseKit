@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'defaults' do |ss|
     ss.dependency 'PromiseKit/Foundation'
-    ss.dependency 'PromiseKit/UIKit'
+    ss.ios.dependency 'PromiseKit/UIKit'
   end
 
   s.subspec 'private' do |ss|
@@ -83,6 +83,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'Social' do |ss|
     ss.dependency 'PromiseKit/base'
+    ss.dependency 'ChuzzleKit'
     ss.source_files = 'PromiseKit+Social.{h,m}'
     ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_SOCIAL=1" }
     ss.frameworks = 'Social'
