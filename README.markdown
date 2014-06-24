@@ -27,3 +27,40 @@ Modern development is highly asynchronous: isn’t it about time iOS developers 
 * PromiseKit is complete, well-tested and in apps on the store.
 
 For guides and complete documentation visit [promisekit.org](http://promisekit.org).
+
+
+#Swift
+
+To test the waters, PromiseKit is available as a Swift variant. If you want to use it in your app then copy the swift directory into your project (rename it PromiseKit!)
+
+Currently the Swift and Objective-C versions are indepenedent. We hope to fix that as Xcode 6 matures.
+
+We provide a demo project for the Swift version, just open the provided xcodeproj.
+
+Please be aware that—much like the language—the Swift version is a work in progress.
+
+```swift
+CLLocationManager.promise().catch {
+    // If location cannot be determined, default to Chicago
+    return CLLocation(latitude: 41.89, longitude: -87.63)
+}.then {
+    let (lat, lon) = ($0.coordinate.latitude, $0.coordinate.longitude)
+    return NSURLConnection.GET("http://user.net/\(lat)/\(lon)")
+}.then { user in
+    let alert = UIAlertView()
+    alert.title = "Hi " + user["name"]
+    alert.addButtonWithTitle("Bye")
+    alert.addButtonWithTitle("Hi")
+    return alert.promise()
+}.then { tappedButtonIndex -> Promise<Void>? in
+    if tappedButtonIndex == 0 {
+        return nil
+    }
+    let vc = HelloViewController()
+    return self.promiseViewController(vc).then { (modallyPresentedResult:String) -> Void in
+        //…
+    }
+}.catch { error in
+    //…
+}
+```
