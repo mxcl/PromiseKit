@@ -1,5 +1,6 @@
 #import <objc/runtime.h>
 #import "Private/PMKManualReference.h"
+#import "Private/ClassSwizzling.m"
 #import "PromiseKit/Promise.h"
 #import "PromiseKit+UIKit.h"
 @import UIKit.UINavigationController;
@@ -7,6 +8,9 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 
 
+
+static const char* kSegueFulfiller = "kSegueFulfiller";
+static const char* kSegueRejecter = "kSegueRejecter";
 
 @interface PMKMFDelegater : NSObject
 @end
@@ -92,6 +96,43 @@
     }].finally(^{
         [self dismissViewControllerAnimated:animated completion:nil];
     });
+}
+
+- (PMKPromise *)promiseSegueWithIdentifier:(NSString*) identifier sender:(id) sender {
+    
+    const char* prefix = "PromiseKitUIKitSegue_";
+    swizzleClass(prefix, self, @selector(prepareForSegue:sender:), @selector(PromiseKitUIKit_prepareForSegue:sender:));
+    PMKPromise* promise = [PMKPromise new:^(id fulfiller, id rejecter){
+        objc_setAssociatedObject(self,
+                                 kSegueFulfiller,
+                                 fulfiller,
+                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(self,
+                                 kSegueRejecter,
+                                 rejecter,
+                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }].finally(^{
+        [self dismissViewControllerAnimated:YES completion:nil];
+    });
+    
+    [self performSegueWithIdentifier:identifier sender:sender];
+    return promise;
+}
+
+
+-(void) PromiseKitUIKit_prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+    
+    id fulfiller = objc_getAssociatedObject(segue.sourceViewController, kSegueFulfiller);
+    id rejecter = objc_getAssociatedObject(segue.sourceViewController, kSegueRejecter);
+    objc_setAssociatedObject(self, kSegueFulfiller, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(self, kSegueRejecter, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+    
+    objc_setAssociatedObject(segue.destinationViewController, @selector(fulfill:), fulfiller, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    objc_setAssociatedObject(segue.destinationViewController, @selector(reject:), rejecter, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    
+    
+    [self PromiseKitUIKit_prepareForSegue:segue sender:sender];
 }
 
 - (void)fulfill:(id)result {
