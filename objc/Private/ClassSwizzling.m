@@ -12,7 +12,7 @@ static __attribute__((unused)) void swizzleClass(const char* classPrefix, id tar
     Class klass = [target class];
     NSString* className = NSStringFromClass(klass);
     
-    if (strncmp(classPrefix, [className UTF8String], strlen(classPrefix) != 0)) {
+    if (strncmp(classPrefix, [className UTF8String], strlen(classPrefix)) != 0) {
         NSString* subclassName = [NSString stringWithFormat:@"%s%@", classPrefix, className];
         Class subclass = NSClassFromString(subclassName);
         if (subclass == nil) {
