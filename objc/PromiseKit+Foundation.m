@@ -52,10 +52,6 @@ static BOOL NSHTTPURLResponseIsImage(NSHTTPURLResponse *rsp) {
     return [self promise:[OMGHTTPURLRQ POST:url:params]];
 }
 
-+ (PMKPromise *)POST:(id)url multipartFormData:(NSData *)payload name:(NSString *)name {
-    return [self promise:[OMGHTTPURLRQ POST:url:payload filename:name]];
-}
-
 + (PMKPromise *)promise:(NSURLRequest *)rq {
     static NSOperationQueue *q;
     static dispatch_once_t onceToken;
