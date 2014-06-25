@@ -20,6 +20,9 @@
 #ifdef PMK_AVFOUNDATION
 #import "PromiseKit+AVFoundation.h"
 #endif
+#ifdef PMK_ACCOUNTS
+#import "PromiseKit+Accounts.h"
+#endif
 
 
 #ifndef PMK_NO_UNPREFIXATION
