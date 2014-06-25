@@ -5,20 +5,10 @@
 #import "PromiseKit+Foundation.h"
 #import "PromiseKit/Promise.h"
 #import "Private/PromiseKit.ph"
+#import <OMGHTTPURLRQ.h>
 
 NSString const*const PMKURLErrorFailingURLResponse = PMKURLErrorFailingURLResponseKey;
 NSString const*const PMKURLErrorFailingData = PMKURLErrorFailingDataKey;
-
-
-
-static inline NSString *enc(NSString *in) {
-	return (__bridge_transfer  NSString *) CFURLCreateStringByAddingPercentEscapes(
-            kCFAllocatorDefault,
-            (__bridge CFStringRef)in.description,
-            CFSTR("[]."),
-            CFSTR(":/?&=;+!@#$()',*"),
-            kCFStringEncodingUTF8);
-}
 
 static BOOL NSHTTPURLResponseIsText(NSHTTPURLResponse *rsp) {
     NSString *type = rsp.allHeaderFields[@"Content-Type"];
@@ -39,49 +29,6 @@ static BOOL NSHTTPURLResponseIsImage(NSHTTPURLResponse *rsp) {
 }
 #endif
 
-static NSArray *DoQueryMagic(NSString *key, id value) {
-    NSMutableArray *parts = [NSMutableArray new];
-
-    // Sort dictionary keys to ensure consistent ordering in query string,
-    // which is important when deserializing potentially ambiguous sequences,
-    // such as an array of dictionaries
-    #define sortDescriptor [NSSortDescriptor sortDescriptorWithKey:@"description" ascending:YES selector:@selector(compare:)]
-
-    if ([value isKindOfClass:[NSDictionary class]]) {
-        NSDictionary *dictionary = value;
-        for (id nestedKey in [dictionary.allKeys sortedArrayUsingDescriptors:@[sortDescriptor]]) {
-            id recursiveKey = key ? [NSString stringWithFormat:@"%@[%@]", key, nestedKey] : nestedKey;
-            [parts addObjectsFromArray:DoQueryMagic(recursiveKey, dictionary[nestedKey])];
-        }
-    } else if ([value isKindOfClass:[NSArray class]]) {
-        for (id nestedValue in value)
-            [parts addObjectsFromArray:DoQueryMagic([NSString stringWithFormat:@"%@[]", key], nestedValue)];
-    } else if ([value isKindOfClass:[NSSet class]]) {
-        for (id obj in [value sortedArrayUsingDescriptors:@[sortDescriptor]])
-            [parts addObjectsFromArray:DoQueryMagic(key, obj)];
-    } else
-        [parts addObjectsFromArray:@[key, value]];
-
-    return parts;
-
-    #undef sortDescriptor
-}
-
-NSString *NSDictionaryToURLQueryString(NSDictionary *params) {
-    if (!params.chuzzle)
-        return nil;
-    NSMutableString *s = [NSMutableString new];
-    NSEnumerator *e = DoQueryMagic(nil, params).objectEnumerator;
-    for (;;) {
-        id obj = e.nextObject;
-        if (!obj) break;
-        [s appendFormat:@"%@=%@&", enc(obj), enc(e.nextObject)];
-    }
-    [s deleteCharactersInRange:NSMakeRange(s.length-1, 1)];
-    return s;
-}
-
-
 
 @implementation NSURLConnection (PromiseKit)
 
@@ -89,92 +36,24 @@ NSString *NSDictionaryToURLQueryString(NSDictionary *params) {
     if (!urlFormat || urlFormat == [NSNull null])
         return [PMKPromise promiseWithValue:[NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeInvalidUsage userInfo:nil]];
 
-    if ([urlFormat isKindOfClass:[NSURL class]])
-        return [self GET:urlFormat query:nil];
     va_list arguments;
     va_start(arguments, urlFormat);
     urlFormat = [[NSString alloc] initWithFormat:urlFormat arguments:arguments];
     va_end(arguments);
-    return [self GET:urlFormat query:nil];
+
+    return [self promise:[OMGHTTPURLRQ GET:urlFormat:nil]];
 }
 
 + (PMKPromise *)GET:(id)url query:(NSDictionary *)params {
-    if (params.chuzzle) {
-        if ([url isKindOfClass:[NSURL class]])
-            url = [url absoluteString];
-        id query = NSDictionaryToURLQueryString(params);
-        url = [NSString stringWithFormat:@"%@?%@", url, query];
-    }
-    if ([url isKindOfClass:[NSString class]])
-        url = [NSURL URLWithString:url];
-        
-    return [self promise:[NSURLRequest requestWithURL:url]];
+    return [self promise:[OMGHTTPURLRQ GET:url:params]];
 }
 
 + (PMKPromise *)POST:(id)url formURLEncodedParameters:(NSDictionary *)params {
-    if ([url isKindOfClass:[NSString class]])
-        url = [NSURL URLWithString:url];
-
-    NSMutableURLRequest *rq = [[NSMutableURLRequest alloc] initWithURL:url];
-    rq.HTTPMethod = @"POST";
-
-    if (params.chuzzle) {
-        [rq addValue:@"application/x-www-form-urlencoded; charset=utf-8" forHTTPHeaderField:@"Content-Type"];
-        rq.HTTPBody = [NSDictionaryToURLQueryString(params) dataUsingEncoding:NSUTF8StringEncoding];
-    }
-
-    return [self promise:rq];
+    return [self promise:[OMGHTTPURLRQ POST:url:params]];
 }
 
 + (PMKPromise *)POST:(id)url multipartFormData:(NSData *)payload name:(NSString *)name {
-    if ([url isKindOfClass:[NSString class]])
-        url = [NSURL URLWithString:url];
-
-    NSMutableURLRequest *rq = [NSMutableURLRequest new];
-    NSString *charset = (NSString *)CFStringConvertEncodingToIANACharSetName(CFStringConvertNSStringEncodingToEncoding(NSUTF8StringEncoding));
-    rq.URL = url;
-    rq.HTTPMethod = @"POST";
-
-    id boundary1 = @"0xKhTmLbOuNdArY";
-    id boundary2 = [NSString stringWithFormat:@"\r\n--%@\r\n", boundary1];
-
-    id contentType = [NSString stringWithFormat:@"multipart/form-data; charset=%@; boundary=%@", charset, boundary1];
-    [rq addValue:contentType forHTTPHeaderField:@"Content-Type"];
-
-    NSMutableData *tempPostData = [NSMutableData data];
-    [tempPostData appendData:[[NSString stringWithFormat:@"--%@\r\n", boundary1] dataUsingEncoding:NSUTF8StringEncoding]];
-
-    // Sample Key Value for data
-    [tempPostData appendData:[@"Content-Disposition: form-data; name=\"Key_Param\"\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-    [tempPostData appendData:[@"Value_Param" dataUsingEncoding:NSUTF8StringEncoding]];
-    [tempPostData appendData:[boundary2 dataUsingEncoding:NSUTF8StringEncoding]];
-
-    // Sample file to send as data
-    [tempPostData appendData:[[NSString stringWithFormat:@"Content-Disposition: form-data; name=\"%@\"; filename=\"file\"\r\n", name] dataUsingEncoding:NSUTF8StringEncoding]];
-    [tempPostData appendData:[@"Content-Type: application/octet-stream\r\n\r\n" dataUsingEncoding:NSUTF8StringEncoding]];
-    [tempPostData appendData:payload];
-    [tempPostData appendData:[[NSString stringWithFormat:@"\r\n--%@--\r\n", boundary1] dataUsingEncoding:NSUTF8StringEncoding]];
-
-    rq.HTTPBody = tempPostData;
-
-    return [self promise:rq];
-}
-
-NSString *PMKUserAgent() {
-    static NSString *ua;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        id info = [NSBundle mainBundle].infoDictionary;
-        id name = info[@"CFBundleDisplayName"] ?: info[(__bridge NSString *)kCFBundleIdentifierKey];
-        id vers = (__bridge id)CFBundleGetValueForInfoDictionaryKey(CFBundleGetMainBundle(), kCFBundleVersionKey) ?: info[(__bridge NSString *)kCFBundleVersionKey];
-      #ifdef UIKIT_EXTERN
-        float scale = ([[UIScreen mainScreen] respondsToSelector:@selector(scale)] ? [UIScreen mainScreen].scale : 1.0f);
-        ua = [NSString stringWithFormat:@"%@/%@ (%@; iOS %@; Scale/%0.2f)", name, vers, [UIDevice currentDevice].model, [UIDevice currentDevice].systemVersion, scale];
-      #else
-        ua = [NSString stringWithFormat:@"%@/%@", name, vers];
-      #endif
-    });
-    return ua;
+    return [self promise:[OMGHTTPURLRQ POST:url:payload filename:name]];
 }
 
 + (PMKPromise *)promise:(NSURLRequest *)rq {
@@ -183,12 +62,6 @@ NSString *PMKUserAgent() {
     dispatch_once(&onceToken, ^{
         q = [NSOperationQueue new];
     });
-
-    if (![rq valueForHTTPHeaderField:@"User-Agent"]) {
-        if (![rq respondsToSelector:@selector(setValue:forHTTPHeaderField:)])
-            rq = rq.mutableCopy;
-        [(id)rq setValue:PMKUserAgent() forHTTPHeaderField:@"User-Agent"];
-    }
 
     return [PMKPromise new:^(PMKPromiseFulfiller fluff, PMKPromiseRejecter rejunk){
         [NSURLConnection sendAsynchronousRequest:rq queue:q completionHandler:^(id rsp, id data, NSError *urlError) {

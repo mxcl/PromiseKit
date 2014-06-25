@@ -43,6 +43,7 @@ Pod::Spec.new do |s|
     ss.preserve_paths = preserved
     ss.frameworks = 'Foundation'
     ss.dependency "ChuzzleKit"
+    ss.dependency "OMGHTTPURLRQ"
   end
 
   s.subspec 'UIKit' do |ss|
