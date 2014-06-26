@@ -433,6 +433,25 @@ NSMutableURLRequest *rq = [NSMutableURLRequest requestWithURL:url];
 })
 {% endhighlight %}
 
+PromiseKit depends on [OMHGTTPURLRQ](https://github.com/mxcl/OMHGTTPURLRQ) so if you need to POST, but first you want to adjust some other parameters of the `URLRequest` (eg. the timeout or cachePolicy) then `#import <OMGHTTPURLRQ.h>` (you have it because PromiseKit depends on it) and construct the `NSMutableURLRequest` yourself first:
+
+{% highlight objectivec %}
+NSMutableURLRequest *rq = [OMGHTTPURLRQ POST:url:@{@"key": @"value"}];
+rq.timeoutInterval = 20;
+[NSURLConnection promise:rq].then(^{…});
+{% endhighlight %}
+
+OMGHTTPURLRQ also makes it easy to send multipartForm POSTs:
+
+{% highlight objectivec %}
+NSMutableURLRequest *rq = [OMGHTTPURLRQ POST:url multipartForm:^(void (^addFile)(NSData *, NSString *name, NSString *filename)){
+    addFile(data1, @"file1", @"file1.png");
+    addFile(data2, @"file2", @"file2.png");
+}];
+[NSURLConnection promise:rq].then(^{…});
+{% endhighlight %}
+
+
 
 ##CLLocationManager+PromiseKit
 
