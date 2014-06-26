@@ -31,13 +31,13 @@ For guides and complete documentation visit [promisekit.org](http://promisekit.o
 
 #Swift
 
-To test the waters, PromiseKit is available as a Swift variant. If you want to use it in your app then copy the swift directory into your project (rename it PromiseKit!)
+To test the waters, PromiseKit is available as a Swift variant. If you want to use it in your app then drag and drop `swift/PromiseKit.xcodeproj` into your project.
 
 Currently the Swift and Objective-C versions are indepenedent. We hope to fix that as Xcode 6 matures.
 
 We provide a demo project for the Swift version, just open the provided xcodeproj.
 
-Please be aware that—much like the language—the Swift version is a work in progress.
+Please be aware that (much like the language) the Swift version is a work in progress.
 
 ```swift
 CLLocationManager.promise().catch {
