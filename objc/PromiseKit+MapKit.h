@@ -1,9 +1,18 @@
 #import "PromiseKit/fwd.h"
 
 
+
+#if !PMK_MODULES
+  #import <MapKit/MapKit.h>
+#endif
+
+
+
 #if PMK_iOS6_ISH
 
-@import MapKit.MKDirections;
+#if PMK_MODULES
+  @import MapKit.MKDirections;
+#endif
 
 @interface MKDirections (PromiseKit)
 + (PMKPromise *)promise:(MKDirectionsRequest *)request;
@@ -13,9 +22,12 @@
 #endif
 
 
+
 #if PMK_iOS7_ISH
 
-@import MapKit.MKMapSnapshotter;
+#if PMK_MODULES
+  @import MapKit.MKMapSnapshotter;
+#endif
 
 @interface MKMapSnapshotter (PromiseKit)
 - (PMKPromise *)promise;

@@ -1,6 +1,12 @@
-@import Dispatch.introspection;
-@import Foundation.NSArray;
-@import Foundation.NSError;
+#import "PromiseKit/fwd.h"
+
+#if PMK_MODULES
+  @import Dispatch.introspection;
+  @import Foundation.NSArray;
+  @import Foundation.NSError;
+#else
+  #import <Foundation/Foundation.h>
+#endif
 
 
 typedef void (^PromiseResolver)(id) __attribute__((deprecated("Use PromiseFulfiller or PromiseRejecter")));

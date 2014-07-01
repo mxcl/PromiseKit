@@ -1,4 +1,8 @@
-@import Darwin.Availability;
+#if PMK_MODULES
+  @import Darwin.Availability;
+#else
+  #import <Availability.h>
+#endif
 
 
 @class PMKPromise;

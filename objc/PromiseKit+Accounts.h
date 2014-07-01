@@ -8,7 +8,12 @@
 
 #if PMK_iOS6_ISH
 
+#if PMK_MODULES
 @import Accounts.ACAccountStore;
+#else
+#import <Accounts/Accounts.h>
+#endif
+
 
 @interface ACAccountStore (PromiseKit)
 - (PMKPromise *)promiseForAccountsWithType:(ACAccountType *)type options:(NSDictionary *)options;

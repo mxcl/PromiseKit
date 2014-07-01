@@ -1,6 +1,11 @@
-@import CoreLocation.CLLocationManager;
-@import CoreLocation.CLGeocoder;
-@class PMKPromise;
+#import "PromiseKit/fwd.h"
+
+#if PMK_MODULES
+  @import CoreLocation.CLLocationManager;
+  @import CoreLocation.CLGeocoder;
+#else
+  #import <CoreLocation/CoreLocation.h>
+#endif
 
 
 @interface CLLocationManager (PromiseKit)

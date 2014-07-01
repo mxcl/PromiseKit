@@ -1,7 +1,12 @@
-@import UIKit.UIViewController;
-@import UIKit.UIAlertView;
-@import UIKit.UIActionSheet;
-@class PMKPromise;
+#import "PromiseKit/fwd.h"
+
+#if PMK_MODULES
+  @import UIKit.UIViewController;
+  @import UIKit.UIAlertView;
+  @import UIKit.UIActionSheet;
+#else
+  #import <UIKit/UIKit.h>
+#endif
 
 
 

@@ -1,8 +1,13 @@
-@import Foundation.NSDictionary;
-@import Foundation.NSURLCache;
-@import Foundation.NSURLConnection;
-@import Foundation.NSURLRequest;
-@class PMKPromise;
+#import "PromiseKit/fwd.h"
+
+#if PMK_MODULES
+  @import Foundation.NSDictionary;
+  @import Foundation.NSURLCache;
+  @import Foundation.NSURLConnection;
+  @import Foundation.NSURLRequest;
+#else
+  #import <Foundation/Foundation.h>
+#endif
 
 #define PMKURLErrorFailingURLResponseKey @"PMKURLErrorFailingURLResponseKey"
 #define PMKURLErrorFailingDataKey @"PMKURLErrorFailingDataKey"
