@@ -52,7 +52,7 @@ CLLocationManager.promise().catch {
     alert.addButtonWithTitle("Bye")
     alert.addButtonWithTitle("Hi")
     return alert.promise()
-}.then { tappedButtonIndex -> Promise<Void>? in
+}.then { [unowned self] tappedButtonIndex -> Promise<Void>? in
     if tappedButtonIndex == 0 {
         return nil
     }
