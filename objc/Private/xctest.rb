@@ -52,10 +52,15 @@ def test!
   end
 end
 
-def prepare!
+def clone! repo
   Dir.chdir "/tmp" do
-    system "git clone https://github.com/mxcl/ChuzzleKit"
-  end unless File.directory? "/tmp/ChuzzleKit"
+    system "git clone #{repo}"
+  end unless File.directory? "/tmp/#{File.basename(repo)}"
+end
+
+def prepare!
+  clone! "https://github.com/mxcl/ChuzzleKit"
+  clone! "https://github.com/mxcl/OMGHTTPURLRQ"
 
   File.open('/tmp/PromiseKitTests.m', 'w') do |f|
     f.puts  # make line numbers correlate
@@ -72,9 +77,9 @@ def compile!
   abort unless system <<-EOS
     clang -g -O0 -ObjC -F#{FRAMEWORKS} -I. -fmodules -fobjc-arc \
           -framework XCTest \
-          -I/tmp/ChuzzleKit \
+          -isystem/tmp/ChuzzleKit -isystem/tmp/OMGHTTPURLRQ \
           /tmp/PromiseKitTests.m \
-          /tmp/ChuzzleKit/*.m \
+          /tmp/ChuzzleKit/*.m /tmp/OMGHTTPURLRQ/*.m \
           -Wall -Weverything -Wno-unused-parameter -Wno-missing-field-initializers \
           -Wno-documentation -Wno-gnu-conditional-omitted-operand \
           -Wno-pointer-arith -Wno-disabled-macro-expansion \
@@ -83,6 +88,8 @@ def compile!
           -Wno-missing-noreturn -Wno-pedantic \
           -Wno-format-nonliteral \
           -Wno-incomplete-module -Wno-objc-interface-ivars \
+          -Wno-auto-import \
+          -DPMK_MODULES=0 \
           -o /tmp/PromiseKitTests
   EOS
   abort unless system <<-EOS
