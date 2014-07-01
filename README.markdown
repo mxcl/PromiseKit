@@ -46,7 +46,7 @@ CLLocationManager.promise().catch {
 }.then {
     let (lat, lon) = ($0.coordinate.latitude, $0.coordinate.longitude)
     return NSURLConnection.GET("http://user.net/\(lat)/\(lon)")
-}.then { user in
+}.then { (user:NSDictionary) in
     let alert = UIAlertView()
     alert.title = "Hi " + user["name"]
     alert.addButtonWithTitle("Bye")
