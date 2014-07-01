@@ -20,7 +20,7 @@ static BOOL NSHTTPURLResponseIsText(NSHTTPURLResponse *rsp) {
 #ifdef UIKIT_EXTERN
 static BOOL NSHTTPURLResponseIsImage(NSHTTPURLResponse *rsp) {
     NSString *type = rsp.allHeaderFields[@"Content-Type"];
-    NSArray *bits = [type componentsSeparatedByString:@";"];
+    NSArray *bits = [type componentsSeparatedByString:@";"].chuzzle;
     for (NSString *bit in bits) {
         if ([bit isEqualToString:@"image/jpeg"]) return YES;
         if ([bit isEqualToString:@"image/png"]) return YES;
