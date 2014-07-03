@@ -8,6 +8,7 @@
 @import Foundation.NSPointerArray;
 #import "Private/NSMethodSignatureForBlock.m"
 #import "PromiseKit/Promise.h"
+#import <pthread.h>
 
 #define IsPromise(o) ([o isKindOfClass:[PMKPromise class]])
 #define IsError(o) ([o isKindOfClass:[NSError class]])
@@ -33,7 +34,23 @@ static inline NSError *NSErrorWithThrown(id e) {
     return [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeThrown userInfo:userInfo];
 }
 
-
+/**
+ *  Try to keep running on the same queue if possible
+ */
+static inline void dispatch_async_safe(dispatch_queue_t queue, void (^block)()){
+    if (queue == dispatch_get_current_queue()) {
+        block();
+    }
+    /**
+     *  pthread_main_np is the fastest way to detect if we are on the main thread
+     */
+    else if(pthread_main_np() != 0 && dispatch_get_main_queue() == queue){
+        block();
+    }
+    else{
+        dispatch_async(queue, block);
+    }
+}
 
 /**
  `then` and `catch` are method-signature tolerant, this function calls
@@ -183,7 +200,7 @@ static id safely_call_block(id frock, id result) {
                 next->result = selfDotResult;
                 PMKResolve(next);
             }
-            else dispatch_async(q, ^{
+            else dispatch_async_safe(q, ^{
                 id rv = safely_call_block(block, selfDotResult);
                 if (IsError(rv))
                     rejecter(rv);
@@ -218,7 +235,7 @@ static id safely_call_block(id frock, id result) {
         }];
         [handlers addObject:^(id selfDotResult){
             if (IsError(selfDotResult)) {
-                dispatch_async(dispatch_get_main_queue(), ^{
+                dispatch_async_safe(dispatch_get_main_queue(), ^{
                     id rv = safely_call_block(block, selfDotResult);
                     if (IsError(rv))
                         rejecter(rv);
@@ -253,7 +270,7 @@ static id safely_call_block(id frock, id result) {
             rejecter = rejunk;
         }];
         [handlers addObject:^(id passthru){
-            dispatch_async(dispatch_get_main_queue(), ^{
+            dispatch_async_safe(dispatch_get_main_queue(), ^{
                 block();
                 if (IsError(passthru))
                     rejecter(passthru);
@@ -296,19 +313,20 @@ static id safely_call_block(id frock, id result) {
         }];
 
     return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter){
-        NSPointerArray *results = [NSPointerArray strongObjectsPointerArray];
-        results.count = count;
+        NSMutableArray *results = [NSMutableArray arrayWithCapacity:count];
 
         NSUInteger ii = 0;
 
         for (__strong PMKPromise *promise in promises) {
+            [results addObject:[NSNull null]];
+
             if (!IsPromise(promise))
                 promise = [PMKPromise promiseWithValue:promise];
             promise.catch(rejecter(@(ii)));
             promise.then(^(id o){
-                [results replacePointerAtIndex:ii withPointer:(__bridge_retained void *)(o ?: [NSNull null])];
+                [results replaceObjectAtIndex:ii withObject:(o ?: [NSNull null])];
                 if (--count == 0)
-                    fulfiller(results.allObjects);
+                    fulfiller(results);
             });
             ii++;
         }
@@ -478,7 +496,7 @@ PMKPromise *dispatch_promise(id block) {
 
 PMKPromise *dispatch_promise_on(dispatch_queue_t queue, id block) {
     return [PMKPromise new:^(void(^fulfiller)(id), void(^rejecter)(id)){
-        dispatch_async(queue, ^{
+        dispatch_async_safe(queue, ^{
             id result = safely_call_block(block, nil);
             if ([result isKindOfClass:[NSError class]])
                 rejecter(result);
