@@ -128,7 +128,7 @@ An example usage is an app starting up that must get data from the Internet befo
  in fact will often only consume the first parameter. Thus ensure the
  order of parameters is: from most-important to least-important.
 
- Note that attempts to reject with `PMKMany` will `@throw`.
+ Note that attempts to reject with `PMKManifold` will `@throw`.
 */
 id PMKManifold(NSArray *arguments);
 #define PMKManifold(...) PMKManifold(@[__VA_ARGS__])
