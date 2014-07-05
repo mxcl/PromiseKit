@@ -324,6 +324,10 @@ int main() {
 
     }).then(^(id md5){
         XCTAssertEqualObjects(md5, @"49F68A5C8493EC2C0BF489821C21FC3B");
+        return dispatch_promise(^{
+            return nil;
+        });
+    }).then(^{
         resolved = YES;
     });
     wait(0.1);
@@ -858,10 +862,11 @@ PMKPromise *gcdreject() {
 }
 
 - (void)test_58_just_finally {
-    promise.finally(^{
+    promise = dispatch_promise(^{
+        return nil;
+    }).finally(^{
         resolved = YES;
     });
-    fulfiller(nil);
     wait(0.1);
     XCTAssertTrue(resolved);
     
@@ -887,6 +892,18 @@ PMKPromise *gcdreject() {
 
 - (void)test_60_plain_new_is_rejected {
     XCTAssertThrows([PMKPromise new]);
+    XCTAssertThrows([[PMKPromise alloc] init]);
+}
+
+- (void)test_61_manifold_of_nothing {
+    [PMKPromise new:^(PMKPromiseFulfiller _fulfiller, id r){
+        _fulfiller(PMKManifold(@[]));
+    }].then(^(id o){
+        XCTAssertEqualObjects(o, nil);
+        resolved = YES;
+    });
+    wait(0.1);
+    XCTAssertTrue(resolved);
 }
 
 @end
