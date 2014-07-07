@@ -296,19 +296,20 @@ static id safely_call_block(id frock, id result) {
         }];
 
     return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter){
-        NSPointerArray *results = [NSPointerArray strongObjectsPointerArray];
-        results.count = count;
+        NSMutableArray *results = [NSMutableArray arrayWithCapacity:count];
 
         NSUInteger ii = 0;
 
         for (__strong PMKPromise *promise in promises) {
+            [results addObject:[NSNull null]];
+
             if (!IsPromise(promise))
                 promise = [PMKPromise promiseWithValue:promise];
             promise.catch(rejecter(@(ii)));
             promise.then(^(id o){
-                [results replacePointerAtIndex:ii withPointer:(__bridge_retained void *)(o ?: [NSNull null])];
+                [results replaceObjectAtIndex:ii withObject:(o ?: [NSNull null])];
                 if (--count == 0)
-                    fulfiller(results.allObjects);
+                    fulfiller(results);
             });
             ii++;
         }
