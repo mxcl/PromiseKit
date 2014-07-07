@@ -306,7 +306,7 @@ static id safely_call_block(id frock, id result) {
                 promise = [PMKPromise promiseWithValue:promise];
             promise.catch(rejecter(@(ii)));
             promise.then(^(id o){
-                [results replacePointerAtIndex:ii withPointer:(__bridge_retained void *)(o ?: [NSNull null])];
+                [results replacePointerAtIndex:ii withPointer:(__bridge void *)(o ?: [NSNull null])];
                 if (--count == 0)
                     fulfiller(results.allObjects);
             });

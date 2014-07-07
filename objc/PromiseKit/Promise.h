@@ -37,6 +37,8 @@ If an exception is thrown inside your block, or you return an `NSError` object t
 
 Then is always executed on the main dispatch queue (i.e the main/UI thread).
 
+@see `-thenOn`
+
 @return A new `Promise` to be executed after the block passed to this `then`
 */
 - (PMKPromise *(^)(id))then;
@@ -96,6 +98,8 @@ An example usage is an app starting up that must get data from the Internet befo
 
 /** 
 @return A new `Promise` that is already resolved with @param value. Calling `then` on a resolved `Promise` executes the provided block immediately.
+
+Note that passing an `NSError` object is valid usage and will reject this promise.
 */
 + (PMKPromise *)promiseWithValue:(id)value;
 
