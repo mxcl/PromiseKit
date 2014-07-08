@@ -38,17 +38,16 @@ class Resolver<T> {
     }
 }
 
-var keys: Selector = "fulfill:"
-let key: CConstVoidPointer = &keys
+var key = "PMKSomeString"
 
 extension UIViewController {
     func fulfill<T>(value:T) {
-        let resolver = objc_getAssociatedObject(self, key) as Resolver<T>
+        let resolver = objc_getAssociatedObject(self, &key) as Resolver<T>
         resolver.fulfiller(value)
     }
 
     func reject(error:NSError) {
-        let resolver = objc_getAssociatedObject(self, key) as Resolver<Any>;
+        let resolver = objc_getAssociatedObject(self, &key) as Resolver<Any>;
         resolver.rejecter(error)
     }
 
@@ -57,7 +56,7 @@ extension UIViewController {
 
         let deferred = Promise<T>.defer()
 
-        objc_setAssociatedObject(vc, key, Resolver<T>(deferred), UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
+        objc_setAssociatedObject(vc, &key, Resolver<T>(deferred), UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
 
         return deferred.promise.finally { () -> () in
             self.dismissViewControllerAnimated(animated, completion:nil)

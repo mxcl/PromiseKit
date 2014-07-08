@@ -5,7 +5,7 @@ class LocationManager: CLLocationManager, CLLocationManagerDelegate {
     let fulfiller: (CLLocation) -> Void
     let rejecter: (NSError) -> Void
 
-    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: AnyObject[]!) {
+    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
         let mostRecentLocation = (locations as NSArray).lastObject as CLLocation
         fulfiller(mostRecentLocation)
     }

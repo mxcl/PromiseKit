@@ -24,7 +24,7 @@ func dispatch_main(block: ()->()) {
 
 
 class Promise<T> {
-    var _handlers:(() -> Void)[] = []
+    var _handlers:[() -> Void] = []
     var _state:State = .Pending
 
     var rejected:Bool {
