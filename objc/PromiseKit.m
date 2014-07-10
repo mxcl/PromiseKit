@@ -193,20 +193,20 @@ static id PMKMakeCallback(PMKPromise *this, PMKResolveOnQueueBlock (^alreadyReso
         if (result == nil) {
             callBlock = ^(dispatch_queue_t q, id block) {
                 __block PMKPromise* next = nil;
-                __block id result;
+                __block id promiseResult;
                 
                 dispatch_barrier_sync(this->_promiseQueue, ^{
-                    result = this->_result;
+                    promiseResult = this->_result;
                     
-                    if (result == nil) {
+                    if (promiseResult == nil) {
                         __block PMKPromiseFulfiller fulfiller;
                         __block PMKPromiseRejecter rejecter;
                         next = [PMKPromise new:^(PMKPromiseFulfiller fluff, PMKPromiseRejecter rejunk) {
                             fulfiller = fluff;
                             rejecter = rejunk;
                         }];
-                        [this->_handlers addObject:^(id result){
-                            whenResolved(result, next, q, block, fulfiller, rejecter);
+                        [this->_handlers addObject:^(id r){
+                            whenResolved(r, next, q, block, fulfiller, rejecter);
                         }];
                     }
                 });
@@ -216,7 +216,7 @@ static id PMKMakeCallback(PMKPromise *this, PMKResolveOnQueueBlock (^alreadyReso
                 // call to the block.
                 
                 if (next == nil) {
-                    next = alreadyResolved(result)(q, block);
+                    next = alreadyResolved(promiseResult)(q, block);
                 }
                 
                 return next;
