@@ -124,7 +124,7 @@ static id safely_call_block(id frock, id result) {
             [e name] == NSPortReceiveException))
                 @throw e;
       #endif
-        return [e isKindOfClass:[NSError class]] ? e : NSErrorWithThrown(e);
+        return IsError(e) ? e : NSErrorWithThrown(e);
     }
 }
 
@@ -160,7 +160,7 @@ static id safely_call_block(id frock, id result) {
     if (IsPromise(result))
         return ((PMKPromise *)result).thenOn;
 
-    if ([result isKindOfClass:[NSError class]])
+    if (IsError(result))
         return ^(dispatch_queue_t q, id b){
             return [PMKPromise promiseWithValue:result];
         };
@@ -340,9 +340,9 @@ static id safely_call_block(id frock, id result) {
                 block = nil;  // break retain cycle
             }).catch(^(id e){
                 PMKPromise *rv = safely_call_block(failHandler, e);
-                if ([rv isKindOfClass:[PMKPromise class]])
+                if (IsPromise(rv))
                     rv.then(block);
-                else if (![rv isKindOfClass:[NSError class]])
+                else if (!IsError(rv))
                     block();
             });
         };
@@ -409,7 +409,7 @@ static void PMKResolve(PMKPromise *this) {
         }
         if (!error)
             error = [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeUnknown userInfo:nil];
-        if (![error isKindOfClass:[NSError class]]) {
+        if (!IsError(error)) {
             NSLog(@"PromiseKit: Warning, you should reject with proper NSError objects!");
             error = [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeInvalidUsage userInfo:@{
                 NSLocalizedDescriptionKey: [error description]
@@ -423,7 +423,7 @@ static void PMKResolve(PMKPromise *this) {
     @try {
         block(fulfiller, rejecter);
     } @catch (id e) {
-        this->result = [e isKindOfClass:[NSError class]] ? e : NSErrorWithThrown(e);
+        this->result = IsError(e) ? e : NSErrorWithThrown(e);
     }
 
     return this;
@@ -441,11 +441,11 @@ static void PMKResolve(PMKPromise *this) {
 }
 
 - (BOOL)fulfilled {
-    return self.resolved && ![result isKindOfClass:[NSError class]];
+    return self.resolved && !IsError(result);
 }
 
 - (BOOL)rejected {
-    return self.resolved && [result isKindOfClass:[NSError class]];
+    return self.resolved && IsError(result);
 }
 
 - (id)value {
@@ -480,7 +480,7 @@ PMKPromise *dispatch_promise_on(dispatch_queue_t queue, id block) {
     return [PMKPromise new:^(void(^fulfiller)(id), void(^rejecter)(id)){
         dispatch_async(queue, ^{
             id result = safely_call_block(block, nil);
-            if ([result isKindOfClass:[NSError class]])
+            if (IsError(result))
                 rejecter(result);
             else
                 fulfiller(result);
