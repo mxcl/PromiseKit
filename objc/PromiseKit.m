@@ -136,8 +136,8 @@ static id safely_call_block(id frock, id result) {
  can fulfill promises. Our usage is like the C++ `friend` keyword.
  */
 @public
-    NSMutableArray *handlers;
-    id result;
+    NSMutableArray *_handlers;
+    id _result;
 }
 
 - (instancetype)init {
@@ -146,7 +146,7 @@ static id safely_call_block(id frock, id result) {
 }
 
 - (void)dealloc {
-    if (!result && handlers.count)
+    if (!_result && _handlers.count)
         NSLog(@"PromiseKit: Promise about to be deallocated before it has been resolved! This is likely a bug and you are likely to crash. @see https://github.com/mxcl/PromiseKit/issues/50");
 }
 
@@ -157,17 +157,17 @@ static id safely_call_block(id frock, id result) {
 }
 
 - (PMKPromise *(^)(dispatch_queue_t, id))thenOn {
-    if (IsPromise(result))
-        return ((PMKPromise *)result).thenOn;
+    if (IsPromise(_result))
+        return ((PMKPromise *)_result).thenOn;
 
-    if (IsError(result))
+    if (IsError(_result))
         return ^(dispatch_queue_t q, id b){
-            return [PMKPromise promiseWithValue:result];
+            return [PMKPromise promiseWithValue:_result];
         };
 
-    if (result) return ^(dispatch_queue_t q, id block) {
+    if (_result) return ^(dispatch_queue_t q, id block) {
         return dispatch_promise_on(q, ^{   // don’t release Zalgo
-            return safely_call_block(block, result);
+            return safely_call_block(block, _result);
         });
     };
 
@@ -178,9 +178,9 @@ static id safely_call_block(id frock, id result) {
             fulfiller = fluff;
             rejecter = rejunk;
         }];
-        [handlers addObject:^(id selfDotResult){
+        [_handlers addObject:^(id selfDotResult){
             if (IsError(selfDotResult)) {
-                next->result = selfDotResult;
+                next->_result = selfDotResult;
                 PMKResolve(next);
             }
             else dispatch_async(q, ^{
@@ -196,17 +196,17 @@ static id safely_call_block(id frock, id result) {
 }
 
 - (PMKPromise *(^)(id))catch {
-    if (IsPromise(result))
-        return ((PMKPromise *)result).catch;
+    if (IsPromise(_result))
+        return ((PMKPromise *)_result).catch;
 
-    if (IsError(result)) return ^(id block) {
+    if (IsError(_result)) return ^(id block) {
         return dispatch_promise_on(dispatch_get_main_queue(), ^{   // don’t release Zalgo
-            return safely_call_block(block, result);
+            return safely_call_block(block, _result);
         });
     };
 
-    if (result) return ^id(id block){
-        return [PMKPromise promiseWithValue:result];
+    if (_result) return ^id(id block){
+        return [PMKPromise promiseWithValue:_result];
     };
 
     return ^(id block){
@@ -216,7 +216,7 @@ static id safely_call_block(id frock, id result) {
             fulfiller = fluff;
             rejecter = rejunk;
         }];
-        [handlers addObject:^(id selfDotResult){
+        [_handlers addObject:^(id selfDotResult){
             if (IsError(selfDotResult)) {
                 dispatch_async(dispatch_get_main_queue(), ^{
                     id rv = safely_call_block(block, selfDotResult);
@@ -226,7 +226,7 @@ static id safely_call_block(id frock, id result) {
                         fulfiller(rv);
                 });
             } else {
-                next->result = selfDotResult;
+                next->_result = selfDotResult;
                 PMKResolve(next);
             }
         }];
@@ -235,13 +235,13 @@ static id safely_call_block(id frock, id result) {
 }
 
 - (PMKPromise *(^)(void(^)(void)))finally {
-    if (IsPromise(result))
-        return ((PMKPromise *)result).finally;
+    if (IsPromise(_result))
+        return ((PMKPromise *)_result).finally;
 
-    if (result) return ^(void (^block)(void)) {
+    if (_result) return ^(void (^block)(void)) {
         return dispatch_promise_on(dispatch_get_main_queue(), ^{
             block();
-            return result;
+            return _result;
         });
     };
 
@@ -252,7 +252,7 @@ static id safely_call_block(id frock, id result) {
             fulfiller = fluff;
             rejecter = rejunk;
         }];
-        [handlers addObject:^(id passthru){
+        [_handlers addObject:^(id passthru){
             dispatch_async(dispatch_get_main_queue(), ^{
                 block();
                 if (IsError(passthru))
@@ -355,14 +355,14 @@ static id safely_call_block(id frock, id result) {
 
 + (PMKPromise *)promiseWithValue:(id)value {
     PMKPromise *p = [PMKPromise alloc];
-    p->result = value ?: PMKNull;
+    p->_result = value ?: PMKNull;
     return p;
 }
 
 
 static void PMKResolve(PMKPromise *this) {
     id const value = ({
-        PMKPromise *rv = this->result;
+        PMKPromise *rv = this->_result;
         if (IsPromise(rv) && !rv.pending)
             rv = rv.value ?: PMKNull;
         rv;
@@ -370,36 +370,36 @@ static void PMKResolve(PMKPromise *this) {
 
     if (IsPromise(value)) {
         PMKPromise *rsvp = (PMKPromise *)value;
-        [rsvp->handlers addObject:^(id o){
-            this->result = o;
+        [rsvp->_handlers addObject:^(id o){
+            this->_result = o;
             PMKResolve(this);
         }];
     } else {
-        for (void (^handler)(id) in this->handlers)
+        for (void (^handler)(id) in this->_handlers)
             handler(value);
-        this->handlers = nil;
+        this->_handlers = nil;
     }
 }
 
 
 + (PMKPromise *)new:(void(^)(PMKPromiseFulfiller, PMKPromiseRejecter))block {
     PMKPromise *this = [PMKPromise alloc];
-    this->handlers = [NSMutableArray new];
+    this->_handlers = [NSMutableArray new];
 
     id fulfiller = ^(id value){
-        if (this->result)
+        if (this->_result)
             return NSLog(@"PromiseKit: Promise already resolved");
         if (IsError(value))
             @throw PMKE(@"You may not fulfill a Promise with an NSError");
         if (!value)
             value = PMKNull;
 
-        this->result = value;
+        this->_result = value;
         PMKResolve(this);
     };
 
     id rejecter = ^(id error){
-        if (this->result)
+        if (this->_result)
             return NSLog(@"PromiseKit: Promise already resolved");
         if (IsPromise(error)) {
             if ([error rejected]) {
@@ -416,56 +416,56 @@ static void PMKResolve(PMKPromise *this) {
             }];
         }
 
-        this->result = error;
+        this->_result = error;
         PMKResolve(this);
     };
 
     @try {
         block(fulfiller, rejecter);
     } @catch (id e) {
-        this->result = IsError(e) ? e : NSErrorWithThrown(e);
+        this->_result = IsError(e) ? e : NSErrorWithThrown(e);
     }
 
     return this;
 }
 
 - (BOOL)pending {
-    if (IsPromise(result)) {
-        return [result pending];
+    if (IsPromise(_result)) {
+        return [_result pending];
     } else
-        return result == nil;
+        return _result == nil;
 }
 
 - (BOOL)resolved {
-    return result != nil;
+    return _result != nil;
 }
 
 - (BOOL)fulfilled {
-    return self.resolved && !IsError(result);
+    return self.resolved && !IsError(_result);
 }
 
 - (BOOL)rejected {
-    return self.resolved && IsError(result);
+    return self.resolved && IsError(_result);
 }
 
 - (id)value {
-    if (IsPromise(result))
-        return [(PMKPromise*)result value];
-    if (result == PMKNull)
+    if (IsPromise(_result))
+        return [(PMKPromise*)_result value];
+    if (_result == PMKNull)
         return nil;
     else
-        return result;
+        return _result;
 }
 
 - (NSString *)description {
     if (self.pending)
-        return [NSString stringWithFormat:@"Promise: %lu pending handlers", (unsigned long)handlers.count];
+        return [NSString stringWithFormat:@"Promise: %lu pending handlers", (unsigned long)_handlers.count];
     if (self.rejected)
-        return [NSString stringWithFormat:@"Promise: rejected: %@", result];
+        return [NSString stringWithFormat:@"Promise: rejected: %@", _result];
 
     assert(self.fulfilled);
 
-    return [NSString stringWithFormat:@"Promise: fulfilled: %@", result];
+    return [NSString stringWithFormat:@"Promise: fulfilled: %@", _result];
 }
 
 @end
