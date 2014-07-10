@@ -430,10 +430,11 @@ static void PMKResolve(PMKPromise *this) {
 }
 
 - (BOOL)pending {
-    if (IsPromise(_result)) {
-        return [_result pending];
+	id result = _result;
+    if (IsPromise(result)) {
+        return [result pending];
     } else
-        return _result == nil;
+        return result == nil;
 }
 
 - (BOOL)resolved {
@@ -441,20 +442,23 @@ static void PMKResolve(PMKPromise *this) {
 }
 
 - (BOOL)fulfilled {
-    return self.resolved && !IsError(_result);
+	id result = _result;
+    return result != nil && !IsError(result);
 }
 
 - (BOOL)rejected {
-    return self.resolved && IsError(_result);
+	id result = _result;
+    return result != nil && IsError(result);
 }
 
 - (id)value {
-    if (IsPromise(_result))
-        return [(PMKPromise*)_result value];
-    if (_result == PMKNull)
+	id result = _result;
+    if (IsPromise(result))
+        return [(PMKPromise*)result value];
+    if (result == PMKNull)
         return nil;
     else
-        return _result;
+        return result;
 }
 
 - (NSString *)description {
