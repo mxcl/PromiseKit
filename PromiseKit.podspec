@@ -57,6 +57,17 @@ Pod::Spec.new do |s|
     ss.weak_framework = 'AssetsLibrary'
   end
 
+  s.subspec 'UIAnimation' do |ss|
+    ss.dependency 'PromiseKit/base'
+    ss.dependency 'PromiseKit/private'
+    ss.ios.source_files = 'objc/PromiseKit+UIAnimation.{h,m}'
+    ss.ios.deployment_target = '7.0'
+    ss.ios.frameworks = 'UIKit'
+    ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_UIANIMATION=1" }
+    ss.preserve_paths = preserved
+  end
+
+
   s.subspec 'CoreLocation' do |ss|
     ss.dependency 'PromiseKit/base'
     ss.dependency 'PromiseKit/private'
