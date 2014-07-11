@@ -29,6 +29,7 @@ Pod::Spec.new do |s|
   s.subspec 'defaults' do |ss|
     ss.dependency 'PromiseKit/Foundation'
     ss.ios.dependency 'PromiseKit/UIKit'
+    ss.ios.dependency 'PromiseKit/UIAnimation'
   end
 
   s.subspec 'private' do |ss|
