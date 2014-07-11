@@ -57,7 +57,7 @@
     return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejunker){
         
         [UIView animateKeyframesWithDuration:duration delay:delay options:options animations:animations completion:^(BOOL finished) {
-            
+                        fulfiller([NSNumber numberWithBool:finished]);
         }];
     }];
 }
