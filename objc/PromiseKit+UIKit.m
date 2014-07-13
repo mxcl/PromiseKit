@@ -86,7 +86,7 @@ static const char* kSegueRejecter = "kSegueRejecter";
         vc = [(id)vc viewControllers].firstObject;
     
     if (!vc) {
-        id err = [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeInvalidUsage userInfo:@{NSLocalizedDescriptionKey: @"Cannot promise a `nil` viewcontroller"}];
+        id err = [NSError errorWithDomain:PMKErrorDomain code:PMKInvalidUsageError userInfo:@{NSLocalizedDescriptionKey: @"Cannot promise a `nil` viewcontroller"}];
         return [PMKPromise promiseWithValue:err];
     }
     

@@ -142,10 +142,15 @@ id PMKManifold(NSArray *arguments);
 #define PMKErrorDomain @"PMKErrorDomain"
 #define PMKUnderlyingExceptionKey @"PMKUnderlyingExceptionKey"
 #define PMKFailingPromiseIndexKey @"PMKFailingPromiseIndexKey"
-#define PMKErrorCodeThrown 1
-#define PMKErrorCodeUnknown 2
-#define PMKErrorCodeInvalidUsage 3
+#define PMKUnhandledExceptionError 1
+#define PMKUnknownError 2
+#define PMKInvalidUsageError 3
 #define PMKAccessDeniedError 4
+
+// deprecated
+#define PMKErrorCodeThrown PMKUnhandledExceptionError
+#define PMKErrorCodeUnknown PMKUnknownError
+#define PMKErrorCodeInvalidUsage PMKInvalidUsageError
 
 extern NSString const*const PMKThrown __attribute__((deprecated("Use PMKUnderlyingExceptionKey")));
 

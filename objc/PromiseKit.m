@@ -30,7 +30,7 @@ static inline NSError *NSErrorWithThrown(id e) {
         userInfo[NSLocalizedDescriptionKey] = [e reason];
     else
         userInfo[NSLocalizedDescriptionKey] = [e description];
-    return [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeThrown userInfo:userInfo];
+    return [NSError errorWithDomain:PMKErrorDomain code:PMKUnhandledExceptionError userInfo:userInfo];
 }
 
 
@@ -408,10 +408,10 @@ static void PMKResolve(PMKPromise *this) {
                 @throw PMKE(@"You may not reject a Promise with a Promise");
         }
         if (!error)
-            error = [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeUnknown userInfo:nil];
+            error = [NSError errorWithDomain:PMKErrorDomain code:PMKUnknownError userInfo:nil];
         if (![error isKindOfClass:[NSError class]]) {
             NSLog(@"PromiseKit: Warning, you should reject with proper NSError objects!");
-            error = [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeInvalidUsage userInfo:@{
+            error = [NSError errorWithDomain:PMKErrorDomain code:PMKInvalidUsageError userInfo:@{
                 NSLocalizedDescriptionKey: [error description]
             }];
         }

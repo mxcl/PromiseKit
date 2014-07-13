@@ -34,7 +34,7 @@ static BOOL NSHTTPURLResponseIsImage(NSHTTPURLResponse *rsp) {
 
 + (PMKPromise *)GET:(id)urlFormat, ... {
     if (!urlFormat || urlFormat == [NSNull null])
-        return [PMKPromise promiseWithValue:[NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeInvalidUsage userInfo:nil]];
+        return [PMKPromise promiseWithValue:[NSError errorWithDomain:PMKErrorDomain code:PMKInvalidUsageError userInfo:nil]];
 
     va_list arguments;
     va_start(arguments, urlFormat);
