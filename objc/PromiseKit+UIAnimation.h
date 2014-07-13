@@ -10,7 +10,8 @@
 
 @class PMKPromise;
 
-@interface UIView (PromiseKit_UIAnimation)
+@interface UIView (PMKUIAnimation)
+
 + (PMKPromise *)promiseAnimationWithDuration:(NSTimeInterval)duration
                                   animations:(void (^)(void))animations;
 
