@@ -26,7 +26,9 @@
 #ifdef PMK_ACCOUNTS
 #import "PromiseKit+Accounts.h"
 #endif
-
+#ifdef PMK_TIMING
+#import "PromiseKit/Promise+Timing.h"
+#endif
 
 #ifndef PMK_NO_UNPREFIXATION
 // I used a typedef but it broke the tests, turns out typedefs are new
