@@ -2,7 +2,7 @@ Pod::Spec.new do |s|
   preserved =  %w{objc/Private objc/PromiseKit}
 
   s.name = "PromiseKit"
-  s.version = "0.9.11.1"
+  s.version = "0.9.12"
   s.source = { :git => "https://github.com/mxcl/#{s.name}.git", :tag => s.version }
   s.license = 'MIT'
   s.summary = 'A delightful Promises implementation for iOS and OS X.'
@@ -75,7 +75,6 @@ Pod::Spec.new do |s|
     ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_UIANIMATION=1" }
     ss.preserve_paths = preserved
   end
-
 
   s.subspec 'CoreLocation' do |ss|
     ss.dependency 'PromiseKit/base'
