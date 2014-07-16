@@ -82,6 +82,15 @@ static const char* kSegueRejecter = "kSegueRejecter";
         [delegator pmk_reference];
         [(UIImagePickerController *)vc setDelegate:delegator];
     }
+    else if ([vc isKindOfClass:NSClassFromString(@"SLComposeViewController")]) {
+        return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
+            id block = ^(int result){
+                fulfiller(@(result));
+                [self dismissViewControllerAnimated:animated completion:nil];
+            };
+            [vc setValue:block forKey:@"completionHandler"];
+        }];
+    }
     else if ([vc isKindOfClass:[UINavigationController class]])
         vc = [(id)vc viewControllers].firstObject;
     
