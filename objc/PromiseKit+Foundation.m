@@ -52,6 +52,15 @@ static BOOL NSHTTPURLResponseIsImage(NSHTTPURLResponse *rsp) {
     return [self promise:[OMGHTTPURLRQ POST:url:params]];
 }
 
++ (PMKPromise *)PUT:(id)url formURLEncodedParameters:(NSDictionary *)params {
+    return [self promise:[OMGHTTPURLRQ PUT:url:params]];
+}
+
++ (PMKPromise *)DELETE:(id)url formURLEncodedParameters:(NSDictionary *)params {
+    return [self promise:[OMGHTTPURLRQ DELETE:url:params]];
+}
+
+
 + (PMKPromise *)promise:(NSURLRequest *)rq {
     static NSOperationQueue *q;
     static dispatch_once_t onceToken;
