@@ -195,6 +195,11 @@ static PMKResolveOnQueueBlock PMKMakeCallback(PMKPromise *this, PMKResolveOnQueu
             callBlock = ^(dispatch_queue_t q, id block) {
                 __block PMKPromise *next = nil;
                 __block id promiseResult;
+
+                // HACK we seem to expose some bug in ARC where this block can
+                // be an NSStackBlock which then gets deallocated by the time
+                // we get around to using it. So we force it to be malloc'd.
+                block = [block copy];
                 
                 dispatch_barrier_sync(this->_promiseQueue, ^{
                     promiseResult = this->_result;
