@@ -146,11 +146,6 @@ static id safely_call_block(id frock, id result) {
     return nil;
 }
 
-- (void)dealloc {
-    if (!_result && _handlers.count)
-        NSLog(@"PromiseKit: Promise about to be deallocated before it has been resolved! This is likely a bug and you are likely to crash. @see https://github.com/mxcl/PromiseKit/issues/50");
-}
-
 - (PMKPromise *(^)(id))then {
     return ^(id block){
         return self.thenOn(dispatch_get_main_queue(), block);
@@ -319,7 +314,6 @@ static PMKResolveOnQueueBlock PMKMakeCallback(PMKPromise *this, PMKResolveOnQueu
         });
     });
 }
-
 
 + (PMKPromise *)all:(id<NSFastEnumeration, NSObject>)promises {
     __block NSUInteger count = [(id)promises count];  // FIXME
