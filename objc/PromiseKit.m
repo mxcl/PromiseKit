@@ -163,13 +163,13 @@ static id safely_call_block(id frock, id result) {
     };
 }
 
-- (PMKPromise *(^)(void(^)(void))) finally {
+- (PMKPromise *(^)(void(^)(void)))finally {
     return ^(id block){
         return self.finallyOnImp(dispatch_get_main_queue(), block);
     };
 }
 
-- (PMKPromise *(^)(dispatch_queue_t, void(^)(void))) finallyOn {
+- (PMKPromise *(^)(dispatch_queue_t, void(^)(void)))finallyOn {
     // This preserves the requirement that finallyOn is passed a block that has no arguments.
     return ^(dispatch_queue_t q, void(^block)(void)){
         return self.finallyOnImp(q, block);
@@ -177,14 +177,15 @@ static id safely_call_block(id frock, id result) {
 }
 
 
-typedef PMKPromise*(^PMKResolveOnQueueBlock)(dispatch_queue_t, id);
+typedef PMKPromise *(^PMKResolveOnQueueBlock)(dispatch_queue_t, id);
 typedef void(^PMKResolveHandler)(id result, PMKPromise *next, dispatch_queue_t q, id block, PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter);
 
-    // This function generates the block that is returned from thenOn, catchOn and finallyOn(Imp).
-    // It takes a block that is called when the promise is resolved and one that is called in two
-    // cases where it is determined that the promise has already been resolved
-static id PMKMakeCallback(PMKPromise *this, PMKResolveOnQueueBlock (^alreadyResolved)(id result), PMKResolveHandler whenResolved) {
-    __block PMKPromise* (^callBlock)(dispatch_queue_t, id block);
+// This function generates the block that is returned from thenOn,
+// catchOn and finallyOn. It takes a block that is called when the
+// promise is resolved and one that is called in two cases where it is
+// determined that the promise has already been resolved.
+static PMKResolveOnQueueBlock PMKMakeCallback(PMKPromise *this, PMKResolveOnQueueBlock (^alreadyResolved)(id result), PMKResolveHandler whenResolved) {
+    __block PMKPromise *(^callBlock)(dispatch_queue_t, id block);
     __block id result;
     
     dispatch_sync(this->_promiseQueue, ^{
@@ -192,7 +193,7 @@ static id PMKMakeCallback(PMKPromise *this, PMKResolveOnQueueBlock (^alreadyReso
         
         if (result == nil) {
             callBlock = ^(dispatch_queue_t q, id block) {
-                __block PMKPromise* next = nil;
+                __block PMKPromise *next = nil;
                 __block id promiseResult;
                 
                 dispatch_barrier_sync(this->_promiseQueue, ^{
@@ -268,7 +269,7 @@ static id PMKMakeCallback(PMKPromise *this, PMKResolveOnQueueBlock (^alreadyReso
     });
 }
 
-- (PMKResolveOnQueueBlock)catchOn {
+- (PMKPromise *(^)(dispatch_queue_t, id))catchOn {
     return PMKMakeCallback(self, ^(id result){
         if (IsPromise(result)) {
             return ((PMKPromise *)result).catchOn;
@@ -419,7 +420,7 @@ static id PMKMakeCallback(PMKPromise *this, PMKResolveOnQueueBlock (^alreadyReso
 
 
 static dispatch_queue_t PMKCreatePromiseQueue() {
-    return dispatch_queue_create("com.github.mxcl.PromiseKit.PromiseQueue", DISPATCH_QUEUE_CONCURRENT);
+    return dispatch_queue_create("org.promiseKit.Q", DISPATCH_QUEUE_CONCURRENT);
 }
 
 static id PMKResult(PMKPromise *this) {
@@ -546,7 +547,7 @@ static void PMKResolve(PMKPromise *this, id result) {
 - (id)value {
 	id result = PMKResult(self);
     if (IsPromise(result))
-        return [(PMKPromise*)result value];
+        return [(PMKPromise *)result value];
     if (result == PMKNull)
         return nil;
     else

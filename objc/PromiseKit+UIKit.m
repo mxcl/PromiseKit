@@ -8,9 +8,8 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 
 
-
-static const char* kSegueFulfiller = "kSegueFulfiller";
-static const char* kSegueRejecter = "kSegueRejecter";
+static const char *kSegueFulfiller = "kSegueFulfiller";
+static const char *kSegueRejecter = "kSegueRejecter";
 
 @interface PMKMFDelegater : NSObject
 @end
