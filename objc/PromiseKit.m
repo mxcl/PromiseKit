@@ -163,16 +163,9 @@ static id safely_call_block(id frock, id result) {
     };
 }
 
-- (PMKPromise *(^)(void(^)(void)))finally {
-    return ^(id block){
-        return self.finallyOnImp(dispatch_get_main_queue(), block);
-    };
-}
-
-- (PMKPromise *(^)(dispatch_queue_t, void(^)(void)))finallyOn {
-    // This preserves the requirement that finallyOn is passed a block that has no arguments.
-    return ^(dispatch_queue_t q, void(^block)(void)){
-        return self.finallyOnImp(q, block);
+- (PMKPromise *(^)(dispatch_block_t))finally {
+    return ^(dispatch_block_t block) {
+        return self.finallyOn(dispatch_get_main_queue(), block);
     };
 }
 
@@ -303,21 +296,21 @@ static PMKResolveOnQueueBlock PMKMakeCallback(PMKPromise *this, PMKResolveOnQueu
         }
     });
 }
-    
-- (PMKResolveOnQueueBlock)finallyOnImp {
+
+- (PMKPromise *(^)(dispatch_queue_t, dispatch_block_t))finallyOn {
     return PMKMakeCallback(self, ^(id result){
         if (IsPromise(result))
-            return ((PMKPromise *)result).finallyOnImp;
+            return ((PMKPromise *)result).finallyOn;
         
-        return ^(dispatch_queue_t q, id block) {
+        return ^(dispatch_queue_t q, dispatch_block_t block) {
             return dispatch_promise_on(q, ^{
-                (void) safely_call_block(block, nil);
+                block();
                 return result;
             });
         };
-    }, ^(id passthru, PMKPromise *next, dispatch_queue_t q, id block, PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter){
+    }, ^(id passthru, PMKPromise *next, dispatch_queue_t q, dispatch_block_t block, PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter){
         dispatch_async(q, ^{
-            (void) safely_call_block(block, nil);
+            block();
             
             if (IsError(passthru))
                 rejecter(passthru);
