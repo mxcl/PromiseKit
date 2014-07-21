@@ -1,11 +1,3 @@
-//
-//  UIView+PromiseKit_UIAnimation.m
-//  YahooDenaStudy
-//
-//  Created by Masafumi Yoshida on 2014/07/11.
-//  Copyright (c) 2014年 DeNA. All rights reserved.
-//
-
 #import "PromiseKit+UIAnimation.h"
 #import "PromiseKit+Foundation.h"
 #import "PromiseKit/Promise.h"
@@ -67,35 +59,6 @@
 
 
 
-// deprecated
 
-+ (PMKPromise *)promiseAnimationWithDuration:(NSTimeInterval)duration animations:(void(^)(void))animations {
-    return [self promiseWithDuration:duration delay:0 options:0 animations:animations];
-}
-
-+ (PMKPromise *)promiseAnimationWithDuration:(NSTimeInterval)duration
-                                       delay:(NSTimeInterval)delay
-                                     options:(UIViewAnimationOptions)options
-                                  animations:(void(^)(void))animations {
-    return [self promiseWithDuration:duration delay:delay options:options animations:animations];
-}
-
-+ (PMKPromise *)promiseAnimateKeyframesWithDuration:(NSTimeInterval)duration
-                                              delay:(NSTimeInterval)delay
-                                            options:(UIViewKeyframeAnimationOptions)options
-                                         animations:(void(^)(void))animations
-{
-    return [self promiseWithDuration:duration delay:delay options:options keyframeAnimations:animations];
-}
-
-+ (PMKPromise *)promiseAnimateWithDuration:(NSTimeInterval)duration
-                                     delay:(NSTimeInterval)delay
-                    usingSpringWithDamping:(CGFloat)dampingRatio
-                     initialSpringVelocity:(CGFloat)velocity
-                                   options:(UIViewAnimationOptions)options
-                                animations:(void(^)(void))animations
-{
-    return [self promiseWithDuration:duration delay:delay usingSpringWithDamping:dampingRatio initialSpringVelocity:velocity options:options animations:animations];
-}
 
 @end

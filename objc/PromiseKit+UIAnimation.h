@@ -1,11 +1,3 @@
-//
-//  UIView+PromiseKit_UIAnimation.h
-//  YahooDenaStudy
-//
-//  Created by Masafumi Yoshida on 2014/07/11.
-//  Copyright (c) 2014年 DeNA. All rights reserved.
-//
-
 #import <UIKit/UIKit.h>
 
 @class PMKPromise;
@@ -46,7 +38,7 @@
 
  “Then”s the `BOOL` that the underlying `completion` block receives.
 */
-+ (PMKPromise *)promiseWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay usingSpringWithDamping:(CGFloat)dampingRatio initialSpringVelocity:(CGFloat)velocity options:(UIViewAnimationOptions)options animations:(void(^)(void))animations;
++ (PMKPromise *)promiseWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay usingSpringWithDamping:(CGFloat)dampingRatio initialSpringVelocity:(CGFloat)velocity options:(UIViewAnimationOptions)options animations:(void(^)(void))animations  NS_AVAILABLE_IOS(7_0);
 
 /**
  0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.
@@ -57,32 +49,7 @@
 
  “Then”s the `BOOL` that the underlying `completion` block receives.
 */
-+ (PMKPromise *)promiseWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewKeyframeAnimationOptions)options keyframeAnimations:(void(^)(void))animations;
++ (PMKPromise *)promiseWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewKeyframeAnimationOptions)options keyframeAnimations:(void(^)(void))animations  NS_AVAILABLE_IOS(7_0);
 
 
-
-
-+ (PMKPromise *)promiseAnimationWithDuration:(NSTimeInterval)duration
-                                  animations:(void (^)(void))animations
-                __attribute__((deprecated("Use -promiseWithDuration:animations:")));
-
-+ (PMKPromise *)promiseAnimationWithDuration:(NSTimeInterval)duration
-                                       delay:(NSTimeInterval)delay
-                                     options:(UIViewAnimationOptions)options
-                                  animations:(void (^)(void))animations
-                __attribute__((deprecated("Use -promiseithDuration:delay:options:animations:")));
-
-+ (PMKPromise *)promiseAnimateKeyframesWithDuration:(NSTimeInterval)duration
-                                              delay:(NSTimeInterval)delay
-                                            options:(UIViewKeyframeAnimationOptions)options
-                                         animations:(void (^)(void))animations
-                __attribute__((deprecated("Use -promiseWithDuration:delay:options:keyframeAnimations:")));
-
-+ (PMKPromise *)promiseAnimateWithDuration:(NSTimeInterval)duration
-                                     delay:(NSTimeInterval)delay
-                    usingSpringWithDamping:(CGFloat)dampingRatio
-                     initialSpringVelocity:(CGFloat)velocity
-                                   options:(UIViewAnimationOptions)options
-                                animations:(void (^)(void))animations
-                __attribute__((deprecated("Use -promiseWithDuration:delay:usingSpringWithDamping:initialSpringVelocity:options:animations:")));
 @end
