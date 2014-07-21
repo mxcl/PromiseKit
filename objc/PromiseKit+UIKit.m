@@ -8,9 +8,8 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 
 
-
-static const char* kSegueFulfiller = "kSegueFulfiller";
-static const char* kSegueRejecter = "kSegueRejecter";
+static const char *kSegueFulfiller = "kSegueFulfiller";
+static const char *kSegueRejecter = "kSegueRejecter";
 
 @interface PMKMFDelegater : NSObject
 @end
@@ -82,11 +81,20 @@ static const char* kSegueRejecter = "kSegueRejecter";
         [delegator pmk_reference];
         [(UIImagePickerController *)vc setDelegate:delegator];
     }
+    else if ([vc isKindOfClass:NSClassFromString(@"SLComposeViewController")]) {
+        return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
+            id block = ^(int result){
+                fulfiller(@(result));
+                [self dismissViewControllerAnimated:animated completion:nil];
+            };
+            [vc setValue:block forKey:@"completionHandler"];
+        }];
+    }
     else if ([vc isKindOfClass:[UINavigationController class]])
         vc = [(id)vc viewControllers].firstObject;
     
     if (!vc) {
-        id err = [NSError errorWithDomain:PMKErrorDomain code:PMKErrorCodeInvalidUsage userInfo:@{NSLocalizedDescriptionKey: @"Cannot promise a `nil` viewcontroller"}];
+        id err = [NSError errorWithDomain:PMKErrorDomain code:PMKInvalidUsageError userInfo:@{NSLocalizedDescriptionKey: @"Cannot promise a `nil` viewcontroller"}];
         return [PMKPromise promiseWithValue:err];
     }
     

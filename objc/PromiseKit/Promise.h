@@ -59,6 +59,16 @@ Then is always executed on the main dispatch queue (i.e the main/UI thread).
 - (PMKPromise *(^)(dispatch_queue_t, id))thenOn;
 
 /**
+ The provided block is executed on the dispatch queue of your choice.
+*/
+- (PMKPromise *(^)(dispatch_queue_t, id))catchOn;
+
+/**
+ The provided block is executed on the dispatch queue of your choice.
+*/
+- (PMKPromise *(^)(dispatch_queue_t, void(^)(void)))finallyOn;
+
+/**
 Returns a new Promise that is resolved when all passed Promises are resolved.
 
 If an array is passed then the returned `Promise` is resolved once all of the `Promise`s in the array are resolved. The returned Promise is rejected immediately if *any* of the `Promise`s received by `when` fail, discarding all other Promise values (thus you only get one error in any catch handler you provide).
@@ -142,10 +152,15 @@ id PMKManifold(NSArray *arguments);
 #define PMKErrorDomain @"PMKErrorDomain"
 #define PMKUnderlyingExceptionKey @"PMKUnderlyingExceptionKey"
 #define PMKFailingPromiseIndexKey @"PMKFailingPromiseIndexKey"
-#define PMKErrorCodeThrown 1
-#define PMKErrorCodeUnknown 2
-#define PMKErrorCodeInvalidUsage 3
+#define PMKUnhandledExceptionError 1
+#define PMKUnknownError 2
+#define PMKInvalidUsageError 3
 #define PMKAccessDeniedError 4
+
+// deprecated
+#define PMKErrorCodeThrown PMKUnhandledExceptionError
+#define PMKErrorCodeUnknown PMKUnknownError
+#define PMKErrorCodeInvalidUsage PMKInvalidUsageError
 
 extern NSString const*const PMKThrown __attribute__((deprecated("Use PMKUnderlyingExceptionKey")));
 

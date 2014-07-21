@@ -189,4 +189,22 @@ class TestPromise: XCTestCase {
         }
         waitForExpectationsWithTimeout(1, handler: nil)
     }
+
+/* TODO
+    func testCanCatchOffVoidPromise() {
+
+        let p1 = Promise{ success, _ in
+            success(10)
+        }
+        let p2 = p1.then{ (number: Int)->Void in
+            let a = "int is \(number)"
+        }
+        let p3 = p2.then{ Void->Void in
+            let a = 1
+            return
+        }
+
+        p3.cat
+    }
+*/
 }
