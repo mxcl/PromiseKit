@@ -1,0 +1,42 @@
+---
+category: home
+layout: default
+---
+
+# Importing PromiseKit
+
+In your [Podfile](http://guides.cocoapods.org/using/using-cocoapods.html):
+
+{% highlight ruby %}
+pod 'PromiseKit'
+{% endhighlight %}
+
+In your `.m` files:
+
+{% highlight c %}
+#import <PromiseKit.h>
+{% endhighlight %}
+
+<aside>
+Asking for just the `PromiseKit` pod gives you the 80% most people want, ie. `PMKPromise`, the `Foundation` category additions and the `UIKit` category additions.
+</aside>
+
+PromiseKit is modulized; if you only want `PMKPromise` and none of our category additions:
+
+{% highlight ruby %}
+pod 'PromiseKit/base'
+{% endhighlight %}
+
+Or if you only want some of our categories:
+
+{% highlight ruby %}
+pod 'PromiseKit/Foundation'    # in defaults
+pod 'PromiseKit/UIKit'         # in defaults
+pod 'PromiseKit/CoreLocation'
+pod 'PromiseKit/MapKit'
+pod 'PromiseKit/Social'
+pod 'PromiseKit/Accounts'
+pod 'PromiseKit/AVFoundation'
+pod 'PromiseKit/UIAnimation'   # in defaults
+pod 'PromiseKit/timing'
+{% endhighlight %}

@@ -9,10 +9,6 @@ html {
   color: #515151;
 }
 
-body {
-  padding: 3rem 0;
-}
-
 code, pre {
   font-family: Menlo, Monaco, "Courier New", monospace;
 }
@@ -21,7 +17,7 @@ code {
   color: #bf616a;
   background-color: #f9f9f9;
 }
-pre {
+pre, aside {
   margin-top: 0;
   margin-bottom: 1rem;
 }
@@ -67,4 +63,39 @@ pre code {
   display: inline-block;
   color: #9a9a9a;
   margin: 0.75rem;
+}
+
+aside {
+  background: #f9f9f9;
+  border: 10px solid darkgray;
+  border-width: 0 1rem;
+  color: darkgray;
+  font-size: 0.9rem;
+  padding: 1rem;
+  display: block;
+  text-align:justify;
+  text-justify:inter-word;
+}
+aside:before {
+  content: "Oh! BTW…";
+  color: darkgray;
+  display: block;
+  font-weight: bold;
+}
+
+.post:not(:last-child) {
+  border-bottom: 3px dashed lightgray;
+}
+
+nav {
+  position: absolute;
+  top: 0;
+  right: 0;
+  padding: 0 1rem;
+}
+nav a {
+  display: inline-block;
+  padding: 0.3rem;
+  margin-left: 0.3rem;
+  text-decoration: none;
 }
