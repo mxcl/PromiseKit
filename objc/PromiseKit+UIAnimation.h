@@ -1,11 +1,3 @@
-//
-//  UIView+PromiseKit_UIAnimation.h
-//  YahooDenaStudy
-//
-//  Created by Masafumi Yoshida on 2014/07/11.
-//  Copyright (c) 2014年 DeNA. All rights reserved.
-//
-
 #import <UIKit/UIKit.h>
 
 @class PMKPromise;
@@ -22,12 +14,12 @@
 + (PMKPromise *)promiseAnimateKeyframesWithDuration:(NSTimeInterval)duration
                                               delay:(NSTimeInterval)delay
                                             options:(UIViewKeyframeAnimationOptions)options
-                                         animations:(void (^)(void))animations;
+                                         animations:(void (^)(void))animations  NS_AVAILABLE_IOS(7_0);
 
 + (PMKPromise *)promiseAnimateWithDuration:(NSTimeInterval)duration
                                      delay:(NSTimeInterval)delay
                     usingSpringWithDamping:(CGFloat)dampingRatio
                      initialSpringVelocity:(CGFloat)velocity
                                    options:(UIViewAnimationOptions)options
-                                animations:(void (^)(void))animations;
+                                animations:(void (^)(void))animations  NS_AVAILABLE_IOS(7_0);
 @end
