@@ -106,7 +106,6 @@
 		63C7063B1959D8B6007C14DB /* plain.text */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = plain.text; path = Fixtures/plain.text; sourceTree = SOURCE_ROOT; };
 		63E3C6B319425F010042BBDE /* NSURLConnection+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSURLConnection+Promise.swift"; path = "Sources/NSURLConnection+Promise.swift"; sourceTree = SOURCE_ROOT; };
 		63F53F581944CBCF00F5F2B4 /* objc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = objc.m; path = Sources/objc.m; sourceTree = SOURCE_ROOT; };
-		63F53F5A1944CC1F00F5F2B4 /* objc.bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = objc.bridge.h; path = Sources/objc.bridge.h; sourceTree = SOURCE_ROOT; };
 		63F53F5B1944E3B000F5F2B4 /* MapKit+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "MapKit+Promise.swift"; path = "Sources/MapKit+Promise.swift"; sourceTree = SOURCE_ROOT; };
 		63F53F5E1944E7E000F5F2B4 /* StoreKit+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "StoreKit+Promise.swift"; path = "Sources/StoreKit+Promise.swift"; sourceTree = SOURCE_ROOT; };
 		63F53F611944EBB700F5F2B4 /* Social+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Social+Promise.swift"; path = "Sources/Social+Promise.swift"; sourceTree = SOURCE_ROOT; };
@@ -168,7 +167,6 @@
 				63F53F671944F29400F5F2B4 /* UIActionSheet+Promise.swift */,
 				63F53F651944F0E800F5F2B4 /* UIAlertView+Promise.swift */,
 				63F53F691944F33200F5F2B4 /* UIViewController+Promise.swift */,
-				63F53F5A1944CC1F00F5F2B4 /* objc.bridge.h */,
 				63F53F581944CBCF00F5F2B4 /* objc.m */,
 				637D0F131943821A0059AD78 /* constants.swift */,
 				63519919193FCD4C002CF47D /* Specs */,
@@ -553,7 +551,6 @@
 				METAL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = Sources/objc.bridge.h;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -575,7 +572,6 @@
 				METAL_ENABLE_DEBUG_INFO = NO;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
-				SWIFT_OBJC_BRIDGING_HEADER = Sources/objc.bridge.h;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";

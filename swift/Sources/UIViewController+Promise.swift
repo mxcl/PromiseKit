@@ -51,7 +51,7 @@ extension UIViewController {
         resolver.rejecter(error)
     }
 
-    func promiseViewController<T>(vc: UIViewController, animated: Bool = true, completion:(Void)->() = {}) -> Promise<T> {
+    public func promiseViewController<T>(vc: UIViewController, animated: Bool = true, completion:(Void)->() = {}) -> Promise<T> {
         presentViewController(vc, animated:animated, completion:completion)
 
         let deferred = Promise<T>.defer()
@@ -63,17 +63,17 @@ extension UIViewController {
         }
     }
 
-    func promiseViewController<T>(nc: UINavigationController, animated: Bool = false, completion:(Void)->() = {}) -> Promise<T> {
+    public func promiseViewController<T>(nc: UINavigationController, animated: Bool = false, completion:(Void)->() = {}) -> Promise<T> {
         let vc = nc.viewControllers[0] as UIViewController
         return promiseViewController(vc, animated: animated, completion: completion)
     }
 
-    func promiseViewController(vc: MFMailComposeViewController, animated: Bool = false, completion:(Void)->() = {}) -> Promise<Int> {
+    public func promiseViewController(vc: MFMailComposeViewController, animated: Bool = false, completion:(Void)->() = {}) -> Promise<Int> {
         vc.delegate = MFMailComposeViewControllerProxy()
         return promiseViewController(vc as UIViewController, animated: animated, completion: completion)
     }
 
-    func promiseViewController(vc: UIImagePickerController, animated: Bool = false, completion:(Void)->() = {}) -> Promise<UIImage?> {
+    public func promiseViewController(vc: UIImagePickerController, animated: Bool = false, completion:(Void)->() = {}) -> Promise<UIImage?> {
         let delegate = UIImagePickerControllerProxy()
         vc.delegate = delegate
         PMKRetain(delegate)

@@ -2,7 +2,7 @@ import MapKit
 
 extension MKDirections {
 
-    class func promise(request:MKDirectionsRequest) -> Promise<MKDirectionsResponse> {
+    public class func promise(request:MKDirectionsRequest) -> Promise<MKDirectionsResponse> {
         return Promise { (fulfiller, rejecter) in
             MKDirections(request:request).calculateDirectionsWithCompletionHandler {
                 if $1 {
@@ -14,7 +14,7 @@ extension MKDirections {
         }
     }
 
-    class func promise(request:MKDirectionsRequest) -> Promise<MKETAResponse> {
+    public class func promise(request:MKDirectionsRequest) -> Promise<MKETAResponse> {
         return Promise { (fulfiller, rejecter) in
             MKDirections(request:request).calculateETAWithCompletionHandler {
                 if $1 {
@@ -28,7 +28,7 @@ extension MKDirections {
 }
 
 extension MKMapSnapshotter {
-    func promise() -> Promise<MKMapSnapshot> {
+    public func promise() -> Promise<MKMapSnapshot> {
         return Promise { (fulfiller, rejecter) in
             self.startWithCompletionHandler {
                 if ($1) {

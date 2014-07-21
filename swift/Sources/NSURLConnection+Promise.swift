@@ -79,39 +79,39 @@ extension NSURLConnection {
 
     // Swift generics are not 100% capable yet, hence the repetition
 
-    class func GET(url:String) -> Promise<NSData> {
+    public class func GET(url:String) -> Promise<NSData> {
         let rq = NSURLRequest(URL:NSURL(string:url))
         return promise(rq)
     }
-    class func GET(url:String) -> Promise<String> {
+    public class func GET(url:String) -> Promise<String> {
         let rq = NSURLRequest(URL:NSURL(string:url))
         return promise(rq)
     }
-    class func GET(url:String) -> Promise<UIImage> {
+    public class func GET(url:String) -> Promise<UIImage> {
         let rq = NSURLRequest(URL:NSURL(string:url))
         return promise(rq)
     }
-    class func GET(url:String) -> Promise<NSArray> {
+    public class func GET(url:String) -> Promise<NSArray> {
         let rq = NSURLRequest(URL:NSURL(string:url))
         return promise(rq)
     }
-    class func GET(url:String) -> Promise<NSDictionary> {
+    public class func GET(url:String) -> Promise<NSDictionary> {
         return promise(NSURLRequest(URL:NSURL(string:url)))
     }
-    class func GET(url:String, query:Dictionary<String, String>) -> Promise<NSDictionary> {
+    public class func GET(url:String, query:Dictionary<String, String>) -> Promise<NSDictionary> {
         return promise(NSURLRequest(URL:NSURL(string:url + PMKDictionaryToURLQueryString(query))))
     }
-    class func GET(url:String, query:Dictionary<String, String>) -> Promise<NSArray> {
+    public class func GET(url:String, query:Dictionary<String, String>) -> Promise<NSArray> {
         return promise(NSURLRequest(URL:NSURL(string:url + PMKDictionaryToURLQueryString(query))))
     }
     
-    class func promise(rq:NSURLRequest) -> Promise<NSData> {
+    public class func promise(rq:NSURLRequest) -> Promise<NSData> {
         return fetch(rq) { (fulfiller, _, data) in
             fulfiller(data)
         }
     }
 
-    class func promise(rq:NSURLRequest) -> Promise<String> {
+    public class func promise(rq:NSURLRequest) -> Promise<String> {
         return fetch(rq) { (fulfiller, rejecter, data) in
             let str:String? = NSString(data: data, encoding: NSUTF8StringEncoding)
             if str {
@@ -130,7 +130,7 @@ extension NSURLConnection {
     // that only JSON object types work, also ideally I should be
     // about to specify eg String[] or [String:Array] etc.
 
-    class func promise(request:NSURLRequest) -> Promise<NSDictionary> {
+    public class func promise(request:NSURLRequest) -> Promise<NSDictionary> {
         return fetch(request) { (fulfiller, rejecter, data) in
             var error:NSError?
             let json:AnyObject? = NSJSONSerialization.JSONObjectWithData(data, options:nil, error:&error)
@@ -151,7 +151,7 @@ extension NSURLConnection {
         }
     }
 
-    class func promise(request:NSURLRequest) -> Promise<NSArray> {
+    public class func promise(request:NSURLRequest) -> Promise<NSArray> {
         return fetch(request) { (fulfiller, rejecter, data) in
             var error:NSError?
             let json:AnyObject? = NSJSONSerialization.JSONObjectWithData(data, options:nil, error:&error)
@@ -170,7 +170,7 @@ extension NSURLConnection {
         }
     }
 
-    class func promise(rq:NSURLRequest) -> Promise<UIImage> {
+    public class func promise(rq:NSURLRequest) -> Promise<UIImage> {
         return fetch(rq) { (fulfiller, rejecter, data) in
             var img:UIImage? = UIImage(data:data)
             if img {

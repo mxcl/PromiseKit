@@ -25,7 +25,7 @@ class LocationManager: CLLocationManager, CLLocationManagerDelegate {
 }
 
 extension CLLocationManager {
-    class func promise() -> Promise<CLLocation> {
+    public class func promise() -> Promise<CLLocation> {
         let deferred = Promise<CLLocation>.defer()
         let manager = LocationManager(deferred: deferred)
         manager.startUpdatingLocation()
@@ -39,7 +39,7 @@ extension CLLocationManager {
 }
 
 extension CLGeocoder {
-    class func reverseGeocode(location:CLLocation) -> Promise<CLPlacemark> {
+    public class func reverseGeocode(location:CLLocation) -> Promise<CLPlacemark> {
         return Promise { (fulfiller, rejecter) in
             CLGeocoder().reverseGeocodeLocation(location) {
                 if $1 {
@@ -51,7 +51,7 @@ extension CLGeocoder {
         }
     }
 
-    class func geocode(#addressDictionary:Dictionary<String, String>) -> Promise<CLPlacemark> {
+    public class func geocode(#addressDictionary:Dictionary<String, String>) -> Promise<CLPlacemark> {
         return Promise { (fulfiller, rejecter) in
             CLGeocoder().geocodeAddressDictionary(addressDictionary) {
                 if $1 {
@@ -63,7 +63,7 @@ extension CLGeocoder {
         }
     }
 
-    class func geocode(#addressString:String) -> Promise<CLPlacemark> {
+    public class func geocode(#addressString:String) -> Promise<CLPlacemark> {
         return Promise { (fulfiller, rejecter) in
             CLGeocoder().geocodeAddressString(addressString) {
                 if $1 {
