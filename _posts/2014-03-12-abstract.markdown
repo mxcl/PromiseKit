@@ -3,7 +3,7 @@ category: home
 layout: default
 ---
 
-# Hello, PromiseKit
+<img src='/public/img/header.png' id='elephants'>
 
 Modern development is highly asynchronous: isn’t it about time iOS developers had tools that made programming asynchronously powerful, easy and delightful?
 

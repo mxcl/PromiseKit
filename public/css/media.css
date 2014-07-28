@@ -54,7 +54,7 @@ pre {
   }
   .highlight {
     text-align: center;
-  }  
+  }
 }
 @media (min-width: 800px) {
   html {
@@ -68,5 +68,8 @@ pre {
   }
   aside {
     min-width: 34rem;
+  }
+  #elephants {
+    width: auto;
   }
 }

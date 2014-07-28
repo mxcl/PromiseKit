@@ -51,7 +51,9 @@ pre code {
   background: -webkit-linear-gradient(top, rgb(52,159,226) 0%, rgb(0,48,191) 100%);
   background: -o-linear-gradient(top, rgb(52,159,226) 0%, rgb(0,48,191) 100%);
   background: -ms-linear-gradient(top, rgb(52,159,226) 0%, rgb(0,48,191) 100%);
-  background: linear-gradient(to bottom, rgb(52,159,226) 0%, rgb(0,48,191) 100%); 
+  background: linear-gradient(to bottom, rgb(52,159,226) 0%, rgb(0,48,191) 100%);
+  
+  font-family: "PT Sans", Helvetica, Arial, sans-serif;
 }
 .github:hover {
   text-decoration: none;
@@ -63,6 +65,7 @@ pre code {
   display: inline-block;
   color: #9a9a9a;
   margin: 0.75rem;
+  font-family: "PT Sans", Helvetica, Arial, sans-serif;
 }
 
 aside {
@@ -91,11 +94,19 @@ nav {
   position: absolute;
   top: 0;
   right: 0;
+  left: 0;
   padding: 0 1rem;
+  text-align: center;
 }
 nav a {
   display: inline-block;
   padding: 0.3rem;
   margin-left: 0.3rem;
   text-decoration: none;
+  font-family: "PT Sans", Helvetica, Arial, sans-serif;
+}
+
+#elephants {
+  margin-top: -1rem;
+  width: 100%;
 }
