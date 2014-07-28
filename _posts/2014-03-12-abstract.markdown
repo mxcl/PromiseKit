@@ -10,19 +10,3 @@ Modern development is highly asynchronous: isn’t it about time iOS developers 
 PromiseKit is not just a [Promises](http://wikipedia.org/wiki/Promise_%28programming%29) implementation, it is also a collection of helper functions that make the typical asynchronous patterns we use in iOS development delightful *too*.
 
 In addition, PromiseKit is designed to be integrated into other [CocoaPods](http://cocoapods.org). If your library has asynchronous operations then consider adding an opt-in subspec that provides Promises for your users. Documentation to help you integrate PromiseKit into your own pods is provided later in this guide.
-
-<script>
-function foo(rsp) {
-  if (rsp.meta.status == 200) {
-    var pulse = document.getElementById("pulse");
-    pulse.innerHTML = "★" + rsp.data.stargazers_count;
-  }
-}
-
-var script = document.createElement('script');
-script.src = 'https://api.github.com/repos/mxcl/PromiseKit?access_token=c826b3e99f4be66fd134ebabd070e61159ab4d7a&callback=foo';
-
-document.getElementsByTagName('head')[0].appendChild(script);
-</script>
-
-<a class="github" href="https://github.com/mxcl/PromiseKit">PromiseKit on GitHub</a> <span id="pulse"></span>

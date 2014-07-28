@@ -1,8 +1,28 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
   {% include head.html %}
+  
   <body>
-    <nav><a href='/'>Overview</a><a href='/api/'>API</a><a href='/examples/'>Example Usage</a><a href='/pods/'>Promised Pods</a></nav>
+    <script>
+      function foo(rsp) {
+        if (rsp.meta.status == 200) {
+          var pulse = document.getElementById("pulse");
+          pulse.innerHTML = "★" + rsp.data.stargazers_count;
+        }
+      }
+
+      var script = document.createElement('script');
+      script.src = 'https://api.github.com/repos/mxcl/PromiseKit?access_token=c826b3e99f4be66fd134ebabd070e61159ab4d7a&callback=foo';
+
+      document.getElementsByTagName('head')[0].appendChild(script);
+    </script>
+
+    <nav>
+      <a href='/'>Overview</a>
+      <a href='/api/'>API</a><a href='/examples/'>Example Usage</a>
+      <a href='/pods/'>Promised Pods</a>
+      <a href="https://github.com/mxcl/PromiseKit">Sources {<span id="pulse"></span>}</a>
+    </nav>
     {{ content }}
   </body>
 </html>
