@@ -1,13 +1,7 @@
+#import <dispatch/dispatch.h>
+#import <Foundation/NSError.h>
+#import <Foundation/NSArray.h>
 #import <PromiseKit/fwd.h>
-
-#if PMK_MODULES
-  @import Dispatch.introspection;
-  @import Foundation.NSArray;
-  @import Foundation.NSError;
-#else
-  #import <Foundation/Foundation.h>
-#endif
-
 
 typedef void (^PromiseResolver)(id) __attribute__((deprecated("Use PromiseFulfiller or PromiseRejecter")));
 typedef void (^PromiseFulfiller)(id) __attribute__((deprecated("Use PMKPromiseFulfiller")));
@@ -103,6 +97,8 @@ An example usage is an app starting up that must get data from the Internet befo
  Create a new root Promise.
 
  Pass a block to this constructor, the block must take two arguments that point to the `fulfiller` and `rejecter` of this Promise. Fulfill or reject this Promise using those blocks and the Promise chain that roots to this Promise will be resolved accordingly.
+
+ Should you need to fulfill a promise but have no sensical value to use; fulfill with `nil`.
 */
 + (PMKPromise *)new:(void(^)(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter))block;
 
