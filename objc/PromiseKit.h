@@ -1,38 +1,36 @@
-#import "PromiseKit/Promise.h"
+#import <PromiseKit/Promise.h>
+
 #ifdef PMK_CORELOCATION
-#import "PromiseKit+CoreLocation.h"
+#import <CoreLocation+PromiseKit.h>
 #endif
 #ifdef PMK_FOUNDATION
-#import "PromiseKit+Foundation.h"
+#import <Foundation+PromiseKit.h>
 #endif
-#ifdef PMK_UIKIT
-#import "PromiseKit+UIKit.h"
-#endif
-#ifdef PMK_UIANIMATION
-#import "PromiseKit+UIAnimation.h"
+#if defined(PMK_UIKIT) || defined(PMK_UIANIMATION)
+#import <UIKit+PromiseKit.h>
 #endif
 #ifdef PMK_MAPKIT
-#import "PromiseKit+MapKit.h"
+#import <MapKit+PromiseKit.h>
 #endif
 #ifdef PMK_SOCIAL
-#import "PromiseKit+Social.h"
+#import <Social+PromiseKit.h>
 #endif
 #ifdef PMK_STOREKIT
-#import "PromiseKit+StoreKit.h"
+#import <StoreKit+PromiseKit.h>
 #endif
 #ifdef PMK_AVFOUNDATION
-#import "PromiseKit+AVFoundation.h"
+#import <AVFoundation+PromiseKit.h>
 #endif
 #ifdef PMK_ACCOUNTS
-#import "PromiseKit+Accounts.h"
+#import <Accounts+PromiseKit.h>
 #endif
 #ifdef PMK_TIMING
-#import "PromiseKit/Promise+Timing.h"
+#import <PromiseKit/Promise+Timing.h>
 #endif
 
 #ifndef PMK_NO_UNPREFIXATION
 // I used a typedef but it broke the tests, turns out typedefs are new
 // types that have consequences with isKindOfClass and that
-// NOTE I will remove this at 1.0
+// NOTE I will remove this at 1.1
 typedef PMKPromise Promise __attribute__((deprecated("Use PMKPromise. Use of Promise is deprecated. This is a typedef, and since it is a typedef, there may be unintended side-effects.")));
 #endif

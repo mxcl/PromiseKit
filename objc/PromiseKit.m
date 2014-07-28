@@ -1,4 +1,4 @@
-#import "assert.h"
+#import <assert.h>
 @import Dispatch.introspection;
 @import Foundation.NSDictionary;
 @import Foundation.NSError;

@@ -8,11 +8,7 @@
 
 #if PMK_iOS6_ISH
 
-#if PMK_MODULES
-  @import Social.SLRequest;
-#else
-  #import <Social/Social.h>
-#endif
+#import <Social/SLRequest.h>
 
 extern NSString *const SLRequestPromiseKitErrorDomain;
 extern const NSInteger SLRequestPromiseKitServerStatusCodeErrorCode;

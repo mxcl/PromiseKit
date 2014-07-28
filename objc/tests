@@ -2,14 +2,14 @@
 OBJC = <<-__EOBJC__
 
 #import "PromiseKit/Promise.h"
-#import "PromiseKit+Foundation.m"
+#import "Foundation+PromiseKit.m"
 #import <CommonCrypto/CommonCrypto.h>
     
-#import "PromiseKit+Accounts.m"      // test compiles
-#import "PromiseKit+CoreLocation.m"  // test compiles
-#import "PromiseKit+MapKit.m"        // test compiles
-#import "PromiseKit+Social.m"        // test compiles
-#import "PromiseKit+StoreKit.m"      // test compiles
+#import "Accounts+PromiseKit.m"      // test compiles
+#import "CoreLocation+PromiseKit.m"  // test compiles
+#import "MapKit+PromiseKit.m"        // test compiles
+#import "Social+PromiseKit.m"        // test compiles
+#import "StoreKit+PromiseKit.m"      // test compiles
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wgnu-zero-variadic-macro-arguments"

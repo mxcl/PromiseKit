@@ -4,7 +4,7 @@
 //  Created by Matthew Loseke on 6/21/14.
 //
 
-#import "PromiseKit+AVFoundation.h"
+#import "AVFoundation+PromiseKit.h"
 #import "PromiseKit/Promise.h"
 
 @implementation AVAudioSession (PromiseKit)

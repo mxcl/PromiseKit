@@ -1,5 +1,5 @@
+#import "MapKit+PromiseKit.h"
 #import "PromiseKit/Promise.h"
-#import "PromiseKit+MapKit.h"
 
 
 #if PMK_iOS6_ISH

@@ -1,6 +1,6 @@
 @import CoreLocation.CLLocationManagerDelegate;
+#import "CoreLocation+PromiseKit.h"
 #import "Private/PMKManualReference.h"
-#import "PromiseKit+CoreLocation.h"
 #import "PromiseKit/fwd.h"
 #import "PromiseKit/Promise.h"
 

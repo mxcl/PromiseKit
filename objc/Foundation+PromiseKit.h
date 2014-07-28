@@ -1,13 +1,8 @@
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSURLCache.h>
+#import <Foundation/NSURLConnection.h>
+#import <Foundation/NSURLRequest.h>
 #import "PromiseKit/fwd.h"
-
-#if PMK_MODULES
-  @import Foundation.NSDictionary;
-  @import Foundation.NSURLCache;
-  @import Foundation.NSURLConnection;
-  @import Foundation.NSURLRequest;
-#else
-  #import <Foundation/Foundation.h>
-#endif
 
 #define PMKURLErrorFailingURLResponseKey @"PMKURLErrorFailingURLResponseKey"
 #define PMKURLErrorFailingDataKey @"PMKURLErrorFailingDataKey"
@@ -38,10 +33,3 @@ extern NSString const*const PMKURLErrorFailingData __attribute__((deprecated("Us
 // ideally this would be from a pod, but I looked and all the pods imposed
 // too much symbol overhead or used catgeories
 NSString *NSDictionaryToURLQueryString(NSDictionary *parameters);
-
-
-/**
- A sensible User-Agent string, that by default we set on your requests if you
- didn’t set your own.
-*/
-NSString *PMKUserAgent();

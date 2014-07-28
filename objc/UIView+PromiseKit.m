@@ -6,9 +6,8 @@
 //  Copyright (c) 2014年 DeNA. All rights reserved.
 //
 
-#import "PromiseKit+UIAnimation.h"
-#import "PromiseKit+Foundation.h"
 #import "PromiseKit/Promise.h"
+#import "UIKit+PromiseKit.h"
 
 #define PMKMainThreadError [NSError errorWithDomain:PMKErrorDomain code:PMKInvalidUsageError userInfo:@{NSLocalizedDescriptionKey: @"Animation was attempted on a background thread"}]
 

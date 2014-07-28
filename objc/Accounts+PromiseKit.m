@@ -1,4 +1,4 @@
-#import "PromiseKit+Accounts.h"
+#import "Accounts+PromiseKit.h"
 #import "PromiseKit/Promise.h"
 
 #if PMK_iOS6_ISH

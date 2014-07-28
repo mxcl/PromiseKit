@@ -5,8 +5,8 @@
 //
 
 #import "Private/PromiseKit.ph"
-#import "PromiseKit+Social.h"
 #import "PromiseKit/Promise.h"
+#import "Social+PromiseKit.h"
 
 #if PMK_iOS6_ISH
 

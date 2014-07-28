@@ -1,4 +1,4 @@
-#import "PromiseKit/fwd.h"
+#import <PromiseKit/fwd.h>
 
 #if PMK_MODULES
   @import Dispatch.introspection;

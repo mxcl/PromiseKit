@@ -1,12 +1,11 @@
+#import <AssetsLibrary/AssetsLibrary.h>
 #import <objc/runtime.h>
 #import "Private/PMKManualReference.h"
 #import "Private/ClassSwizzling.m"
 #import "PromiseKit/Promise.h"
-#import "PromiseKit+UIKit.h"
 @import UIKit.UINavigationController;
 @import UIKit.UIImagePickerController;
-#import <AssetsLibrary/AssetsLibrary.h>
-
+#import "UIKit+PromiseKit.h"
 
 static const char *kSegueFulfiller = "kSegueFulfiller";
 static const char *kSegueRejecter = "kSegueRejecter";

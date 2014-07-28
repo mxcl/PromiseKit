@@ -6,9 +6,9 @@
 //  Copyright (c) 2014 Josejulio Martínez. All rights reserved.
 //
 
+#import <Foundation/NSString.h>
 #import <objc/runtime.h>
 #import <string.h>
-#import <Foundation/NSString.h>
 
 static __attribute__((unused)) void swizzleClass(const char* classPrefix, id target, SEL originalSelector, SEL swizzledSelector) {
     Class klass = [target class];

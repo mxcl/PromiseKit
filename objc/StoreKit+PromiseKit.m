@@ -7,7 +7,7 @@
 
 #import "Private/PMKManualReference.h"
 #import "PromiseKit/Promise.h"
-#import "PromiseKit+StoreKit.h"
+#import "StoreKit+PromiseKit.h"
 
 @interface PMKSKProductsRequestDelegater : NSObject <SKProductsRequestDelegate> {
 @public

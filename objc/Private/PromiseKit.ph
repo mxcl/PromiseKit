@@ -1,5 +1,5 @@
 @import Foundation.NSURLResponse;
-#import "Chuzzle.h"
+#import <Chuzzle.h>
 
 
 static inline BOOL PMKHTTPURLResponseIsJSON(NSHTTPURLResponse *rsp) {

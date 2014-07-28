@@ -4,11 +4,7 @@
 //  Created by Matthew Loseke on 6/21/14.
 //
 
-#if PMK_MODULES
-@import AVFoundation.AVAudioSession;
-#else
-#import <AVFoundation/AVFoundation.h>
-#endif
+#import <AVFoundation/AVAudioSession.h>
 
 
 @class PMKPromise;
