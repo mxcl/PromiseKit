@@ -282,7 +282,7 @@ static PMKResolveOnQueueBlock PMKMakeCallback(PMKPromise *this, PMKResolveOnQueu
                 if (IsError(rv)) {
                     if (rv != result) ((PMKError *)result)->consumed = YES;
                     rejecter(rv);
-                else if (rv)
+                } else {
                     ((PMKError *)result)->consumed = YES;
                     fulfiller(rv);
                 }
