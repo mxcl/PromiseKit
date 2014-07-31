@@ -18,20 +18,13 @@ static const id PMKNull = @"PMKNull";
 @interface PMKArray : NSObject
 @end
 
+@interface PMKError : NSError
+{ @public BOOL consumed; }
++ (instancetype):(id)foo;
+@end
+
 // deprecated
 NSString const*const PMKThrown = PMKUnderlyingExceptionKey;
-
-
-
-static inline NSError *NSErrorWithThrown(id e) {
-    id userInfo = [NSMutableDictionary new];
-    userInfo[PMKUnderlyingExceptionKey] = e;
-    if ([e isKindOfClass:[NSException class]])
-        userInfo[NSLocalizedDescriptionKey] = [e reason];
-    else
-        userInfo[NSLocalizedDescriptionKey] = [e description];
-    return [NSError errorWithDomain:PMKErrorDomain code:PMKUnhandledExceptionError userInfo:userInfo];
-}
 
 
 
@@ -124,7 +117,7 @@ static id safely_call_block(id frock, id result) {
             [e name] == NSPortReceiveException))
                 @throw e;
       #endif
-        return IsError(e) ? e : NSErrorWithThrown(e);
+        return [PMKError:e];
     }
 }
 
@@ -270,7 +263,12 @@ static PMKResolveOnQueueBlock PMKMakeCallback(PMKPromise *this, PMKResolveOnQueu
         
         if (IsError(result)) return ^(dispatch_queue_t q, id block) {
             return dispatch_promise_on(q, ^{   // don’t release Zalgo
-                return safely_call_block(block, result);
+                id rv = safely_call_block(block, result);
+                if (rv != result) {
+                    // if the handler rethrows the error, it is not consumed
+                    ((PMKError *)result)->consumed = YES;
+                }
+                return rv;
             });
         };
         
@@ -281,10 +279,13 @@ static PMKResolveOnQueueBlock PMKMakeCallback(PMKPromise *this, PMKResolveOnQueu
         if (IsError(result)) {
             dispatch_async(q, ^{
                 id rv = safely_call_block(block, result);
-                if (IsError(rv))
+                if (IsError(rv)) {
+                    if (rv != result) ((PMKError *)result)->consumed = YES;
                     rejecter(rv);
                 else if (rv)
+                    ((PMKError *)result)->consumed = YES;
                     fulfiller(rv);
+                }
             });
         } else {
             PMKResolve(next, result);
@@ -324,7 +325,7 @@ static PMKResolveOnQueueBlock PMKMakeCallback(PMKPromise *this, PMKResolveOnQueu
     #define rejecter(key) ^(NSError *err){ \
         id userInfo = err.userInfo.mutableCopy; \
         userInfo[PMKFailingPromiseIndexKey] = key; \
-        err = [NSError errorWithDomain:err.domain code:err.code userInfo:userInfo]; \
+        err = [PMKError errorWithDomain:err.domain code:err.code userInfo:userInfo]; \
         rejecter(err); \
     }
 
@@ -494,21 +495,21 @@ static void PMKResolve(PMKPromise *this, id result) {
                 @throw PMKE(@"You may not reject a Promise with a Promise");
         }
         if (!error)
-            error = [NSError errorWithDomain:PMKErrorDomain code:PMKUnknownError userInfo:nil];
+            error = [PMKError errorWithDomain:PMKErrorDomain code:PMKUnknownError userInfo:nil];
         if (!IsError(error)) {
-            NSLog(@"PromiseKit: Warning, you should reject with proper NSError objects!");
-            error = [NSError errorWithDomain:PMKErrorDomain code:PMKInvalidUsageError userInfo:@{
+            NSLog(@"PromiseKit: Warning: Reject promises with NSErrors!");
+            error = [PMKError errorWithDomain:PMKErrorDomain code:PMKInvalidUsageError userInfo:@{
                 NSLocalizedDescriptionKey: [error description]
             }];
         }
 
-        PMKResolve(this, error);
+        PMKResolve(this, [PMKError:error]);
     };
 
     @try {
         block(fulfiller, rejecter);
     } @catch (id e) {
-        PMKSetResult(this, IsError(e) ? e : NSErrorWithThrown(e));
+        PMKSetResult(this, [PMKError:e]);
     }
 
     return this;
@@ -609,3 +610,29 @@ id PMKManifold(NSArray *args) {
     aa->objs = args;
     return aa;
 }
+
+
+
+@implementation PMKError
+
++ (instancetype):(id)foo {
+    if ([foo isKindOfClass:[PMKError class]])
+        return foo;
+    if ([foo isKindOfClass:[NSError class]])
+        return [PMKError errorWithDomain:[foo domain] code:[foo code] userInfo:[foo userInfo]];
+    else {
+        id userInfo = [NSMutableDictionary new];
+        userInfo[PMKUnderlyingExceptionKey] = foo;
+        userInfo[NSLocalizedDescriptionKey] = [foo isKindOfClass:[NSException class]]
+                ? [foo reason]
+                : [foo description];
+        return [PMKError errorWithDomain:PMKErrorDomain code:PMKUnhandledExceptionError userInfo:userInfo];
+    }
+}
+
+- (void)dealloc {
+    if (!consumed)
+        NSLog(@"PromiseKit: Unhandled error: %@", self);
+}
+
+@end
