@@ -100,12 +100,13 @@ static BOOL NSHTTPURLResponseIsImage(NSHTTPURLResponse *rsp) {
                 NSError *err = nil;
                 id json = [NSJSONSerialization JSONObjectWithData:data options:PMKJSONDeserializationOptions error:&err];
                 if (err) {
-                    id userInfo = err.userInfo.copy;
+                    id userInfo = err.userInfo.mutableCopy;
                     id bytes = ({ id l = [[rsp valueForKeyPath:@"allHeaderFields.Content-Length"] chuzzle];
                                   if (l) l = [NSString stringWithFormat:@"%@ bytes", l];
                                l ?: @""; });
                     id fmt = @"The server claimed a%@ JSON response, but it was invalid. %@";
                     id msg = [NSString stringWithFormat:fmt, bytes, userInfo[NSLocalizedDescriptionKey]];
+                    if (data) userInfo[PMKURLErrorFailingStringKey] = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                     userInfo[NSLocalizedDescriptionKey] = msg;
                     err = [NSError errorWithDomain:err.domain code:err.code userInfo:userInfo];
                     rejecter(err);
