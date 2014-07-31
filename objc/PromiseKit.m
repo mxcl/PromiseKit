@@ -125,7 +125,7 @@ static id safely_call_block(id frock, id result) {
 
 @implementation PMKPromise {
 /**
- We have public @implementation instance variables so PMKResolve
+ We have public @implementation instance variables so PMKResolve()
  can fulfill promises. Our usage is like the C++ `friend` keyword.
  */
 @public
@@ -596,12 +596,10 @@ PMKPromise *dispatch_promise_on(dispatch_queue_t queue, id block) {
 { @public NSArray *objs; }
 
 - (id)objectAtIndexedSubscript:(NSUInteger)idx {
-    return objs.count >= idx+1 ? objs[idx] : nil;
+    return objs[idx];
 }
 
 @end
-
-
 
 #undef PMKManifold
 
