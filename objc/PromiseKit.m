@@ -604,6 +604,7 @@ PMKPromise *dispatch_promise_on(dispatch_queue_t queue, id block) {
 #undef PMKManifold
 
 id PMKManifold(NSArray *args) {
+    if (!args.count) return nil;
     PMKArray *aa = [PMKArray new];
     aa->objs = args;
     return aa;
@@ -617,7 +618,7 @@ id PMKManifold(NSArray *args) {
     if ([foo isKindOfClass:[PMKError class]])
         return foo;
     if ([foo isKindOfClass:[NSError class]])
-        return [PMKError errorWithDomain:[foo domain] code:[foo code] userInfo:[foo userInfo]];
+        return [PMKError errorWithDomain:[foo domain] ?: PMKErrorDomain code:[foo code] userInfo:[foo userInfo]];
     else {
         id userInfo = [NSMutableDictionary new];
         userInfo[PMKUnderlyingExceptionKey] = foo;
