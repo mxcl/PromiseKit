@@ -141,7 +141,9 @@ Note that passing an `NSError` object is valid usage and will reject this promis
  Note that attempts to reject with `PMKManifold` will `@throw`.
 */
 id PMKManifold(NSArray *arguments);
-#define PMKManifold(...) PMKManifold(@[__VA_ARGS__])
+
+// using arrayWithObjects because it is `nil` safe
+#define PMKManifold(...) PMKManifold([NSArray arrayWithObjects:__VA_ARGS__, nil])
 
 
 
