@@ -635,3 +635,14 @@ id PMKManifold(NSArray *args) {
 }
 
 @end
+
+
+
+NSOperationQueue *PMKOperationQueue() {
+    static NSOperationQueue *q;
+    static dispatch_once_t onceToken;
+    dispatch_once(&onceToken, ^{
+        q = [NSOperationQueue new];
+    });
+    return q;
+}

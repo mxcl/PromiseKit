@@ -10,3 +10,7 @@
 
 #define PMK_iOS8_ISH ((defined(__MAC_OS_X_VERSION_MAX_ALLOWED) && __MAC_OS_X_VERSION_MAX_ALLOWED >= 1010) \
                    || (defined(__IPHONE_OS_VERSION_MAX_ALLOWED) && __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000))
+
+
+@class NSOperationQueue;
+extern NSOperationQueue *PMKOperationQueue();
