@@ -60,16 +60,9 @@ static BOOL NSHTTPURLResponseIsImage(NSHTTPURLResponse *rsp) {
     return [self promise:[OMGHTTPURLRQ DELETE:url:params]];
 }
 
-
 + (PMKPromise *)promise:(NSURLRequest *)rq {
-    static NSOperationQueue *q;
-    static dispatch_once_t onceToken;
-    dispatch_once(&onceToken, ^{
-        q = [NSOperationQueue new];
-    });
-
     return [PMKPromise new:^(PMKPromiseFulfiller fluff, PMKPromiseRejecter rejunk){
-        [NSURLConnection sendAsynchronousRequest:rq queue:q completionHandler:^(id rsp, id data, NSError *urlError) {
+        [NSURLConnection sendAsynchronousRequest:rq queue:PMKOperationQueue() completionHandler:^(id rsp, id data, NSError *urlError) {
 
             assert(![NSThread isMainThread]);
 

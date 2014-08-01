@@ -47,7 +47,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'Foundation' do |ss|
     ss.dependency 'PromiseKit/base'
-    ss.source_files = 'objc/Foundation+PromiseKit.{h,m}', 'objc/deprecated/PromiseKit+Foundation.h'
+    ss.source_files = 'objc/Foundation+PromiseKit.h', 'objc/NSURLConnection+PromiseKit.m', 'objc/NSNotificationCenter+PromiseKit.m', 'objc/deprecated/PromiseKit+Foundation.h'
     ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_FOUNDATION=1" }
     ss.preserve_paths = preserved
     ss.frameworks = 'Foundation'

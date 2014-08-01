@@ -31,6 +31,11 @@ extern NSString const*const PMKURLErrorFailingData __attribute__((deprecated("Us
 
 
 
-// ideally this would be from a pod, but I looked and all the pods imposed
-// too much symbol overhead or used catgeories
-NSString *NSDictionaryToURLQueryString(NSDictionary *parameters);
+@interface NSNotificationCenter (PromiseKit)
+/**
+ Fires once for the named notification.
+ 
+ thens the NSNotification object and the NSNotification’s userInfo as the second argument.
+*/
++ (PMKPromise *)once:(NSString *)notificationName;
+@end

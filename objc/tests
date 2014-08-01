@@ -2,7 +2,7 @@
 OBJC = <<-__EOBJC__
 
 #import "PromiseKit/Promise.h"
-#import "Foundation+PromiseKit.m"
+#import "NSURLConnection+PromiseKit.m"
 #import <CommonCrypto/CommonCrypto.h>
     
 #import "Accounts+PromiseKit.m"      // test compiles
