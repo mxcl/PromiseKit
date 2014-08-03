@@ -13,7 +13,7 @@ class Test234: XCTestCase {
             }
 
             promise2.then { (a: Int)->Void in
-                XCTAssertEqualObjects(a, 1)
+                XCTAssertEqual(a, 1)
                 exes[0].fulfill()
             }
         }
@@ -24,7 +24,7 @@ class Test234: XCTestCase {
             }
 
             promise2.then { (a: Int)->Void in
-                XCTAssertEqualObjects(a, 1)
+                XCTAssertEqual(a, 1)
                 exes[0].fulfill()
             }
         }

@@ -10,7 +10,7 @@ class Test223: XCTestCase {
         // with `promise`’s rejection reason as its first argument
         suiteRejected(1) { (promise, exes, memo) -> () in
             promise.catch { error->() in
-                XCTAssertEqualObjects(error, memo)
+                XCTAssertEqual(error, memo)
                 return exes[0].fulfill()
             }
             return
@@ -56,7 +56,7 @@ class Test223: XCTestCase {
         // already-rejected
         var timesCalled = 0
         Promise(error:dammy).catch { _->() in
-            XCTAssertEqualObjects(++timesCalled, 1)
+            XCTAssertEqual(++timesCalled, 1)
         }
     }
 
@@ -65,7 +65,7 @@ class Test223: XCTestCase {
         let (promise, _, rejecter) = Promise<Int>.defer()
         var timesCalled = 0
         promise.catch { _->() in
-            XCTAssertEqualObjects(++timesCalled, 1)
+            XCTAssertEqual(++timesCalled, 1)
         }
         rejecter(dammy)
         rejecter(dammy)
@@ -77,7 +77,7 @@ class Test223: XCTestCase {
         let expectation = expectationWithDescription("trying to reject a pending promise more than once, delayed")
 
         promise.catch { _->() in
-            XCTAssertEqualObjects(++timesCalled, 1)
+            XCTAssertEqual(++timesCalled, 1)
             expectation.fulfill()
         }
         later {
@@ -93,7 +93,7 @@ class Test223: XCTestCase {
         let expectation = expectationWithDescription("trying to fulfill a pending promise more than once, immediately then delayed")
 
         promise.catch { _->() in
-            XCTAssertEqualObjects(++timesCalled, 1)
+            XCTAssertEqual(++timesCalled, 1)
             expectation.fulfill()
         }
         rejecter(dammy)
@@ -112,19 +112,19 @@ class Test223: XCTestCase {
         let e3 = expectationWithDescription(desc)
 
         promise.catch { _->() in
-            XCTAssertEqualObjects(++timesCalled[0], 1)
+            XCTAssertEqual(++timesCalled[0], 1)
             e1.fulfill()
         }
         later(50.0) {
             promise.catch { _->() in
-                XCTAssertEqualObjects(++timesCalled[1], 1)
+                XCTAssertEqual(++timesCalled[1], 1)
                 e2.fulfill()
             }
             return
         }
         later(100.0) {
             promise.catch { _->() in
-                XCTAssertEqualObjects(++timesCalled[2], 1)
+                XCTAssertEqual(++timesCalled[2], 1)
                 e3.fulfill()
             }
             return
@@ -141,13 +141,13 @@ class Test223: XCTestCase {
         let expectation = expectationWithDescription("when `then` is interleaved with fulfillment")
 
         promise.catch { _->() in
-            XCTAssertEqualObjects(++timesCalled[0], 1)
+            XCTAssertEqual(++timesCalled[0], 1)
         }
 
         rejecter(dammy)
 
         promise.catch { _->() in
-            XCTAssertEqualObjects(++timesCalled[1], 1)
+            XCTAssertEqual(++timesCalled[1], 1)
             expectation.fulfill()
         }
 

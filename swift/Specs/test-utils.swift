@@ -24,10 +24,10 @@ func spin() {
 
 
 extension XCTestCase {
-    func suiteFulfilled(numberOfExpectations:Int, test:(Promise<Int>, XCTestExpectation![], Int)->Void) {
+    func suiteFulfilled(numberOfExpectations:Int, test:(Promise<Int>, [XCTestExpectation!], Int)->Void) {
 
-        func e(desc: String) -> XCTestExpectation![] {
-            return Int[](1...numberOfExpectations).map{ self.expectationWithDescription("\(desc) (\($0))") }
+        func e(desc: String) -> [XCTestExpectation!] {
+            return [Int](1...numberOfExpectations).map{ self.expectationWithDescription("\(desc) (\($0))") }
         }
 
         let v1 = Int(rand())
@@ -52,10 +52,10 @@ extension XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func suiteRejected(numberOfExpectations:Int, test:(Promise<Int>, XCTestExpectation![], NSError)->Void) {
+    func suiteRejected(numberOfExpectations:Int, test:(Promise<Int>, [XCTestExpectation!], NSError)->Void) {
 
-        func e(desc: String) -> XCTestExpectation![] {
-            return Int[](1...numberOfExpectations).map{ self.expectationWithDescription("\(desc) (\($0))") }
+        func e(desc: String) -> [XCTestExpectation!] {
+            return [Int](1...numberOfExpectations).map{ self.expectationWithDescription("\(desc) (\($0))") }
         }
 
         let v1 = NSError(domain:PMKErrorDomain, code:Int(rand()), userInfo:nil)

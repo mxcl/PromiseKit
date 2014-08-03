@@ -139,7 +139,7 @@ class TestPromise: XCTestCase {
             e3.fulfill()
         }.catch{ (err:NSError) -> Void in
             e4.fulfill()
-            XCTAssertEqualObjects(err.domain, PMKErrorDomain)
+            XCTAssertEqual(err.domain, PMKErrorDomain)
         }
         waitForExpectationsWithTimeout(1, handler: nil)
 
@@ -173,7 +173,7 @@ class TestPromise: XCTestCase {
         Promise<UInt32>{ (_, rejecter) in
             rejecter(NSError(domain: PMKErrorDomain, code: 123, userInfo: [:]))
         }.catch { (err:NSError)->() in
-            XCTAssertEqualObjects(err.code, 123)
+            XCTAssertEqual(err.code, 123)
             e1.fulfill()
         }
         waitForExpectationsWithTimeout(1, handler: nil)

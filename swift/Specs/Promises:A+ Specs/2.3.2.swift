@@ -59,7 +59,7 @@ class Test232: XCTestCase {
                 return Promise(value:sentinel)
             }
             promise.then { value->() in
-                XCTAssertEqualObjects(value, sentinel)
+                XCTAssertEqual(value, sentinel)
                 ex.fulfill()
             }
         })
@@ -75,7 +75,7 @@ class Test232: XCTestCase {
         }, test: { promise in
             let ex = self.expectation()
             promise.then{ value->Void in
-                XCTAssertEqualObjects(value, sentinel)
+                XCTAssertEqual(value, sentinel)
                 ex.fulfill()
             }
         })
@@ -91,7 +91,7 @@ class Test232: XCTestCase {
         }, test: { promise in
             let ex = self.expectation()
             promise.catch{ error->Void in
-                XCTAssertEqualObjects(error, dammy)
+                XCTAssertEqual(error, dammy)
                 ex.fulfill()
             }
         })
@@ -106,7 +106,7 @@ class Test232: XCTestCase {
         }, test: { promise in
             let ex = self.expectation()
             promise.catch{ error->Void in
-                XCTAssertEqualObjects(error, dammy)
+                XCTAssertEqual(error, dammy)
                 ex.fulfill()
             }
         })

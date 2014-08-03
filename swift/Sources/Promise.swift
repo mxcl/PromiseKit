@@ -57,7 +57,7 @@ public class Promise<T> {
         }
     }
 
-    init(_ body:(fulfiller:(T) -> Void, rejecter:(NSError) -> Void) -> Void) {
+    public init(_ body:(fulfiller:(T) -> Void, rejecter:(NSError) -> Void) -> Void) {
         func recurse() {
             for handler in handlers { handler() }
             handlers.removeAll(keepCapacity: false)
@@ -84,11 +84,11 @@ public class Promise<T> {
         return (p, f!, r!)
     }
 
-    init(value:T) {
+    public init(value:T) {
         self.state = .Fulfilled(value)
     }
 
-    init(error:NSError) {
+    public init(error:NSError) {
         self.state = .Rejected(error)
     }
 

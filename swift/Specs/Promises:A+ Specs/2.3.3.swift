@@ -46,7 +46,7 @@ class Test233: XCTestCase {
 //
 //        testPromiseResolution(xFactory) { (promise, ex) in
 //            promise.then {
-//                XCTAssertEqualObjects(numberOfTimesThenWasRetrieved, 1)
+//                XCTAssertEqual(numberOfTimesThenWasRetrieved, 1)
 //                ex.fulfill()
 //            }
 //        }

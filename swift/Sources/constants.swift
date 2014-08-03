@@ -1,7 +1,7 @@
 import Foundation
 
-let PMKErrorDomain = "PMKErrorDomain"
-let PMKURLErrorFailingDataKey = "PMKURLErrorFailingDataKey"
-let PMKURLErrorFailingURLResponseKey = "PMKURLErrorFailingURLResponseKey"
-let PMKJSONErrorJSONObjectKey = "PMKJSONErrorJSONObjectKey"
-let PMKJSONError = 1
+public let PMKErrorDomain = "PMKErrorDomain"
+public let PMKURLErrorFailingDataKey = "PMKURLErrorFailingDataKey"
+public let PMKURLErrorFailingURLResponseKey = "PMKURLErrorFailingURLResponseKey"
+public let PMKJSONErrorJSONObjectKey = "PMKJSONErrorJSONObjectKey"
+public let PMKJSONError = 1

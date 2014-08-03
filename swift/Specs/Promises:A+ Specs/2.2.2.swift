@@ -11,7 +11,7 @@ class Test222: XCTestCase {
 
         suiteFulfilled(1) { (promise, exes, sentinel) -> () in
             promise.then { value->() in
-                XCTAssertEqualObjects(value, sentinel)
+                XCTAssertEqual(value, sentinel)
                 exes[0].fulfill()
                 return
             }
@@ -57,7 +57,7 @@ class Test222: XCTestCase {
         // already-fulfilled
         var timesCalled = 0
         Promise(value:dummy).then { _->() in
-            XCTAssertEqualObjects(++timesCalled, 1)
+            XCTAssertEqual(++timesCalled, 1)
         }
     }
 
@@ -66,7 +66,7 @@ class Test222: XCTestCase {
         let (promise, fulfiller, _) = Promise<Int>.defer()
         var timesCalled = 0
         promise.then { _->() in
-            XCTAssertEqualObjects(++timesCalled, 1)
+            XCTAssertEqual(++timesCalled, 1)
         }
         fulfiller(dummy)
         fulfiller(dummy)
@@ -78,7 +78,7 @@ class Test222: XCTestCase {
         let e1 = expectationWithDescription("trying to fulfill a pending promise more than once, delayed")
 
         promise.then { _->() in
-            XCTAssertEqualObjects(++timesCalled, 1)
+            XCTAssertEqual(++timesCalled, 1)
             e1.fulfill()
         }
         later {
@@ -94,7 +94,7 @@ class Test222: XCTestCase {
         let e1 = expectationWithDescription("trying to fulfill a pending promise more than once, immediately then delayed")
 
         promise.then { _->() in
-            XCTAssertEqualObjects(++timesCalled, 1)
+            XCTAssertEqual(++timesCalled, 1)
             e1.fulfill()
         }
         fulfiller(dummy)
@@ -113,19 +113,19 @@ class Test222: XCTestCase {
         let e3 = expectationWithDescription(desc)
 
         promise.then { _->() in
-            XCTAssertEqualObjects(++timesCalled[0], 1)
+            XCTAssertEqual(++timesCalled[0], 1)
             e1.fulfill()
         }
         later(50.0) {
             promise.then { _->() in
-                XCTAssertEqualObjects(++timesCalled[1], 1)
+                XCTAssertEqual(++timesCalled[1], 1)
                 e2.fulfill()
             }
             return
         }
         later(100.0) {
             promise.then { _->() in
-                XCTAssertEqualObjects(++timesCalled[2], 1)
+                XCTAssertEqual(++timesCalled[2], 1)
                 e3.fulfill()
             }
             return
@@ -142,13 +142,13 @@ class Test222: XCTestCase {
         let e1 = expectationWithDescription("when `then` is interleaved with fulfillment")
 
         promise.then { _->() in
-            XCTAssertEqualObjects(++timesCalled[0], 1)
+            XCTAssertEqual(++timesCalled[0], 1)
         }
 
         fulfiller(dummy)
 
         promise.then { _->() in
-            XCTAssertEqualObjects(++timesCalled[1], 1)
+            XCTAssertEqual(++timesCalled[1], 1)
             e1.fulfill()
         }
 

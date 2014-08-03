@@ -14,20 +14,20 @@ class Test226: XCTestCase {
         suiteFulfilled(4){ (promise, exes, sentinel) -> () in
             var x = 0
             promise.then{ _->() in
-                XCTAssertEqualObjects(++x, 1)
+                XCTAssertEqual(++x, 1)
                 exes[0].fulfill()
             }
             promise.then{ _->() in
-                XCTAssertEqualObjects(++x, 2)
+                XCTAssertEqual(++x, 2)
                 exes[1].fulfill()
             }
             promise.then{ _->() in
-                XCTAssertEqualObjects(++x, 3)
+                XCTAssertEqual(++x, 3)
                 exes[2].fulfill()
             }
             promise.then{ (value:Int)->() in
-                XCTAssertEqualObjects(value, sentinel)
-                XCTAssertEqualObjects(x, 3)
+                XCTAssertEqual(value, sentinel)
+                XCTAssertEqual(x, 3)
                 exes[3].fulfill()
             }
         }
@@ -39,20 +39,20 @@ class Test226: XCTestCase {
         suiteFulfilled(1) { (promise, ee, sentinel) in
             var x = 0
             promise.then{ _->() in
-                XCTAssertEqualObjects(++x, 1)
+                XCTAssertEqual(++x, 1)
                 return
             }
             promise.then{ _->() in
-                XCTAssertEqualObjects(++x, 2)
+                XCTAssertEqual(++x, 2)
                 return
             }
             promise.then{ _-> Promise<Int> in
-                XCTAssertEqualObjects(++x, 3)
+                XCTAssertEqual(++x, 3)
                 return Promise{ $1(dammy) }
             }
             promise.then{ (value:Int)->() in
-                XCTAssertEqualObjects(value, sentinel)
-                XCTAssertEqualObjects(x, 3)
+                XCTAssertEqual(value, sentinel)
+                XCTAssertEqual(x, 3)
                 ee[0].fulfill()
             }
         }
@@ -69,21 +69,21 @@ class Test226: XCTestCase {
             promise.then { _->Int in
                 return sentinel1
             }.then { value->() in
-                XCTAssertEqualObjects(sentinel1, value)
+                XCTAssertEqual(sentinel1, value)
                 exes[0].fulfill()
             }
 
             promise.then{ _->(Promise<Int>) in
                 return Promise{ $1(NSError(domain:PMKErrorDomain, code:sentinel2, userInfo:nil)) }
             }.catch { err->() in
-                XCTAssertEqualObjects(err.code, sentinel2)
+                XCTAssertEqual(err.code, sentinel2)
                 exes[1].fulfill()
             }
 
             promise.then{ _->Int in
                 return sentinel3
             }.then { value->() in
-                XCTAssertEqualObjects(value, sentinel3)
+                XCTAssertEqual(value, sentinel3)
                 exes[2].fulfill()
             }
         }
@@ -95,15 +95,15 @@ class Test226: XCTestCase {
             var x = 0
 
             promise.then{ _->() in
-                XCTAssertEqualObjects(x++, 0)
+                XCTAssertEqual(x++, 0)
                 exes[0].fulfill()
             }
             promise.then{ _->() in
-                XCTAssertEqualObjects(x++, 1)
+                XCTAssertEqual(x++, 1)
                 exes[1].fulfill()
             }
             promise.then{ _->() in
-                XCTAssertEqualObjects(x++, 2)
+                XCTAssertEqual(x++, 2)
                 exes[2].fulfill()
             }
         }
@@ -114,15 +114,15 @@ class Test226: XCTestCase {
         suiteFulfilled(3) { (promise, exes, memo) in
             var x = 0
             promise.then{ _->() in
-                XCTAssertEqualObjects(x++, 0)
+                XCTAssertEqual(x++, 0)
                 exes[0].fulfill()
                 promise.then{ _->() in
-                    XCTAssertEqualObjects(x++, 2)
+                    XCTAssertEqual(x++, 2)
                     exes[1].fulfill()
                 }
             }
             promise.then{ _->() in
-                XCTAssertEqualObjects(x++, 1)
+                XCTAssertEqual(x++, 1)
                 exes[2].fulfill()
             }
         }
@@ -136,20 +136,20 @@ class Test226: XCTestCase {
         suiteRejected(4){ (promise, exes, sentinel) -> () in
             var x = 0
             promise.catch{ _->() in
-                XCTAssertEqualObjects(++x, 1)
+                XCTAssertEqual(++x, 1)
                 exes[0].fulfill()
             }
             promise.catch{ _->() in
-                XCTAssertEqualObjects(++x, 2)
+                XCTAssertEqual(++x, 2)
                 exes[1].fulfill()
             }
             promise.catch{ _->() in
-                XCTAssertEqualObjects(++x, 3)
+                XCTAssertEqual(++x, 3)
                 exes[2].fulfill()
             }
             promise.catch{ (err:NSError)->() in
-                XCTAssertEqualObjects(err, sentinel)
-                XCTAssertEqualObjects(x, 3)
+                XCTAssertEqual(err, sentinel)
+                XCTAssertEqual(x, 3)
                 exes[3].fulfill()
             }
         }
@@ -162,23 +162,23 @@ class Test226: XCTestCase {
             let blah = NSError(domain:PMKErrorDomain, code:923764, userInfo:nil)
             var x = 0
             promise.catch{ err->() in
-                XCTAssertEqualObjects(err, sentinel)
-                XCTAssertEqualObjects(++x, 1)
+                XCTAssertEqual(err, sentinel)
+                XCTAssertEqual(++x, 1)
                 return
             }
             promise.catch{ err->() in
-                XCTAssertEqualObjects(err, sentinel)
-                XCTAssertEqualObjects(++x, 2)
+                XCTAssertEqual(err, sentinel)
+                XCTAssertEqual(++x, 2)
                 return
             }
             promise.catch{ err->Promise<Int> in
-                XCTAssertEqualObjects(err, sentinel)
-                XCTAssertEqualObjects(++x, 3)
+                XCTAssertEqual(err, sentinel)
+                XCTAssertEqual(++x, 3)
                 return Promise<Int>{ $1(blah) }
             }
             promise.catch{ err->() in
-                XCTAssertEqualObjects(err, sentinel)
-                XCTAssertEqualObjects(x, 3)
+                XCTAssertEqual(err, sentinel)
+                XCTAssertEqual(x, 3)
                 ee[0].fulfill()
             }
         }
@@ -196,21 +196,21 @@ class Test226: XCTestCase {
             promise.catch { _->Int in
                 return sentinel1
             }.then { value->() in
-                XCTAssertEqualObjects(sentinel1, value)
+                XCTAssertEqual(sentinel1, value)
                 exes[0].fulfill()
             }
 
             promise.catch{ _->(Promise<Int>) in
                 return Promise{ $1(NSError(domain:PMKErrorDomain, code:sentinel2, userInfo:nil)) }
             }.catch { err->() in
-                XCTAssertEqualObjects(err.code, sentinel2)
+                XCTAssertEqual(err.code, sentinel2)
                 exes[1].fulfill()
             }
 
             promise.catch{ _->Int in
                 return sentinel3
             }.then { value->() in
-                XCTAssertEqualObjects(value, sentinel3)
+                XCTAssertEqual(value, sentinel3)
                 exes[2].fulfill()
             }
         }
@@ -223,15 +223,15 @@ class Test226: XCTestCase {
             var x = 0
 
             promise.catch{ _->() in
-                XCTAssertEqualObjects(x++, 0)
+                XCTAssertEqual(x++, 0)
                 exes[0].fulfill()
             }
             promise.catch{ _->() in
-                XCTAssertEqualObjects(x++, 1)
+                XCTAssertEqual(x++, 1)
                 exes[1].fulfill()
             }
             promise.catch{ _->() in
-                XCTAssertEqualObjects(x++, 2)
+                XCTAssertEqual(x++, 2)
                 exes[2].fulfill()
             }
         }
@@ -242,15 +242,15 @@ class Test226: XCTestCase {
         suiteRejected(3) { (promise, exes, memo) in
             var x = 0
             promise.catch{ _->() in
-                XCTAssertEqualObjects(x++, 0)
+                XCTAssertEqual(x++, 0)
                 exes[0].fulfill()
                 promise.catch{ _->() in
-                    XCTAssertEqualObjects(x++, 2)
+                    XCTAssertEqual(x++, 2)
                     exes[1].fulfill()
                 }
             }
             promise.catch{ _->() in
-                XCTAssertEqualObjects(x++, 1)
+                XCTAssertEqual(x++, 1)
                 exes[2].fulfill()
             }
         }
