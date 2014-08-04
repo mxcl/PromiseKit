@@ -10,7 +10,7 @@ func _parse<T>(data:NSData, fulfiller:(T) -> Void, rejecter:(NSError) -> Void) {
     var error:NSError?
     let json:AnyObject? = NSJSONSerialization.JSONObjectWithData(data, options:nil, error:&error)
 
-    if error {
+    if error != nil {
         rejecter(error!)
     } else if let cast = json as? T {
         fulfiller(cast)
@@ -114,7 +114,7 @@ extension NSURLConnection {
     public class func promise(rq:NSURLRequest) -> Promise<String> {
         return fetch(rq) { (fulfiller, rejecter, data) in
             let str:String? = NSString(data: data, encoding: NSUTF8StringEncoding)
-            if str {
+            if str != nil {
                 fulfiller(str!)
             } else {
                 let info = [NSLocalizedDescriptionKey: "The server returned repsonse was not textual"]
@@ -135,7 +135,7 @@ extension NSURLConnection {
             var error:NSError?
             let json:AnyObject? = NSJSONSerialization.JSONObjectWithData(data, options:nil, error:&error)
 
-            if error {
+            if error != nil {
                 rejecter(error!)
             } else if let cast = json as? Dictionary<String, String> {
                 println(json)
@@ -156,7 +156,7 @@ extension NSURLConnection {
             var error:NSError?
             let json:AnyObject? = NSJSONSerialization.JSONObjectWithData(data, options:nil, error:&error)
 
-            if error {
+            if error != nil {
                 rejecter(error!)
             } else if let cast = json as? NSArray {
                 fulfiller(cast)
@@ -173,9 +173,9 @@ extension NSURLConnection {
     public class func promise(rq:NSURLRequest) -> Promise<UIImage> {
         return fetch(rq) { (fulfiller, rejecter, data) in
             var img:UIImage? = UIImage(data:data)
-            if img {
+            if img != nil {
                 img = UIImage(CGImage:img!.CGImage, scale:img!.scale, orientation:img!.imageOrientation)
-                if img {
+                if img != nil {
                     return fulfiller(img!)
                 }
             }

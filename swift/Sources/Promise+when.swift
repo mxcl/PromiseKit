@@ -3,16 +3,16 @@ extension Promise {
         let (promise, fulfiller, rejecter) = Promise<(U,V)>.defer()
         var first:Any?
         promise1.then{ u->() in
-            if first {
-                let fulfillment = (u, first as V)
+            if let seal = first {
+                let fulfillment = (u, seal as V)
                 fulfiller(fulfillment)
             } else {
                 first = u
             }
         }
         promise2.then{ v->() in
-            if first {
-                let fulfillment = (first as U, v)
+            if let seal = first {
+                let fulfillment = (seal as U, v)
                 fulfiller(fulfillment)
             } else {
                 first = v

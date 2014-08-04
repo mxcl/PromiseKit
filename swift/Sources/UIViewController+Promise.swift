@@ -3,7 +3,7 @@ import MessageUI
 
 class MFMailComposeViewControllerProxy: NSObject, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate {
 
-    init() {
+    override init() {
         super.init()
         PMKRetain(self)
     }
