@@ -906,6 +906,19 @@ PMKPromise *gcdreject() {
     XCTAssertTrue(resolved);
 }
 
+- (void)test_62_access_extra_elements {
+    [PMKPromise new:^(PMKPromiseFulfiller _fulfiller, id r){
+        _fulfiller(PMKManifold(@[@1]));
+    }].then(^(id o, id m, id n){
+        XCTAssertNil(m, @"Accessing extra elements should not crash");
+        XCTAssertNil(n, @"Accessing extra elements should not crash");
+        XCTAssertEqualObjects(o, @1);
+        resolved = YES;
+    });
+    wait(0.1);
+    XCTAssertTrue(resolved);
+}
+
 @end
 
 __EOBJC__

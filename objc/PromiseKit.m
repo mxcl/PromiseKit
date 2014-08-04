@@ -597,6 +597,7 @@ PMKPromise *dispatch_promise_on(dispatch_queue_t queue, id block) {
 
 - (id)objectAtIndexedSubscript:(NSUInteger)idx {
 	if(objs.count <= idx){
+        // this check is necessary due to lack of checks in `safely_call_block`
 		return nil;
 	}
     return objs[idx];
