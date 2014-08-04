@@ -596,6 +596,9 @@ PMKPromise *dispatch_promise_on(dispatch_queue_t queue, id block) {
 { @public NSArray *objs; }
 
 - (id)objectAtIndexedSubscript:(NSUInteger)idx {
+	if(objs.count <= idx){
+		return nil;
+	}
     return objs[idx];
 }
 
@@ -646,3 +649,4 @@ NSOperationQueue *PMKOperationQueue() {
     });
     return q;
 }
+
