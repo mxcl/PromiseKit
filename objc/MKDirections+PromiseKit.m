@@ -1,8 +1,6 @@
-#import "MapKit+PromiseKit.h"
+#import "MKDirections+PromiseKit.h"
 #import "PromiseKit/Promise.h"
 
-
-#if PMK_iOS6_ISH
 
 @implementation MKDirections (PromiseKit)
 
@@ -29,25 +27,3 @@
 }
 
 @end
-
-#endif
-
-
-#if PMK_iOS7_ISH
-
-@implementation MKMapSnapshotter (PromiseKit)
-
-- (PMKPromise *)promise {
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-        [self startWithCompletionHandler:^(MKMapSnapshot *snapshot, NSError *error) {
-            if (error)
-                rejecter(error);
-            else
-                fulfiller(snapshot);
-        }];
-    }];
-}
-
-@end
-
-#endif

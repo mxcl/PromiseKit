@@ -1,3 +1,4 @@
-#warning This header is deprecated, #import <CoreLocation+PromiseKit.h> instead.
+#warning This header is deprecated, #import <CL…+PromiseKit.h> instead.
 
-#import <CoreLocation+PromiseKit.h>
+#import <CLLocationManager+PromiseKit.h>
+#import <CLGeocoder+PromiseKit.h>

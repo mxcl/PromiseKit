@@ -1,7 +1,6 @@
-@import CoreLocation.CLLocationManagerDelegate;
-#import "CoreLocation+PromiseKit.h"
-#import "Private/PMKManualReference.h"
-#import "PromiseKit/fwd.h"
+#import <CoreLocation/CLLocationManagerDelegate.h>
+#import "CLLocationManager+PromiseKit.h"
+#import <objc/runtime.h>
 #import "PromiseKit/Promise.h"
 
 @interface PMKLocationManager : CLLocationManager <CLLocationManagerDelegate>
@@ -18,7 +17,7 @@
 #define PMKLocationManagerCleanup() \
     [manager stopUpdatingLocation]; \
     self.delegate = nil; \
-    [self pmk_breakReference];
+    PMKRelease(self);
 
 - (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
     fulfiller(PMKManifold(locations.lastObject, locations));
@@ -43,9 +42,9 @@
 + (PMKPromise *)promise {
     PMKLocationManager *manager = [PMKLocationManager new];
     manager.delegate = manager;
-    [manager pmk_reference];
+    PMKRetain(manager);
 
-  #if PMK_iOS8_ISH
+  #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
   #pragma clang diagnostic push
   #pragma clang diagnostic ignored "-Warc-performSelector-leaks"
   #pragma clang diagnostic push
@@ -65,39 +64,6 @@
     return [PMKPromise new:^(id fulfiller, id rejecter){
         manager->fulfiller = fulfiller;
         manager->rejecter = rejecter;
-    }];
-}
-
-@end
-
-
-
-@implementation CLGeocoder (PromiseKit)
-
-+ (PMKPromise *)reverseGeocode:(CLLocation *)location {
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-       [[CLGeocoder new] reverseGeocodeLocation:location completionHandler:^(NSArray *placemarks, NSError *error) {
-            if (error) {
-                rejecter(error);
-            } else
-                fulfiller(PMKManifold(placemarks.firstObject, placemarks));
-        }];
-    }];
-}
-
-+ (PMKPromise *)geocode:(id)address {
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-        id handler = ^(NSArray *placemarks, NSError *error) {
-            if (error) {
-                rejecter(error);
-            } else
-                fulfiller(PMKManifold(placemarks.firstObject, placemarks));
-        };
-        if ([address isKindOfClass:[NSDictionary class]]) {
-            [[CLGeocoder new] geocodeAddressDictionary:address completionHandler:handler];
-        } else {
-            [[CLGeocoder new] geocodeAddressString:address completionHandler:handler];
-        }
     }];
 }
 

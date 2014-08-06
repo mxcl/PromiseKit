@@ -1,11 +1,9 @@
 #import <AssetsLibrary/AssetsLibrary.h>
 #import <objc/runtime.h>
-#import "Private/PMKManualReference.h"
-#import "Private/ClassSwizzling.m"
 #import "PromiseKit/Promise.h"
-@import UIKit.UINavigationController;
-@import UIKit.UIImagePickerController;
-#import "UIKit+PromiseKit.h"
+#import <UIKit/UINavigationController.h>
+#import <UIKit/UIImagePickerController.h>
+#import "UIViewController+PromiseKit.h"
 
 static const char *kSegueFulfiller = "kSegueFulfiller";
 static const char *kSegueRejecter = "kSegueRejecter";
@@ -13,51 +11,8 @@ static const char *kSegueRejecter = "kSegueRejecter";
 @interface PMKMFDelegater : NSObject
 @end
 
-@implementation PMKMFDelegater
-
-- (void)mailComposeController:(id)controller didFinishWithResult:(int)result error:(NSError *)error {
-    if (error)
-        [controller reject:error];
-    else
-        [controller fulfill:@(result)];
-
-    [self pmk_breakReference];
-}
-@end
-
 @interface PMKUIImagePickerControllerDelegate : NSObject <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
 @end
-
-@implementation PMKUIImagePickerControllerDelegate
-
-- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
-{
-    id img = info[UIImagePickerControllerEditedImage] ?: info[UIImagePickerControllerOriginalImage];
-    id url = info[UIImagePickerControllerReferenceURL];
-
-    [[ALAssetsLibrary new] assetForURL:url resultBlock:^(ALAsset *asset) {
-        NSUInteger const N = (NSUInteger)asset.defaultRepresentation.size;
-        uint8_t *bytes = malloc(N);
-        [asset.defaultRepresentation getBytes:bytes fromOffset:0 length:N error:nil];
-        id data = [NSData dataWithBytes:bytes length:N];
-        free(bytes);
-
-        [picker fulfill:PMKManifold(img, data, info)];
-        [self pmk_breakReference];
-    }
-    failureBlock:^(NSError *error){
-        [picker reject:error];
-        [self pmk_breakReference];
-    }];
-}
-
-- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
-    [picker fulfill:nil];
-    [self pmk_breakReference];
-}
-
-@end
-
 
 
 @implementation UIViewController (PromiseKit)
@@ -68,8 +23,7 @@ static const char *kSegueRejecter = "kSegueRejecter";
 
     if ([vc isKindOfClass:NSClassFromString(@"MFMailComposeViewController")]) {
         PMKMFDelegater *delegater = [PMKMFDelegater new];
-
-        [delegater pmk_reference];
+        PMKRetain(delegater);
 
         SEL selector = NSSelectorFromString(@"setMailComposeDelegate:");
         IMP imp = [vc methodForSelector:selector];
@@ -78,7 +32,7 @@ static const char *kSegueRejecter = "kSegueRejecter";
     }
     else if ([vc isKindOfClass:NSClassFromString(@"UIImagePickerController")]) {
         PMKUIImagePickerControllerDelegate *delegator = [PMKUIImagePickerControllerDelegate new];
-        [delegator pmk_reference];
+        PMKRetain(delegator);
         [(UIImagePickerController *)vc setDelegate:delegator];
     }
     else if ([vc isKindOfClass:NSClassFromString(@"SLComposeViewController")]) {
@@ -106,6 +60,28 @@ static const char *kSegueRejecter = "kSegueRejecter";
     });
 }
 
+static void swizzleClass(const char* classPrefix, id target, SEL originalSelector, SEL swizzledSelector) {
+    Class klass = [target class];
+    NSString *className = NSStringFromClass(klass);
+    
+    if (strncmp(classPrefix, [className UTF8String], strlen(classPrefix)) != 0) {
+        NSString* subclassName = [NSString stringWithFormat:@"%s%@", classPrefix, className];
+        Class subclass = NSClassFromString(subclassName);
+        if (subclass == nil) {
+            subclass = objc_allocateClassPair(klass, [subclassName UTF8String], 0);
+            if (subclass != nil) {
+                Method originalMethod = class_getInstanceMethod(klass, originalSelector);
+                Method swizzledMethod = class_getInstanceMethod(klass, swizzledSelector);
+                method_exchangeImplementations(originalMethod, swizzledMethod);
+                objc_registerClassPair(subclass);
+            }
+        }
+        if (subclass != nil) {
+            object_setClass(target, subclass);
+        }
+    }
+}
+
 - (PMKPromise *)promiseSegueWithIdentifier:(NSString*) identifier sender:(id) sender {
     
     const char* prefix = "PromiseKitUIKitSegue_";
@@ -128,7 +104,7 @@ static const char *kSegueRejecter = "kSegueRejecter";
 }
 
 
--(void) PromiseKitUIKit_prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
+- (void)PromiseKitUIKit_prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     id fulfiller = objc_getAssociatedObject(segue.sourceViewController, kSegueFulfiller);
     id rejecter = objc_getAssociatedObject(segue.sourceViewController, kSegueRejecter);
@@ -157,59 +133,46 @@ static const char *kSegueRejecter = "kSegueRejecter";
 
 
 
-@interface PMKAlertViewDelegater : NSObject <UIAlertViewDelegate> {
-@public
-    void (^fulfiller)(id);
+@implementation PMKMFDelegater
+
+- (void)mailComposeController:(id)controller didFinishWithResult:(int)result error:(NSError *)error {
+    if (error)
+        [controller reject:error];
+    else
+        [controller fulfill:@(result)];
+
+    PMKRelease(self);
 }
 @end
 
-@implementation PMKAlertViewDelegater
-- (void)alertView:(UIAlertView *)alertView didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    fulfiller(PMKManifold(@(buttonIndex), alertView));
-    [self pmk_breakReference];
-}
-@end
 
-@implementation UIAlertView (PromiseKit)
 
-- (PMKPromise *)promise {
-    PMKAlertViewDelegater *d = [PMKAlertViewDelegater new];
-    [d pmk_reference];
-    self.delegate = d;
-    [self show];
-    return [PMKPromise new:^(id fulfiller, id rejecter){
-        d->fulfiller = fulfiller;
+@implementation PMKUIImagePickerControllerDelegate
+
+- (void)imagePickerController:(UIImagePickerController *)picker didFinishPickingMediaWithInfo:(NSDictionary *)info
+{
+    id img = info[UIImagePickerControllerEditedImage] ?: info[UIImagePickerControllerOriginalImage];
+    id url = info[UIImagePickerControllerReferenceURL];
+
+    [[ALAssetsLibrary new] assetForURL:url resultBlock:^(ALAsset *asset) {
+        NSUInteger const N = (NSUInteger)asset.defaultRepresentation.size;
+        uint8_t *bytes = malloc(N);
+        [asset.defaultRepresentation getBytes:bytes fromOffset:0 length:N error:nil];
+        id data = [NSData dataWithBytes:bytes length:N];
+        free(bytes);
+
+        [picker fulfill:PMKManifold(img, data, info)];
+        PMKRelease(self);
+    }
+    failureBlock:^(NSError *error){
+        [picker reject:error];
+        PMKRelease(self);
     }];
 }
 
-@end
-
-
-
-
-@interface PMKActionSheetDelegater : NSObject <UIActionSheetDelegate> {
-@public
-    void (^fulfiller)(id);
-}
-@end
-
-@implementation PMKActionSheetDelegater
-- (void)actionSheet:(UIActionSheet *)actionSheet didDismissWithButtonIndex:(NSInteger)buttonIndex {
-    fulfiller(PMKManifold(@(buttonIndex), actionSheet));
-    [self pmk_breakReference];
-}
-@end
-
-@implementation UIActionSheet (PromiseKit)
-
-- (PMKPromise *)promiseInView:(UIView *)view {
-    PMKActionSheetDelegater *d = [PMKActionSheetDelegater new];
-    [d pmk_reference];
-    self.delegate = d;
-    [self showInView:view];
-    return [PMKPromise new:^(id fulfiller, id rejecter){
-        d->fulfiller = fulfiller;
-    }];
+- (void)imagePickerControllerDidCancel:(UIImagePickerController *)picker {
+    [picker fulfill:nil];
+    PMKRelease(self);
 }
 
 @end

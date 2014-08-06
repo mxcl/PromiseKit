@@ -1,36 +1,62 @@
 #import <PromiseKit/Promise.h>
 
-#ifdef PMK_CORELOCATION
-#import <CoreLocation+PromiseKit.h>
+#ifdef PMK_WHEN
+#import <PromiseKit/Promise+When.h>
 #endif
-#ifdef PMK_FOUNDATION
-#import <Foundation+PromiseKit.h>
+#ifdef PMK_UNTIL
+#import <PromiseKit/Promise+Until.h>
 #endif
-#if defined(PMK_UIKIT) || defined(PMK_UIANIMATION)
-#import <UIKit+PromiseKit.h>
+#ifdef PMK_PAUSE
+#import <PromiseKit/Promise+Pause.h>
 #endif
-#ifdef PMK_MAPKIT
-#import <MapKit+PromiseKit.h>
+
+#ifdef PMK_ACACCOUNTSTORE
+#import <ACAccountStore+PromiseKit.h>
 #endif
-#ifdef PMK_SOCIAL
-#import <Social+PromiseKit.h>
+#ifdef PMK_AVAUDIOSESSION
+#import <AVAudioSession+PromiseKit.h>
 #endif
-#ifdef PMK_STOREKIT
-#import <StoreKit+PromiseKit.h>
+#ifdef PMK_CLGEOCODER
+#import <CLGeocoder+PromiseKit.h>
 #endif
-#ifdef PMK_AVFOUNDATION
-#import <AVFoundation+PromiseKit.h>
+#ifdef PMK_CLLOCATIONMANAGER
+#import <CLLocationManager+PromiseKit.h>
 #endif
-#ifdef PMK_ACCOUNTS
-#import <Accounts+PromiseKit.h>
+#ifdef PMK_MKDIRECTIONS
+#import <MKDirections+PromiseKit.h>
 #endif
-#ifdef PMK_TIMING
-#import <PromiseKit/Promise+Timing.h>
+#ifdef PMK_MKMAPSNAPSHOTTER
+#import <MKMapSnapshotter+PromiseKit.h>
 #endif
+#ifdef PMK_NSNOTIFICATIONCENTER
+#import <NSNotificationCenter+PromiseKit.h>
+#endif
+#ifdef PMK_NSURLCONNECTION
+#import <NSURLConnection+PromiseKit.h>
+#endif
+#ifdef PMK_SKPRODUCTSREQUEST
+#import <SKProductsRequest+PromiseKit.h>
+#endif
+#ifdef PMK_SLREQUEST
+#import <SLRequest+PromiseKit.h>
+#endif
+#ifdef PMK_UIACTIONSHEET
+#import <UIActionSheet+PromiseKit.h>
+#endif
+#ifdef PMK_UIALERTVIEW
+#import <UIAlertView+PromiseKit.h>
+#endif
+#ifdef PMK_UIVIEW
+#import <UIView+PromiseKit.h>
+#endif
+#ifdef PMK_UIVIEWCONTROLLER
+#import <UIViewController+PromiseKit.h>
+#endif
+
 
 #ifndef PMK_NO_UNPREFIXATION
 // I used a typedef but it broke the tests, turns out typedefs are new
 // types that have consequences with isKindOfClass and that
 // NOTE I will remove this at 1.1
-typedef PMKPromise Promise __attribute__((deprecated("Use PMKPromise. Use of Promise is deprecated. This is a typedef, and since it is a typedef, there may be unintended side-effects.")));
+typedef PMKPromise Promise PMK_DEPRECATED("Use PMKPromise. Use of Promise is deprecated. This is a typedef, and since it is a typedef, there may be unintended side-effects.");
 #endif

@@ -4,10 +4,7 @@
 //
 //
 
-#import "PromiseKit/fwd.h"
-
-#if PMK_iOS6_ISH
-
+#import <PromiseKit/fwd.h>
 #import <Accounts/ACAccountStore.h>
 
 
@@ -18,5 +15,3 @@
 - (PMKPromise *)promiseForAccountRemoval:(ACAccount *)account;
 - (PMKPromise *)requestAccessToAccountsWithType:(ACAccountType *)type options:(NSDictionary *)options;
 @end
-
-#endif

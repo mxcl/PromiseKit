@@ -1,6 +1,5 @@
 #import <CoreLocation/CLLocationManager.h>
-#import <CoreLocation/CLGeocoder.h>
-#import "PromiseKit/fwd.h"
+#import <PromiseKit/fwd.h>
 
 
 @interface CLLocationManager (PromiseKit)
@@ -18,10 +17,4 @@
 */
 + (PMKPromise *)promise;
 
-@end
-
-
-@interface CLGeocoder (PromiseKit)
-+ (PMKPromise *)reverseGeocode:(CLLocation *)location;
-+ (PMKPromise *)geocode:(id)addressDictionaryOrAddressString;
 @end

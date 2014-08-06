@@ -1,3 +1,3 @@
-#warning This header is deprecated, #import <AVFoundation+PromiseKit.h> instead.
+#warning This header is deprecated, #import <AVAudioSession+PromiseKit.h> instead.
 
-#import <AVFoundation+PromiseKit.h>
+#import <AVAudioSession+PromiseKit.h>

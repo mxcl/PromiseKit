@@ -1,7 +1,7 @@
 #import <PromiseKit/Promise.h>
 
 
-@interface PMKPromise (Timing)
+@interface PMKPromise (Pause)
 
 /**
  Pauses the chain by the specified number of seconds.

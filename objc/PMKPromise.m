@@ -316,101 +316,12 @@ static PMKResolveOnQueueBlock PMKMakeCallback(PMKPromise *this, PMKResolveOnQueu
     });
 }
 
-+ (PMKPromise *)all:(id<NSFastEnumeration, NSObject>)promises {
-    __block NSUInteger count = [(id)promises count];  // FIXME
-    
-    if (count == 0)
-        return [PMKPromise promiseWithValue:@[]];
-
-    #define rejecter(key) ^(NSError *err){ \
-        id userInfo = err.userInfo.mutableCopy; \
-        userInfo[PMKFailingPromiseIndexKey] = key; \
-        err = [PMKError errorWithDomain:err.domain code:err.code userInfo:userInfo]; \
-        rejecter(err); \
-    }
-
-    if ([promises isKindOfClass:[NSDictionary class]])
-        return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter){
-            NSMutableDictionary *results = [NSMutableDictionary new];
-            for (id key in promises) {
-                PMKPromise *promise = promises[key];
-                if (!IsPromise(promise))
-                    promise = [PMKPromise promiseWithValue:promise];
-                promise.catch(rejecter(key));
-                promise.then(^(id o){
-                    if (o)
-                        results[key] = o;
-                    if (--count == 0)
-                        fulfiller(results);
-                });
-            }
-        }];
-
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter){
-        NSPointerArray *results = [NSPointerArray strongObjectsPointerArray];
-        results.count = count;
-
-        NSUInteger ii = 0;
-
-        for (__strong PMKPromise *promise in promises) {
-            if (!IsPromise(promise))
-                promise = [PMKPromise promiseWithValue:promise];
-            promise.catch(rejecter(@(ii)));
-            promise.then(^(id o){
-                [results replacePointerAtIndex:ii withPointer:(__bridge void *)(o ?: [NSNull null])];
-                if (--count == 0)
-                    fulfiller(results.allObjects);
-            });
-            ii++;
-        }
-    }];
-
-    #undef rejecter
-}
-
-+ (PMKPromise *)when:(id)promises {
-    if ([promises conformsToProtocol:@protocol(NSFastEnumeration)]) {
-        return [self all:promises];
-    } else {
-        return [self all:@[promises]].then(^(NSArray *values){
-            return values[0];
-        });
-    }
-}
-
-+ (PMKPromise *)until:(id (^)(void))blockReturningPromises catch:(id)failHandler
-{
-  #pragma clang diagnostic push
-  #pragma clang diagnostic ignored "-Warc-retain-cycles"
-
-    return [PMKPromise new:^(void(^fulfiller)(id), id rejecter){
-        __block void (^block)() = ^{
-            id promises = blockReturningPromises();
-            [self when:promises].then(^(id o){
-                fulfiller(o);
-                block = nil;  // break retain cycle
-            }).catch(^(id e){
-                PMKPromise *rv = safely_call_block(failHandler, e);
-                if (IsPromise(rv))
-                    rv.then(block);
-                else if (!IsError(rv))
-                    block();
-            });
-        };
-        block();
-    }];
-
-  #pragma clang diagnostic pop
-}
-
-
 + (PMKPromise *)promiseWithValue:(id)value {
     PMKPromise *p = [PMKPromise alloc];
     p->_promiseQueue = PMKCreatePromiseQueue();
     p->_result = value ?: PMKNull;
     return p;
 }
-
 
 static dispatch_queue_t PMKCreatePromiseQueue() {
     return dispatch_queue_create("org.promiseKit.Q", DISPATCH_QUEUE_CONCURRENT);
@@ -435,7 +346,6 @@ static NSArray* PMKSetResult(PMKPromise *this, id result) {
     
     return handlers;
 }
-
 
 static void PMKResolve(PMKPromise *this, id result) {
     __block id r = result ?: PMKNull;
@@ -469,7 +379,6 @@ static void PMKResolve(PMKPromise *this, id result) {
         }
     }
 }
-
 
 + (PMKPromise *)new:(void(^)(PMKPromiseFulfiller, PMKPromiseRejecter))block {
     PMKPromise *this = [PMKPromise alloc];
@@ -651,3 +560,6 @@ NSOperationQueue *PMKOperationQueue() {
     return q;
 }
 
+
+
+void *PMKManualReferenceAssociatedObject = &PMKManualReferenceAssociatedObject;

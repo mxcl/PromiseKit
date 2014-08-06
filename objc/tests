@@ -2,14 +2,8 @@
 OBJC = <<-__EOBJC__
 
 #import "PromiseKit/Promise.h"
-#import "NSURLConnection+PromiseKit.m"
+#import "NSURLConnection+Promise.m"
 #import <CommonCrypto/CommonCrypto.h>
-    
-#import "Accounts+PromiseKit.m"      // test compiles
-#import "CoreLocation+PromiseKit.m"  // test compiles
-#import "MapKit+PromiseKit.m"        // test compiles
-#import "Social+PromiseKit.m"        // test compiles
-#import "StoreKit+PromiseKit.m"      // test compiles
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wgnu-zero-variadic-macro-arguments"
@@ -24,7 +18,9 @@ OBJC = <<-__EOBJC__
 
 #define NSLog(...)
 // prevent error logging here
-#import "PromiseKit.m"
+#import "PMKPromise.m"
+#import "PMKPromise+When.m"
+#import "PMKPromise+Until.m"
 #undef NSLog
 
 #define wait(t) [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:t]]

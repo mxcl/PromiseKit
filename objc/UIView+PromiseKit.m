@@ -7,7 +7,7 @@
 //
 
 #import "PromiseKit/Promise.h"
-#import "UIKit+PromiseKit.h"
+#import "UIView+PromiseKit.h"
 
 #define PMKMainThreadError [NSError errorWithDomain:PMKErrorDomain code:PMKInvalidUsageError userInfo:@{NSLocalizedDescriptionKey: @"Animation was attempted on a background thread"}]
 
@@ -35,6 +35,8 @@
         }];
     }];
 }
+
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
 
 + (PMKPromise *)promiseWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay usingSpringWithDamping:(CGFloat)dampingRatio initialSpringVelocity:(CGFloat)velocity options:(UIViewAnimationOptions)options animations:(void(^)(void))animations
 {
@@ -64,6 +66,7 @@
     }];
 }
 
+#endif
 
 
 // deprecated
@@ -78,6 +81,8 @@
                                   animations:(void(^)(void))animations {
     return [self promiseWithDuration:duration delay:delay options:options animations:animations];
 }
+
+#if __IPHONE_OS_VERSION_MAX_ALLOWED >= 70000
 
 + (PMKPromise *)promiseAnimateKeyframesWithDuration:(NSTimeInterval)duration
                                               delay:(NSTimeInterval)delay
@@ -96,5 +101,7 @@
 {
     return [self promiseWithDuration:duration delay:delay usingSpringWithDamping:dampingRatio initialSpringVelocity:velocity options:options animations:animations];
 }
+
+#endif
 
 @end

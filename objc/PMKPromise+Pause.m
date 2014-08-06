@@ -1,9 +1,9 @@
-#import "PromiseKit/Promise+Timing.h"
+#import "PromiseKit/Promise+Pause.h"
 
 #define Queue dispatch_get_main_queue()
 
 
-@implementation PMKPromise (mxcl)
+@implementation PMKPromise (Pause)
 
 - (PMKPromise *(^)(NSTimeInterval))pause {
     return ^(NSTimeInterval delay) {

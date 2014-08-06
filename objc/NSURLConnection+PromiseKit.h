@@ -1,17 +1,10 @@
 #import <Foundation/NSDictionary.h>
-#import <Foundation/NSURLCache.h>
 #import <Foundation/NSURLConnection.h>
 #import <Foundation/NSURLRequest.h>
-#import "PromiseKit/fwd.h"
+#import <PromiseKit/fwd.h>
 
-#define PMKURLErrorFailingURLResponseKey @"PMKURLErrorFailingURLResponseKey"
-#define PMKURLErrorFailingDataKey @"PMKURLErrorFailingDataKey"
-#define PMKURLErrorFailingStringKey @"PMKURLErrorFailingStringKey"
-
-extern NSString const*const PMKURLErrorFailingURLResponse __attribute__((deprecated("Use PMKURLErrorFailingURLResponseKey")));
-extern NSString const*const PMKURLErrorFailingData __attribute__((deprecated("Use PMKURLErrorFailingDataKey")));
-
-
+extern NSString const*const PMKURLErrorFailingURLResponse PMK_DEPRECATED("Use PMKURLErrorFailingURLResponseKey");
+extern NSString const*const PMKURLErrorFailingData PMK_DEPRECATED("Use PMKURLErrorFailingDataKey");
 
 @interface NSURLConnection (PromiseKit)
 
@@ -27,15 +20,4 @@ extern NSString const*const PMKURLErrorFailingData __attribute__((deprecated("Us
 + (PMKPromise *)PUT:(id)url formURLEncodedParameters:(NSDictionary *)params;
 + (PMKPromise *)DELETE:(id)url formURLEncodedParameters:(NSDictionary *)params;
 + (PMKPromise *)promise:(NSURLRequest *)rq;
-@end
-
-
-
-@interface NSNotificationCenter (PromiseKit)
-/**
- Fires once for the named notification.
- 
- thens the NSNotification object and the NSNotification’s userInfo as the second argument.
-*/
-+ (PMKPromise *)once:(NSString *)notificationName;
 @end

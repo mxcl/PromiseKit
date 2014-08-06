@@ -1,3 +1,5 @@
-#warning This header is deprecated, #import <UIKit+PromiseKit.h> instead.
+#warning This header is deprecated, #import <UI…+PromiseKit.h> instead.
 
-#import <UIKit+PromiseKit.h>
+#import <UIActionSheet+PromiseKit.h>
+#import <UIAlertView+PromiseKit.h>
+#import <UIViewController+PromiseKit.h>

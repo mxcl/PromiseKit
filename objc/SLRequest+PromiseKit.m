@@ -4,19 +4,19 @@
 //
 //
 
-#import "Private/PromiseKit.ph"
+#import <Chuzzle.h>
 #import "PromiseKit/Promise.h"
-#import "Social+PromiseKit.h"
+#import "SLRequest+PromiseKit.h"
 
-#if PMK_iOS6_ISH
-
-NSString *const SLRequestPromiseKitErrorDomain = @"SLRequestPromiseKitErrorDomain";
-const NSInteger SLRequestPromiseKitServerStatusCodeErrorCode = 1;
+NSString *const SLRequestPromiseKitErrorDomain = PMKErrorDomain;
+const NSInteger SLRequestPromiseKitServerStatusCodeErrorCode = NSURLErrorBadServerResponse;
 NSString *const SLRequestPromiseKitOriginalStatusCodeKey = @"SLRequestPromiseKitOriginalStatusCodeKey";
-NSString *const SLRequestPromiseKitOriginalResponseDataKey = @"SLRequestPromiseKitOriginalResponseDataKey";
-NSString *const SLRequestPromiseKitResponseDataAsTextKey = @"SLRequestPromiseKitResponseDataAsTextKey";
+NSString *const SLRequestPromiseKitOriginalResponseDataKey = PMKURLErrorFailingURLResponseKey;
+NSString *const SLRequestPromiseKitResponseDataAsTextKey = PMKURLErrorFailingStringKey;
+
 
 @implementation SLRequest (PromiseKit)
+
 - (PMKPromise *)promise
 {
   return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
@@ -31,20 +31,21 @@ NSString *const SLRequestPromiseKitResponseDataAsTextKey = @"SLRequestPromiseKit
 
       NSInteger const statusCode = urlResponse.statusCode;
       if (statusCode < 200 || statusCode >= 300) {
-        NSString *localizedStatusCode = [NSHTTPURLResponse localizedStringForStatusCode:statusCode];
+
+          //TODO also add this code into general rejecter!
 
         NSMutableDictionary *userInfo = [@{
-          SLRequestPromiseKitOriginalStatusCodeKey : @(statusCode),
-          SLRequestPromiseKitOriginalResponseDataKey : responseData ?: [NSNull null],
-          NSLocalizedDescriptionKey : localizedStatusCode
+          @"SLRequestPromiseKitOriginalStatusCodeKey" : @(statusCode),
+          PMKURLErrorFailingURLResponseKey : responseData ?: [NSNull null],
+          NSLocalizedDescriptionKey : [NSHTTPURLResponse localizedStringForStatusCode:statusCode]
         } mutableCopy];
 
         if (responseData) {
           NSString *responseDataAsText = [[NSString alloc] initWithData:responseData encoding:NSUTF8StringEncoding];
-          userInfo[SLRequestPromiseKitResponseDataAsTextKey] = responseDataAsText ?: [NSNull null];
+          if (responseDataAsText) userInfo[PMKURLErrorFailingStringKey] = responseDataAsText;
         }
 
-        rejecter([NSError errorWithDomain:SLRequestPromiseKitErrorDomain code:SLRequestPromiseKitServerStatusCodeErrorCode userInfo:userInfo]);
+        rejecter([NSError errorWithDomain:PMKErrorDomain code:NSURLErrorBadServerResponse userInfo:userInfo]);
         return;
       }
 
@@ -68,5 +69,3 @@ NSString *const SLRequestPromiseKitResponseDataAsTextKey = @"SLRequestPromiseKit
 }
 
 @end
-
-#endif

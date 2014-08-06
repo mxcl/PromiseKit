@@ -1,59 +1,10 @@
-#import "PromiseKit/fwd.h"
-#import <UIKit/UIViewController.h>
-#import <UIKit/UIAlertView.h>
-#import <UIKit/UIActionSheet.h>
+#import <PromiseKit/fwd.h>
 #import <UIKit/UIView.h>
-
-
-
-@interface UIViewController (PromiseKit)
-
-/**
- .2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2
- Calls `presentViewController:` such that the presentedViewController can
- call `reject:` or `fulfill:` and resolve the promise. When resolved the
- presentedViewController is dismissed.
-
- This method is smart and SDK provided ViewControllers like
- `MFMailComposeViewController` will be automatically delegate into the
- returned Promise.
- */
-- (PMKPromise *)promiseViewController:(UIViewController *)vc animated:(BOOL)animated completion:(void(^)(void))block;
-- (PMKPromise *)promiseSegueWithIdentifier:(NSString*) identifier sender:(id) sender;
-
-- (void)fulfill:(id)result;
-- (void)reject:(NSError *)error;
-
-@end
-
-
-
-@interface UIAlertView (PromiseKit)
-/**
- Thens the dismissedButtonIndex and the alertView itself as the second
- parameter. This promise can not be rejected.
- */
-- (PMKPromise *)promise;
-@end
-
-
-
-@interface UIActionSheet (PromiseKit)
-/**
- Thens the dismissedButtonIndex and the actionSheet itself as the second
- parameter. This promise can not be rejected.
- */
-- (PMKPromise *)promiseInView:(UIView *)view;
-@end
-
-
-
-#ifdef PMK_UIANIMATION
 
 //  Created by Masafumi Yoshida on 2014/07/11.
 //  Copyright (c) 2014年 DeNA. All rights reserved.
 
-@interface UIView (PMKUIAnimation)
+@interface UIView (PromiseKit)
 
 /**
  Returns a new promise that fulfills when the properties changed in the
@@ -61,7 +12,7 @@
 
  “Then”s the `BOOL` that the underlying `completion` block receives.
 */
-+ (PMKPromise *)animate:(void(^)(void))animations;
++ (PMKPromise *)animate:(void(^)(void))animations NS_AVAILABLE_IOS(4_0);
 
 /**
  Returns a new promise that fulfills when the properties changed in the
@@ -69,7 +20,7 @@
 
  “Then”s the `BOOL` that the underlying `completion` block receives.
 */
-+ (PMKPromise *)promiseWithDuration:(NSTimeInterval)duration animations:(void(^)(void))animations;
++ (PMKPromise *)promiseWithDuration:(NSTimeInterval)duration animations:(void(^)(void))animations NS_AVAILABLE_IOS(4_0);
 
 /**
  Returns a new promise that fulfills when the properties changed in the
@@ -78,7 +29,7 @@
 
  “Then”s the `BOOL` that the underlying `completion` block receives.
 */
-+ (PMKPromise *)promiseWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options animations:(void(^)(void))animations;
++ (PMKPromise *)promiseWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewAnimationOptions)options animations:(void(^)(void))animations NS_AVAILABLE_IOS(4_0);
 
 /**
  Returns a new promise that fulfills when the properties changed in the
@@ -88,10 +39,9 @@
 
  “Then”s the `BOOL` that the underlying `completion` block receives.
 */
-+ (PMKPromise *)promiseWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay usingSpringWithDamping:(CGFloat)dampingRatio initialSpringVelocity:(CGFloat)velocity options:(UIViewAnimationOptions)options animations:(void(^)(void))animations;
++ (PMKPromise *)promiseWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay usingSpringWithDamping:(CGFloat)dampingRatio initialSpringVelocity:(CGFloat)velocity options:(UIViewAnimationOptions)options animations:(void(^)(void))animations NS_AVAILABLE_IOS(7_0);
 
 /**
- 0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.
  Returns a new promise that fulfills when the properties changed in the
  provided block have completed keyframe animation over `duration`
  seconds with initial `delay` and the provided keyframe animation
@@ -99,26 +49,26 @@
 
  “Then”s the `BOOL` that the underlying `completion` block receives.
 */
-+ (PMKPromise *)promiseWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewKeyframeAnimationOptions)options keyframeAnimations:(void(^)(void))animations;
++ (PMKPromise *)promiseWithDuration:(NSTimeInterval)duration delay:(NSTimeInterval)delay options:(UIViewKeyframeAnimationOptions)options keyframeAnimations:(void(^)(void))animations NS_AVAILABLE_IOS(7_0);
 
 
 
 
 + (PMKPromise *)promiseAnimationWithDuration:(NSTimeInterval)duration
                                   animations:(void (^)(void))animations
-                __attribute__((deprecated("Use -promiseWithDuration:animations:")));
+                PMK_DEPRECATED("Use -promiseWithDuration:animations:");
 
 + (PMKPromise *)promiseAnimationWithDuration:(NSTimeInterval)duration
                                        delay:(NSTimeInterval)delay
                                      options:(UIViewAnimationOptions)options
                                   animations:(void (^)(void))animations
-                __attribute__((deprecated("Use -promiseithDuration:delay:options:animations:")));
+                PMK_DEPRECATED("Use -promiseithDuration:delay:options:animations:");
 
 + (PMKPromise *)promiseAnimateKeyframesWithDuration:(NSTimeInterval)duration
                                               delay:(NSTimeInterval)delay
                                             options:(UIViewKeyframeAnimationOptions)options
                                          animations:(void (^)(void))animations
-                __attribute__((deprecated("Use -promiseWithDuration:delay:options:keyframeAnimations:")));
+                PMK_DEPRECATED("Use -promiseWithDuration:delay:options:keyframeAnimations:") NS_AVAILABLE_IOS(7_0);
 
 + (PMKPromise *)promiseAnimateWithDuration:(NSTimeInterval)duration
                                      delay:(NSTimeInterval)delay
@@ -126,7 +76,5 @@
                      initialSpringVelocity:(CGFloat)velocity
                                    options:(UIViewAnimationOptions)options
                                 animations:(void (^)(void))animations
-                __attribute__((deprecated("Use -promiseWithDuration:delay:usingSpringWithDamping:initialSpringVelocity:options:animations:")));
+                PMK_DEPRECATED("Use -promiseWithDuration:delay:usingSpringWithDamping:initialSpringVelocity:options:animations:") NS_AVAILABLE_IOS(7_0);
 @end
-
-#endif

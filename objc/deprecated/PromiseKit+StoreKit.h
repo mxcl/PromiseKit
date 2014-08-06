@@ -1,3 +1,3 @@
-#warning This header is deprecated, #import <StoreKit+PromiseKit.h> instead.
+#warning This header is deprecated, #import <SKProductsRequest+PromiseKit.h> instead.
 
-#import <StoreKit+PromiseKit.h>
+#import <SKProductsRequest+PromiseKit.h>

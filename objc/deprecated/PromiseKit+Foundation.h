@@ -1,3 +1,4 @@
-#warning This header is deprecated, #import <Foundation+PromiseKit.h> instead.
+#warning This header is deprecated, #import <NS…+PromiseKit.h> instead.
 
-#import <Foundation+PromiseKit.h>
+#import <NSURLConnection+PromiseKit.h>
+#import <NSNotificationCenter+PromiseKit.h>

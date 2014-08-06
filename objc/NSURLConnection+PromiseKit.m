@@ -1,10 +1,8 @@
 #import <Chuzzle.h>
-@import CoreFoundation.CFString;
-@import CoreFoundation.CFURL;
-@import Foundation;
-#import "Foundation+PromiseKit.h"
+#import <CoreFoundation/CFString.h>
+#import <CoreFoundation/CFURL.h>
+#import "NSURLConnection+PromiseKit.h"
 #import <OMGHTTPURLRQ.h>
-#import "Private/PromiseKit.ph"
 #import "PromiseKit/Promise.h"
 
 NSString const*const PMKURLErrorFailingURLResponse = PMKURLErrorFailingURLResponseKey;

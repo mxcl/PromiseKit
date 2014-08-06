@@ -5,9 +5,9 @@
 //  Created by Josejulio Martínez on 16/05/14.
 //
 
-#import "Private/PMKManualReference.h"
 #import "PromiseKit/Promise.h"
-#import "StoreKit+PromiseKit.h"
+#import <objc/runtime.h>
+#import "SKProductsRequest+PromiseKit.h"
 
 @interface PMKSKProductsRequestDelegater : NSObject <SKProductsRequestDelegate> {
 @public
@@ -23,13 +23,13 @@
 
 - (void)requestDidFinish:(SKRequest *)request {
     request.delegate = nil;
-    [self pmk_breakReference];
+    PMKRelease(self);
 }
 
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
     rejecter(error);
     request.delegate = nil;
-    [self pmk_breakReference];
+    PMKRelease(self);
 }
 
 @end
@@ -38,7 +38,7 @@
 
 - (PMKPromise *)promise {
     PMKSKProductsRequestDelegater *d = [PMKSKProductsRequestDelegater new];
-    [d pmk_reference];
+    PMKRetain(d);
     self.delegate = d;
     [self start];
     return [PMKPromise new:^(id fulfiller, id rejecter){

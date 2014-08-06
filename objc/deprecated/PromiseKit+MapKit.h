@@ -1,3 +1,4 @@
-#warning This header is deprecated, #import <MapKit+PromiseKit.h> instead.
+#warning This header is deprecated, #import <MK…+PromiseKit.h> instead.
 
-#import <MapKit+PromiseKit.h>
+#import <MKDirections+PromiseKit.h>
+#import <MKMapSnapshotter+PromiseKit.h>

@@ -1,3 +1,3 @@
-#warning This header is deprecated, #import <Social+PromiseKit.h> instead.
+#warning This header is deprecated, #import <SLRequest+PromiseKit.h> instead.
 
-#import <Social+PromiseKit.h>
+#import <SLRequest+PromiseKit.h>

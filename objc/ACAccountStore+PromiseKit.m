@@ -1,7 +1,6 @@
-#import "Accounts+PromiseKit.h"
+#import "ACAccountStore+PromiseKit.h"
 #import "PromiseKit/Promise.h"
 
-#if PMK_iOS6_ISH
 
 @implementation ACAccountStore (PromiseKit)
 
@@ -71,5 +70,3 @@
 }
 
 @end
-
-#endif

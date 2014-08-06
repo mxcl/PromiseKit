@@ -1,4 +1,4 @@
-#import "Foundation+PromiseKit.h"
+#import "NSNotificationCenter+PromiseKit.h"
 #import "PromiseKit/Promise.h"
 
 
