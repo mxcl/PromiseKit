@@ -36,4 +36,4 @@ pod 'PromiseKit/UIAlertView'
 // et cetera
 {% endhighlight %}
 
-There is a CocoaPods subspec for every category and an umbrella subspec for every framework (eg. `Promisekit/Foundation`, `Promisekit/UIKit`, etc.).
+There is a CocoaPods subspec for every category and an umbrella subspec for every framework (eg. `Promisekit/Foundation`, `Promisekit/UIKit`, etc.). If you don’t want to think about it then choose `pod 'PromiseKit'` or `pod 'PromiseKit/all'`; `all` is *everything*. 
