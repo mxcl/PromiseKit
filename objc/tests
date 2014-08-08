@@ -2,7 +2,7 @@
 OBJC = <<-__EOBJC__
 
 #import "PromiseKit/Promise.h"
-#import "NSURLConnection+Promise.m"
+#import "NSURLConnection+PromiseKit.m"
 #import <CommonCrypto/CommonCrypto.h>
 
 #pragma clang diagnostic push
