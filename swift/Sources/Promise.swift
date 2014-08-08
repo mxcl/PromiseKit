@@ -1,9 +1,9 @@
 import Foundation
 import UIKit
 
-enum State {   //TODO generics! Type T! Nested! (can't now due to compiler bugs)
+enum State<T> {   //TODO generics! Type T! Nested! (can't now due to compiler bugs)
     case Pending
-    case Fulfilled(Any)
+    case Fulfilled(@autoclosure () -> T)
     case Rejected(NSError)
 }
 
@@ -23,7 +23,7 @@ func dispatch_main(block: ()->()) {
 
 public class Promise<T> {
     var handlers:[()->()] = []
-    var state:State = .Pending
+    var state:State<T> = .Pending
 
     public var rejected:Bool {
         switch state {
@@ -51,7 +51,7 @@ public class Promise<T> {
     public var value:T? {
         switch state {
         case .Fulfilled(let value):
-            return value as? T
+            return value()
         default:
             return nil
         }
@@ -97,7 +97,7 @@ public class Promise<T> {
         case .Rejected(let error):
             return Promise<U>(error: error);
         case .Fulfilled(let value):
-            return dispatch_promise(to:q){ d in d.fulfiller(body(value as T)) }
+            return dispatch_promise(to:q){ d in d.fulfiller(body(value())) }
         case .Pending:
             return Promise<U>{ (fulfiller, rejecter) in
                 self.handlers.append {
@@ -106,7 +106,7 @@ public class Promise<T> {
                         rejecter(error)
                     case .Fulfilled(let value):
                         dispatch_async(q) {
-                            fulfiller(body(value as T))
+                            fulfiller(body(value()))
                         }
                     case .Pending:
                         abort()
@@ -124,14 +124,14 @@ public class Promise<T> {
             case .Rejected(let error):
                 rejecter(error)
             case .Fulfilled(let value):
-                fulfiller(value as U)
+                fulfiller(value())
             case .Pending:
                 promise.handlers.append{
                     switch promise.state {
                     case .Rejected(let error):
                         rejecter(error)
                     case .Fulfilled(let value):
-                        fulfiller(value as U)
+                        fulfiller(value())
                     case .Pending:
                         abort()
                     }
@@ -144,7 +144,7 @@ public class Promise<T> {
             return Promise<U>(error: error);
         case .Fulfilled(let value):
             return dispatch_promise(to:q){
-                bind(value as T, $0, $1)
+                bind(value(), $0, $1)
             }
         case .Pending:
             return Promise<U>{ (fulfiller, rejecter) in
@@ -154,7 +154,7 @@ public class Promise<T> {
                         abort()
                     case .Fulfilled(let value):
                         dispatch_async(q){
-                            bind(value as T, fulfiller, rejecter)
+                            bind(value(), fulfiller, rejecter)
                         }
                     case .Rejected(let error):
                         rejecter(error)
@@ -167,7 +167,7 @@ public class Promise<T> {
     public func catch(onQueue:dispatch_queue_t = dispatch_get_main_queue(), body:(NSError) -> T) -> Promise<T> {
         switch state {
         case .Fulfilled(let value):
-            return Promise(value:value as T)
+            return Promise(value:value())
         case .Rejected(let error):
             return dispatch_promise(to:onQueue){ (fulfiller, _) -> Void in fulfiller(body(error)) }
         case .Pending:
@@ -175,7 +175,7 @@ public class Promise<T> {
                 self.handlers.append {
                     switch self.state {
                     case .Fulfilled(let value):
-                        fulfiller(value as T)
+                        fulfiller(value())
                     case .Rejected(let error):
                         dispatch_async(onQueue){ fulfiller(body(error)) }
                     case .Pending:
@@ -216,14 +216,14 @@ public class Promise<T> {
             case .Rejected(let error):
                 rejecter(error)
             case .Fulfilled(let value):
-                fulfiller(value as T)
+                fulfiller(value())
             case .Pending:
                 promise.handlers.append{
                     switch promise.state {
                     case .Rejected(let error):
                         rejecter(error)
                     case .Fulfilled(let value):
-                        fulfiller(value as T)
+                        fulfiller(value())
                     case .Pending:
                         abort()
                     }
@@ -237,7 +237,8 @@ public class Promise<T> {
                 bind(error, $0, $1)
             }
         case .Fulfilled(let value):
-            return Promise<T>(value:value as T)
+            return Promise<T>(value:value() as T)
+            
         case .Pending:
             return Promise<T>{ (fulfiller, rejecter) in
                 self.handlers.append{
@@ -245,7 +246,7 @@ public class Promise<T> {
                     case .Pending:
                         abort()
                     case .Fulfilled(let value):
-                        fulfiller(value as T)
+                        fulfiller(value() as T)
                     case .Rejected(let error):
                         dispatch_async(q){
                             bind(error, fulfiller, rejecter)
@@ -262,7 +263,7 @@ public class Promise<T> {
             switch self.state {
             case .Fulfilled(let value):
                 body()
-                fulfiller(value as T)
+                fulfiller(value())
             case .Rejected(let error):
                 body()
                 rejecter(error)
@@ -271,7 +272,7 @@ public class Promise<T> {
                     body()
                     switch self.state {
                     case .Fulfilled(let value):
-                        fulfiller(value as T)
+                        fulfiller(value())
                     case .Rejected(let error):
                         rejecter(error)
                     case .Pending:
