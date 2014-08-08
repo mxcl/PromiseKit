@@ -52,7 +52,7 @@ Cocoa development can become a mess of asynchronous patterns and asynchronous bo
 @end
 {% endhighlight %}
 
-The code is ugly, error handling is tricky, the error path spreads over multiple methods and the 90% path is buried inside asynchronicity boilerplate and error handling. Surely there is a better way? Enter PromiseKit:
+The code is ugly, error handling is tricky, the error path spreads over multiple methods and the 90% path is buried inside asynchronicity boilerplate and error handling. Surely there is a better way? Promises are a better way:
 
 {% highlight objectivec %}
 #import <PromiseKit.h>
@@ -97,7 +97,7 @@ UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:…];
 });
 {% endhighlight %}
 
-We call this rightward drift, and it doesn’t take long for it to impede readability and make you want to refactor. Promises solve this by making `then` chainable.
+It doesn’t take long for rightward-drift to impede readability and make you want to refactor. Promises solve this by making `then` chainable.
 
 {% highlight objectivec %}
 UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:…];
