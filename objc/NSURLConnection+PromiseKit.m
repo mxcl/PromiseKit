@@ -115,7 +115,7 @@ static BOOL NSHTTPURLResponseIsImage(NSHTTPURLResponse *rsp) {
                         NSURLErrorFailingURLStringErrorKey: rq.URL.absoluteString,
                         NSURLErrorFailingURLErrorKey: rq.URL
                     };
-                    id err = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorBadServerResponse userInfo:info];
+                    id err = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorCannotDecodeContentData userInfo:info];
                     rejecter(err);
                 }
           #endif
@@ -129,7 +129,7 @@ static BOOL NSHTTPURLResponseIsImage(NSHTTPURLResponse *rsp) {
                         NSURLErrorFailingURLStringErrorKey: rq.URL.absoluteString,
                         NSURLErrorFailingURLErrorKey: rq.URL
                     };
-                    id err = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorBadServerResponse userInfo:info];
+                    id err = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorCannotDecodeContentData userInfo:info];
                     rejecter(err);
                 }
             } else
