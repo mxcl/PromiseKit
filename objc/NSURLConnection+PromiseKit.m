@@ -1,4 +1,3 @@
-#import <Chuzzle.h>
 #import <CoreFoundation/CFString.h>
 #import <CoreFoundation/CFURL.h>
 #import "NSURLConnection+PromiseKit.h"
@@ -7,25 +6,6 @@
 
 NSString const*const PMKURLErrorFailingURLResponse = PMKURLErrorFailingURLResponseKey;
 NSString const*const PMKURLErrorFailingData = PMKURLErrorFailingDataKey;
-
-static BOOL NSHTTPURLResponseIsText(NSHTTPURLResponse *rsp) {
-    NSString *type = rsp.allHeaderFields[@"Content-Type"];
-    NSArray *bits = [type componentsSeparatedByString:@";"].chuzzle;
-    id textTypes = @[@"text/plain", @"text/html", @"text/css"];
-    return [bits firstObjectCommonWithArray:textTypes] != nil;
-}
-
-#ifdef UIKIT_EXTERN
-static BOOL NSHTTPURLResponseIsImage(NSHTTPURLResponse *rsp) {
-    NSString *type = rsp.allHeaderFields[@"Content-Type"];
-    NSArray *bits = [type componentsSeparatedByString:@";"].chuzzle;
-    for (NSString *bit in bits) {
-        if ([bit isEqualToString:@"image/jpeg"]) return YES;
-        if ([bit isEqualToString:@"image/png"]) return YES;
-    };
-    return NO;
-}
-#endif
 
 
 @implementation NSURLConnection (PromiseKit)
@@ -104,7 +84,7 @@ static BOOL NSHTTPURLResponseIsImage(NSHTTPURLResponse *rsp) {
                 } else
                     fulfiller(json);
           #ifdef UIKIT_EXTERN
-            } else if (NSHTTPURLResponseIsImage(rsp)) {
+            } else if (PMKHTTPURLResponseIsImage(rsp)) {
                 UIImage *image = [[UIImage alloc] initWithData:data];
                 image = [[UIImage alloc] initWithCGImage:[image CGImage] scale:image.scale orientation:image.imageOrientation];
                 if (image)
@@ -119,7 +99,7 @@ static BOOL NSHTTPURLResponseIsImage(NSHTTPURLResponse *rsp) {
                     rejecter(err);
                 }
           #endif
-            } else if (NSHTTPURLResponseIsText(rsp)) {
+            } else if (PMKHTTPURLResponseIsText(rsp)) {
                 id str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
                 if (str)
                     fulfiller(str);

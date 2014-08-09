@@ -107,7 +107,6 @@ Pod::Spec.new do |s|
     ss.osx.deployment_target = '10.6'
   end
   s.mksubspec 'NSURLConnection' do |ss|
-    ss.dependency "ChuzzleKit"
     ss.dependency "OMGHTTPURLRQ"
     ss.ios.deployment_target = '5.0'
     ss.osx.deployment_target = '10.7'
@@ -117,7 +116,6 @@ Pod::Spec.new do |s|
     ss.osx.deployment_target = '10.7'
   end
   s.mksubspec 'SLRequest' do |ss|
-    ss.dependency 'ChuzzleKit'
     ss.ios.deployment_target = '6.0'
     ss.osx.deployment_target = '10.8'
   end

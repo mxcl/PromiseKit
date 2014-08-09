@@ -7,11 +7,9 @@ extern NSOperationQueue *PMKOperationQueue();
 
 #define PMKJSONDeserializationOptions ((NSJSONReadingOptions)(NSJSONReadingAllowFragments | NSJSONReadingMutableContainers))
 
-#define PMKHTTPURLResponseIsJSON(rsp) ({ \
-    NSString *type = [rsp allHeaderFields][@"Content-Type"]; \
-    NSArray *bits = [type componentsSeparatedByString:@";"]; \
-    [bits.chuzzle containsObject:@"application/json"]; \
-})
+#define PMKHTTPURLResponseIsJSON(rsp) [@[@"application/json", @"text/json", @"text/javascript"] containsObject:[rsp MIMEType]]
+#define PMKHTTPURLResponseIsImage(rsp) [@[@"image/tiff", @"image/jpeg", @"image/gif", @"image/png", @"image/ico", @"image/x-icon", @"image/bmp", @"image/x-bmp", @"image/x-xbitmap", @"image/x-win-bitmap"] containsObject:[rsp MIMEType]]
+#define PMKHTTPURLResponseIsText(rsp) [[rsp MIMEType] hasPrefix:@"text/"]
 
 extern void *PMKManualReferenceAssociatedObject;
 

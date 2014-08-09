@@ -4,7 +4,6 @@
 //
 //
 
-#import <Chuzzle.h>
 #import "PromiseKit/Promise.h"
 #import "SLRequest+PromiseKit.h"
 
