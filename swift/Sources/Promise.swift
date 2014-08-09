@@ -1,7 +1,9 @@
 import Foundation
 import UIKit
 
-enum State<T> {   //TODO generics! Type T! Nested! (can't now due to compiler bugs)
+//TODO use plain T, once Swift compiler is more mature
+//TODO nest in Promise class (currently causes SourceKit to freak out)
+enum State<T> {
     case Pending
     case Fulfilled(@autoclosure () -> T)
     case Rejected(NSError)
