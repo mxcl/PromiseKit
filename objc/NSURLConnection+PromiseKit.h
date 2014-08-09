@@ -14,10 +14,11 @@ extern NSString const*const PMKURLErrorFailingData PMK_DEPRECATED("Use PMKURLErr
  eg. a multipartFormData POST, check out OMGHTTPURLRQ (which CocoaPods
  already pulled in for you).
 */
-+ (PMKPromise *)GET:(id)stringFormatOrNSURL, ...;
-+ (PMKPromise *)GET:(id)stringOrURL query:(NSDictionary *)parameters;
-+ (PMKPromise *)POST:(id)stringOrURL formURLEncodedParameters:(NSDictionary *)parameters;
-+ (PMKPromise *)PUT:(id)url formURLEncodedParameters:(NSDictionary *)params;
-+ (PMKPromise *)DELETE:(id)url formURLEncodedParameters:(NSDictionary *)params;
+
++ (PMKPromise *)GET:(id)urlStringFormatOrURL, ...;
++ (PMKPromise *)GET:(NSString *)string query:(NSDictionary *)parameters;
++ (PMKPromise *)POST:(NSString *)urlString formURLEncodedParameters:(NSDictionary *)parameters;
++ (PMKPromise *)PUT:(NSString *)urlString formURLEncodedParameters:(NSDictionary *)params;
++ (PMKPromise *)DELETE:(NSString *)urlString formURLEncodedParameters:(NSDictionary *)params;
 + (PMKPromise *)promise:(NSURLRequest *)rq;
 @end

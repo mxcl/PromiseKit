@@ -2,6 +2,7 @@
 #import <CoreFoundation/CFURL.h>
 #import "NSURLConnection+PromiseKit.h"
 #import <OMGHTTPURLRQ.h>
+#import <OMGUserAgent.h>
 #import "PromiseKit/Promise.h"
 
 NSString const*const PMKURLErrorFailingURLResponse = PMKURLErrorFailingURLResponseKey;
@@ -11,30 +12,34 @@ NSString const*const PMKURLErrorFailingData = PMKURLErrorFailingDataKey;
 @implementation NSURLConnection (PromiseKit)
 
 + (PMKPromise *)GET:(id)urlFormat, ... {
-    if (!urlFormat || urlFormat == [NSNull null])
-        return [PMKPromise promiseWithValue:[NSError errorWithDomain:PMKErrorDomain code:PMKInvalidUsageError userInfo:nil]];
-
-    va_list arguments;
-    va_start(arguments, urlFormat);
-    urlFormat = [[NSString alloc] initWithFormat:urlFormat arguments:arguments];
-    va_end(arguments);
-
+    if ([urlFormat isKindOfClass:[NSString class]]) {
+        va_list arguments;
+        va_start(arguments, urlFormat);
+        urlFormat = [[NSString alloc] initWithFormat:urlFormat arguments:arguments];
+        va_end(arguments);
+    } else if ([urlFormat isKindOfClass:[NSURL class]]) {
+        NSMutableURLRequest *rq = [[NSMutableURLRequest alloc] initWithURL:urlFormat];
+        [rq setValue:OMGUserAgent() forHTTPHeaderField:@"User-Agent"];
+        return [self promise:rq];
+    } else {
+        urlFormat = [urlFormat description];
+    }
     return [self promise:[OMGHTTPURLRQ GET:urlFormat:nil]];
 }
 
-+ (PMKPromise *)GET:(id)url query:(NSDictionary *)params {
++ (PMKPromise *)GET:(NSString *)url query:(NSDictionary *)params {
     return [self promise:[OMGHTTPURLRQ GET:url:params]];
 }
 
-+ (PMKPromise *)POST:(id)url formURLEncodedParameters:(NSDictionary *)params {
++ (PMKPromise *)POST:(NSString *)url formURLEncodedParameters:(NSDictionary *)params {
     return [self promise:[OMGHTTPURLRQ POST:url:params]];
 }
 
-+ (PMKPromise *)PUT:(id)url formURLEncodedParameters:(NSDictionary *)params {
++ (PMKPromise *)PUT:(NSString *)url formURLEncodedParameters:(NSDictionary *)params {
     return [self promise:[OMGHTTPURLRQ PUT:url:params]];
 }
 
-+ (PMKPromise *)DELETE:(id)url formURLEncodedParameters:(NSDictionary *)params {
++ (PMKPromise *)DELETE:(NSString *)url formURLEncodedParameters:(NSDictionary *)params {
     return [self promise:[OMGHTTPURLRQ DELETE:url:params]];
 }
 
