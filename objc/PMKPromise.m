@@ -556,6 +556,7 @@ NSOperationQueue *PMKOperationQueue() {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         q = [NSOperationQueue new];
+        q.name = @"org.promisekit.Q";
     });
     return q;
 }
