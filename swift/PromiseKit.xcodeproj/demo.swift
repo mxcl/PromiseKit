@@ -59,7 +59,7 @@ class ViewController: UIViewController, CLLocationManagerDelegate {
                 //…
             }
         }.catch { (error:NSError) -> Void in
-            //…
+            println(error);
         }
     }
 
