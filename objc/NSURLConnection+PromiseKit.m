@@ -55,6 +55,16 @@ NSString const*const PMKURLErrorFailingData = PMKURLErrorFailingDataKey;
                 rejunk(error);
             };
 
+            NSStringEncoding (^stringEncoding)() = ^NSStringEncoding{
+                id encodingName = [rsp textEncodingName];
+                if (encodingName) {
+                    CFStringEncoding encoding = CFStringConvertIANACharSetNameToEncoding((CFStringRef)encodingName);
+                    if (encoding != kCFStringEncodingInvalidId)
+                        return CFStringConvertEncodingToNSStringEncoding(encoding);
+                }
+                return NSUTF8StringEncoding;
+            };
+
             if (urlError) {
                 rejecter(urlError);
             } else if (![rsp isKindOfClass:[NSHTTPURLResponse class]]) {
@@ -74,19 +84,22 @@ NSString const*const PMKURLErrorFailingData = PMKURLErrorFailingDataKey;
 
                 NSError *err = nil;
                 id json = [NSJSONSerialization JSONObjectWithData:data options:PMKJSONDeserializationOptions error:&err];
-                if (err) {
+                if (!err) {
+                    fulfiller(json);
+                } else {
                     id userInfo = err.userInfo.mutableCopy;
-                    id bytes = ({ id l = [[rsp valueForKeyPath:@"allHeaderFields.Content-Length"] chuzzle];
-                                  if (l) l = [NSString stringWithFormat:@"%@ bytes", l];
-                               l ?: @""; });
-                    id fmt = @"The server claimed a%@ JSON response, but it was invalid. %@";
-                    id msg = [NSString stringWithFormat:fmt, bytes, userInfo[NSLocalizedDescriptionKey]];
-                    if (data) userInfo[PMKURLErrorFailingStringKey] = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
-                    userInfo[NSLocalizedDescriptionKey] = msg;
+                    if (data) {
+                        NSString *string = [[NSString alloc] initWithData:data encoding:stringEncoding()];
+                        if (string)
+                            userInfo[PMKURLErrorFailingStringKey] = string;
+                    }
+                    long long length = [rsp expectedContentLength];
+                    id bytes = length <= 0 ? @"" : [NSString stringWithFormat:@"%lld bytes", length];
+                    id fmt = @"The server claimed a%@ JSON response, but decoding failed with: %@";
+                    userInfo[NSLocalizedDescriptionKey] = [NSString stringWithFormat:fmt, bytes, userInfo[NSLocalizedDescriptionKey]];
                     err = [NSError errorWithDomain:err.domain code:err.code userInfo:userInfo];
                     rejecter(err);
-                } else
-                    fulfiller(json);
+                }
           #ifdef UIKIT_EXTERN
             } else if (PMKHTTPURLResponseIsImage(rsp)) {
                 UIImage *image = [[UIImage alloc] initWithData:data];
@@ -104,7 +117,7 @@ NSString const*const PMKURLErrorFailingData = PMKURLErrorFailingDataKey;
                 }
           #endif
             } else if (PMKHTTPURLResponseIsText(rsp)) {
-                id str = [[NSString alloc] initWithData:data encoding:NSUTF8StringEncoding];
+                id str = [[NSString alloc] initWithData:data encoding:stringEncoding()];
                 if (str)
                     fulfiller(str);
                 else {
