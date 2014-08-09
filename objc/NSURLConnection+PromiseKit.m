@@ -68,6 +68,10 @@ NSString const*const PMKURLErrorFailingData = PMKURLErrorFailingDataKey;
                 id err = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorBadServerResponse userInfo:info];
                 rejecter(err);
             } else if (PMKHTTPURLResponseIsJSON(rsp)) {
+                // work around ever-so-common Rails workaround: https://github.com/rails/rails/issues/1742
+                if ([rsp expectedContentLength] == 1 && [data isEqualToData:[NSData dataWithBytes:" " length:1]])
+                    return fulfiller(nil);
+
                 NSError *err = nil;
                 id json = [NSJSONSerialization JSONObjectWithData:data options:PMKJSONDeserializationOptions error:&err];
                 if (err) {
