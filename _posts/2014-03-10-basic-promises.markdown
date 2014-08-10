@@ -155,6 +155,10 @@ You can return from an error handler. Returning anything but an `NSError` implie
 
 This is useful for error-correction. If the error is fatal, then you can return the error again, or return a new Error.
 
+### Unhandled Errors
+
+Unhandled errors are logged to aid debugging.
+
 
 ## A Pause for Terminology
 

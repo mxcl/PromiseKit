@@ -26,12 +26,6 @@ This is a rigid adherance to Promises/A+, however we are [considering changing](
 Really though, this is bad chain design. Probably what you wanted was to nest the chains. Sometimes rightward-drift is *correct* and makes the code clearer.
 
 
-## 2. Silently Absorbed Errors
-
-If you don’t at least have one `catch` in every chain, errors will be silently absorbed. This can be confusing. There is a ticket to log unhandled errors.
-
-
-## 3. `EXC_BAD_ACCESS`
+## 2. `EXC_BAD_ACCESS`
 
 ARC is pretty good, but in some cases it is possible for your Promise chain to be partially deallocated. Usually when wrapping delegate systems. PromiseKit itself has macros that force additional retains and releases to avoid this.
-
