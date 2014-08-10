@@ -13,17 +13,15 @@
 {
     return [PMKPromise new:^(PMKPromiseFulfiller fulfill, PMKPromiseRejecter reject){
         __block void (^block)() = ^{
-            PMKPromise *next = [self when:blockReturningPromises()].then(^(id o){
+            PMKPromise *next = [self when:blockReturningPromises()];
+            next.then(^(id o){
                 fulfill(o);
                 block = nil;  // break retain cycle
-            }).catch(failHandler);
-
-            next.then(block);
-            next.catch(^(id err){
-                // we documented that the loop ends, the returned promise
-                // is not rejected. But probably should revisit that.
-                //reject(err);
-                block = nil;  // break retain cycle
+            });
+            next.catch(^(NSError *error){
+                [PMKPromise promiseWithValue:error].catch(failHandler).then(block).catch(^{
+                    block = nil;  // break retain cycle
+                });
             });
         };
         block();
