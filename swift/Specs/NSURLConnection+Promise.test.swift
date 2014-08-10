@@ -20,7 +20,7 @@ class TestNSURLConnectionPlusPromise: XCTestCase {
             let hi = json["data"]! as String
             XCTAssertEqual(hi as String, "hi")
             return 1
-        }.catch { (err:NSError) in
+        }.catch { _->Int in
             return 3
         }.then { (value:Int) -> Void in
             XCTAssertEqual(value, 1)

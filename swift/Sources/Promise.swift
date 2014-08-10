@@ -173,7 +173,7 @@ public class Promise<T> {
         case .Rejected(let error):
             return dispatch_promise(to:onQueue){ (fulfiller, _) -> Void in fulfiller(body(error)) }
         case .Pending:
-            return Promise<T>{ (fulfiller, rejecter) in
+            return Promise{ (fulfiller, rejecter) in
                 self.handlers.append {
                     switch self.state {
                     case .Fulfilled(let value):
@@ -210,8 +210,8 @@ public class Promise<T> {
         }
     }
 
-    public func catch<T>(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(NSError) -> Promise<T>) -> Promise<T> {
-
+    public func catch(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(NSError) -> Promise<T>) -> Promise<T>
+    {
         func bind(error:NSError, fulfiller: (T)->(), rejecter: (NSError)->()) {
             let promise = body(error)
             switch promise.state {
@@ -239,16 +239,16 @@ public class Promise<T> {
                 bind(error, $0, $1)
             }
         case .Fulfilled(let value):
-            return Promise<T>(value:value() as T)
+            return Promise(value:value())
             
         case .Pending:
-            return Promise<T>{ (fulfiller, rejecter) in
+            return Promise{ (fulfiller, rejecter) in
                 self.handlers.append{
                     switch self.state {
                     case .Pending:
                         abort()
                     case .Fulfilled(let value):
-                        fulfiller(value() as T)
+                        fulfiller(value())
                     case .Rejected(let error):
                         dispatch_async(q){
                             bind(error, fulfiller, rejecter)

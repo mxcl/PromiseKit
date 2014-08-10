@@ -190,11 +190,11 @@ class TestPromise: XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-/* TODO
     func testCanCatchOffVoidPromise() {
+        let e1 = expectation()
 
-        let p1 = Promise{ success, _ in
-            success(10)
+        let p1 = Promise<Int>{ _, reject in
+            reject(NSError())
         }
         let p2 = p1.then{ (number: Int)->Void in
             let a = "int is \(number)"
@@ -204,7 +204,16 @@ class TestPromise: XCTestCase {
             return
         }
 
-        p3.cat
+        // Due to Swift finding this situation ambiguous we have to explicitly
+        // tell it which catch to use. As yet I’m not sure of a good solution.
+        // see: https://github.com/mxcl/PromiseKit/issues/56
+
+        let q = dispatch_get_global_queue(0, 0)
+        let catch = p3.catch as (dispatch_queue_t, (err:NSError)->())->()
+        catch(q) { err in
+            e1.fulfill()
+        }
+
+        waitForExpectationsWithTimeout(1, handler: nil)
     }
-*/
 }
