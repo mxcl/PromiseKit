@@ -30,24 +30,24 @@ public class Promise<T> {
     public var rejected:Bool {
         switch state {
             case .Fulfilled, .Pending: return false
-            case .Rejected: return true;
+            case .Rejected: return true
         }
     }
     public var fulfilled:Bool {
         switch state {
             case .Rejected, .Pending: return false
-            case .Fulfilled: return true;
+            case .Fulfilled: return true
         }
     }
     public var pending:Bool {
         switch state {
             case .Rejected, .Fulfilled: return false
-            case .Pending: return true;
+            case .Pending: return true
         }
     }
 
     /**
-      returns the fulfilled value unless the Promise is not fulfilled
+      returns the fulfilled value unless the Promise is pending
       in which case returns `nil`
      */
     public var value:T? {
@@ -66,13 +66,13 @@ public class Promise<T> {
         }
         func rejecter(err: NSError) {
             if self.pending {
-                self.state = .Rejected(err);
-                recurse();
+                self.state = .Rejected(err)
+                recurse()
             }
         }
         func fulfiller(obj: T) {
             if self.pending {
-                self.state = .Fulfilled(obj);
+                self.state = .Fulfilled(obj)
                 recurse()
             }
         }
@@ -97,7 +97,7 @@ public class Promise<T> {
     public func then<U>(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -> U) -> Promise<U> {
         switch state {
         case .Rejected(let error):
-            return Promise<U>(error: error);
+            return Promise<U>(error: error)
         case .Fulfilled(let value):
             return dispatch_promise(to:q){ d in d.fulfiller(body(value())) }
         case .Pending:
@@ -143,7 +143,7 @@ public class Promise<T> {
 
         switch state {
         case .Rejected(let error):
-            return Promise<U>(error: error);
+            return Promise<U>(error: error)
         case .Fulfilled(let value):
             return dispatch_promise(to:q){
                 bind(value(), $0, $1)
