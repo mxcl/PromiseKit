@@ -129,7 +129,7 @@ UIActionSheet *sheet = [[UIActionSheet alloc] initWithTitle:…];
 
 One of the best parts of Promises is the implicit and standardized error handling. If an error occurs during your Promise chain, the nearest `catch` handler is executed, skipping any `then` handlers in between.
 
-Thus create promise chains that correlate to a sequence of events with the same error domain. Often very long chains imply poor judgement about error handling.
+Thus, create promise chains that correlate to a sequence of events with the same error domain. Often very long chains imply poor judgement about error handling.
 
 Notably, any exceptions thrown during promise execution are caught and turned into `NSError`s.
 
