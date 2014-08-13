@@ -88,7 +88,7 @@ Note that passing an `NSError` object is valid usage and will reject this promis
 
  Should you need to fulfill a promise but have no sensical value to use; fulfill with `nil`.
 */
-+ (PMKPromise *)new:(void(^)(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter))block;
++ (PMKPromise *)new:(void(^)(PMKPromiseFulfiller fulfill, PMKPromiseRejecter reject))block;
 
 @end
 

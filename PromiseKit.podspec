@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = "PromiseKit"
-  s.version = "0.9.14.3"
+  s.version = "0.9.15"
   s.source = { :git => "https://github.com/mxcl/#{s.name}.git", :tag => s.version }
   s.license = 'MIT'
   s.summary = 'A delightful Promises implementation for iOS and OS X.'
@@ -23,6 +23,7 @@ Pod::Spec.new do |s|
       when 'AC' then 'Accounts'
       when 'SL' then 'Social'
       when 'SK' then 'StoreKit'
+      when 'CK' then 'CloudKit'
       else 'Foundation'
     end
     srcs = ["objc/#{name}+PromiseKit.h", "objc/#{name}+PromiseKit.m", "objc/deprecated/PromiseKit+#{framework}.h"]
@@ -44,9 +45,15 @@ Pod::Spec.new do |s|
       end
 
       yield(ss)
-      
-      ss.ios.deployment_target = ["5.0", (ss.ios.deployment_target rescue "0")].max
-      ss.osx.deployment_target = ["10.7", (ss.osx.deployment_target rescue "0")].max
+
+      pmk_max = Proc.new do |a, b|
+        split = Proc.new{ |f| f.split('.').map{|s| s.to_i } }
+        max = [split.call(a), split.call(a)].max
+        max.join(".")
+      end
+
+      ss.ios.deployment_target = pmk_max.call((ss.ios.deployment_target rescue "0.0"), "5.0")
+      ss.osx.deployment_target = pmk_max.call((ss.osx.deployment_target rescue "0.0"), "10.7")
     end
   end
 
@@ -89,6 +96,14 @@ Pod::Spec.new do |s|
   s.mksubspec 'CLGeocoder' do |ss|
     ss.ios.deployment_target = '5.0'
     ss.osx.deployment_target = '10.8'
+  end
+  s.mksubspec 'CKContainer' do |ss|
+    ss.ios.deployment_target = '8.0'
+    ss.osx.deployment_target = '10.10'
+  end
+  s.mksubspec 'CKDatabase' do |ss|
+    ss.ios.deployment_target = '8.0'
+    ss.osx.deployment_target = '10.10'
   end
   s.mksubspec 'CLLocationManager' do |ss|
     ss.ios.deployment_target = '2.0'
@@ -140,6 +155,10 @@ Pod::Spec.new do |s|
   s.subspec 'AVFoundation' do |ss|
     ss.dependency 'PromiseKit/AVAudioSession'
   end
+  s.subspec 'CloudKit' do |ss|
+    ss.dependency 'PromiseKit/CKContainer'
+    ss.dependency 'PromiseKit/CKDatabase'
+  end
   s.subspec 'CoreLocation' do |ss|
     ss.dependency 'PromiseKit/CLGeocoder'
     ss.dependency 'PromiseKit/CLLocationManager'
@@ -172,6 +191,7 @@ Pod::Spec.new do |s|
 
     ss.dependency 'PromiseKit/Accounts'
     ss.dependency 'PromiseKit/AVFoundation'
+    ss.dependency 'PromiseKit/CloudKit'
     ss.dependency 'PromiseKit/CoreLocation'
     ss.dependency 'PromiseKit/Foundation'
     ss.dependency 'PromiseKit/MapKit'

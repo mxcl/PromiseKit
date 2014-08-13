@@ -22,6 +22,12 @@
 #ifdef PMK_CLLOCATIONMANAGER
 #import <CLLocationManager+PromiseKit.h>
 #endif
+#ifdef PMK_CKCONTAINER
+#import <CKContainer+PromiseKit.h>
+#endif
+#ifdef PMK_CKDATABASE
+#import <CKDatabase+PromiseKit.h>
+#endif
 #ifdef PMK_MKDIRECTIONS
 #import <MKDirections+PromiseKit.h>
 #endif
