@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   def s.PMKOSX; "10.7"; end
 
   s.name = "PromiseKit"
-  s.version = "0.9.15.2"
+  s.version = "0.9.15.3"
   s.source = { :git => "https://github.com/mxcl/#{s.name}.git", :tag => s.version }
   s.license = 'MIT'
   s.summary = 'A delightful Promises implementation for iOS and OS X.'
@@ -32,25 +32,8 @@ Pod::Spec.new do |s|
       when 'CK' then 'CloudKit'
       else 'Foundation'
     end
-    srcs = ["objc/#{name}+PromiseKit.h", "objc/#{name}+PromiseKit.m", "objc/deprecated/PromiseKit+#{framework}.h"]
 
     subspec(name) do |ss|
-      ss.dependency 'PromiseKit/Promise'
-      ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_#{name.upcase}=1" }
-      ss.preserve_paths = 'objc/PromiseKit'
-
-      if prefix == 'UI'
-        ss.ios.source_files = srcs
-        ss.ios.frameworks = 'UIKit'
-      elsif prefix == 'AV'
-        ss.ios.source_files = srcs
-        ss.ios.frameworks = framework
-      else
-        ss.source_files = srcs
-        ss.frameworks = framework
-      end
-
-      yield(ss)
 
       pmk_max = Proc.new do |a, b|
         split = Proc.new{ |f| f.split('.').map{|s| s.to_i } }
@@ -58,8 +41,24 @@ Pod::Spec.new do |s|
         max.join(".")
       end
 
+      ss.dependency 'PromiseKit/Promise'
+      ss.preserve_paths = 'objc/PromiseKit'
+
+      yield(ss)
+
       ss.ios.deployment_target = pmk_max.call((ss.ios.deployment_target rescue "0.0"), self.PMKiOS)
       ss.osx.deployment_target = pmk_max.call((ss.osx.deployment_target rescue "0.0"), self.PMKOSX)
+
+      ss = case prefix when 'UI', 'AV'
+        ss.ios
+      else
+        ss
+      end
+
+      ss.framework = framework
+      ss.source_files = (ss.source_files rescue []) + ["objc/#{name}+PromiseKit.h", "objc/#{name}+PromiseKit.m", "objc/deprecated/PromiseKit+#{framework}.h"]
+
+      ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_#{name.upcase}=1" }
     end
   end
 
@@ -147,7 +146,7 @@ Pod::Spec.new do |s|
     ss.ios.deployment_target = '2.0'
   end
   s.mksubspec 'UIView' do |ss|
-    ss.source_files = 'objc/deprecated/PromiseKit+UIAnimation.h'
+    ss.ios.source_files = 'objc/deprecated/PromiseKit+UIAnimation.h'
     ss.ios.deployment_target = '4.0'
   end
   s.mksubspec 'UIViewController' do |ss|
