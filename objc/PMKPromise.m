@@ -139,6 +139,10 @@ static id safely_call_block(id frock, id result) {
     return nil;
 }
 
+- (void)dealloc {
+    dispatch_release(_promiseQueue);
+}
+
 - (PMKPromise *(^)(id))then {
     return ^(id block){
         return self.thenOn(dispatch_get_main_queue(), block);
