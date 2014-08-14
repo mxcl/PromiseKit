@@ -915,6 +915,20 @@ PMKPromise *gcdreject() {
     XCTAssertTrue(resolved);
 }
 
+- (void)test_63_then_manifold {
+    promise.then(^{
+        return PMKManifold(@[@1, @2, @3]);
+    }).then(^(id o1, id o2, id o3){
+        XCTAssertEqualObjects(o1, @1);
+        XCTAssertEqualObjects(o2, @2);
+        XCTAssertEqualObjects(o3, @3);
+        resolved = YES;
+    });
+    fulfiller(@0);
+    wait(0.1);
+    XCTAssertTrue(resolved);
+}
+
 @end
 
 __EOBJC__
