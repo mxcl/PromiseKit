@@ -139,9 +139,11 @@ static id safely_call_block(id frock, id result) {
     return nil;
 }
 
+#if OS_OBJECT_USE_OBJC == 0
 - (void)dealloc {
     dispatch_release(_promiseQueue);
 }
+#endif
 
 - (PMKPromise *(^)(id))then {
     return ^(id block){

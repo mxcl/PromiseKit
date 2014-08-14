@@ -1,6 +1,12 @@
 Pod::Spec.new do |s|
+
+  # due to https://github.com/CocoaPods/CocoaPods/issues/1001
+  def s.PMKiOS; "6.0"; end
+  # due to ARC requirement (5.0)
+  def s.PMKOSX; "10.7"; end
+
   s.name = "PromiseKit"
-  s.version = "0.9.15.1"
+  s.version = "0.9.15.2"
   s.source = { :git => "https://github.com/mxcl/#{s.name}.git", :tag => s.version }
   s.license = 'MIT'
   s.summary = 'A delightful Promises implementation for iOS and OS X.'
@@ -52,17 +58,17 @@ Pod::Spec.new do |s|
         max.join(".")
       end
 
-      ss.ios.deployment_target = pmk_max.call((ss.ios.deployment_target rescue "0.0"), "5.0")
-      ss.osx.deployment_target = pmk_max.call((ss.osx.deployment_target rescue "0.0"), "10.7")
+      ss.ios.deployment_target = pmk_max.call((ss.ios.deployment_target rescue "0.0"), self.PMKiOS)
+      ss.osx.deployment_target = pmk_max.call((ss.osx.deployment_target rescue "0.0"), self.PMKOSX)
     end
   end
 
-  s.ios.deployment_target = '5.0'
-  s.osx.deployment_target = '10.7'
+  s.ios.deployment_target = s.PMKiOS
+  s.osx.deployment_target = s.PMKOSX
 
   s.subspec 'Promise' do |ss|
-    ss.ios.deployment_target = '5.0'
-    ss.osx.deployment_target = '10.7'
+    ss.ios.deployment_target = s.PMKiOS
+    ss.osx.deployment_target = s.PMKOSX
     ss.source_files = 'objc/PromiseKit.h', 'objc/PMKPromise.m', 'objc/PromiseKit/Promise.h', 'objc/PromiseKit/fwd.h'
     ss.preserve_paths = 'objc/PromiseKit', 'objc/Private'
     ss.frameworks = 'Foundation'
@@ -73,8 +79,8 @@ Pod::Spec.new do |s|
       ss.source_files = "objc/PMKPromise+#{name}.m", "objc/PromiseKit/Promise+#{name}.h"
       ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_#{name.upcase}=1" }
       ss.preserve_paths = 'objc/PromiseKit'
-      ss.ios.deployment_target = '5.0'
-      ss.osx.deployment_target = '10.7'
+      ss.ios.deployment_target = s.PMKiOS
+      ss.osx.deployment_target = s.PMKOSX
       ss.dependency 'PromiseKit/When' if name == 'Until'
       ss.dependency 'PromiseKit/Promise'
     end
