@@ -43,6 +43,10 @@ static id safely_call_block(id frock, id result) {
         const NSUInteger nargs = sig.numberOfArguments;
         const char rtype = sig.methodReturnType[0];
 
+        #define null_to_nil(val) ({^id{ \
+            return (val == [NSNull null]) ? nil : val; \
+        }();})
+        
         #define call_block_with_rtype(type) ({^type{ \
             switch (nargs) { \
                 default:  @throw PMKE(@"Invalid argument count for handler block"); \
@@ -50,19 +54,19 @@ static id safely_call_block(id frock, id result) {
                 case 2: { \
                     type (^block)(id) = frock; \
                     return [result class] == [PMKArray class] \
-                        ? block(result[0]) \
+                        ? block(null_to_nil(result[0])) \
                         : block(result); \
                 } \
                 case 3: { \
                     type (^block)(id, id) = frock; \
                     return [result class] == [PMKArray class] \
-                        ? block(result[0], result[1]) \
+                        ? block(null_to_nil(result[0]), null_to_nil(result[1])) \
                         : block(result, nil); \
                 } \
                 case 4: { \
                     type (^block)(id, id, id) = frock; \
                     return [result class] == [PMKArray class] \
-                        ? block(result[0], result[1], result[2]) \
+                        ? block(null_to_nil(result[0]), null_to_nil(result[1]), null_to_nil(result[2])) \
                         : block(result, nil, nil); \
                 } \
             }}();})
