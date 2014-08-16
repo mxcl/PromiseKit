@@ -79,6 +79,7 @@ def compile!
           -framework XCTest \
           -isystem/tmp/ChuzzleKit -isystem/tmp/OMGHTTPURLRQ \
           /tmp/PromiseKitTests.m \
+          NSURLConnection+PromiseKit.m PMKPromise.m PMKPromise+When.m PMKPromise+Until.m \
           /tmp/ChuzzleKit/*.m /tmp/OMGHTTPURLRQ/*.m \
           -Wall -Weverything -Wno-unused-parameter -Wno-missing-field-initializers \
           -Wno-documentation -Wno-gnu-conditional-omitted-operand \
@@ -89,7 +90,6 @@ def compile!
           -Wno-format-nonliteral \
           -Wno-incomplete-module -Wno-objc-interface-ivars \
           -Wno-auto-import \
-          -DPMK_MODULES=0 \
           -o /tmp/PromiseKitTests
   EOS
   abort unless system <<-EOS

@@ -2,26 +2,21 @@
 OBJC = <<-__EOBJC__
 
 #import "PromiseKit/Promise.h"
-#import "NSURLConnection+PromiseKit.m"
+#import "PromiseKit/Promise+When.h"
+#import "PromiseKit/Promise+Until.h"
+#import "NSURLConnection+PromiseKit.h"
 #import <CommonCrypto/CommonCrypto.h>
-
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wgnu-zero-variadic-macro-arguments"
+//
+// #pragma clang diagnostic push
+// #pragma clang diagnostic ignored "-Wgnu-zero-variadic-macro-arguments"
 @import XCTest;
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wimplicit-retain-self"
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wunreachable-code"
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wgnu-zero-variadic-macro-arguments"
-
-#define NSLog(...)
-// prevent error logging here
-#import "PMKPromise.m"
-#import "PMKPromise+When.m"
-#import "PMKPromise+Until.m"
-#undef NSLog
+// #pragma clang diagnostic push
+// #pragma clang diagnostic ignored "-Wgnu-zero-variadic-macro-arguments"
 
 #define wait(t) [[NSRunLoop mainRunLoop] runUntilDate:[NSDate dateWithTimeIntervalSinceNow:t]]
 #define HI [@"hi" dataUsingEncoding:NSUTF8StringEncoding]
@@ -891,20 +886,9 @@ PMKPromise *gcdreject() {
     XCTAssertThrows([[PMKPromise alloc] init]);
 }
 
-- (void)test_61_manifold_of_nothing {
-    [PMKPromise new:^(PMKPromiseFulfiller _fulfiller, id r){
-        _fulfiller(PMKManifold(@[]));
-    }].then(^(id o){
-        XCTAssertEqualObjects(o, nil);
-        resolved = YES;
-    });
-    wait(0.1);
-    XCTAssertTrue(resolved);
-}
-
 - (void)test_62_access_extra_elements {
     [PMKPromise new:^(PMKPromiseFulfiller _fulfiller, id r){
-        _fulfiller(PMKManifold(@[@1]));
+        _fulfiller(PMKManifold(@1));
     }].then(^(id o, id m, id n){
         XCTAssertNil(m, @"Accessing extra elements should not crash");
         XCTAssertNil(n, @"Accessing extra elements should not crash");
@@ -917,10 +901,24 @@ PMKPromise *gcdreject() {
 
 - (void)test_63_then_manifold {
     promise.then(^{
-        return PMKManifold(@[@1, @2, @3]);
+        return PMKManifold(@1, @2, @3);
     }).then(^(id o1, id o2, id o3){
         XCTAssertEqualObjects(o1, @1);
         XCTAssertEqualObjects(o2, @2);
+        XCTAssertEqualObjects(o3, @3);
+        resolved = YES;
+    });
+    fulfiller(@0);
+    wait(0.1);
+    XCTAssertTrue(resolved);
+}
+
+- (void)test_63_then_manifold_with_nil {
+    promise.then(^{
+        return PMKManifold(@1, nil, @3);
+    }).then(^(id o1, id o2, id o3){
+        XCTAssertEqualObjects(o1, @1);
+        XCTAssertEqualObjects(o2, nil);
         XCTAssertEqualObjects(o3, @3);
         resolved = YES;
     });
