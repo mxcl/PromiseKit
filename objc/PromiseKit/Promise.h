@@ -95,18 +95,21 @@ Note that passing an `NSError` object is valid usage and will reject this promis
 
 
 /**
- Use with `[Promise new:]` to fulfill a Promise with multiple arguments.
+ Use with `+new:`, or return from a `then` or `catch` handler to fulfill
+ a promise with multiple arguments.
 
  Consumers of your Promise are not compelled to consume any arguments and
  in fact will often only consume the first parameter. Thus ensure the
  order of parameters is: from most-important to least-important.
-
- Note that attempts to reject with `PMKManifold` will `@throw`.
+ 
+ Currently PromiseKit limits you to THREE parameters to the manifold.
 */
-id PMKManifold(NSArray *arguments);
+#define PMKManifold(...) __PMKManifold(__VA_ARGS__, 3, 2, 1)
+#define __PMKManifold(_1, _2, _3, N, ...) [PMKArray:N, _1, _2, _3]
+@interface PMKArray : NSObject
++ (instancetype):(NSUInteger)count, ...;
+@end
 
-// using arrayWithObjects because it is `nil` safe
-#define PMKManifold(...) PMKManifold([NSArray arrayWithObjects:__VA_ARGS__, nil])
 
 
 
