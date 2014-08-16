@@ -8,7 +8,7 @@
     return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
         [self requestAccessToAccountsWithType:type options:options completion:^(BOOL granted, NSError *error) {
             if (granted) {
-                fulfiller(self);
+                fulfiller([self accountsWithAccountType:type]);
             } else if (error) {
                 rejecter(error);
             } else {
@@ -21,20 +21,11 @@
     }];
 }
 
-- (PMKPromise *)promiseForAccountsWithType:(ACAccountType *)type options:(NSDictionary *)options
-{
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-        [self requestAccessToAccountsWithType:type options:options completion:^(BOOL granted, NSError *error) {
-            if (!granted) {
-                rejecter(error);
-            } else
-                fulfiller([self accountsWithAccountType:type]);
-        }];
-    }];
+- (PMKPromise *)promiseForAccountsWithType:(ACAccountType *)type options:(NSDictionary *)options {
+    return [self requestAccessToAccountsWithType:type options:options];
 }
 
-- (PMKPromise *)promiseForCredentialsRenewalWithAccount:(ACAccount *)account
-{
+- (PMKPromise *)renewCredentialsForAccount:(ACAccount *)account {
     return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
         [self renewCredentialsForAccount:account completion:^(ACAccountCredentialRenewResult renewResult, NSError *error) {
             if (error) {
@@ -45,8 +36,11 @@
     }];
 }
 
-- (PMKPromise *)promiseForAccountSave:(ACAccount *)account
-{
+- (PMKPromise *)promiseForCredentialsRenewalWithAccount:(ACAccount *)account {
+    return [self renewCredentialsForAccount:account];
+}
+
+- (PMKPromise *)saveAccount:(ACAccount *)account {
     return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
         [self saveAccount:account withCompletionHandler:^(BOOL success, NSError *error) {
             if (!success) {
@@ -57,8 +51,11 @@
     }];
 }
 
-- (PMKPromise *)promiseForAccountRemoval:(ACAccount *)account
-{
+- (PMKPromise *)promiseForAccountSave:(ACAccount *)account {
+    return [self saveAccount:account];
+}
+
+- (PMKPromise *)removeAccount:(ACAccount *)account {
     return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
         [self removeAccount:account withCompletionHandler:^(BOOL success, NSError *error) {
             if (!success) {
@@ -67,6 +64,10 @@
                 fulfiller(nil);
         }];
     }];
+}
+
+- (PMKPromise *)promiseForAccountRemoval:(ACAccount *)account {
+    return [self removeAccount:account];
 }
 
 @end
