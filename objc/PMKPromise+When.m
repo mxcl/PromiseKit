@@ -1,3 +1,6 @@
+@import Foundation.NSDictionary;
+@import Foundation.NSNull;
+@import Foundation.NSPointerArray;
 #import "PromiseKit/Promise+When.h"
 
 

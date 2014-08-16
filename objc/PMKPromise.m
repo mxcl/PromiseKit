@@ -5,9 +5,11 @@
 @import Foundation.NSException;
 @import Foundation.NSKeyValueCoding;
 @import Foundation.NSMethodSignature;
+@import Foundation.NSOperation;
 @import Foundation.NSPointerArray;
 #import "Private/NSMethodSignatureForBlock.m"
 #import "PromiseKit/Promise.h"
+#import <string.h>
 
 #define IsPromise(o) ([o isKindOfClass:[PMKPromise class]])
 #define IsError(o) ([o isKindOfClass:[NSError class]])
