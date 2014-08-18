@@ -1,4 +1,3 @@
-@import Foundation;
 #import "PromiseKit/Promise.h"
 #import "PromiseKit/Promise+When.h"
 
