@@ -5,8 +5,8 @@ import PromiseKit
 class TestNSURLConnectionPlusPromise: XCTestCase {
 
     func resource(fn: String, ext: String = "json") -> NSURLRequest {
-        let url = NSBundle(forClass:self.classForCoder).pathForResource(fn, ofType:ext);
-        return NSURLRequest(URL:NSURL(string:"file://\(url)"))
+        let url = NSBundle(forClass:self.classForCoder).pathForResource(fn, ofType:ext)!
+        return NSURLRequest(URL:NSURL(fileURLWithPath: url))
     }
 
     var plainText: NSURLRequest { return resource("plain", ext: "text") }
@@ -35,7 +35,7 @@ class TestNSURLConnectionPlusPromise: XCTestCase {
             XCTFail()
             return 1
         }.catch { (err:NSError) -> Int in
-            XCTAssertEqual(err.domain, NSCocoaErrorDomain!)
+            XCTAssertEqual(err.domain, NSCocoaErrorDomain! as String)
             XCTAssertEqual(err.code, 3840)
             return 1234
         }.then { (value:Int) -> Void in
@@ -53,7 +53,7 @@ class TestNSURLConnectionPlusPromise: XCTestCase {
         }.catch { (err:NSError) -> Int in
             XCTAssertEqual(err.domain, PMKErrorDomain)
             XCTAssertEqual(err.code, PMKJSONError)
-            XCTAssertEqual(err.userInfo[PMKJSONErrorJSONObjectKey] as NSDictionary, ["data": "hi"])
+            XCTAssertEqual(err.userInfo![PMKJSONErrorJSONObjectKey] as NSDictionary, ["data": "hi"])
             return 1234
         }.then { (value:Int) -> Void in
             XCTAssertEqual(value, 1234)

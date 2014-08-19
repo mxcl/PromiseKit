@@ -9,7 +9,7 @@ class MFMailComposeViewControllerProxy: NSObject, MFMailComposeViewControllerDel
     }
 
     func mailComposeController(controller:MFMailComposeViewController!, didFinishWithResult result:Int, error:NSError!) {
-        if (error) {
+        if error != nil {
             controller.reject(error)
         } else {
             controller.fulfill(result)

@@ -10,6 +10,51 @@ enum State<T> {
 }
 
 
+private func bind1<T, U>(body:(T) -> Promise<U>, value:T, fulfiller: (U)->(), rejecter: (NSError)->()) {
+    let promise = body(value)
+    switch promise.state {
+    case .Rejected(let error):
+        rejecter(error)
+    case .Fulfilled(let value):
+        fulfiller(value())
+    case .Pending:
+        promise.handlers.append{
+            switch promise.state {
+            case .Rejected(let error):
+                rejecter(error)
+            case .Fulfilled(let value):
+                fulfiller(value())
+            case .Pending:
+                abort()
+            }
+        }
+    }
+}
+
+private func bind2<T>(body:(NSError) -> Promise<T>, error: NSError, fulfiller: (T)->(), rejecter: (NSError)->()) {
+    let promise = body(error)
+    switch promise.state {
+    case .Rejected(let error):
+        rejecter(error)
+    case .Fulfilled(let value):
+        fulfiller(value())
+    case .Pending:
+        promise.handlers.append{
+            switch promise.state {
+            case .Rejected(let error):
+                rejecter(error)
+            case .Fulfilled(let value):
+                fulfiller(value())
+            case .Pending:
+                abort()
+            }
+        }
+    }
+}
+
+
+
+
 func dispatch_promise<T>(to queue:dispatch_queue_t = dispatch_get_global_queue(0, 0), block:(fulfiller: (T)->Void, rejecter: (NSError)->Void) -> ()) -> Promise<T> {
     return Promise<T> { (fulfiller, rejecter) in
         dispatch_async(queue) {
@@ -59,20 +104,23 @@ public class Promise<T> {
         }
     }
 
+    // TODO move into init as has no use anywhere else
+    // is here currently because: beta 6 compile errors it
+    private func recurse() {
+        for handler in handlers { handler() }
+        handlers.removeAll(keepCapacity: false)
+    }
+
     public init(_ body:(fulfiller:(T) -> Void, rejecter:(NSError) -> Void) -> Void) {
-        func recurse() {
-            for handler in handlers { handler() }
-            handlers.removeAll(keepCapacity: false)
-        }
         func rejecter(err: NSError) {
-            if self.pending {
-                self.state = .Rejected(err)
+            if pending {
+                state = .Rejected(err)
                 recurse()
             }
         }
         func fulfiller(obj: T) {
-            if self.pending {
-                self.state = .Fulfilled(obj)
+            if pending {
+                state = .Fulfilled(obj)
                 recurse()
             }
         }
@@ -120,33 +168,12 @@ public class Promise<T> {
 
     public func then<U>(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -> Promise<U>) -> Promise<U> {
 
-        func bind(value:T, fulfiller: (U)->(), rejecter: (NSError)->()) {
-            let promise = body(value)
-            switch promise.state {
-            case .Rejected(let error):
-                rejecter(error)
-            case .Fulfilled(let value):
-                fulfiller(value())
-            case .Pending:
-                promise.handlers.append{
-                    switch promise.state {
-                    case .Rejected(let error):
-                        rejecter(error)
-                    case .Fulfilled(let value):
-                        fulfiller(value())
-                    case .Pending:
-                        abort()
-                    }
-                }
-            }
-        }
-
         switch state {
         case .Rejected(let error):
             return Promise<U>(error: error)
         case .Fulfilled(let value):
             return dispatch_promise(to:q){
-                bind(value(), $0, $1)
+                bind1(body, value(), $0, $1)
             }
         case .Pending:
             return Promise<U>{ (fulfiller, rejecter) in
@@ -156,7 +183,7 @@ public class Promise<T> {
                         abort()
                     case .Fulfilled(let value):
                         dispatch_async(q){
-                            bind(value(), fulfiller, rejecter)
+                            bind1(body, value(), fulfiller, rejecter)
                         }
                     case .Rejected(let error):
                         rejecter(error)
@@ -169,7 +196,7 @@ public class Promise<T> {
     public func catch(onQueue:dispatch_queue_t = dispatch_get_main_queue(), body:(NSError) -> T) -> Promise<T> {
         switch state {
         case .Fulfilled(let value):
-            return Promise(value:value())
+            return Promise(value: value())
         case .Rejected(let error):
             return dispatch_promise(to:onQueue){ (fulfiller, _) -> Void in fulfiller(body(error)) }
         case .Pending:
@@ -212,31 +239,10 @@ public class Promise<T> {
 
     public func catch(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(NSError) -> Promise<T>) -> Promise<T>
     {
-        func bind(error:NSError, fulfiller: (T)->(), rejecter: (NSError)->()) {
-            let promise = body(error)
-            switch promise.state {
-            case .Rejected(let error):
-                rejecter(error)
-            case .Fulfilled(let value):
-                fulfiller(value())
-            case .Pending:
-                promise.handlers.append{
-                    switch promise.state {
-                    case .Rejected(let error):
-                        rejecter(error)
-                    case .Fulfilled(let value):
-                        fulfiller(value())
-                    case .Pending:
-                        abort()
-                    }
-                }
-            }
-        }
-
         switch state {
         case .Rejected(let error):
             return dispatch_promise(to:q){
-                bind(error, $0, $1)
+                bind2(body, error, $0, $1)
             }
         case .Fulfilled(let value):
             return Promise(value:value())
@@ -251,7 +257,7 @@ public class Promise<T> {
                         fulfiller(value())
                     case .Rejected(let error):
                         dispatch_async(q){
-                            bind(error, fulfiller, rejecter)
+                            bind2(body, error, fulfiller, rejecter)
                         }
                     }
                 }

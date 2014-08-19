@@ -42,7 +42,7 @@ func PMKUserAgent() -> String {
 
 func fetch<T>(var request: NSURLRequest, body: ((T) -> Void, (NSError) -> Void, NSData) -> Void) -> Promise<T> {
 
-    if !request.valueForHTTPHeaderField("User-Agent") {
+    if request.valueForHTTPHeaderField("User-Agent") == nil {
         let rq = request.mutableCopy() as NSMutableURLRequest
         rq.setValue(PMKUserAgent(), forHTTPHeaderField:"User-Agent")
         request = rq
@@ -65,7 +65,7 @@ func fetch<T>(var request: NSURLRequest, body: ((T) -> Void, (NSError) -> Void, 
                 rejunker(NSError(domain:error.domain, code:error.code, userInfo:info))
             }
 
-            if err {
+            if err != nil {
                 rejecter(err)
             } else {
                 body(fulfiller, rejecter, data!)
