@@ -1,12 +1,6 @@
 Pod::Spec.new do |s|
-
-  # due to https://github.com/CocoaPods/CocoaPods/issues/1001
-  def s.PMKiOS; "6.0"; end
-  # due to ARC requirement (5.0)
-  def s.PMKOSX; "10.7"; end
-
   s.name = "PromiseKit"
-  s.version = "0.9.15.3"
+  s.version = "0.9.16"
   s.source = { :git => "https://github.com/mxcl/#{s.name}.git", :tag => s.version }
   s.license = 'MIT'
   s.summary = 'A delightful Promises implementation for iOS and OS X.'
@@ -18,8 +12,10 @@ Pod::Spec.new do |s|
                        'UIActionSheet', 'UIAlertView', 'UIViewController', 'UIView',
                        'Pause', 'When', 'Until'
   s.requires_arc = true
+  s.ios.deployment_target = '6.0'    # due to https://github.com/CocoaPods/CocoaPods/issues/1001
+  s.osx.deployment_target = '10.7'
 
-  def s.mksubspec name
+  def s.mksubspec name, ios: nil, osx: nil
     prefix = name[0..1]
     framework = case prefix
       when 'UI' then 'UIKit'
@@ -35,21 +31,35 @@ Pod::Spec.new do |s|
 
     subspec(name) do |ss|
 
-      pmk_max = Proc.new do |a, b|
+      # this method because CocoaPods insists 
+      max = Proc.new do |a, b|
         split = Proc.new{ |f| f.split('.').map{|s| s.to_i } }
-        max = [split.call(a), split.call(a)].max
-        max.join(".")
+        [split.call(a), split.call(a)].max.join(".")
       end
 
       ss.dependency 'PromiseKit/Promise'
       ss.preserve_paths = 'objc/PromiseKit'
 
-      yield(ss)
+      # becuase CocoaPods won't lint if the deployment targets of subspecs
+      # are different to the deployment targets of the root spec we have
+      # to just pretend everything is the same as the root spec :P
+      # https://github.com/CocoaPods/CocoaPods/issues/1987
+      if ios
+        #ss.ios.deployment_target = max.call(ios, self.deployment_target(:ios))
+        ss.ios.deployment_target = deployment_target(:ios)
+      end
+      if osx
+        #ss.osx.deployment_target = max.call(osx, self.deployment_target(:osx))
+        ss.osx.deployment_target = deployment_target(:osx)
+      end
+      
+      yield(ss) if block_given?
 
-      ss.ios.deployment_target = pmk_max.call((ss.ios.deployment_target rescue "0.0"), self.PMKiOS)
-      ss.osx.deployment_target = pmk_max.call((ss.osx.deployment_target rescue "0.0"), self.PMKOSX)
-
-      ss = case prefix when 'UI', 'AV'
+      ss = if !ios
+        ss.ios.deployment_target = nil
+        ss.osx
+      elsif !osx
+        ss.osx.deployment_target = nil
         ss.ios
       else
         ss
@@ -57,29 +67,21 @@ Pod::Spec.new do |s|
 
       ss.framework = framework
       ss.source_files = (ss.source_files rescue []) + ["objc/#{name}+PromiseKit.h", "objc/#{name}+PromiseKit.m", "objc/deprecated/PromiseKit+#{framework}.h"]
-
       ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_#{name.upcase}=1" }
     end
   end
 
-  s.ios.deployment_target = s.PMKiOS
-  s.osx.deployment_target = s.PMKOSX
-
   s.subspec 'Promise' do |ss|
-    ss.ios.deployment_target = s.PMKiOS
-    ss.osx.deployment_target = s.PMKOSX
     ss.source_files = 'objc/PromiseKit.h', 'objc/PMKPromise.m', 'objc/PromiseKit/Promise.h', 'objc/PromiseKit/fwd.h'
     ss.preserve_paths = 'objc/PromiseKit', 'objc/Private'
     ss.frameworks = 'Foundation'
   end
-  
+
   %w{Pause Until When}.each do |name|
     s.subspec(name) do |ss|
       ss.source_files = "objc/PMKPromise+#{name}.m", "objc/PromiseKit/Promise+#{name}.h"
       ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_#{name.upcase}=1" }
       ss.preserve_paths = 'objc/PromiseKit'
-      ss.ios.deployment_target = s.PMKiOS
-      ss.osx.deployment_target = s.PMKOSX
       ss.dependency 'PromiseKit/When' if name == 'Until'
       ss.dependency 'PromiseKit/Promise'
     end
@@ -91,69 +93,30 @@ Pod::Spec.new do |s|
     ss.dependency 'PromiseKit/Until'
   end
 
-  s.mksubspec 'ACAccountStore' do |ss|
-    ss.ios.deployment_target = '6.0'
-    ss.osx.deployment_target = '10.8'
-  end
-  s.mksubspec 'AVAudioSession' do |ss|
-    ss.ios.deployment_target = '7.0'
-  end
-  s.mksubspec 'CLGeocoder' do |ss|
-    ss.ios.deployment_target = '5.0'
-    ss.osx.deployment_target = '10.8'
-  end
-  s.mksubspec 'CKContainer' do |ss|
-    ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
-  end
-  s.mksubspec 'CKDatabase' do |ss|
-    ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
-  end
-  s.mksubspec 'CLLocationManager' do |ss|
-    ss.ios.deployment_target = '2.0'
-    ss.osx.deployment_target = '10.6'
-  end
-  s.mksubspec 'MKDirections' do |ss|
-    ss.ios.deployment_target = '7.0'
-    ss.osx.deployment_target = '10.9'
-  end
-  s.mksubspec 'MKMapSnapshotter' do |ss|
-    ss.ios.deployment_target = '7.0'
-    ss.osx.deployment_target = '10.9'
-  end
-  s.mksubspec 'NSNotificationCenter' do |ss|
-    ss.ios.deployment_target = '4.0'
-    ss.osx.deployment_target = '10.6'
-  end
-  s.mksubspec 'NSURLConnection' do |ss|
+  s.mksubspec 'ACAccountStore', ios: '6.0', osx: '10.8'
+  s.mksubspec 'AVAudioSession', ios: '7.0'
+  s.mksubspec 'CLGeocoder', ios: '5.0', osx: '10.8'
+  s.mksubspec 'CKContainer', ios: '8.0', osx: '10.10'
+  s.mksubspec 'CKDatabase', ios: '8.0', osx: '10.10'
+  s.mksubspec 'CLLocationManager', ios: '2.0', osx: '10.6'
+  s.mksubspec 'MKDirections', ios: '7.0', osx: '10.9'
+  s.mksubspec 'MKMapSnapshotter', ios: '7.0', osx: '10.9'
+  s.mksubspec 'NSNotificationCenter', ios: '4.0', osx: '10.6'
+  s.mksubspec 'NSTask', osx: '10.0'
+  s.mksubspec 'NSURLConnection', ios: '5.0', osx: '10.7' do |ss|
     ss.dependency "OMGHTTPURLRQ"
-    ss.ios.deployment_target = '5.0'
-    ss.osx.deployment_target = '10.7'
   end
-  s.mksubspec 'SKProductsRequest' do |ss|
-    ss.ios.deployment_target = '3.0'
-    ss.osx.deployment_target = '10.7'
-  end
-  s.mksubspec 'SLRequest' do |ss|
-    ss.ios.deployment_target = '6.0'
-    ss.osx.deployment_target = '10.8'
-  end
-  s.mksubspec 'UIActionSheet' do |ss|
-    ss.ios.deployment_target = '2.0'
-  end
-  s.mksubspec 'UIAlertView' do |ss|
-    ss.ios.deployment_target = '2.0'
-  end
-  s.mksubspec 'UIView' do |ss|
+  s.mksubspec 'SKProductsRequest', ios: '3.0', osx: '10.7'
+  s.mksubspec 'SLRequest', ios: '6.0', osx: '10.8'
+  s.mksubspec 'UIActionSheet', ios: '2.0'
+  s.mksubspec 'UIAlertView', ios: '2.0'
+  s.mksubspec 'UIView', ios: '4.0' do |ss|
     ss.ios.source_files = 'objc/deprecated/PromiseKit+UIAnimation.h'
-    ss.ios.deployment_target = '4.0'
   end
-  s.mksubspec 'UIViewController' do |ss|
-    ss.ios.deployment_target = '5.0'
+  s.mksubspec 'UIViewController', ios: '5.0' do |ss|
     ss.ios.weak_frameworks = 'AssetsLibrary'
   end
-  
+
   s.subspec 'Accounts' do |ss|
     ss.dependency 'PromiseKit/ACAccountStore'
   end
@@ -170,6 +133,7 @@ Pod::Spec.new do |s|
   end
   s.subspec 'Foundation' do |ss|
     ss.dependency 'PromiseKit/NSNotificationCenter'
+    ss.dependency 'PromiseKit/NSTask'
     ss.dependency 'PromiseKit/NSURLConnection'
   end
   s.subspec 'MapKit' do |ss|
@@ -192,7 +156,7 @@ Pod::Spec.new do |s|
   s.subspec 'all' do |ss|
     ss.dependency 'PromiseKit/When'
     ss.dependency 'PromiseKit/Until'
-    ss.dependency 'PromiseKit/Pause'    
+    ss.dependency 'PromiseKit/Pause'
 
     ss.dependency 'PromiseKit/Accounts'
     ss.dependency 'PromiseKit/AVFoundation'

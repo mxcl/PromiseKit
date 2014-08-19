@@ -37,6 +37,9 @@
 #ifdef PMK_NSNOTIFICATIONCENTER
 #import <NSNotificationCenter+PromiseKit.h>
 #endif
+#ifdef PMK_NSTASK
+#import <NSTask+PromiseKit.h>
+#endif
 #ifdef PMK_NSURLCONNECTION
 #import <NSURLConnection+PromiseKit.h>
 #endif
