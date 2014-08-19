@@ -56,12 +56,14 @@ func fetch<T>(var request: NSURLRequest, body: ((T) -> Void, (NSError) -> Void, 
             //TODO handle non 2xx responses
             //TODO in the event of a non 2xx rsp, try to parse JSON out of the response anyway
 
-            func rejecter(error:NSError) {
-                let info = NSMutableDictionary(dictionary: error.userInfo)
-                if let s = request.URL.absoluteString { info[NSURLErrorFailingURLStringErrorKey] = s }
-                info[NSURLErrorFailingURLErrorKey] = request.URL
-                if data { info[PMKURLErrorFailingDataKey] = data! }
-                if rsp { info[PMKURLErrorFailingURLResponseKey] = rsp! }
+            func rejecter(error: NSError) {
+                let info = error.userInfo != nil ? NSMutableDictionary(dictionary: error.userInfo) : NSMutableDictionary()
+                if let url = request.URL {
+                    info[NSURLErrorFailingURLErrorKey] = url
+                    info[NSURLErrorFailingURLStringErrorKey] = url.absoluteString
+                }
+                if data != nil { info[PMKURLErrorFailingDataKey] = data! }
+                if rsp != nil { info[PMKURLErrorFailingURLResponseKey] = rsp! }
                 rejunker(NSError(domain:error.domain, code:error.code, userInfo:info))
             }
 
