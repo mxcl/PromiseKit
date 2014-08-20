@@ -1,5 +1,10 @@
 #import <CoreFoundation/CFString.h>
 #import <CoreFoundation/CFURL.h>
+#import <Foundation/NSJSONSerialization.h>
+#import <Foundation/NSThread.h>
+#import <Foundation/NSURLError.h>
+#import <Foundation/NSURL.h>
+#import <Foundation/NSURLResponse.h>
 #import "NSURLConnection+PromiseKit.h"
 #import <OMGHTTPURLRQ.h>
 #import <OMGUserAgent.h>
