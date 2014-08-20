@@ -385,8 +385,8 @@ static void PMKResolve(PMKPromise *this, id result) {
     }
 }
 
-+ (PMKPromise *)new:(void(^)(PMKPromiseFulfiller, PMKPromiseRejecter))block {
-    PMKPromise *this = [PMKPromise alloc];
++ (instancetype)new:(void(^)(PMKPromiseFulfiller, PMKPromiseRejecter))block {
+    PMKPromise *this = [self alloc];
     this->_promiseQueue = PMKCreatePromiseQueue();
     this->_handlers = [NSMutableArray new];
 
