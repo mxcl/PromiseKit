@@ -37,3 +37,10 @@ There is a CocoaPods subspec for every category and an umbrella subspec for ever
 <aside>
 Asking for just the `PromiseKit` pod gives you the 80% most people want, ie. `PMKPromise`, the `NSURLConnection` & `NSNotifcationCenter` category additions and the `UIKit` category additions.
 </aside>
+
+
+## Without CocoaPods
+
+If you don’t want to use CocoaPods you can use [CocoaPods Packager](https://github.com/CocoaPods/cocoapods-packager) to generate a static version of PromiseKit and just embed that.
+
+Please update regularly though, currently PromiseKit is updated *twice a week*.
