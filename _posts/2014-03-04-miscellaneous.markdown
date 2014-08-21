@@ -5,10 +5,10 @@ layout: default
 
 # Miscellaneous
 
-## Guides
+## Guides/Blogs
 
 * [Promises Pay](http://blog.popularpays.com/tech/2014/4/28/popular-promises)
-
+* [PromiseKit + AFNetworking](http://oramind.com/promisekit-afnetworking/)
 
 ## Alternatives to PromiseKit
 
