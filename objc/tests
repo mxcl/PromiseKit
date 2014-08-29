@@ -927,6 +927,16 @@ PMKPromise *gcdreject() {
     XCTAssertTrue(resolved);
 }
 
+- (void)test_catch_in_new {
+    [PMKPromise new:^(id f, id r){
+        @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"foo" userInfo:@{}];
+    }].catch(^{
+        resolved = YES;
+    });
+    wait(0.1);
+    XCTAssertTrue(resolved);
+}
+
 @end
 
 __EOBJC__
