@@ -131,10 +131,11 @@ One of the best parts of Promises is the implicit and standardized error handlin
 
 Thus, create promise chains that correlate to a sequence of events with the same error domain. Often very long chains imply poor judgement about error handling.
 
-Notably, any exceptions thrown during promise execution are caught and turned into `NSError`s.
+Notably, any exceptions thrown while executing PromiseKit handlers (`-then`, `-catch` and `+new:`) are caught and turned into `NSError`s.
 
 <aside>If you throw some other kind of object the `NSError` will have its `localizedDescription` set to that object’s description. This means throwing strings can be a direct way to show the user an error message. The thrown object will be available in the `NSError`’s `userInfo`’s `PMKUnderlyingExceptionKey`.</aside>
 
+<aside>PromiseKit cannot catch exceptions thrown in other threads even if they were spawned inside handlers, even if the throw happens from a nested block inside a PromiseKit handler. If you have such situations, consider `dispatch_promise` or wrapping more of your asynchronous systems in other promises.</aisde>
 
 ### Causing Errors
 
