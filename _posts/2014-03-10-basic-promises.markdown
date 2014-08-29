@@ -135,7 +135,7 @@ Notably, any exceptions thrown while executing PromiseKit handlers (`-then`, `-c
 
 <aside>If you throw some other kind of object the `NSError` will have its `localizedDescription` set to that object’s description. This means throwing strings can be a direct way to show the user an error message. The thrown object will be available in the `NSError`’s `userInfo`’s `PMKUnderlyingExceptionKey`.</aside>
 
-<aside>PromiseKit cannot catch exceptions thrown in other threads even if they were spawned inside handlers, even if the throw happens from a nested block inside a PromiseKit handler. If you have such situations, consider `dispatch_promise` or wrapping more of your asynchronous systems in other promises.</aisde>
+<aside>PromiseKit cannot catch exceptions thrown in other threads even if they were spawned inside handlers, even if the throw happens from a nested block inside a PromiseKit handler. If you have such situations, consider `dispatch_promise` or wrapping more of your asynchronous systems in other promises.</aside>
 
 ### Causing Errors
 
