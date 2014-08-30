@@ -28,4 +28,4 @@ Really though, this is bad chain design. Probably what you wanted was to nest th
 
 ## 2. `EXC_BAD_ACCESS`
 
-ARC is pretty good, but in some cases it is possible for your Promise chain to be partially deallocated. Usually when wrapping delegate systems. PromiseKit itself has macros that force additional retains and releases to avoid this.
+When wrapping delegate patterns, the delegate property is usually `assign` which means if nothing else points to it, it will be deallocated immediately. The block-heavy nature of promises can easily lead to this situation, so it is something to be aware of.
