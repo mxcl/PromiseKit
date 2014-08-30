@@ -32,8 +32,7 @@ NSString const*const PMKThrown = PMKUnderlyingExceptionKey;
  the block correctly and normalizes the return value to `id`.
  */
 static id safely_call_block(id frock, id result) {
-    if (!frock)
-        @throw PMKE(@"Internal error");
+    assert(frock);
 
     if (result == PMKNull)
         result = nil;
@@ -45,13 +44,11 @@ static id safely_call_block(id frock, id result) {
 
         #define call_block_with_rtype(type) ({^type{ \
             switch (nargs) { \
-                default:  @throw PMKE(@"Invalid argument count for handler block"); \
-                case 1:   return ((type(^)(void))frock)(); \
+                case 1: \
+                    return ((type(^)(void))frock)(); \
                 case 2: { \
-                    type (^block)(id) = frock; \
-                    return [result class] == [PMKArray class] \
-                        ? block(result[0]) \
-                        : block(result); \
+                    const id arg = [result class] == [PMKArray class] ? result[0] : result; \
+                    return ((type(^)(id))frock)(arg); \
                 } \
                 case 3: { \
                     type (^block)(id, id) = frock; \
@@ -65,6 +62,8 @@ static id safely_call_block(id frock, id result) {
                         ? block(result[0], result[1], result[2]) \
                         : block(result, nil, nil); \
                 } \
+                default: \
+                    @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"PromiseKit: The provided block’s argument count is unsupported." userInfo:nil]; \
             }}();})
 
         switch (rtype) {
@@ -162,85 +161,78 @@ static id safely_call_block(id frock, id result) {
     };
 }
 
+typedef PMKPromise *(^PMKResolveOnQueueBlock)(dispatch_queue_t, id block);
 
-typedef PMKPromise *(^PMKResolveOnQueueBlock)(dispatch_queue_t, id);
-typedef void(^PMKResolveHandler)(id result, PMKPromise *next, dispatch_queue_t q, id block, PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter);
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wimplicit-retain-self"
 
-// This function generates the block that is returned from thenOn,
-// catchOn and finallyOn. It takes a block that is called when the
-// promise is resolved and one that is called in two cases where it is
-// determined that the promise has already been resolved.
-static PMKResolveOnQueueBlock PMKMakeCallback(PMKPromise *this, PMKResolveOnQueueBlock (^alreadyResolved)(id result), PMKResolveHandler whenResolved) {
-    __block PMKPromise *(^callBlock)(dispatch_queue_t, id block);
+// Convoluted helper method that returns a block that is called
+// from a thenOn/catchOn/finallyOn. It returns a block that when
+// executed calls the user’s block with our result. The method
+// takes two blocks that allow the callee to alter the behavior
+// when calling the user’s block. The first for the already-
+// resolved state, the second for the pending state.
+
+- (id)resolved:(PMKResolveOnQueueBlock(^)(id result))mkresolvedCallback
+       pending:(void(^)(id result, PMKPromise *next, dispatch_queue_t q, id block, PMKPromiseFulfiller resolver))mkpendingCallback
+{
+    __block PMKResolveOnQueueBlock callBlock;
     __block id result;
     
-    dispatch_sync(this->_promiseQueue, ^{
-        result = this->_result;
-        
-        if (result == nil) {
-            callBlock = ^(dispatch_queue_t q, id block) {
-                __block PMKPromise *next = nil;
-                __block id promiseResult;
+    dispatch_sync(_promiseQueue, ^{
+        if ((result = _result))
+            return;
 
-                // HACK we seem to expose some bug in ARC where this block can
-                // be an NSStackBlock which then gets deallocated by the time
-                // we get around to using it. So we force it to be malloc'd.
-                block = [block copy];
-                
-                dispatch_barrier_sync(this->_promiseQueue, ^{
-                    promiseResult = this->_result;
-                    
-                    if (promiseResult == nil) {
-                        __block PMKPromiseFulfiller fulfiller;
-                        __block PMKPromiseRejecter rejecter;
-                        next = [PMKPromise new:^(PMKPromiseFulfiller fluff, PMKPromiseRejecter rejunk) {
-                            fulfiller = fluff;
-                            rejecter = rejunk;
-                        }];
-                        [this->_handlers addObject:^(id r){
-                            whenResolved(r, next, q, block, fulfiller, rejecter);
-                        }];
-                    }
-                });
-                
-                // This can still happen if the promise was resolved after
-                // .thenOn read it and decided which block to return and the
-                // call to the block.
-                
-                if (next == nil) {
-                    next = alreadyResolved(promiseResult)(q, block);
-                }
-                
-                return next;
-            };
-        }
+        callBlock = ^(dispatch_queue_t q, id block) {
+            __block PMKPromise *next = nil;
+
+            // HACK we seem to expose some bug in ARC where this block can
+            // be an NSStackBlock which then gets deallocated by the time
+            // we get around to using it. So we force it to be malloc'd.
+            block = [block copy];
+            
+            dispatch_barrier_sync(_promiseQueue, ^{
+                if ((result = _result))
+                    return;
+
+                __block PMKPromiseFulfiller resolver;
+                next = [PMKPromise new:^(PMKPromiseFulfiller fulfill, PMKPromiseRejecter reject) {
+                    resolver = ^(id o){
+                        if (IsError(o)) reject(o); else fulfill(o);
+                    };
+                }];
+                [_handlers addObject:^(id value){
+                    mkpendingCallback(value, next, q, block, resolver);
+                }];
+            });
+            
+            // next can still be `nil` if the promise was resolved after
+            // 1) `-thenOn` read it and decided which block to return; and
+            // 2) the call to the block.
+
+            return next ?: mkresolvedCallback(result)(q, block);
+        };
     });
-    
-    if (callBlock == nil) {
-        // We could just always return the above block, but then every caller would
-        // trigger a barrier_sync on the promise queue. Instead, if we know that the
-        // promise is resolved (since that makes it immutable), we can return a simpler
-        // block that don't use a barrier in those cases.
 
-        callBlock = alreadyResolved(result);
-    }
-    
-    return callBlock;
+    // We could just always return the above block, but then every caller would
+    // trigger a barrier_sync on the promise queue. Instead, if we know that the
+    // promise is resolved (since that makes it immutable), we can return a simpler
+    // block that doesn't use a barrier in those cases.
+
+    return callBlock ?: mkresolvedCallback(result);
 }
 
+#pragma clang diagnostic pop
 
 - (PMKResolveOnQueueBlock)thenOn {
-    return PMKMakeCallback(self, ^(id result){
-        if (IsPromise(result)) {
+    return [self resolved:^(id result) {
+        if (IsPromise(result))
             return ((PMKPromise *)result).thenOn;
-        }
-        
-        if (IsError(result)) {
-            return ^(dispatch_queue_t q, id block) {
-                return [PMKPromise promiseWithValue:result];
-            };
-        }
-        
+
+        if (IsError(result)) return ^(dispatch_queue_t q, id block) {
+            return [PMKPromise promiseWithValue:result];
+        };
+
         return ^(dispatch_queue_t q, id block) {
 
             // HACK we seem to expose some bug in ARC where this block can
@@ -248,83 +240,75 @@ static PMKResolveOnQueueBlock PMKMakeCallback(PMKPromise *this, PMKResolveOnQueu
             // we get around to using it. So we force it to be malloc'd.
             block = [block copy];
 
-            return dispatch_promise_on(q, ^{   // don’t release Zalgo
+            return dispatch_promise_on(q, ^{
                 return safely_call_block(block, result);
             });
         };
-    }, ^(id result, PMKPromise *next, dispatch_queue_t q, id block, PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter){
-        if (IsError(result)) {
-            PMKResolve(next, result);
-        }
-        else dispatch_async(q, ^{
-            id rv = safely_call_block(block, result);
-            if (IsError(rv))
-                rejecter(rv);
-            else
-                fulfiller(rv);
+    }
+    pending:^(id result, PMKPromise *next, dispatch_queue_t q, id block, PMKPromiseFulfiller resolve) {
+        if (IsError(result))
+            return PMKResolve(next, result);
+
+        dispatch_async(q, ^{
+            resolve(safely_call_block(block, result));
         });
-    });
+    }];
 }
 
-- (PMKPromise *(^)(dispatch_queue_t, id))catchOn {
-    return PMKMakeCallback(self, ^(id result){
-        if (IsPromise(result)) {
+- (PMKResolveOnQueueBlock)catchOn {
+    return [self resolved:^(id result) {
+        if (IsPromise(result))
             return ((PMKPromise *)result).catchOn;
-        }
         
         if (IsError(result)) return ^(dispatch_queue_t q, id block) {
-            return dispatch_promise_on(q, ^{   // don’t release Zalgo
+            return dispatch_promise_on(q, ^{
                 id rv = safely_call_block(block, result);
-                if (rv != result) {
-                    // if the handler rethrows the error, it is not consumed
+                if (rv != result)
+                    // if the handler rethrows the same error, it is not consumed
                     ((PMKError *)result)->consumed = YES;
-                }
                 return rv;
             });
         };
         
         return ^(dispatch_queue_t q, id block) {
-            return [PMKPromise promiseWithValue: result];
+            return [PMKPromise promiseWithValue:result];
         };
-    }, ^(id result, PMKPromise *next, dispatch_queue_t q, id block, PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter){
+    }
+    pending:^(id result, PMKPromise *next, dispatch_queue_t q, id block, PMKPromiseFulfiller resolve) {
         if (IsError(result)) {
             dispatch_async(q, ^{
                 id rv = safely_call_block(block, result);
-                if (IsError(rv)) {
-                    if (rv != result) ((PMKError *)result)->consumed = YES;
-                    rejecter(rv);
-                } else {
+                if (rv != result)
+                    // if the handler rethrows the same error, it is not consumed
                     ((PMKError *)result)->consumed = YES;
-                    fulfiller(rv);
-                }
+                resolve(rv);
             });
-        } else {
+        } else
             PMKResolve(next, result);
-        }
-    });
+    }];
 }
 
 - (PMKPromise *(^)(dispatch_queue_t, dispatch_block_t))finallyOn {
-    return PMKMakeCallback(self, ^(id result){
-        if (IsPromise(result))
-            return ((PMKPromise *)result).finallyOn;
-        
+    return [self resolved:^(id passthru) {
+        if (IsPromise(passthru))
+            return ((PMKPromise *)passthru).finallyOn;
+
         return ^(dispatch_queue_t q, dispatch_block_t block) {
             return dispatch_promise_on(q, ^{
                 block();
-                return result;
+                return passthru;
             });
         };
-    }, ^(id passthru, PMKPromise *next, dispatch_queue_t q, dispatch_block_t block, PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter){
+    } pending:^(id passthru, PMKPromise *next, dispatch_queue_t q, dispatch_block_t block, PMKPromiseFulfiller resolve) {
         dispatch_async(q, ^{
-            block();
-            
-            if (IsError(passthru))
-                rejecter(passthru);
-            else
-                fulfiller(passthru);
+            @try {
+                block();
+                resolve(passthru);
+            } @catch (id e) {
+                resolve(e);
+            }
         });
-    });
+    }];
 }
 
 + (PMKPromise *)promiseWithValue:(id)value {
@@ -338,57 +322,47 @@ static dispatch_queue_t PMKCreatePromiseQueue() {
     return dispatch_queue_create("org.promiseKit.Q", DISPATCH_QUEUE_CONCURRENT);
 }
 
-static id PMKResult(PMKPromise *this) {
-    __block id r;
+static id PMKGetResult(PMKPromise *this) {
+    __block id result;
     dispatch_sync(this->_promiseQueue, ^{
-        r = this->_result;
+        result = this->_result;
     });
-    return r;
+    return result;
 }
 
-static NSArray* PMKSetResult(PMKPromise *this, id result) {
-    __block NSArray* handlers;
-    
+static NSArray *PMKSetResult(PMKPromise *this, id result) {
+    __block NSArray *handlers;
+
     dispatch_barrier_sync(this->_promiseQueue, ^{
         handlers = this->_handlers;
-        this->_result = result;
+        this->_result = result ?: PMKNull;
         this->_handlers = nil;
     });
-    
+
     return handlers;
 }
 
 static void PMKResolve(PMKPromise *this, id result) {
-    __block id r = result ?: PMKNull;
-    __block PMKPromise *rv = IsPromise(r) ? r : nil;
-    
-    if (rv) {
-        dispatch_barrier_sync(rv->_promiseQueue, ^{
-            id promiseValue = rv->_result;
+    void (^set)(id) = ^(id r){
+        NSArray *handlers = PMKSetResult(this, r);
+        for (void (^handler)(id) in handlers)
+            handler(r);
+    };
+
+    if (IsPromise(result)) {
+        PMKPromise *next = result;
+        dispatch_barrier_sync(next->_promiseQueue, ^{
+            id nextResult = next->_result;
             
-            if (promiseValue == nil) {
-                [rv->_handlers addObject:^(id o){
+            if (nextResult == nil) {  // ie. pending
+                [next->_handlers addObject:^(id o){
                     PMKResolve(this, o);
                 }];
-                r = nil;
-            }
-            else {
-                r = promiseValue;
-            }
+            } else
+                set(nextResult);
         });
-    }
-    
-    if (r) {
-        NSArray* handlers = PMKSetResult(this, r);
-        
-        if (r == PMKNull) {
-            r = nil;
-        }
-        
-        for (void (^handler)(id) in handlers) {
-            handler(r);
-        }
-    }
+    } else
+        set(result);
 }
 
 + (instancetype)new:(void(^)(PMKPromiseFulfiller, PMKPromiseRejecter))block {
@@ -397,7 +371,7 @@ static void PMKResolve(PMKPromise *this, id result) {
     this->_handlers = [NSMutableArray new];
 
     id fulfiller = ^(id value){
-        if (PMKResult(this))
+        if (PMKGetResult(this))
             return NSLog(@"PromiseKit: Promise already resolved");
         if (IsError(value))
             @throw PMKE(@"You may not fulfill a Promise with an NSError");
@@ -406,7 +380,7 @@ static void PMKResolve(PMKPromise *this, id result) {
     };
 
     id rejecter = ^(id error){
-        if (PMKResult(this))
+        if (PMKGetResult(this))
             return NSLog(@"PromiseKit: Promise already resolved");
         if (IsPromise(error)) {
             if ([error rejected]) {
@@ -436,7 +410,7 @@ static void PMKResolve(PMKPromise *this, id result) {
 }
 
 - (BOOL)pending {
-	id result = PMKResult(self);
+	id result = PMKGetResult(self);
     if (IsPromise(result)) {
         return [result pending];
     } else
@@ -444,21 +418,21 @@ static void PMKResolve(PMKPromise *this, id result) {
 }
 
 - (BOOL)resolved {
-    return PMKResult(self) != nil;
+    return PMKGetResult(self) != nil;
 }
 
 - (BOOL)fulfilled {
-	id result = PMKResult(self);
+	id result = PMKGetResult(self);
     return result != nil && !IsError(result);
 }
 
 - (BOOL)rejected {
-	id result = PMKResult(self);
+	id result = PMKGetResult(self);
     return result != nil && IsError(result);
 }
 
 - (id)value {
-	id result = PMKResult(self);
+	id result = PMKGetResult(self);
     if (IsPromise(result))
         return [(PMKPromise *)result value];
     if (result == PMKNull)
@@ -471,8 +445,8 @@ static void PMKResolve(PMKPromise *this, id result) {
     __block id result;
     __block NSUInteger handlerCount;
     dispatch_sync(_promiseQueue, ^{
-        result = _result;
-        handlerCount = _handlers.count;
+        result = self->_result;
+        handlerCount = self->_handlers.count;
     });
     
     BOOL pending = IsPromise(result) ? [result pending] : (result == nil);
