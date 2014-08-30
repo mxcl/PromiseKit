@@ -242,6 +242,12 @@ static PMKResolveOnQueueBlock PMKMakeCallback(PMKPromise *this, PMKResolveOnQueu
         }
         
         return ^(dispatch_queue_t q, id block) {
+
+            // HACK we seem to expose some bug in ARC where this block can
+            // be an NSStackBlock which then gets deallocated by the time
+            // we get around to using it. So we force it to be malloc'd.
+            block = [block copy];
+
             return dispatch_promise_on(q, ^{   // don’t release Zalgo
                 return safely_call_block(block, result);
             });
