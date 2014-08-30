@@ -43,8 +43,8 @@
 #ifdef PMK_NSURLCONNECTION
 #import <NSURLConnection+PromiseKit.h>
 #endif
-#ifdef PMK_SKPRODUCTSREQUEST
-#import <SKProductsRequest+PromiseKit.h>
+#ifdef PMK_SKREQUEST
+#import <SKRequest+PromiseKit.h>
 #endif
 #ifdef PMK_SLREQUEST
 #import <SLRequest+PromiseKit.h>

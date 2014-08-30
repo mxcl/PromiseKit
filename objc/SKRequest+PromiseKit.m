@@ -7,27 +7,29 @@
 
 #import "PromiseKit/Promise.h"
 #import <objc/runtime.h>
-#import "SKProductsRequest+PromiseKit.h"
+#import "SKRequest+PromiseKit.h"
+#import <StoreKit/SKProductsRequest.h>
 
-@interface PMKSKProductsRequestDelegater : NSObject <SKProductsRequestDelegate> {
+@interface PMKSKRequestDelegater : NSObject <SKProductsRequestDelegate> {
 @public
-    void (^fulfiller)(id);
-    void (^rejecter)(id);
+    void (^fulfill)(id);
+    void (^reject)(id);
 }
 @end
 
-@implementation PMKSKProductsRequestDelegater
+@implementation PMKSKRequestDelegater
 - (void)productsRequest:(SKProductsRequest *)request didReceiveResponse:(SKProductsResponse *)response {
-    fulfiller(response);
+    fulfill(response);
 }
 
 - (void)requestDidFinish:(SKRequest *)request {
+    fulfill(nil);
     request.delegate = nil;
     PMKRelease(self);
 }
 
 - (void)request:(SKRequest *)request didFailWithError:(NSError *)error {
-    rejecter(error);
+    reject(error);
     request.delegate = nil;
     PMKRelease(self);
 }
@@ -37,13 +39,13 @@
 @implementation SKProductsRequest (PromiseKit)
 
 - (PMKPromise *)promise {
-    PMKSKProductsRequestDelegater *d = [PMKSKProductsRequestDelegater new];
+    PMKSKRequestDelegater *d = [PMKSKRequestDelegater new];
     PMKRetain(d);
     self.delegate = d;
     [self start];
     return [PMKPromise new:^(id fulfiller, id rejecter){
-        d->fulfiller = fulfiller;
-        d->rejecter = rejecter;
+        d->fulfill = fulfiller;
+        d->reject = rejecter;
     }];
 }
 

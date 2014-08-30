@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = "PromiseKit"
-  s.version = "0.9.16.3"
+  s.version = "0.9.16.4"
   s.source = { :git => "https://github.com/mxcl/#{s.name}.git", :tag => s.version }
   s.license = 'MIT'
   s.summary = 'A delightful Promises implementation for iOS and OS X.'
@@ -106,7 +106,7 @@ Pod::Spec.new do |s|
   s.mksubspec 'NSURLConnection', ios: '5.0', osx: '10.7' do |ss|
     ss.dependency "OMGHTTPURLRQ"
   end
-  s.mksubspec 'SKProductsRequest', ios: '3.0', osx: '10.7'
+  s.mksubspec 'SKRequest', ios: '3.0', osx: '10.7'
   s.mksubspec 'SLRequest', ios: '6.0', osx: '10.8'
   s.mksubspec 'UIActionSheet', ios: '2.0'
   s.mksubspec 'UIAlertView', ios: '2.0'
@@ -144,7 +144,7 @@ Pod::Spec.new do |s|
     ss.dependency 'PromiseKit/SLRequest'
   end
   s.subspec 'StoreKit' do |ss|
-    ss.dependency 'PromiseKit/SKProductsRequest'
+    ss.dependency 'PromiseKit/SKRequest'
   end
   s.subspec 'UIKit' do |ss|
     ss.dependency 'PromiseKit/UIActionSheet'
@@ -167,6 +167,14 @@ Pod::Spec.new do |s|
     ss.dependency 'PromiseKit/Social'
     ss.dependency 'PromiseKit/StoreKit'
     ss.dependency 'PromiseKit/UIKit'
+  end
+
+#### deprecated
+
+  s.subspec 'SKProductsRequest' do |ss|
+    ss.dependency 'PromiseKit/SKRequest'
+    ss.preserve_paths = 'objc/deprecated'
+    ss.source_files = 'objc/deprecated/SKProductsRequest+PromiseKit.h'
   end
 
 end
