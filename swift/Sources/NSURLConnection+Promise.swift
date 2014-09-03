@@ -57,11 +57,9 @@ func fetch<T>(var request: NSURLRequest, body: ((T) -> Void, (NSError) -> Void, 
             //TODO in the event of a non 2xx rsp, try to parse JSON out of the response anyway
 
             func rejecter(error: NSError) {
-                let info = error.userInfo != nil ? NSMutableDictionary(dictionary: error.userInfo) : NSMutableDictionary()
-                if let url = request.URL {
-                    info[NSURLErrorFailingURLErrorKey] = url
-                    info[NSURLErrorFailingURLStringErrorKey] = url.absoluteString
-                }
+                let info = NSMutableDictionary(dictionary: error.userInfo ?? [:])
+                info[NSURLErrorFailingURLErrorKey] = request.URL
+                info[NSURLErrorFailingURLStringErrorKey] = request.URL.absoluteString
                 if data != nil { info[PMKURLErrorFailingDataKey] = data! }
                 if rsp != nil { info[PMKURLErrorFailingURLResponseKey] = rsp! }
                 rejunker(NSError(domain:error.domain, code:error.code, userInfo:info))
