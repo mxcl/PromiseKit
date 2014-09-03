@@ -87,12 +87,6 @@ Pod::Spec.new do |s|
     end
   end
 
-  s.subspec 'base' do |ss|   # deprecated
-    ss.dependency 'PromiseKit/Promise'
-    ss.dependency 'PromiseKit/When'
-    ss.dependency 'PromiseKit/Until'
-  end
-
   s.mksubspec 'ACAccountStore', ios: '6.0', osx: '10.8'
   s.mksubspec 'AVAudioSession', ios: '7.0'
   s.mksubspec 'CLGeocoder', ios: '5.0', osx: '10.8'
@@ -172,9 +166,17 @@ Pod::Spec.new do |s|
 #### deprecated
 
   s.subspec 'SKProductsRequest' do |ss|
+    ss.deprecated_in_favor_of = 'PromiseKit/SKRequest'
     ss.dependency 'PromiseKit/SKRequest'
     ss.preserve_paths = 'objc/deprecated'
     ss.source_files = 'objc/deprecated/SKProductsRequest+PromiseKit.h'
+  end
+
+  s.subspec 'base' do |ss|   # deprecated
+    ss.deprecated_in_favor_of = 'PromiseKit/Promise'
+    ss.dependency 'PromiseKit/Promise'
+    ss.dependency 'PromiseKit/When'
+    ss.dependency 'PromiseKit/Until'
   end
 
 end
