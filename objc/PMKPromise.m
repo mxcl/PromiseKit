@@ -184,13 +184,14 @@ typedef PMKPromise *(^PMKResolveOnQueueBlock)(dispatch_queue_t, id block);
             return;
 
         callBlock = ^(dispatch_queue_t q, id block) {
-            __block PMKPromise *next = nil;
 
             // HACK we seem to expose some bug in ARC where this block can
             // be an NSStackBlock which then gets deallocated by the time
             // we get around to using it. So we force it to be malloc'd.
             block = [block copy];
-            
+
+            __block PMKPromise *next = nil;
+
             dispatch_barrier_sync(_promiseQueue, ^{
                 if ((result = _result))
                     return;
@@ -261,6 +262,12 @@ typedef PMKPromise *(^PMKResolveOnQueueBlock)(dispatch_queue_t, id block);
             return ((PMKPromise *)result).catchOn;
         
         if (IsError(result)) return ^(dispatch_queue_t q, id block) {
+
+            // HACK we seem to expose some bug in ARC where this block can
+            // be an NSStackBlock which then gets deallocated by the time
+            // we get around to using it. So we force it to be malloc'd.
+            block = [block copy];
+
             return dispatch_promise_on(q, ^{
                 id rv = safely_call_block(block, result);
                 if (rv != result)
@@ -294,6 +301,12 @@ typedef PMKPromise *(^PMKResolveOnQueueBlock)(dispatch_queue_t, id block);
             return ((PMKPromise *)passthru).finallyOn;
 
         return ^(dispatch_queue_t q, dispatch_block_t block) {
+
+            // HACK we seem to expose some bug in ARC where this block can
+            // be an NSStackBlock which then gets deallocated by the time
+            // we get around to using it. So we force it to be malloc'd.
+            block = [block copy];
+
             return dispatch_promise_on(q, ^{
                 block();
                 return passthru;
