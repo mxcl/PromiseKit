@@ -937,6 +937,15 @@ PMKPromise *gcdreject() {
     XCTAssertTrue(resolved);
 }
 
+- (void)test_65_manifold_fulfill_value {
+    promise = promise.then(^{
+        return PMKManifold(@123, @2);
+    });
+    fulfiller(@1);
+    wait(0.1);
+    XCTAssertEqual(promise.value, @123);
+}
+
 @end
 
 __EOBJC__

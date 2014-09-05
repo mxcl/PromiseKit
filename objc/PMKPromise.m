@@ -448,6 +448,8 @@ static void PMKResolve(PMKPromise *this, id result) {
 	id result = PMKGetResult(self);
     if (IsPromise(result))
         return [(PMKPromise *)result value];
+    if ([result isKindOfClass:[PMKArray class]])
+        return result[0];
     if (result == PMKNull)
         return nil;
     else
