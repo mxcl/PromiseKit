@@ -34,6 +34,9 @@
 #ifdef PMK_MKMAPSNAPSHOTTER
 #import <MKMapSnapshotter+PromiseKit.h>
 #endif
+#ifdef PMK_NSFILEMANAGER
+#import <NSFileManager+PromiseKit.h>
+#endif
 #ifdef PMK_NSNOTIFICATIONCENTER
 #import <NSNotificationCenter+PromiseKit.h>
 #endif

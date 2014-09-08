@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name = "PromiseKit"
-  s.version = "0.9.16.6"
+  s.version = "0.9.17"
   s.source = { :git => "https://github.com/mxcl/#{s.name}.git", :tag => s.version }
   s.license = 'MIT'
   s.summary = 'A delightful Promises implementation for iOS and OS X.'
@@ -95,6 +95,7 @@ Pod::Spec.new do |s|
   s.mksubspec 'CLLocationManager', ios: '2.0', osx: '10.6'
   s.mksubspec 'MKDirections', ios: '7.0', osx: '10.9'
   s.mksubspec 'MKMapSnapshotter', ios: '7.0', osx: '10.9'
+  s.mksubspec 'NSFileManager', ios: '2.0', osx: '10.5'
   s.mksubspec 'NSNotificationCenter', ios: '4.0', osx: '10.6'
   s.mksubspec 'NSTask', osx: '10.0'
   s.mksubspec 'NSURLConnection', ios: '5.0', osx: '10.7' do |ss|
@@ -126,6 +127,7 @@ Pod::Spec.new do |s|
     ss.dependency 'PromiseKit/CLLocationManager'
   end
   s.subspec 'Foundation' do |ss|
+    ss.dependency 'PromiseKit/NSFileManager'
     ss.dependency 'PromiseKit/NSNotificationCenter'
     ss.dependency 'PromiseKit/NSTask'
     ss.dependency 'PromiseKit/NSURLConnection'
