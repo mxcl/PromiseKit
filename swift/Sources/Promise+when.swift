@@ -1,5 +1,5 @@
 extension Promise {
-    class func when<U,V>(promise1: Promise<U>, promise2: Promise<V>) -> Promise<(U,V)> {
+    public class func when<U,V>(promise1: Promise<U>, promise2: Promise<V>) -> Promise<(U,V)> {
         let (promise, fulfiller, rejecter) = Promise<(U,V)>.defer()
         var first:Any?
         promise1.then{ u->() in
@@ -53,4 +53,48 @@ extension Promise {
 //
 //        return promise
 //    }
+	
+	// For Void Promises we don't need type accumulations, so we can use recursion easily
+	public class func when(promise1: Promise<Void>, promise2: Promise<Void>) -> Promise<Void> {
+		let (promise, fulfiller, rejecter) = Promise<Void>.defer()
+		var first:Any?
+		promise1.then {
+			()->() in
+			if let other = first {
+				fulfiller()
+			} else {
+				first = promise1
+			}
+		}
+		
+		promise2.then {
+			()->() in
+			if let other = first {
+				fulfiller()
+			} else {
+				first = promise2
+			}
+		}
+		let _:Void=promise2.catch(rejecter)
+		let _:Void=promise2.catch(rejecter)
+		return promise
+	}
+	
+	// recursively apply the 2 parameter form
+	public class func when(promises: Array<Promise<Void>>)->Promise<Void> {
+		switch promises.count
+		{
+		case 0:
+			return Promise<Void>(value: ())
+		case 1:
+			return promises[0]
+		case 2:
+			return when(promises[0],promise2: promises[1])
+		default:
+			let head=Array(promises[0..<promises.count-1])
+			let tail=promises[promises.count-1]
+			return when(when(head),promise2: tail)
+		}
+	}
+	
 }
