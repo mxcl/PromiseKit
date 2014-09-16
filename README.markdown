@@ -80,7 +80,7 @@ sheet.promise.then { dismissedButtonIndex in
     }.catch { error in
         // because we returned promises in the above handler, any errors
         // that may occur during execution of the chain will be caught here
-        UIAlertView(errors).show()
+        UIAlertView(error).show()
     })
 })
 ```
