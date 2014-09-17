@@ -56,7 +56,7 @@ Please be aware that (much like the language) the Swift version is a work in pro
 ```swift
 let sheet = UIAlertView(…)
 sheet.message = "Share photo with your new local bestie?"
-sheet.promise.then { dismissedButtonIndex in
+sheet.promise().then { dismissedButtonIndex in
     if dismissedButtonIndex == alert.cancelButtonIndex
         return
 
