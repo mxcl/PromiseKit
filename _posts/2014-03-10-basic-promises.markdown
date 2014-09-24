@@ -17,7 +17,7 @@ Promises are useful because:
 
 ## Promises In Practice
 
-Cocoa development can become a mess of asynchronous patterns and asynchronous boilerplate. Here's an example:
+Cocoa development can become a mess of asynchronous patterns, asynchronous boilerplate and flakey error handling. Here’s an example:
 
 {% highlight objectivec %}
 @implementation MyViewController
@@ -52,7 +52,9 @@ Cocoa development can become a mess of asynchronous patterns and asynchronous bo
 @end
 {% endhighlight %}
 
-The code is ugly, error handling is tricky, the error path spreads over multiple methods and the 90% path is buried inside asynchronicity boilerplate and error handling. Surely there is a better way? Promises are a better way:
+The code is ugly, the error handling convoluted and the 90% path is buried inside asynchronicity boilerplate. Why have we put up with such code for so long?
+
+PromiseKit can transform such code:
 
 {% highlight objectivec %}
 #import <PromiseKit.h>
@@ -69,7 +71,7 @@ The code is ugly, error handling is tricky, the error path spreads over multiple
 }
 {% endhighlight %}
 
-PromiseKit leads to elegant, almost procedural, code with the error handling kept out of the way of the usual path, while simultaneously making it simple to handle errors effectively.
+Asynchronous operations are the bread and butter of modern programming; by standardizing asynchronicity’s form and coagulating error handlers, promises can make your code more readable, more extensible and more elegant to boot.
 
 <aside>Indeed PromiseKit’s `NSURLConnection` categories decode the rich data type for you based on the mimetype. Here you get a `UIImage`, decoded in a background thread with the additional error handling that entails for free.</aside>
 
