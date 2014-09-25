@@ -105,10 +105,10 @@ Note that passing an `NSError` object is valid usage and will reject this promis
  Currently PromiseKit limits you to THREE parameters to the manifold.
 */
 #define PMKManifold(...) __PMKManifold(__VA_ARGS__, 3, 2, 1)
-#define __PMKManifold(_1, _2, _3, N, ...) [PMKArray:N, _1, _2, _3]
+#define __PMKManifold(_1, _2, _3, N, ...) [PMKArray arrayWithCount:N, _1, _2, _3]
 @interface PMKArray : NSObject
 // returning `id` to avoid compiler issues: https://github.com/mxcl/PromiseKit/issues/76
-+ (id):(NSUInteger)count, ...;
++ (id)arrayWithCount:(NSUInteger)count, ...;
 @end
 
 

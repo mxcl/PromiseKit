@@ -503,7 +503,7 @@ PMKPromise *dispatch_promise_on(dispatch_queue_t queue, id block) {
 
 @implementation PMKArray { NSUInteger count; id objs[3]; }
 
-+ (instancetype):(NSUInteger)count, ... {
++ (instancetype)arrayWithCount:(NSUInteger)count, ... {
     PMKArray *this = [self new];
     this->count = count;
     va_list args;
