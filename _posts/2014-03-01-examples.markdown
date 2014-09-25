@@ -52,7 +52,7 @@ In the case where you have the persisted, cached value for some asynchronous obj
     return [Promise new:^(PMKPromiseFulfiller fulfill, PMKPromiseRejecter rejct){
         id fresh = [NSURLConnection GET:self.fetchURL];  // start fetching ASAP
         id cached = [NSData dataWithContentsOfFile:…];
-        fulfiller(PMKManifold(cached, fresh));
+        fulfill(PMKManifold(cached, fresh));
     }];
 }
 
