@@ -26,7 +26,7 @@
 		6387397D19D60A4900F7BABC /* CLGeocoder+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6387397C19D60A4900F7BABC /* CLGeocoder+Promise.swift */; };
 		6387397F19D60D3B00F7BABC /* MKDirections+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6387397E19D60D3B00F7BABC /* MKDirections+Promise.swift */; };
 		6387398119D60E8800F7BABC /* misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6387398019D60E8800F7BABC /* misc.swift */; };
-		63A5BF6D1950ABA200BDFD42 /* Promise+when.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A5BF6C1950ABA200BDFD42 /* Promise+when.swift */; };
+		63A5BF6D1950ABA200BDFD42 /* when.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A5BF6C1950ABA200BDFD42 /* when.swift */; };
 		63BC394F19422A9600D8CD9A /* PromiseKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 63BC394E19422A9600D8CD9A /* PromiseKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63C7063C1959D8B6007C14DB /* array.json in Resources */ = {isa = PBXBuildFile; fileRef = 63C706391959D8B6007C14DB /* array.json */; };
 		63C7063D1959D8B6007C14DB /* dictionary.json in Resources */ = {isa = PBXBuildFile; fileRef = 63C7063A1959D8B6007C14DB /* dictionary.json */; };
@@ -107,7 +107,7 @@
 		6387397C19D60A4900F7BABC /* CLGeocoder+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CLGeocoder+Promise.swift"; path = "Sources/CLGeocoder+Promise.swift"; sourceTree = "<group>"; };
 		6387397E19D60D3B00F7BABC /* MKDirections+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "MKDirections+Promise.swift"; path = "Sources/MKDirections+Promise.swift"; sourceTree = "<group>"; };
 		6387398019D60E8800F7BABC /* misc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = misc.swift; sourceTree = "<group>"; };
-		63A5BF6C1950ABA200BDFD42 /* Promise+when.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+when.swift"; path = "Sources/Promise+when.swift"; sourceTree = SOURCE_ROOT; };
+		63A5BF6C1950ABA200BDFD42 /* when.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = when.swift; path = Sources/when.swift; sourceTree = SOURCE_ROOT; };
 		63BC394D19422A9600D8CD9A /* framework-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "framework-Info.plist"; path = "PromiseKit.xcodeproj/framework-Info.plist"; sourceTree = SOURCE_ROOT; };
 		63BC394E19422A9600D8CD9A /* PromiseKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PromiseKit.h; path = Sources/PromiseKit.h; sourceTree = SOURCE_ROOT; };
 		63C706391959D8B6007C14DB /* array.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = array.json; path = Fixtures/array.json; sourceTree = SOURCE_ROOT; };
@@ -165,7 +165,7 @@
 			isa = PBXGroup;
 			children = (
 				63519926193FCD5B002CF47D /* Promise.swift */,
-				63A5BF6C1950ABA200BDFD42 /* Promise+when.swift */,
+				63A5BF6C1950ABA200BDFD42 /* when.swift */,
 				63F53F631944EE1B00F5F2B4 /* ACAccountStore+Promise.swift */,
 				6387397C19D60A4900F7BABC /* CLGeocoder+Promise.swift */,
 				633C27AB1944A98700185338 /* CLLocationManager+Promise.swift */,
@@ -392,7 +392,7 @@
 				63F53F6A1944F33200F5F2B4 /* UIViewController+Promise.swift in Sources */,
 				63F53F601944E7E800F5F2B4 /* SKRequest+Promise.swift in Sources */,
 				63F53F681944F29400F5F2B4 /* UIActionSheet+Promise.swift in Sources */,
-				63A5BF6D1950ABA200BDFD42 /* Promise+when.swift in Sources */,
+				63A5BF6D1950ABA200BDFD42 /* when.swift in Sources */,
 				6387397D19D60A4900F7BABC /* CLGeocoder+Promise.swift in Sources */,
 				63F53F641944EE1B00F5F2B4 /* ACAccountStore+Promise.swift in Sources */,
 				637D0F141943821A0059AD78 /* constants.swift in Sources */,
