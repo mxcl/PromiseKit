@@ -3,18 +3,11 @@
 FOUNDATION_EXPORT double PromiseKitVersionNumber;
 FOUNDATION_EXPORT const unsigned char PromiseKitVersionString[];
 
-@import Foundation.NSDictionary;
-@import Foundation.NSString;
-
-void PMKRetain(id obj);
-void PMKRelease(id obj);
-
-
-
 #import <Foundation/NSData.h>
 #import <Foundation/NSDictionary.h>
 #import <Foundation/NSURLRequest.h>
 #import <Foundation/NSString.h>
+
 
 
 NSString *OMGUserAgent();

@@ -78,7 +78,7 @@ extension UIViewController {
         vc.delegate = delegate
         PMKRetain(delegate)
         return promiseViewController(vc as UIViewController, animated: animated, completion: completion).finally {
-            PMKRelease(vc.delegate)
+            PMKRelease(delegate)
         }
     }
 }

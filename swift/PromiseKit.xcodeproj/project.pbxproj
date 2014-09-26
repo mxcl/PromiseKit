@@ -25,6 +25,7 @@
 		637D0F1B194388110059AD78 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 637D0F1119437D4C0059AD78 /* PromiseKit.framework */; };
 		6387397D19D60A4900F7BABC /* CLGeocoder+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6387397C19D60A4900F7BABC /* CLGeocoder+Promise.swift */; };
 		6387397F19D60D3B00F7BABC /* MKDirections+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6387397E19D60D3B00F7BABC /* MKDirections+Promise.swift */; };
+		6387398119D60E8800F7BABC /* misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6387398019D60E8800F7BABC /* misc.swift */; };
 		63A5BF6D1950ABA200BDFD42 /* Promise+when.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A5BF6C1950ABA200BDFD42 /* Promise+when.swift */; };
 		63BC394F19422A9600D8CD9A /* PromiseKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 63BC394E19422A9600D8CD9A /* PromiseKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63C7063C1959D8B6007C14DB /* array.json in Resources */ = {isa = PBXBuildFile; fileRef = 63C706391959D8B6007C14DB /* array.json */; };
@@ -33,7 +34,6 @@
 		63E3C6B019422B670042BBDE /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63519926193FCD5B002CF47D /* Promise.swift */; };
 		63E3C6B119423C120042BBDE /* Promise.test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6351991C193FCD4C002CF47D /* Promise.test.swift */; };
 		63E3C6B419425F010042BBDE /* NSURLConnection+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E3C6B319425F010042BBDE /* NSURLConnection+Promise.swift */; };
-		63F53F591944CBDF00F5F2B4 /* objc.m in Sources */ = {isa = PBXBuildFile; fileRef = 63F53F581944CBCF00F5F2B4 /* objc.m */; };
 		63F53F5D1944E4D200F5F2B4 /* MKMapSnapshotter+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F53F5B1944E3B000F5F2B4 /* MKMapSnapshotter+Promise.swift */; };
 		63F53F601944E7E800F5F2B4 /* SKRequest+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F53F5E1944E7E000F5F2B4 /* SKRequest+Promise.swift */; };
 		63F53F621944EBB700F5F2B4 /* SLRequest+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F53F611944EBB700F5F2B4 /* SLRequest+Promise.swift */; };
@@ -106,6 +106,7 @@
 		637D0F17194387D90059AD78 /* NSURLConnection+Promise.test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSURLConnection+Promise.test.swift"; path = "Specs/NSURLConnection+Promise.test.swift"; sourceTree = SOURCE_ROOT; };
 		6387397C19D60A4900F7BABC /* CLGeocoder+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CLGeocoder+Promise.swift"; path = "Sources/CLGeocoder+Promise.swift"; sourceTree = "<group>"; };
 		6387397E19D60D3B00F7BABC /* MKDirections+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "MKDirections+Promise.swift"; path = "Sources/MKDirections+Promise.swift"; sourceTree = "<group>"; };
+		6387398019D60E8800F7BABC /* misc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = misc.swift; sourceTree = "<group>"; };
 		63A5BF6C1950ABA200BDFD42 /* Promise+when.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "Promise+when.swift"; path = "Sources/Promise+when.swift"; sourceTree = SOURCE_ROOT; };
 		63BC394D19422A9600D8CD9A /* framework-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "framework-Info.plist"; path = "PromiseKit.xcodeproj/framework-Info.plist"; sourceTree = SOURCE_ROOT; };
 		63BC394E19422A9600D8CD9A /* PromiseKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PromiseKit.h; path = Sources/PromiseKit.h; sourceTree = SOURCE_ROOT; };
@@ -113,7 +114,6 @@
 		63C7063A1959D8B6007C14DB /* dictionary.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = dictionary.json; path = Fixtures/dictionary.json; sourceTree = SOURCE_ROOT; };
 		63C7063B1959D8B6007C14DB /* plain.text */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; name = plain.text; path = Fixtures/plain.text; sourceTree = SOURCE_ROOT; };
 		63E3C6B319425F010042BBDE /* NSURLConnection+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSURLConnection+Promise.swift"; path = "Sources/NSURLConnection+Promise.swift"; sourceTree = SOURCE_ROOT; };
-		63F53F581944CBCF00F5F2B4 /* objc.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = objc.m; path = Sources/objc.m; sourceTree = SOURCE_ROOT; };
 		63F53F5B1944E3B000F5F2B4 /* MKMapSnapshotter+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "MKMapSnapshotter+Promise.swift"; path = "Sources/MKMapSnapshotter+Promise.swift"; sourceTree = SOURCE_ROOT; };
 		63F53F5E1944E7E000F5F2B4 /* SKRequest+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "SKRequest+Promise.swift"; path = "Sources/SKRequest+Promise.swift"; sourceTree = SOURCE_ROOT; };
 		63F53F611944EBB700F5F2B4 /* SLRequest+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "SLRequest+Promise.swift"; path = "Sources/SLRequest+Promise.swift"; sourceTree = SOURCE_ROOT; };
@@ -177,7 +177,7 @@
 				63F53F671944F29400F5F2B4 /* UIActionSheet+Promise.swift */,
 				63F53F651944F0E800F5F2B4 /* UIAlertView+Promise.swift */,
 				63F53F691944F33200F5F2B4 /* UIViewController+Promise.swift */,
-				63F53F581944CBCF00F5F2B4 /* objc.m */,
+				6387398019D60E8800F7BABC /* misc.swift */,
 				637D0F131943821A0059AD78 /* constants.swift */,
 				635985AF19D5CDEA00B36976 /* Vendor */,
 				63519919193FCD4C002CF47D /* Specs */,
@@ -402,10 +402,10 @@
 				63F53F621944EBB700F5F2B4 /* SLRequest+Promise.swift in Sources */,
 				63E3C6B419425F010042BBDE /* NSURLConnection+Promise.swift in Sources */,
 				635985B519D5CE0000B36976 /* OMGHTTPURLRQ.m in Sources */,
-				63F53F591944CBDF00F5F2B4 /* objc.m in Sources */,
 				63E3C6B019422B670042BBDE /* Promise.swift in Sources */,
 				63F53F661944F0E800F5F2B4 /* UIAlertView+Promise.swift in Sources */,
 				635985B719D5CE0000B36976 /* OMGUserAgent.m in Sources */,
+				6387398119D60E8800F7BABC /* misc.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
