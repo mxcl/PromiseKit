@@ -1,9 +1,7 @@
 import StoreKit
 
-// TODO should be possible to genericize this
 
-
-class SKRequestProxy: NSObject, SKRequestDelegate {
+private class SKRequestProxy: NSObject, SKRequestDelegate {
     let fulfiller:(SKRequest) -> ()
     let rejecter:(NSError) -> ()
 
