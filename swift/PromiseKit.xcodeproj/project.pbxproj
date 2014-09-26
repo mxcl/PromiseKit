@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		633C27AD1944AB3C00185338 /* CoreLocation+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633C27AB1944A98700185338 /* CoreLocation+Promise.swift */; };
+		635985B519D5CE0000B36976 /* OMGHTTPURLRQ.m in Sources */ = {isa = PBXBuildFile; fileRef = 635985B119D5CE0000B36976 /* OMGHTTPURLRQ.m */; };
+		635985B719D5CE0000B36976 /* OMGUserAgent.m in Sources */ = {isa = PBXBuildFile; fileRef = 635985B319D5CE0000B36976 /* OMGUserAgent.m */; };
 		635D3C8F1959D3B00031F972 /* 2.1.2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D3C861959D3B00031F972 /* 2.1.2.swift */; };
 		635D3C901959D3B00031F972 /* 2.1.3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D3C871959D3B00031F972 /* 2.1.3.swift */; };
 		635D3C911959D3B00031F972 /* 2.2.2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D3C881959D3B00031F972 /* 2.2.2.swift */; };
@@ -82,6 +84,8 @@
 		6351991B193FCD4C002CF47D /* tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; name = "tests-Info.plist"; path = "PromiseKit.xcodeproj/tests-Info.plist"; sourceTree = SOURCE_ROOT; };
 		6351991C193FCD4C002CF47D /* Promise.test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Promise.test.swift; path = Specs/Promise.test.swift; sourceTree = SOURCE_ROOT; };
 		63519926193FCD5B002CF47D /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Promise.swift; path = Sources/Promise.swift; sourceTree = SOURCE_ROOT; };
+		635985B119D5CE0000B36976 /* OMGHTTPURLRQ.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OMGHTTPURLRQ.m; path = Sources/OMGHTTPURLRQ.m; sourceTree = "<group>"; };
+		635985B319D5CE0000B36976 /* OMGUserAgent.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = OMGUserAgent.m; path = Sources/OMGUserAgent.m; sourceTree = "<group>"; };
 		635D3C861959D3B00031F972 /* 2.1.2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = 2.1.2.swift; path = "Specs/Promises:A+ Specs/2.1.2.swift"; sourceTree = SOURCE_ROOT; };
 		635D3C871959D3B00031F972 /* 2.1.3.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = 2.1.3.swift; path = "Specs/Promises:A+ Specs/2.1.3.swift"; sourceTree = SOURCE_ROOT; };
 		635D3C881959D3B00031F972 /* 2.2.2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = 2.2.2.swift; path = "Specs/Promises:A+ Specs/2.2.2.swift"; sourceTree = SOURCE_ROOT; };
@@ -169,6 +173,7 @@
 				63F53F691944F33200F5F2B4 /* UIViewController+Promise.swift */,
 				63F53F581944CBCF00F5F2B4 /* objc.m */,
 				637D0F131943821A0059AD78 /* constants.swift */,
+				635985AF19D5CDEA00B36976 /* Vendor */,
 				63519919193FCD4C002CF47D /* Specs */,
 				634356541944A80700529B89 /* Fixtures */,
 				63DDE17E1947B946005D34A3 /* … */,
@@ -185,6 +190,15 @@
 			);
 			name = Specs;
 			path = Tests;
+			sourceTree = "<group>";
+		};
+		635985AF19D5CDEA00B36976 /* Vendor */ = {
+			isa = PBXGroup;
+			children = (
+				635985B119D5CE0000B36976 /* OMGHTTPURLRQ.m */,
+				635985B319D5CE0000B36976 /* OMGUserAgent.m */,
+			);
+			name = Vendor;
 			sourceTree = "<group>";
 		};
 		635D3C851959D3B00031F972 /* Promises/A+ Specs */ = {
@@ -379,9 +393,11 @@
 				63F53F5D1944E4D200F5F2B4 /* MapKit+Promise.swift in Sources */,
 				63F53F621944EBB700F5F2B4 /* Social+Promise.swift in Sources */,
 				63E3C6B419425F010042BBDE /* NSURLConnection+Promise.swift in Sources */,
+				635985B519D5CE0000B36976 /* OMGHTTPURLRQ.m in Sources */,
 				63F53F591944CBDF00F5F2B4 /* objc.m in Sources */,
 				63E3C6B019422B670042BBDE /* Promise.swift in Sources */,
 				63F53F661944F0E800F5F2B4 /* UIAlertView+Promise.swift in Sources */,
+				635985B719D5CE0000B36976 /* OMGUserAgent.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
