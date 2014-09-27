@@ -49,7 +49,13 @@
         }];
 
     return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter){
-        NSPointerArray *results = [NSPointerArray strongObjectsPointerArray];
+        NSPointerArray *results = nil;
+        if ([[NSPointerArray class] respondsToSelector:@selector(strongObjectsPointerArray)]) {
+            results = [NSPointerArray strongObjectsPointerArray];
+        }
+        else if ([[NSPointerArray class] respondsToSelector:@selector(pointerArrayWithStrongObjects)]) {
+            results = [NSPointerArray pointerArrayWithStrongObjects];
+        }
         results.count = count;
 
         NSUInteger ii = 0;
