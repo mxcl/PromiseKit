@@ -24,7 +24,10 @@ OBJC = <<-__EOBJC__
 
 int main() {
     @autoreleasepool {
+      #pragma clang diagnostic push
+      #pragma clang diagnostic ignored "-Wdeprecated-declarations"
         XCTSelfTestMain();
+      #pragma clang diagnostic pop
     }
 }
 

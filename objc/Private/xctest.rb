@@ -1,4 +1,11 @@
-FRAMEWORKS = "/Applications/Xcode.app/Contents/Developer/Library/Frameworks"
+FRAMEWORKS = begin
+  attempt1 = "/Applications/Xcode.app/Contents/Developer/Library/Frameworks"
+  if File.directory? "#{attempt1}/XCTest.framework"
+    attempt1
+  else
+    "/Applications/Xcode.app/Contents/Developer/Platforms/MacOSX.platform/Developer/Library/Frameworks"
+  end
+end
 
 def bold(s); s; end
 def red(s); "\e[31m#{s}\e[0m"; end
