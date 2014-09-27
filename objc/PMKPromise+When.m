@@ -52,9 +52,11 @@
         NSPointerArray *results = nil;
         if ([[NSPointerArray class] respondsToSelector:@selector(strongObjectsPointerArray)]) {
             results = [NSPointerArray strongObjectsPointerArray];
-        }
-        else if ([[NSPointerArray class] respondsToSelector:@selector(pointerArrayWithStrongObjects)]) {
+        } else {
+          #pragma clang diagnostic push
+          #pragma clang diagnostic ignored "-Wdeprecated-declarations"
             results = [NSPointerArray pointerArrayWithStrongObjects];
+          #pragma clang diagnostic pop
         }
         results.count = count;
 
