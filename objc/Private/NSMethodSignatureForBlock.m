@@ -23,6 +23,27 @@ typedef NS_OPTIONS(NSUInteger, PMKBlockDescriptionFlags) {
     PMKBlockDescriptionFlagsHasSignature = (1 << 30)
 };
 
+// It appears 10.7 doesn't support quotes in method signatures. Remove them
+// via @rabovik's method. See https://github.com/OliverLetterer/SLObjectiveCRuntimeAdditions/pull/2
+#if defined(__MAC_OS_X_VERSION_MIN_REQUIRED) && __MAC_OS_X_VERSION_MIN_REQUIRED < __MAC_10_8
+NS_INLINE const char * pmk_removeQuotesFromMethodSignature(const char *str){
+    char *result = malloc(strlen(str) + 1);
+    BOOL skip = NO;
+    char *to = result;
+    char c;
+    while ((c = *str++)) {
+        if ('"' == c) {
+            skip = !skip;
+            continue;
+        }
+        if (skip) continue;
+        *to++ = c;
+    }
+    *to = '\0';
+    return result;
+}
+#endif
+
 static NSMethodSignature *NSMethodSignatureForBlock(id block) {
     if (!block)
         return nil;
@@ -41,6 +62,9 @@ static NSMethodSignature *NSMethodSignatureForBlock(id block) {
         }
 
         const char *signature = (*(const char **)signatureLocation);
+#if defined(__MAC_OS_X_VERSION_MIN_REQUIRED) && __MAC_OS_X_VERSION_MIN_REQUIRED < __MAC_10_8
+        signature = pmk_removeQuotesFromMethodSignature(signature);
+#endif
         return [NSMethodSignature signatureWithObjCTypes:signature];
     }
     return 0;
