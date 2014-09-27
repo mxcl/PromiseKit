@@ -55,7 +55,7 @@ private func bind2<T>(body:(NSError) -> Promise<T>, error: NSError, fulfiller: (
 
 
 
-func dispatch_promise<T>(to queue:dispatch_queue_t = dispatch_get_global_queue(0, 0), block:(fulfiller: (T)->Void, rejecter: (NSError)->Void) -> ()) -> Promise<T> {
+func dispatch_promise<T>(to queue:dispatch_queue_t = dispatch_get_global_queue(0, 0), block:(fulfill: (T)->Void, reject: (NSError)->Void) -> ()) -> Promise<T> {
     return Promise<T> { (fulfiller, rejecter) in
         dispatch_async(queue) {
             block(fulfiller, rejecter)
@@ -65,6 +65,17 @@ func dispatch_promise<T>(to queue:dispatch_queue_t = dispatch_get_global_queue(0
 
 func dispatch_main(block: ()->()) {
     dispatch_async(dispatch_get_main_queue(), block)
+}
+
+func dispatch_bg<T>(body:() -> AnyObject) -> Promise<T> {
+    return dispatch_promise(to: dispatch_get_global_queue(0, 0)) { d in
+        let obj: AnyObject = body()
+        if obj is NSError {
+            d.reject(obj as NSError)
+        } else {
+            d.fulfill(obj as T)
+        }
+    }
 }
 
 
@@ -93,12 +104,25 @@ public class Promise<T> {
 
     /**
       returns the fulfilled value unless the Promise is pending
-      in which case returns `nil`
+      or rejected in which case returns `nil`
      */
     public var value:T? {
         switch state {
         case .Fulfilled(let value):
             return value()
+        default:
+            return nil
+        }
+    }
+
+    /**
+      returns the rejected error unless the Promise is pending
+      or fulfilled in which case returns `nil`
+    */
+    public var error:NSError? {
+        switch state {
+        case .Rejected(let error):
+            return error
         default:
             return nil
         }
@@ -111,7 +135,7 @@ public class Promise<T> {
         handlers.removeAll(keepCapacity: false)
     }
 
-    public init(_ body:(fulfiller:(T) -> Void, rejecter:(NSError) -> Void) -> Void) {
+    public init(_ body:(fulfill:(T) -> Void, reject:(NSError) -> Void) -> Void) {
         func rejecter(err: NSError) {
             if pending {
                 state = .Rejected(err)
@@ -147,7 +171,7 @@ public class Promise<T> {
         case .Rejected(let error):
             return Promise<U>(error: error)
         case .Fulfilled(let value):
-            return dispatch_promise(to:q){ d in d.fulfiller(body(value())) }
+            return dispatch_promise(to:q){ d in d.fulfill(body(value())) }
         case .Pending:
             return Promise<U>{ (fulfiller, rejecter) in
                 self.handlers.append {

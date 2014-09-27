@@ -26,7 +26,11 @@
 		6387397D19D60A4900F7BABC /* CLGeocoder+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6387397C19D60A4900F7BABC /* CLGeocoder+Promise.swift */; };
 		6387397F19D60D3B00F7BABC /* MKDirections+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6387397E19D60D3B00F7BABC /* MKDirections+Promise.swift */; };
 		6387398119D60E8800F7BABC /* misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6387398019D60E8800F7BABC /* misc.swift */; };
+		6387398319D648E700F7BABC /* CKContainer+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6387398219D648E700F7BABC /* CKContainer+Promise.swift */; };
+		638739A519D655CE00F7BABC /* NSNotificationCenter+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638739A419D655CE00F7BABC /* NSNotificationCenter+Promise.swift */; };
+		638739A719D6584E00F7BABC /* UIView+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638739A619D6584E00F7BABC /* UIView+Promise.swift */; };
 		63A5BF6D1950ABA200BDFD42 /* when.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A5BF6C1950ABA200BDFD42 /* when.swift */; };
+		63B287DA19DB448C004E8E3C /* CKDatabase+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B287D919DB448C004E8E3C /* CKDatabase+Promise.swift */; };
 		63BC394F19422A9600D8CD9A /* PromiseKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 63BC394E19422A9600D8CD9A /* PromiseKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63C7063C1959D8B6007C14DB /* array.json in Resources */ = {isa = PBXBuildFile; fileRef = 63C706391959D8B6007C14DB /* array.json */; };
 		63C7063D1959D8B6007C14DB /* dictionary.json in Resources */ = {isa = PBXBuildFile; fileRef = 63C7063A1959D8B6007C14DB /* dictionary.json */; };
@@ -41,6 +45,8 @@
 		63F53F661944F0E800F5F2B4 /* UIAlertView+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F53F651944F0E800F5F2B4 /* UIAlertView+Promise.swift */; };
 		63F53F681944F29400F5F2B4 /* UIActionSheet+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F53F671944F29400F5F2B4 /* UIActionSheet+Promise.swift */; };
 		63F53F6A1944F33200F5F2B4 /* UIViewController+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F53F691944F33200F5F2B4 /* UIViewController+Promise.swift */; };
+		63F60FCF19DB54EF00C3E8F8 /* AVAudioSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F60FCE19DB54EF00C3E8F8 /* AVAudioSession.swift */; };
+		63F60FD119DB558B00C3E8F8 /* NSFileManager+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F60FD019DB558B00C3E8F8 /* NSFileManager+Promise.swift */; };
 		63FCFEF71950F12900FB3A47 /* test-utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FCFEF51950F0FB00FB3A47 /* test-utils.swift */; };
 /* End PBXBuildFile section */
 
@@ -106,8 +112,12 @@
 		637D0F17194387D90059AD78 /* NSURLConnection+Promise.test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSURLConnection+Promise.test.swift"; path = "Specs/NSURLConnection+Promise.test.swift"; sourceTree = SOURCE_ROOT; };
 		6387397C19D60A4900F7BABC /* CLGeocoder+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CLGeocoder+Promise.swift"; path = "Sources/CLGeocoder+Promise.swift"; sourceTree = "<group>"; };
 		6387397E19D60D3B00F7BABC /* MKDirections+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "MKDirections+Promise.swift"; path = "Sources/MKDirections+Promise.swift"; sourceTree = "<group>"; };
-		6387398019D60E8800F7BABC /* misc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = misc.swift; sourceTree = "<group>"; };
+		6387398019D60E8800F7BABC /* misc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = misc.swift; path = Sources/misc.swift; sourceTree = SOURCE_ROOT; };
+		6387398219D648E700F7BABC /* CKContainer+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CKContainer+Promise.swift"; path = "Sources/CKContainer+Promise.swift"; sourceTree = "<group>"; };
+		638739A419D655CE00F7BABC /* NSNotificationCenter+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSNotificationCenter+Promise.swift"; path = "Sources/NSNotificationCenter+Promise.swift"; sourceTree = SOURCE_ROOT; };
+		638739A619D6584E00F7BABC /* UIView+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIView+Promise.swift"; path = "Sources/UIView+Promise.swift"; sourceTree = "<group>"; };
 		63A5BF6C1950ABA200BDFD42 /* when.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = when.swift; path = Sources/when.swift; sourceTree = SOURCE_ROOT; };
+		63B287D919DB448C004E8E3C /* CKDatabase+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CKDatabase+Promise.swift"; path = "Sources/CKDatabase+Promise.swift"; sourceTree = "<group>"; };
 		63BC394D19422A9600D8CD9A /* framework-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "framework-Info.plist"; path = "PromiseKit.xcodeproj/framework-Info.plist"; sourceTree = SOURCE_ROOT; };
 		63BC394E19422A9600D8CD9A /* PromiseKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PromiseKit.h; path = Sources/PromiseKit.h; sourceTree = SOURCE_ROOT; };
 		63C706391959D8B6007C14DB /* array.json */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.json; name = array.json; path = Fixtures/array.json; sourceTree = SOURCE_ROOT; };
@@ -121,6 +131,8 @@
 		63F53F651944F0E800F5F2B4 /* UIAlertView+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIAlertView+Promise.swift"; path = "Sources/UIAlertView+Promise.swift"; sourceTree = SOURCE_ROOT; };
 		63F53F671944F29400F5F2B4 /* UIActionSheet+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIActionSheet+Promise.swift"; path = "Sources/UIActionSheet+Promise.swift"; sourceTree = SOURCE_ROOT; };
 		63F53F691944F33200F5F2B4 /* UIViewController+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIViewController+Promise.swift"; path = "Sources/UIViewController+Promise.swift"; sourceTree = SOURCE_ROOT; };
+		63F60FCE19DB54EF00C3E8F8 /* AVAudioSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVAudioSession.swift; sourceTree = "<group>"; };
+		63F60FD019DB558B00C3E8F8 /* NSFileManager+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSFileManager+Promise.swift"; sourceTree = "<group>"; };
 		63FCFEF51950F0FB00FB3A47 /* test-utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "test-utils.swift"; path = "Specs/test-utils.swift"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
@@ -167,15 +179,21 @@
 				63519926193FCD5B002CF47D /* Promise.swift */,
 				63A5BF6C1950ABA200BDFD42 /* when.swift */,
 				63F53F631944EE1B00F5F2B4 /* ACAccountStore+Promise.swift */,
+				63F60FCE19DB54EF00C3E8F8 /* AVAudioSession.swift */,
+				6387398219D648E700F7BABC /* CKContainer+Promise.swift */,
+				63B287D919DB448C004E8E3C /* CKDatabase+Promise.swift */,
 				6387397C19D60A4900F7BABC /* CLGeocoder+Promise.swift */,
 				633C27AB1944A98700185338 /* CLLocationManager+Promise.swift */,
 				6387397E19D60D3B00F7BABC /* MKDirections+Promise.swift */,
 				63F53F5B1944E3B000F5F2B4 /* MKMapSnapshotter+Promise.swift */,
+				63F60FD019DB558B00C3E8F8 /* NSFileManager+Promise.swift */,
+				638739A419D655CE00F7BABC /* NSNotificationCenter+Promise.swift */,
 				63E3C6B319425F010042BBDE /* NSURLConnection+Promise.swift */,
 				63F53F611944EBB700F5F2B4 /* SLRequest+Promise.swift */,
 				63F53F5E1944E7E000F5F2B4 /* SKRequest+Promise.swift */,
 				63F53F671944F29400F5F2B4 /* UIActionSheet+Promise.swift */,
 				63F53F651944F0E800F5F2B4 /* UIAlertView+Promise.swift */,
+				638739A619D6584E00F7BABC /* UIView+Promise.swift */,
 				63F53F691944F33200F5F2B4 /* UIViewController+Promise.swift */,
 				6387398019D60E8800F7BABC /* misc.swift */,
 				637D0F131943821A0059AD78 /* constants.swift */,
@@ -398,14 +416,20 @@
 				637D0F141943821A0059AD78 /* constants.swift in Sources */,
 				633C27AD1944AB3C00185338 /* CLLocationManager+Promise.swift in Sources */,
 				63F53F5D1944E4D200F5F2B4 /* MKMapSnapshotter+Promise.swift in Sources */,
+				63F60FD119DB558B00C3E8F8 /* NSFileManager+Promise.swift in Sources */,
 				6387397F19D60D3B00F7BABC /* MKDirections+Promise.swift in Sources */,
 				63F53F621944EBB700F5F2B4 /* SLRequest+Promise.swift in Sources */,
 				63E3C6B419425F010042BBDE /* NSURLConnection+Promise.swift in Sources */,
+				63B287DA19DB448C004E8E3C /* CKDatabase+Promise.swift in Sources */,
+				638739A519D655CE00F7BABC /* NSNotificationCenter+Promise.swift in Sources */,
 				635985B519D5CE0000B36976 /* OMGHTTPURLRQ.m in Sources */,
 				63E3C6B019422B670042BBDE /* Promise.swift in Sources */,
 				63F53F661944F0E800F5F2B4 /* UIAlertView+Promise.swift in Sources */,
 				635985B719D5CE0000B36976 /* OMGUserAgent.m in Sources */,
 				6387398119D60E8800F7BABC /* misc.swift in Sources */,
+				638739A719D6584E00F7BABC /* UIView+Promise.swift in Sources */,
+				63F60FCF19DB54EF00C3E8F8 /* AVAudioSession.swift in Sources */,
+				6387398319D648E700F7BABC /* CKContainer+Promise.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -1,8 +1,6 @@
 import Foundation
 import UIKit.UIImage
 
-let Q = NSOperationQueue()
-
 
 private func fetch<T>(var request: NSURLRequest, body: ((T) -> Void, (NSError) -> Void, NSData) -> Void) -> Promise<T> {
     if request.valueForHTTPHeaderField("User-Agent") == nil {
@@ -37,20 +35,30 @@ private func fetch<T>(var request: NSURLRequest, body: ((T) -> Void, (NSError) -
     }
 }
 
-private func fetchJSON<T>(request: NSURLRequest) -> Promise<T> {
-    return fetch(request) { (fulfiller, rejecter, data) in
-        var error:NSError?
-        let json:AnyObject? = NSJSONSerialization.JSONObjectWithData(data, options:nil, error:&error)
+func NSJSONFromData<T>(data: NSData) -> Promise<T> {
+    var error:NSError?
+    let json:AnyObject? = NSJSONSerialization.JSONObjectWithData(data, options:nil, error:&error)
 
-        if error != nil {
-            rejecter(error!)
-        } else if let cast = json as? T {
-            fulfiller(cast)
+    if error != nil {
+        return Promise(error: error!)
+    } else if let cast = json as? T {
+        return Promise(value: cast)
+    } else {
+        var info:Dictionary = [:]
+        info[NSLocalizedDescriptionKey] = "The server returned JSON in an unexpected arrangement"
+        if let jo:AnyObject = json { info[PMKJSONErrorJSONObjectKey] = jo }
+        let error = NSError(domain:PMKErrorDomain, code:PMKJSONError, userInfo:info)
+        return Promise(error: error)
+    }
+}
+
+private func fetchJSON<T>(request: NSURLRequest) -> Promise<T> {
+    return fetch(request) { (fulfill, reject, data) in
+        let result: Promise<T> = NSJSONFromData(data)
+        if result.fulfilled {
+            fulfill(result.value!)
         } else {
-            var info:Dictionary = [:]
-            info[NSLocalizedDescriptionKey] = "The server returned JSON in an unexpected arrangement"
-            if let jo:AnyObject = json { info[PMKJSONErrorJSONObjectKey] = jo }
-            rejecter(NSError(domain:PMKErrorDomain, code:PMKJSONError, userInfo:info))
+            reject(result.error!)
         }
     }
 }
@@ -156,7 +164,7 @@ extension NSURLConnection {
             if str != nil {
                 fulfiller(str!)
             } else {
-                let info = [NSLocalizedDescriptionKey: "The server returned repsonse was not textual"]
+                let info = [NSLocalizedDescriptionKey: "The server repsonse was not textual"]
                 rejecter(NSError(domain:NSURLErrorDomain, code: NSURLErrorBadServerResponse, userInfo:info))
             }
         }

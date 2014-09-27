@@ -12,4 +12,16 @@ extension SLRequest {
             }
         }
     }
+
+    public func promise() -> Promise<NSDictionary> {
+        return self.promise().then { (data: NSData) -> Promise<NSDictionary> in
+            return NSJSONFromData(data)
+        }
+    }
+
+    public func promise() -> Promise<NSArray> {
+        return self.promise().then { (data: NSData) -> Promise<NSArray> in
+            return NSJSONFromData(data)
+        }
+    }
 }
