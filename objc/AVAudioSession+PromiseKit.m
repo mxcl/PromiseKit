@@ -9,11 +9,14 @@
 
 @implementation AVAudioSession (PromiseKit)
 
-- (PMKPromise *)promiseForRequestRecordPermission
-{
+- (PMKPromise *)promiseForRequestRecordPermission {
+    return [self requestRecordPermission];
+}
+
+- (PMKPromise *)requestRecordPermission {
     return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
         [[AVAudioSession sharedInstance] requestRecordPermission:^(BOOL granted) {
-            fulfiller([NSNumber numberWithBool:granted]);
+            fulfiller(@(granted));
         }];
     }];
 }
