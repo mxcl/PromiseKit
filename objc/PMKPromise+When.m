@@ -50,7 +50,7 @@
 
     return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter){
         NSPointerArray *results = nil;
-      #ifdef TARGET_OS_IPHONE
+      #if TARGET_OS_IPHONE
         results = [NSPointerArray strongObjectsPointerArray];
       #else
         if ([[NSPointerArray class] respondsToSelector:@selector(strongObjectsPointerArray)]) {
