@@ -1,5 +1,7 @@
 Modern development is highly asynchronous: isn’t it about time iOS developers had tools that made programming asynchronously powerful, easy and delightful?
 
+**Vastly, copiously, vigorously documented at [promisekit.org](http://promisekit.org).**
+
 ![PromiseKit](http://promisekit.org/public/img/tight-header.png)
 
 ```objc
