@@ -35,7 +35,22 @@ private func fetch<T>(var request: NSURLRequest, body: ((T) -> Void, (NSError) -
     }
 }
 
-func NSJSONFromData<T>(data: NSData) -> Promise<T> {
+func NSJSONFromData(data: NSData) -> Promise<NSArray> {
+    // work around ever-so-common Rails issue: https://github.com/rails/rails/issues/1742
+    if data.isEqualToData(NSData(bytes: " ", length: 1)) {
+        return Promise(value: NSArray())  // couldn’t do T() in generic function
+    }
+    return NSJSONFromDataT(data)
+}
+
+func NSJSONFromData(data: NSData) -> Promise<NSDictionary> {
+    if data.isEqualToData(NSData(bytes: " ", length: 1)) {
+        return Promise(value: NSDictionary())
+    }
+    return NSJSONFromDataT(data)
+}
+
+private func NSJSONFromDataT<T>(data: NSData) -> Promise<T> {
     var error:NSError?
     let json:AnyObject? = NSJSONSerialization.JSONObjectWithData(data, options:nil, error:&error)
 
@@ -54,7 +69,7 @@ func NSJSONFromData<T>(data: NSData) -> Promise<T> {
 
 private func fetchJSON<T>(request: NSURLRequest) -> Promise<T> {
     return fetch(request) { (fulfill, reject, data) in
-        let result: Promise<T> = NSJSONFromData(data)
+        let result: Promise<T> = NSJSONFromDataT(data)
         if result.fulfilled {
             fulfill(result.value!)
         } else {
