@@ -131,8 +131,8 @@
 		63F53F651944F0E800F5F2B4 /* UIAlertView+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIAlertView+Promise.swift"; path = "Sources/UIAlertView+Promise.swift"; sourceTree = SOURCE_ROOT; };
 		63F53F671944F29400F5F2B4 /* UIActionSheet+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIActionSheet+Promise.swift"; path = "Sources/UIActionSheet+Promise.swift"; sourceTree = SOURCE_ROOT; };
 		63F53F691944F33200F5F2B4 /* UIViewController+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIViewController+Promise.swift"; path = "Sources/UIViewController+Promise.swift"; sourceTree = SOURCE_ROOT; };
-		63F60FCE19DB54EF00C3E8F8 /* AVAudioSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AVAudioSession.swift; sourceTree = "<group>"; };
-		63F60FD019DB558B00C3E8F8 /* NSFileManager+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSFileManager+Promise.swift"; sourceTree = "<group>"; };
+		63F60FCE19DB54EF00C3E8F8 /* AVAudioSession.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AVAudioSession.swift; path = Sources/AVAudioSession.swift; sourceTree = SOURCE_ROOT; };
+		63F60FD019DB558B00C3E8F8 /* NSFileManager+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSFileManager+Promise.swift"; path = "Sources/NSFileManager+Promise.swift"; sourceTree = SOURCE_ROOT; };
 		63FCFEF51950F0FB00FB3A47 /* test-utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "test-utils.swift"; path = "Specs/test-utils.swift"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
