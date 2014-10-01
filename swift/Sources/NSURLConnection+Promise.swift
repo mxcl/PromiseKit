@@ -2,7 +2,20 @@ import Foundation
 import UIKit.UIImage
 
 
-private func fetch<T>(var request: NSURLRequest, body: ((T) -> Void, (NSError) -> Void, NSData) -> Void) -> Promise<T> {
+extension NSURLResponse {
+    private var stringEncoding: UInt {
+        if let encodingName = textEncodingName {
+            let encoding = CFStringConvertIANACharSetNameToEncoding(encodingName)
+            if encoding != kCFStringEncodingInvalidId {
+                return CFStringConvertEncodingToNSStringEncoding(encoding)
+            }
+        }
+        return NSUTF8StringEncoding
+    }
+}
+
+
+private func fetch<T>(var request: NSURLRequest, body: ((T) -> Void, (NSError) -> Void, NSData, NSURLResponse) -> Void) -> Promise<T> {
     if request.valueForHTTPHeaderField("User-Agent") == nil {
         let rq = request.mutableCopy() as NSMutableURLRequest
         rq.setValue(OMGUserAgent(), forHTTPHeaderField:"User-Agent")
@@ -21,7 +34,12 @@ private func fetch<T>(var request: NSURLRequest, body: ((T) -> Void, (NSError) -
                 let info = NSMutableDictionary(dictionary: error.userInfo ?? [:])
                 info[NSURLErrorFailingURLErrorKey] = request.URL
                 info[NSURLErrorFailingURLStringErrorKey] = request.URL.absoluteString
-                if data != nil { info[PMKURLErrorFailingDataKey] = data! }
+                if data != nil {
+                    info[PMKURLErrorFailingDataKey] = data!
+                    if let str = NSString(data: data, encoding: rsp.stringEncoding) {
+                        info[PMKURLErrorFailingStringKey] = str
+                    }
+                }
                 if rsp != nil { info[PMKURLErrorFailingURLResponseKey] = rsp! }
                 rejunker(NSError(domain:error.domain, code:error.code, userInfo:info))
             }
@@ -29,7 +47,7 @@ private func fetch<T>(var request: NSURLRequest, body: ((T) -> Void, (NSError) -
             if err != nil {
                 rejecter(err)
             } else {
-                body(fulfiller, rejecter, data!)
+                body(fulfiller, rejecter, data!, rsp)
             }
         }
     }
@@ -68,7 +86,7 @@ private func NSJSONFromDataT<T>(data: NSData) -> Promise<T> {
 }
 
 private func fetchJSON<T>(request: NSURLRequest) -> Promise<T> {
-    return fetch(request) { (fulfill, reject, data) in
+    return fetch(request) { (fulfill, reject, data, _) in
         let result: Promise<T> = NSJSONFromDataT(data)
         if result.fulfilled {
             fulfill(result.value!)
@@ -168,18 +186,18 @@ extension NSURLConnection {
 
 
     public class func promise(rq:NSURLRequest) -> Promise<NSData> {
-        return fetch(rq) { (fulfill, _, data) in
+        return fetch(rq) { (fulfill, _, data, _) in
             fulfill(data)
         }
     }
 
     public class func promise(rq: NSURLRequest) -> Promise<String> {
-        return fetch(rq) { (fulfiller, rejecter, data) in
-            let str:String? = NSString(data: data, encoding: NSUTF8StringEncoding)
+        return fetch(rq) { (fulfiller, rejecter, data, rsp) in
+            let str = NSString(data: data, encoding:rsp.stringEncoding)
             if str != nil {
                 fulfiller(str!)
             } else {
-                let info = [NSLocalizedDescriptionKey: "The server repsonse was not textual"]
+                let info = [NSLocalizedDescriptionKey: "The server response was not textual"]
                 rejecter(NSError(domain:NSURLErrorDomain, code: NSURLErrorBadServerResponse, userInfo:info))
             }
         }
@@ -194,14 +212,14 @@ extension NSURLConnection {
     }
 
     public class func promise(rq: NSURLRequest) -> Promise<UIImage> {
-        return fetch(rq) { (fulfiller, rejecter, data) in
+        return fetch(rq) { (fulfiller, rejecter, data, _) in
             assert(!NSThread.isMainThread())
 
-            var img = UIImage(data: data) as UIImage?
+            var img = UIImage(data: data) as UIImage!
             if img != nil {
-                img = UIImage(CGImage:img!.CGImage, scale:img!.scale, orientation:img!.imageOrientation)
+                img = UIImage(CGImage:img.CGImage, scale:img.scale, orientation:img.imageOrientation)
                 if img != nil {
-                    return fulfiller(img!)
+                    return fulfiller(img)
                 }
             }
 
