@@ -35,7 +35,7 @@ NSString *const SLRequestPromiseKitResponseDataAsTextKey = PMKURLErrorFailingStr
 
         NSMutableDictionary *userInfo = [@{
           @"SLRequestPromiseKitOriginalStatusCodeKey" : @(statusCode),
-          PMKURLErrorFailingURLResponseKey : responseData ?: [NSNull null],
+          PMKURLErrorFailingURLResponseKey : urlResponse,
           NSLocalizedDescriptionKey : [NSHTTPURLResponse localizedStringForStatusCode:statusCode]
         } mutableCopy];
 
