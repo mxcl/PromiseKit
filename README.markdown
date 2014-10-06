@@ -86,3 +86,8 @@ sheet.promise().then { dismissedButtonIndex in
     })
 })
 ```
+
+
+#Donations
+
+PromiseKit is almost completely the work of one man: me; [Max Howell](https://mxcl.github.io). I thoroughly enjoyed making PromiseKit, but nevertheless if you have found it useful then your bitcoin will give me a warm fuzzy feeling from my head right down to my toes: 1JDbV5zuym3jFw4kBCc5Z758maUD8e4dKR.
