@@ -74,7 +74,8 @@ static void classOverridingSelector(const char* newClassPrefix, id target, SEL o
                 objc_registerClassPair(subclass);
                 Method swizzledMethod = class_getInstanceMethod(klass, overrideSelector);
                 BOOL methodAdded = class_addMethod(subclass, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));
-                NSCAssert(methodAdded, @"Adding a method to a class (new one) without own methods.");
+                if (!methodAdded)
+                    @throw @"Swizzle failure.";
             }
         }
         if (subclass != nil) {
@@ -83,40 +84,32 @@ static void classOverridingSelector(const char* newClassPrefix, id target, SEL o
     }
 }
 
-- (PMKPromise *)promiseSegueWithIdentifier:(NSString*) identifier sender:(id) sender {
-    
-    const char* prefix = "PromiseKitUIKitSegue_";
-    classOverridingSelector(prefix, self, @selector(prepareForSegue:sender:), @selector(PromiseKitUIKit_prepareForSegue:sender:));
-    PMKPromise* promise = [PMKPromise new:^(id fulfiller, id rejecter){
-        objc_setAssociatedObject(self,
-                                 kSegueFulfiller,
-                                 fulfiller,
-                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-        objc_setAssociatedObject(self,
-                                 kSegueRejecter,
-                                 rejecter,
-                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+#define _PMKS(x) #x
+#define PMKPrefix _PMKS(PromiseKitUIKit_)
+#define PMKPrefixify(x) PromiseKitUIKit_##x
+
+- (PMKPromise *)promiseSegueWithIdentifier:(NSString *)identifier sender:(id) sender {
+    return [PMKPromise new:^(id fulfiller, id rejecter){
+        classOverridingSelector(PMKPrefix, self, @selector(prepareForSegue:sender:), @selector(PMKPrefixify(prepareForSegue:sender:)));
+
+        objc_setAssociatedObject(self, kSegueFulfiller, fulfiller, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        objc_setAssociatedObject(self, kSegueRejecter, rejecter, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+
+        [self performSegueWithIdentifier:identifier sender:sender];
     }].finally(^{
         [self dismissViewControllerAnimated:YES completion:nil];
     });
-    
-    [self performSegueWithIdentifier:identifier sender:sender];
-    return promise;
 }
 
-
-- (void)PromiseKitUIKit_prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
-    
+- (void)PMKPrefixify(prepareForSegue):(UIStoryboardSegue *)segue sender:(id)sender {    
     id fulfiller = objc_getAssociatedObject(segue.sourceViewController, kSegueFulfiller);
     id rejecter = objc_getAssociatedObject(segue.sourceViewController, kSegueRejecter);
+
     objc_setAssociatedObject(self, kSegueFulfiller, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    objc_setAssociatedObject(self, kSegueRejecter, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    
-    
+    objc_setAssociatedObject(self, kSegueRejecter, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);    
     objc_setAssociatedObject(segue.destinationViewController, @selector(fulfill:), fulfiller, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     objc_setAssociatedObject(segue.destinationViewController, @selector(reject:), rejecter, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    
-    
+
     Class zuper = class_getSuperclass([self class]);
     SEL prepareForSegueSelector = @selector(prepareForSegue:sender:);
     if ([zuper instancesRespondToSelector:prepareForSegueSelector]) {
