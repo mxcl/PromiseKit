@@ -1,4 +1,5 @@
 #import <AssetsLibrary/AssetsLibrary.h>
+#import <objc/message.h>
 #import <objc/runtime.h>
 #import "PromiseKit/Promise.h"
 #import <UIKit/UINavigationController.h>
@@ -60,20 +61,20 @@ static const char *kSegueRejecter = "kSegueRejecter";
     });
 }
 
-static void swizzleClass(const char* classPrefix, id target, SEL originalSelector, SEL swizzledSelector) {
+static void classOverridingSelector(const char* newClassPrefix, id target, SEL originalSelector, SEL overrideSelector) {
     Class klass = [target class];
     NSString *className = NSStringFromClass(klass);
     
-    if (strncmp(classPrefix, [className UTF8String], strlen(classPrefix)) != 0) {
-        NSString* subclassName = [NSString stringWithFormat:@"%s%@", classPrefix, className];
+    if (strncmp(newClassPrefix, [className UTF8String], strlen(newClassPrefix)) != 0) {
+        NSString* subclassName = [NSString stringWithFormat:@"%s%@", newClassPrefix, className];
         Class subclass = NSClassFromString(subclassName);
         if (subclass == nil) {
             subclass = objc_allocateClassPair(klass, [subclassName UTF8String], 0);
             if (subclass != nil) {
-                Method originalMethod = class_getInstanceMethod(klass, originalSelector);
-                Method swizzledMethod = class_getInstanceMethod(klass, swizzledSelector);
-                method_exchangeImplementations(originalMethod, swizzledMethod);
                 objc_registerClassPair(subclass);
+                Method swizzledMethod = class_getInstanceMethod(klass, overrideSelector);
+                BOOL methodAdded = class_addMethod(subclass, originalSelector, method_getImplementation(swizzledMethod), method_getTypeEncoding(swizzledMethod));
+                NSCAssert(methodAdded, @"Adding a method to a class (new one) without own methods.");
             }
         }
         if (subclass != nil) {
@@ -85,7 +86,7 @@ static void swizzleClass(const char* classPrefix, id target, SEL originalSelecto
 - (PMKPromise *)promiseSegueWithIdentifier:(NSString*) identifier sender:(id) sender {
     
     const char* prefix = "PromiseKitUIKitSegue_";
-    swizzleClass(prefix, self, @selector(prepareForSegue:sender:), @selector(PromiseKitUIKit_prepareForSegue:sender:));
+    classOverridingSelector(prefix, self, @selector(prepareForSegue:sender:), @selector(PromiseKitUIKit_prepareForSegue:sender:));
     PMKPromise* promise = [PMKPromise new:^(id fulfiller, id rejecter){
         objc_setAssociatedObject(self,
                                  kSegueFulfiller,
@@ -116,7 +117,14 @@ static void swizzleClass(const char* classPrefix, id target, SEL originalSelecto
     objc_setAssociatedObject(segue.destinationViewController, @selector(reject:), rejecter, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
     
     
-    [self PromiseKitUIKit_prepareForSegue:segue sender:sender];
+    Class zuper = class_getSuperclass([self class]);
+    SEL prepareForSegueSelector = @selector(prepareForSegue:sender:);
+    if ([zuper instancesRespondToSelector:prepareForSegueSelector]) {
+        struct objc_super objcSuper;
+        objcSuper.receiver = self;
+        objcSuper.super_class = zuper;
+        objc_msgSendSuper(&objcSuper, prepareForSegueSelector, segue, sender);
+    }
 }
 
 - (void)fulfill:(id)result {
