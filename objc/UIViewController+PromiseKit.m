@@ -1,5 +1,6 @@
 #import <AssetsLibrary/AssetsLibrary.h>
-#import <objc/objc-runtime.h>
+#import <objc/message.h>
+#import <objc/runtime.h>
 #import "PromiseKit/Promise.h"
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UIImagePickerController.h>
