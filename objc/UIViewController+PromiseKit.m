@@ -104,7 +104,7 @@ static void classOverridingSelector(const char* newClassPrefix, id target, SEL o
 }
 
 
-- (void)PromiseKitUIKit_    (id)sender {
+- (void)PromiseKitUIKit_prepareForSegue:(UIStoryboardSegue *)segue sender:(id)sender {
     
     id fulfiller = objc_getAssociatedObject(segue.sourceViewController, kSegueFulfiller);
     id rejecter = objc_getAssociatedObject(segue.sourceViewController, kSegueRejecter);
