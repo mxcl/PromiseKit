@@ -63,7 +63,7 @@ static const char *kSegueRejecter = "kSegueRejecter";
 
 static void classOverridingSelector(const char* newClassPrefix, id target, SEL originalSelector, SEL overrideSelector) {
     Class klass = [target class];
-    NSString* className = NSStringFromClass(klass);
+    NSString *className = NSStringFromClass(klass);
     
     if (strncmp(newClassPrefix, [className UTF8String], strlen(newClassPrefix)) != 0) {
         NSString* subclassName = [NSString stringWithFormat:@"%s%@", newClassPrefix, className];
