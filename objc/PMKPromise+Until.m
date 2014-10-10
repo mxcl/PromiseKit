@@ -19,6 +19,7 @@
             });
             next.catch(^(NSError *error){
                 [PMKPromise promiseWithValue:error].catch(failHandler).then(block).catch(^{
+                    reject(error);
                     block = nil;  // break retain cycle
                 });
             });
