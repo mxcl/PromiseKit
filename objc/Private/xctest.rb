@@ -97,6 +97,7 @@ def compile!
           -Wno-format-nonliteral \
           -Wno-incomplete-module -Wno-objc-interface-ivars \
           -Wno-auto-import \
+          -headerpad_max_install_names \
           -o /tmp/PromiseKitTests
   EOS
   abort unless system <<-EOS
