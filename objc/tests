@@ -949,6 +949,49 @@ PMKPromise *gcdreject() {
     XCTAssertEqual(promise.value, @123);
 }
 
+- (void)test_66_until {
+    __block BOOL this_happened = NO;
+    __block int x = 0;
+    [PMKPromise until:^{
+        return dispatch_promise(^{
+            if (x++ < 2)
+                @throw @"no";
+        });
+    } catch:^(NSError *error){
+        return dispatch_promise(^{
+            this_happened = YES;
+        });
+    }].then(^{
+        resolved = YES;
+    });
+    wait(0.2);
+    XCTAssertTrue(resolved);
+    XCTAssertTrue(this_happened);
+}
+
+- (void)test_67_until_failure {
+    __block BOOL this_happened = NO;
+    __block int x = 0;
+    [PMKPromise until:^{
+        return dispatch_promise(^{
+            @throw @"no";
+        });
+    } catch:^(NSError *error){
+        return dispatch_promise(^{
+            this_happened = YES;
+            if (x++ >= 2)
+                @throw @"no";
+        });
+    }].then(^{
+        XCTFail();
+    }).catch(^{
+        resolved = YES;
+    });
+    wait(0.2);
+    XCTAssertTrue(resolved);
+    XCTAssertTrue(this_happened);
+}
+
 @end
 
 __EOBJC__
