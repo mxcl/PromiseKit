@@ -5,7 +5,7 @@ import UIKit.UIImage
 extension NSURLResponse {
     private var stringEncoding: UInt {
         if let encodingName = textEncodingName {
-            let encoding = CFStringConvertIANACharSetNameToEncoding(encodingName)
+            let encoding = CFStringConvertIANACharSetNameToEncoding(encodingName as NSString as CFStringRef)
             if encoding != kCFStringEncodingInvalidId {
                 return CFStringConvertEncodingToNSStringEncoding(encoding)
             }
@@ -36,9 +36,7 @@ private func fetch<T>(var request: NSURLRequest, body: ((T) -> Void, (NSError) -
                 info[NSURLErrorFailingURLStringErrorKey] = request.URL.absoluteString
                 if data != nil {
                     info[PMKURLErrorFailingDataKey] = data!
-                    if let str = NSString(data: data, encoding: rsp.stringEncoding) {
-                        info[PMKURLErrorFailingStringKey] = str
-                    }
+                    info[PMKURLErrorFailingStringKey] = NSString(data: data, encoding: rsp.stringEncoding)
                 }
                 if rsp != nil { info[PMKURLErrorFailingURLResponseKey] = rsp! }
                 rejunker(NSError(domain:error.domain, code:error.code, userInfo:info))
@@ -77,7 +75,7 @@ private func NSJSONFromDataT<T>(data: NSData) -> Promise<T> {
     } else if let cast = json as? T {
         return Promise(value: cast)
     } else {
-        var info = NSMutableDictionary()
+        var info:Dictionary = [:]
         info[NSLocalizedDescriptionKey] = "The server returned JSON in an unexpected arrangement"
         if let jo:AnyObject = json { info[PMKJSONErrorJSONObjectKey] = jo }
         let error = NSError(domain:PMKErrorDomain, code:PMKJSONError, userInfo:info)
@@ -102,19 +100,19 @@ extension NSURLConnection {
     // I couldn’t persuade Swift to process these generically hence the lack of DRY
 
     public class func GET(url:String) -> Promise<NSData> {
-        return promise(NSURLRequest(URL:NSURL(string:url)!))
+        return promise(NSURLRequest(URL:NSURL(string:url)))
     }
     public class func GET(url:String) -> Promise<String> {
-        return promise(NSURLRequest(URL:NSURL(string:url)!))
+        return promise(NSURLRequest(URL:NSURL(string:url)))
     }
     public class func GET(url:String) -> Promise<UIImage> {
-        return promise(NSURLRequest(URL:NSURL(string:url)!))
+        return promise(NSURLRequest(URL:NSURL(string:url)))
     }
     public class func GET(url:String) -> Promise<NSArray> {
-        return promise(NSURLRequest(URL:NSURL(string:url)!))
+        return promise(NSURLRequest(URL:NSURL(string:url)))
     }
     public class func GET(url:String) -> Promise<NSDictionary> {
-        return promise(NSURLRequest(URL:NSURL(string:url)!))
+        return promise(NSURLRequest(URL:NSURL(string:url)))
     }
 
     public class func GET(url:String, query:[String:String]) -> Promise<NSData> {
@@ -193,13 +191,7 @@ extension NSURLConnection {
 
     public class func promise(rq: NSURLRequest) -> Promise<String> {
         return fetch(rq) { (fulfiller, rejecter, data, rsp) in
-            let str = NSString(data: data, encoding:rsp.stringEncoding)
-            if str != nil {
-                fulfiller(str!)
-            } else {
-                let info = [NSLocalizedDescriptionKey: "The server response was not textual"]
-                rejecter(NSError(domain:NSURLErrorDomain, code: NSURLErrorBadServerResponse, userInfo:info))
-            }
+            fulfiller(NSString(data: data, encoding:rsp.stringEncoding))
         }
     }
 

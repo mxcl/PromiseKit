@@ -102,12 +102,12 @@ class TestPromise: XCTestCase {
 
     func test_f_catchAndContinue() {
         let e1 = expectation()
-        Promise<Int>{ (fulfiller, rejecter) -> Void in
-            rejecter(NSError(domain: PMKErrorDomain, code: 123, userInfo: nil))
-        }.catch { (err:NSError) -> Int in
+        Promise<UInt32>{ (fulfiller, rejecter) -> Void in
+            rejecter(NSError(domain: PMKErrorDomain, code: 123, userInfo: [:]))
+        }.catch { (err:NSError) -> UInt32 in
             return 123  //TODO return err.code
-        }.then{ (value: Int) -> Void in
-            XCTAssertEqual(value, 123)
+        }.then{ (value:UInt32) -> Void in
+            XCTAssertEqual(123, value)
             e1.fulfill()
         }
         waitForExpectationsWithTimeout(1, handler: nil)
