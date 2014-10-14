@@ -194,7 +194,7 @@ class TestPromise: XCTestCase {
         let e1 = expectation()
 
         let p1 = Promise<Int>{ _, reject in
-            reject(NSError())
+            reject(dammy)
         }
         let p2 = p1.then{ (number: Int)->Void in
             let a = "int is \(number)"

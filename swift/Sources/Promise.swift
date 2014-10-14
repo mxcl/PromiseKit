@@ -1,101 +1,39 @@
 import Foundation
 import UIKit
 
-//TODO use plain T, once Swift compiler is more mature
-//TODO nest in Promise class (currently causes SourceKit to freak out)
-enum State<T> {
-    case Pending
-    case Fulfilled(@autoclosure () -> T)
-    case Rejected(NSError)
+
+
+private enum State<T> {
+    case Pending(Handlers)
+    case Fulfilled(@autoclosure () -> T) //TODO use plain T, once Swift compiler matures
+    case Rejected(Error)
 }
 
-
-private func bind1<T, U>(body:(T) -> Promise<U>, value:T, fulfiller: (U)->(), rejecter: (NSError)->()) {
-    let promise = body(value)
-    switch promise.state {
-    case .Rejected(let error):
-        rejecter(error)
-    case .Fulfilled(let value):
-        fulfiller(value())
-    case .Pending:
-        promise.handlers.append{
-            switch promise.state {
-            case .Rejected(let error):
-                rejecter(error)
-            case .Fulfilled(let value):
-                fulfiller(value())
-            case .Pending:
-                abort()
-            }
-        }
-    }
-}
-
-private func bind2<T>(body:(NSError) -> Promise<T>, error: NSError, fulfiller: (T)->(), rejecter: (NSError)->()) {
-    let promise = body(error)
-    switch promise.state {
-    case .Rejected(let error):
-        rejecter(error)
-    case .Fulfilled(let value):
-        fulfiller(value())
-    case .Pending:
-        promise.handlers.append{
-            switch promise.state {
-            case .Rejected(let error):
-                rejecter(error)
-            case .Fulfilled(let value):
-                fulfiller(value())
-            case .Pending:
-                abort()
-            }
-        }
-    }
-}
-
-
-
-
-func dispatch_promise<T>(to queue:dispatch_queue_t = dispatch_get_global_queue(0, 0), block:(fulfill: (T)->Void, reject: (NSError)->Void) -> ()) -> Promise<T> {
-    return Promise<T> { (fulfiller, rejecter) in
-        dispatch_async(queue) {
-            block(fulfiller, rejecter)
-        }
-    }
-}
-
-func dispatch_main(block: ()->()) {
-    dispatch_async(dispatch_get_main_queue(), block)
-}
-
-func dispatch_bg<T>(body:() -> AnyObject) -> Promise<T> {
-    return dispatch_promise(to: dispatch_get_global_queue(0, 0)) { d in
-        let obj: AnyObject = body()
-        if obj is NSError {
-            d.reject(obj as NSError)
-        } else {
-            d.fulfill(obj as T)
-        }
-    }
-}
 
 
 public class Promise<T> {
-    var handlers:[()->()] = []
-    var state:State<T> = .Pending
+    private let barrier = dispatch_queue_create("org.promisekit.barrier", DISPATCH_QUEUE_CONCURRENT)
+    private var _state: State<T>
 
-    public var rejected:Bool {
+    private var state: State<T> {
+        var result: State<T>?
+        dispatch_sync(barrier) { result = self._state }
+        return result!
+    }
+
+    public var rejected: Bool {
         switch state {
             case .Fulfilled, .Pending: return false
             case .Rejected: return true
         }
     }
-    public var fulfilled:Bool {
+    public var fulfilled: Bool {
         switch state {
             case .Rejected, .Pending: return false
             case .Fulfilled: return true
         }
     }
-    public var pending:Bool {
+    public var pending: Bool {
         switch state {
             case .Rejected, .Fulfilled: return false
             case .Pending: return true
@@ -106,7 +44,7 @@ public class Promise<T> {
       returns the fulfilled value unless the Promise is pending
       or rejected in which case returns `nil`
      */
-    public var value:T? {
+    public var value: T? {
         switch state {
         case .Fulfilled(let value):
             return value()
@@ -119,7 +57,7 @@ public class Promise<T> {
       returns the rejected error unless the Promise is pending
       or fulfilled in which case returns `nil`
     */
-    public var error:NSError? {
+    public var error: NSError? {
         switch state {
         case .Rejected(let error):
             return error
@@ -128,27 +66,24 @@ public class Promise<T> {
         }
     }
 
-    // TODO move into init as has no use anywhere else
-    // is here currently because: beta 6 compile errors it
-    private func recurse() {
-        for handler in handlers { handler() }
-        handlers.removeAll(keepCapacity: false)
-    }
-
     public init(_ body:(fulfill:(T) -> Void, reject:(NSError) -> Void) -> Void) {
-        func rejecter(err: NSError) {
-            if pending {
-                state = .Rejected(err)
-                recurse()
+        _state = .Pending(Handlers())
+
+        let resolver = { (newstate: State<T>) -> Void in
+            var handlers = Array<()->()>()
+            dispatch_barrier_sync(self.barrier) {
+                switch self._state {
+                case .Pending(let Ω):
+                    self._state = newstate
+                    handlers = Ω.bodies
+                default:
+                    noop()
+                }
             }
+            for handler in handlers { handler() }
         }
-        func fulfiller(obj: T) {
-            if pending {
-                state = .Fulfilled(obj)
-                recurse()
-            }
-        }
-        body(fulfiller, rejecter)
+
+        body({ resolver(.Fulfilled($0)) }, { resolver(.Rejected(Error($0))) })
     }
 
     public class func defer() -> (promise:Promise, fulfiller:(T) -> Void, rejecter:(NSError) -> Void) {
@@ -158,159 +93,268 @@ public class Promise<T> {
         return (p, f!, r!)
     }
 
-    public init(value:T) {
-        self.state = .Fulfilled(value)
+    public init(value: T) {
+        _state = .Fulfilled(value)
     }
 
-    public init(error:NSError) {
-        self.state = .Rejected(error)
+    public init(error: NSError) {
+        _state = .Rejected(Error(error))
     }
 
     public func then<U>(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -> U) -> Promise<U> {
-        switch state {
-        case .Rejected(let error):
-            return Promise<U>(error: error)
-        case .Fulfilled(let value):
-            return dispatch_promise(to:q){ d in d.fulfill(body(value())) }
-        case .Pending:
-            return Promise<U>{ (fulfiller, rejecter) in
-                self.handlers.append {
-                    switch self.state {
-                    case .Rejected(let error):
-                        rejecter(error)
-                    case .Fulfilled(let value):
-                        dispatch_async(q) {
-                            fulfiller(body(value()))
-                        }
-                    case .Pending:
-                        abort()
+        return Promise<U>{ (fulfill, reject) in
+            var foo: (()->())?
+            foo = {
+                switch self.state {
+                case .Rejected(let error):
+                    reject(error)
+                case .Fulfilled(let value):
+                    dispatch_async(q) { fulfill(body(value())) }
+                case .Pending(let handlers):
+                    dispatch_barrier_sync(self.barrier) {
+                        handlers.append(foo!)
                     }
                 }
             }
+            foo!()
         }
     }
 
     public func then<U>(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -> Promise<U>) -> Promise<U> {
-
-        switch state {
-        case .Rejected(let error):
-            return Promise<U>(error: error)
-        case .Fulfilled(let value):
-            return dispatch_promise(to:q){
-                bind1(body, value(), $0, $1)
-            }
-        case .Pending:
-            return Promise<U>{ (fulfiller, rejecter) in
-                self.handlers.append{
-                    switch self.state {
-                    case .Pending:
-                        abort()
-                    case .Fulfilled(let value):
-                        dispatch_async(q){
-                            bind1(body, value(), fulfiller, rejecter)
-                        }
-                    case .Rejected(let error):
-                        rejecter(error)
-                    }
-                }
-            }
-        }
-    }
-
-    public func catch(onQueue:dispatch_queue_t = dispatch_get_main_queue(), body:(NSError) -> T) -> Promise<T> {
-        switch state {
-        case .Fulfilled(let value):
-            return Promise(value: value())
-        case .Rejected(let error):
-            return dispatch_promise(to:onQueue){ (fulfiller, _) -> Void in fulfiller(body(error)) }
-        case .Pending:
-            return Promise{ (fulfiller, rejecter) in
-                self.handlers.append {
-                    switch self.state {
-                    case .Fulfilled(let value):
-                        fulfiller(value())
-                    case .Rejected(let error):
-                        dispatch_async(onQueue){ fulfiller(body(error)) }
-                    case .Pending:
-                        abort()
-                    }
-                }
-            }
-        }
-    }
-
-    public func catch(onQueue:dispatch_queue_t = dispatch_get_main_queue(), body:(NSError) -> Void) -> Void {
-        switch state {
-        case .Rejected(let error):
-            dispatch_async(onQueue, {
-                body(error)
-            })
-        case .Fulfilled:
-            let noop = 0
-        case .Pending:
-            self.handlers.append({
+        return Promise<U>{ (fulfill, reject) in
+            var foo: (()->())?
+            foo = {
                 switch self.state {
                 case .Rejected(let error):
-                    dispatch_async(onQueue){ body(error) }
-                case .Fulfilled:
-                    let noop = 0
-                case .Pending:
-                    abort()
-                }
-            })
-        }
-    }
-
-    public func catch(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(NSError) -> Promise<T>) -> Promise<T>
-    {
-        switch state {
-        case .Rejected(let error):
-            return dispatch_promise(to:q){
-                bind2(body, error, $0, $1)
-            }
-        case .Fulfilled(let value):
-            return Promise(value:value())
-            
-        case .Pending:
-            return Promise{ (fulfiller, rejecter) in
-                self.handlers.append{
-                    switch self.state {
-                    case .Pending:
-                        abort()
-                    case .Fulfilled(let value):
-                        fulfiller(value())
-                    case .Rejected(let error):
-                        dispatch_async(q){
-                            bind2(body, error, fulfiller, rejecter)
+                    reject(error)
+                case .Fulfilled(let value):
+                    dispatch_async(q) {
+                        let promise = body(value())
+                        switch promise.state {
+                        case .Rejected(let error):
+                            reject(error)
+                        case .Fulfilled(let value):
+                            fulfill(value())
+                        case .Pending(let handlers):
+                            dispatch_barrier_sync(promise.barrier) {
+                                handlers.append{
+                                    switch promise.state {
+                                    case .Rejected(let error):
+                                        reject(error)
+                                    case .Fulfilled(let value):
+                                        fulfill(value())
+                                    case .Pending:
+                                        abort()
+                                    }
+                                }
+                            }
                         }
                     }
+                case .Pending(let handlers):
+                    dispatch_barrier_sync(self.barrier) {
+                        handlers.append(foo!)
+                    }
                 }
             }
+            foo!()
         }
     }
 
-    public func finally(body:() -> Void) -> Promise<T> {
-        let q = dispatch_get_main_queue()
-        return dispatch_promise(to:q) { (fulfiller, rejecter) in
-            switch self.state {
-            case .Fulfilled(let value):
-                body()
-                fulfiller(value())
-            case .Rejected(let error):
-                body()
-                rejecter(error)
-            case .Pending:
-                self.handlers.append{
-                    body()
-                    switch self.state {
-                    case .Fulfilled(let value):
-                        fulfiller(value())
-                    case .Rejected(let error):
-                        rejecter(error)
-                    case .Pending:
-                        abort()
+    public func catch(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(NSError) -> T) -> Promise<T> {
+        return Promise<T>{ (fulfill, _) in
+            var foo: (()->())?
+            foo = {
+                switch self.state {
+                case .Rejected(let error):
+                    dispatch_async(q) {
+                        error.consumed = true
+                        fulfill(body(error))
+                    }
+                case .Fulfilled(let value):
+                    fulfill(value())
+                case .Pending(let handlers):
+                    dispatch_barrier_sync(self.barrier) {
+                        handlers.append(foo!)
                     }
                 }
+            }
+            foo!()
+        }
+    }
+
+    public func catch(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(NSError) -> Void) -> Void {
+        var foo: (()->())?
+        foo = {
+            switch self.state {
+            case .Rejected(let error):
+                dispatch_async(q) {
+                    error.consumed = true
+                    body(error)
+                }
+            case .Fulfilled:
+                noop()
+            case .Pending(let handlers):
+                dispatch_barrier_sync(self.barrier) {
+                    handlers.append(foo!)
+                }
+            }
+        }
+        foo!()
+    }
+
+    public func catch(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(NSError) -> Promise<T>) -> Promise<T> {
+        return Promise<T>{ (fulfill, rejecter) in
+
+            let reject = { (error: Error)->Void in
+                error.consumed = true
+                rejecter(error)
+            }
+
+            var foo: (()->())?
+            foo = {
+                switch self.state {
+                case .Fulfilled(let value):
+                    fulfill(value())
+                case .Rejected(let error):
+                    dispatch_async(q) {
+                        let promise = body(error)
+                        switch promise.state {
+                        case .Fulfilled(let value):
+                            fulfill(value())
+                        case .Rejected(let error):
+                            dispatch_async(q) { reject(error) }
+                        case .Pending(let handlers):
+                            dispatch_barrier_sync(promise.barrier) {
+                                handlers.append {
+                                    switch promise.state {
+                                    case .Rejected(let error):
+                                        reject(error)
+                                    case .Fulfilled(let value):
+                                        fulfill(value())
+                                    case .Pending:
+                                        abort()
+                                    }
+                                }
+                            }
+                        }
+                    }
+                case .Pending(let handlers):
+                    dispatch_barrier_sync(self.barrier) {
+                        handlers.append(foo!)
+                    }
+                }
+            }
+            foo!()
+        }
+    }
+
+    //FIXME adding the queue parameter prevents compilation with Xcode 6.0.1
+    public func finally(/*onQueue q:dispatch_queue_t = dispatch_get_main_queue(),*/ body:()->()) -> Promise<T> {
+        let q = dispatch_get_main_queue()
+
+        return Promise<T>{ (fulfill, reject) in
+            var foo: (()->())?
+            foo = {
+                switch self.state {
+                case .Fulfilled(let value):
+                    dispatch_async(q) {
+                        body()
+                        fulfill(value())
+                    }
+                case .Rejected(let error):
+                    dispatch_async(q) {
+                        body()
+                        reject(error)
+                    }
+                case .Pending(let handlers):
+                    dispatch_barrier_sync(self.barrier) {
+                        handlers.append(foo!)
+                    }
+                }
+            }
+            foo!()
+        }
+    }
+}
+
+
+
+private class Error : NSError {
+    var consumed: Bool = false
+
+    init(_ error: NSError) {
+        super.init(domain: error.domain, code: error.code, userInfo: error.userInfo)
+    }
+
+    required init(coder: NSCoder) {
+        super.init(coder: coder)
+    }
+
+    deinit {
+        if !consumed {
+            println("PromiseKit: Unhandled error: \(self)")
+        }
+    }
+}
+
+
+
+/**
+ When accessing handlers from the State enum, the array
+ must not be a copy or we stop being thread-safe. Hence
+ this class.
+*/
+private class Handlers: SequenceType {
+    var bodies: [()->()] = []
+
+    func append(body: ()->()) {
+        bodies.append(body)
+    }
+
+    func generate() -> IndexingGenerator<[()->()]> {
+        return bodies.generate()
+    }
+
+    var count: Int {
+        return bodies.count
+    }
+}
+
+
+
+extension Promise: DebugPrintable {
+    public var debugDescription: String {
+        var state: State<T>?
+        dispatch_sync(barrier) {
+            state = self._state
+        }
+
+        switch state! {
+        case .Pending(let handlers):
+            var count: Int?
+            dispatch_sync(barrier) {
+                count = handlers.count
+            }
+            return "Promise: Pending with \(count!) handlers"
+        case .Fulfilled(let value):
+            return "Promise: Fulfilled with value: \(value())"
+        case .Rejected(let error):
+            return "Promise: Rejected with error: \(error)"
+        }
+    }
+}
+
+
+
+func dispatch_promise<T>(/*to q:dispatch_queue_t = dispatch_get_global_queue(0, 0),*/ body:() -> AnyObject) -> Promise<T> {
+    let q = dispatch_get_global_queue(0, 0)
+    return Promise<T> { (fulfill, reject) in
+        dispatch_async(q) {
+            let obj: AnyObject = body()
+            if obj is NSError {
+                reject(obj as NSError)
+            } else {
+                fulfill(obj as T)
             }
         }
     }
