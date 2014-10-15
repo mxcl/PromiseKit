@@ -86,7 +86,7 @@ public class Promise<T> {
         body({ resolver(.Fulfilled($0)) }, { resolver(.Rejected(Error($0))) })
     }
 
-    public class func defer() -> (promise:Promise, fulfiller:(T) -> Void, rejecter:(NSError) -> Void) {
+    public class func defer() -> (promise:Promise, fulfill:(T) -> Void, reject:(NSError) -> Void) {
         var f: ((T) -> Void)?
         var r: ((NSError) -> Void)?
         let p = Promise{ f = $0; r = $1 }

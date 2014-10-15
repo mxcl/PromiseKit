@@ -39,7 +39,7 @@ extension XCTestCase {
         let v2 = Int(rand())
         let e2 = e("immediately-fulfilled")
         test(d2.promise, e2, v2)
-        d2.fulfiller(v2)
+        d2.fulfill(v2)
         waitForExpectationsWithTimeout(1, handler: nil)
 
         let d3 = Promise<Int>.defer()
@@ -47,7 +47,7 @@ extension XCTestCase {
         let e3 = e("eventually-fulfilled")
         later {
             test(d3.promise, e3, v3)
-            d3.fulfiller(v3)
+            d3.fulfill(v3)
         }
         waitForExpectationsWithTimeout(1, handler: nil)
     }
@@ -68,7 +68,7 @@ extension XCTestCase {
         let d2 = Promise<Int>.defer()
         let v2 = NSError(domain:PMKErrorDomain, code:Int(rand()), userInfo:nil)
         test(d2.promise, e2, v2)
-        d2.rejecter(v2)
+        d2.reject(v2)
         waitForExpectationsWithTimeout(1, handler: nil)
 
         let e3 = e("eventually-rejected")
@@ -76,7 +76,7 @@ extension XCTestCase {
         let v3 = NSError(domain:PMKErrorDomain, code:Int(rand()), userInfo:nil)
         later {
             test(d3.promise, e3, v3)
-            d3.rejecter(v3)
+            d3.reject(v3)
         }
         waitForExpectationsWithTimeout(1, handler: nil)
     }

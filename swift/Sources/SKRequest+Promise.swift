@@ -26,7 +26,7 @@ private class SKRequestProxy: NSObject, SKRequestDelegate {
 extension SKRequest {
     public func promise() -> Promise<SKRequest> {
         let deferred = Promise<SKRequest>.defer()
-        delegate = SKRequestProxy(deferred.fulfiller, deferred.rejecter)
+        delegate = SKRequestProxy(deferred.fulfill, deferred.reject)
         start()
         return deferred.promise
     }

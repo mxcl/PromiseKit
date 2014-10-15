@@ -34,7 +34,7 @@ extension CLLocationManager {
 
     public class func promise() -> Promise<[CLLocation]> {
         let deferred = Promise<[CLLocation]>.defer()
-        let manager = LocationManager(deferred.fulfiller, deferred.rejecter)
+        let manager = LocationManager(deferred.fulfill, deferred.reject)
         manager.startUpdatingLocation()
         deferred.promise.finally {
             manager.delegate = nil
