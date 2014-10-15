@@ -1,5 +1,4 @@
 import Foundation
-import UIKit
 
 
 
@@ -273,6 +272,22 @@ public class Promise<T> {
                 }
             }
             foo!()
+        }
+    }
+
+    /**
+     Immediate resolution of body if the promise is fulfilled.
+
+     Please note, there are good reasons that `then` does not call `body`
+     immediately if the promise is already fulfilled. If you don’t understand
+     the implications of unleashing zalgo, you should not under any
+     cirumstances use this function!
+    */
+    public func thenUnleashZalgo(body:(T)->Void) -> Void {
+        if let obj = value {
+            body(obj)
+        } else {
+            then(body)
         }
     }
 }

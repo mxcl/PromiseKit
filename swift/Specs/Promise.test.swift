@@ -216,4 +216,13 @@ class TestPromise: XCTestCase {
 
         waitForExpectationsWithTimeout(1, handler: nil)
     }
+
+    func testZalgo() {
+        var resolved = false
+        Promise(value: 1).thenUnleashZalgo{ x in
+            resolved = true
+        }
+        XCTAssertTrue(resolved)
+    }
+
 }
