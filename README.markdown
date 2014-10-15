@@ -47,13 +47,9 @@ For guides and complete documentation visit [promisekit.org](http://promisekit.o
 
 #Swift
 
-To test the waters, PromiseKit is available as a Swift variant. If you want to use it in your app then drag and drop `swift/PromiseKit.xcodeproj` into your project.
+The Swift version of PromiseKit takes advantage of many new Swift features to make using PromiseKit even more delightful.
 
-Currently the Swift and Objective-C versions are indepenedent. We intend to fix that as Xcode 6 matures.
-
-We provide a demo project for the Swift version, just open the provided xcodeproj.
-
-Please be aware that (much like the language) the Swift version is a work in progress.
+To use the Swift version clone the project and drop the `xcodeproj` into your project. Once CocoaPods properly supports Swift frameworks, we will update the podspec accordingly.
 
 ```swift
 let sheet = UIAlertView(…)
@@ -86,6 +82,8 @@ sheet.promise().then { dismissedButtonIndex in
     })
 })
 ```
+
+Sadly Swift promises cannot be used from Objective-C, but Objective-C promises can be used from Swift. Though if you do use Objective-C promises, be aware that they are tricky to use in Swift due to the unusual way PromiseKit uses Objective-C.
 
 
 #Donations
