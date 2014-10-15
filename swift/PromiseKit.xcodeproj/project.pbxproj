@@ -110,6 +110,7 @@
 		637D0F1219437D4C0059AD78 /* PromiseKitTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PromiseKitTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		637D0F131943821A0059AD78 /* constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = constants.swift; path = Sources/constants.swift; sourceTree = SOURCE_ROOT; };
 		637D0F17194387D90059AD78 /* NSURLConnection+Promise.test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSURLConnection+Promise.test.swift"; path = "Specs/NSURLConnection+Promise.test.swift"; sourceTree = SOURCE_ROOT; };
+		6384FD1019EECD2400613CBF /* PMK.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = PMK.playground; sourceTree = "<group>"; };
 		6387397C19D60A4900F7BABC /* CLGeocoder+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CLGeocoder+Promise.swift"; path = "Sources/CLGeocoder+Promise.swift"; sourceTree = "<group>"; };
 		6387397E19D60D3B00F7BABC /* MKDirections+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "MKDirections+Promise.swift"; path = "Sources/MKDirections+Promise.swift"; sourceTree = "<group>"; };
 		6387398019D60E8800F7BABC /* misc.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = misc.swift; path = Sources/misc.swift; sourceTree = SOURCE_ROOT; };
@@ -178,6 +179,7 @@
 			children = (
 				63519926193FCD5B002CF47D /* Promise.swift */,
 				63A5BF6C1950ABA200BDFD42 /* when.swift */,
+				6384FD1019EECD2400613CBF /* PMK.playground */,
 				63F53F631944EE1B00F5F2B4 /* ACAccountStore+Promise.swift */,
 				63F60FCE19DB54EF00C3E8F8 /* AVAudioSession.swift */,
 				6387398219D648E700F7BABC /* CKContainer+Promise.swift */,

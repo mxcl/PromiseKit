@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<playground version='3.0' sdk='iphonesimulator'>
+    <sections>
+        <documentation relative-path='section-10-intro.html'/>
+        <code source-file-name='section-2.swift'/>
+        <documentation relative-path='section-20-basics.html'/>
+        <code source-file-name='section-4.swift'/>
+        <documentation relative-path='section-30-b0rked.html'/>
+        <code source-file-name='section-6.swift'/>
+    </sections>
+    <timeline fileName='timeline.xctimeline'/>
+</playground>
