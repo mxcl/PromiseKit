@@ -6,7 +6,7 @@ class TestNSURLConnectionPlusPromise: XCTestCase {
 
     func resource(fn: String, ext: String = "json") -> NSURLRequest {
         let url = NSBundle(forClass:self.classForCoder).pathForResource(fn, ofType:ext)!
-        return NSURLRequest(URL:NSURL(fileURLWithPath: url))
+        return NSURLRequest(URL:NSURL(fileURLWithPath: url)!)
     }
 
     var plainText: NSURLRequest { return resource("plain", ext: "text") }
