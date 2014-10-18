@@ -107,7 +107,7 @@ class TestPromise: XCTestCase {
         }.catch { (err:NSError) -> UInt32 in
             return 123  //TODO return err.code
         }.then{ (value:UInt32) -> Void in
-            XCTAssertEqual(123, value)
+            XCTAssertEqual(UInt32(123), value)
             e1.fulfill()
         }
         waitForExpectationsWithTimeout(1, handler: nil)

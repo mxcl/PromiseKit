@@ -5,8 +5,9 @@ import PromiseKit
 class TestNSURLConnectionPlusPromise: XCTestCase {
 
     func resource(fn: String, ext: String = "json") -> NSURLRequest {
-        let url = NSBundle(forClass:self.classForCoder).pathForResource(fn, ofType:ext)!
-        return NSURLRequest(URL:NSURL(fileURLWithPath: url))
+        let path = NSBundle(forClass:self.classForCoder).pathForResource(fn, ofType:ext)!
+        let url:NSURL! = NSURL(fileURLWithPath: path)
+        return NSURLRequest(URL:url!)
     }
 
     var plainText: NSURLRequest { return resource("plain", ext: "text") }

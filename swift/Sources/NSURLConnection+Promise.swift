@@ -75,7 +75,7 @@ private func NSJSONFromDataT<T>(data: NSData) -> Promise<T> {
     } else if let cast = json as? T {
         return Promise(value: cast)
     } else {
-        var info:Dictionary = [:]
+        var info:Dictionary = NSDictionary()
         info[NSLocalizedDescriptionKey] = "The server returned JSON in an unexpected arrangement"
         if let jo:AnyObject = json { info[PMKJSONErrorJSONObjectKey] = jo }
         let error = NSError(domain:PMKErrorDomain, code:PMKJSONError, userInfo:info)
@@ -100,19 +100,24 @@ extension NSURLConnection {
     // I couldn’t persuade Swift to process these generically hence the lack of DRY
 
     public class func GET(url:String) -> Promise<NSData> {
-        return promise(NSURLRequest(URL:NSURL(string:url)))
+        let url:NSURL! = NSURL(string:url)
+        return promise(NSURLRequest(URL:url))
     }
     public class func GET(url:String) -> Promise<String> {
-        return promise(NSURLRequest(URL:NSURL(string:url)))
+        let url:NSURL! = NSURL(string:url)
+        return promise(NSURLRequest(URL:url))
     }
     public class func GET(url:String) -> Promise<UIImage> {
-        return promise(NSURLRequest(URL:NSURL(string:url)))
+        let url:NSURL! = NSURL(string:url)
+        return promise(NSURLRequest(URL:url))
     }
     public class func GET(url:String) -> Promise<NSArray> {
-        return promise(NSURLRequest(URL:NSURL(string:url)))
+        let url:NSURL! = NSURL(string:url)
+        return promise(NSURLRequest(URL:url))
     }
     public class func GET(url:String) -> Promise<NSDictionary> {
-        return promise(NSURLRequest(URL:NSURL(string:url)))
+        let url:NSURL! = NSURL(string:url)
+        return promise(NSURLRequest(URL:url))
     }
 
     public class func GET(url:String, query:[String:String]) -> Promise<NSData> {
@@ -191,7 +196,8 @@ extension NSURLConnection {
 
     public class func promise(rq: NSURLRequest) -> Promise<String> {
         return fetch(rq) { (fulfiller, rejecter, data, rsp) in
-            fulfiller(NSString(data: data, encoding:rsp.stringEncoding))
+            let string:NSString! = NSString(data: data, encoding:rsp.stringEncoding)
+            fulfiller(string)
         }
     }
 
