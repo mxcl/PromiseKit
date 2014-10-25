@@ -1,6 +1,7 @@
 import UIKit
 import MessageUI.MFMailComposeViewController
 import Social.SLComposeViewController
+import AssetsLibrary.ALAssetsLibrary
 
 
 class MFMailComposeViewControllerProxy: NSObject, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate {
@@ -23,12 +24,11 @@ class MFMailComposeViewControllerProxy: NSObject, MFMailComposeViewControllerDel
 class UIImagePickerControllerProxy: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate
 {
     func imagePickerController(picker: UIImagePickerController!, didFinishPickingMediaWithInfo info: NSDictionary!) {
-        let o = info.objectForKey(UIImagePickerControllerOriginalImage) as UIImage!
-        picker.fulfill(o as UIImage?)
+        picker.fulfill(info as NSDictionary?)
     }
 
     func imagePickerControllerDidCancel(picker: UIImagePickerController!) {
-        picker.fulfill(nil as UIImage?)
+        picker.fulfill(nil as NSDictionary?)
     }
 }
 
@@ -75,11 +75,58 @@ extension UIViewController {
         return promiseViewController(vc as UIViewController, animated: animated, completion: completion)
     }
 
-    public func promiseViewController(vc: UIImagePickerController, animated: Bool = false, completion:(Void)->() = {}) -> Promise<UIImage?> {
+    private func imagePicker<T>(vc: UIImagePickerController, _ animated: Bool, _ completion:()->(), process: (NSDictionary)->T) -> Promise<T?> {
         let delegate = UIImagePickerControllerProxy()
         vc.delegate = delegate
         PMKRetain(delegate)
-        return promiseViewController(vc as UIViewController, animated: animated, completion: completion).finally {
+        return promiseViewController(vc as UIViewController, animated: animated, completion: completion).then{
+            (dict: NSDictionary?) -> T? in
+            return dict == nil ? nil : process(dict!)
+        }.finally {
+            PMKRelease(delegate)
+        }
+    }
+
+    public func promiseViewController(vc: UIImagePickerController, animated: Bool = false, completion:()->() = {}) -> Promise<UIImage?> {
+        let delegate = UIImagePickerControllerProxy()
+        vc.delegate = delegate
+        PMKRetain(delegate)
+        return promiseViewController(vc as UIViewController, animated: animated, completion: completion).then{
+            (info: NSDictionary?) -> UIImage? in
+            return info?.objectForKey(UIImagePickerControllerOriginalImage) as UIImage?
+        }.finally {
+            PMKRelease(delegate)
+        }
+    }
+
+    public func promiseViewController(vc: UIImagePickerController, animated: Bool = false, completion:(Void)->() = {}) -> Promise<NSData?> {
+        let delegate = UIImagePickerControllerProxy()
+        vc.delegate = delegate
+        PMKRetain(delegate)
+        return promiseViewController(vc as UIViewController, animated: animated, completion: completion).then{
+            (info: NSDictionary?) -> Promise<NSData?> in
+
+            if info == nil { return Promise<NSData?>(value: nil) }
+
+            let url = info![UIImagePickerControllerReferenceURL] as NSURL
+
+            return Promise { (fulfill, reject) in
+                ALAssetsLibrary().assetForURL(url, resultBlock:{ asset in
+                    let N = Int(asset.defaultRepresentation().size())
+                    let bytes = UnsafeMutablePointer<UInt8>.alloc(N)
+                    var error: NSError?
+                    asset.defaultRepresentation().getBytes(bytes, fromOffset:0, length:N, error:&error)
+                    if error != nil {
+                        reject(error!)
+                    } else {
+                        let data = NSData(bytesNoCopy: bytes, length: N)
+                        fulfill(data)
+                    }
+                }, failureBlock:{
+                    reject($0)
+                })
+            }
+        }.finally {
             PMKRelease(delegate)
         }
     }
