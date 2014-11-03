@@ -1,5 +1,5 @@
 #import <PromiseKit/Promise.h>
-
+#import <Foundation/Foundation.h>
 
 @interface PMKPromise (Pause)
 
