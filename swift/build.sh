@@ -1,10 +1,7 @@
 #!/bin/sh
 rm -rf build
 
-# Using Release causes the end framework to have no
-# symbols that use generics (so almost everything)
-# Last tested: Xcode 6.1.0
-CFG="Debug"
+CFG="Release"
 
 xcodebuild -target PromiseKit -configuration $CFG ONLY_ACTIVE_ARCH=NO -sdk iphoneos          clean build
 xcodebuild -target PromiseKit -configuration $CFG -arch x86_64 -sdk iphonesimulator clean build
