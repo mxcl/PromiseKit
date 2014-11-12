@@ -4,7 +4,7 @@
  varying generic types, so this is the best you get if you have more
  than two things you need to `when` currently.
 */
-public func when(promises: Promise<AnyObject>...) -> Promise<[AnyObject]> {
+public func when(promises: [Promise<AnyObject>]) -> Promise<[AnyObject]> {
     if promises.isEmpty {
         return Promise<[AnyObject]>(value:[])
     }
@@ -23,6 +23,10 @@ public func when(promises: Promise<AnyObject>...) -> Promise<[AnyObject]> {
     }
 
     return promise
+}
+
+public func when(promises: Promise<AnyObject>...) -> Promise<[AnyObject]> {
+    return when(promises)
 }
 
 public func when<U,V>(promise1: Promise<U>, promise2: Promise<V>) -> Promise<(U,V)> {
