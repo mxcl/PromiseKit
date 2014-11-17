@@ -22,7 +22,7 @@
     __block NSUInteger count = [(id)promises count];  // FIXME
     
     if (count == 0)
-        return [PMKPromise promiseWithValue:@[]];
+        return [PMKPromise promiseWithValue:promises];
 
     // Keep a reference to the newly created
     // promise so we can check if it's resolved
