@@ -64,6 +64,10 @@ static NSMethodSignature *NSMethodSignatureForBlock(id block) {
         const char *signature = (*(const char **)signatureLocation);
 #if defined(__MAC_OS_X_VERSION_MIN_REQUIRED) && __MAC_OS_X_VERSION_MIN_REQUIRED < __MAC_10_8
         signature = pmk_removeQuotesFromMethodSignature(signature);
+        NSMethodSignature *nsSignature = [NSMethodSignature signatureWithObjCTypes:signature];
+        free((void *)signature);
+
+        return nsSignature;
 #endif
         return [NSMethodSignature signatureWithObjCTypes:signature];
     }
