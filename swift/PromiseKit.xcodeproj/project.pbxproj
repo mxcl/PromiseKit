@@ -29,6 +29,7 @@
 		6387398319D648E700F7BABC /* CKContainer+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6387398219D648E700F7BABC /* CKContainer+Promise.swift */; };
 		638739A519D655CE00F7BABC /* NSNotificationCenter+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638739A419D655CE00F7BABC /* NSNotificationCenter+Promise.swift */; };
 		638739A719D6584E00F7BABC /* UIView+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638739A619D6584E00F7BABC /* UIView+Promise.swift */; };
+		639431AE1A24EF9A00883C3B /* after.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639431AD1A24EF9A00883C3B /* after.swift */; };
 		63A5BF6D1950ABA200BDFD42 /* when.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A5BF6C1950ABA200BDFD42 /* when.swift */; };
 		63B287DA19DB448C004E8E3C /* CKDatabase+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B287D919DB448C004E8E3C /* CKDatabase+Promise.swift */; };
 		63BC394F19422A9600D8CD9A /* PromiseKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 63BC394E19422A9600D8CD9A /* PromiseKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -117,6 +118,7 @@
 		6387398219D648E700F7BABC /* CKContainer+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CKContainer+Promise.swift"; path = "Sources/CKContainer+Promise.swift"; sourceTree = "<group>"; };
 		638739A419D655CE00F7BABC /* NSNotificationCenter+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSNotificationCenter+Promise.swift"; path = "Sources/NSNotificationCenter+Promise.swift"; sourceTree = SOURCE_ROOT; };
 		638739A619D6584E00F7BABC /* UIView+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIView+Promise.swift"; path = "Sources/UIView+Promise.swift"; sourceTree = "<group>"; };
+		639431AD1A24EF9A00883C3B /* after.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = after.swift; path = Sources/after.swift; sourceTree = "<group>"; };
 		63A5BF6C1950ABA200BDFD42 /* when.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = when.swift; path = Sources/when.swift; sourceTree = SOURCE_ROOT; };
 		63B287D919DB448C004E8E3C /* CKDatabase+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CKDatabase+Promise.swift"; path = "Sources/CKDatabase+Promise.swift"; sourceTree = "<group>"; };
 		63BC394D19422A9600D8CD9A /* framework-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "framework-Info.plist"; path = "PromiseKit.xcodeproj/framework-Info.plist"; sourceTree = SOURCE_ROOT; };
@@ -179,6 +181,7 @@
 			children = (
 				63519926193FCD5B002CF47D /* Promise.swift */,
 				63A5BF6C1950ABA200BDFD42 /* when.swift */,
+				639431AD1A24EF9A00883C3B /* after.swift */,
 				6384FD1019EECD2400613CBF /* PMK.playground */,
 				63F53F631944EE1B00F5F2B4 /* ACAccountStore+Promise.swift */,
 				63F60FCE19DB54EF00C3E8F8 /* AVAudioSession.swift */,
@@ -409,6 +412,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				639431AE1A24EF9A00883C3B /* after.swift in Sources */,
 				63F53F6A1944F33200F5F2B4 /* UIViewController+Promise.swift in Sources */,
 				63F53F601944E7E800F5F2B4 /* SKRequest+Promise.swift in Sources */,
 				63F53F681944F29400F5F2B4 /* UIActionSheet+Promise.swift in Sources */,
