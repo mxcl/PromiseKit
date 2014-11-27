@@ -323,9 +323,18 @@ public class Promise<T> {
 
 
 private class Error : NSError {
-    var consumed: Bool = false
+    var consumed: Bool = false  //TODO strictly, should be atomic
 
     init(_ error: NSError) {
+
+        if error is Error {
+            // we always make a new Error, this allows users to pass
+            // the reject function from a Promise constructor as a
+            // catch handler without the error being considered
+            // consumed. We do this ourselves in when()
+            (error as Error).consumed = true
+        }
+
         super.init(domain: error.domain, code: error.code, userInfo: error.userInfo)
     }
 
@@ -335,7 +344,7 @@ private class Error : NSError {
 
     deinit {
         if !consumed {
-            println("PromiseKit: Unhandled error: \(self)")
+            NSLog("%@", "PromiseKit: Unhandled error: \(self)")
         }
     }
 }
