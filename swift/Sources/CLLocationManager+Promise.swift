@@ -22,6 +22,28 @@ private class LocationManager: CLLocationManager, CLLocationManagerDelegate {
     }
 }
 
+private class AuthorizationCatcher: CLLocationManager, CLLocationManagerDelegate {
+    let fulfill: (CLAuthorizationStatus) -> Void
+
+    init(_ fulfill: (CLAuthorizationStatus)->()) {
+        self.fulfill = fulfill
+        super.init()
+        let status = CLLocationManager.authorizationStatus()
+        if status == .NotDetermined {
+            self.delegate = self
+            PMKRetain(self)
+            requestAlwaysAuthorization()
+        } else {
+            fulfill(status)
+        }
+    }
+
+    private func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+        fulfill(status)
+        PMKRelease(self)
+    }
+}
+
 extension CLLocationManager {
     /**
       Returns the most recent CLLocation.
@@ -42,5 +64,17 @@ extension CLLocationManager {
             PMKRelease(manager)
         }
         return deferred.promise
+    }
+
+    /**
+      Cannot error, despite the fact this might be more useful in some
+      circumstances, we stick with our decision that errors are errors
+      and errors only. Thus your catch handler is always catching failures
+      and not being abused for logic.
+     */
+    public class func requestAlwaysAuthorization() -> Promise<CLAuthorizationStatus> {
+        let d = Promise<CLAuthorizationStatus>.defer()
+        AuthorizationCatcher(d.fulfill)
+        return d.promise
     }
 }
