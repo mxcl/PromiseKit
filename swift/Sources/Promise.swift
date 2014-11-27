@@ -75,6 +75,7 @@ public class Promise<T> {
                 case .Pending(let Ω):
                     self._state = newstate
                     handlers = Ω.bodies
+                    Ω.bodies.removeAll(keepCapacity: false)
                 default:
                     noop()
                 }
