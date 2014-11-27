@@ -103,27 +103,30 @@ public class Promise<T> {
 
     public func then<U>(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -> U) -> Promise<U> {
         return Promise<U>{ (fulfill, reject) in
-            var foo: (()->())?
-            foo = {
+            let handler = { ()->() in
                 switch self.state {
                 case .Rejected(let error):
                     reject(error)
                 case .Fulfilled(let value):
                     dispatch_async(q) { fulfill(body(value())) }
-                case .Pending(let handlers):
-                    dispatch_barrier_sync(self.barrier) {
-                        handlers.append(foo!)
-                    }
+                case .Pending:
+                    abort()
                 }
             }
-            foo!()
+            switch self.state {
+            case .Rejected, .Fulfilled:
+                handler()
+            case .Pending(let handlers):
+                dispatch_barrier_sync(self.barrier) {
+                    handlers.append(handler)
+                }
+            }
         }
     }
 
     public func then<U>(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -> Promise<U>) -> Promise<U> {
         return Promise<U>{ (fulfill, reject) in
-            var foo: (()->())?
-            foo = {
+            let handler = { ()->() in
                 switch self.state {
                 case .Rejected(let error):
                     reject(error)
@@ -137,7 +140,7 @@ public class Promise<T> {
                             fulfill(value())
                         case .Pending(let handlers):
                             dispatch_barrier_sync(promise.barrier) {
-                                handlers.append{
+                                handlers.append {
                                     switch promise.state {
                                     case .Rejected(let error):
                                         reject(error)
@@ -150,20 +153,26 @@ public class Promise<T> {
                             }
                         }
                     }
-                case .Pending(let handlers):
-                    dispatch_barrier_sync(self.barrier) {
-                        handlers.append(foo!)
-                    }
+                case .Pending:
+                    abort()
                 }
             }
-            foo!()
+
+            switch self.state {
+            case .Rejected, .Fulfilled:
+                handler()
+            case .Pending(let handlers):
+                dispatch_barrier_sync(self.barrier) {
+                    handlers.append(handler)
+                }
+            }
+
         }
     }
 
     public func catch(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(NSError) -> T) -> Promise<T> {
         return Promise<T>{ (fulfill, _) in
-            var foo: (()->())?
-            foo = {
+            let handler = { ()->() in
                 switch self.state {
                 case .Rejected(let error):
                     dispatch_async(q) {
@@ -172,19 +181,23 @@ public class Promise<T> {
                     }
                 case .Fulfilled(let value):
                     fulfill(value())
-                case .Pending(let handlers):
-                    dispatch_barrier_sync(self.barrier) {
-                        handlers.append(foo!)
-                    }
+                case .Pending:
+                    abort()
                 }
             }
-            foo!()
+            switch self.state {
+            case .Fulfilled, .Rejected:
+                handler()
+            case .Pending(let handlers):
+                dispatch_barrier_sync(self.barrier) {
+                    handlers.append(handler)
+                }
+            }
         }
     }
 
     public func catch(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(NSError) -> Void) -> Void {
-        var foo: (()->())?
-        foo = {
+        let handler = { ()->() in
             switch self.state {
             case .Rejected(let error):
                 dispatch_async(q) {
@@ -193,13 +206,18 @@ public class Promise<T> {
                 }
             case .Fulfilled:
                 noop()
-            case .Pending(let handlers):
-                dispatch_barrier_sync(self.barrier) {
-                    handlers.append(foo!)
-                }
+            case .Pending:
+                abort()
             }
         }
-        foo!()
+        switch self.state {
+        case .Fulfilled, .Rejected:
+            handler()
+        case .Pending(let handlers):
+            dispatch_barrier_sync(self.barrier) {
+                handlers.append(handler)
+            }
+        }
     }
 
     public func catch(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(NSError) -> Promise<T>) -> Promise<T> {
@@ -210,8 +228,7 @@ public class Promise<T> {
                 rejecter(error)
             }
 
-            var foo: (()->())?
-            foo = {
+            let handler = { ()->() in
                 switch self.state {
                 case .Fulfilled(let value):
                     fulfill(value())
@@ -238,13 +255,19 @@ public class Promise<T> {
                             }
                         }
                     }
-                case .Pending(let handlers):
-                    dispatch_barrier_sync(self.barrier) {
-                        handlers.append(foo!)
-                    }
+                case .Pending:
+                    abort()
                 }
             }
-            foo!()
+
+            switch self.state {
+            case .Fulfilled, .Rejected:
+                handler()
+            case .Pending(let handlers):
+                dispatch_barrier_sync(self.barrier) {
+                    handlers.append(handler)
+                }
+            }
         }
     }
 
@@ -253,8 +276,7 @@ public class Promise<T> {
         let q = dispatch_get_main_queue()
 
         return Promise<T>{ (fulfill, reject) in
-            var foo: (()->())?
-            foo = {
+            let handler = { ()->() in
                 switch self.state {
                 case .Fulfilled(let value):
                     dispatch_async(q) {
@@ -266,13 +288,18 @@ public class Promise<T> {
                         body()
                         reject(error)
                     }
-                case .Pending(let handlers):
-                    dispatch_barrier_sync(self.barrier) {
-                        handlers.append(foo!)
-                    }
+                case .Pending:
+                    abort()
                 }
             }
-            foo!()
+            switch self.state {
+            case .Fulfilled, .Rejected:
+                handler()
+            case .Pending(let handlers):
+                dispatch_barrier_sync(self.barrier) {
+                    handlers.append(handler)
+                }
+            }
         }
     }
 
