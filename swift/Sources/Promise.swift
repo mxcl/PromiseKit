@@ -221,12 +221,7 @@ public class Promise<T> {
     }
 
     public func catch(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(NSError) -> Promise<T>) -> Promise<T> {
-        return Promise<T>{ (fulfill, rejecter) in
-
-            let reject = { (error: Error)->Void in
-                error.consumed = true
-                rejecter(error)
-            }
+        return Promise<T>{ (fulfill, reject) in
 
             let handler = { ()->() in
                 switch self.state {
@@ -234,6 +229,7 @@ public class Promise<T> {
                     fulfill(value())
                 case .Rejected(let error):
                     dispatch_async(q) {
+                        error.consumed = true
                         let promise = body(error)
                         switch promise.state {
                         case .Fulfilled(let value):
