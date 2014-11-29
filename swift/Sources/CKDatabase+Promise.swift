@@ -89,7 +89,8 @@ extension CKDatabase {
                 if records == nil {
                     d.reject(error)
                 } else if records.isEmpty {
-                    let error = NSError(domain: PMKErrorDomain, code: NoSuchRecord, userInfo: nil)
+                    let info = [NSLocalizedDescriptionKey: "No such record found for query: \(query)"]
+                    let error = NSError(domain: PMKErrorDomain, code: NoSuchRecord, userInfo: info)
                     d.reject(error)
                 } else {
                     d.fulfill(records[0] as CKRecord)
