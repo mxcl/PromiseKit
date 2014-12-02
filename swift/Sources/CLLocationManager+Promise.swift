@@ -39,8 +39,10 @@ private class AuthorizationCatcher: CLLocationManager, CLLocationManagerDelegate
     }
 
     private func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
-        fulfill(status)
-        PMKRelease(self)
+        if status != .NotDetermined {
+            fulfill(status)
+            PMKRelease(self)
+        }
     }
 }
 
