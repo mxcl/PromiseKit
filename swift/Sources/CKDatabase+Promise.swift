@@ -17,7 +17,7 @@ extension CKDatabase {
         }
     }
 
-    public func fetchSubscriptionWithID(subscriptionID :String) -> Promise<CKSubscription> {
+    public func fetchSubscriptionWithID(subscriptionID: String) -> Promise<CKSubscription> {
         return Promise { d in
             self.fetchSubscriptionWithID(subscriptionID, completionHandler: proxy(d))
         }
@@ -96,6 +96,12 @@ extension CKDatabase {
                     d.fulfill(records[0] as CKRecord)
                 }
             }
+        }
+    }
+
+    public func fetchUserRecord(container: CKContainer = CKContainer.defaultContainer()) -> Promise<CKRecord> {
+        return container.fetchUserRecordID().then { uid->Promise<CKRecord> in
+            return self.fetchRecordWithID(uid)
         }
     }
 }
