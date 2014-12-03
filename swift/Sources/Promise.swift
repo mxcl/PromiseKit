@@ -83,7 +83,14 @@ public class Promise<T> {
             for handler in handlers { handler() }
         }
 
-        body({ resolver(.Fulfilled($0)) }, { resolver(.Rejected(Error($0))) })
+        body({ resolver(.Fulfilled($0)) }, { error in
+            if let pmkerror = error as? Error {
+                pmkerror.consumed = false
+                resolver(.Rejected(pmkerror))
+            } else {
+                resolver(.Rejected(Error(domain: error.domain, code: error.code, userInfo: error.userInfo)))
+            }
+        })
     }
 
     public class func defer() -> (promise:Promise, fulfill:(T) -> Void, reject:(NSError) -> Void) {
@@ -98,7 +105,7 @@ public class Promise<T> {
     }
 
     public init(error: NSError) {
-        _state = .Rejected(Error(error))
+        _state = .Rejected(Error(domain: error.domain, code: error.code, userInfo: error.userInfo))
     }
 
     public func then<U>(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(T) -> U) -> Promise<U> {
@@ -318,25 +325,15 @@ public class Promise<T> {
 
 
 
-private class Error : NSError {
-    var consumed: Bool = false  //TODO strictly, should be atomic
 
-    init(_ error: NSError) {
-
-        if error is Error {
-            // we always make a new Error, this allows users to pass
-            // the reject function from a Promise constructor as a
-            // catch handler without the error being considered
-            // consumed. We do this ourselves in when()
-            (error as Error).consumed = true
         }
 
-        super.init(domain: error.domain, code: error.code, userInfo: error.userInfo)
     }
 
-    required init(coder: NSCoder) {
-        super.init(coder: coder)
-    }
+
+
+private class Error : NSError {
+    var consumed: Bool = false  //TODO strictly, should be atomic
 
     deinit {
         if !consumed {
