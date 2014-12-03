@@ -321,14 +321,35 @@ public class Promise<T> {
             then(body)
         }
     }
-}
 
+    public func voidify() -> Promise<Void> {
+        // there is no body parameter, so we zalgo it
 
+        let d = Promise<Void>.defer()
 
-
+        let handler = { ()->() in
+            switch self.state {
+            case .Fulfilled:
+                d.fulfill()
+            case .Rejected(let error):
+                d.reject(error)
+            case .Pending:
+                abort()
+            }
         }
 
+        switch state {
+        case .Fulfilled, .Rejected:
+            handler()
+        case .Pending(let handlers):
+            dispatch_barrier_sync(self.barrier) {
+                handlers.append(handler)
+            }
+        }
+
+        return d.promise
     }
+}
 
 
 
