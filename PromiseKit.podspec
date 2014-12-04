@@ -8,7 +8,7 @@ Pod::Spec.new do |s|
   s.social_media_url = 'https://twitter.com/mxcl'
   s.authors  = { 'Max Howell' => 'mxcl@me.com' }
   s.documentation_url = 'http://promisekit.org/api/'
-  s.default_subspecs = 'NSURLConnection', 'NSNotificationCenter',
+  s.default_subspecs = 'CALayer', 'NSURLConnection', 'NSNotificationCenter',
                        'UIActionSheet', 'UIAlertView', 'UIViewController', 'UIView',
                        'Pause', 'When', 'Until'
   s.requires_arc = true
@@ -26,6 +26,7 @@ Pod::Spec.new do |s|
       when 'SL' then 'Social'
       when 'SK' then 'StoreKit'
       when 'CK' then 'CloudKit'
+      when 'CA' then 'QuartzCore'
       else 'Foundation'
     end
 
@@ -111,6 +112,7 @@ Pod::Spec.new do |s|
   s.mksubspec 'UIViewController', ios: '5.0' do |ss|
     ss.ios.weak_frameworks = 'AssetsLibrary'
   end
+  s.mksubspec 'CALayer', ios: '2.0', osx: '10.5'
 
   s.subspec 'Accounts' do |ss|
     ss.dependency 'PromiseKit/ACAccountStore'
@@ -148,6 +150,9 @@ Pod::Spec.new do |s|
     ss.dependency 'PromiseKit/UIView'
     ss.dependency 'PromiseKit/UIViewController'
   end
+  s.subspec 'QuartzCore' do |ss|
+    ss.dependency 'PromiseKit/CALayer'
+  end
 
   s.subspec 'all' do |ss|
     ss.dependency 'PromiseKit/When'
@@ -163,6 +168,7 @@ Pod::Spec.new do |s|
     ss.dependency 'PromiseKit/Social'
     ss.dependency 'PromiseKit/StoreKit'
     ss.dependency 'PromiseKit/UIKit'
+    ss.dependency 'PromiseKit/QuartzCore'
   end
 
 #### deprecated
