@@ -352,13 +352,17 @@ public class Promise<T> {
 }
 
 
+public var PMKUnhandledErrorHandler = { (error: NSError) in
+    NSLog("%@", "PromiseKit: Unhandled error: \(error)")
+}
+
 
 private class Error : NSError {
     var consumed: Bool = false  //TODO strictly, should be atomic
 
     deinit {
         if !consumed {
-            NSLog("%@", "PromiseKit: Unhandled error: \(self)")
+            PMKUnhandledErrorHandler(self)
         }
     }
 }
