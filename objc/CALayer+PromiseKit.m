@@ -19,7 +19,7 @@
 @implementation PMKCAAnimationDelegate
 
 -(void) animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
-    fullfiller(PMKManifold(anim, @(flag)));
+    fullfiller(PMKManifold(@(flag), anim));
     PMKRelease(self);
 }
 
