@@ -4,19 +4,19 @@
  varying generic types, so this is the best you get if you have more
  than two things you need to `when` currently.
 */
-public func when(promises: [Promise<AnyObject>]) -> Promise<[AnyObject]> {
+public func when<T>(promises: [Promise<T>]) -> Promise<[T]> {
     if promises.isEmpty {
-        return Promise<[AnyObject]>(value:[])
+        return Promise<[T]>(value:[])
     }
 
-    let (promise, fulfiller, rejecter) = Promise<[AnyObject]>.defer()
-    var results = Array<AnyObject>(count: promises.count, repeatedValue: NSNull())
+    let (promise, fulfiller, rejecter) = Promise<[T]>.defer()
+    var results = Array<Any>(count: promises.count, repeatedValue: NSNull())
     var x = 0
     for (index, promise) in enumerate(promises) {
         promise.then{ (value) -> Void in
-            results[index] = value
+            results[index] = value as T
             if ++x == promises.count {
-                fulfiller(results)
+                fulfiller(results as [T])
             }
         }
         promise.catch(rejecter)
@@ -25,7 +25,7 @@ public func when(promises: [Promise<AnyObject>]) -> Promise<[AnyObject]> {
     return promise
 }
 
-public func when(promises: Promise<AnyObject>...) -> Promise<[AnyObject]> {
+public func when<T>(promises: Promise<T>...) -> Promise<[T]> {
     return when(promises)
 }
 
