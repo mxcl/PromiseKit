@@ -83,17 +83,15 @@ extension CKDatabase {
         }
     }
 
-    public func performQuery(query: CKQuery, inZoneWithID zoneID: CKRecordZoneID? = nil) -> Promise<CKRecord> {
+    public func performQuery(query: CKQuery, inZoneWithID zoneID: CKRecordZoneID? = nil) -> Promise<CKRecord?> {
         return Promise { d in
             self.performQuery(query, inZoneWithID: zoneID) { (records, error) in
                 if records == nil {
                     d.reject(error)
                 } else if records.isEmpty {
-                    let info = [NSLocalizedDescriptionKey: "No such record found for query: \(query)"]
-                    let error = NSError(domain: PMKErrorDomain, code: NoSuchRecord, userInfo: info)
-                    d.reject(error)
+                    d.fulfill(nil)
                 } else {
-                    d.fulfill(records[0] as CKRecord)
+                    d.fulfill((records as [CKRecord])[0])
                 }
             }
         }
