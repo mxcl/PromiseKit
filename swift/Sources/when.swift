@@ -4,24 +4,37 @@
  varying generic types, so this is the best you get if you have more
  than two things you need to `when` currently.
 */
+private enum PromiseResult<T> {
+    case Busy
+    case Fulfilled(T)
+}
+
 public func when<T>(promises: [Promise<T>]) -> Promise<[T]> {
     if promises.isEmpty {
         return Promise<[T]>(value:[])
     }
-
     let (promise, fulfiller, rejecter) = Promise<[T]>.defer()
-    var results = Array<Any>(count: promises.count, repeatedValue: NSNull())
+    var results = [PromiseResult<T>](count: promises.count, repeatedValue: PromiseResult.Busy)
     var x = 0
     for (index, promise) in enumerate(promises) {
         promise.then{ (value) -> Void in
-            results[index] = value as T
+            results[index] = .Fulfilled(value)
             if ++x == promises.count {
-                fulfiller(results as [T])
+                var values: [T] = []
+                for result in results {
+                    switch result {
+                    case .Busy:
+                        // Does not happen in practise but makes the compiler happy
+                        break
+                    case .Fulfilled(let value):
+                        values.append(value)
+                    }
+                }
+                fulfiller(values)
             }
         }
         promise.catch(rejecter)
     }
-
     return promise
 }
 
