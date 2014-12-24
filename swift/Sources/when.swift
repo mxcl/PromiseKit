@@ -86,7 +86,7 @@ private func when(promise1: Promise<Void>, # promise2: Promise<Void>) -> Promise
             first = promise2
         }
     }
-    let _:Void = promise2.catch(rejecter)
+    let _:Void = promise1.catch(rejecter)
     let _:Void = promise2.catch(rejecter)
     return promise
 }
