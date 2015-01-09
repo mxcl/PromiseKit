@@ -16,7 +16,7 @@
         id stderrData = [[self.standardError fileHandleForReading] readDataToEndOfFile];
         id stderrString = [[NSString alloc] initWithData:stderrData encoding:NSUTF8StringEncoding];
 
-        if (self.terminationReason == NSTaskTerminationReasonExit) {
+        if (self.terminationReason == NSTaskTerminationReasonExit && self.terminationStatus == 0) {
             return PMKManifold(stdoutString, stderrString, stdoutData);
         } else {
             id cmd = [NSMutableArray arrayWithObject:self.launchPath];
