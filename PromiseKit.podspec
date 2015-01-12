@@ -171,6 +171,10 @@ Pod::Spec.new do |s|
     ss.dependency 'PromiseKit/QuartzCore'
   end
 
+  s.subspec 'Swift' do |ss|
+    ss.source_files = 'swift/Sources/**/*.{swift,h,m}'
+  end
+
 #### deprecated
 
   s.subspec 'SKProductsRequest' do |ss|
