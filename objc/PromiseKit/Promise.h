@@ -32,6 +32,11 @@ Then is always executed on the main dispatch queue (i.e the main/UI thread).
 - (PMKPromise *(^)(id))then;
 
 /**
+ The provided block is executed in the background on a default global queue.
+ */
+- (PMKPromise *(^)(id))thenInBackground;
+
+/**
  The provided block always runs on the main queue.
 */
 - (PMKPromise *(^)(id))catch;
