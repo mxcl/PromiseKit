@@ -40,6 +40,10 @@ NSString const*const PMKURLErrorFailingData = PMKURLErrorFailingDataKey;
     return [self promise:[OMGHTTPURLRQ POST:url:params]];
 }
 
++ (PMKPromise *)POST:(NSString *)urlString JSON:(NSDictionary *)params {
+    return [self promise:[OMGHTTPURLRQ POST:urlString JSON:params]];
+}
+
 + (PMKPromise *)PUT:(NSString *)url formURLEncodedParameters:(NSDictionary *)params {
     return [self promise:[OMGHTTPURLRQ PUT:url:params]];
 }

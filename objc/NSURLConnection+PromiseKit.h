@@ -18,6 +18,7 @@ extern NSString const*const PMKURLErrorFailingData PMK_DEPRECATED("Use PMKURLErr
 + (PMKPromise *)GET:(id)urlStringFormatOrURL, ...;
 + (PMKPromise *)GET:(NSString *)string query:(NSDictionary *)parameters;
 + (PMKPromise *)POST:(NSString *)urlString formURLEncodedParameters:(NSDictionary *)parameters;
++ (PMKPromise *)POST:(NSString *)urlString JSON:(NSDictionary *)JSONParameters;
 + (PMKPromise *)PUT:(NSString *)urlString formURLEncodedParameters:(NSDictionary *)params;
 + (PMKPromise *)DELETE:(NSString *)urlString formURLEncodedParameters:(NSDictionary *)params;
 + (PMKPromise *)promise:(NSURLRequest *)rq;
