@@ -116,7 +116,7 @@ static void classOverridingSelector(const char* newClassPrefix, id target, SEL o
         struct objc_super objcSuper;
         objcSuper.receiver = self;
         objcSuper.super_class = zuper;
-        objc_msgSendSuper(&objcSuper, prepareForSegueSelector, segue, sender);
+        ((void(*)(id, SEL, id, id))objc_msgSendSuper)((__bridge id)(&objcSuper), prepareForSegueSelector, segue, sender);
     }
 }
 
