@@ -149,6 +149,12 @@ static id safely_call_block(id frock, id result) {
     };
 }
 
+- (PMKPromise *(^)(id))thenInBackground {
+    return ^(id block){
+        return self.thenOn(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), block);
+    };
+}
+
 - (PMKPromise *(^)(id))catch {
     return ^(id block){
         return self.catchOn(dispatch_get_main_queue(), block);
