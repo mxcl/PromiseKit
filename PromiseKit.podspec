@@ -173,6 +173,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'Swift' do |ss|
     ss.source_files = 'swift/Sources/**/*.{swift,h,m}'
+    ss.framework = 'AssetsLibrary'
   end
 
 #### deprecated
