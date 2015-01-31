@@ -531,6 +531,9 @@ PMKPromise *dispatch_promise_on(dispatch_queue_t queue, id block) {
 @end
 
 
+void (^PMKUnhandledErrorHandler)(id) = ^(NSError *error){
+    NSLog(@"PromiseKit: Unhandled error: %@", error);
+};
 
 @implementation PMKError
 
@@ -550,8 +553,8 @@ PMKPromise *dispatch_promise_on(dispatch_queue_t queue, id block) {
 }
 
 - (void)dealloc {
-    if (!consumed)
-        NSLog(@"PromiseKit: Unhandled error: %@", self);
+    if (!consumed && PMKUnhandledErrorHandler)
+        PMKUnhandledErrorHandler(self);
 }
 
 @end
