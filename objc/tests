@@ -3,6 +3,7 @@ OBJC = <<-__EOBJC__
 
 #import "PromiseKit/Promise.h"
 #import "PromiseKit/Promise+When.h"
+#import "PromiseKit/Promise+WhenResolved.h"
 #import "PromiseKit/Promise+Until.h"
 #import "NSURLConnection+PromiseKit.h"
 #import <CommonCrypto/CommonCrypto.h>
@@ -992,6 +993,71 @@ PMKPromise *gcdreject() {
     XCTAssertTrue(this_happened);
 }
 
+- (void)test_68_when_resolved {
+    __block NSUInteger values = 0;
+    __block NSInteger errorCodes = 0;
+    [PMKPromise whenResolved:@[
+        [PMKPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:1 userInfo:nil]],
+        promise,
+        [PMKPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:2 userInfo:nil]]
+    ]].then(^(NSArray *successes, NSArray *errors) {
+        for (NSNumber *value in successes) {
+            values |= [value unsignedIntValue];
+        }
+        for (NSError *error in errors) {
+            errorCodes |= error.code;
+        }
+        resolved = YES;
+    });
+    fulfiller(@4);
+    wait(0.05);
+    XCTAssertTrue(resolved);
+    XCTAssertTrue(values == 4);
+    XCTAssertTrue(errorCodes == 3);
+}
+
+- (void)test_69_when_resolved_no_errors {
+    __block NSArray *values = nil;
+    __block NSArray *errors = nil;
+    [PMKPromise whenResolved:@[
+        [PMKPromise promiseWithValue:@1],
+        [PMKPromise promiseWithValue:@2]
+    ]].then(^(NSArray *thenValues, NSArray *thenErrors) {
+        values = thenValues;
+        errors = thenErrors;
+        resolved = YES;
+    });
+    wait(0.05);
+    XCTAssertTrue(resolved);
+    XCTAssertEqualObjects(values, (@[@1, @2]));
+    XCTAssertFalse(errors);
+}
+
+- (void)test_70_when_resolved_no_success {
+    __block NSArray *values = nil;
+    __block NSArray *errors = nil;
+    [PMKPromise whenResolved:@[
+        [PMKPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:1 userInfo:nil]],
+        [PMKPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:2 userInfo:nil]],
+    ]].then(^(NSArray *thenValues, NSArray *thenErrors) {
+        values = thenValues;
+        errors = thenErrors;
+        resolved = YES;
+    });
+    wait(0.05);
+    XCTAssertTrue(resolved);
+    XCTAssertEqualObjects(values, @[]);
+    XCTAssertTrue(errors);
+}
+
+- (void)test_70_when_resolved_empty {
+    [PMKPromise whenResolved:@[]]
+    .then(^(NSArray *successes, NSArray *errors) {
+        resolved = YES;
+    });
+    wait(0.05);
+    XCTAssertTrue(resolved);
+}
 @end
 
 __EOBJC__
