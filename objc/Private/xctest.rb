@@ -84,11 +84,11 @@ def compile!
   abort unless system <<-EOS
     clang -g -O0 -ObjC -F#{FRAMEWORKS} -I. -fmodules -fobjc-arc \
           -framework XCTest \
-          -isystem/tmp/ChuzzleKit -isystem/tmp/OMGHTTPURLRQ \
+          -isystem/tmp/ChuzzleKit -isystem/tmp/OMGHTTPURLRQ/Sources \
           /tmp/PromiseKitTests.m \
           NSURLConnection+PromiseKit.m \
           PMKPromise.m PMKPromise+Pause.m PMKPromise+When.m PMKPromise+Until.m PMKPromise+Join.m \
-          /tmp/ChuzzleKit/*.m /tmp/OMGHTTPURLRQ/*.m \
+          /tmp/ChuzzleKit/*.m /tmp/OMGHTTPURLRQ/Sources/*.m \
           -Wall -Weverything -Wno-unused-parameter -Wno-missing-field-initializers \
           -Wno-documentation -Wno-gnu-conditional-omitted-operand \
           -Wno-pointer-arith -Wno-disabled-macro-expansion \
