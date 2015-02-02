@@ -87,7 +87,7 @@ def compile!
           -isystem/tmp/ChuzzleKit -isystem/tmp/OMGHTTPURLRQ \
           /tmp/PromiseKitTests.m \
           NSURLConnection+PromiseKit.m \
-          PMKPromise.m PMKPromise+When.m PMKPromise+Until.m PMKPromise+WhenResolved.m \
+          PMKPromise.m PMKPromise+When.m PMKPromise+Until.m PMKPromise+Join.m \
           /tmp/ChuzzleKit/*.m /tmp/OMGHTTPURLRQ/*.m \
           -Wall -Weverything -Wno-unused-parameter -Wno-missing-field-initializers \
           -Wno-documentation -Wno-gnu-conditional-omitted-operand \

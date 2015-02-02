@@ -3,7 +3,7 @@ OBJC = <<-__EOBJC__
 
 #import "PromiseKit/Promise.h"
 #import "PromiseKit/Promise+When.h"
-#import "PromiseKit/Promise+WhenResolved.h"
+#import "PromiseKit/Promise+Join.h"
 #import "PromiseKit/Promise+Until.h"
 #import "NSURLConnection+PromiseKit.h"
 #import <CommonCrypto/CommonCrypto.h>
@@ -996,7 +996,7 @@ PMKPromise *gcdreject() {
 - (void)test_68_when_resolved {
     __block NSUInteger values = 0;
     __block NSInteger errorCodes = 0;
-    [PMKPromise whenResolved:@[
+    [PMKPromise join:@[
         [PMKPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:1 userInfo:nil]],
         promise,
         [PMKPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:2 userInfo:nil]]
@@ -1019,7 +1019,7 @@ PMKPromise *gcdreject() {
 - (void)test_69_when_resolved_no_errors {
     __block NSArray *values = nil;
     __block NSArray *errors = nil;
-    [PMKPromise whenResolved:@[
+    [PMKPromise join:@[
         [PMKPromise promiseWithValue:@1],
         [PMKPromise promiseWithValue:@2]
     ]].then(^(NSArray *thenValues, NSArray *thenErrors) {
@@ -1036,7 +1036,7 @@ PMKPromise *gcdreject() {
 - (void)test_70_when_resolved_no_success {
     __block NSArray *values = nil;
     __block NSArray *errors = nil;
-    [PMKPromise whenResolved:@[
+    [PMKPromise join:@[
         [PMKPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:1 userInfo:nil]],
         [PMKPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:2 userInfo:nil]],
     ]].then(^(NSArray *thenValues, NSArray *thenErrors) {
@@ -1051,7 +1051,7 @@ PMKPromise *gcdreject() {
 }
 
 - (void)test_70_when_resolved_empty {
-    [PMKPromise whenResolved:@[]]
+    [PMKPromise join:@[]]
     .then(^(NSArray *successes, NSArray *errors) {
         resolved = YES;
     });

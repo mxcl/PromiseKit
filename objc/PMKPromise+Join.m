@@ -1,12 +1,12 @@
 #import <Foundation/NSArray.h>
 #import <Foundation/NSDictionary.h>
 #import "PromiseKit/Promise+Until.h"
-#import "PromiseKit/Promise+WhenResolved.h"
+#import "PromiseKit/Promise+Join.h"
 
 
-@implementation PMKPromise (WhenResolved)
+@implementation PMKPromise (Join)
 
-+ (PMKPromise *)whenResolved:(NSArray*)promises {
++ (PMKPromise *)join:(NSArray*)promises {
     __block NSMutableArray *mutablePromises = [promises mutableCopy];
     __block NSMutableArray *collectedErrors = [NSMutableArray new];
 

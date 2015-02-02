@@ -2,7 +2,7 @@
 #import <PromiseKit/Promise.h>
 
 
-@interface PMKPromise (WhenResolved)
+@interface PMKPromise (Join)
 /**
 Returns a new Promise that is resolved only when all passed Promises are resolved.
 
@@ -12,6 +12,6 @@ The promise will resolve to a pair `NSArray *fulfilledResults, NSArray *rejected
 
 @param promises an array of Promises.
 */
-+ (PMKPromise *)whenResolved:(NSArray*)promises;
++ (PMKPromise *)join:(NSArray*)promises;
 
 @end
