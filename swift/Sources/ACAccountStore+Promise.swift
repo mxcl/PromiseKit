@@ -13,7 +13,7 @@ extension ACAccountStore {
         }
     }
 
-    public func requestAccessToAccounts(# type: ACAccountType, options:Dictionary<String, String>? = nil) -> Promise<Void> {
+    public func requestAccessToAccounts(# type: ACAccountType, options:Dictionary<String, AnyObject>? = nil) -> Promise<Void> {
         return Promise { (fulfill, reject) in
             self.requestAccessToAccountsWithType(type, options:options) {
                 if $1 != nil {
