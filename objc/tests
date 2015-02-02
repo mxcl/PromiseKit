@@ -1136,7 +1136,6 @@ PMKPromise *gcdreject() {
     XCTAssertTrue(this_happened);
 }
 
-<<<<<<< HEAD
 - (void)test_68_unhandled_error_handler {
     @autoreleasepool {
         XCTestExpectation *ex = [self expectationWithDescription:@""];
