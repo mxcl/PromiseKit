@@ -4,6 +4,7 @@ OBJC = <<-__EOBJC__
 #import "PromiseKit/Promise.h"
 #import "PromiseKit/Promise+Pause.h"
 #import "PromiseKit/Promise+When.h"
+#import "PromiseKit/Promise+Join.h"
 #import "PromiseKit/Promise+Until.h"
 #import "NSURLConnection+PromiseKit.h"
 #import <CommonCrypto/CommonCrypto.h>
@@ -1135,6 +1136,7 @@ PMKPromise *gcdreject() {
     XCTAssertTrue(this_happened);
 }
 
+<<<<<<< HEAD
 - (void)test_68_unhandled_error_handler {
     @autoreleasepool {
         XCTestExpectation *ex = [self expectationWithDescription:@""];
@@ -1222,6 +1224,78 @@ PMKPromise *gcdreject() {
     [self waitForExpectationsWithTimeout:2 handler:nil];
 }
 
+- (void)test_73_join {
+    XCTestExpectation *ex1 = [self expectationWithDescription:@""];
+    __block NSUInteger values = 0;
+    __block NSInteger errorCodes = 0;
+    
+    __block void (^fulfiller)(id) = nil;
+    PMKPromise *promise =     [PMKPromise new:^(id f, id r){
+        fulfiller = f;
+    }];
+    
+    [PMKPromise join:@[
+        [PMKPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:1 userInfo:nil]],
+        promise,
+        [PMKPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:2 userInfo:nil]]
+    ]].then(^(NSArray *successes, NSArray *errors) {
+        for (NSNumber *value in successes) {
+            values |= [value unsignedIntValue];
+        }
+        for (NSError *error in errors) {
+            errorCodes |= error.code;
+        }
+        [ex1 fulfill];
+    });
+    fulfiller(@4);
+    [self waitForExpectationsWithTimeout:2 handler:nil];
+    XCTAssertTrue(values == 4);
+    XCTAssertTrue(errorCodes == 3);
+}
+
+- (void)test_74_join_no_errors {
+    XCTestExpectation *ex1 = [self expectationWithDescription:@""];
+    __block NSArray *values = nil;
+    __block NSArray *errors = nil;
+    [PMKPromise join:@[
+        [PMKPromise promiseWithValue:@1],
+        [PMKPromise promiseWithValue:@2]
+    ]].then(^(NSArray *thenValues, NSArray *thenErrors) {
+        values = thenValues;
+        errors = thenErrors;
+        [ex1 fulfill];
+    });
+    [self waitForExpectationsWithTimeout:2 handler:nil];
+    XCTAssertEqualObjects(values, (@[@1, @2]));
+    XCTAssertFalse(errors);
+}
+
+- (void)test_75_join_no_success {
+    XCTestExpectation *ex1 = [self expectationWithDescription:@""];
+    __block NSArray *values = nil;
+    __block NSArray *errors = nil;
+    [PMKPromise join:@[
+        [PMKPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:1 userInfo:nil]],
+        [PMKPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:2 userInfo:nil]],
+    ]].then(^(NSArray *thenValues, NSArray *thenErrors) {
+        values = thenValues;
+        errors = thenErrors;
+        [ex1 fulfill];
+    });
+    [self waitForExpectationsWithTimeout:2 handler:nil];
+    XCTAssertEqualObjects(values, @[]);
+    XCTAssertTrue(errors);
+}
+
+- (void)test_76_when_resolved_empty {
+    XCTestExpectation *ex1 = [self expectationWithDescription:@""];
+    [PMKPromise join:@[]]
+    .then(^(NSArray *successes, NSArray *errors) {
+        [ex1 fulfill];
+    });
+    [self waitForExpectationsWithTimeout:2 handler:nil];
+}
+
 @end
 
 
@@ -1231,7 +1305,7 @@ PMKPromise *gcdreject() {
 
 @implementation Tests (More)
 
-- (void)test_73_allow_error_subclasses {
+- (void)test_999_allow_error_subclasses {
     XCTestExpectation *ex1 = [self expectationWithDescription:@""];
 
     dispatch_promise(^{

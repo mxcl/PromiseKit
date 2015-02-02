@@ -4,9 +4,9 @@
 
 @interface PMKPromise (When)
 /**
-Returns a new Promise that is resolved when all passed Promises are resolved.
+Returns a new Promise that is fulfilled when all passed Promises are fulfilled.
 
-If an array is passed then the returned `Promise` is resolved once all of the `Promise`s in the array are resolved. The returned Promise is rejected immediately if *any* of the `Promise`s received by `when` fail, discarding all other Promise values (thus you only get one error in any catch handler you provide).
+If an array is passed then the returned `Promise` is fulfilled once all of the `Promise`s in the array are fulfilled. The returned Promise is rejected immediately if *any* of the `Promise`s received by `when` fail, discarding all other Promise values (thus you only get one error in any catch handler you provide).
 
 The returned `Promise` is resolved with an array of results indexed as the original array passed to when. If you pass a single value to when, you will not get an array in subsequent `then`s.
 
