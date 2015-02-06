@@ -576,6 +576,24 @@ PMKPromise *dispatch_promise_on(dispatch_queue_t queue, id block) {
     }];
 }
 
+PMKPromise *dispatch_promise_in_background(id block) {
+    return [PMKPromise new:^(void(^fulfiller)(id), void(^rejecter)(id)){
+        void(^executeBlock)() = ^{
+            id result = safely_call_block(block, nil);
+            if (IsError(result))
+                rejecter(result);
+            else
+                fulfiller(result);
+        };
+        if ([NSThread isMainThread]) {
+            dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), executeBlock);
+        }
+        else {
+            executeBlock();
+        }
+    }];
+}
+
 
 
 @implementation PMKArray { NSUInteger count; id objs[3]; }
