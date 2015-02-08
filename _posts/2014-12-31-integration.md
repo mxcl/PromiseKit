@@ -1,9 +1,9 @@
 ---
-category: home
+category: docs
 layout: default
 ---
 
-# Importing PromiseKit
+# Integrating PromiseKit Into Your App
 
 In your [Podfile](http://guides.cocoapods.org/using/using-cocoapods.html):
 
@@ -48,11 +48,12 @@ Asking for just the `PromiseKit` pod gives you the 80% most people want, ie. `PM
 
 If you don’t want to use CocoaPods you can use [CocoaPods Packager](https://github.com/CocoaPods/cocoapods-packager) to generate a static version of PromiseKit and just embed that.
 
-Please update regularly though, currently PromiseKit is updated *twice a week*.
+Please though! Update every now and again!
 
 
-## Swift
+## Carthage
 
-Currently CocoaPods does not have good Swift support. To use PromiseKit in your Swift project, add all of the `swift` directory to your sources and in your `xcodeproj` drag and drop `PromiseKit.xcodeproj` into your sources. Next configure your project to depend on PromiseKit and to link to it and to embed it into your final app.
+Carthage support is coming, if you are capable, please add it and create a pull request!
 
-Alternatively directly compile all the sources into your sources. If you do this, `Promise` will be available without having to `import PromiseKit` in your `.swift` files.
+
+<div><a class="pagination" href="/swift">Next: Specifics Regarding Swift PromiseKit</a></div>
