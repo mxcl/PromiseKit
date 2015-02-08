@@ -168,6 +168,9 @@ extension NSURLConnection {
         return promise(OMGHTTPURLRQ.POST(url, JSON: json))
     }
 
+    public class func POST(url:String, JSON json:[String:AnyObject]) -> Promise<NSDictionary> {
+      return promise(OMGHTTPURLRQ.POST(url, JSON: json))
+    }
 
     public class func POST(url:String, multipartFormData: OMGMultipartFormData) -> Promise<NSData> {
         return promise(OMGHTTPURLRQ.POST(url, multipartFormData))
