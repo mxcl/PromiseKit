@@ -1,4 +1,5 @@
 permalink:   /:title
 highlighter: pygments
-paginate:    8
+paginate:    1
 markdown:    kramdown
+paginate_path: "page:num"

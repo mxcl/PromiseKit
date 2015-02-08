@@ -5,12 +5,11 @@ body {
   padding: 2.5rem 0;
 }
 
-p, h1, h2, h3, ol, ul, pre, aside {
+p, h1, h2, h3, ol, ul, pre, aside, .indent {
   margin-left: auto;
   margin-right: auto;
 }
 pre {
-  background-color: #f9f9f9;
   overflow-x: scroll;
 }
 
@@ -18,7 +17,7 @@ pre {
   html {
     font-size: 12px;
   }
-  p, h1, h2, h3, ol, ul, aside {
+  p, h1, h2, h3, ol, ul, aside, .indent {
     margin-left: 16px;
     margin-right: 16px;
   }
@@ -27,7 +26,7 @@ pre {
   }
 }
 @media (min-width: 320px) and (orientation: landscape) {
-  p, h1, h2, h3, ol, ul, aside {
+  p, h1, h2, h3, ol, ul, aside, .indent {
     margin-left: 20px;
     margin-right: 20px;
   }
@@ -40,7 +39,7 @@ pre {
   html {
     font-size: 20px;
   }
-  p, h1, h2, h3, ol, ul, aside {
+  p, h1, h2, h3, ol, ul, aside, .indent {
     max-width: 30rem;
     margin-left: auto;
     margin-right: auto;
@@ -60,7 +59,7 @@ pre {
   html {
     font-size: 20px;
   }
-  p, h1, h2, h3, ol, ul {
+  p, h1, h2, h3, ol, ul, .indent {
     max-width: 38rem;
   }
   pre {
@@ -68,8 +67,5 @@ pre {
   }
   aside {
     min-width: 34rem;
-  }
-  #elephants {
-    width: auto;
   }
 }

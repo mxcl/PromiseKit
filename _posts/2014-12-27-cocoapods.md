@@ -3,7 +3,7 @@ category: pods
 layout: default
 ---
 
-# Promised Pods
+# Pods That Add Promises To Third Party Libraries
 
 Use PromiseKit with your favorite third party libraries:
 
@@ -12,7 +12,7 @@ Use PromiseKit with your favorite third party libraries:
 * [AFNetworking](https://github.com/csotiriou/AFNetworking-PromiseKit) (alternatives:  [1](https://github.com/skeeet/AFNetworking-PromiseKit))
 * [YOUR LIBRARY HERE!](mailto:mxcl@me.com)
 
-# Adding Promises to Third Party Libraries
+# How To Add Promises to Third Party Libraries
 
 It would be great if every library with asynchronous functionality would offer opt-in `PMKPromise *` variants for the asynchronous mechanisms.
 
@@ -84,6 +84,8 @@ end
 {% endhighlight %}
 
 
-## Adding PromiseKit to Someone Else’s Pod
+## Adding PromiseKit to a Pod You Don’t Maintain
 
 Firstly you should try submitting the above to the project itself. If they won’t add it then you'll need to make your own pod. Use the naming scheme: `ABCKitten+PromiseKit`. Don’t name it with `PromiseKit` first (it’s not PromiseKit plus foo it’s foo plus PromiseKit!). Also use a `+`: there’s enough dashes in project names already. `+` is more descriptive, it’s more distinctive and CocoaPods accepts such names *just fine*.
+
+<div><a class="pagination" href="/troubleshooting">Next: Troubleshooting</a></div>

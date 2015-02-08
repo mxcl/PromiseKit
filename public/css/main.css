@@ -15,7 +15,9 @@ code, pre {
 code {
   padding: .25em .5em;
   color: #bf616a;
-  background-color: #f9f9f9;
+}
+code, pre {
+  background-color: #f5f5f5;
 }
 pre, aside {
   margin-top: 0;
@@ -37,17 +39,11 @@ pre code {
   margin-bottom: 0;
 }
 
-#pulse {
-  display: inline-block;
-  color: #9a9a9a;
-  font-family: "PT Sans", Helvetica, Arial, sans-serif;
-}
-
 aside {
   background: #f9f9f9;
-  border: 10px solid darkgray;
+  border: 10px solid rgba(0,0,0,0.2);
   border-width: 0 1rem;
-  color: darkgray;
+  color: rgba(0,0,0,0.66);;
   font-size: 0.9rem;
   padding: 1rem;
   display: block;
@@ -56,7 +52,7 @@ aside {
 }
 aside:before {
   content: "Oh! BTW…";
-  color: darkgray;
+  color: rgba(0,0,0,0.66);;
   display: block;
   font-weight: bold;
 }
@@ -84,6 +80,75 @@ nav a:hover {
 }
 
 #elephants {
-  margin-top: -1rem;
   width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.big {
+  font-size: 2rem;
+  font-style: normal;
+  padding: 1em 0;
+  margin: 2rem 0;
+  background: rgba(0,0,0,0.07);
+  border-style: solid;
+  border-color: rgba(0,0,0,0.2);
+  border-width: 1px;
+  font-family: "PT Sans", Helvetica, Arial, sans-serif;
+}
+
+a.pagination:after {
+	content: "\f054";
+	font-family: FontAwesome;
+  font-weight: 300;
+  margin-left: 0.2em;
+  font-size: 0.86em;
+}
+
+a.pagination {
+  font-size: xx-large;
+  text-transform: uppercase;
+  background: HSL(212, 100%, 35%);
+  font-family: "PT Sans", Helvetica, Arial, sans-serif;
+  padding: 1rem 0;
+  font-weight: bold;
+  color: white;  
+  display: block;
+  text-align: center;
+  margin-top: 3rem;
+  margin-bottom: -2.5rem;
+}
+a.pagination:hover {
+  text-decoration: none;
+  background: HSL(212, 90%, 45%);
+}
+
+.pagination abbr {
+  color: white;
+  border-bottom: 1px dotted white;
+  font-size: 1em;
+}
+
+
+.big code {
+    background: transparent;
+    font-size: inherit;
+    padding: 0;
+}
+code .external-link {
+  color: #515151;
+}
+.external-link:after {
+  content: "\f08e";
+  font-family: FontAwesome;
+  margin-left: 0.2em;
+  font-size: smaller;
+  color: #888;
+}
+
+.contents {
+  margin: 1rem;
+  margin-top: -1.5rem;
+  box-sizing: border-box;
+  width: auto;
 }

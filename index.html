@@ -1,11 +1,92 @@
 ---
-layout: default
+layout: opener
 ---
 
-<div class="posts">
-  {% for post in paginator.posts %}
-  <div class="post">
-    {{ post.content }}
+<style>
+.top {
+    font-size: 1.5rem;
+    text-align: center;
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+.block {
+    background: HSLA(204, 100%, 40%, 0.1);;
+    padding: 2rem;
+    box-sizing: border-box;
+    margin: 0 2%;
+    border-radius: 15px;
+    border-color: HSLA(204, 100%, 40%, 0.5);
+    border-width: 1px;
+    border-style: solid;
+    height: 100%;
+    vertical-align: middle;
+    display: table-cell;
+    width: 45%;
+}
+.block.quote {
+    background-color: rgba(0,0,0,0.07);
+    border-color: rgba(0,0,0,0.3);
+    font-family: "PT Sans", Helvetica, Arial, sans-serif;
+}
+.indent {
+    display: table;
+    border-collapse: separate;
+    border-spacing: 10px;
+}
+.bigger {
+    font-size: 1.5em;
+}
+.right {
+  text-align: right;
+  font-size: 0.8em;
+}
+.right:before {
+  content: "—";
+}
+a.block.next {
+    background: HSL(212, 100%, 35%);
+    text-align: center;
+}
+a.block.next {
+    color: white;
+    font-size: 1.5em;
+    font-family: "PT Sans", Helvetica, Arial, sans-serif;
+}
+.block.next .thang:after {
+  	content: "\f054";
+  	font-family: FontAwesome;
+    margin-left: 0.3em;
+    font-size: 0.9em;
+}
+a.block.next:hover {
+  text-decoration: none;
+  background: HSL(212, 90%, 45%);
+}
+</style>
+
+<p><img width='760' height='297' src='/public/img/tight-header.png' id='elephants'></p>
+
+<p class="top">We code in an asynchronous world. We promise.</p>
+
+<div class="indent">
+  <div style='display:table-row'>
+    <div class="block">PromiseKit is not just a <a href="http://en.wikipedia.org/wiki/Futures_and_promises">promises</a> implementation, it is also a collection of helper functions that make the typical asynchronous patterns we use as iOS developers delightful too.</div>
+    <div class="block">PromiseKit is modular and can easily be integrated into other libraries or incorporated into asynchronous code you have already written.</div>
   </div>
-  {% endfor %}
+  <div style='display:table-row'>
+    <div class="block">PromiseKit is available in Objective-C and Swift flavors.</div>
+    <div class="block quote">
+      <div class="bigger">“PromiseKit is the dog’s bollocks”</div>
+      <div class="right">I.A. McOder</div>
+    </div>
+  </div>
+  <div style='display:table-row'>
+    <div class="block quote">
+      <div class="bigger">“PromiseKit unravelled my spaghetti code”</div>
+      <div class="right">Alec Init</div>
+    </div>
+    <a class="block next" href='/introduction'>
+      LEARN HOW<span class="thang"></span>
+    </a>
+  </div>
 </div>
