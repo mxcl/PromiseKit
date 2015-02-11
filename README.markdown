@@ -2,9 +2,10 @@
 
 Modern development is highly asynchronous: isn’t it about time iOS developers had tools that made programming asynchronously powerful, easy and delightful?
 
-# Learn PromiseKit
+# How To Get Started
 
-Visit [promisekit.org](http://promisekit.org) for complete documentation and learning guide.
+* Read PromiseKit’s [comprehensive documentation](http://promisekit.org/introduction).
+* [Integrate](http://promisekit.org/getting-started) PromiseKit into your existing projects.
 
 # Donations
 

@@ -1,6 +1,11 @@
+
 Pod::Spec.new do |s|
   s.name = "PromiseKit"
-  s.version = "1.2.2"
+
+  `xcodebuild -project swift/PromiseKit.xcodeproj -showBuildSettings` =~ /CURRENT_PROJECT_VERSION = ((\d\.)+\d)/
+  abort if $1.nil?
+  s.version = $1
+
   s.source = { :git => "https://github.com/mxcl/#{s.name}.git", :tag => s.version }
   s.license = 'MIT'
   s.summary = 'A delightful Promises implementation for iOS and OS X.'
@@ -174,6 +179,7 @@ Pod::Spec.new do |s|
   s.subspec 'Swift' do |ss|
     ss.source_files = 'swift/Sources/**/*.{swift,h,m}'
     ss.framework = 'AssetsLibrary'
+    ss.dependency 'OMGHTTPURLRQ'
   end
 
 #### deprecated
