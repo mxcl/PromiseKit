@@ -1,5 +1,6 @@
 import Foundation
 import UIKit.UIImage
+import OMGHTTPURLRQ
 
 
 extension NSURLResponse {
