@@ -18,7 +18,9 @@ private class LocationManager: CLLocationManager, CLLocationManagerDelegate {
         super.init()
         PMKRetain(self)
         delegate = self
+    #if os(IOS)
         requestWhenInUseAuthorization()
+    #endif
     }
 }
 
@@ -32,7 +34,9 @@ private class AuthorizationCatcher: CLLocationManager, CLLocationManagerDelegate
         if status == .NotDetermined {
             self.delegate = self
             PMKRetain(self)
+        #if os(IOS)
             requestAlwaysAuthorization()
+        #endif
         } else {
             fulfill(status)
         }

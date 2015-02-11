@@ -177,9 +177,12 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'Swift' do |ss|
-    ss.source_files = 'swift/Sources/**/*.{swift,h,m}'
-    ss.framework = 'AssetsLibrary'
+    ss.ios.framework = 'AssetsLibrary'
     ss.dependency 'OMGHTTPURLRQ'
+    ss.ios.deployment_target = 8.0
+    ss.osx.deployment_target = 10.9
+    ss.ios.source_files = 'swift/Sources/**/*.{swift,h,m}'
+    ss.osx.source_files = Dir["swift/Sources/*.swift"] - ["swift/Sources/AVAudioSession.swift"] - Dir["swift/Sources/UI*"]
   end
 
 #### deprecated

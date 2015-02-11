@@ -1,5 +1,4 @@
 import Foundation
-import UIKit.UIImage
 import OMGHTTPURLRQ
 
 
@@ -109,9 +108,6 @@ extension NSURLConnection {
     public class func GET(url:String) -> Promise<String> {
         return promise(NSURLRequest(URL:NSURL(string:url)!))
     }
-    public class func GET(url:String) -> Promise<UIImage> {
-        return promise(NSURLRequest(URL:NSURL(string:url)!))
-    }
     public class func GET(url:String) -> Promise<NSArray> {
         return promise(NSURLRequest(URL:NSURL(string:url)!))
     }
@@ -123,9 +119,6 @@ extension NSURLConnection {
         return promise(OMGHTTPURLRQ.GET(url, query))
     }
     public class func GET(url:String, query:[String:String]) -> Promise<String> {
-        return promise(OMGHTTPURLRQ.GET(url, query))
-    }
-    public class func GET(url:String, query:[String:String]) -> Promise<UIImage> {
         return promise(OMGHTTPURLRQ.GET(url, query))
     }
     public class func GET(url:String, query:[String:String]) -> Promise<NSDictionary> {
@@ -142,9 +135,6 @@ extension NSURLConnection {
     public class func POST(url:String, formData:[String:String]) -> Promise<String> {
         return promise(OMGHTTPURLRQ.POST(url, formData))
     }
-    public class func POST(url:String, formData:[String:String]) -> Promise<UIImage> {
-        return promise(OMGHTTPURLRQ.POST(url, formData))
-    }
     public class func POST(url:String, formData:[String:String]) -> Promise<NSArray> {
         return promise(OMGHTTPURLRQ.POST(url, formData))
     }
@@ -157,9 +147,6 @@ extension NSURLConnection {
         return promise(OMGHTTPURLRQ.POST(url, JSON: json))
     }
     public class func POST(url:String, JSON json:[String:String]) -> Promise<String> {
-        return promise(OMGHTTPURLRQ.POST(url, JSON: json))
-    }
-    public class func POST(url:String, JSON json:[String:String]) -> Promise<UIImage> {
         return promise(OMGHTTPURLRQ.POST(url, JSON: json))
     }
     public class func POST(url:String, JSON json:[String:String]) -> Promise<NSArray> {
@@ -177,9 +164,6 @@ extension NSURLConnection {
         return promise(OMGHTTPURLRQ.POST(url, multipartFormData))
     }
     public class func POST(url:String, multipartFormData: OMGMultipartFormData) -> Promise<String> {
-        return promise(OMGHTTPURLRQ.POST(url, multipartFormData))
-    }
-    public class func POST(url:String, multipartFormData: OMGMultipartFormData) -> Promise<UIImage> {
         return promise(OMGHTTPURLRQ.POST(url, multipartFormData))
     }
     public class func POST(url:String, multipartFormData: OMGMultipartFormData) -> Promise<NSArray> {
@@ -215,6 +199,33 @@ extension NSURLConnection {
     public class func promise(request: NSURLRequest) -> Promise<NSArray> {
         return fetchJSON(request)
     }
+}
+
+
+#if os(IOS)
+import UIKit.UIImage
+
+extension NSURLConnection {
+
+    public class func GET(url:String) -> Promise<UIImage> {
+        return promise(NSURLRequest(URL:NSURL(string:url)!))
+    }
+
+    public class func GET(url:String, query:[String:String]) -> Promise<UIImage> {
+        return promise(OMGHTTPURLRQ.GET(url, query))
+    }
+
+    public class func POST(url:String, formData:[String:String]) -> Promise<UIImage> {
+        return promise(OMGHTTPURLRQ.POST(url, formData))
+    }
+
+    public class func POST(url:String, JSON json:[String:String]) -> Promise<UIImage> {
+        return promise(OMGHTTPURLRQ.POST(url, JSON: json))
+    }
+
+    public class func POST(url:String, multipartFormData: OMGMultipartFormData) -> Promise<UIImage> {
+        return promise(OMGHTTPURLRQ.POST(url, multipartFormData))
+    }
 
     public class func promise(rq: NSURLRequest) -> Promise<UIImage> {
         return fetch(rq) { (fulfiller, rejecter, data, _) in
@@ -233,3 +244,4 @@ extension NSURLConnection {
         }
     }
 }
+#endif
