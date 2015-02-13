@@ -75,18 +75,6 @@ extension UIViewController {
         return promiseViewController(vc as UIViewController, animated: animated, completion: completion)
     }
 
-    private func imagePicker<T>(vc: UIImagePickerController, _ animated: Bool, _ completion:()->(), process: (NSDictionary)->T) -> Promise<T?> {
-        let delegate = UIImagePickerControllerProxy()
-        vc.delegate = delegate
-        PMKRetain(delegate)
-        return promiseViewController(vc as UIViewController, animated: animated, completion: completion).then{
-            (dict: NSDictionary?) -> T? in
-            return dict == nil ? nil : process(dict!)
-        }.finally {
-            PMKRelease(delegate)
-        }
-    }
-
     public func promiseViewController(vc: UIImagePickerController, animated: Bool = false, completion:()->() = {}) -> Promise<UIImage?> {
         let delegate = UIImagePickerControllerProxy()
         vc.delegate = delegate
