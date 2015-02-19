@@ -9,6 +9,9 @@
 #ifdef PMK_PAUSE
 #import <PromiseKit/Promise+Pause.h>
 #endif
+#ifdef PMK_JOIN
+#import <PromiseKit/Promise+Join.h>
+#endif
 
 #ifdef PMK_ACACCOUNTSTORE
 #import <ACAccountStore+PromiseKit.h>

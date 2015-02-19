@@ -83,12 +83,13 @@ Pod::Spec.new do |s|
     ss.frameworks = 'Foundation'
   end
 
-  %w{Pause Until When}.each do |name|
+  %w{Pause Until When Join}.each do |name|
     s.subspec(name) do |ss|
       ss.source_files = "objc/PMKPromise+#{name}.m", "objc/PromiseKit/Promise+#{name}.h"
       ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_#{name.upcase}=1" }
       ss.preserve_paths = 'objc/PromiseKit'
       ss.dependency 'PromiseKit/When' if name == 'Until'
+      ss.dependency 'PromiseKit/Until' if name == 'Join'
       ss.dependency 'PromiseKit/Promise'
     end
   end
@@ -163,6 +164,7 @@ Pod::Spec.new do |s|
     ss.dependency 'PromiseKit/When'
     ss.dependency 'PromiseKit/Until'
     ss.dependency 'PromiseKit/Pause'
+    ss.dependency 'PromiseKit/Join'
 
     ss.dependency 'PromiseKit/Accounts'
     ss.dependency 'PromiseKit/AVFoundation'
