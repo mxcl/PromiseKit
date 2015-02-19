@@ -2,7 +2,7 @@
 Pod::Spec.new do |s|
   s.name = "PromiseKit"
 
-  `xcodebuild -project swift/PromiseKit.xcodeproj -showBuildSettings` =~ /CURRENT_PROJECT_VERSION = ((\d\.)+\d)/
+  `xcodebuild -project PromiseKit.xcodeproj -showBuildSettings` =~ /CURRENT_PROJECT_VERSION = ((\d\.)+\d)/
   abort if $1.nil?
   s.version = $1
 
@@ -183,8 +183,8 @@ Pod::Spec.new do |s|
     ss.dependency 'OMGHTTPURLRQ'
     ss.ios.deployment_target = 8.0
     ss.osx.deployment_target = 10.9
-    ss.ios.source_files = 'swift/Sources/**/*.{swift,h,m}'
-    ss.osx.source_files = Dir["swift/Sources/*.swift"] - ["swift/Sources/AVAudioSession.swift"] - Dir["swift/Sources/UI*"]
+    ss.ios.source_files = 'Swift Sources/*.{swift,h,m}'
+    ss.osx.source_files = Dir["Swift Sources/*.swift"] - ["Swift Sources/AVAudioSession.swift"] - Dir["Swift Sources/UI*"]
   end
 
 #### deprecated
