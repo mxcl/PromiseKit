@@ -7,6 +7,7 @@ OBJC = <<-__EOBJC__
 #import "PromiseKit/Promise+Join.h"
 #import "PromiseKit/Promise+Until.h"
 #import "PMKPromise+Hang.m"
+#import "PMKPromise+Zalgo.m"
 #import "NSURLConnection+PromiseKit.h"
 #import <CommonCrypto/CommonCrypto.h>
 
@@ -1297,8 +1298,38 @@ PMKPromise *gcdreject() {
 }
 
 - (void)test_77_hang {
-    id value = [PMKPromise hang:[PMKPromise pause:2].then(^{ return 1; })];
+    __block int x = 0;
+    id value = [PMKPromise hang:[PMKPromise pause:0.1].then(^{ x++; return 1; })];
+    XCTAssertEqual(x, 1);
     XCTAssertEqualObjects(value, @1);
+}
+
+- (void)test_78_zalgo {
+    __block int x = 0;
+    [PMKPromise hang:dispatch_promise(^{
+        XCTAssertEqual(x, 0);
+        dispatch_zalgo(^{
+            XCTAssertEqual(x, 0);
+            x++;
+        });
+        XCTAssertEqual(x, 1);
+    })];
+    XCTAssertEqual(x, 1);
+    
+    [PMKPromise promiseWithValue:@1].thenUnleashZalgo(^{
+        x++;
+    });
+    XCTAssertEqual(x, 2);
+    
+    id p = dispatch_promise(^{
+        return @1;
+    }).thenUnleashZalgo(^{
+        x++;
+    });
+    XCTAssertEqual(x, 2);
+    
+    [PMKPromise hang:p];
+    XCTAssertEqual(x, 3ul);
 }
 
 @end

@@ -83,7 +83,7 @@ Pod::Spec.new do |s|
     ss.frameworks = 'Foundation'
   end
 
-  %w{Pause Until When Join Hang}.each do |name|
+  %w{Pause Until When Join Hang Zalgo}.each do |name|
     s.subspec(name) do |ss|
       ss.source_files = "objc/PMKPromise+#{name}.m", "objc/PromiseKit/Promise+#{name}.h"
       ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_#{name.upcase}=1" }
