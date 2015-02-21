@@ -6,12 +6,11 @@
 @interface PMKLocationManager : CLLocationManager <CLLocationManagerDelegate>
 @end
 
-
-
 @implementation PMKLocationManager {
 @public
     void (^fulfiller)(id);
     void (^rejecter)(id);
+    BOOL (^block)(CLLocation *);
 }
 
 #define PMKLocationManagerCleanup() \
@@ -19,9 +18,17 @@
     self.delegate = nil; \
     PMKRelease(self);
 
-- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations {
-    fulfiller(PMKManifold(locations.lastObject, locations));
-    PMKLocationManagerCleanup();
+- (void)locationManager:(CLLocationManager *)manager didUpdateLocations:(NSArray *)locations
+{
+    NSMutableArray *okd = [NSMutableArray new];
+    for (id location in locations)
+        if (block(location))
+            [okd addObject:location];
+    
+    if (okd.count) {
+        fulfiller(PMKManifold(okd.lastObject, okd));
+        PMKLocationManagerCleanup();
+    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
@@ -40,8 +47,15 @@
 @implementation CLLocationManager (PromiseKit)
 
 + (PMKPromise *)promise {
+    return [self until:^BOOL(CLLocation *location){
+        return location.horizontalAccuracy <= 500 && location.verticalAccuracy <= 500;
+    }];
+}
+
++ (PMKPromise *)until:(BOOL(^)(CLLocation *))block {
     PMKLocationManager *manager = [PMKLocationManager new];
     manager.delegate = manager;
+    manager->block = block;
     PMKRetain(manager);
 
   #if __IPHONE_OS_VERSION_MAX_ALLOWED >= 80000
