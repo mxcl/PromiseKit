@@ -75,9 +75,8 @@ public class Promise<T> {
                 case .Pending(let Ω):
                     self._state = newstate
                     handlers = Ω.bodies
-                    Ω.bodies.removeAll(keepCapacity: false)
                 default:
-                    noop()
+                    break
                 }
             }
             for handler in handlers { handler() }
@@ -212,7 +211,7 @@ public class Promise<T> {
                     body(error)
                 }
             case .Fulfilled:
-                noop()
+                break
             case .Pending:
                 abort()
             }
