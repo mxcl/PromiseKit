@@ -6,6 +6,7 @@ OBJC = <<-__EOBJC__
 #import "PromiseKit/Promise+When.h"
 #import "PromiseKit/Promise+Join.h"
 #import "PromiseKit/Promise+Until.h"
+#import "PMKPromise+Hang.m"
 #import "NSURLConnection+PromiseKit.h"
 #import <CommonCrypto/CommonCrypto.h>
 
@@ -1293,6 +1294,11 @@ PMKPromise *gcdreject() {
         [ex1 fulfill];
     });
     [self waitForExpectationsWithTimeout:2 handler:nil];
+}
+
+- (void)test_77_hang {
+    id value = [PMKPromise hang:[PMKPromise pause:2].then(^{ return 1; })];
+    XCTAssertEqualObjects(value, @1);
 }
 
 @end
