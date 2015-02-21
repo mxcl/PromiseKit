@@ -23,6 +23,12 @@
 static const id PMKNull = @"PMKNull";
 
 
+
+@interface PMKArray : NSObject
+@end
+
+
+
 static inline NSError *NSErrorFromNil() {
     PMKLog(@"PromiseKit: Warning: Promise rejected with nil");
     return [NSError errorWithDomain:PMKErrorDomain code:PMKInvalidUsageError userInfo:nil];
@@ -577,18 +583,9 @@ PMKPromise *dispatch_promise_on(dispatch_queue_t queue, id block) {
 }
 
 
-
-@implementation PMKArray { NSUInteger count; id objs[3]; }
-
-+ (instancetype)arrayWithCount:(NSUInteger)count, ... {
-    PMKArray *this = [self new];
-    this->count = count;
-    va_list args;
-    va_start(args, count);
-    for (NSUInteger x = 0; x < count; ++x)
-        this->objs[x] = va_arg(args, id);
-    va_end(args);
-    return this;
+@implementation PMKArray {
+@public id objs[3];
+@public NSUInteger count;
 }
 
 - (id)objectAtIndexedSubscript:(NSUInteger)idx {
@@ -600,6 +597,17 @@ PMKPromise *dispatch_promise_on(dispatch_queue_t queue, id block) {
 }
 
 @end
+
+id __PMKArrayWithCount(NSUInteger count, ...) {
+    PMKArray *this = [PMKArray new];
+    this->count = count;
+    va_list args;
+    va_start(args, count);
+    for (NSUInteger x = 0; x < count; ++x)
+        this->objs[x] = va_arg(args, id);
+    va_end(args);
+    return this;
+}
 
 
 

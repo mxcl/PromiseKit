@@ -1329,7 +1329,7 @@ PMKPromise *gcdreject() {
     XCTAssertEqual(x, 2);
     
     [PMKPromise hang:p];
-    XCTAssertEqual(x, 3ul);
+    XCTAssertEqual(x, 3);
 }
 
 @end
