@@ -135,6 +135,13 @@ PMKPromise *dispatch_promise(id block);
  */
 PMKPromise *dispatch_promise_on(dispatch_queue_t q, id block);
 
+/**
+ Executes @param block in the background using `dispatch_async` with `DISPATCH_QUEUE_PRIORITY_DEFAULT`.
+ If this function is called while already on a background queue, no dispatch occurs, and the block
+ is executed immediately.
+ @see dispatch_promise
+ */
+PMKPromise *dispatch_promise_in_background(id block);
 
 
 /**
