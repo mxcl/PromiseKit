@@ -202,7 +202,7 @@ extension NSURLConnection {
 }
 
 
-#if os(IOS)
+#if os(iOS)
 import UIKit.UIImage
 
 extension NSURLConnection {

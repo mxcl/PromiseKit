@@ -18,7 +18,7 @@ private class LocationManager: CLLocationManager, CLLocationManagerDelegate {
         super.init()
         PMKRetain(self)
         delegate = self
-    #if os(IOS)
+    #if os(iOS)
         requestWhenInUseAuthorization()
     #endif
     }
