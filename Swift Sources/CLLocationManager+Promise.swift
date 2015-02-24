@@ -34,7 +34,7 @@ private class AuthorizationCatcher: CLLocationManager, CLLocationManagerDelegate
         if status == .NotDetermined {
             self.delegate = self
             PMKRetain(self)
-        #if os(IOS)
+        #if os(iOS)
             requestAlwaysAuthorization()
         #endif
         } else {
