@@ -498,8 +498,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/mxcl/src/PromiseKit/Carthage/Build/iOS,
+					"$(inherited)"
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -527,8 +526,7 @@
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
-					"$(inherited)",
-					/Users/mxcl/src/PromiseKit/Carthage/Build/iOS,
+					"$(inherited)"
 				);
 				INFOPLIST_FILE = "$(SRCROOT)/PromiseKit.xcodeproj/framework-Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
@@ -549,8 +547,7 @@
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					/Users/mxcl/src/PromiseKit/Carthage/Build/iOS,
+					"$(inherited)"
 				);
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -569,8 +566,7 @@
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SDKROOT)/Developer/Library/Frameworks",
-					"$(inherited)",
-					/Users/mxcl/src/PromiseKit/Carthage/Build/iOS,
+					"$(inherited)"
 				);
 				INFOPLIST_FILE = "PromiseKit.xcodeproj/tests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
