@@ -36,7 +36,8 @@ private func fetch<T>(var request: NSURLRequest, body: ((T) -> Void, (NSError) -
                 info[NSURLErrorFailingURLStringErrorKey] = request.URL.absoluteString
                 if data != nil {
                     info[PMKURLErrorFailingDataKey] = data!
-                    if let str = NSString(data: data, encoding: rsp.stringEncoding) {
+                    let encoding = rsp?.stringEncoding ?? NSUTF8StringEncoding
+                    if let str = NSString(data: data, encoding: encoding) {
                         info[PMKURLErrorFailingStringKey] = str
                     }
                 }
