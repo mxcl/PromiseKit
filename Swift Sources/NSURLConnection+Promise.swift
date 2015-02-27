@@ -48,7 +48,7 @@ private func fetch<T>(var request: NSURLRequest, body: ((T) -> Void, (NSError) -
             if err != nil {
                 rejecter(err)
             } else {
-                body(fulfiller, rejecter, data!, rsp)
+                body(fulfiller, rejecter, data, rsp)
             }
         }
     }
