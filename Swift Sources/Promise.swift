@@ -176,6 +176,14 @@ public class Promise<T> {
         }
     }
 
+    public func thenInBackground<U>(body:(T) -> U) -> Promise<U> {
+        return then(onQueue: dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), body: body)
+    }
+    
+    public func thenInBackground<U>(body:(T) -> Promise<U>) -> Promise<U> {
+        return then(onQueue: dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), body: body)
+    }
+
     public func catch(onQueue q:dispatch_queue_t = dispatch_get_main_queue(), body:(NSError) -> T) -> Promise<T> {
         return Promise<T>{ (fulfill, _) in
             let handler = { ()->() in
