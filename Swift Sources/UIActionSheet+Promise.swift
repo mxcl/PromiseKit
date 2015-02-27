@@ -9,7 +9,7 @@ class UIActionSheetProxy: NSObject, UIActionSheetDelegate {
         PMKRetain(self)
     }
 
-    func actionSheet(actionSheet: UIActionSheet!, didDismissWithButtonIndex buttonIndex: Int) {
+    func actionSheet(actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {
         fulfiller(buttonIndex)
         PMKRelease(self)
     }
@@ -19,7 +19,7 @@ class UIActionSheetProxy: NSObject, UIActionSheetDelegate {
 extension UIActionSheet {
     public func promiseInView(view:UIView) -> Promise<Int> {
         let deferred = Promise<Int>.defer()
-        delegate = UIActionSheetProxy(deferred.fulfill)
+        delegate = UIActionSheetProxy(fulfiller: deferred.fulfill)
         showInView(view)
         return deferred.promise
     }

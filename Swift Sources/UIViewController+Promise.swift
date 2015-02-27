@@ -11,7 +11,7 @@ class MFMailComposeViewControllerProxy: NSObject, MFMailComposeViewControllerDel
         PMKRetain(self)
     }
 
-    func mailComposeController(controller:MFMailComposeViewController!, didFinishWithResult result:Int, error:NSError!) {
+    func mailComposeController(controller: MFMailComposeViewController!, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
         if error != nil {
             controller.reject(error)
         } else {
@@ -23,11 +23,11 @@ class MFMailComposeViewControllerProxy: NSObject, MFMailComposeViewControllerDel
 
 class UIImagePickerControllerProxy: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate
 {
-    func imagePickerController(picker: UIImagePickerController!, didFinishPickingMediaWithInfo info: NSDictionary!) {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
         picker.fulfill(info as NSDictionary?)
     }
 
-    func imagePickerControllerDidCancel(picker: UIImagePickerController!) {
+    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         picker.fulfill(nil as NSDictionary?)
     }
 }
@@ -44,12 +44,12 @@ private var key = "PMKSomeString"
 
 extension UIViewController {
     public func fulfill<T>(value:T) {
-        let resolver = objc_getAssociatedObject(self, &key) as Resolver<T>
+        let resolver = objc_getAssociatedObject(self, &key) as! Resolver<T>
         resolver.fulfiller(value)
     }
 
     public func reject(error:NSError) {
-        let resolver = objc_getAssociatedObject(self, &key) as Resolver<Any>;
+        let resolver = objc_getAssociatedObject(self, &key) as! Resolver<Any>;
         resolver.rejecter(error)
     }
 
@@ -66,7 +66,7 @@ extension UIViewController {
     }
 
     public func promiseViewController<T>(nc: UINavigationController, animated: Bool = false, completion:(Void)->() = {}) -> Promise<T> {
-        let vc = nc.viewControllers[0] as UIViewController
+        let vc = nc.viewControllers[0] as! UIViewController
         return promiseViewController(vc, animated: animated, completion: completion)
     }
 
@@ -81,7 +81,7 @@ extension UIViewController {
         PMKRetain(delegate)
         return promiseViewController(vc as UIViewController, animated: animated, completion: completion).then{
             (info: NSDictionary?) -> UIImage? in
-            return info?.objectForKey(UIImagePickerControllerOriginalImage) as UIImage?
+            return info?.objectForKey(UIImagePickerControllerOriginalImage) as! UIImage?
         }.finally {
             PMKRelease(delegate)
         }
@@ -96,7 +96,7 @@ extension UIViewController {
 
             if info == nil { return Promise<NSData?>(value: nil) }
 
-            let url = info![UIImagePickerControllerReferenceURL] as NSURL
+            let url = info![UIImagePickerControllerReferenceURL] as! NSURL
 
             return Promise { (fulfill, reject) in
                 ALAssetsLibrary().assetForURL(url, resultBlock:{ asset in

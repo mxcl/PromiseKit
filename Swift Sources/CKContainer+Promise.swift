@@ -29,7 +29,7 @@ extension CKContainer {
     public func discoverAllContactUserInfos() -> Promise<[CKDiscoveredUserInfo]> {
         return Promise { (fulfill, reject) in
             self.discoverAllContactUserInfosWithCompletionHandler { (userInfos, error) in
-                if error == nil { fulfill(userInfos as [CKDiscoveredUserInfo]) } else { reject(error) }
+                if error == nil { fulfill(userInfos as! [CKDiscoveredUserInfo]) } else { reject(error) }
             }
         }
     }

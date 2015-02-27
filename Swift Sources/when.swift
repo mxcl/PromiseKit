@@ -33,7 +33,7 @@ public func when<T>(promises: [Promise<T>]) -> Promise<[T]> {
                 fulfiller(values)
             }
         }
-        promise.catch(rejecter)
+        promise.catch(body: rejecter)
     }
     return promise
 }
@@ -47,7 +47,7 @@ public func when<U,V>(promise1: Promise<U>, promise2: Promise<V>) -> Promise<(U,
     var first:Any?
     promise1.then{ u->() in
         if let seal = first {
-            let fulfillment = (u, seal as V)
+            let fulfillment = (u, seal as! V)
             fulfiller(fulfillment)
         } else {
             first = u
@@ -55,14 +55,14 @@ public func when<U,V>(promise1: Promise<U>, promise2: Promise<V>) -> Promise<(U,
     }
     promise2.then{ v->() in
         if let seal = first {
-            let fulfillment = (seal as U, v)
+            let fulfillment = (seal as! U, v)
             fulfiller(fulfillment)
         } else {
             first = v
         }
     }
-    promise1.catch(rejecter)
-    promise2.catch(rejecter)
+    promise1.catch(body: rejecter)
+    promise2.catch(body: rejecter)
     return promise
 }
 
@@ -86,8 +86,8 @@ private func when(promise1: Promise<Void>, # promise2: Promise<Void>) -> Promise
             first = promise2
         }
     }
-    let _:Void = promise1.catch(rejecter)
-    let _:Void = promise2.catch(rejecter)
+    let _:Void = promise1.catch(body: rejecter)
+    let _:Void = promise2.catch(body: rejecter)
     return promise
 }
 

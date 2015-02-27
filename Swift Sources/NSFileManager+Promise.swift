@@ -26,7 +26,7 @@ extension NSFileManager {
         }
     }
 
-    func createDirectoryAtPath(path: String, withIntermediateDirectories with: Bool = true, attributes: NSDictionary? = nil) -> Promise<String> {
+    func createDirectoryAtPath(path: String, withIntermediateDirectories with: Bool = true, attributes: [NSObject: AnyObject]? = nil) -> Promise<String> {
         return dispatch_promise() {
             var error: NSError?
             self.createDirectoryAtPath(path, withIntermediateDirectories: with, attributes: attributes, error: &error)

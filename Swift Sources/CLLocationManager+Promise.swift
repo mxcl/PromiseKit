@@ -5,7 +5,7 @@ private class LocationManager: CLLocationManager, CLLocationManagerDelegate {
     let rejecter: (NSError) -> Void
 
     func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
-        fulfiller(locations as [CLLocation])
+        fulfiller(locations as! [CLLocation])
     }
 
     func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {

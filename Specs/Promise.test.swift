@@ -233,10 +233,10 @@ class TestPromise: XCTestCase {
         let p4 = Promise(value: 4 as AnyObject)
 
         when(p1, p2, p3, p4).then { (x: [AnyObject])->() in
-            XCTAssertEqual(x[0] as Int, 1)
-            XCTAssertEqual(x[1] as Int, 2)
-            XCTAssertEqual(x[2] as Int, 3)
-            XCTAssertEqual(x[3] as Int, 4)
+            XCTAssertEqual(x[0] as! Int, 1)
+            XCTAssertEqual(x[1] as! Int, 2)
+            XCTAssertEqual(x[2] as! Int, 3)
+            XCTAssertEqual(x[3] as! Int, 4)
             XCTAssertEqual(x.count, 4)
             e1.fulfill()
         }

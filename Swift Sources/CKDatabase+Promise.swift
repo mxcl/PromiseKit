@@ -6,92 +6,92 @@ private func proxy<T>(fulfill: (T)->(), reject: (NSError)->())(value: T!, error:
 
 extension CKDatabase {
     public func fetchRecordWithID(recordID: CKRecordID) -> Promise<CKRecord> {
-        return Promise { d in
-            self.fetchRecordWithID(recordID, completionHandler: proxy(d))
+        return Promise { f, r in
+            self.fetchRecordWithID(recordID, completionHandler: proxy(f, r))
         }
     }
 
     public func fetchRecordZoneWithID(recordZoneID: CKRecordZoneID) -> Promise<CKRecordZone> {
-        return Promise { d in
-            self.fetchRecordZoneWithID(recordZoneID, completionHandler: proxy(d))
+        return Promise { f, r in
+            self.fetchRecordZoneWithID(recordZoneID, completionHandler: proxy(f, r))
         }
     }
 
     public func fetchSubscriptionWithID(subscriptionID: String) -> Promise<CKSubscription> {
-        return Promise { d in
-            self.fetchSubscriptionWithID(subscriptionID, completionHandler: proxy(d))
+        return Promise { f, r in
+            self.fetchSubscriptionWithID(subscriptionID, completionHandler: proxy(f, r))
         }
     }
 
     public func fetchAllRecordZones() -> Promise<[CKRecordZone]> {
-        return Promise { d in
+        return Promise { f, r in
             self.fetchAllRecordZonesWithCompletionHandler({
-                proxy(d)(value: $0 as [CKRecordZone], error: $1)
+                proxy(f, r)(value: $0 as! [CKRecordZone], error: $1)
             })
         }
     }
 
     public func fetchAllSubscriptions() -> Promise<[CKSubscription]> {
-        return Promise { d in
+        return Promise { f, r in
             self.fetchAllSubscriptionsWithCompletionHandler({
-                proxy(d)(value: $0 as [CKSubscription], error: $1)
+                proxy(f, r)(value: $0 as! [CKSubscription], error: $1)
             })
         }
     }
 
     public func save(record: CKRecord) -> Promise<CKRecord> {
-        return Promise { d in
-            self.saveRecord(record, completionHandler: proxy(d))
+        return Promise { f, r in
+            self.saveRecord(record, completionHandler: proxy(f, r))
         }
     }
 
     public func save(recordZone: CKRecordZone) -> Promise<CKRecordZone> {
-        return Promise { d in
-            self.saveRecordZone(recordZone, completionHandler: proxy(d))
+        return Promise { f, r in
+            self.saveRecordZone(recordZone, completionHandler: proxy(f, r))
         }
     }
 
     public func save(subscription: CKSubscription) -> Promise<CKSubscription> {
-        return Promise { d in
-            self.saveSubscription(subscription, completionHandler: proxy(d))
+        return Promise { f, r in
+            self.saveSubscription(subscription, completionHandler: proxy(f, r))
         }
     }
 
     public func deleteRecordWithID(recordID: CKRecordID) -> Promise<CKRecordID> {
-        return Promise { d in
-            self.deleteRecordWithID(recordID, completionHandler: proxy(d))
+        return Promise { f, r in
+            self.deleteRecordWithID(recordID, completionHandler: proxy(f, r))
         }
     }
 
     public func deleteRecordZoneWithID(zoneID: CKRecordZoneID) -> Promise<CKRecordZoneID> {
-        return Promise { d in
-            self.deleteRecordZoneWithID(zoneID, completionHandler: proxy(d))
+        return Promise { f, r in
+            self.deleteRecordZoneWithID(zoneID, completionHandler: proxy(f, r))
         }
     }
 
     public func deleteSubscriptionWithID(subscriptionID: String) -> Promise<String> {
-        return Promise { d in
-            self.deleteSubscriptionWithID(subscriptionID, completionHandler: proxy(d))
+        return Promise { f, r in
+            self.deleteSubscriptionWithID(subscriptionID, completionHandler: proxy(f, r))
         }
     }
 
     public func performQuery(query: CKQuery, inZoneWithID zoneID: CKRecordZoneID? = nil) -> Promise<[CKRecord]> {
-        return Promise { d in
+        return Promise { f, r in
             self.performQuery(query, inZoneWithID: zoneID) {
-                proxy(d)(value: $0 as [CKRecord], error: $1)
+                proxy(f, r)(value: $0 as! [CKRecord], error: $1)
             }
         }
     }
 
     public func performQuery(query: CKQuery, inZoneWithID zoneID: CKRecordZoneID? = nil) -> Promise<CKRecord?> {
-        return Promise { d in
+        return Promise { fulfill, reject in
             self.performQuery(query, inZoneWithID: zoneID) { (records, error) in
                 if records == nil {
-                    d.reject(error)
+                    reject(error)
                 } else if records.isEmpty {
-                    d.fulfill(nil)
+                    fulfill(nil)
                 } else {
-                    d.fulfill((records as [CKRecord])[0])
+                    fulfill((records as! [CKRecord])[0])
                 }
             }
         }

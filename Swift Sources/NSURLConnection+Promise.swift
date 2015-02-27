@@ -17,7 +17,7 @@ extension NSURLResponse {
 
 private func fetch<T>(var request: NSURLRequest, body: ((T) -> Void, (NSError) -> Void, NSData, NSURLResponse) -> Void) -> Promise<T> {
     if request.valueForHTTPHeaderField("User-Agent") == nil {
-        let rq = request.mutableCopy() as NSMutableURLRequest
+        let rq = request.mutableCopy() as! NSMutableURLRequest
         rq.setValue(OMGUserAgent(), forHTTPHeaderField:"User-Agent")
         request = rq
     }
@@ -33,7 +33,7 @@ private func fetch<T>(var request: NSURLRequest, body: ((T) -> Void, (NSError) -
             func rejecter(error: NSError) {
                 let info = NSMutableDictionary(dictionary: error.userInfo ?? [:])
                 info[NSURLErrorFailingURLErrorKey] = request.URL
-                info[NSURLErrorFailingURLStringErrorKey] = request.URL.absoluteString
+                info[NSURLErrorFailingURLStringErrorKey] = request.URL!.absoluteString
                 if data != nil {
                     info[PMKURLErrorFailingDataKey] = data!
                     let encoding = rsp?.stringEncoding ?? NSUTF8StringEncoding
@@ -42,7 +42,7 @@ private func fetch<T>(var request: NSURLRequest, body: ((T) -> Void, (NSError) -
                     }
                 }
                 if rsp != nil { info[PMKURLErrorFailingURLResponseKey] = rsp! }
-                rejunker(NSError(domain:error.domain, code:error.code, userInfo:info))
+                rejunker(NSError(domain:error.domain, code:error.code, userInfo:info as [NSObject : AnyObject]))
             }
 
             if err != nil {
@@ -81,7 +81,7 @@ private func NSJSONFromDataT<T>(data: NSData) -> Promise<T> {
         var info = NSMutableDictionary()
         info[NSLocalizedDescriptionKey] = "The server returned JSON in an unexpected arrangement"
         if let jo:AnyObject = json { info[PMKJSONErrorJSONObjectKey] = jo }
-        let error = NSError(domain:PMKErrorDomain, code:PMKJSONError, userInfo:info)
+        let error = NSError(domain:PMKErrorDomain, code:PMKJSONError, userInfo:info as [NSObject : AnyObject])
         return Promise(error: error)
     }
 }
@@ -185,7 +185,7 @@ extension NSURLConnection {
         return fetch(rq) { (fulfiller, rejecter, data, rsp) in
             let str = NSString(data: data, encoding:rsp.stringEncoding)
             if str != nil {
-                fulfiller(str!)
+                fulfiller(str! as String)
             } else {
                 let info = [NSLocalizedDescriptionKey: "The server response was not textual"]
                 rejecter(NSError(domain:NSURLErrorDomain, code: NSURLErrorBadServerResponse, userInfo:info))

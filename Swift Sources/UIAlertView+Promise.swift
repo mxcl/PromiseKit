@@ -9,7 +9,7 @@ class UIAlertViewProxy: NSObject, UIAlertViewDelegate {
         PMKRetain(self)
     }
 
-    func alertView(alertView: UIAlertView!, didDismissWithButtonIndex buttonIndex: Int) {
+    func alertView(alertView: UIAlertView, didDismissWithButtonIndex buttonIndex: Int) {
         fulfiller(buttonIndex)
         PMKRelease(self)
     }
@@ -19,7 +19,7 @@ class UIAlertViewProxy: NSObject, UIAlertViewDelegate {
 extension UIAlertView {
     public func promise() -> Promise<Int> {
         let deferred = Promise<Int>.defer()
-        delegate = UIAlertViewProxy(deferred.fulfill)
+        delegate = UIAlertViewProxy(fulfiller: deferred.fulfill)
         show()
         return deferred.promise
     }

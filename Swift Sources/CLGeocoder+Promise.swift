@@ -8,7 +8,7 @@ extension CLGeocoder {
                 if $1 != nil {
                     rejecter($1)
                 } else {
-                    fulfiller($0[0] as CLPlacemark)
+                    fulfiller($0[0] as! CLPlacemark)
                 }
             }
         }
@@ -20,7 +20,7 @@ extension CLGeocoder {
                 if $1 != nil {
                     rejecter($1)
                 } else {
-                    fulfiller($0[0] as CLPlacemark)
+                    fulfiller($0[0] as! CLPlacemark)
                 }
             }
         }
@@ -32,7 +32,7 @@ extension CLGeocoder {
                 if $1 != nil {
                     rejecter($1)
                 } else {
-                    fulfiller($0[0] as CLPlacemark)
+                    fulfiller($0[0] as! CLPlacemark)
                 }
             }
         }

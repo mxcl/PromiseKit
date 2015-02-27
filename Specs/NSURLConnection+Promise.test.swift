@@ -17,7 +17,7 @@ class TestNSURLConnectionPlusPromise: XCTestCase {
     func test_001() {
         let e1 = expectation()
         NSURLConnection.promise(dictionaryJSON).then { (json:NSDictionary) -> Int in
-            let hi = json["data"]! as String
+            let hi = json["data"]! as! String
             XCTAssertEqual(hi as String, "hi")
             return 1
         }.catch { _->Int in
@@ -35,7 +35,7 @@ class TestNSURLConnectionPlusPromise: XCTestCase {
             XCTFail()
             return 1
         }.catch { (err:NSError) -> Int in
-            XCTAssertEqual(err.domain, NSCocoaErrorDomain! as String)
+            XCTAssertEqual(err.domain, NSCocoaErrorDomain as String)
             XCTAssertEqual(err.code, 3840)
             return 1234
         }.then { (value:Int) -> Void in
@@ -53,7 +53,7 @@ class TestNSURLConnectionPlusPromise: XCTestCase {
         }.catch { (err:NSError) -> Int in
             XCTAssertEqual(err.domain, PMKErrorDomain)
             XCTAssertEqual(err.code, PMKJSONError)
-            XCTAssertEqual(err.userInfo![PMKJSONErrorJSONObjectKey] as NSDictionary, ["data": "hi"])
+            XCTAssertEqual(err.userInfo![PMKJSONErrorJSONObjectKey] as! NSDictionary, ["data": "hi"])
             return 1234
         }.then { (value:Int) -> Void in
             XCTAssertEqual(value, 1234)
@@ -65,7 +65,7 @@ class TestNSURLConnectionPlusPromise: XCTestCase {
     func testParsesJSONArray() {
         let e1 = expectation()
         NSURLConnection.promise(arrayJSON).then { (json:NSArray) -> Int in
-            let hi = json[1] as String
+            let hi = json[1] as! String
             XCTAssertEqual(hi as String, "hi")
             e1.fulfill()
             return 1
