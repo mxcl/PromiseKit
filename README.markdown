@@ -6,7 +6,13 @@ Modern development is highly asynchronous: isn’t it about time iOS developers 
 
 * Read PromiseKit’s [comprehensive learning guide](http://promisekit.org/introduction).
 * Read the [API documentation](http://cocoadocs.org/docsets/PromiseKit/).
-* [Integrate](http://promisekit.org/getting-started) PromiseKit into your existing projects.
+* [Integrate](http://promisekit.org/getting-started) promises into your existing projects.
+
+## How To Get Started… Quickly
+
+```ruby
+pod "PromiseKit"
+```
 
 # Donations
 

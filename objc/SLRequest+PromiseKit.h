@@ -13,11 +13,26 @@ extern NSString *const SLRequestPromiseKitOriginalStatusCodeKey PMK_DEPRECATED("
 extern NSString *const SLRequestPromiseKitOriginalResponseDataKey PMK_DEPRECATED("Use PMKURLErrorFailingURLResponseKey");
 extern NSString *const SLRequestPromiseKitResponseDataAsTextKey PMK_DEPRECATED("Use PMKURLErrorFailingStringKey");
 
+/**
+ To import the `SLRequest` category:
+
+    pod "PromiseKit/SLRequest"
+
+ Or you can import all categories on `Social`:
+
+    pod "PromiseKit/Social"
+*/
 @interface SLRequest (PromiseKit)
 /**
- `thens` the decoded JSON, the NSHTTPURLReponse and finally the original `NSData`
+ Performs the request asynchronously.
 
- If the response is not JSON, then the first parameter will be the `NSData`, ie. the same as the third.
+ @return A promise that fulfills with three parameters:
+ 1) The response decoded as JSON.
+ 2) The `NSHTTPURLResponse`.
+ 3) The raw `NSData` response.
+
+ @warning *Note* If PromiseKit determines the response is not JSON, the first
+ parameter will instead be plain `NSData`.
 */
 - (PMKPromise *)promise;
 

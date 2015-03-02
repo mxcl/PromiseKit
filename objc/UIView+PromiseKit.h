@@ -4,6 +4,19 @@
 //  Created by Masafumi Yoshida on 2014/07/11.
 //  Copyright (c) 2014年 DeNA. All rights reserved.
 
+/**
+ To import the `UIView` category:
+
+    pod "PromiseKit/UIView"
+
+ Or you can import all categories on `UIKit`:
+
+    pod "PromiseKit/UIKit"
+
+ Or `UIKit` is one of the categories imported by the umbrella pod:
+
+    pod "PromiseKit"
+*/
 @interface UIView (PromiseKit)
 
 /**

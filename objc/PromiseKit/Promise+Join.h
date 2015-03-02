@@ -4,14 +4,23 @@
 
 @interface PMKPromise (Join)
 /**
-Returns a new Promise that is resolved only when all passed Promises are resolved.
+ Creates a new promise that resolves only when all provided promises have resolved.
 
-The returned `Promise` is resolved once all of the `Promise`s in the array are resolved (either rejected or fulfilled). Unlike `+when`, the returned `Promise` is not rejected immediately if one of the promises in the array are rejected. In fact, it is never rejected, even if all the promises in the array were.
+ Typically, you should use `+when:`.
 
-The promise will resolve to a pair `NSArray *fulfilledResults, NSArray *rejectedErrors`. If no promises were rejected, `rejectedErrors` will be `nil`.
+ @param promises An array of promises.
 
-@param promises an array of Promises.
+ @return A promise that thens two parameters:
+
+ 1) An array of values from the promises that fulfilled.
+ 2) An array of errors from the promises that rejected or nil if all promises fulfilled.
+
+ This promise is not rejectable.
+
+ @warning *Important* It is not possible to know which promises fulfilled and which rejected.
+
+ @see when
 */
-+ (PMKPromise *)join:(NSArray*)promises;
++ (PMKPromise *)join:(NSArray *)promises;
 
 @end

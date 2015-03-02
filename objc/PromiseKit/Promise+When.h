@@ -4,20 +4,25 @@
 
 @interface PMKPromise (When)
 /**
-Returns a new Promise that is fulfilled when all passed Promises are fulfilled.
+Returns a new promise that is fulfilled if and when all the provided promises are fulfilled.
 
-If an array is passed then the returned `Promise` is fulfilled once all of the `Promise`s in the array are fulfilled. The returned Promise is rejected immediately if *any* of the `Promise`s received by `when` fail, discarding all other Promise values (thus you only get one error in any catch handler you provide).
+@param promiseOrArrayOfPromisesOrValue The input upon which to wait before resolving this promise.
 
-The returned `Promise` is resolved with an array of results indexed as the original array passed to when. If you pass a single value to when, you will not get an array in subsequent `then`s.
+If an array is passed then the returned promise is fulfilled once all the provided promises are fulfilled. If *any* of the provided promises reject, the returned promise is immediately rejected with that promise’s rejection error.
 
-@param promiseOrArrayOfPromisesOrValue an array of Promises, a single Promise or a single value of any type.
+@return A promise that is resolved with either:
+1. An array of values from the provided array of promises.
+2. The value from the provided promise.
+3. The provided non-promise object.
+
+Note that passing an `NSError` to when will reject the returned promise.
 */
 + (PMKPromise *)when:(id)promiseOrArrayOfPromisesOrValue;
 
 /**
- Same as when, though only takes an object that implements `NSFastEnumeration` (`NSArray` implements `NSFastEnumeration`)
+ Alias for `+when:` provided due to ES6 specifications.
 
- Alias provided due to ES6 specifications.
+ @see when
 */
 + (PMKPromise *)all:(id<NSFastEnumeration, NSObject>)enumerable;
 

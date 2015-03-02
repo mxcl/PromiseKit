@@ -1,6 +1,15 @@
 #import <CloudKit/CKDatabase.h>
 #import <PromiseKit/fwd.h>
 
+/**
+ To import the `CKDatabase` category:
+
+    pod "PromiseKit/CKDatabase"
+
+ Or you can import all categories on `CloudKit`:
+
+    pod "PromiseKit/CloudKit"
+*/
 @interface CKDatabase (PromiseKit)
 
 - (PMKPromise *)fetchRecordWithID:(CKRecordID *)recordID;
