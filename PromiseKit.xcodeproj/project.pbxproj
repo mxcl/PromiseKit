@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		630D44EA1A8BB02D007A06CD /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 637D0F1119437D4C0059AD78 /* PromiseKit.framework */; };
 		633C27AD1944AB3C00185338 /* CLLocationManager+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 633C27AB1944A98700185338 /* CLLocationManager+Promise.swift */; };
+		635366181AABAA6B0091EE6E /* OMGHTTPURLRQ.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 630D44ED1A8BBA42007A06CD /* OMGHTTPURLRQ.framework */; };
 		635D3C8F1959D3B00031F972 /* 2.1.2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D3C861959D3B00031F972 /* 2.1.2.swift */; };
 		635D3C901959D3B00031F972 /* 2.1.3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D3C871959D3B00031F972 /* 2.1.3.swift */; };
 		635D3C911959D3B00031F972 /* 2.2.2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D3C881959D3B00031F972 /* 2.2.2.swift */; };
@@ -125,6 +126,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				635366181AABAA6B0091EE6E /* OMGHTTPURLRQ.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -230,10 +232,10 @@
 		63DDE17E1947B946005D34A3 /* … */ = {
 			isa = PBXGroup;
 			children = (
-				630D44ED1A8BBA42007A06CD /* OMGHTTPURLRQ.framework */,
 				63FCFEF51950F0FB00FB3A47 /* test-utils.swift */,
 				6351991B193FCD4C002CF47D /* tests-Info.plist */,
 				63BC394D19422A9600D8CD9A /* framework-Info.plist */,
+				630D44ED1A8BBA42007A06CD /* OMGHTTPURLRQ.framework */,
 				637D0F1119437D4C0059AD78 /* PromiseKit.framework */,
 				637D0F1219437D4C0059AD78 /* PromiseKitTests.xctest */,
 			);
