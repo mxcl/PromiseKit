@@ -1332,21 +1332,47 @@ PMKPromise *gcdreject() {
     XCTAssertEqual(x, 3);
 }
 
-- (void)test_unhandled_error_handler_not_called_if_double_rejected {
-    XCTestExpectation *ex1 = [self expectationWithDescription:@""];
+- (void)test_79_unhandled_error_handler_not_called_reject_passed_through {
+    @autoreleasepool {
+	    XCTestExpectation *ex1 = [self expectationWithDescription:@""];
+	
+		PMKUnhandledErrorHandler = ^(id e){
+			XCTFail();
+		};
 
-	PMKUnhandledErrorHandler = ^(id e){
-		XCTFail();
-	};
+		[PMKPromise new:^(void(^fulfill)(id), void(^reject)(id)){
+			dispatch_promise(^{
+				@throw @1;
+			}).catch(reject);
+		}].catch(^{
+			[ex1 fulfill];
+		});
+	}
 
-	[PMKPromise new:^(void(^fulfill)(id), void(^reject)(id)){
-		dispatch_promise(^{
-			@throw @1;
-		}).catch(reject);
-	}].finally(^{
-		[ex1 fulfill];
-	});
+    [self waitForExpectationsWithTimeout:2 handler:nil];
+}
 
+- (void)test_80_unhandled_error_handler_called_if_reject_passed_through {
+    @autoreleasepool {
+	    XCTestExpectation *ex1 = [self expectationWithDescription:@""];
+	    XCTestExpectation *ex2 = [self expectationWithDescription:@""];
+		
+		__block BOOL ex1Fulfilled = NO;
+
+		PMKUnhandledErrorHandler = ^(id e){
+			XCTAssert(ex1Fulfilled);
+			[ex2 fulfill];
+		};
+
+		[PMKPromise new:^(void(^fulfill)(id), void(^reject)(id)){
+			dispatch_promise(^{
+				@throw @1;
+			}).catch(reject);
+		}].finally(^{
+			[ex1 fulfill];
+			ex1Fulfilled = YES;
+		});
+	}
     [self waitForExpectationsWithTimeout:2 handler:nil];
 }
 
