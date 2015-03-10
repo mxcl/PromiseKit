@@ -1332,6 +1332,24 @@ PMKPromise *gcdreject() {
     XCTAssertEqual(x, 3);
 }
 
+- (void)test_unhandled_error_handler_not_called_if_double_rejected {
+    XCTestExpectation *ex1 = [self expectationWithDescription:@""];
+
+	PMKUnhandledErrorHandler = ^(id e){
+		XCTFail();
+	};
+
+	[PMKPromise new:^(void(^fulfill)(id), void(^reject)(id)){
+		dispatch_promise(^{
+			@throw @1;
+		}).catch(reject);
+	}].finally(^{
+		[ex1 fulfill];
+	});
+
+    [self waitForExpectationsWithTimeout:2 handler:nil];
+}
+
 @end
 
 
