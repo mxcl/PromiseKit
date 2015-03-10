@@ -66,7 +66,6 @@ def clone! repo
 end
 
 def prepare!
-  clone! "https://github.com/mxcl/ChuzzleKit"
   clone! "https://github.com/mxcl/OMGHTTPURLRQ"
 
   File.open('/tmp/PromiseKitTests.m', 'w') do |f|
