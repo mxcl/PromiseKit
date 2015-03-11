@@ -26,13 +26,8 @@
 }
 
 - (PMKPromise *)renewCredentialsForAccount:(ACAccount *)account {
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-        [self renewCredentialsForAccount:account completion:^(ACAccountCredentialRenewResult renewResult, NSError *error) {
-            if (error) {
-                rejecter(error);
-            } else
-                fulfiller(@(renewResult));
-        }];
+    return [PMKPromise promiseWithIntegerAdapter:^(PMKIntegerAdapter adapter) {
+        [self renewCredentialsForAccount:account completion:adapter];
     }];
 }
 
@@ -41,13 +36,8 @@
 }
 
 - (PMKPromise *)saveAccount:(ACAccount *)account {
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-        [self saveAccount:account withCompletionHandler:^(BOOL success, NSError *error) {
-            if (!success) {
-                rejecter(error);
-            } else
-                fulfiller(nil);
-        }];
+    return [PMKPromise promiseWithBooleanAdapter:^(PMKBooleanAdapter adapter) {
+        [self saveAccount:account withCompletionHandler:adapter];
     }];
 }
 
@@ -56,13 +46,8 @@
 }
 
 - (PMKPromise *)removeAccount:(ACAccount *)account {
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-        [self removeAccount:account withCompletionHandler:^(BOOL success, NSError *error) {
-            if (!success) {
-                rejecter(error);
-            } else
-                fulfiller(nil);
-        }];
+    return [PMKPromise promiseWithBooleanAdapter:^(PMKBooleanAdapter adapter) {
+        [self removeAccount:account withCompletionHandler:adapter];
     }];
 }
 

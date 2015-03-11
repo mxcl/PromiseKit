@@ -21,6 +21,12 @@ typedef void (^PromiseFulfiller)(id) PMK_DEPRECATED("Use PMKPromiseFulfiller");
 typedef void (^PromiseRejecter)(NSError *) PMK_DEPRECATED("Use PMKPromiseRejecter");
 typedef void (^PMKPromiseFulfiller)(id);
 typedef void (^PMKPromiseRejecter)(NSError *);
+typedef void (^PMKFulfiller)(id);
+typedef void (^PMKRejecter)(NSError *);
+typedef void (^PMKResolver)(id);
+typedef void (^PMKAdapter)(id, NSError *);
+typedef void (^PMKIntegerAdapter)(NSInteger, NSError *);
+typedef void (^PMKBooleanAdapter)(BOOL, NSError *);
 
 #define PMKErrorDomain @"PMKErrorDomain"
 #define PMKUnderlyingExceptionKey @"PMKUnderlyingExceptionKey"

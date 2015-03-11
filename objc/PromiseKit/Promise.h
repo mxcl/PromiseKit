@@ -135,7 +135,8 @@
 - (id)value;
 
 /**
- Create a new promise.
+ Create a new promise that is fulfilled or rejected with the provided
+ blocks.
 
  Use this method when wrapping asynchronous code that does *not* use
  promises so that this code can be used in promise chains.
@@ -157,7 +158,76 @@
  @see http://promisekit.org/sealing-your-own-promises/
  @see http://promisekit.org/wrapping-delegation/
 */
-+ (instancetype)new:(void(^)(PMKPromiseFulfiller fulfill, PMKPromiseRejecter reject))block;
++ (instancetype)new:(void(^)(PMKFulfiller fulfill, PMKRejecter reject))block;
+
+/**
+ Create a new promise that is resolved with the provided block.
+
+ Use this method when wrapping asynchronous code that does *not* use
+ promises so that this code can be used in promise chains.
+
+ Javascript promise libraries are the basis of most modern implementations
+ hence the signature of `+new:`. Such libraries allow anything to fulfill
+ or reject promises. Since in PromiseKit we only allow promises to be
+ rejected by `NSError` objects, we can determine the promise state with
+ one rather than two blocks.
+
+ Pass an `NSError` object to reject the promise, and anything else to
+ fulfill it.
+
+    return [PMKPromise promiseWithResolver:^(PMKResolver resolve){
+		PFQuery *query = [PFQuery …];
+		[query findObjectsInBackgroundWithBlock:^(id objs, id error){
+            resolve(objs ?: error);
+        }];
+	}];
+
+ @warning *Important* Resolving a promise with `nil` fulfills it.
+
+ @see http://promisekit.org/sealing-your-own-promises/
+*/
++ (instancetype)promiseWithResolver:(void (^)(PMKResolver resolve))block;
+
+/**
+ Create a new promise by adapting an existing asynchronous system.
+
+ The pattern of a completion block that passes two parameters, the first
+ the result and the second an `NSError` object is so common that we
+ provide this convenience adapter to make wrapping such systems more
+ elegant.
+
+    return [PMKPromise promiseWithAdapter:^(PMKAdapter adapter){
+        PFQuery *query = [PFQuery …];
+        [query findObjectsInBackgroundWithBlock:adapter];
+    }];
+
+ @warning *Important* If both parameters are nil, the promise fulfills,
+ if both are non-nil the promise rejects. This is per the convention.
+
+ @see http://promisekit.org/sealing-your-own-promises/
+*/
++ (instancetype)promiseWithAdapter:(void (^)(PMKAdapter adapter))block;
+
+/**
+ Create a new promise by adapting an existing asynchronous system.
+
+ Adapts asynchronous systems that complete with `^(NSInteger, NSError *)`.
+ NSInteger will cast to enums provided the enum has been wrapped with
+ `NS_ENUM`. All of Apple’s enums are, so if you find one that hasn’t you
+ may need to make a pull-request.
+
+ @see promiseWithAdapter
+*/
++ (instancetype)promiseWithIntegerAdapter:(void (^)(PMKIntegerAdapter adapter))block;
+
+/**
+ Create a new promise by adapting an existing asynchronous system.
+
+ Adapts asynchronous systems that complete with `^(BOOL, NSError *)`.
+
+ @see promiseWithAdapter
+*/
++ (instancetype)promiseWithBooleanAdapter:(void (^)(PMKBooleanAdapter adapter))block;
 
 @end
 
@@ -182,7 +252,8 @@ extern id __PMKArrayWithCount(NSUInteger, ...);
 /**
  Executes the provided block on a background queue.
 
- dispatch_promise is a convenient way to start a promise chain where the first step
+ dispatch_promise is a convenient way to start a promise chain where the
+ first step needs to run synchronously on a background queue.
 
  @param block The block to be executed in the background. Returning an `NSError` will reject the promise, everything else (including void) fulfills the promise.
 

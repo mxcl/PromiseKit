@@ -4,13 +4,8 @@
 @implementation MKMapSnapshotter (PromiseKit)
 
 - (PMKPromise *)promise {
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter) {
-        [self startWithCompletionHandler:^(MKMapSnapshot *snapshot, NSError *error) {
-            if (error)
-                rejecter(error);
-            else
-                fulfiller(snapshot);
-        }];
+    return [PMKPromise promiseWithAdapter:^(PMKAdapter adapter) {
+        [self startWithCompletionHandler:adapter];
     }];
 }
 
