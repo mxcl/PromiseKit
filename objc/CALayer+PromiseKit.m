@@ -8,7 +8,7 @@
 #import <objc/runtime.h>
 #import <PromiseKit/Promise.h>
 #import <QuartzCore/CAAnimation.h>
-#import <PromiseKit/CALayer+PromiseKit.h>
+#import "CALayer+PromiseKit.h"
 
 
 @interface PMKCAAnimationDelegate : NSObject {

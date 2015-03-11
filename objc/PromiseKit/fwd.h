@@ -1,3 +1,7 @@
+#import <Foundation/NSObjCRuntime.h>
+
+@class NSError;
+@class NSString;
 @class NSOperationQueue;
 @class PMKPromise;
 

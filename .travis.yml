@@ -1,2 +1,8 @@
 language: objective-c
-script: cd objc && ruby ./tests
+xcode_project: PromiseKit.xcodeproj
+xcode_scheme: PromiseKit
+xcode_sdk: iphonesimulator8.1
+before_install:
+  - brew update
+  - brew install carthage
+install: carthage bootstrap

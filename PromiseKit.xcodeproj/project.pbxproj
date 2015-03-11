@@ -29,6 +29,33 @@
 		6387398319D648E700F7BABC /* CKContainer+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6387398219D648E700F7BABC /* CKContainer+Promise.swift */; };
 		638739A519D655CE00F7BABC /* NSNotificationCenter+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638739A419D655CE00F7BABC /* NSNotificationCenter+Promise.swift */; };
 		638739A719D6584E00F7BABC /* UIView+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 638739A619D6584E00F7BABC /* UIView+Promise.swift */; };
+		638933A41AAF659F0078F9B6 /* PMKPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334B1AAF65050078F9B6 /* PMKPromise.m */; };
+		638933A51AAF659F0078F9B6 /* PMKPromise+Hang.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334C1AAF65050078F9B6 /* PMKPromise+Hang.m */; };
+		638933A61AAF659F0078F9B6 /* PMKPromise+Join.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334D1AAF65050078F9B6 /* PMKPromise+Join.m */; };
+		638933A71AAF659F0078F9B6 /* PMKPromise+Pause.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334E1AAF65050078F9B6 /* PMKPromise+Pause.m */; };
+		638933A81AAF659F0078F9B6 /* PMKPromise+Until.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334F1AAF65050078F9B6 /* PMKPromise+Until.m */; };
+		638933A91AAF659F0078F9B6 /* PMKPromise+When.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933501AAF65050078F9B6 /* PMKPromise+When.m */; };
+		638933AA1AAF659F0078F9B6 /* PMKPromise+Zalgo.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933511AAF65050078F9B6 /* PMKPromise+Zalgo.m */; };
+		638933AC1AAF65AA0078F9B6 /* ACAccountStore+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933321AAF65050078F9B6 /* ACAccountStore+PromiseKit.m */; };
+		638933AE1AAF65AA0078F9B6 /* AVAudioSession+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933341AAF65050078F9B6 /* AVAudioSession+PromiseKit.m */; };
+		638933B01AAF65AA0078F9B6 /* CALayer+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933361AAF65050078F9B6 /* CALayer+PromiseKit.m */; };
+		638933B21AAF65AA0078F9B6 /* CKContainer+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933381AAF65050078F9B6 /* CKContainer+PromiseKit.m */; };
+		638933B41AAF65AA0078F9B6 /* CKDatabase+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389333A1AAF65050078F9B6 /* CKDatabase+PromiseKit.m */; };
+		638933B61AAF65AA0078F9B6 /* CLGeocoder+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389333C1AAF65050078F9B6 /* CLGeocoder+PromiseKit.m */; };
+		638933B81AAF65AA0078F9B6 /* CLLocationManager+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389333E1AAF65050078F9B6 /* CLLocationManager+PromiseKit.m */; };
+		638933BA1AAF65AA0078F9B6 /* MKDirections+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933401AAF65050078F9B6 /* MKDirections+PromiseKit.m */; };
+		638933BC1AAF65AA0078F9B6 /* MKMapSnapshotter+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933421AAF65050078F9B6 /* MKMapSnapshotter+PromiseKit.m */; };
+		638933BE1AAF65AA0078F9B6 /* NSFileManager+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933441AAF65050078F9B6 /* NSFileManager+PromiseKit.m */; };
+		638933C11AAF65AA0078F9B6 /* NSNotificationCenter+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933461AAF65050078F9B6 /* NSNotificationCenter+PromiseKit.m */; };
+		638933C51AAF65AA0078F9B6 /* NSURLConnection+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334A1AAF65050078F9B6 /* NSURLConnection+PromiseKit.m */; };
+		638933C71AAF65AA0078F9B6 /* SKRequest+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933601AAF65050078F9B6 /* SKRequest+PromiseKit.m */; };
+		638933C91AAF65AA0078F9B6 /* SLRequest+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933621AAF65050078F9B6 /* SLRequest+PromiseKit.m */; };
+		638933CB1AAF65AA0078F9B6 /* UIActionSheet+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933641AAF65050078F9B6 /* UIActionSheet+PromiseKit.m */; };
+		638933CD1AAF65AA0078F9B6 /* UIAlertView+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933661AAF65050078F9B6 /* UIAlertView+PromiseKit.m */; };
+		638933CF1AAF65AA0078F9B6 /* UIView+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933681AAF65050078F9B6 /* UIView+PromiseKit.m */; };
+		638933D11AAF65AA0078F9B6 /* UIViewController+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389336A1AAF65050078F9B6 /* UIViewController+PromiseKit.m */; };
+		638933DC1AAFC3B40078F9B6 /* initializers.spec.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933DA1AAFC3B40078F9B6 /* initializers.spec.m */; };
+		638933DD1AAFC3B40078F9B6 /* PMKPromise.test.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933DB1AAFC3B40078F9B6 /* PMKPromise.test.m */; };
 		639431AE1A24EF9A00883C3B /* after.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639431AD1A24EF9A00883C3B /* after.swift */; };
 		63A5BF6D1950ABA200BDFD42 /* when.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A5BF6C1950ABA200BDFD42 /* when.swift */; };
 		63B287DA19DB448C004E8E3C /* CKDatabase+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B287D919DB448C004E8E3C /* CKDatabase+Promise.swift */; };
@@ -100,6 +127,63 @@
 		6387398219D648E700F7BABC /* CKContainer+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CKContainer+Promise.swift"; path = "Swift Sources/CKContainer+Promise.swift"; sourceTree = "<group>"; };
 		638739A419D655CE00F7BABC /* NSNotificationCenter+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSNotificationCenter+Promise.swift"; path = "Swift Sources/NSNotificationCenter+Promise.swift"; sourceTree = SOURCE_ROOT; };
 		638739A619D6584E00F7BABC /* UIView+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIView+Promise.swift"; path = "Swift Sources/UIView+Promise.swift"; sourceTree = "<group>"; };
+		638933311AAF65050078F9B6 /* ACAccountStore+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ACAccountStore+PromiseKit.h"; path = "objc/ACAccountStore+PromiseKit.h"; sourceTree = "<group>"; };
+		638933321AAF65050078F9B6 /* ACAccountStore+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "ACAccountStore+PromiseKit.m"; path = "objc/ACAccountStore+PromiseKit.m"; sourceTree = "<group>"; };
+		638933331AAF65050078F9B6 /* AVAudioSession+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "AVAudioSession+PromiseKit.h"; path = "objc/AVAudioSession+PromiseKit.h"; sourceTree = "<group>"; };
+		638933341AAF65050078F9B6 /* AVAudioSession+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "AVAudioSession+PromiseKit.m"; path = "objc/AVAudioSession+PromiseKit.m"; sourceTree = "<group>"; };
+		638933351AAF65050078F9B6 /* CALayer+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CALayer+PromiseKit.h"; path = "objc/CALayer+PromiseKit.h"; sourceTree = "<group>"; };
+		638933361AAF65050078F9B6 /* CALayer+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CALayer+PromiseKit.m"; path = "objc/CALayer+PromiseKit.m"; sourceTree = "<group>"; };
+		638933371AAF65050078F9B6 /* CKContainer+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKContainer+PromiseKit.h"; path = "objc/CKContainer+PromiseKit.h"; sourceTree = "<group>"; };
+		638933381AAF65050078F9B6 /* CKContainer+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKContainer+PromiseKit.m"; path = "objc/CKContainer+PromiseKit.m"; sourceTree = "<group>"; };
+		638933391AAF65050078F9B6 /* CKDatabase+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKDatabase+PromiseKit.h"; path = "objc/CKDatabase+PromiseKit.h"; sourceTree = "<group>"; };
+		6389333A1AAF65050078F9B6 /* CKDatabase+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKDatabase+PromiseKit.m"; path = "objc/CKDatabase+PromiseKit.m"; sourceTree = "<group>"; };
+		6389333B1AAF65050078F9B6 /* CLGeocoder+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CLGeocoder+PromiseKit.h"; path = "objc/CLGeocoder+PromiseKit.h"; sourceTree = "<group>"; };
+		6389333C1AAF65050078F9B6 /* CLGeocoder+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CLGeocoder+PromiseKit.m"; path = "objc/CLGeocoder+PromiseKit.m"; sourceTree = "<group>"; };
+		6389333D1AAF65050078F9B6 /* CLLocationManager+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CLLocationManager+PromiseKit.h"; path = "objc/CLLocationManager+PromiseKit.h"; sourceTree = "<group>"; };
+		6389333E1AAF65050078F9B6 /* CLLocationManager+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CLLocationManager+PromiseKit.m"; path = "objc/CLLocationManager+PromiseKit.m"; sourceTree = "<group>"; };
+		6389333F1AAF65050078F9B6 /* MKDirections+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MKDirections+PromiseKit.h"; path = "objc/MKDirections+PromiseKit.h"; sourceTree = "<group>"; };
+		638933401AAF65050078F9B6 /* MKDirections+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MKDirections+PromiseKit.m"; path = "objc/MKDirections+PromiseKit.m"; sourceTree = "<group>"; };
+		638933411AAF65050078F9B6 /* MKMapSnapshotter+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MKMapSnapshotter+PromiseKit.h"; path = "objc/MKMapSnapshotter+PromiseKit.h"; sourceTree = "<group>"; };
+		638933421AAF65050078F9B6 /* MKMapSnapshotter+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MKMapSnapshotter+PromiseKit.m"; path = "objc/MKMapSnapshotter+PromiseKit.m"; sourceTree = "<group>"; };
+		638933431AAF65050078F9B6 /* NSFileManager+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+PromiseKit.h"; path = "objc/NSFileManager+PromiseKit.h"; sourceTree = "<group>"; };
+		638933441AAF65050078F9B6 /* NSFileManager+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSFileManager+PromiseKit.m"; path = "objc/NSFileManager+PromiseKit.m"; sourceTree = "<group>"; };
+		638933451AAF65050078F9B6 /* NSNotificationCenter+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNotificationCenter+PromiseKit.h"; path = "objc/NSNotificationCenter+PromiseKit.h"; sourceTree = "<group>"; };
+		638933461AAF65050078F9B6 /* NSNotificationCenter+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNotificationCenter+PromiseKit.m"; path = "objc/NSNotificationCenter+PromiseKit.m"; sourceTree = "<group>"; };
+		638933471AAF65050078F9B6 /* NSTask+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSTask+PromiseKit.h"; path = "objc/NSTask+PromiseKit.h"; sourceTree = "<group>"; };
+		638933481AAF65050078F9B6 /* NSTask+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSTask+PromiseKit.m"; path = "objc/NSTask+PromiseKit.m"; sourceTree = "<group>"; };
+		638933491AAF65050078F9B6 /* NSURLConnection+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURLConnection+PromiseKit.h"; path = "objc/NSURLConnection+PromiseKit.h"; sourceTree = "<group>"; };
+		6389334A1AAF65050078F9B6 /* NSURLConnection+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURLConnection+PromiseKit.m"; path = "objc/NSURLConnection+PromiseKit.m"; sourceTree = "<group>"; };
+		6389334B1AAF65050078F9B6 /* PMKPromise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PMKPromise.m; path = objc/PMKPromise.m; sourceTree = "<group>"; };
+		6389334C1AAF65050078F9B6 /* PMKPromise+Hang.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PMKPromise+Hang.m"; path = "objc/PMKPromise+Hang.m"; sourceTree = "<group>"; };
+		6389334D1AAF65050078F9B6 /* PMKPromise+Join.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PMKPromise+Join.m"; path = "objc/PMKPromise+Join.m"; sourceTree = "<group>"; };
+		6389334E1AAF65050078F9B6 /* PMKPromise+Pause.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PMKPromise+Pause.m"; path = "objc/PMKPromise+Pause.m"; sourceTree = "<group>"; };
+		6389334F1AAF65050078F9B6 /* PMKPromise+Until.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PMKPromise+Until.m"; path = "objc/PMKPromise+Until.m"; sourceTree = "<group>"; };
+		638933501AAF65050078F9B6 /* PMKPromise+When.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PMKPromise+When.m"; path = "objc/PMKPromise+When.m"; sourceTree = "<group>"; };
+		638933511AAF65050078F9B6 /* PMKPromise+Zalgo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PMKPromise+Zalgo.m"; path = "objc/PMKPromise+Zalgo.m"; sourceTree = "<group>"; };
+		638933531AAF65050078F9B6 /* NSMethodSignatureForBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSMethodSignatureForBlock.m; path = objc/Private/NSMethodSignatureForBlock.m; sourceTree = "<group>"; };
+		638933561AAF65050078F9B6 /* fwd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fwd.h; path = objc/PromiseKit/fwd.h; sourceTree = "<group>"; };
+		638933571AAF65050078F9B6 /* Promise+Hang.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Promise+Hang.h"; path = "objc/PromiseKit/Promise+Hang.h"; sourceTree = "<group>"; };
+		638933581AAF65050078F9B6 /* Promise+Join.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Promise+Join.h"; path = "objc/PromiseKit/Promise+Join.h"; sourceTree = "<group>"; };
+		638933591AAF65050078F9B6 /* Promise+Pause.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Promise+Pause.h"; path = "objc/PromiseKit/Promise+Pause.h"; sourceTree = "<group>"; };
+		6389335A1AAF65050078F9B6 /* Promise+Until.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Promise+Until.h"; path = "objc/PromiseKit/Promise+Until.h"; sourceTree = "<group>"; };
+		6389335B1AAF65050078F9B6 /* Promise+When.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Promise+When.h"; path = "objc/PromiseKit/Promise+When.h"; sourceTree = "<group>"; };
+		6389335C1AAF65050078F9B6 /* Promise+Zalgo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Promise+Zalgo.h"; path = "objc/PromiseKit/Promise+Zalgo.h"; sourceTree = "<group>"; };
+		6389335D1AAF65050078F9B6 /* Promise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Promise.h; path = objc/PromiseKit/Promise.h; sourceTree = "<group>"; };
+		6389335E1AAF65050078F9B6 /* PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PromiseKit.h; path = objc/PromiseKit.h; sourceTree = "<group>"; };
+		6389335F1AAF65050078F9B6 /* SKRequest+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SKRequest+PromiseKit.h"; path = "objc/SKRequest+PromiseKit.h"; sourceTree = "<group>"; };
+		638933601AAF65050078F9B6 /* SKRequest+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "SKRequest+PromiseKit.m"; path = "objc/SKRequest+PromiseKit.m"; sourceTree = "<group>"; };
+		638933611AAF65050078F9B6 /* SLRequest+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SLRequest+PromiseKit.h"; path = "objc/SLRequest+PromiseKit.h"; sourceTree = "<group>"; };
+		638933621AAF65050078F9B6 /* SLRequest+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "SLRequest+PromiseKit.m"; path = "objc/SLRequest+PromiseKit.m"; sourceTree = "<group>"; };
+		638933631AAF65050078F9B6 /* UIActionSheet+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIActionSheet+PromiseKit.h"; path = "objc/UIActionSheet+PromiseKit.h"; sourceTree = "<group>"; };
+		638933641AAF65050078F9B6 /* UIActionSheet+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIActionSheet+PromiseKit.m"; path = "objc/UIActionSheet+PromiseKit.m"; sourceTree = "<group>"; };
+		638933651AAF65050078F9B6 /* UIAlertView+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIAlertView+PromiseKit.h"; path = "objc/UIAlertView+PromiseKit.h"; sourceTree = "<group>"; };
+		638933661AAF65050078F9B6 /* UIAlertView+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIAlertView+PromiseKit.m"; path = "objc/UIAlertView+PromiseKit.m"; sourceTree = "<group>"; };
+		638933671AAF65050078F9B6 /* UIView+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+PromiseKit.h"; path = "objc/UIView+PromiseKit.h"; sourceTree = "<group>"; };
+		638933681AAF65050078F9B6 /* UIView+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+PromiseKit.m"; path = "objc/UIView+PromiseKit.m"; sourceTree = "<group>"; };
+		638933691AAF65050078F9B6 /* UIViewController+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+PromiseKit.h"; path = "objc/UIViewController+PromiseKit.h"; sourceTree = "<group>"; };
+		6389336A1AAF65050078F9B6 /* UIViewController+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+PromiseKit.m"; path = "objc/UIViewController+PromiseKit.m"; sourceTree = "<group>"; };
+		638933DA1AAFC3B40078F9B6 /* initializers.spec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = initializers.spec.m; path = "Specs/Objective C Specs/initializers.spec.m"; sourceTree = SOURCE_ROOT; };
+		638933DB1AAFC3B40078F9B6 /* PMKPromise.test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PMKPromise.test.m; path = "Specs/Objective C Specs/PMKPromise.test.m"; sourceTree = SOURCE_ROOT; };
 		639431AD1A24EF9A00883C3B /* after.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = after.swift; path = "Swift Sources/after.swift"; sourceTree = "<group>"; };
 		63A5BF6C1950ABA200BDFD42 /* when.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = when.swift; path = "Swift Sources/when.swift"; sourceTree = SOURCE_ROOT; };
 		63B287D919DB448C004E8E3C /* CKDatabase+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CKDatabase+Promise.swift"; path = "Swift Sources/CKDatabase+Promise.swift"; sourceTree = "<group>"; };
@@ -169,6 +253,7 @@
 			children = (
 				6351991C193FCD4C002CF47D /* Promise.test.swift */,
 				637D0F17194387D90059AD78 /* NSURLConnection+Promise.test.swift */,
+				638933D61AAF72C10078F9B6 /* Objective C Specs */,
 				635D3C851959D3B00031F972 /* Promises/A+ Specs */,
 			);
 			name = Specs;
@@ -179,6 +264,7 @@
 			isa = PBXGroup;
 			children = (
 				63C494F01A966047009A449C /* Swift */,
+				638933301AAF64E60078F9B6 /* Objective C */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -199,6 +285,85 @@
 			name = "Promises/A+ Specs";
 			path = "Specs/Promises:A+ TestSuite";
 			sourceTree = SOURCE_ROOT;
+		};
+		638933301AAF64E60078F9B6 /* Objective C */ = {
+			isa = PBXGroup;
+			children = (
+				6389335E1AAF65050078F9B6 /* PromiseKit.h */,
+				638933531AAF65050078F9B6 /* NSMethodSignatureForBlock.m */,
+				638933A31AAF651E0078F9B6 /* Categories */,
+				638933561AAF65050078F9B6 /* fwd.h */,
+				6389335D1AAF65050078F9B6 /* Promise.h */,
+				6389334B1AAF65050078F9B6 /* PMKPromise.m */,
+				638933571AAF65050078F9B6 /* Promise+Hang.h */,
+				6389334C1AAF65050078F9B6 /* PMKPromise+Hang.m */,
+				638933581AAF65050078F9B6 /* Promise+Join.h */,
+				6389334D1AAF65050078F9B6 /* PMKPromise+Join.m */,
+				638933591AAF65050078F9B6 /* Promise+Pause.h */,
+				6389334E1AAF65050078F9B6 /* PMKPromise+Pause.m */,
+				6389335A1AAF65050078F9B6 /* Promise+Until.h */,
+				6389334F1AAF65050078F9B6 /* PMKPromise+Until.m */,
+				6389335B1AAF65050078F9B6 /* Promise+When.h */,
+				638933501AAF65050078F9B6 /* PMKPromise+When.m */,
+				6389335C1AAF65050078F9B6 /* Promise+Zalgo.h */,
+				638933511AAF65050078F9B6 /* PMKPromise+Zalgo.m */,
+			);
+			name = "Objective C";
+			sourceTree = "<group>";
+		};
+		638933A31AAF651E0078F9B6 /* Categories */ = {
+			isa = PBXGroup;
+			children = (
+				638933311AAF65050078F9B6 /* ACAccountStore+PromiseKit.h */,
+				638933321AAF65050078F9B6 /* ACAccountStore+PromiseKit.m */,
+				638933331AAF65050078F9B6 /* AVAudioSession+PromiseKit.h */,
+				638933341AAF65050078F9B6 /* AVAudioSession+PromiseKit.m */,
+				638933351AAF65050078F9B6 /* CALayer+PromiseKit.h */,
+				638933361AAF65050078F9B6 /* CALayer+PromiseKit.m */,
+				638933371AAF65050078F9B6 /* CKContainer+PromiseKit.h */,
+				638933381AAF65050078F9B6 /* CKContainer+PromiseKit.m */,
+				638933391AAF65050078F9B6 /* CKDatabase+PromiseKit.h */,
+				6389333A1AAF65050078F9B6 /* CKDatabase+PromiseKit.m */,
+				6389333B1AAF65050078F9B6 /* CLGeocoder+PromiseKit.h */,
+				6389333C1AAF65050078F9B6 /* CLGeocoder+PromiseKit.m */,
+				6389333D1AAF65050078F9B6 /* CLLocationManager+PromiseKit.h */,
+				6389333E1AAF65050078F9B6 /* CLLocationManager+PromiseKit.m */,
+				6389333F1AAF65050078F9B6 /* MKDirections+PromiseKit.h */,
+				638933401AAF65050078F9B6 /* MKDirections+PromiseKit.m */,
+				638933411AAF65050078F9B6 /* MKMapSnapshotter+PromiseKit.h */,
+				638933421AAF65050078F9B6 /* MKMapSnapshotter+PromiseKit.m */,
+				638933431AAF65050078F9B6 /* NSFileManager+PromiseKit.h */,
+				638933441AAF65050078F9B6 /* NSFileManager+PromiseKit.m */,
+				638933451AAF65050078F9B6 /* NSNotificationCenter+PromiseKit.h */,
+				638933461AAF65050078F9B6 /* NSNotificationCenter+PromiseKit.m */,
+				638933471AAF65050078F9B6 /* NSTask+PromiseKit.h */,
+				638933481AAF65050078F9B6 /* NSTask+PromiseKit.m */,
+				638933491AAF65050078F9B6 /* NSURLConnection+PromiseKit.h */,
+				6389334A1AAF65050078F9B6 /* NSURLConnection+PromiseKit.m */,
+				6389335F1AAF65050078F9B6 /* SKRequest+PromiseKit.h */,
+				638933601AAF65050078F9B6 /* SKRequest+PromiseKit.m */,
+				638933611AAF65050078F9B6 /* SLRequest+PromiseKit.h */,
+				638933621AAF65050078F9B6 /* SLRequest+PromiseKit.m */,
+				638933631AAF65050078F9B6 /* UIActionSheet+PromiseKit.h */,
+				638933641AAF65050078F9B6 /* UIActionSheet+PromiseKit.m */,
+				638933651AAF65050078F9B6 /* UIAlertView+PromiseKit.h */,
+				638933661AAF65050078F9B6 /* UIAlertView+PromiseKit.m */,
+				638933671AAF65050078F9B6 /* UIView+PromiseKit.h */,
+				638933681AAF65050078F9B6 /* UIView+PromiseKit.m */,
+				638933691AAF65050078F9B6 /* UIViewController+PromiseKit.h */,
+				6389336A1AAF65050078F9B6 /* UIViewController+PromiseKit.m */,
+			);
+			name = Categories;
+			sourceTree = "<group>";
+		};
+		638933D61AAF72C10078F9B6 /* Objective C Specs */ = {
+			isa = PBXGroup;
+			children = (
+				638933DA1AAFC3B40078F9B6 /* initializers.spec.m */,
+				638933DB1AAFC3B40078F9B6 /* PMKPromise.test.m */,
+			);
+			name = "Objective C Specs";
+			sourceTree = "<group>";
 		};
 		63C494F01A966047009A449C /* Swift */ = {
 			isa = PBXGroup;
@@ -396,6 +561,33 @@
 				63FCFEF71950F12900FB3A47 /* test-utils.swift in Sources */,
 				63E3C6B119423C120042BBDE /* Promise.test.swift in Sources */,
 				637D0F1A194387F60059AD78 /* NSURLConnection+Promise.test.swift in Sources */,
+				638933A41AAF659F0078F9B6 /* PMKPromise.m in Sources */,
+				638933DD1AAFC3B40078F9B6 /* PMKPromise.test.m in Sources */,
+				638933A51AAF659F0078F9B6 /* PMKPromise+Hang.m in Sources */,
+				638933A61AAF659F0078F9B6 /* PMKPromise+Join.m in Sources */,
+				638933AC1AAF65AA0078F9B6 /* ACAccountStore+PromiseKit.m in Sources */,
+				638933AE1AAF65AA0078F9B6 /* AVAudioSession+PromiseKit.m in Sources */,
+				638933B01AAF65AA0078F9B6 /* CALayer+PromiseKit.m in Sources */,
+				638933DC1AAFC3B40078F9B6 /* initializers.spec.m in Sources */,
+				638933B21AAF65AA0078F9B6 /* CKContainer+PromiseKit.m in Sources */,
+				638933B41AAF65AA0078F9B6 /* CKDatabase+PromiseKit.m in Sources */,
+				638933B61AAF65AA0078F9B6 /* CLGeocoder+PromiseKit.m in Sources */,
+				638933B81AAF65AA0078F9B6 /* CLLocationManager+PromiseKit.m in Sources */,
+				638933BA1AAF65AA0078F9B6 /* MKDirections+PromiseKit.m in Sources */,
+				638933BC1AAF65AA0078F9B6 /* MKMapSnapshotter+PromiseKit.m in Sources */,
+				638933BE1AAF65AA0078F9B6 /* NSFileManager+PromiseKit.m in Sources */,
+				638933C11AAF65AA0078F9B6 /* NSNotificationCenter+PromiseKit.m in Sources */,
+				638933C51AAF65AA0078F9B6 /* NSURLConnection+PromiseKit.m in Sources */,
+				638933C71AAF65AA0078F9B6 /* SKRequest+PromiseKit.m in Sources */,
+				638933C91AAF65AA0078F9B6 /* SLRequest+PromiseKit.m in Sources */,
+				638933CB1AAF65AA0078F9B6 /* UIActionSheet+PromiseKit.m in Sources */,
+				638933CD1AAF65AA0078F9B6 /* UIAlertView+PromiseKit.m in Sources */,
+				638933CF1AAF65AA0078F9B6 /* UIView+PromiseKit.m in Sources */,
+				638933D11AAF65AA0078F9B6 /* UIViewController+PromiseKit.m in Sources */,
+				638933A71AAF659F0078F9B6 /* PMKPromise+Pause.m in Sources */,
+				638933A81AAF659F0078F9B6 /* PMKPromise+Until.m in Sources */,
+				638933A91AAF659F0078F9B6 /* PMKPromise+When.m in Sources */,
+				638933AA1AAF659F0078F9B6 /* PMKPromise+Zalgo.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -497,6 +689,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -512,6 +705,7 @@
 				METAL_ENABLE_DEBUG_INFO = YES;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
@@ -522,6 +716,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CLANG_ENABLE_MODULES = YES;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
@@ -547,6 +742,11 @@
 					"DEBUG=1",
 					"$(inherited)",
 				);
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/objc",
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				INFOPLIST_FILE = "PromiseKit.xcodeproj/tests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				METAL_ENABLE_DEBUG_INFO = YES;
@@ -558,6 +758,11 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
+				HEADER_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/objc",
+					"$(inherited)",
+					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
+				);
 				INFOPLIST_FILE = "PromiseKit.xcodeproj/tests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				METAL_ENABLE_DEBUG_INFO = NO;

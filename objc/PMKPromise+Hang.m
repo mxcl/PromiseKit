@@ -1,3 +1,4 @@
+@import CoreFoundation.CFRunLoop;
 #import "PromiseKit/Promise+Hang.h"
 
 @implementation PMKPromise (Hang)
