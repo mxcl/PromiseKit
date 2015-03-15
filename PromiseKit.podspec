@@ -180,12 +180,25 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'Swift' do |ss|
-    ss.ios.framework = 'AssetsLibrary'
-    ss.dependency 'OMGHTTPURLRQ'
+    ss.default_subspec 'all'
     ss.ios.deployment_target = 8.0
-    ss.osx.deployment_target = 10.9
-    ss.ios.source_files = 'Swift Sources/*.{swift,h,m}'
-    ss.osx.source_files = Dir["Swift Sources/*.swift"] - ["Swift Sources/AVAudioSession.swift"] - Dir["Swift Sources/UI*"]
+    ss.osx.deployment_target = 10.9    
+
+    ss.subspec 'Promise' do |sss|
+      sss.source_files = ['Swift Sources/Promise.swift', 'Swift Sources/misc.swift', 'Swift Sources/constants.swift']
+    end
+
+    ss.subspec 'CloudKit' do |sss|
+      sss.dependency 'PromiseKit/Swift/Promise'
+      sss.source_files = ['Swift Sources/CK*.swift']
+    end
+    
+    ss.subspec 'all' do
+      sss.ios.framework = 'AssetsLibrary'
+      sss.dependency 'OMGHTTPURLRQ'
+      sss.ios.source_files = 'Swift Sources/*.{swift,h,m}'
+      sss.osx.source_files = Dir["Swift Sources/*.swift"] - ["Swift Sources/AVAudioSession.swift"] - Dir["Swift Sources/UI*"]
+    end
   end
 
 #### deprecated
