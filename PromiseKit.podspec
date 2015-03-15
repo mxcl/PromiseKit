@@ -180,7 +180,7 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'Swift' do |ss|
-    ss.default_subspec 'all'
+    ss.default_subspec = 'all'
     ss.ios.deployment_target = 8.0
     ss.osx.deployment_target = 10.9    
 
@@ -193,7 +193,7 @@ Pod::Spec.new do |s|
       sss.source_files = ['Swift Sources/CK*.swift']
     end
     
-    ss.subspec 'all' do
+    ss.subspec 'all' do |sss|
       sss.ios.framework = 'AssetsLibrary'
       sss.dependency 'OMGHTTPURLRQ'
       sss.ios.source_files = 'Swift Sources/*.{swift,h,m}'
