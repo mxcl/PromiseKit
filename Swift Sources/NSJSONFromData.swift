@@ -15,7 +15,7 @@ func NSJSONFromData(data: NSData) -> Promise<NSDictionary> {
     return NSJSONFromDataT(data)
 }
 
-private func NSJSONFromDataT<T>(data: NSData) -> Promise<T> {
+func NSJSONFromDataT<T>(data: NSData) -> Promise<T> {
     var error:NSError?
     let json:AnyObject? = NSJSONSerialization.JSONObjectWithData(data, options:nil, error:&error)
 

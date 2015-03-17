@@ -97,6 +97,7 @@
 		63F803E91AB89F2500E4DEE1 /* OMGHTTPURLRQ.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 630D44ED1A8BBA42007A06CD /* OMGHTTPURLRQ.framework */; };
 		63F803EB1AB89F2500E4DEE1 /* PromiseKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 63BC394E19422A9600D8CD9A /* PromiseKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63FCFEF71950F12900FB3A47 /* test-utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FCFEF51950F0FB00FB3A47 /* test-utils.swift */; };
+		63FE956C1AB8C4F60053144E /* NSTask+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FE956B1AB8C4F60053144E /* NSTask+Promise.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -226,6 +227,7 @@
 		63F60FD019DB558B00C3E8F8 /* NSFileManager+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSFileManager+Promise.swift"; path = "Swift Sources/NSFileManager+Promise.swift"; sourceTree = SOURCE_ROOT; };
 		63F803F01AB89F2500E4DEE1 /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		63FCFEF51950F0FB00FB3A47 /* test-utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "test-utils.swift"; path = "Specs/test-utils.swift"; sourceTree = SOURCE_ROOT; };
+		63FE956B1AB8C4F60053144E /* NSTask+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "NSTask+Promise.swift"; path = "Swift Sources/NSTask+Promise.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -422,6 +424,7 @@
 				63F53F5B1944E3B000F5F2B4 /* MKMapSnapshotter+Promise.swift */,
 				63F60FD019DB558B00C3E8F8 /* NSFileManager+Promise.swift */,
 				638739A419D655CE00F7BABC /* NSNotificationCenter+Promise.swift */,
+				63FE956B1AB8C4F60053144E /* NSTask+Promise.swift */,
 				63E3C6B319425F010042BBDE /* NSURLConnection+Promise.swift */,
 				63F53F611944EBB700F5F2B4 /* SLRequest+Promise.swift */,
 				63F53F5E1944E7E000F5F2B4 /* SKRequest+Promise.swift */,
@@ -689,6 +692,7 @@
 				63F803E01AB89F2500E4DEE1 /* CKDatabase+Promise.swift in Sources */,
 				63F803E11AB89F2500E4DEE1 /* NSNotificationCenter+Promise.swift in Sources */,
 				63F803E21AB89F2500E4DEE1 /* Promise.swift in Sources */,
+				63FE956C1AB8C4F60053144E /* NSTask+Promise.swift in Sources */,
 				63F803E41AB89F2500E4DEE1 /* misc.swift in Sources */,
 				6319AD7C1ABC8D3B00D94997 /* NSJSONFromData.swift in Sources */,
 				63F803E71AB89F2500E4DEE1 /* CKContainer+Promise.swift in Sources */,
