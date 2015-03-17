@@ -286,4 +286,22 @@ class TestPromise: XCTestCase {
         f(1)
         XCTAssertEqual(x, 1)
     }
+
+    func testRace1() {
+        let ex = expectation()
+        race(after(0.01), after(1.0)).then { (interval: NSTimeInterval, index: Int) -> Void in
+            XCTAssertEqual(index, 0)
+            ex.fulfill()
+        }
+        waitForExpectationsWithTimeout(1, handler: nil)
+    }
+
+    func testRace2() {
+        let ex = expectation()
+        race(after(1.0), after(0.01)).then { (interval: NSTimeInterval, index: Int) -> Void in
+            XCTAssertEqual(index, 1)
+            ex.fulfill()
+        }
+        waitForExpectationsWithTimeout(1, handler: nil)
+    }
 }

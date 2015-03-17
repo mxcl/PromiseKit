@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		6308AC6B1AB8CF10005D7320 /* race.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6308AC6A1AB8CF10005D7320 /* race.swift */; };
+		6308AC6C1AB8CF10005D7320 /* race.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6308AC6A1AB8CF10005D7320 /* race.swift */; };
 		630D44EA1A8BB02D007A06CD /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 637D0F1119437D4C0059AD78 /* PromiseKit.framework */; };
 		6319AD7A1ABC8CEC00D94997 /* NSJSONFromData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6319AD791ABC8CEC00D94997 /* NSJSONFromData.swift */; };
 		6319AD7C1ABC8D3B00D94997 /* NSJSONFromData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6319AD791ABC8CEC00D94997 /* NSJSONFromData.swift */; };
@@ -124,6 +126,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		6308AC6A1AB8CF10005D7320 /* race.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = race.swift; path = "Swift Sources/race.swift"; sourceTree = "<group>"; };
 		630D44ED1A8BBA42007A06CD /* OMGHTTPURLRQ.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OMGHTTPURLRQ.framework; path = Carthage/Build/iOS/OMGHTTPURLRQ.framework; sourceTree = "<group>"; };
 		6319AD791ABC8CEC00D94997 /* NSJSONFromData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = NSJSONFromData.swift; path = "Swift Sources/NSJSONFromData.swift"; sourceTree = "<group>"; };
 		633C27AB1944A98700185338 /* CLLocationManager+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CLLocationManager+Promise.swift"; path = "Swift Sources/CLLocationManager+Promise.swift"; sourceTree = SOURCE_ROOT; };
@@ -414,6 +417,7 @@
 				63519926193FCD5B002CF47D /* Promise.swift */,
 				63A5BF6C1950ABA200BDFD42 /* when.swift */,
 				639431AD1A24EF9A00883C3B /* after.swift */,
+				6308AC6A1AB8CF10005D7320 /* race.swift */,
 				63F53F631944EE1B00F5F2B4 /* ACAccountStore+Promise.swift */,
 				63F60FCE19DB54EF00C3E8F8 /* AVAudioSession.swift */,
 				6387398219D648E700F7BABC /* CKContainer+Promise.swift */,
@@ -619,6 +623,7 @@
 				638739A519D655CE00F7BABC /* NSNotificationCenter+Promise.swift in Sources */,
 				6319AD7A1ABC8CEC00D94997 /* NSJSONFromData.swift in Sources */,
 				63E3C6B019422B670042BBDE /* Promise.swift in Sources */,
+				6308AC6B1AB8CF10005D7320 /* race.swift in Sources */,
 				63F53F661944F0E800F5F2B4 /* UIAlertView+Promise.swift in Sources */,
 				6387398119D60E8800F7BABC /* misc.swift in Sources */,
 				638739A719D6584E00F7BABC /* UIView+Promise.swift in Sources */,
@@ -678,6 +683,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63F803D21AB89F2500E4DEE1 /* after.swift in Sources */,
+				6308AC6C1AB8CF10005D7320 /* race.swift in Sources */,
 				63F803D41AB89F2500E4DEE1 /* SKRequest+Promise.swift in Sources */,
 				63F803D61AB89F2500E4DEE1 /* when.swift in Sources */,
 				63F803D71AB89F2500E4DEE1 /* CLGeocoder+Promise.swift in Sources */,
