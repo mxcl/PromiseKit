@@ -10,6 +10,7 @@ Pod::Spec.new do |s|
   s.license = 'MIT'
   s.summary = 'A delightful Promises implementation for iOS and OS X.'
   s.homepage = 'http://promisekit.org'
+  s.description = 'UIActionSheet UIAlertView CLLocationManager MFMailComposeViewController ACAccountStore StoreKit SKRequest SKProductRequest blocks'
   s.social_media_url = 'https://twitter.com/mxcl'
   s.authors  = { 'Max Howell' => 'mxcl@me.com' }
   s.documentation_url = 'http://promisekit.org/api/'
@@ -180,24 +181,78 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'Swift' do |ss|
-    ss.default_subspec = 'all'
+    ss.default_subspecs = 'Foundation', 'UIKit'
     ss.ios.deployment_target = 8.0
     ss.osx.deployment_target = 10.9    
 
     ss.subspec 'Promise' do |sss|
-      sss.source_files = ['Swift Sources/Promise.swift', 'Swift Sources/misc.swift', 'Swift Sources/constants.swift']
+      sss.source_files = %w{Promise when misc constants after race}.map{ |x| "Swift Sources/#{x}.swift" }
     end
 
     ss.subspec 'CloudKit' do |sss|
       sss.dependency 'PromiseKit/Swift/Promise'
-      sss.source_files = ['Swift Sources/CK*.swift']
+      sss.source_files = 'Swift Sources/CK*.swift'
     end
     
-    ss.subspec 'all' do |sss|
+    ss.subspec 'UIKit' do |sss|
+      sss.dependency 'PromiseKit/Swift/Promise'
+      sss.ios.source_files = 'Swift Sources/UI*.swift'
       sss.ios.framework = 'AssetsLibrary'
+    end
+
+    ss.subspec 'CoreLocation' do |sss|
+      sss.dependency 'PromiseKit/Swift/Promise'
+      sss.source_files = 'Swift Sources/CL*.swift'
+    end
+
+    ss.subspec 'MapKit' do |sss|
+      sss.dependency 'PromiseKit/Swift/Promise'
+      sss.source_files = 'Swift Sources/MK*.swift'
+    end
+    
+    ss.subspec 'NSJSONFromData' do |sss|
+      sss.dependency 'PromiseKit/Swift/Promise'  # only needs constants in fact
+      sss.source_files = 'Swift Sources/NSJSONFromData.swift'
+    end
+
+    ss.subspec 'Social' do |sss|
+      sss.dependency 'PromiseKit/Swift/Promise'
+      sss.dependency 'PromiseKit/Swift/NSJSONFromData'
+      sss.source_files = Dir['Swift Sources/SL*.swift']
+    end
+
+    ss.subspec 'StoreKit' do |sss|
+      sss.dependency 'PromiseKit/Swift/Promise'
+      sss.source_files = 'Swift Sources/SK*.swift'
+    end
+
+    ss.subspec 'Foundation' do |sss|
+      sss.dependency 'PromiseKit/Swift/Promise'
+      sss.dependency 'PromiseKit/Swift/NSJSONFromData'
       sss.dependency 'OMGHTTPURLRQ'
-      sss.ios.source_files = 'Swift Sources/*.{swift,h,m}'
-      sss.osx.source_files = Dir["Swift Sources/*.swift"] - ["Swift Sources/AVAudioSession.swift"] - Dir["Swift Sources/UI*"]
+      ios = %w{NSFileManager NSNotificationCenter NSURLConnection}.map{|x| "Swift Sources/#{x}+Promise.swift"}
+      sss.ios.source_files = ios
+      sss.osx.source_files = ios + ['Swift Sources/NSTask+Promise.swift']
+    end
+
+    ss.subspec 'Accounts' do |sss|
+      sss.dependency 'PromiseKit/Swift/Promise'
+      sss.source_files = "Swift Sources/AC*.swift"
+    end
+    
+    ss.subspec 'AVFoundation' do |sss|
+      sss.dependency 'PromiseKit/Swift/Promise'
+      sss.ios.source_files = "Swift Sources/AV*.swift"
+    end
+
+    ss.subspec 'all' do |sss|
+      sss.dependency 'PromiseKit/Swift/CloudKit'
+      sss.dependency 'PromiseKit/Swift/CoreLocation'
+      sss.dependency 'PromiseKit/Swift/Foundation'
+      sss.dependency 'PromiseKit/Swift/MapKit'
+      sss.dependency 'PromiseKit/Swift/Social'
+      sss.dependency 'PromiseKit/Swift/StoreKit'
+      sss.dependency 'PromiseKit/Swift/UIKit'
     end
   end
 
