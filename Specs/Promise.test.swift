@@ -268,4 +268,22 @@ class TestPromise: XCTestCase {
 
         waitForExpectationsWithTimeout(1, handler: nil)
     }
+
+    func testZalgoMore() {
+        let p1 = Promise(value: 1).thenUnleashZalgo{ x->Int in
+            return 2
+        }
+        XCTAssertEqual(p1.value!, 2)
+
+        var x = 0
+
+        let (p2, f, _) = Promise<Int>.defer()
+        p2.thenUnleashZalgo{ _->Void in
+            x = 1
+        }
+        XCTAssertEqual(x, 0)
+
+        f(1)
+        XCTAssertEqual(x, 1)
+    }
 }
