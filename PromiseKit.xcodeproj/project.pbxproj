@@ -23,10 +23,9 @@
 		635D3C951959D3B00031F972 /* 2.3.2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D3C8C1959D3B00031F972 /* 2.3.2.swift */; };
 		635D3C961959D3B00031F972 /* 2.3.3.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D3C8D1959D3B00031F972 /* 2.3.3.swift */; };
 		635D3C971959D3B00031F972 /* 2.3.4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D3C8E1959D3B00031F972 /* 2.3.4.swift */; };
-		637B65F21A9663E300B1C0B2 /* OMGHTTPURLRQ.framework in Resources */ = {isa = PBXBuildFile; fileRef = 630D44ED1A8BBA42007A06CD /* OMGHTTPURLRQ.framework */; };
-		637B65F41A96667000B1C0B2 /* OMGHTTPURLRQ.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 630D44ED1A8BBA42007A06CD /* OMGHTTPURLRQ.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		637D0F141943821A0059AD78 /* constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637D0F131943821A0059AD78 /* constants.swift */; };
 		637D0F1A194387F60059AD78 /* NSURLConnection+Promise.test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 637D0F17194387D90059AD78 /* NSURLConnection+Promise.test.swift */; };
+		6386DD141ABC80DA004105CE /* PromiseKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 637D0F1119437D4C0059AD78 /* PromiseKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		6387397D19D60A4900F7BABC /* CLGeocoder+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6387397C19D60A4900F7BABC /* CLGeocoder+Promise.swift */; };
 		6387397F19D60D3B00F7BABC /* MKDirections+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6387397E19D60D3B00F7BABC /* MKDirections+Promise.swift */; };
 		6387398119D60E8800F7BABC /* misc.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6387398019D60E8800F7BABC /* misc.swift */; };
@@ -41,7 +40,6 @@
 		638933A91AAF659F0078F9B6 /* PMKPromise+When.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933501AAF65050078F9B6 /* PMKPromise+When.m */; };
 		638933AA1AAF659F0078F9B6 /* PMKPromise+Zalgo.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933511AAF65050078F9B6 /* PMKPromise+Zalgo.m */; };
 		638933AC1AAF65AA0078F9B6 /* ACAccountStore+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933321AAF65050078F9B6 /* ACAccountStore+PromiseKit.m */; };
-		638933AE1AAF65AA0078F9B6 /* AVAudioSession+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933341AAF65050078F9B6 /* AVAudioSession+PromiseKit.m */; };
 		638933B01AAF65AA0078F9B6 /* CALayer+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933361AAF65050078F9B6 /* CALayer+PromiseKit.m */; };
 		638933B21AAF65AA0078F9B6 /* CKContainer+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933381AAF65050078F9B6 /* CKContainer+PromiseKit.m */; };
 		638933B41AAF65AA0078F9B6 /* CKDatabase+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389333A1AAF65050078F9B6 /* CKDatabase+PromiseKit.m */; };
@@ -54,12 +52,10 @@
 		638933C51AAF65AA0078F9B6 /* NSURLConnection+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334A1AAF65050078F9B6 /* NSURLConnection+PromiseKit.m */; };
 		638933C71AAF65AA0078F9B6 /* SKRequest+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933601AAF65050078F9B6 /* SKRequest+PromiseKit.m */; };
 		638933C91AAF65AA0078F9B6 /* SLRequest+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933621AAF65050078F9B6 /* SLRequest+PromiseKit.m */; };
-		638933CB1AAF65AA0078F9B6 /* UIActionSheet+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933641AAF65050078F9B6 /* UIActionSheet+PromiseKit.m */; };
-		638933CD1AAF65AA0078F9B6 /* UIAlertView+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933661AAF65050078F9B6 /* UIAlertView+PromiseKit.m */; };
-		638933CF1AAF65AA0078F9B6 /* UIView+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933681AAF65050078F9B6 /* UIView+PromiseKit.m */; };
-		638933D11AAF65AA0078F9B6 /* UIViewController+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389336A1AAF65050078F9B6 /* UIViewController+PromiseKit.m */; };
 		638933DC1AAFC3B40078F9B6 /* initializers.spec.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933DA1AAFC3B40078F9B6 /* initializers.spec.m */; };
 		638933DD1AAFC3B40078F9B6 /* PMKPromise.test.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933DB1AAFC3B40078F9B6 /* PMKPromise.test.m */; };
+		6392D70A1ABC7FBC0095E14E /* OMGHTTPURLRQ.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6392D7091ABC7FBC0095E14E /* OMGHTTPURLRQ.framework */; };
+		6392D70B1ABC7FBE0095E14E /* OMGHTTPURLRQ.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6392D7091ABC7FBC0095E14E /* OMGHTTPURLRQ.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		639431AE1A24EF9A00883C3B /* after.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639431AD1A24EF9A00883C3B /* after.swift */; };
 		63A5BF6D1950ABA200BDFD42 /* when.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A5BF6C1950ABA200BDFD42 /* when.swift */; };
 		63B287DA19DB448C004E8E3C /* CKDatabase+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B287D919DB448C004E8E3C /* CKDatabase+Promise.swift */; };
@@ -119,7 +115,8 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				637B65F41A96667000B1C0B2 /* OMGHTTPURLRQ.framework in CopyFiles */,
+				6392D70B1ABC7FBE0095E14E /* OMGHTTPURLRQ.framework in CopyFiles */,
+				6386DD141ABC80DA004105CE /* PromiseKit.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -210,6 +207,7 @@
 		6389336A1AAF65050078F9B6 /* UIViewController+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+PromiseKit.m"; path = "objc/UIViewController+PromiseKit.m"; sourceTree = "<group>"; };
 		638933DA1AAFC3B40078F9B6 /* initializers.spec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = initializers.spec.m; path = "Specs/Objective C Specs/initializers.spec.m"; sourceTree = SOURCE_ROOT; };
 		638933DB1AAFC3B40078F9B6 /* PMKPromise.test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PMKPromise.test.m; path = "Specs/Objective C Specs/PMKPromise.test.m"; sourceTree = SOURCE_ROOT; };
+		6392D7091ABC7FBC0095E14E /* OMGHTTPURLRQ.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OMGHTTPURLRQ.framework; path = Carthage/Build/Mac/OMGHTTPURLRQ.framework; sourceTree = "<group>"; };
 		639431AD1A24EF9A00883C3B /* after.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = after.swift; path = "Swift Sources/after.swift"; sourceTree = "<group>"; };
 		63A5BF6C1950ABA200BDFD42 /* when.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = when.swift; path = "Swift Sources/when.swift"; sourceTree = SOURCE_ROOT; };
 		63B287D919DB448C004E8E3C /* CKDatabase+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CKDatabase+Promise.swift"; path = "Swift Sources/CKDatabase+Promise.swift"; sourceTree = "<group>"; };
@@ -239,6 +237,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				635366181AABAA6B0091EE6E /* OMGHTTPURLRQ.framework in Frameworks */,
+				6392D70A1ABC7FBC0095E14E /* OMGHTTPURLRQ.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -444,6 +443,7 @@
 		63DDE17E1947B946005D34A3 /* … */ = {
 			isa = PBXGroup;
 			children = (
+				6392D7091ABC7FBC0095E14E /* OMGHTTPURLRQ.framework */,
 				63FCFEF51950F0FB00FB3A47 /* test-utils.swift */,
 				6351991B193FCD4C002CF47D /* tests-Info.plist */,
 				63BC394D19422A9600D8CD9A /* framework-Info.plist */,
@@ -503,6 +503,7 @@
 				63BC395119422A9600D8CD9A /* Frameworks */,
 				63BC395219422A9600D8CD9A /* Resources */,
 				637B65F31A96666700B1C0B2 /* CopyFiles */,
+				6386DD151ABC81A1004105CE /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -584,7 +585,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				637B65F21A9663E300B1C0B2 /* OMGHTTPURLRQ.framework in Resources */,
 				63C7063C1959D8B6007C14DB /* array.json in Resources */,
 				63C7063D1959D8B6007C14DB /* dictionary.json in Resources */,
 				63C7063F1959D8C3007C14DB /* plain.text in Resources */,
@@ -599,6 +599,22 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXResourcesBuildPhase section */
+
+/* Begin PBXShellScriptBuildPhase section */
+		6386DD151ABC81A1004105CE /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "cd $BUILT_PRODUCTS_DIR/$(dirname $EXECUTABLE_PATH)\nln -sf ../Frameworks";
+		};
+/* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
 		63BC394519422A9600D8CD9A /* Sources */ = {
@@ -653,7 +669,6 @@
 				638933A51AAF659F0078F9B6 /* PMKPromise+Hang.m in Sources */,
 				638933A61AAF659F0078F9B6 /* PMKPromise+Join.m in Sources */,
 				638933AC1AAF65AA0078F9B6 /* ACAccountStore+PromiseKit.m in Sources */,
-				638933AE1AAF65AA0078F9B6 /* AVAudioSession+PromiseKit.m in Sources */,
 				638933B01AAF65AA0078F9B6 /* CALayer+PromiseKit.m in Sources */,
 				638933DC1AAFC3B40078F9B6 /* initializers.spec.m in Sources */,
 				638933B21AAF65AA0078F9B6 /* CKContainer+PromiseKit.m in Sources */,
@@ -667,10 +682,6 @@
 				638933C51AAF65AA0078F9B6 /* NSURLConnection+PromiseKit.m in Sources */,
 				638933C71AAF65AA0078F9B6 /* SKRequest+PromiseKit.m in Sources */,
 				638933C91AAF65AA0078F9B6 /* SLRequest+PromiseKit.m in Sources */,
-				638933CB1AAF65AA0078F9B6 /* UIActionSheet+PromiseKit.m in Sources */,
-				638933CD1AAF65AA0078F9B6 /* UIAlertView+PromiseKit.m in Sources */,
-				638933CF1AAF65AA0078F9B6 /* UIView+PromiseKit.m in Sources */,
-				638933D11AAF65AA0078F9B6 /* UIViewController+PromiseKit.m in Sources */,
 				638933A71AAF659F0078F9B6 /* PMKPromise+Pause.m in Sources */,
 				638933A81AAF659F0078F9B6 /* PMKPromise+Until.m in Sources */,
 				638933A91AAF659F0078F9B6 /* PMKPromise+When.m in Sources */,
@@ -736,7 +747,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1.4.0;
+				CURRENT_PROJECT_VERSION = 1.4.1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = "$(CURRENT_PROJECT_VERSION)";
@@ -788,7 +799,7 @@
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 1.4.0;
+				CURRENT_PROJECT_VERSION = 1.4.1;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = "$(CURRENT_PROJECT_VERSION)";
@@ -817,7 +828,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -827,7 +841,10 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				CLANG_ENABLE_MODULES = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/iOS";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+				);
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -837,9 +854,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = NO;
+				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = NO;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/Mac";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/objc",
 					"$(inherited)",
@@ -856,9 +877,13 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = NO;
+				CODE_SIGN_IDENTITY = "";
 				DEFINES_MODULE = NO;
 				EMBEDDED_CONTENT_CONTAINS_SWIFT = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(PROJECT_DIR)/Carthage/Build/Mac";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
+					"$(PROJECT_DIR)/Carthage/Build/iOS",
+				);
 				HEADER_SEARCH_PATHS = (
 					"$(PROJECT_DIR)/objc",
 					"$(inherited)",
