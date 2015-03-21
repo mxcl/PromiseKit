@@ -1073,7 +1073,7 @@ PMKPromise *gcdreject() {
 
     [self waitForExpectationsWithTimeout:2 handler:nil];
 
-    XCTAssertEqual(promise.value, @123);
+    XCTAssertEqualObjects(promise.value, @123);
 }
 
 - (void)test_66_until {
@@ -1293,30 +1293,24 @@ PMKPromise *gcdreject() {
 
 - (void)test_78_zalgo {
     __block int x = 0;
-    [PMKPromise hang:dispatch_promise(^{
+
+    id ex = [self expectationWithDescription:@""];
+    dispatch_promise(^{
         XCTAssertEqual(x, 0);
         dispatch_zalgo(^{
             XCTAssertEqual(x, 0);
             x++;
         });
         XCTAssertEqual(x, 1);
-    })];
+        [ex fulfill];
+    });
+    [self waitForExpectationsWithTimeout:1 handler:nil];
     XCTAssertEqual(x, 1);
 
     [PMKPromise promiseWithValue:@1].thenUnleashZalgo(^{
         x++;
     });
     XCTAssertEqual(x, 2);
-
-    id p = dispatch_promise(^{
-        return @1;
-    }).thenUnleashZalgo(^{
-        x++;
-    });
-    XCTAssertEqual(x, 2);
-
-    [PMKPromise hang:p];
-    XCTAssertEqual(x, 3);
 }
 
 - (void)test_79_unhandled_error_handler_not_called_reject_passed_through {
