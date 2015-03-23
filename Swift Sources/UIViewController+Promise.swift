@@ -71,7 +71,7 @@ extension UIViewController {
     }
 
     public func promiseViewController(vc: MFMailComposeViewController, animated: Bool = false, completion:(Void)->() = {}) -> Promise<Int> {
-        vc.delegate = MFMailComposeViewControllerProxy()
+        vc.mailComposeDelegate = MFMailComposeViewControllerProxy()
         return promiseViewController(vc as UIViewController, animated: animated, completion: completion)
     }
 
