@@ -235,6 +235,11 @@ Pod::Spec.new do |s|
       sss.osx.source_files = ios + ['Swift Sources/NSTask+Promise.swift']
     end
 
+    ss.subspec 'NSNotificationCenter' do |sss|
+      sss.dependency 'PromiseKit/Swift/Promise'
+      sss.source_files = 'Swift Sources/NSNotificationCenter+Promise.swift'
+    end
+
     ss.subspec 'Accounts' do |sss|
       sss.dependency 'PromiseKit/Swift/Promise'
       sss.source_files = "Swift Sources/AC*.swift"
