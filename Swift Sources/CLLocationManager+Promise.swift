@@ -1,6 +1,6 @@
 import CoreLocation.CLLocationManager
 
-private class LocationManager: CLLocationManager, CLLocationManagerDelegate {
+class LocationManager: CLLocationManager, CLLocationManagerDelegate {
     let fulfiller: ([CLLocation]) -> Void
     let rejecter: (NSError) -> Void
 
