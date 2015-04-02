@@ -73,7 +73,7 @@ Pod::Spec.new do |s|
       end
 
       ss.framework = framework
-      ss.source_files = (ss.source_files rescue []) + ["objc/#{name}+PromiseKit.h", "objc/#{name}+PromiseKit.m", "objc/deprecated/PromiseKit+#{framework}.h"]
+      ss.source_files = (ss.source_files rescue []) + ["objc/#{name}+PromiseKit.h", "objc/#{name}+PromiseKit.m"]
       ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_#{name.upcase}=1" }
     end
   end
@@ -113,9 +113,8 @@ Pod::Spec.new do |s|
   s.mksubspec 'SLRequest', ios: '6.0', osx: '10.8'
   s.mksubspec 'UIActionSheet', ios: '2.0'
   s.mksubspec 'UIAlertView', ios: '2.0'
-  s.mksubspec 'UIView', ios: '4.0' do |ss|
-    ss.ios.source_files = 'objc/deprecated/PromiseKit+UIAnimation.h'
-  end
+  s.mksubspec 'UIView', ios: '4.0'
+
   s.mksubspec 'UIViewController', ios: '5.0' do |ss|
     ss.ios.weak_frameworks = 'AssetsLibrary'
   end
