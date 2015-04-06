@@ -23,11 +23,11 @@ private func fetch<T>(var request: NSURLRequest, body: ((T) -> Void, (NSError) -
     }
 
     return Promise<T> { (fulfiller, rejunker) in
-        NSURLConnection.sendAsynchronousRequest(request, queue:Q) { (rsp, data, err) in
+        NSURLConnection.sendAsynchronousRequest(request, queue:Q) {
+            (rsp, data, err) in
 
             assert(!NSThread.isMainThread())
 
-            //TODO handle non 2xx responses
             //TODO in the event of a non 2xx rsp, try to parse JSON out of the response anyway
 
             func rejecter(error: NSError) {
@@ -41,13 +41,31 @@ private func fetch<T>(var request: NSURLRequest, body: ((T) -> Void, (NSError) -
                         info[PMKURLErrorFailingStringKey] = str
                     }
                 }
-                if rsp != nil { info[PMKURLErrorFailingURLResponseKey] = rsp! }
+
+                if rsp != nil {
+                    info[PMKURLErrorFailingURLResponseKey] = rsp!
+                }
+
                 rejunker(NSError(domain:error.domain, code:error.code, userInfo:info))
             }
 
             if err != nil {
                 rejecter(err)
             } else {
+                if let response = (rsp as? NSHTTPURLResponse) {
+                    if response.statusCode < 200 || response.statusCode >= 300 {
+                        rejecter(NSError(domain: NSURLErrorDomain,
+                                         code: NSURLErrorBadServerResponse,
+                                         userInfo: [
+                                             NSLocalizedDescriptionKey: "The server returned a bad HTTP response code",
+                                             NSURLErrorFailingURLStringErrorKey: request.URL.absoluteString!,
+                                             NSURLErrorFailingURLErrorKey: request.URL
+                                         ]))
+
+                        return
+                    }
+                }
+
                 body(fulfiller, rejecter, data, rsp)
             }
         }
