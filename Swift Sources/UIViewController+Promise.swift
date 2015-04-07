@@ -32,35 +32,39 @@ class UIImagePickerControllerProxy: NSObject, UIImagePickerControllerDelegate, U
     }
 }
 
-class Resolver<T> {
-    let fulfiller: (T) -> Void
-    let rejecter: (NSError) -> Void
-    init(_ deferred: (Promise<T>, (T)->Void, (NSError)->Void)) {
-        (_, self.fulfiller, self.rejecter) = deferred
+class Resolver {
+    let fulfill: (Any) -> Void
+    let reject: (NSError) -> Void
+    init(fulfill: (Any) -> Void, reject: (NSError) -> Void) {
+        self.fulfill = fulfill
+        self.reject = reject
     }
 }
 
 private var key = "PMKSomeString"
 
 extension UIViewController {
-    public func fulfill<T>(value:T) {
-        let resolver = objc_getAssociatedObject(self, &key) as Resolver<T>
-        resolver.fulfiller(value)
+    public func fulfill(value: Any) {
+        let resolver = objc_getAssociatedObject(self, &key) as Resolver
+        resolver.fulfill(value)
     }
 
     public func reject(error:NSError) {
-        let resolver = objc_getAssociatedObject(self, &key) as Resolver<Any>;
-        resolver.rejecter(error)
+        let resolver = objc_getAssociatedObject(self, &key) as Resolver
+        resolver.reject(error)
     }
 
-    public func promiseViewController<T>(vc: UIViewController, animated: Bool = true, completion:(Void)->() = {}) -> Promise<T> {
+    public func promiseViewController<T: Any>(vc: UIViewController, animated: Bool = true, completion:(Void)->() = {}) -> Promise<T> {
         presentViewController(vc, animated:animated, completion:completion)
 
-        let deferred = Promise<T>.defer()
+        let (promise, f, r) = Promise<T>.defer()
+        let fwrap = { (any: Any) in
+            f(any as T)
+        }
 
-        objc_setAssociatedObject(vc, &key, Resolver<T>(deferred), UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
+        objc_setAssociatedObject(vc, &key, Resolver(fulfill: fwrap, reject: r), UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
 
-        return deferred.promise.finally { () -> () in
+        return promise.finally { _ in
             self.dismissViewControllerAnimated(animated, completion:nil)
         }
     }
