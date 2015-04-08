@@ -317,19 +317,42 @@ public class Promise<T> {
     }
 
     /**
-     Immediate resolution of body if the promise is fulfilled.
+     If the promise is fulfilled, body is called immediately, if the promise
+     is pending, body is called as soon as the promise is resolved on the
+     queue that it was resolved upon.
+
+     Usually handlers are called inside a `dispatch_async` even if the promise
+     is already resolved.
 
      Please note, there are good reasons that `then` does not call `body`
-     immediately if the promise is already fulfilled. If you don’t understand
-     the implications of unleashing zalgo, you should not under any
-     cirumstances use this function!
+     immediately. If you don’t understand the implications of unleashing
+     zalgo, you should not under any cirumstances use this function!
+
+     At the very least be aware your handler probably won’t be called the main
+     thread if the promise is pending.
     */
-    public func thenUnleashZalgo(body:(T)->Void) -> Void {
-        if let obj = value {
-            body(obj)
-        } else {
-            then(body: body)
+    public func thenUnleashZalgo<U>(body: (T) -> U) -> Promise<U> {
+        let (promise, fulfill, reject) = Promise<U>.defer()
+
+        switch state {
+        case .Fulfilled(let value):
+            fulfill(body(value()))
+        case .Rejected(let error):
+            reject(error)
+        case .Pending(let handlers):
+            handlers.append({
+                switch self.state {
+                case .Fulfilled(let value):
+                    fulfill(body(value()))
+                case .Rejected(let error):
+                    reject(error)
+                case .Pending:
+                    abort()
+                }
+            })
         }
+
+        return promise
     }
 
     public func voidify() -> Promise<Void> {

@@ -1,33 +1,48 @@
 import StoreKit
 
-
 private class SKRequestProxy: NSObject, SKRequestDelegate {
-    let fulfiller:(SKRequest) -> ()
-    let rejecter:(NSError) -> ()
-
-    init(fulfiller:(SKRequest) -> (), rejecter:(NSError) -> ()) {
-        self.fulfiller = fulfiller
-        self.rejecter = rejecter
-        super.init()
-        PMKRetain(self)
-    }
+    let (promise, fulfill, reject) = Promise<SKRequest>.defer()
 
     func requestDidFinish(request: SKRequest!) {
-        fulfiller(request)
+        fulfill(request)
         PMKRelease(self)
     }
     func request(request: SKRequest!, didFailWithError error: NSError!) {
-        rejecter(error)
+        reject(error)
         PMKRelease(self)
     }
 }
 
-
 extension SKRequest {
     public func promise() -> Promise<SKRequest> {
-        let deferred = Promise<SKRequest>.defer()
-        delegate = SKRequestProxy(fulfiller: deferred.fulfill, rejecter: deferred.reject)
+        let proxy = SKRequestProxy()
+        PMKRetain(proxy)
+        delegate = proxy
         start()
-        return deferred.promise
+        return proxy.promise
+    }
+}
+
+private class SKProductsRequestProxy: NSObject, SKProductsRequestDelegate {
+    let (promise, fulfill, reject) = Promise<SKProductsResponse>.defer()
+
+    func productsRequest(request: SKProductsRequest!, didReceiveResponse response: SKProductsResponse!) {
+        fulfill(response)
+        PMKRelease(self)
+    }
+
+    func request(request: SKRequest!, didFailWithError error: NSError!) {
+        reject(error)
+        PMKRelease(self)
+    }
+}
+
+extension SKProductsRequest {
+    public func promise() -> Promise<SKProductsResponse> {
+        let proxy = SKProductsRequestProxy()
+        delegate = proxy
+        PMKRetain(proxy)
+        start()
+        return proxy.promise
     }
 }

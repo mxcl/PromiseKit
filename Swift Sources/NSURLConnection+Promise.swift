@@ -23,11 +23,11 @@ private func fetch<T>(var request: NSURLRequest, body: ((T) -> Void, (NSError) -
     }
 
     return Promise<T> { (fulfiller, rejunker) in
-        NSURLConnection.sendAsynchronousRequest(request, queue:Q) { (rsp, data, err) in
+        NSURLConnection.sendAsynchronousRequest(request, queue:Q) {
+            (rsp, data, err) in
 
             assert(!NSThread.isMainThread())
 
-            //TODO handle non 2xx responses
             //TODO in the event of a non 2xx rsp, try to parse JSON out of the response anyway
 
             func rejecter(error: NSError) {
@@ -41,50 +41,37 @@ private func fetch<T>(var request: NSURLRequest, body: ((T) -> Void, (NSError) -
                         info[PMKURLErrorFailingStringKey] = str
                     }
                 }
-                if rsp != nil { info[PMKURLErrorFailingURLResponseKey] = rsp! }
-                rejunker(NSError(domain:error.domain, code:error.code, userInfo:info as [NSObject : AnyObject]))
+
+                if rsp != nil {
+                    info[PMKURLErrorFailingURLResponseKey] = rsp!
+                }
+
+                rejunker(NSError(domain:error.domain, code:error.code, userInfo:info))
             }
 
             if err != nil {
                 rejecter(err)
             } else {
+                if let response = (rsp as? NSHTTPURLResponse) {
+                    if response.statusCode < 200 || response.statusCode >= 300 {
+                        rejecter(NSError(domain: NSURLErrorDomain,
+                                         code: NSURLErrorBadServerResponse,
+                                         userInfo: [
+                                             NSLocalizedDescriptionKey: "The server returned a bad HTTP response code",
+                                             NSURLErrorFailingURLStringErrorKey: request.URL.absoluteString!,
+                                             NSURLErrorFailingURLErrorKey: request.URL
+                                         ]))
+
+                        return
+                    }
+                }
+
                 body(fulfiller, rejecter, data, rsp)
             }
         }
     }
 }
 
-func NSJSONFromData(data: NSData) -> Promise<NSArray> {
-    // work around ever-so-common Rails issue: https://github.com/rails/rails/issues/1742
-    if data.isEqualToData(NSData(bytes: " ", length: 1)) {
-        return Promise(value: NSArray())  // couldn’t do T() in generic function
-    }
-    return NSJSONFromDataT(data)
-}
-
-func NSJSONFromData(data: NSData) -> Promise<NSDictionary> {
-    if data.isEqualToData(NSData(bytes: " ", length: 1)) {
-        return Promise(value: NSDictionary())
-    }
-    return NSJSONFromDataT(data)
-}
-
-private func NSJSONFromDataT<T>(data: NSData) -> Promise<T> {
-    var error:NSError?
-    let json:AnyObject? = NSJSONSerialization.JSONObjectWithData(data, options:nil, error:&error)
-
-    if error != nil {
-        return Promise(error: error!)
-    } else if let cast = json as? T {
-        return Promise(value: cast)
-    } else {
-        var info = NSMutableDictionary()
-        info[NSLocalizedDescriptionKey] = "The server returned JSON in an unexpected arrangement"
-        if let jo:AnyObject = json { info[PMKJSONErrorJSONObjectKey] = jo }
-        let error = NSError(domain:PMKErrorDomain, code:PMKJSONError, userInfo:info as [NSObject : AnyObject])
-        return Promise(error: error)
-    }
-}
 
 private func fetchJSON<T>(request: NSURLRequest) -> Promise<T> {
     return fetch(request) { (fulfill, reject, data, _) in

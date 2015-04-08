@@ -5,19 +5,15 @@
 
 #define mkmethod1(method) \
 - (PMKPromise *)method { \
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfill, PMKPromiseRejecter reject) { \
-        [self method ## WithCompletionHandler:^(id result, NSError *error) { \
-            if (error) reject(error); else fulfill(result); \
-        }]; \
+    return [PMKPromise promiseWithAdapter:^(PMKAdapter adapter) { \
+        [self method ## WithCompletionHandler:adapter]; \
     }]; \
 }
 
 #define mkmethod2(method) \
 - (PMKPromise *)method { \
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfill, PMKPromiseRejecter reject) { \
-        [self method completionHandler:^(id result, NSError *error) { \
-            if (error) reject(error); else fulfill(result); \
-        }]; \
+    return [PMKPromise promiseWithAdapter:^(PMKAdapter adapter) { \
+        [self method completionHandler:adapter]; \
     }]; \
 }
 

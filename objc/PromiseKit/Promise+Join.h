@@ -19,6 +19,8 @@
 
  @warning *Important* It is not possible to know which promises fulfilled and which rejected.
 
+     pod "PromiseKit/join"
+
  @see when
 */
 + (PMKPromise *)join:(NSArray *)promises;

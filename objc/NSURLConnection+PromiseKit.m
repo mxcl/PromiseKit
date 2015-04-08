@@ -6,8 +6,8 @@
 #import <Foundation/NSURL.h>
 #import <Foundation/NSURLResponse.h>
 #import "NSURLConnection+PromiseKit.h"
-#import <OMGHTTPURLRQ.h>
-#import <OMGUserAgent.h>
+#import <OMGHTTPURLRQ/OMGHTTPURLRQ.h>
+#import <OMGHTTPURLRQ/OMGUserAgent.h>
 #import "PromiseKit/Promise.h"
 
 NSString const*const PMKURLErrorFailingURLResponse = PMKURLErrorFailingURLResponseKey;

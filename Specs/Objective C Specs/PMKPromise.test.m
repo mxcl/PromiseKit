@@ -1,13 +1,10 @@
-#!/usr/bin/env ruby
-OBJC = <<-__EOBJC__
-
 #import "PromiseKit/Promise.h"
 #import "PromiseKit/Promise+Pause.h"
 #import "PromiseKit/Promise+When.h"
 #import "PromiseKit/Promise+Join.h"
 #import "PromiseKit/Promise+Until.h"
-#import "PMKPromise+Hang.m"
-#import "PMKPromise+Zalgo.m"
+#import "PromiseKit/Promise+Hang.h"
+#import "PromiseKit/Promise+Zalgo.h"
 #import "NSURLConnection+PromiseKit.h"
 #import <CommonCrypto/CommonCrypto.h>
 
@@ -19,21 +16,11 @@ OBJC = <<-__EOBJC__
 #pragma clang diagnostic ignored "-Wunreachable-code"
 
 
-int main() {
-    @autoreleasepool {
-      #pragma clang diagnostic push
-      #pragma clang diagnostic ignored "-Wdeprecated-declarations"
-        XCTSelfTestMain();
-      #pragma clang diagnostic pop
-    }
-}
-
-
-@interface Tests : XCTestCase
+@interface PMKPromiseTestSuite : XCTestCase
 @end
 
 
-@implementation Tests {    
+@implementation PMKPromiseTestSuite {
     id originalUnhandledErrorHandler;
 }
 
@@ -368,10 +355,10 @@ int main() {
         unsigned char result[16];
         CC_MD5(cstr, (CC_LONG)clen, result);
         return [NSString stringWithFormat:@"%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X%02X",
-             result[0],  result[1],  result[2],  result[3],
-             result[4],  result[5],  result[6],  result[7],
-             result[8],  result[9], result[10], result[11],
-            result[12], result[13], result[14], result[15]];
+                result[0],  result[1],  result[2],  result[3],
+                result[4],  result[5],  result[6],  result[7],
+                result[8],  result[9], result[10], result[11],
+                result[12], result[13], result[14], result[15]];
 
     }).then(^(id md5){
         XCTAssertEqualObjects(md5, @"49F68A5C8493EC2C0BF489821C21FC3B");
@@ -410,7 +397,7 @@ int main() {
     PMKPromise *promise = [PMKPromise new:^(id f, void (^r)(id)){
         rejecter = r;
     }];
-    
+
     promise.then(^{
         XCTFail();
     }).catch(^(NSError *e){
@@ -432,7 +419,7 @@ int main() {
 - (void)test_23_add_another_fail_to_already_rejected {
     id ex1 = [self expectationWithDescription:@""];
     id ex2 = [self expectationWithDescription:@""];
-    
+
     __block void (^rejecter)(id) = nil;
 
     PMKPromise *promise = [PMKPromise new:^(id f, id r){
@@ -760,14 +747,14 @@ PMKPromise *gcdreject() {
 
 - (void)test_43_return_promise_from_itself {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     PMKPromise *p = dispatch_promise(^{ return @1; });
     p.then(^{
         return p;
     }).then(^{
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:2 handler:nil];
 }
 
@@ -922,7 +909,7 @@ PMKPromise *gcdreject() {
 
 - (void)test_54_reject_with_rejected_promise {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     [PMKPromise new:^(id f, void (^r)(id)){
         id err = [NSError errorWithDomain:@"a" code:123 userInfo:nil];
         r([PMKPromise promiseWithValue:err]);
@@ -936,12 +923,12 @@ PMKPromise *gcdreject() {
 
 - (void)test_55_all_dictionary {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     id promises = @{
-        @1: @2,
-        @2: @"abc",
-        @"a": [PMKPromise pause:0.01].then(^{ return @"HI"; })
-    };
+                    @1: @2,
+                    @2: @"abc",
+                    @"a": [PMKPromise pause:0.01].then(^{ return @"HI"; })
+                    };
     [PMKPromise all:promises].then(^(NSDictionary *dict){
         XCTAssertEqual(dict.count, 3ul);
         XCTAssertEqualObjects(dict[@1], @2);
@@ -955,7 +942,7 @@ PMKPromise *gcdreject() {
 
 - (void)test_56_empty_array_when {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     [PMKPromise when:@[]].then(^(NSArray *array){
         XCTAssertEqual(array.count, 0ul);
         [ex1 fulfill];
@@ -997,7 +984,7 @@ PMKPromise *gcdreject() {
 
 - (void)test_59_typedef {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     PMKPromise *p1 = [PMKPromise promiseWithValue:@1];
     XCTAssertEqualObjects(p1.value, @1);
 
@@ -1061,7 +1048,7 @@ PMKPromise *gcdreject() {
 
 - (void)test_64_catch_in_new {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     [PMKPromise new:^(id f, id r){
         @throw [NSException exceptionWithName:NSInvalidArgumentException reason:@"foo" userInfo:@{}];
     }].catch(^{
@@ -1073,7 +1060,7 @@ PMKPromise *gcdreject() {
 
 - (void)test_65_manifold_fulfill_value {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     PMKPromise *promise = [PMKPromise promiseWithValue:@1].then(^{
         return PMKManifold(@123, @2);
     });
@@ -1086,12 +1073,12 @@ PMKPromise *gcdreject() {
 
     [self waitForExpectationsWithTimeout:2 handler:nil];
 
-    XCTAssertEqual(promise.value, @123);
+    XCTAssertEqualObjects(promise.value, @123);
 }
 
 - (void)test_66_until {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     __block BOOL this_happened = NO;
     __block int x = 0;
     [PMKPromise until:^{
@@ -1229,17 +1216,17 @@ PMKPromise *gcdreject() {
     XCTestExpectation *ex1 = [self expectationWithDescription:@""];
     __block NSUInteger values = 0;
     __block NSInteger errorCodes = 0;
-    
+
     __block void (^fulfiller)(id) = nil;
     PMKPromise *promise =     [PMKPromise new:^(id f, id r){
         fulfiller = f;
     }];
-    
+
     [PMKPromise join:@[
-        [PMKPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:1 userInfo:nil]],
-        promise,
-        [PMKPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:2 userInfo:nil]]
-    ]].then(^(NSArray *successes, NSArray *errors) {
+                       [PMKPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:1 userInfo:nil]],
+                       promise,
+                       [PMKPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:2 userInfo:nil]]
+                       ]].then(^(NSArray *successes, NSArray *errors) {
         for (NSNumber *value in successes) {
             values |= [value unsignedIntValue];
         }
@@ -1259,9 +1246,9 @@ PMKPromise *gcdreject() {
     __block NSArray *values = nil;
     __block NSArray *errors = nil;
     [PMKPromise join:@[
-        [PMKPromise promiseWithValue:@1],
-        [PMKPromise promiseWithValue:@2]
-    ]].then(^(NSArray *thenValues, NSArray *thenErrors) {
+                       [PMKPromise promiseWithValue:@1],
+                       [PMKPromise promiseWithValue:@2]
+                       ]].then(^(NSArray *thenValues, NSArray *thenErrors) {
         values = thenValues;
         errors = thenErrors;
         [ex1 fulfill];
@@ -1276,9 +1263,9 @@ PMKPromise *gcdreject() {
     __block NSArray *values = nil;
     __block NSArray *errors = nil;
     [PMKPromise join:@[
-        [PMKPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:1 userInfo:nil]],
-        [PMKPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:2 userInfo:nil]],
-    ]].then(^(NSArray *thenValues, NSArray *thenErrors) {
+                       [PMKPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:1 userInfo:nil]],
+                       [PMKPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:2 userInfo:nil]],
+                       ]].then(^(NSArray *thenValues, NSArray *thenErrors) {
         values = thenValues;
         errors = thenErrors;
         [ex1 fulfill];
@@ -1306,30 +1293,68 @@ PMKPromise *gcdreject() {
 
 - (void)test_78_zalgo {
     __block int x = 0;
-    [PMKPromise hang:dispatch_promise(^{
+
+    id ex = [self expectationWithDescription:@""];
+    dispatch_promise(^{
         XCTAssertEqual(x, 0);
         dispatch_zalgo(^{
             XCTAssertEqual(x, 0);
             x++;
         });
         XCTAssertEqual(x, 1);
-    })];
+        [ex fulfill];
+    });
+    [self waitForExpectationsWithTimeout:1 handler:nil];
     XCTAssertEqual(x, 1);
-    
+
     [PMKPromise promiseWithValue:@1].thenUnleashZalgo(^{
         x++;
     });
     XCTAssertEqual(x, 2);
-    
-    id p = dispatch_promise(^{
-        return @1;
-    }).thenUnleashZalgo(^{
-        x++;
-    });
-    XCTAssertEqual(x, 2);
-    
-    [PMKPromise hang:p];
-    XCTAssertEqual(x, 3);
+}
+
+- (void)test_79_unhandled_error_handler_not_called_reject_passed_through {
+    @autoreleasepool {
+        XCTestExpectation *ex1 = [self expectationWithDescription:@""];
+
+        PMKUnhandledErrorHandler = ^(id e){
+            XCTFail();
+        };
+
+        [PMKPromise new:^(void(^fulfill)(id), void(^reject)(id)){
+            dispatch_promise(^{
+                @throw @1;
+            }).catch(reject);
+        }].catch(^{
+            [ex1 fulfill];
+        });
+    }
+
+    [self waitForExpectationsWithTimeout:2 handler:nil];
+}
+
+- (void)test_80_unhandled_error_handler_called_if_reject_passed_through {
+    @autoreleasepool {
+        XCTestExpectation *ex1 = [self expectationWithDescription:@""];
+        XCTestExpectation *ex2 = [self expectationWithDescription:@""];
+
+        __block BOOL ex1Fulfilled = NO;
+
+        PMKUnhandledErrorHandler = ^(id e){
+            XCTAssert(ex1Fulfilled);
+            [ex2 fulfill];
+        };
+        
+        [PMKPromise new:^(void(^fulfill)(id), void(^reject)(id)){
+            dispatch_promise(^{
+                @throw @1;
+            }).catch(reject);
+        }].finally(^{
+            [ex1 fulfill];
+            ex1Fulfilled = YES;
+        });
+    }
+    [self waitForExpectationsWithTimeout:2 handler:nil];
 }
 
 @end
@@ -1339,22 +1364,19 @@ PMKPromise *gcdreject() {
 @implementation WTFError @end
 
 
-@implementation Tests (More)
+@implementation PMKPromiseTestSuite (More)
 
 - (void)test_999_allow_error_subclasses {
     XCTestExpectation *ex1 = [self expectationWithDescription:@""];
-
+    
     dispatch_promise(^{
         return [WTFError errorWithDomain:@"WTF" code:0 userInfo:nil];
     }).catch(^(NSError *e){
         XCTAssertEqualObjects(e.class, WTFError.class);
         [ex1 fulfill];
     });
-
+    
     [self waitForExpectationsWithTimeout:2 handler:nil];
 }
 
 @end
-
-__EOBJC__
-require_relative 'Private/xctest.rb'

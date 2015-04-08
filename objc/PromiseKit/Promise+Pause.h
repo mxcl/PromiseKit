@@ -22,7 +22,7 @@
  @warning *Caveat* Any promise that was previously resolved with `PMKManifold` will lose
  parameters beyond the first parameter.
 */
-- (PMKPromise *(^)(NSTimeInterval))duration;
+- (PMKPromise *(^)(NSTimeInterval duration))pause;
 
 /**
  @param duration The duration in seconds to wait before resolving this promise.

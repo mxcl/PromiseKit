@@ -458,42 +458,18 @@ static void PMKResolve(PMKPromise *this, id result) {
         set(result);
 }
 
-+ (instancetype)new:(void(^)(PMKPromiseFulfiller, PMKPromiseRejecter))block {
++ (instancetype)promiseWithResolver:(void (^)(PMKResolver))block {
     PMKPromise *this = [self alloc];
     this->_promiseQueue = PMKCreatePromiseQueue();
     this->_handlers = [NSMutableArray new];
 
-    id fulfiller = ^(id value){
-        if (PMKGetResult(this))
-            return PMKLog(@"PromiseKit: Warning: Promise already resolved");
-        if (IsError(value))
-            @throw PMKE(@"You may not fulfill a Promise with an NSError");
-
-        PMKResolve(this, value);
-    };
-
-    id rejecter = ^(id error){
-        if (PMKGetResult(this))
-            return PMKLog(@"PromiseKit: Warning: Promise already resolved");
-        if (IsPromise(error)) {
-            if ([error rejected]) {
-                error = ((PMKPromise *)error).value;
-            } else
-                @throw PMKE(@"You may not reject a Promise with a Promise");
-        } else if (!error) {
-            error = NSErrorFromNil();
-        } else if (!IsError(error)) {
-            PMKLog(@"PromiseKit: Warning: Promise rejected with object other than NSError");
-            error = [NSError errorWithDomain:PMKErrorDomain code:PMKInvalidUsageError userInfo:@{
-                NSLocalizedDescriptionKey: [error description],
-                PMKUnderlyingExceptionKey: error
-            }];
-        }
-        PMKResolve(this, error);
-    };
-
     @try {
-        block(fulfiller, rejecter);
+        block(^(id result){
+            if (PMKGetResult(this))
+                return PMKLog(@"PromiseKit: Warning: Promise already resolved");
+
+            PMKResolve(this, result);
+        });
     } @catch (id e) {
         // at this point, no pointer to the Promise has been provided
         // to the user, so we can’t have any handlers, so all we need
@@ -503,6 +479,62 @@ static void PMKResolve(PMKPromise *this, id result) {
     }
 
     return this;
+}
+
++ (instancetype)new:(void(^)(PMKFulfiller, PMKRejecter))block {
+    return [self promiseWithResolver:^(PMKResolver resolve) {
+        id rejecter = ^(id error){
+            if (error == nil) {
+                error = NSErrorFromNil();
+            } else if (IsPromise(error) && [error rejected]) {
+                // this is safe, acceptable and (basically) valid
+            } else if (!IsError(error)) {
+                id userInfo = @{NSLocalizedDescriptionKey: [error description], PMKUnderlyingExceptionKey: error};
+                error = [NSError errorWithDomain:PMKErrorDomain code:PMKInvalidUsageError userInfo:userInfo];
+            }
+            resolve(error);
+        };
+
+        id fulfiller = ^(id result){
+            if (IsError(result))
+                PMKLog(@"PromiseKit: Warning: PMKFulfiller called with NSError.");
+            resolve(result);
+        };
+
+        block(fulfiller, rejecter);
+    }];
+}
+
++ (instancetype)promiseWithAdapter:(void (^)(PMKAdapter))block {
+    return [self promiseWithResolver:^(PMKResolver resolve) {
+        block(^(id value, id error){
+            resolve(error ?: value);
+        });
+    }];
+}
+
++ (instancetype)promiseWithIntegerAdapter:(void (^)(PMKIntegerAdapter))block {
+    return [self promiseWithResolver:^(PMKResolver resolve) {
+        block(^(NSInteger value, id error){
+            if (error) {
+                resolve(error);
+            } else {
+                resolve(@(value));
+            }
+        });
+    }];
+}
+
++ (instancetype)promiseWithBooleanAdapter:(void (^)(PMKBooleanAdapter adapter))block {
+    return [self promiseWithResolver:^(PMKResolver resolve) {
+        block(^(BOOL value, id error){
+            if (error) {
+                resolve(error);
+            } else {
+                resolve(@(value));
+            }
+        });
+    }];
 }
 
 - (BOOL)pending {

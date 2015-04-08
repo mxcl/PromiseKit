@@ -5,73 +5,42 @@
 @implementation CKContainer (PromiseKit)
 
 - (PMKPromise *)accountStatus {
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfill, PMKPromiseRejecter reject) {
-        [self accountStatusWithCompletionHandler:^(CKAccountStatus accountStatus, NSError *error) {
-            if (error)
-                reject(error);
-            else
-                fulfill(@(accountStatus));
-        }];
+    return [PMKPromise promiseWithIntegerAdapter:^(PMKIntegerAdapter adapter) {
+        [self accountStatusWithCompletionHandler:adapter];
     }];
 }
 
 - (PMKPromise *)requestApplicationPermission:(CKApplicationPermissions)permissions {
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfill, PMKPromiseRejecter reject) {
-        [self requestApplicationPermission:permissions completionHandler:^(CKApplicationPermissionStatus status, NSError *error) {
-            if (error)
-                reject(error);
-            else
-                fulfill(@(status));
-        }];
+    return [PMKPromise promiseWithIntegerAdapter:^(PMKIntegerAdapter adapter) {
+        [self requestApplicationPermission:permissions completionHandler:adapter];
     }];
 }
 
 - (PMKPromise *)statusForApplicationPermission:(CKApplicationPermissions)applicationPermission {
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfill, PMKPromiseRejecter reject) {
-        [self statusForApplicationPermission:applicationPermission completionHandler:^(CKApplicationPermissionStatus status, NSError *error) {
-            if (error)
-                reject(error);
-            else
-                fulfill(@(status));
-        }];
+    return [PMKPromise promiseWithIntegerAdapter:^(PMKIntegerAdapter adapter) {
+        [self statusForApplicationPermission:applicationPermission completionHandler:adapter];
     }];
 }
 
 - (PMKPromise *)discoverAllContactUserInfos {
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfill, PMKPromiseRejecter reject) {
-        [self discoverAllContactUserInfosWithCompletionHandler:^(NSArray *userInfos, NSError *error) {
-            if (error)
-                reject(error);
-            else
-                fulfill(userInfos);
-        }];
+    return [PMKPromise promiseWithAdapter:^(PMKAdapter adapter){
+        [self discoverAllContactUserInfosWithCompletionHandler:adapter];
     }];
 }
 
 - (PMKPromise *)discoverUserInfo:(id)input {
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfill, PMKPromiseRejecter reject) {
-        void (^handler)(CKDiscoveredUserInfo *, NSError *) = ^(CKDiscoveredUserInfo *info, NSError *error) {
-            if (error)
-                reject(error);
-            else
-                fulfill(info);
-        };
+    return [PMKPromise promiseWithAdapter:^(PMKAdapter adapter){
         if ([input isKindOfClass:[CKRecordID class]]) {
-            [self discoverUserInfoWithUserRecordID:input completionHandler:handler];
+            [self discoverUserInfoWithUserRecordID:input completionHandler:adapter];
         } else {
-            [self discoverUserInfoWithEmailAddress:input completionHandler:handler];
+            [self discoverUserInfoWithEmailAddress:input completionHandler:adapter];
         }
     }];
 }
 
 - (PMKPromise *)fetchUserRecordID {
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfill, PMKPromiseRejecter reject) {
-        [self fetchUserRecordIDWithCompletionHandler:^(CKRecordID *recordID, NSError *error) {
-            if (error)
-                reject(error);
-            else
-                fulfill(recordID);
-        }];
+    return [PMKPromise promiseWithAdapter:^(PMKAdapter adapter) {
+        [self fetchUserRecordIDWithCompletionHandler:adapter];
     }];
 }
 

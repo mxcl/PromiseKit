@@ -11,7 +11,15 @@ Modern development is highly asynchronous: isn’t it about time iOS developers 
 ## How To Get Started… Quickly
 
 ```ruby
-pod "PromiseKit"
+# CocoaPods
+pod "PromiseKit"                # Objective-C PromiseKit
+pod "PromiseKit/Promise"        # Just PMKPromise, none of the categories
+
+pod "PromiseKit/Swift"          # Swift PromiseKit
+pod "PromiseKit/Swift/Promise"  # Just Promise, none of the categories
+
+# Carthage
+github "mxcl/PromiseKit"        # Swift PromiseKit
 ```
 
 # Donations
