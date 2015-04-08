@@ -45,12 +45,12 @@ private var key = "PMKSomeString"
 
 extension UIViewController {
     public func fulfill(value: Any) {
-        let resolver = objc_getAssociatedObject(self, &key) as Resolver
+        let resolver = objc_getAssociatedObject(self, &key) as! Resolver
         resolver.fulfill(value)
     }
 
     public func reject(error:NSError) {
-        let resolver = objc_getAssociatedObject(self, &key) as Resolver
+        let resolver = objc_getAssociatedObject(self, &key) as! Resolver
         resolver.reject(error)
     }
 
@@ -59,7 +59,7 @@ extension UIViewController {
 
         let (promise, f, r) = Promise<T>.defer()
         let fwrap = { (any: Any) in
-            f(any as T)
+            f(any as! T)
         }
 
         objc_setAssociatedObject(vc, &key, Resolver(fulfill: fwrap, reject: r), UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))

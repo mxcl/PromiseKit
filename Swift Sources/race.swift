@@ -8,7 +8,7 @@ public func race<T>(promises: Promise<T>...) -> Promise<(T, Int)> {
             promise.thenUnleashZalgo { value->() in
                 fulfill(value, index)
             }
-            promise.catch(reject)
+            promise.catch(body: reject)
         }
     }
 }

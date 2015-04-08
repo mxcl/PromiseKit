@@ -31,7 +31,7 @@ private func fetch<T>(var request: NSURLRequest, body: ((T) -> Void, (NSError) -
             //TODO in the event of a non 2xx rsp, try to parse JSON out of the response anyway
 
             func rejecter(error: NSError) {
-                let info = NSMutableDictionary(dictionary: error.userInfo ?? [:])
+                var info: [NSObject: AnyObject] = error.userInfo ?? [:]
                 info[NSURLErrorFailingURLErrorKey] = request.URL
                 info[NSURLErrorFailingURLStringErrorKey] = request.URL!.absoluteString
                 if data != nil {
@@ -52,21 +52,15 @@ private func fetch<T>(var request: NSURLRequest, body: ((T) -> Void, (NSError) -
             if err != nil {
                 rejecter(err)
             } else {
-                if let response = (rsp as? NSHTTPURLResponse) {
-                    if response.statusCode < 200 || response.statusCode >= 300 {
-                        rejecter(NSError(domain: NSURLErrorDomain,
-                                         code: NSURLErrorBadServerResponse,
-                                         userInfo: [
-                                             NSLocalizedDescriptionKey: "The server returned a bad HTTP response code",
-                                             NSURLErrorFailingURLStringErrorKey: request.URL.absoluteString!,
-                                             NSURLErrorFailingURLErrorKey: request.URL
-                                         ]))
-
-                        return
-                    }
+                if let response = (rsp as? NSHTTPURLResponse) where response.statusCode < 200 || response.statusCode >= 300 {
+                    rejecter(NSError(domain: NSURLErrorDomain,
+                                     code: NSURLErrorBadServerResponse,
+                                     userInfo: [
+                                         NSLocalizedDescriptionKey: "The server returned a bad HTTP response code",
+                                     ]))
+                } else {
+                    body(fulfiller, rejecter, data, rsp)
                 }
-
-                body(fulfiller, rejecter, data, rsp)
             }
         }
     }

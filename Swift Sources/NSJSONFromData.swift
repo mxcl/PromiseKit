@@ -24,7 +24,7 @@ func NSJSONFromDataT<T>(data: NSData) -> Promise<T> {
     } else if let cast = json as? T {
         return Promise(value: cast)
     } else {
-        var info = NSMutableDictionary()
+        var info: [NSObject: AnyObject] = [:]
         info[NSLocalizedDescriptionKey] = "The server returned JSON in an unexpected arrangement"
         if let jo:AnyObject = json { info[PMKJSONErrorJSONObjectKey] = jo }
         let error = NSError(domain:PMKErrorDomain, code:PMKJSONError, userInfo:info)

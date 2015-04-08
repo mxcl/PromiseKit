@@ -336,14 +336,14 @@ public class Promise<T> {
 
         switch state {
         case .Fulfilled(let value):
-            fulfill(body(value()))
+            fulfill(body(value as! T))
         case .Rejected(let error):
             reject(error)
         case .Pending(let handlers):
             handlers.append({
                 switch self.state {
                 case .Fulfilled(let value):
-                    fulfill(body(value()))
+                    fulfill(body(value as! T))
                 case .Rejected(let error):
                     reject(error)
                 case .Pending:
