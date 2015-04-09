@@ -18,7 +18,7 @@ extension NSTask {
         return promise().thenInBackground { (stdout: NSData, stderr: NSData, terminationStatus: Int) -> Promise<(String, String, Int)> in
             if let out = NSString(data: stdout, encoding: encoding) {
                 if let err = NSString(data: stderr, encoding: encoding) {
-                    return Promise(value: (out, err, terminationStatus))
+                    return Promise(value: (String(out), String(err), terminationStatus))
                 }
             }
             return Promise(error: generateError("Could not decode command output into string.", stdout, stderr, self))
@@ -39,7 +39,8 @@ extension NSTask {
                 if self.terminationReason == .Exit && self.terminationStatus == 0 {
                     fulfill(stdout, stderr, Int(self.terminationStatus))
                 } else {
-                    let cmd = " ".join([self.launchPath] + (self.arguments as [String]))
+                    let args = [self.launchPath] + self.arguments
+                    let cmd = " ".join(args as! [String])
                     reject(generateError("Failed executing: `\(cmd)`.", stdout, stderr, self))
                 }
             }
