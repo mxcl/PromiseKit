@@ -4,11 +4,11 @@ private class LocationManager: CLLocationManager, CLLocationManagerDelegate {
     let fulfiller: ([CLLocation]) -> Void
     let rejecter: (NSError) -> Void
 
-    func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+    @objc func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
         fulfiller(locations as! [CLLocation])
     }
 
-    func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
+    @objc func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
         rejecter(error)
     }
 
@@ -37,7 +37,7 @@ private class AuthorizationCatcher: CLLocationManager, CLLocationManagerDelegate
         }
     }
 
-    private func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+    @objc func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         if status != .NotDetermined {
             fulfill(status)
             PMKRelease(self)
