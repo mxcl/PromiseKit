@@ -6,11 +6,13 @@
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UIImagePickerController.h>
 #import "UIViewController+PromiseKit.h"
+@import MessageUI.MFMessageComposeViewController;
+@import MessageUI.MFMailComposeViewController;
 
 static const char *kSegueFulfiller = "kSegueFulfiller";
 static const char *kSegueRejecter = "kSegueRejecter";
 
-@interface PMKMFDelegater : NSObject
+@interface PMKMFDelegater : NSObject <MFMessageComposeViewControllerDelegate, MFMailComposeViewControllerDelegate>
 @end
 
 @interface PMKUIImagePickerControllerDelegate : NSObject <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
@@ -28,6 +30,15 @@ static const char *kSegueRejecter = "kSegueRejecter";
         PMKRetain(delegater);
 
         SEL selector = NSSelectorFromString(@"setMailComposeDelegate:");
+        IMP imp = [vc methodForSelector:selector];
+        void (*func)(id, SEL, id) = (void *)imp;
+        func(vc, selector, delegater);
+    }
+    else if ([vc isKindOfClass:NSClassFromString(@"MFMessageComposeViewController")]) {
+        PMKMFDelegater *delegater = [PMKMFDelegater new];
+        PMKRetain(delegater);
+
+        SEL selector = NSSelectorFromString(@"setMessageComposeDelegate:");
         IMP imp = [vc methodForSelector:selector];
         void (*func)(id, SEL, id) = (void *)imp;
         func(vc, selector, delegater);
@@ -137,7 +148,7 @@ static void classOverridingSelector(const char* newClassPrefix, id target, SEL o
 
 @implementation PMKMFDelegater
 
-- (void)mailComposeController:(id)controller didFinishWithResult:(int)result error:(NSError *)error {
+- (void)mailComposeController:(id)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
     if (error)
         [controller reject:error];
     else
@@ -145,6 +156,16 @@ static void classOverridingSelector(const char* newClassPrefix, id target, SEL o
 
     PMKRelease(self);
 }
+
+- (void)messageComposeViewController:(id)controller didFinishWithResult:(MessageComposeResult)result {
+    if (result == MessageComposeResultFailed)
+        [controller reject:[NSError errorWithDomain:PMKErrorDomain code:PMKUnknownError userInfo:@{NSLocalizedDescriptionKey: @"The user’s attempt to save or send the message was unsuccessful."}]];
+    else
+        [controller fulfill:@(result)];
+
+    PMKRelease(self);
+}
+
 @end
 
 
