@@ -84,12 +84,12 @@ extension UIViewController {
         return promiseViewController(vc, animated: animated, completion: completion)
     }
 
-    public func promiseViewController(vc: MFMailComposeViewController, animated: Bool = false, completion:(Void)->() = {}) -> Promise<Int> {
+    public func promiseViewController(vc: MFMailComposeViewController, animated: Bool = false, completion:(Void)->() = {}) -> Promise<Any> {
         vc.mailComposeDelegate = MFComposeViewControllerProxy()
         return promiseViewController(vc as UIViewController, animated: animated, completion: completion)
     }
 
-    public func promiseViewController(vc: MFMessageComposeViewController, animated: Bool = false, completion:(Void)->() = {}) -> Promise<Int> {
+    public func promiseViewController(vc: MFMessageComposeViewController, animated: Bool = false, completion:(Void)->() = {}) -> Promise<Any> {
         vc.messageComposeDelegate = MFComposeViewControllerProxy()
         return promiseViewController(vc as UIViewController, animated: animated, completion: completion)
     }
