@@ -155,9 +155,9 @@ static void classOverridingSelector(const char* newClassPrefix, id target, SEL o
     PMKRelease(self);
 }
 
-        [controller reject:[NSError errorWithDomain:PMKErrorDomain code:PMKUnknownError userInfo:@{NSLocalizedDescriptionKey: @"The user’s attempt to save or send the message was unsuccessful."}]];
 - (void)messageComposeViewController:(id)controller didFinishWithResult:(int)result {
     if (result == 2)
+        [controller reject:[NSError errorWithDomain:PMKErrorDomain code:PMKOperationFailed userInfo:@{NSLocalizedDescriptionKey: @"The user’s attempt to save or send the message was unsuccessful."}]];
     else
         [controller fulfill:@(result)];
 

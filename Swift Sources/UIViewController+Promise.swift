@@ -23,7 +23,7 @@ class MFComposeViewControllerProxy: NSObject, MFMailComposeViewControllerDelegat
 
     func messageComposeViewController(controller: MFMessageComposeViewController!, didFinishWithResult result: MessageComposeResult) {
         if result.value == MessageComposeResultFailed.value {
-            controller.reject(NSError(domain: PMKErrorDomain, code: 4, userInfo: [NSLocalizedDescriptionKey: "The user’s attempt to save or send the message was unsuccessful."]))
+            controller.reject(NSError(domain: PMKErrorDomain, code: PMKOperationFailed, userInfo: [NSLocalizedDescriptionKey: "The user’s attempt to save or send the message was unsuccessful."]))
         } else {
             controller.fulfill(result)
         }
