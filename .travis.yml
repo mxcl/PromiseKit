@@ -5,11 +5,11 @@ before_install:
   - brew install carthage
 install: carthage bootstrap --verbose
 xcode_scheme: [PMKiOS, PMKOSX]
-xcode_sdk: [iphonesimulator8.1, macosx10.10]
+xcode_sdk: [iphonesimulator8.3, macosx10.10]
 
 matrix:
   exclude:
     - xcode_scheme: PMKOSX
-      xcode_sdk: iphonesimulator8.1
+      xcode_sdk: iphonesimulator8.3
     - xcode_scheme: PMKiOS
       xcode_sdk: macosx10.10
