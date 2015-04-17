@@ -191,6 +191,7 @@ Pod::Spec.new do |s|
     ss.subspec 'CloudKit' do |sss|
       sss.dependency 'PromiseKit/Swift/Promise'
       sss.source_files = 'Swift Sources/CK*.swift'
+      sss.ios.deployment_target = 8.0
       sss.osx.deployment_target = '10.10'
     end
     
