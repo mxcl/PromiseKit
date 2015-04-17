@@ -6,13 +6,11 @@
 #import <UIKit/UINavigationController.h>
 #import <UIKit/UIImagePickerController.h>
 #import "UIViewController+PromiseKit.h"
-@import MessageUI.MFMessageComposeViewController;
-@import MessageUI.MFMailComposeViewController;
 
 static const char *kSegueFulfiller = "kSegueFulfiller";
 static const char *kSegueRejecter = "kSegueRejecter";
 
-@interface PMKMFDelegater : NSObject <MFMessageComposeViewControllerDelegate, MFMailComposeViewControllerDelegate>
+@interface PMKMFDelegater : NSObject
 @end
 
 @interface PMKUIImagePickerControllerDelegate : NSObject <UIImagePickerControllerDelegate, UINavigationControllerDelegate>
@@ -148,7 +146,7 @@ static void classOverridingSelector(const char* newClassPrefix, id target, SEL o
 
 @implementation PMKMFDelegater
 
-- (void)mailComposeController:(id)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
+- (void)mailComposeController:(id)controller didFinishWithResult:(int)result error:(NSError *)error {
     if (error)
         [controller reject:error];
     else
@@ -157,9 +155,9 @@ static void classOverridingSelector(const char* newClassPrefix, id target, SEL o
     PMKRelease(self);
 }
 
-- (void)messageComposeViewController:(id)controller didFinishWithResult:(MessageComposeResult)result {
-    if (result == MessageComposeResultFailed)
         [controller reject:[NSError errorWithDomain:PMKErrorDomain code:PMKUnknownError userInfo:@{NSLocalizedDescriptionKey: @"The user’s attempt to save or send the message was unsuccessful."}]];
+- (void)messageComposeViewController:(id)controller didFinishWithResult:(int)result {
+    if (result == 2)
     else
         [controller fulfill:@(result)];
 
