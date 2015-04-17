@@ -39,6 +39,7 @@ typedef void (^PMKBooleanAdapter)(BOOL, NSError *);
 #define PMKUnknownError 2
 #define PMKInvalidUsageError 3
 #define PMKAccessDeniedError 4
+#define PMKOperationFailed 5
 
 #define PMKURLErrorFailingURLResponseKey @"PMKURLErrorFailingURLResponseKey"
 #define PMKURLErrorFailingDataKey @"PMKURLErrorFailingDataKey"
