@@ -8,6 +8,7 @@ public let PMKJSONErrorJSONObjectKey = "PMKJSONErrorJSONObjectKey"
 
 public let PMKJSONError = 1
 public let NoSuchRecord = 2
+public let PMKOperationFailed = 5
 
 #if os(OSX)
 public let PMKTaskErrorStandardOutputKey = "PMKTaskErrorStandardOutputKey"

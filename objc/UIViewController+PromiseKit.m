@@ -32,6 +32,15 @@ static const char *kSegueRejecter = "kSegueRejecter";
         void (*func)(id, SEL, id) = (void *)imp;
         func(vc, selector, delegater);
     }
+    else if ([vc isKindOfClass:NSClassFromString(@"MFMessageComposeViewController")]) {
+        PMKMFDelegater *delegater = [PMKMFDelegater new];
+        PMKRetain(delegater);
+
+        SEL selector = NSSelectorFromString(@"setMessageComposeDelegate:");
+        IMP imp = [vc methodForSelector:selector];
+        void (*func)(id, SEL, id) = (void *)imp;
+        func(vc, selector, delegater);
+    }
     else if ([vc isKindOfClass:NSClassFromString(@"UIImagePickerController")]) {
         PMKUIImagePickerControllerDelegate *delegator = [PMKUIImagePickerControllerDelegate new];
         PMKRetain(delegator);
@@ -145,6 +154,16 @@ static void classOverridingSelector(const char* newClassPrefix, id target, SEL o
 
     PMKRelease(self);
 }
+
+- (void)messageComposeViewController:(id)controller didFinishWithResult:(int)result {
+    if (result == 2)
+        [controller reject:[NSError errorWithDomain:PMKErrorDomain code:PMKOperationFailed userInfo:@{NSLocalizedDescriptionKey: @"The user’s attempt to save or send the message was unsuccessful."}]];
+    else
+        [controller fulfill:@(result)];
+
+    PMKRelease(self);
+}
+
 @end
 
 

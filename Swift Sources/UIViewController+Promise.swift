@@ -1,10 +1,11 @@
 import UIKit
 import MessageUI.MFMailComposeViewController
+import MessageUI.MFMessageComposeViewController
 import Social.SLComposeViewController
 import AssetsLibrary.ALAssetsLibrary
 
 
-class MFMailComposeViewControllerProxy: NSObject, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate {
+class MFComposeViewControllerProxy: NSObject, MFMailComposeViewControllerDelegate, MFMessageComposeViewControllerDelegate, UINavigationControllerDelegate {
 
     override init() {
         super.init()
@@ -14,6 +15,15 @@ class MFMailComposeViewControllerProxy: NSObject, MFMailComposeViewControllerDel
     func mailComposeController(controller: MFMailComposeViewController!, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
         if error != nil {
             controller.reject(error)
+        } else {
+            controller.fulfill(result)
+        }
+        PMKRelease(self)
+    }
+
+    func messageComposeViewController(controller: MFMessageComposeViewController!, didFinishWithResult result: MessageComposeResult) {
+        if result.value == MessageComposeResultFailed.value {
+            controller.reject(NSError(domain: PMKErrorDomain, code: PMKOperationFailed, userInfo: [NSLocalizedDescriptionKey: "The user’s attempt to save or send the message was unsuccessful."]))
         } else {
             controller.fulfill(result)
         }
@@ -74,8 +84,13 @@ extension UIViewController {
         return promiseViewController(vc, animated: animated, completion: completion)
     }
 
-    public func promiseViewController(vc: MFMailComposeViewController, animated: Bool = false, completion:(Void)->() = {}) -> Promise<Int> {
-        vc.mailComposeDelegate = MFMailComposeViewControllerProxy()
+    public func promiseViewController(vc: MFMailComposeViewController, animated: Bool = false, completion:(Void)->() = {}) -> Promise<MFMailComposeResult> {
+        vc.mailComposeDelegate = MFComposeViewControllerProxy()
+        return promiseViewController(vc as UIViewController, animated: animated, completion: completion)
+    }
+
+    public func promiseViewController(vc: MFMessageComposeViewController, animated: Bool = false, completion:(Void)->() = {}) -> Promise<MessageComposeResult> {
+        vc.messageComposeDelegate = MFComposeViewControllerProxy()
         return promiseViewController(vc as UIViewController, animated: animated, completion: completion)
     }
 
