@@ -67,21 +67,15 @@ extension UIViewController {
     public func promiseViewController<T: Any>(vc: UIViewController, animated: Bool = true, completion:(Void)->() = {}) -> Promise<T> {
         presentViewController(vc, animated:animated, completion:completion)
 
-        let (promise, f, r) = Promise<T>.defer()
-        let fwrap = { (any: Any) in
-            f(any as! T)
-        }
-
-        objc_setAssociatedObject(vc, &key, Resolver(fulfill: fwrap, reject: r), UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
-
-        return promise.finally { _ in
-            self.dismissViewControllerAnimated(animated, completion:nil)
-        }
+        return bindPromiseToViewController(vc, animated: animated)
     }
 
-    public func promiseViewController<T>(nc: UINavigationController, animated: Bool = false, completion:(Void)->() = {}) -> Promise<T> {
+    public func promiseViewController<T>(nc: UINavigationController, animated: Bool = true, completion:(Void)->() = {}) -> Promise<T> {
+        presentViewController(nc, animated:animated, completion:completion)
+
         let vc = nc.viewControllers[0] as! UIViewController
-        return promiseViewController(vc, animated: animated, completion: completion)
+
+        return bindPromiseToViewController(vc, animated: animated)
     }
 
     public func promiseViewController(vc: MFMailComposeViewController, animated: Bool = false, completion:(Void)->() = {}) -> Promise<MFMailComposeResult> {
@@ -145,6 +139,19 @@ extension UIViewController {
                 self.dismissViewControllerAnimated(animated, completion: nil)
             }
             self.presentViewController(vc, animated: animated, completion: completion)
+        }
+    }
+
+    private func bindPromiseToViewController<T: Any>(vc: UIViewController, animated: Bool) -> Promise<T> {
+        let (promise, f, r) = Promise<T>.defer()
+        let fwrap = { (any: Any) in
+            f(any as! T)
+        }
+
+        objc_setAssociatedObject(vc, &key, Resolver(fulfill: fwrap, reject: r), UInt(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
+        
+        return promise.finally { _ in
+            self.dismissViewControllerAnimated(animated, completion:nil)
         }
     }
 }
