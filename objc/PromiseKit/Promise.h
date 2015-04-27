@@ -57,16 +57,20 @@
  */
 - (PMKPromise *(^)(id))thenInBackground;
 
+#if !__cplusplus
 /**
  The provided block is executed when the receiver is rejected.
 
  Provide a block of form `^(NSError *){}` or simply `^{}`. The parameter has type `id` to give you the freedom to choose either.
 
  The provided block always runs on the main queue.
+ 
+ Note, since catch is a c++ keyword, this method is not availble in Objective-C++ files. Instead use catchOn.
 
  @see catchOn
 */
-- (PMKPromise *(^)(id))catch;
+- (PMKPromise *(^)(id))catch;  // catch is a c++ keyword
+#endif
 
 /**
  The provided block is executed when the receiver is resolved.
