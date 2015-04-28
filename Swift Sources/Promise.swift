@@ -340,16 +340,18 @@ public class Promise<T> {
         case .Rejected(let error):
             reject(error)
         case .Pending(let handlers):
-            handlers.append({
-                switch self.state {
-                case .Fulfilled(let value):
-                    fulfill(body(value as! T))
-                case .Rejected(let error):
-                    reject(error)
-                case .Pending:
-                    abort()
-                }
-            })
+            dispatch_barrier_sync(self.barrier) {
+                handlers.append({
+                    switch self.state {
+                    case .Fulfilled(let value):
+                        fulfill(body(value as! T))
+                    case .Rejected(let error):
+                        reject(error)
+                    case .Pending:
+                        abort()
+                    }
+                })
+            }
         }
 
         return promise
