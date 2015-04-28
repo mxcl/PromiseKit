@@ -25,6 +25,27 @@ class TestPromise: XCTestCase {
         }
     }
 
+    func stressDataRace<T: Equatable>(e1: XCTestExpectation, iterations: Int = 1000, stressFactor: Int = 10, stressFunction: (Promise<T>) -> Void, fulfill f: () -> T) {
+        let group = dispatch_group_create()
+        let queue = dispatch_queue_create("the.domain.of.Zalgo", DISPATCH_QUEUE_CONCURRENT)
+
+        for i in 0..<iterations {
+            let (promise, fulfill, reject) = Promise<T>.defer()
+
+            dispatch_apply(stressFactor, queue) { n in
+                stressFunction(promise)
+            }
+
+            dispatch_group_async(group, queue) {
+                fulfill(f())
+            }
+        }
+
+        dispatch_group_notify(group, queue) {
+            e1.fulfill()
+        }
+    }
+
     func test_hasValue() {
         let p:Promise<Int> = Promise(value:1)
         XCTAssertEqual(p.value!, 1)
@@ -267,6 +288,34 @@ class TestPromise: XCTestCase {
         }
 
         waitForExpectationsWithTimeout(1, handler: nil)
+    }
+
+    func testThenDataRace() {
+        let e1 = expectation()
+
+        //will crash if then doesn't protect handlers
+        stressDataRace(e1, stressFunction: { promise in
+            promise.then { s -> Void in
+                XCTAssertEqual("ok", s)
+                return
+            }
+        }, fulfill: { "ok" })
+
+        waitForExpectationsWithTimeout(10, handler: nil)
+    }
+
+    func testZalgoDataRace() {
+        let e1 = expectation()
+
+        //will crash if zalgo doesn't protect handlers
+        stressDataRace(e1, stressFunction: { promise in
+            promise.thenUnleashZalgo { s -> Void in
+                XCTAssertEqual("ok", s)
+                return
+            }
+        }, fulfill: { "ok" })
+
+        waitForExpectationsWithTimeout(10, handler: nil)
     }
 
     func testZalgoMore() {
