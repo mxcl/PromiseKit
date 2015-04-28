@@ -2,7 +2,7 @@
 Pod::Spec.new do |s|
   s.name = "PromiseKit"
 
-  `xcodebuild -project PromiseKit.xcodeproj -showBuildSettings` =~ /CURRENT_PROJECT_VERSION = ((\d\.)+\d)/
+  `xcodebuild -project PromiseKit.xcodeproj -showBuildSettings 2>/dev/null` =~ /CURRENT_PROJECT_VERSION = ((\d\.)+\d)/
   abort if $1.nil?
   s.version = $1
 
