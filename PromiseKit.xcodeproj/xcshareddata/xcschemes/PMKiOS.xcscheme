@@ -14,23 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "639339731ABCF32B00B7AAA9"
+               BlueprintIdentifier = "63F803A21AB87A8200E4DEE1"
                BuildableName = "PromiseKit.framework"
                BlueprintName = "PMKiOS"
-               ReferencedContainer = "container:PromiseKit.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6393397D1ABCF32B00B7AAA9"
-               BuildableName = "PMKTests.xctest"
-               BlueprintName = "PMKTests"
                ReferencedContainer = "container:PromiseKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -46,9 +32,19 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6393397D1ABCF32B00B7AAA9"
-               BuildableName = "PMKTests.xctest"
-               BlueprintName = "PMKTests"
+               BlueprintIdentifier = "63CA14921AEA9CBE00223904"
+               BuildableName = "PMKiOSCategoryHostedTests.xctest"
+               BlueprintName = "PMKiOSCategoryHostedTests"
+               ReferencedContainer = "container:PromiseKit.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "638E0ED41AEF16530052E28F"
+               BuildableName = "PMKiOSCategoryTests.xctest"
+               BlueprintName = "PMKiOSCategoryTests"
                ReferencedContainer = "container:PromiseKit.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -56,7 +52,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "639339731ABCF32B00B7AAA9"
+            BlueprintIdentifier = "63F803A21AB87A8200E4DEE1"
             BuildableName = "PromiseKit.framework"
             BlueprintName = "PMKiOS"
             ReferencedContainer = "container:PromiseKit.xcodeproj">
@@ -75,7 +71,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "639339731ABCF32B00B7AAA9"
+            BlueprintIdentifier = "63F803A21AB87A8200E4DEE1"
             BuildableName = "PromiseKit.framework"
             BlueprintName = "PMKiOS"
             ReferencedContainer = "container:PromiseKit.xcodeproj">
@@ -93,7 +89,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "639339731ABCF32B00B7AAA9"
+            BlueprintIdentifier = "63F803A21AB87A8200E4DEE1"
             BuildableName = "PromiseKit.framework"
             BlueprintName = "PMKiOS"
             ReferencedContainer = "container:PromiseKit.xcodeproj">
