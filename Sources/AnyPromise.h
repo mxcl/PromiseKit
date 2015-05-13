@@ -12,12 +12,14 @@ typedef NS_ENUM(NSInteger, PMKCatchPolicy) {
 
 __attribute__((objc_runtime_name("PMKAnyPromise")))
 __attribute__((objc_subclassing_restricted))
-@interface AnyPromise : NSObject
+@interface PMKPromise : NSObject
 @property (nonatomic, readonly) BOOL pending;
 @property (nonatomic, readonly) BOOL resolved;
 @property (nonatomic, readonly) BOOL fulfilled;
 @property (nonatomic, readonly) BOOL rejected;
 @end
+
+@compatibility_alias AnyPromise PMKPromise;
 
 
 /**

@@ -5,9 +5,6 @@
 
 #import <PromiseKit/AnyPromise.h>
 
-
-#define PMKPromise AnyPromise
-
 typedef void (^PMKFulfiller)(id);
 typedef void (^PMKRejecter)(NSError *);
 
