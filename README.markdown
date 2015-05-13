@@ -4,6 +4,8 @@ Modern development is highly asynchronous: isn’t it about time iOS developers 
 
 # How To Get Started
 
+[![Join the chat at https://gitter.im/mxcl/PromiseKit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mxcl/PromiseKit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+
 * Read PromiseKit’s [comprehensive learning guide](http://promisekit.org/introduction).
 * Read the [API documentation](http://cocoadocs.org/docsets/PromiseKit/).
 * [Integrate](http://promisekit.org/getting-started) promises into your existing projects.
