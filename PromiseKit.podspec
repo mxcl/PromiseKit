@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.version = $1
 
   s.source = { :git => "https://github.com/mxcl/#{s.name}.git", :tag => s.version }
-  s.license = 'MIT'
+  s.license = { :type => 'MIT', :text => '@see README' }
   s.summary = 'A delightful Promises implementation for iOS and OS X.'
   s.homepage = 'http://promisekit.org'
   s.description = 'UIActionSheet UIAlertView CLLocationManager MFMailComposeViewController ACAccountStore StoreKit SKRequest SKProductRequest blocks'
@@ -17,7 +17,7 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.ios.deployment_target = '8.0'
   s.osx.deployment_target = '10.9'
-  s.module_map = 'Sources/module.map'
+  s.module_map = 'Sources/PMK.modulemap'
   s.xcconfig = { 'SWIFT_INSTALL_OBJC_HEADER' => 'NO' }
 
   s.subspec 'Accounts' do |ss|
@@ -57,7 +57,7 @@ Pod::Spec.new do |s|
     
     ss.source_files = 'Sources/*.{swift}', 'Sources/{after,AnyPromise,dispatch_promise,hang,join,PMKPromise,when}.m', *hh
     ss.public_header_files = hh
-    ss.private_header_files = 'Sources/__AnyPromise.h'
+    ss.private_header_files = 'Sources/AnyPromise+Private.h'
     ss.frameworks = 'Foundation'
   end
 
@@ -100,7 +100,8 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'Social' do |ss|
-    ss.source_files = 'Categories/Social/*'
+    ss.ios.source_files = 'Categories/Social/*'
+    ss.osx.source_files = Dir['Categories/Social/*'] - ['Categories/Social/SLComposeViewController+Promise.swift']
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'Social'
   end
@@ -127,13 +128,13 @@ Pod::Spec.new do |s|
 ####################################################### deprecated
   %w{base Promise Pause Until When Join Hang Zalgo}.each do |name|
     s.subspec name do |ss|
-      ss.deprecated = true
+      #ss.deprecated = true
       ss.dependency 'PromiseKit/CorePromise'
     end
   end
 
   s.subspec 'all' do |ss|
-    ss.deprecated = true
+    #ss.deprecated = true
     ss.dependency 'PromiseKit/Accounts'
     ss.dependency 'PromiseKit/AVFoundation'
     ss.dependency 'PromiseKit/CloudKit'
@@ -162,33 +163,33 @@ Pod::Spec.new do |s|
     end
     s.subspec name do |ss|
       ss.dependency "PromiseKit/#{framework}"
-      ss.deprecated = true
+      #ss.deprecated = true
     end
   end
 
   s.subspec 'Swift' do |ss|
-    ss.deprecated = true
+    #ss.deprecated = true
     ss.default_subspecs = 'Foundation', 'UIKit'
 
     ss.subspec 'Promise' do |sss|
-      sss.deprecated = true
+      #sss.deprecated = true
       sss.dependency 'PromiseKit/CorePromise'
     end
     
     ss.subspec 'NSJSONFromData' do |sss|
-      sss.deprecated = true
+      #sss.deprecated = true
       sss.dependency 'PromiseKit/CorePromise'
     end      
 
     %w{CloudKit UIKit CoreLocation MapKit Social StoreKit Foundation NSNotificationCenter Accounts AVFoundation}.each do |name|
       ss.subspec(name) do |sss|
-        sss.deprecated = true
+        #sss.deprecated = true
         sss.dependency "PromiseKit/#{name}"
       end
     end
 
     ss.subspec 'all' do |sss|
-      sss.deprecated = true
+      #sss.deprecated = true
       sss.dependency 'PromiseKit/Swift/CloudKit'
       sss.dependency 'PromiseKit/Swift/CoreLocation'
       sss.dependency 'PromiseKit/Swift/Foundation'
