@@ -57,7 +57,7 @@ Pod::Spec.new do |s|
     
     ss.source_files = 'Sources/*.{swift}', 'Sources/{after,AnyPromise,dispatch_promise,hang,join,PMKPromise,when}.m', *hh
     ss.public_header_files = hh
-    ss.private_header_files = 'Sources/AnyPromise+Private.h'
+    ss.preserve_paths = 'Sources/AnyPromise+Private.h', 'Sources/PMKCallVariadicBlock.m', 'Sources/NSMethodSignatureForBlock.m'
     ss.frameworks = 'Foundation'
   end
 
