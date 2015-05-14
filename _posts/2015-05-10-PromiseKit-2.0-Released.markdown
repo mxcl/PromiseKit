@@ -38,7 +38,8 @@ PromiseKit 2.0 has two promise types:
  
 Each is designed to be an approproate promise implementation for the strong points of its language.
 
-`Promise<T>` is strict, defined and precise. `AnyPromise` is loose, flexible and dynamic.
+* `Promise<T>` is strict, defined and precise.
+* `AnyPromise` is loose, flexible and dynamic.
 
 `AnyPromise` behaves like PromiseKit 1’s Objective-C promise implementation (`PMKPromise`):
 
@@ -92,12 +93,20 @@ NSURLConnection.GET("http://placekitten.com/\(width)/\(height)").then { (data: N
 If you have an `AnyPromise` you can use it in a `Promise<T>` chain:
 
 {% highlight swift %}
-import PromiseKit.SystemConfiguration
-
-NSURLConnection.POST(url, multipartFormData: formData).then {
+someSwiftPromise().then { _ -> AnyPromise in
+    // provided by `pod PromiseKit/SystemConfiguration`
     return SCNetworkReachability()
 }.then { (obj: AnyObject?) in
     // AnyPromise always resolves with `AnyObject?`
+}
+{% endhighlight %}
+
+Or you can directly then off it:
+
+{% highlight swift %}
+fetchKitten().then { (kitten: Kitten) in
+    // this version is generic so you must specify the
+    // type of the fulfillment value, above: `Kitten`
 }
 {% endhighlight %}
 
@@ -116,6 +125,8 @@ class MyObject {
     }
 }
 {% endhighlight %}
+
+Please note, that it is essential that you `#import <PromiseKit/PromiseKit.h>` before you import the generated `YourProject-Swift.h` header in your Objective-C `.m` files. This is because of how we have declared our type `AnyPromise` to maintain backwards compatability. Sorry about this, but we have to balance many different convenience considerations.
     
 ## Cancellation
 
@@ -219,9 +230,9 @@ Please note, there are <a href="http://blog.izs.me/post/59142742143/designing-ap
 Normally a `then` can be dispatched to the queue of your choice:
 
 {% highlight swift %}
-let bgq = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
 
-NSURLConnection.GET(url).then(on: bgq) {
+NSURLConnection.GET(url).then(on: queue) {
     // we’re on the queue we asked for
 }
 {% endhighlight %}
@@ -255,6 +266,17 @@ firstly {
     NSURLConnection.POST(url)
 }
 {% endhighlight %}
+
+Versus:
+
+{% highlight swift %}
+CLLocationManger.promise().then {
+    UIView.animate { foo.alpha = 1 }
+}.then {
+    NSURLConnection.POST(url)
+}
+{% endhighlight %}
+
 
 ## 100% Test Coverage
 
@@ -295,7 +317,7 @@ The Swift compiler will often error with `then`. To figure out the issue, first
 try specifying the full signature for your closures:
 
 {% highlight swift %}
-foo.then {
+foo.then { x in
     doh()
     return bar()
 }
@@ -308,14 +330,13 @@ foo.then { obj -> Promise<Type> in
 }
 
 // Because the Swift compiler cannot infer closure types very
-// well yet, one-line closures almost always
-// compile without explicitness. I’m not a fan of this, as it makes
-// using promises in Swift ugly, but I hope that
-// Apple intend to improve the detection of closure types to
-// make using promises in Swift as delightful as in Objective-C.
+// well yet. We hope this will be fixed.
+
+// Watch out for  one-line closures though! Swift will
+// automatically infer the types, which may confuse you:
 
 foo.then {
-    return bar()
+    return bar()  // 👌
 }
 {% endhighlight %}
 
@@ -337,15 +358,21 @@ Because `AnyPromise` is for Objective-C, it can only hold objects that Objective
 When porting from PromiseKit 1.x to 2.x, your code will probably compile as before. However, you should be aware of:
 
 * Cancellation
-* `AnyPromise` no longer catches most exceptions. You can still `@throw` strings and `NSError` objects. We decided that exceptions in Objective-C mostly represent serious programmer errors and should be allowed to crash the program. [Discussion here](https://github.com/mxcl/PromiseKit/issues/13)
-* `PMKPromise` will continue to work as a namespace, but is considered deprecated.
-* Features like `when` have been moved to top-level functions (e.g., `[PMKPromise when:]` is now `PMKWhen`). For Swift, they are the same (`when`, `join`, etc.).
+* `AnyPromise` no longer catches most exceptions. Cocoa exceptions (almost entirely) represent serious programmer errors and should be allowed to crash the program. [Discussion here](https://github.com/mxcl/PromiseKit/issues/13). `Promise<T>` will not catch anything since you can’t throw nor can you catch anything in Swift. You can still `@throw` strings and `NSError` objects because we explicitly encouraged it as part of PromiseKit 1.x’s documentation and thus need to continue supporting it.
 * `PMKJoin` has a different parameter order per the documentation.
-* PromiseKit 2.0 has an iOS 7 minimum deployment target, though for users who want convenience, it is 8.0. This is because CocoaPods and Carthage will only build Swift projects for iOS 8. We intend to explore building a static library that will work on iOS 7, so stay tuned if you’re using PromiseKit 2 on iOS 7 and don’t want to manually compile the framework. The other option is PromiseKit 1.x which (provided you don’t use the Swift version) supports back to iOS 6.
-* Few exceptions are caught by `AnyPromise`. Because we explicitly encouraged it in the PromiseKit 1.x documentation, we still catch thrown `NSString` objects and thrown `NSError` objects. As before, `Promise<T>` will not catch anything since you can’t throw nor can you catch anything in Swift.
+* PromiseKit 2.0 has an iOS 7 minimum deployment target, though for users who want convenience, it is 8.0. This is because CocoaPods and Carthage will only build Swift projects for iOS 8. For iOS 7 we provide an [iOS 7 EZ-Bake](https://github.com/PromiseKit/EZiOS7) that makes it much easier to use PromiseKit 2 in iOS 7 targets. For iOS 6 and below you can still use PromiseKit 1.x. Most of the benefits of PromiseKit 2 are the cross-language bridging of promises.
 * PromiseKit 2 is mostly written in Swift. This means you will have to check the relevant project settings to embed a Swift framework.
+* `promiseViewController` with a `UIImagePickerController` no longer provides the original media data for its second parameter. Sorry but to do this imposed AssetsLibrary linkage on all PromiseKit consumers. The Swift categories still provide this option, since with Swift we can discern what you want precisely, so it can be provided in a separate file as a separate subspec. If you depended on this feature you can still get the original data, just grab the code from PromiseKit 1.x’s sources.
 
-In a few months we will delete the Swift portion of PromiseKit 1.x (CocoaPods will still find it if you depend on PromiseKit 1.x). It was never officially endorsed, and 2.x is better inevery way.
+In a few months we will delete the Swift portion of PromiseKit 1.x (CocoaPods will still find it if you depend on PromiseKit 1.x). It was never officially endorsed, and 2.x is better in every way.
+
+**If when porting from 1 to 2 you believe something no longer works, but it *should*, please, open a ticket. We believe in as much source compatability between major releases as possible**.
+
+Porting should be straight forward, but please be aware of the above, especially for any promises with changed then signatures for Objective-C promises (the only signatures that were intentially changed were `join` and promiseViewController for `UIImagePickerController`, so if you find a signature that is different otherwise, it is a bug, please report it).
+
+Cancellation *should* work for you as before, but it depends on how you were handling the cancellation in your codebase, so be careful.
+
+When in doubt, don’t upgrade major versions of third party libraries for production applications! We tried very hard to respect your commitment to PromiseKit, but it is not worth the risk unless you do thorough Q&A.
 
 
 # The Future

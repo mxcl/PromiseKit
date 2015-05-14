@@ -5,19 +5,15 @@ layout: default
 
 # Sealing Your Own Promises
 
-To start your own promise chain, use `+new:`. Here we show how to wrap a [Parse](http://parse.com) query:
+To start your own promise chain, use `+promiseWithResolverBlock:`. Here we show how to wrap a [Parse](http://parse.com) query:
 
 {% highlight objectivec %}
 - (PMKPromise *)users {
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfill, PMKPromiseRejecter reject) {
+    return [PMKPromise promiseWithResolverBlock:^(PMKResolver *resolve) {
         PFQuery *query = [PFUser query];
         [query whereKey:@"name" equals:@"mxcl"];
         [query findObjectsInBackgroundWithBlock:^(NSArray *objects, NSError *error) {
-            if (error) {
-                reject(error);
-            } else {
-                fulfill(objects);
-            }
+            resolve(error ?: objects);
         }];
     }];
 }
@@ -27,17 +23,17 @@ To start your own promise chain, use `+new:`. Here we show how to wrap a [Parse]
 });
 {% endhighlight %}
 
-Call `fulfill` if the asynchronous operation succeeds, and `reject` if it fails. It’s really important you do one or the other for *all* code paths, or your promise chain will not resolve under certain circumstances.
+`resolve` rejects the promise if you pass an NSError and fulfills it otherwise. It’s very important that all asynchronous paths end with a resolve or your promise will hang.
 
-This unusual syntax (for Objective-C) encourages encapsulation. `fulfill` and `reject` are private and should not be generally accessible to outside code. Thus if you use promises returned from third party code you can feel confident that they are not being mutated by your code or by anything else. It also means exceptions thrown during creation will be caught and cause the promise to be immediately rejected.
+This unusual syntax (for Objective-C) encourages encapsulation. `resolve` is private and should not be generally accessible to outside code. Thus if you use promises returned from third party code you can feel confident that they are not being mutated by your code or by anything else. It also means exceptions thrown during creation will be caught and cause the promise to be immediately rejected.
 
 Often you may need to do some work in a background queue as part of your new promise; if so, don’t be afraid to start using `thenOn` or `thenInBackground`. `then` and `thenOn`, return new promises, so you can just return that promise instead of the initial promise, and your API is A-OK.
 
 {% highlight objectivec %}
 - (PMKPromise *)kittens {
-    return [PMKPromise new:^(PMKPromiseFulfiller fulfill, PMKPromiseRejecter reject) {
+    return [PMKPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         [KittenPower fetch:^(NSArray kittens){
-            fulfill(kittens);
+            resolve(kittens);
         }];
     }].thenInBackground(^(NSArray *kittens){
         for (Kitten *kitten in kittens) {

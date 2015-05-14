@@ -22,40 +22,26 @@ Consequently PromiseKit doesn’t wrap many delegate patterns yet (eg. `UITextFi
 @end
 
 @implementation PMKLocationManager {
-    PromiseFulfiller fulfiller;   // void (^)(id)
-    PromiseRejecter rejecter;     // void (^)(NSError *)
+    PMKResolver resolve;
+    id retainCycle;
 }
 
 + (PMKPromise *)promise {
     PMKLocationManager *manager = [PMKLocationManager new];
     manager.delegate = manager;
+    manager->retainCycle = self;  // prevent deallocation
     [manager startUpdatingLocation];
-    PMKPromise *promise = [Promise new:^(PromiseFulfiller fulfiller, PromiseRejecter rejecter){
-        manager->fulfiller = fulfiller;
-        manager->rejecter = rejecter;
-    }];
-    promise.finally(^{
-        /*
-          By using the manager object here we force it to be retained by the
-          Promise object until *after* the part of the chain that uses it has
-          finished. Logging sucks, so maybe there is something more useful you can
-          do, eg. for `CLLocationManager` `-stopUpdatingLocation` would be perfect!
-          If you have nothing, then see the PromiseKit sources, we use an
-          associated object hack to force an object to retain itself.
-         */
-        NSLog(@"%@", manager);
-    });
-    // NOTE: we don’t return the promise returned by finally.
-    // This way we don’t risk premature deallocation of the manager.
-    return promise;
+    return [[AnyPromise alloc] initWithResolve:&manager->resolve];
 }
 
 - (void)locationManager:(id)manager didUpdateLocations:(NSArray *)locations {
-    fulfiller(PMKManifold(locations.firstObject, locations));
+    resolve(PMKManifold(locations.firstObject, locations));
+    retainCycle = nil;  // break retain cycle
 }
 
 - (void)locationManager:(id)manager didFailWithError:(NSError *)error {
-    rejecter(error);
+    resolve(error);
+    retainCycle = nil;  // break retain cycle
 }
 
 @end

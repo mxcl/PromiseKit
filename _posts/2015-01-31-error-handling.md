@@ -54,10 +54,8 @@ It’s important to remember that in order for your errors to propogate they mus
 
 PromiseKit has an additional bonus: unhandled errors (ie. errors that never get handled in a `catch`) are logged. If you like, we even provide [a mechanism][ueh] to execute your own code whenever errors are not caught.
 
-<aside>Even exceptions are caught during Promise execution and will cause the nearest catch handler to execute. When this happens the resulting <code>NSError</code> will have its localizedDescription set to the exception’s description. The thrown object will be stored in the error’s <code>userInfo</code> under <code>PMKUnderlyingExceptionKey</code>.<br><br>The reason we do this is so you have an opportunity to recover. An exception that occurs in an asynchronous task is usually specific to that task, you can recover and you don’t have to crash. If the exception was just thrown you wouldn't be able to <code>@catch</code> it since it is outside your control. If you still want to crash, you can rethrow exceptions in your catch handler, and to catch unhandled errors implement <code>PMKUnhandlerErrorHandler</code>.<br><br>Our recommendation however is: enjoy the additional stability promises provide. Chain all your promises so any errors or exceptions will halt the flow of the task the chain represents. Errors will naturally halt sequences of logic so you don't have to worry about your state machine’s integrity.</aside>
-
-<aside>PromiseKit cannot catch exceptions thrown in other threads even if they were spawned inside handlers, even if the throw happens from a nested block inside a PromiseKit handler. If you have such situations, consider <code>dispatch_promise</code> or wrapping more of your asynchronous systems in other promises.</aside>
+<aside>PromiseKit 1 would catch all exceptions. PromiseKit 2 will only catch exceptions that <i>you</i> throw within (only) <code>AnyPromise</code> handlers and only if they are of type <code>NSString</code> or <code>NSError</code>.</aside>
 
 <div><a class="pagination" href="/when">Next: `when`</a></div>
 
-[ueh]: https://github.com/mxcl/PromiseKit/blob/master/objc/PromiseKit/Promise.h#L140-L146
+[ueh]: https://github.com/mxcl/PromiseKit/blob/master/Sources/ErrorUnhandler.swift#L3-L24
