@@ -47,13 +47,15 @@ github "mxcl/PromiseKit" ~> 2.0
 
 ###  iOS 7 And Below
 
-Neither CocoaPods or Carthage will install iOS frameworks for deployment targets below iOS 8. PromiseKit 2 is a iOS framework. Thus if you need to support iOS 7 (or below, we support back to iOS 5):
+Neither CocoaPods or Carthage will install iOS frameworks for deployment targets below iOS 8. PromiseKit 2 is an iOS framework. If you need previous iOS versions then you need to do one of:
 
- 1. `pod "PromiseKit", "~> 1.5"`
+ 1. `pod "PromiseKit", "~> 1.5"` †‡
  2. Manually compile all the PromiseKit sources into your app target.
  3. Download our pre-built static framework (coming soon!)
 
-Note option 1 gives you no Swift support. Swift can only be compiled directly into the main application target or compiled into iOS 8 dynamic frameworks. Thus if you need Swift and you need iOS 7 you must compile the sources by hand (and if you’re doing that, pick PromiseKit 2, it’s better).
+† There is no Swift support with PromiseKit 1.x installed via CocoaPods.
+
+‡ PromiseKit 1.x will work as far back as iOS 5 if required.
 
 
 # Donations
