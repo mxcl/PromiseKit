@@ -43,9 +43,9 @@ github "mxcl/PromiseKit" ~> 2.0
 
 ### Standalone Distributions
 
-* [iOS 8 dynamic frameworks](https://github.com/mxcl/PromiseKit/releases/download/2.0.0/PromiseKit-2.0.0.zip)
+* [Pre-built Frameworks](https://github.com/mxcl/PromiseKit/releases/download/2.0.0/PromiseKit-2.0.0.zip)
 
-*Please Note* If you want a standalone download because you don’t want to learn CocoaPods or Carthage then may we ask you to reconsider? If you choose to use third-party libraries you should also choose to install bug fix releases, some of the fixes can be very important! Using a dependency manager takes the headache out of staying up-to-date.
+*Please Note* If you want a standalone download because you don’t want to learn CocoaPods or Carthage then please take note that if you choose to use third-party libraries you should also choose to install bug fix releases, some of the fixes can be very important! Using a dependency manager takes the headache out of staying up-to-date.
 
 ###  iOS 7 And Below
 
