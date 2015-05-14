@@ -3,17 +3,38 @@ category: home
 layout: default
 ---
 
-# What is a Promise?
+# What’s a Promise?
 
 A [promise](http://wikipedia.org/wiki/Promise_%28programming%29) represents the future value of an asynchronous task.
 
-# Sorry, what?
+# Sorry, What?
 
 A promise is an object that wraps an asynchronous task. Pass that object around, and write clean, ordered code; a logical, simple, modular stream of progression from one asynchronous task to another.
 
-# Right, OK… So Why Should I Care?
+{% highlight objective-c %}
+[self login].then(^{
 
-Promises are better than alternatives because:
+    // our login method wrapped an async task in a promise
+    return [API fetchKittens];
+
+}).then(^(NSArray *fetchedKittens){
+
+    // our API class wraps our API and returns promises
+    // fetchKittens returned a promise that resolves with an array of kittens
+    self.kittens = fetchedKittens;
+    [self.tableView reloadData];
+
+}).catch(^(NSError *error){
+
+    // any errors in any of the above promises land here
+    [[[UIAlertView alloc] init…] show];
+
+});
+{% endhighlight %}
+
+# Oh. Cool…?
+
+Promises are neat because:
 
 1. They make asynchronous operations chainable and standardized;
 2. They clean up asynchronous spaghetti;

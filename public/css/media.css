@@ -24,6 +24,9 @@ pre {
   pre {
     padding: 16px;
   }
+  .contents {
+    font-size: 0.6rem;
+  }
 }
 @media (min-width: 320px) and (orientation: landscape) {
   p, h1, h2, h3, ol, ul, aside, .indent {
@@ -67,5 +70,8 @@ pre {
   }
   aside {
     min-width: 34rem;
+  }
+  .contents {
+    font-size: 1rem;
   }
 }

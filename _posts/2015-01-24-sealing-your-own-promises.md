@@ -27,7 +27,7 @@ To start your own promise chain, use `+new:`. Here we show how to wrap a [Parse]
 });
 {% endhighlight %}
 
-Call `fulfill` if the asynchronous operation succeeds, and `reject` if it fails.
+Call `fulfill` if the asynchronous operation succeeds, and `reject` if it fails. It’s really important you do one or the other for *all* code paths, or your promise chain will not resolve under certain circumstances.
 
 This unusual syntax (for Objective-C) encourages encapsulation. `fulfill` and `reject` are private and should not be generally accessible to outside code. Thus if you use promises returned from third party code you can feel confident that they are not being mutated by your code or by anything else. It also means exceptions thrown during creation will be caught and cause the promise to be immediately rejected.
 

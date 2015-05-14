@@ -45,6 +45,9 @@ Consequently PromiseKit doesn’t wrap many delegate patterns yet (eg. `UITextFi
          */
         NSLog(@"%@", manager);
     });
+    // NOTE: we don’t return the promise returned by finally.
+    // This way we don’t risk premature deallocation of the manager.
+    return promise;
 }
 
 - (void)locationManager:(id)manager didUpdateLocations:(NSArray *)locations {

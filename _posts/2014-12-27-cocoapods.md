@@ -3,6 +3,8 @@ category: pods
 layout: default
 ---
 
+For instructions on how to install PromiseKit with CocoaPods [see the Getting Started guide](/getting-started).
+
 # Pods That Add Promises To Third Party Libraries
 
 Use PromiseKit with your favorite third party libraries:
@@ -10,7 +12,15 @@ Use PromiseKit with your favorite third party libraries:
 * [Parse](https://github.com/hathway/Parse-PromiseKit)
 * [RevMob](https://github.com/mxcl/PromiseKit/pull/47)
 * [AFNetworking](https://github.com/csotiriou/AFNetworking-PromiseKit) (alternatives:  [1](https://github.com/skeeet/AFNetworking-PromiseKit))
-* [YOUR LIBRARY HERE!](mailto:mxcl@me.com)
+* [Facebook SDK](https://github.com/FastrBooks/Facebook-PromiseKit)
+
+Or see if there’s anything that uses PromiseKit on CocoaPods that you could use:
+
+* [uses:PromiseKit](https://cocoapods.org/?q=uses%3Apromisekit*)
+
+# Pods Built on PromiseKit
+
+* [MBTNetworking](https://github.com/madbat/MBTNetworking) (pretty interesting networking library built on AFNetworking, Mantle and PromiseKit)
 
 # How To Add Promises to Third Party Libraries
 
@@ -77,7 +87,8 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'PromiseKit' do |ss|
-    ss.dependency 'PromiseKit/base', 'ABCKitten/base'
+    ss.dependency 'PromiseKit/Promise', '~> 1.5'
+    ss.dependency 'ABCKitten/base'
     ss.source_files = 'ABCKitten+PromiseKit.{m,h}'
   end
 end

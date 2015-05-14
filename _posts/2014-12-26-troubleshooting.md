@@ -32,8 +32,6 @@ Something got deallocated, and you still used it as part of your promise chain.
 
 When wrapping delegate patterns, the delegate property is usually `assign` which means if nothing else points to it, it will be deallocated immediately. The block-heavy nature of promises can easily lead to this situation, so it is something to be aware of.
 
-<div><a class="pagination" href="/appendix">Next: Appendix</a></div>
-
 
 ## 3. `Return type must match previous return type`
 
@@ -67,4 +65,4 @@ You need to change the return type of your block. Clang is smart, but only so fa
 
 You see the `id` after the `^` and before the `{`? That’s the fix.
 
-<div><a class="pagination" href="/appendix">Next: Appendix</a></div>
+<div><a class="pagination" href="/common-misusage">Next: Common Misusage</a></div>
