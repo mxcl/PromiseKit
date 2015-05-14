@@ -15,7 +15,9 @@ when(fetchImage(), getLocation()).then { image, location in
 }
 ```
 
-[![Join the chat at https://gitter.im/mxcl/PromiseKit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mxcl/PromiseKit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+PromiseKit is a thorough and delightful implementation of promises for iOS and OS X with first-class support for **both** Objective-C *and* Swift.
+
+[![Join the chat at https://gitter.im/mxcl/PromiseKit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mxcl/PromiseKit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) ![](https://img.shields.io/cocoapods/v/PromiseKit.svg?label=Current%20Release)
 
 
 # How To Get Started
@@ -39,7 +41,7 @@ pod "PromiseKit", "~> 2.0"
 github "mxcl/PromiseKit" ~> 2.0
 ```
 
-### Standalone Downloads
+### Standalone Distributions
 
 * [iOS 8 dynamic frameworks](https://github.com/mxcl/PromiseKit/releases/download/2.0.0/PromiseKit-2.0.0.zip)
 
@@ -53,9 +55,7 @@ Neither CocoaPods or Carthage will install iOS frameworks for deployment targets
  2. Manually compile all the PromiseKit sources into your app target.
  3. Download our pre-built static framework (coming soon!)
 
-† There is no Swift support with PromiseKit 1.x installed via CocoaPods.
-
-‡ PromiseKit 1.x will work as far back as iOS 5 if required.
+† There is no Swift support with PromiseKit 1.x installed via CocoaPods.<br>‡ PromiseKit 1.x will work as far back as iOS 5 if required.
 
 
 # Donations
