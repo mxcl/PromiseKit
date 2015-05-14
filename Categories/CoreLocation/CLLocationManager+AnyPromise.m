@@ -57,7 +57,7 @@
     [manager requestWhenInUseAuthorization];
 #endif
     [manager startUpdatingLocation];
-    return [AnyPromise promiseWithResolver:&manager->resolve];
+    return [[AnyPromise alloc] initWithResolver:&manager->resolve];
 }
 
 @end

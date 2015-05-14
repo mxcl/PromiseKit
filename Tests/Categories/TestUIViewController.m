@@ -33,7 +33,7 @@
     PMKResolver resolve;
 
     MyViewController *myvc = [MyViewController new];
-    myvc.promise = [AnyPromise promiseWithResolver:&resolve];
+    myvc.promise = [[AnyPromise alloc] initWithResolver:&resolve];
     [rootvc promiseViewController:myvc animated:NO completion:nil].then(^{
         // seems to take another tick for the dismissal to complete
     }).then(^{
@@ -117,7 +117,7 @@
 
     MyViewController *myvc = [MyViewController new];
     UINavigationController *nc = [[UINavigationController alloc] initWithRootViewController:myvc];
-    myvc.promise = [AnyPromise promiseWithResolver:&resolve];
+    myvc.promise = [[AnyPromise alloc] initWithResolver:&resolve];
     [rootvc promiseViewController:nc animated:NO completion:nil].then(^(id obj){
         XCTAssertEqualObjects(@1, obj);
     }).then(^{

@@ -32,7 +32,7 @@
     }
     else if ([vc isKindOfClass:NSClassFromString(@"SLComposeViewController")]) {
         PMKResolver resolve;
-        promise = [AnyPromise promiseWithResolver:&resolve];
+        promise = [[AnyPromise alloc] initWithResolver:&resolve];
         [vc setValue:^(NSInteger result){
             if (result == 0) {
                 resolve([NSError cancelledError]);
@@ -90,7 +90,7 @@
 + (instancetype)delegateWithPromise:(AnyPromise **)promise; {
     PMKGenericDelegate *d = [PMKGenericDelegate new];
     d->retainCycle = d;
-    *promise = [AnyPromise promiseWithResolver:&d->resolve];
+    *promise = [[AnyPromise alloc] initWithResolver:&d->resolve];
     return d;
 }
 

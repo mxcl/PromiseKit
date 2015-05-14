@@ -19,7 +19,7 @@
     } \
     \
     PMKResolver resolve = nil; \
-    AnyPromise *promise = [AnyPromise promiseWithResolver:&resolve];
+    AnyPromise *promise = [[AnyPromise alloc] initWithResolver:&resolve];
 
 
 @implementation UIView (PromiseKit)

@@ -11,7 +11,7 @@
 @implementation PMKPromise (BackCompat)
 
 + (instancetype)new:(void(^)(PMKFulfiller, PMKRejecter))block {
-    return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
+    return [self promiseWithResolverBlock:^(PMKResolver resolve) {
         id rejecter = ^(id error){
             if (error == nil) {
                 error = [NSError errorWithDomain:PMKErrorDomain code:PMKInvalidUsageError userInfo:nil];
@@ -42,10 +42,11 @@
     }];
 }
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Warc-retain-cycles"
++ (instancetype)until:(id (^)(void))blockReturningPromises catch:(id)failHandler {
 
-+ (PMKPromise *)until:(id (^)(void))blockReturningPromises catch:(id)failHandler {
+    #pragma clang diagnostic push
+    #pragma clang diagnostic ignored "-Warc-retain-cycles"
+
     return [PMKPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         __block void (^block)() = ^{
             AnyPromise *next = PMKWhen(blockReturningPromises());
@@ -62,9 +63,9 @@
         };
         block();
     }];
-}
 
-#pragma clang diagnostic pop
+    #pragma clang diagnostic pop
+}
 
 @end
 
@@ -72,19 +73,35 @@
 
 @implementation PMKPromise (Deprecated)
 
-+ (PMKPromise *)when:(id)input {
++ (instancetype)when:(id)input {
     return PMKWhen(input);
 }
 
-+ (PMKPromise *)pause:(NSTimeInterval)duration {
++ (instancetype)pause:(NSTimeInterval)duration {
     return PMKAfter(duration);
 }
 
-+ (PMKPromise *)join:(id)input {
++ (instancetype)join:(id)input {
     return PMKJoin(input).then(^(id a, id b, id c){
         // preserving PMK 1.x behavior
         return PMKManifold(b, c);
     });
+}
+
++ (instancetype)promiseWithResolver:(PMKResolver)block {
+    return [self promiseWithResolverBlock:block];
+}
+
++ (instancetype)promiseWithAdapter:(void (^)(PMKAdapter adapter))block {
+    return [self promiseWithAdapterBlock:block];
+}
+
++ (instancetype)promiseWithIntegerAdapter:(void (^)(PMKIntegerAdapter adapter))block {
+    return [self promiseWithIntegerAdapterBlock:block];
+}
+
++ (instancetype)promiseWithBooleanAdapter:(void (^)(PMKBooleanAdapter adapter))block {
+    return [self promiseWithBooleanAdapterBlock:block];
 }
 
 @end

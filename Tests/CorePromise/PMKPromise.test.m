@@ -1,5 +1,8 @@
+@class PMKPromise;
+
+PMKPromise *foo();
+
 #import <PromiseKit/PromiseKit.h>
-#import <PromiseKit/PMKPromise.h>
 #import <CommonCrypto/CommonCrypto.h>
 
 @import XCTest;
@@ -21,34 +24,18 @@ static inline NSError *dummyError() {
 }
 
 @interface PMKPromise (BackCompat2)
-+ (PMKPromise *)pause:(NSTimeInterval)duration;
-+ (PMKPromise *)when:(id)input;
-+ (PMKPromise *)join:(id)input;
 + (PMKPromise *)hang:(id)input;
-- (BOOL)resolved;
-@end
-
-@interface PMKPromise (XP)
-+ (void)setUnhandledErrorHandler:(id)handler;
 @end
 
 @implementation PMKPromise (BackCompat2)
-+ (PMKPromise *)pause:(NSTimeInterval)duration {
-    return PMKAfter(duration);
-}
-+ (PMKPromise *)when:(id)input {
-    return PMKWhen(input);
-}
-+ (PMKPromise *)join:(id)input {
-    return PMKJoin(input);
-}
 + (PMKPromise *)hang:(id)input {
     return PMKHang(input);
 }
-- (BOOL)resolved {
-    return !self.pending && ![self.value isKindOfClass:[NSError class]];
-}
 @end
+
+PMKPromise *foo() {
+    return [PMKPromise promiseWithValue:@1];
+}
 
 
 
@@ -59,7 +46,19 @@ static inline NSError *dummyError() {
 @implementation PMKPromiseTestSuite
 
 - (void)tearDown {
-    [AnyPromise setUnhandledErrorHandler:^(id err){}];
+    PMKSetUnhandledErrorHandler(^(id err){});
+}
+
+- (void)testCanDeclareClassBeforeImport {
+    // tests that our compatability layer with PMKPromise is
+    // 100% great. Predeclaring @class PMKPromise works and
+    // has no linker error either. AnyPromise is the same class.
+
+    id ex1 = [self expectationWithDescription:@""];
+    foo().then(^{
+        [ex1 fulfill];
+    });
+    [self waitForExpectationsWithTimeout:2 handler:nil];
 }
 
 - (void)test_01_resolve {
@@ -848,9 +847,9 @@ PMKPromise *gcdreject() {
         id ex1 = [self expectationWithDescription:@""];
         id ex2 = [self expectationWithDescription:@""];
 
-        [AnyPromise setUnhandledErrorHandler:^(id e){
+        PMKSetUnhandledErrorHandler(^(id e){
             [ex2 fulfill];
-        }];
+        });
 
         [PMKPromise promiseWithValue:@1].then(^{
             @throw @"1";
@@ -1142,10 +1141,10 @@ PMKPromise *gcdreject() {
     @autoreleasepool {
         XCTestExpectation *ex = [self expectationWithDescription:@""];
 
-        [AnyPromise setUnhandledErrorHandler:^(NSError *error){
+        PMKSetUnhandledErrorHandler(^(NSError *error){
             XCTAssertEqualObjects(@"5", error.localizedDescription);
             [ex fulfill];
-        }];
+        });
 
         [PMKPromise new:^(id f, void (^r)(id)){
             r(@5);
@@ -1158,10 +1157,10 @@ PMKPromise *gcdreject() {
     @autoreleasepool {
         XCTestExpectation *ex1 = [self expectationWithDescription:@"unhandler"];
         XCTestExpectation *ex2 = [self expectationWithDescription:@"initial catch"];
-        [AnyPromise setUnhandledErrorHandler:^(NSError *error){
+        PMKSetUnhandledErrorHandler(^(NSError *error){
             XCTAssertEqualObjects(@"5", error.localizedDescription);
             [ex1 fulfill];
-        }];
+        });
         [PMKPromise new:^(id f, void (^r)(id)){
             r(@5);
         }].catch(^(id e){
@@ -1178,9 +1177,9 @@ PMKPromise *gcdreject() {
     @autoreleasepool {
         XCTestExpectation *ex1 = [self expectationWithDescription:@""];
 
-        [AnyPromise setUnhandledErrorHandler:^(id err){
+        PMKSetUnhandledErrorHandler(^(id err){
             XCTFail();
-        }];
+        });
 
         [PMKPromise new:^(id f, void (^r)(id)){
             r(@5);
@@ -1290,9 +1289,9 @@ PMKPromise *gcdreject() {
     @autoreleasepool {
         XCTestExpectation *ex1 = [self expectationWithDescription:@""];
 
-        [AnyPromise setUnhandledErrorHandler:^(id e){
+        PMKSetUnhandledErrorHandler(^(id e){
             XCTFail();
-        }];
+        });
 
         [PMKPromise new:^(void(^fulfill)(id), void(^reject)(id)){
             dispatch_promise(^{
@@ -1313,10 +1312,10 @@ PMKPromise *gcdreject() {
 
         __block BOOL ex1Fulfilled = NO;
 
-        [AnyPromise setUnhandledErrorHandler:^(id e){
+        PMKSetUnhandledErrorHandler(^(id e){
             XCTAssert(ex1Fulfilled);
             [ex2 fulfill];
-        }];
+        });
 
         [PMKPromise new:^(void(^fulfill)(id), void(^reject)(id)){
             dispatch_promise(^{

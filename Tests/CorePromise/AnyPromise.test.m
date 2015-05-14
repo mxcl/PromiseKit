@@ -364,7 +364,7 @@ static inline AnyPromise *fulfillLater() {
     id ex2 = [self expectationWithDescription:@""];
 
     PMKResolver resolve;
-    AnyPromise *promise = [AnyPromise promiseWithResolver:&resolve];
+    AnyPromise *promise = [[AnyPromise alloc] initWithResolver:&resolve];
     
     promise.then(^{
         XCTFail();
@@ -388,7 +388,7 @@ static inline AnyPromise *fulfillLater() {
     id ex2 = [self expectationWithDescription:@""];
     
     PMKResolver resolve;
-    AnyPromise *promise = [AnyPromise promiseWithResolver:&resolve];
+    AnyPromise *promise = [[AnyPromise alloc] initWithResolver:&resolve];
     
     promise.then(^{
         XCTFail();

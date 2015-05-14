@@ -19,7 +19,7 @@ AnyPromise *PMKWhen(id promises) {
     }
 
     PMKResolver resolve;
-    AnyPromise *rootPromise = [AnyPromise promiseWithResolver:&resolve];
+    AnyPromise *rootPromise = [[AnyPromise alloc] initWithResolver:&resolve];
     __block void (^fulfill)();
 
     __block NSInteger countdown = [promises count];

@@ -30,7 +30,7 @@
     PMKActionSheetDelegate *d = [PMKActionSheetDelegate new];
     d->retainCycle = self.delegate = d;
     [self showInView:view];
-    return [AnyPromise promiseWithResolver:&d->resolve];
+    return [[AnyPromise alloc] initWithResolver:&d->resolve];
 }
 
 @end

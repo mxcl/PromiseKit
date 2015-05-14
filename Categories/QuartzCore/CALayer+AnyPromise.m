@@ -33,7 +33,7 @@
     PMKCAAnimationDelegate *d = [PMKCAAnimationDelegate new];
     d->retainCycle = animation.delegate = d;
     [self addAnimation:animation forKey:key];
-    return [AnyPromise promiseWithResolver:&d->resolve];
+    return [[AnyPromise alloc] initWithResolver:&d->resolve];
 }
 
 @end

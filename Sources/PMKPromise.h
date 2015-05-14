@@ -15,7 +15,6 @@ typedef PMKRejecter PMKPromiseRejecter;
 
 
 
-
 @interface PMKPromise (BackCompat)
 
 /**
@@ -71,6 +70,11 @@ typedef PMKRejecter PMKPromiseRejecter;
 + (PMKPromise *)join:(id)input __attribute__((deprecated("Use PMKJoin()")));
 
 - (PMKPromise *( ^ ) ( id ))thenUnleashZalgo __attribute__((unavailable("If you need this, open a ticket, we will provide it, I just want to say hi.")));
+
++ (PMKPromise *)promiseWithResolver:(PMKResolver)block __attribute__((deprecated("Use +promiseWithResolverBlock:")));
++ (instancetype)promiseWithAdapter:(void (^)(PMKAdapter adapter))block __attribute__((deprecated("Use +promiseWithAdapterBlock:")));
++ (instancetype)promiseWithIntegerAdapter:(void (^)(PMKIntegerAdapter adapter))block __attribute__((deprecated("Use +promiseWithIntegerAdapterBlock:")));
++ (instancetype)promiseWithBooleanAdapter:(void (^)(PMKBooleanAdapter adapter))block __attribute__((deprecated("Use +promiseWithBooleanAdapterBlock:")));
 
 @end
 

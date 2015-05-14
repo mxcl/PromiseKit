@@ -196,7 +196,7 @@ __attribute__((objc_subclassing_restricted))
 
  @see promiseWithResolverBlock:
 */
-+ (instancetype)promiseWithResolver:(PMKResolver __strong *)resolver;
+- (instancetype)initWithResolver:(PMKResolver __strong *)resolver;
 
 @end
 

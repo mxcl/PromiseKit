@@ -8,8 +8,8 @@ NSString *const PMKErrorDomain = @"PMKErrorDomain";
 
 @implementation AnyPromise (objc)
 
-+ (instancetype)promiseWithResolver:(PMKResolver __strong *)resolver {
-    return [[self alloc] initWithBridge:^(PMKResolver resolve){
+- (instancetype)initWithResolver:(PMKResolver __strong *)resolver {
+    return [self initWithBridge:^(PMKResolver resolve){
         *resolver = resolve;
     }];
 }

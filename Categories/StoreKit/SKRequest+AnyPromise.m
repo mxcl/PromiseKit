@@ -42,7 +42,7 @@
     PMKSKRequestDelegate *d = [PMKSKRequestDelegate new];
     d->retainCycle = self.delegate = d;
     [self start];
-    return [AnyPromise promiseWithResolver:&d->resolve];
+    return [[AnyPromise alloc] initWithResolver:&d->resolve];
 }
 
 @end

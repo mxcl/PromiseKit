@@ -23,7 +23,7 @@ AnyPromise *SCNetworkReachability() {
         return [AnyPromise promiseWithValue:nil];
     reach->retainCycle = reach;
     [reach start];
-    return [AnyPromise promiseWithResolver:&reach->resolve];
+    return [[AnyPromise alloc] initWithResolver:&reach->resolve];
 }
 
 
