@@ -32,8 +32,6 @@ Something got deallocated, and you still used it as part of your promise chain.
 
 When wrapping delegate patterns, the delegate property is usually `assign` which means if nothing else points to it, it will be deallocated immediately. The block-heavy nature of promises can easily lead to this situation, so it is something to be aware of.
 
-<div><a class="pagination" href="/appendix">Next: Appendix</a></div>
-
 
 ## 3. `Return type must match previous return type`
 
@@ -67,4 +65,54 @@ You need to change the return type of your block. Clang is smart, but only so fa
 
 You see the `id` after the `^` and before the `{`? That’s the fix.
 
-<div><a class="pagination" href="/appendix">Next: Appendix</a></div>
+
+## 4. Chaining Doesn’t Seem To Work
+
+{% highlight objectivec %}
+foo.then(^{
+    [self promise];
+}).then(^{
+    NSLog(@"Happens immediately! WTF?!");
+});
+{% endhighlight %}
+
+This happens because you didn’t *return* the promise. We can’t know you mean to
+wait on the promise before executing the next `then`.
+
+{% highlight objectivec %}
+foo.then(^{
+    return [self promise];
+}).then(^{
+    NSLog(@"Happens once [self promise] finishes :)");
+});
+{% endhighlight %}
+
+With Swift especially it is easy to accidentally return `Void` eg:
+
+{% highlight swift %}
+foo.then {
+    return promise()
+}.then { _ in
+    NSLog("Happens immediately! But why?!")
+}
+
+func promise() {
+    Promise { fulfill, reject in
+        //…
+    }
+}
+{% endhighlight %}
+
+We return `promise()` *but*! The function doesn’t return! The actual intention was:
+
+{% highlight swift %}
+func promise() -> Promise {
+    return Promise { fulfill, reject in
+        //…
+    }
+}
+{% endhighlight %}
+
+Careful with this as it is perfectly valid Swift code.
+
+<div><a class="pagination" href="/common-misusage">Next: Common Misusage</a></div>

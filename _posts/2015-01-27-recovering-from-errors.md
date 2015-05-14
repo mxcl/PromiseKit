@@ -3,9 +3,9 @@ category: docs
 layout: default
 ---
 
-# Recovering From Errors
+# Recovering From Errors — Objective C
 
-You can return from an error handler. Returning anything but an `NSError` implies the error has been resolved, and the chain will continue.
+Returning from `catch` continues the chain. Returning anything but an `NSError` implies the error has been resolved, and thus the chain will continue.
 
 {% highlight objectivec %}
 
@@ -17,26 +17,39 @@ You can return from an error handler. Returning anything but an `NSError` implie
 
 {% endhighlight %}
 
-This is useful for error-correction. If the error is fatal, then return the error again, or return a new `NSError`.
-
-Usually when you decide to implement “recovery” you will need to change the return type of the block to `id`. Clang is smart about automatically determining the return type of blocks, but when you return two different types, it stubbornly insists you specify `id`. For example:
-
+This is useful for error-correction. If the error is fatal, then “rethrow” the error or `@throw` a new `NSError`:
 
 {% highlight objectivec %}
 
-[CLLocationManager promise].catch(^id(NSError *error){
-    if (error.code == CLLocationUnknown) {
-        return CLLocationChicago;
-    } else {
-        return error;
-    }
+[CLLocationManager promise].catch(^(NSError *error){
+    if (IsFatal(error)) @throw error;
+    return CLLocationChicago;
 }).then(^(CLLocation *userLocation){
-    // the user’s location, or Chicago for specific errors
-}).catch(^{
-    // errors that were not recovered above
+    //…
+}).catch(^(NSError *error){
+    // error was fatal
 });
 
 {% endhighlight %}
+
+
+# Recovering From Errors — Swift
+
+In Swift, `catch` is `error`. However, unlike Objective-C `catch`, `error` is terminating (the chain cannot continue). So we provide `recover`:
+
+{% highlight swift %}
+
+CLLocationManager.promise().recover { err in
+    guard !err.fatal else { throw err }
+    return CLLocationChicago
+}.then { location in
+    // the user’s location, or Chicago if an error occurred
+}.error { err in
+    // the error was fatal
+}
+
+{% endhighlight %}
+
 
 
 <div><a class="pagination" href="/breaking-the-chain">Next: Instigating Errors</a></div>

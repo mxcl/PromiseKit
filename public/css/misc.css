@@ -121,7 +121,7 @@ table {
 }
 td,
 th {
-  padding: .25rem .5rem;
+  padding: .25em .5em;
   border: 1px solid #e5e5e5;
 }
 tbody tr:nth-child(odd) td,

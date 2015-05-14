@@ -18,24 +18,22 @@ id q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0);
 
 {% endhighlight %}
 
-With `thenOn` it becomes convenient to process data from promises off the main thread and then pass it back for `UIView` display.
+{% highlight swift %}
 
-{% highlight objectivec %}
+let url = "http://placekitten.com/320/320"
+let q = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
 
-[NSURLConnection GET:url].thenInBackground(^(NSArray *json){
-    return OMGSuperExpensiveFunction(json);
-}).then(^(NSArray *processedData){
-    self.kittens = processedData;
-    [self.tableView reloadData];
-});
+NSURLConnection.GET(url).then(on: q) { (image: UIImage) in
+    assert(!NSThread.isMainThread())
+}
 
 {% endhighlight %}
 
-In the above example we used the convenience method `thenInBackground`, which dispatches the promise onto the default GCD queue.
+With `thenOn` it becomes convenient to process data from promises off the main thread and then pass it back for `UIView` display.
+
+We also provide `thenInBackground` for convenience which dispatches the promise onto the default GCD queue.
 
 <aside>Everything in PromiseKit is thread-safe.</aside>
-
-There are also `finallyOn` and `catchOn`.
 
 <hr>
 

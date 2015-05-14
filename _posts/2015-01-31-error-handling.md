@@ -39,7 +39,7 @@ This isn't even a complicated example.
 Promises streamline error handling:
 
 {% highlight objectivec %}
-[NSURLConnection GET:url].then(^(NSDictionary *json){
+[NSURLSession GET:url].then(^(NSDictionary *json){
     return [NSURLConnection GET:json[@"avatar_url"]];
 }).then(^(UIImage *image){
     self.imageView.image = image;
@@ -48,16 +48,27 @@ Promises streamline error handling:
 })
 {% endhighlight %}
 
-This is a somewhat unfair example: PromiseKit’s `NSURLConnection` category detects the JSON and the image HTTP responses and automatically decode them for you (with thoroughly filled `NSError` objects). But the key here is that any errors that happen anywhere in the chain propogate to the error handler skipping any intermediary `then` handlers.
+{% highlight swift %}
+firstly {
+    NSURLSession.GET(url)
+}.then { (json: NSDictionary) in
+    NSURLConnection.GET(json["avatar_url"])
+}.then { (image: UIImage) in
+    self.imageView.image = image
+}.error { error in
+    UIAlertView(…).show()
+}
+{% endhighlight %}
+
+
+Any errors that happen anywhere in the chain propogate to the error handler skipping any intermediary `then` handlers.
+
+<aside>This is a somewhat unfair example: PromiseKit’s Objective-C <code>NSURLSession</code> category detects the JSON and the image HTTP responses and automatically decode them for you (with thoroughly filled <code>NSError</code> objects). The Swift version does not detect, but you still get decoded responses by specializing the then to the response type you want.</aside>
 
 It’s important to remember that in order for your errors to propogate they must occur in the chain. **If you don’t return your promise, thus inserting it into the chain, the error won’t propogate**.
 
-PromiseKit has an additional bonus: unhandled errors (ie. errors that never get handled in a `catch`) are logged. If you like, we even provide [a mechanism][ueh] to execute your own code whenever errors are not caught.
-
-<aside>Even exceptions are caught during Promise execution and will cause the nearest catch handler to execute. When this happens the resulting <code>NSError</code> will have its localizedDescription set to the exception’s description. The thrown object will be stored in the error’s userInfo under <code>PMKUnderlyingExceptionKey</code>.</aside>
-
-<aside>PromiseKit cannot catch exceptions thrown in other threads even if they were spawned inside handlers, even if the throw happens from a nested block inside a PromiseKit handler. If you have such situations, consider <code>dispatch_promise</code> or wrapping more of your asynchronous systems in other promises.</aside>
+PromiseKit has an additional bonus: unhandled errors (ie. errors that never get handled in a `catch`, `error`, or `recover`) are logged. If you like, we even provide [a mechanism][ueh] to execute your own code whenever errors are not caught.
 
 <div><a class="pagination" href="/when">Next: `when`</a></div>
 
-[ueh]: https://github.com/mxcl/PromiseKit/blob/master/objc/PromiseKit/Promise.h#L140-L146
+[ueh]: https://github.com/mxcl/PromiseKit/blob/master/Sources/ErrorUnhandler.swift#L3-L24
