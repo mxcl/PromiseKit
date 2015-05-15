@@ -1,4 +1,5 @@
 #import <dispatch/once.h>
+#import <Foundation/NSDictionary.h>
 #import <Foundation/NSError.h>
 #import <Foundation/NSException.h>
 #import "NSMethodSignatureForBlock.m"
@@ -9,11 +10,6 @@
 #ifndef PMKLog
 #define PMKLog NSLog
 #endif
-
-static inline NSError *NSErrorFromNil() {
-    PMKLog(@"PromiseKit: Warning: Promise rejected with nil");
-    return [NSError errorWithDomain:PMKErrorDomain code:PMKInvalidUsageError userInfo:nil];
-}
 
 @interface PMKArray : NSObject {
 @public
