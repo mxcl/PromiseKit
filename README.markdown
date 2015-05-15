@@ -43,9 +43,9 @@ github "mxcl/PromiseKit" ~> 2.0
 
 ### Standalone Distributions
 
-* [Pre-built Frameworks](https://github.com/mxcl/PromiseKit/releases/download/2.0.0/PromiseKit-2.0.0.zip)
+* [iOS 8  Frameworks](https://github.com/mxcl/PromiseKit/releases/download/2.0.0/PromiseKit-2.0.0.zip) (Binaries)
 
-*Please Note* If you want a standalone download because you don’t want to learn CocoaPods or Carthage then please take note that if you choose to use third-party libraries you should also choose to install bug fix releases, some of the fixes can be very important! Using a dependency manager takes the headache out of staying up-to-date.
+*Please Note* The preferred way to integrate PromiseKit is CocoaPods or Carthage.
 
 ###  iOS 7 And Below
 
@@ -65,7 +65,7 @@ PromiseKit is hundreds of hours of work almost completely by just me: [Max Howel
 
 # License
 
-Copyright 2015 Max Howell <mxcl@me.com>
+Copyright 2015, Max Howell <mxcl@me.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
