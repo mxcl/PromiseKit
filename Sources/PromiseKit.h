@@ -2,6 +2,7 @@
 #import <Foundation/NSDate.h>
 #import <Foundation/NSObject.h>
 #import <PromiseKit/AnyPromise.h>
+#import <PromiseKit/NSError+Cancellation.h>
 #import <PromiseKit/PMKPromise.h>
 #import <PromiseKit/Umbrella.h>
 

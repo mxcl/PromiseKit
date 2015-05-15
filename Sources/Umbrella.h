@@ -1,6 +1,5 @@
 #import <Foundation/NSObjCRuntime.h>
 #import <Foundation/NSString.h>
-#import <PromiseKit/NSError+Cancellation.h>
 
 FOUNDATION_EXPORT double PromiseKitVersionNumber;
 FOUNDATION_EXPORT const unsigned char PromiseKitVersionString[];
