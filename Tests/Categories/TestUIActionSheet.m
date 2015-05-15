@@ -34,7 +34,7 @@
     PMKAfter(0.5).then(^{
         [sheet dismissWithClickedButtonIndex:1 animated: NO];
     });
-    [self waitForExpectationsWithTimeout:3 handler: nil];
+    [self waitForExpectationsWithTimeout:10 handler: nil];
 }
 
 // cancel button presses are cancelled errors
@@ -52,7 +52,7 @@
     PMKAfter(0.5).then(^{
         [sheet dismissWithClickedButtonIndex:2 animated: NO];
     });
-    [self waitForExpectationsWithTimeout:3 handler: nil];
+    [self waitForExpectationsWithTimeout:10 handler: nil];
 }
 
 // single button UIActionSheets don't get considered cancelled
@@ -68,7 +68,7 @@
     PMKAfter(0.5).then(^{
         [sheet dismissWithClickedButtonIndex:0 animated: NO];
     });
-    [self waitForExpectationsWithTimeout:3 handler: nil];
+    [self waitForExpectationsWithTimeout:10 handler: nil];
 }
 
 // single button UIActionSheets don't get considered cancelled unless the cancelIndex is set
@@ -84,7 +84,7 @@
     PMKAfter(0.5).then(^{
         [sheet dismissWithClickedButtonIndex:0 animated: NO];
     });
-    [self waitForExpectationsWithTimeout:3 handler: nil];
+    [self waitForExpectationsWithTimeout:10 handler: nil];
 }
 
 @end
