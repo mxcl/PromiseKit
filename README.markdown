@@ -23,7 +23,7 @@ PromiseKit is a thorough and delightful implementation of promises for iOS and O
 # How To Get Started
 
 * Check out the [complete, comprehensive PromiseKit documentation](http://promisekit.org).
-* Read the [API documentation](http://cocoadocs.org/docsets/PromiseKit/).
+* Read the [API documentation](http://cocoadocs.org/docsets/PromiseKit/), (note the documentation is not 100% currently as CocoaDocs is not good with Swift, you may have better luck reading the comments in the sources).
 * [Integrate](http://promisekit.org/getting-started) promises into your existing projects.
 
 ## Quick Start Guide
