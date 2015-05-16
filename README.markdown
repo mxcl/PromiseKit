@@ -65,7 +65,7 @@ PromiseKit is hundreds of hours of work almost completely by just me: [Max Howel
 
 # License
 
-Copyright 2015, Max Howell <mxcl@me.com>
+Copyright 2015, Max Howell; <mxcl@me.com>
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal

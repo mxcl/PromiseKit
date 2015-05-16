@@ -98,3 +98,16 @@ class TestPromise: XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 }
+
+
+@objc(PMKPromiseBridgeHelper) class PromiseBridgeHelper: NSObject {
+    override init() {
+        super.init()
+    }
+
+    @objc func bridge1() -> AnyPromise {
+        return AnyPromise(bound: dispatch_promise {
+            return 1
+        })
+    }
+}

@@ -1259,3 +1259,32 @@ static inline AnyPromise *fulfillLater() {
 }
 
 @end
+
+
+
+__attribute__((objc_runtime_name("PMKPromiseBridgeHelper")))
+__attribute__((objc_subclassing_restricted))
+@interface PromiseBridgeHelper: NSObject
+- (AnyPromise *)bridge1;
+@end
+
+@interface TestPromiseBridge: XCTestCase
+@end
+
+@implementation TestPromiseBridge
+
+- (void)test1 {
+    XCTestExpectation *ex = [self expectationWithDescription:@""];
+    AnyPromise *promise = fulfillLater();
+    for (int x = 0; x < 100; ++x) {
+        promise = promise.then(^{
+            return [[[PromiseBridgeHelper alloc] init] bridge1];
+        });
+    }
+    promise.then(^{
+        [ex fulfill];
+    });
+    [self waitForExpectationsWithTimeout:10 handler:nil];
+}
+
+@end
