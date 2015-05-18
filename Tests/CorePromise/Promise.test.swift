@@ -97,6 +97,26 @@ class TestPromise: XCTestCase {
         
         waitForExpectationsWithTimeout(1, handler: nil)
     }
+
+    func testThensAreSequentialForLongTime() {
+        var values = [Int]()
+        let ex = expectationWithDescription("")
+        var promise = dispatch_promise { 0 }
+        let N = 1000
+        for x in 1..<N {
+            promise = promise.then { y -> Promise<Int> in
+                values.append(y)
+                XCTAssertEqual(x - 1, y)
+                return dispatch_promise { x }
+            }
+        }
+        promise.then { x -> Void in
+            values.append(x)
+            XCTAssertEqual(values, (0..<N).map{ $0 })
+            ex.fulfill()
+        }
+        waitForExpectationsWithTimeout(10, handler: nil)
+    }
 }
 
 
