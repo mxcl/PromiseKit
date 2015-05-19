@@ -52,7 +52,7 @@ AnyPromise *PMKWhen(id promises) {
               #ifndef PMKDisableProgress
                 progress.completedUnitCount++;
               #endif
-                set(value);
+                set(promise.value);  // we use -value to unwrap PMKManifolds
                 if (--countdown == 0)
                     fulfill();
             }
