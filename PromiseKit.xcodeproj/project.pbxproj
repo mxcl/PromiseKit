@@ -109,6 +109,7 @@
 		634E98AE1AF916BD00094594 /* Stubbilino.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 634E98AC1AF916BD00094594 /* Stubbilino.framework */; };
 		634E98AF1AF917BC00094594 /* Stubbilino.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 634E98A91AF916AA00094594 /* Stubbilino.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		634E98B01AF917CF00094594 /* Stubbilino.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 634E98AC1AF916BD00094594 /* Stubbilino.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		635121511B0A585B008ED696 /* when.test.m in Sources */ = {isa = PBXBuildFile; fileRef = 635121501B0A585B008ED696 /* when.test.m */; };
 		63533B391AE57A9300C10972 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63F803CC1AB89A0F00E4DEE1 /* PromiseKit.framework */; };
 		635D0D731ADD7CE700CC0406 /* PMKPromise.test.m in Sources */ = {isa = PBXBuildFile; fileRef = 635D0D711ADD7CAE00CC0406 /* PMKPromise.test.m */; };
 		635D0D761ADDA2EA00CC0406 /* AnyPromise.test.m in Sources */ = {isa = PBXBuildFile; fileRef = 635D0D741ADDA2C100CC0406 /* AnyPromise.test.m */; };
@@ -374,6 +375,7 @@
 		633810641B02EC7A00CCD263 /* NSError+Cancellation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSError+Cancellation.h"; path = "Sources/NSError+Cancellation.h"; sourceTree = "<group>"; };
 		634E98A91AF916AA00094594 /* Stubbilino.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Stubbilino.framework; path = Carthage/Build/iOS/Stubbilino.framework; sourceTree = "<group>"; };
 		634E98AC1AF916BD00094594 /* Stubbilino.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Stubbilino.framework; path = Carthage/Build/Mac/Stubbilino.framework; sourceTree = "<group>"; };
+		635121501B0A585B008ED696 /* when.test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = when.test.m; sourceTree = "<group>"; };
 		63533B331AE57A9300C10972 /* PMKAPlusTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PMKAPlusTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		635D0D711ADD7CAE00CC0406 /* PMKPromise.test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PMKPromise.test.m; path = Tests/CorePromise/PMKPromise.test.m; sourceTree = SOURCE_ROOT; };
 		635D0D741ADDA2C100CC0406 /* AnyPromise.test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnyPromise.test.m; path = Tests/CorePromise/AnyPromise.test.m; sourceTree = SOURCE_ROOT; };
@@ -702,6 +704,7 @@
 				6302AD3F1AEF55A4001F0069 /* Promise.test.swift */,
 				6388E1B01AD316CB0074D85B /* race.test.swift */,
 				6388E1AE1AD316690074D85B /* when.test.swift */,
+				635121501B0A585B008ED696 /* when.test.m */,
 				6388E1B11AD316CB0074D85B /* zalgo.test.swift */,
 			);
 			name = Core;
@@ -1212,6 +1215,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				635D0D731ADD7CE700CC0406 /* PMKPromise.test.m in Sources */,
+				635121511B0A585B008ED696 /* when.test.m in Sources */,
 				638D02781AEC06430038201C /* after.test.swift in Sources */,
 				635D0D761ADDA2EA00CC0406 /* AnyPromise.test.m in Sources */,
 				6302AD401AEF55A4001F0069 /* Promise.test.swift in Sources */,

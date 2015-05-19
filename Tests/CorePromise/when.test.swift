@@ -56,4 +56,75 @@ class TestWhen: XCTestCase {
         
         waitForExpectationsWithTimeout(1, handler: nil)
     }
+
+    func testProgress() {
+        let ex = expectationWithDescription("")
+
+        XCTAssertNil(NSProgress.currentProgress())
+
+        let p1 = after(0.01)
+        let p2 = after(0.02)
+        let p3 = after(0.03)
+        let p4 = after(0.04)
+
+        let progress = NSProgress(totalUnitCount: 1)
+        progress.becomeCurrentWithPendingUnitCount(1)
+
+        when(p1, p2, p3, p4).then { _ -> Void in
+            XCTAssertEqual(progress.completedUnitCount, 1)
+            ex.fulfill()
+        }
+
+        progress.resignCurrent()
+
+        var cum = Double(0)
+        for promise in [p1, p2, p3, p4] {
+            promise.then { _ -> Void in
+                cum += 0.25
+                XCTAssertEqual(cum, progress.fractionCompleted)
+            }
+        }
+        
+        waitForExpectationsWithTimeout(1, handler: nil)
+    }
+
+    func testProgressDoesNotExceed100Percent() {
+        let ex1 = expectationWithDescription("")
+        let ex2 = expectationWithDescription("")
+
+        XCTAssertNil(NSProgress.currentProgress())
+
+        let p1 = after(0.01)
+        let p2 = after(0.02).then { Promise<Void>(NSError(domain: "a", code: 1, userInfo: nil)) }
+        let p3 = after(0.03)
+        let p4 = after(0.04)
+
+        let progress = NSProgress(totalUnitCount: 1)
+        progress.becomeCurrentWithPendingUnitCount(1)
+
+        let promise: Promise<Void> = when(p1, p2, p3, p4)
+
+        progress.resignCurrent()
+
+        promise.catch { _ in
+            ex2.fulfill()
+        }
+
+        var x = 0
+        func finally() {
+            if ++x == 4 {
+                XCTAssertLessThanOrEqual(1, progress.fractionCompleted)
+                XCTAssertEqual(progress.completedUnitCount, 1)
+                ex1.fulfill()
+            }
+        }
+
+        let q = dispatch_get_main_queue()
+        p1.finally(on: q, finally)
+        p2.finally(on: q, finally)
+        p3.finally(on: q, finally)
+        p4.finally(on: q, finally)
+
+        waitForExpectationsWithTimeout(1, handler: nil)
+    }
 }
