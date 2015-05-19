@@ -30,12 +30,7 @@ AnyPromise *PMKWhen(id promises) {
             if (!rootPromise.pending) {
                 // suppress “already resolved” log message
             } else if (IsError(value)) {
-                NSError *err = value;
-                id userInfo = err.userInfo.mutableCopy;
-                userInfo[PMKFailingPromiseIndexKey] = key;
-                //TODO add test that when etc. don't lose NSError class
-                err = [[[value class] alloc] initWithDomain:err.domain code:err.code userInfo:userInfo];
-                resolve(err);
+                resolve(NSErrorSupplement(value, @{PMKFailingPromiseIndexKey: key}));
             } else {
                 set(value);
                 if (--countdown == 0)
