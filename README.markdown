@@ -17,12 +17,17 @@ when(fetchImage(), getLocation()).then { image, location in
 
 PromiseKit is a thoughtful and complete implementation of promises for iOS and OS X with first-class support for **both** Objective-C *and* Swift.
 
-[![Join the chat at https://gitter.im/mxcl/PromiseKit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mxcl/PromiseKit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) ![](https://img.shields.io/cocoapods/v/PromiseKit.svg?label=Current%20Release)
+[![Join the chat at https://gitter.im/mxcl/PromiseKit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mxcl/PromiseKit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) ![](https://img.shields.io/cocoapods/v/PromiseKit.svg?label=Current%20Release)  [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg)](https://github.com/Carthage/Carthage)
+
+
+# PromiseKit 2
+
+PromiseKit 2 has been released! Read the [release blog post](http://promisekit.org/PromiseKit-2.0-Released/).
 
 
 # How To Get Started
 
-* Check out the [complete, comprehensive PromiseKit documentation](http://promisekit.org).
+* Check out the complete, comprehensive [PromiseKit documentation](http://promisekit.org).
 * Read the [API documentation](http://cocoadocs.org/docsets/PromiseKit/), (note the documentation is not 100% currently as CocoaDocs is not good with Swift, you may have better luck reading the comments in the sources).
 * [Integrate](http://promisekit.org/getting-started) promises into your existing projects.
 
