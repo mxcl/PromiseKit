@@ -187,7 +187,9 @@ private func fetch(var request: NSURLRequest) -> Promise<(NSData, NSURLResponse)
                 info[NSURLErrorFailingURLErrorKey] = request.URL
                 info[NSURLErrorFailingURLStringErrorKey] = request.URL?.absoluteString
                 info[PMKURLErrorFailingDataKey] = data
-                info[PMKURLErrorFailingStringKey] = NSString(data: data, encoding: rsp?.stringEncoding ?? NSUTF8StringEncoding)
+                if data != nil {
+                    info[PMKURLErrorFailingStringKey] = NSString(data: data, encoding: rsp?.stringEncoding ?? NSUTF8StringEncoding)
+                }
                 info[PMKURLErrorFailingURLResponseKey] = rsp
                 prereject(NSError(domain: error.domain, code: error.code, userInfo: info))
             }
