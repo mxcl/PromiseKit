@@ -22,7 +22,7 @@ PromiseKit is a thoughtful and complete implementation of promises for iOS and O
 
 # PromiseKit 2
 
-PromiseKit 2 has been released! Read the [release blog post](http://promisekit.org/PromiseKit-2.0-Released/).
+Read our [release announcement](http://promisekit.org/PromiseKit-2.0-Released/) for full details.
 
 
 # How To Get Started
