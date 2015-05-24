@@ -22,7 +22,7 @@ PromiseKit is a thoughtful and complete implementation of promises for iOS and O
 
 # PromiseKit 2
 
-Read our [release announcement](http://promisekit.org/PromiseKit-2.0-Released/) for full details.
+PromiseKit 2 contains many interesting and important additions. Check out our our [release announcement](http://promisekit.org/PromiseKit-2.0-Released/) for full details.
 
 
 # How To Get Started
@@ -48,7 +48,7 @@ github "mxcl/PromiseKit" ~> 2.0
 
 ### Standalone Distributions
 
-* [iOS 8  Frameworks](https://github.com/mxcl/PromiseKit/releases/download/2.0.0/PromiseKit-2.0.0.zip) (Binaries)
+* [iOS 8 & OS X 10.9  Frameworks](https://github.com/mxcl/PromiseKit/releases/download/2.0.1/PromiseKit-2.0.1.zip) (Binaries)
 
 *Please note*, the preferred way to integrate PromiseKit is CocoaPods or Carthage.
 
