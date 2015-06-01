@@ -12,7 +12,6 @@
 @interface PMKCAAnimationDelegate : NSObject {
 @public
     PMKResolver resolve;
-    id retainCycle;
 }
 @end
 
@@ -20,7 +19,6 @@
 
 - (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
     resolve(PMKManifold(@(flag), anim));
-    retainCycle = nil;
 }
 
 @end
@@ -30,8 +28,7 @@
 @implementation CALayer (PromiseKit)
 
 - (AnyPromise *)promiseAnimation:(CAAnimation *)animation forKey:(NSString *)key {
-    PMKCAAnimationDelegate *d = [PMKCAAnimationDelegate new];
-    d->retainCycle = animation.delegate = d;
+    PMKCAAnimationDelegate *d = animation.delegate = [PMKCAAnimationDelegate new];
     [self addAnimation:animation forKey:key];
     return [[AnyPromise alloc] initWithResolver:&d->resolve];
 }
