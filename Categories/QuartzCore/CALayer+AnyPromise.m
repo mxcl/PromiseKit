@@ -12,13 +12,15 @@
 @interface PMKCAAnimationDelegate : NSObject {
 @public
     PMKResolver resolve;
+    CAAnimation *animation;
 }
 @end
 
 @implementation PMKCAAnimationDelegate
 
-- (void)animationDidStop:(CAAnimation *)anim finished:(BOOL)flag {
-    resolve(PMKManifold(@(flag), anim));
+- (void)animationDidStop:(CAAnimation *)ignoreOrRetainCycleHappens finished:(BOOL)flag {
+    resolve(PMKManifold(@(flag), animation));
+    animation.delegate = nil;
 }
 
 @end
@@ -29,6 +31,7 @@
 
 - (AnyPromise *)promiseAnimation:(CAAnimation *)animation forKey:(NSString *)key {
     PMKCAAnimationDelegate *d = animation.delegate = [PMKCAAnimationDelegate new];
+    d->animation = animation;
     [self addAnimation:animation forKey:key];
     return [[AnyPromise alloc] initWithResolver:&d->resolve];
 }

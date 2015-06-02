@@ -99,7 +99,6 @@ private func unbox(resolution: Resolution) -> AnyObject? {
         bridge { result in
             func preresolve(obj: AnyObject?) {
                 resolve(box(obj))
-                resolve = nil  // or retain cycle, @see git blame
             }
             if let next = result as? AnyPromise {
                 next.pipe(preresolve)
