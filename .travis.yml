@@ -6,6 +6,7 @@ before_install:
 install: carthage bootstrap --verbose
 xcode_scheme: [PMKiOS, PMKOSX]
 xcode_sdk: [iphonesimulator8.3, macosx10.10]
+osx_image: beta-xcode6.3
 
 matrix:
   exclude:
