@@ -21,4 +21,28 @@ class TestNSObject: XCTestCase {
 
         waitForExpectationsWithTimeout(1, handler: nil)
     }
+
+    func testAfterlife() {
+        let ex = expectationWithDescription("")
+        var killme: NSObject!
+
+        autoreleasepool {
+
+            func innerScope() {
+                killme = NSObject()
+                afterlife(killme).then { _ -> Void in
+                    //…
+                    ex.fulfill()
+                }
+            }
+
+            innerScope()
+
+            after(0.2).then {
+                killme = nil
+            }
+        }
+
+        waitForExpectationsWithTimeout(1, handler: nil)
+    }
 }
