@@ -51,3 +51,6 @@ public func when<U, V>(pu: Promise<U>, pv: Promise<V>) -> Promise<(U, V)> {
 public func when<U, V, X>(pu: Promise<U>, pv: Promise<V>, px: Promise<X>) -> Promise<(U, V, X)> {
     return when(pu.asVoid(), pv.asVoid(), px.asVoid()).then(on: zalgo) { (pu.value!, pv.value!, px.value!) }
 }
+
+@availability(*, unavailable, message="Use `when`")
+public func join<T>(promises: Promise<T>...) {}
