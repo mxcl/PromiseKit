@@ -1,15 +1,13 @@
 import Foundation
 import PromiseKit
 
-private var handle: UInt8 = 0
+/**
+ @return A promise that resolves when the provided object deallocates
 
-private class GrimReaper: NSObject {
-    deinit {
-        fulfill()
-    }
-    let (promise, fulfill, _) = Promise<Void>.defer()
-}
-
+ @warning *Important* The promise is not guarenteed to resolve immediately
+ when the provided object is deallocated. So you cannot write code that
+ depends on exact timing.
+*/
 public func afterlife(object: NSObject) -> Promise<Void> {
     var reaper = objc_getAssociatedObject(object, &handle) as? GrimReaper
     if reaper == nil {
@@ -17,4 +15,13 @@ public func afterlife(object: NSObject) -> Promise<Void> {
         objc_setAssociatedObject(object, &handle, reaper, objc_AssociationPolicy(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
     }
     return reaper!.promise
+}
+
+private var handle: UInt8 = 0
+
+private class GrimReaper: NSObject {
+    deinit {
+        fulfill()
+    }
+    let (promise, fulfill, _) = Promise<Void>.defer()
 }
