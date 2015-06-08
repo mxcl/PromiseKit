@@ -203,6 +203,8 @@ __attribute__((objc_subclassing_restricted))
 
  @return A new promise.
 
+ @warning *Important* The resolver strongly retains the promise.
+
  @see promiseWithResolverBlock:
 */
 - (instancetype)initWithResolver:(PMKResolver __strong *)resolver;

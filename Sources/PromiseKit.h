@@ -30,13 +30,15 @@ extern AnyPromise * __nonnull PMKAfter(NSTimeInterval duration);
 
  Interestingly, if a single promise is passed then when waits on that single promise, and if a single non-promise object is passed then when fulfills immediately with that object. If the array or dictionary that is passed contains objects that are not promises, then these objects are considered fulfilled promises. The reason we do this is to allow a pattern know as "abstracting away asynchronicity".
 
- If *any* of the provided promises reject, the returned promise is immediately rejected with that promise’s rejection error. The error’s `userInfo` object is supplemented with `PMKFailingPromiseIndexKey`.
+ If *any* of the provided promises reject, the returned promise is immediately rejected with that promise’s rejection. The error’s `userInfo` object is supplemented with `PMKFailingPromiseIndexKey`.
 
  For example:
 
     PMKWhen(@[promise1, promise2]).then(^(NSArray *results){
         //…
     });
+
+ @warning *Important* In the event of rejection the other promises will continue to resolve and as per any other promise will eithe fulfill or reject. This is the right pattern for `getter` style asynchronous tasks, but often for `setter` tasks (eg. storing data on a server), you most likely will need to wait on all tasks and then act based on which have succeeded and which have failed. In such situations use `PMKJoin`.
 
  @param input The input upon which to wait before resolving this promise.
 
@@ -45,6 +47,9 @@ extern AnyPromise * __nonnull PMKAfter(NSTimeInterval duration);
   1. An array of values from the provided array of promises.
   2. The value from the provided promise.
   3. The provided non-promise object.
+
+ @see PMKJoin
+
 */
 extern AnyPromise * __nonnull PMKWhen(id __nonnull input);
 
@@ -55,13 +60,13 @@ extern AnyPromise * __nonnull PMKWhen(id __nonnull input);
 
  Typically, you should use `PMKWhen`.
 
- This promise is not rejectable.
-
  For example:
 
     PMKJoin(@[promise1, promise2]).then(^(NSArray *results, NSArray *values, NSArray *errors){
         //…
     });
+
+ @warning *Important* This promise is not rejectable. Thus it is up to you to propogate an error if you want any subsequent chain to continue being rejected.
 
  @param promises An array of promises.
 
