@@ -85,6 +85,50 @@ private func unbox(resolution: Resolution) -> AnyObject? {
         }
     }
 
+    /**
+     @return A new AnyPromise bound to a Promise<[T]>.
+
+     The two promises represent the same task, any changes to either
+     will instantly reflect on both.
+    
+     The value is converted to an NSArray so Objective-C can use it.
+    */
+    public init<T: AnyObject>(bound: Promise<[T]>) {
+        //WARNING copy pasta from above. FIXME how?
+        var resolve: ((Resolution) -> Void)!
+        state = UnsealedState(resolver: &resolve)
+        bound.pipe { resolution in
+            switch resolution {
+            case .Fulfilled:
+                resolve(box(NSArray(array: bound.value!)))
+            case .Rejected(let error):
+                resolve(box(error))
+            }
+        }
+    }
+
+    /**
+    @return A new AnyPromise bound to a Promise<[T]>.
+
+    The two promises represent the same task, any changes to either
+    will instantly reflect on both.
+
+    The value is converted to an NSArray so Objective-C can use it.
+    */
+    public init<T: AnyObject, U: AnyObject>(bound: Promise<[T:U]>) {
+        //WARNING copy pasta from above. FIXME how?
+        var resolve: ((Resolution) -> Void)!
+        state = UnsealedState(resolver: &resolve)
+        bound.pipe { resolution in
+            switch resolution {
+            case .Fulfilled:
+                resolve(box(bound.value! as NSDictionary))
+            case .Rejected(let error):
+                resolve(box(error))
+            }
+        }
+    }
+
     convenience public init(bound: Promise<Int>) {
         self.init(bound: bound.then(on: zalgo) { NSNumber(integer: $0) })
     }

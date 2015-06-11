@@ -95,6 +95,7 @@
 		63196AC71AFD936300555BCD /* dispatch_promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63196AC41AFD936300555BCD /* dispatch_promise.swift */; };
 		63196AC81AFD936300555BCD /* dispatch_promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63196AC41AFD936300555BCD /* dispatch_promise.swift */; };
 		63196AC91AFD9F6E00555BCD /* after.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A60E1F1AFD795B00C4E692 /* after.m */; };
+		631A51BC1B29E7E90018606D /* bridging.test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631A51BB1B29E7E90018606D /* bridging.test.swift */; };
 		631FEA7F1AF28E4900ED9646 /* PMKPromise.h in Headers */ = {isa = PBXBuildFile; fileRef = 631FEA7E1AF28E4900ED9646 /* PMKPromise.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		631FEA801AF28E4900ED9646 /* PMKPromise.h in Headers */ = {isa = PBXBuildFile; fileRef = 631FEA7E1AF28E4900ED9646 /* PMKPromise.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63314ADA1AEDDC070071B6F5 /* hang.m in Sources */ = {isa = PBXBuildFile; fileRef = 63314AD71AEDDC070071B6F5 /* hang.m */; };
@@ -369,6 +370,7 @@
 		63196ABE1AFD8B7100555BCD /* Promise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Promise.h; path = Sources/Promise.h; sourceTree = "<group>"; };
 		63196AC31AFD936300555BCD /* dispatch_promise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = dispatch_promise.m; path = Sources/dispatch_promise.m; sourceTree = "<group>"; };
 		63196AC41AFD936300555BCD /* dispatch_promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = dispatch_promise.swift; path = Sources/dispatch_promise.swift; sourceTree = "<group>"; };
+		631A51BB1B29E7E90018606D /* bridging.test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = bridging.test.swift; sourceTree = "<group>"; };
 		631FEA7E1AF28E4900ED9646 /* PMKPromise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PMKPromise.h; path = Sources/PMKPromise.h; sourceTree = "<group>"; };
 		63314AD71AEDDC070071B6F5 /* hang.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = hang.m; path = Sources/hang.m; sourceTree = "<group>"; };
 		63314AD81AEDDC070071B6F5 /* join.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = join.m; path = Sources/join.m; sourceTree = "<group>"; };
@@ -710,6 +712,7 @@
 				6388E1AE1AD316690074D85B /* when.test.swift */,
 				635121501B0A585B008ED696 /* when.test.m */,
 				6388E1B11AD316CB0074D85B /* zalgo.test.swift */,
+				631A51BB1B29E7E90018606D /* bridging.test.swift */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -1218,6 +1221,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				631A51BC1B29E7E90018606D /* bridging.test.swift in Sources */,
 				635D0D731ADD7CE700CC0406 /* PMKPromise.test.m in Sources */,
 				635121511B0A585B008ED696 /* when.test.m in Sources */,
 				638D02781AEC06430038201C /* after.test.swift in Sources */,

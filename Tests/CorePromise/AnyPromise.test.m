@@ -1268,10 +1268,10 @@ __attribute__((objc_subclassing_restricted))
 - (AnyPromise *)bridge1;
 @end
 
-@interface TestPromiseBridge: XCTestCase
+@interface PMKTestPromiseBridge: XCTestCase
 @end
 
-@implementation TestPromiseBridge
+@implementation PMKTestPromiseBridge
 
 - (void)test1 {
     XCTestExpectation *ex = [self expectationWithDescription:@""];
