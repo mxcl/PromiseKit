@@ -115,6 +115,7 @@
 		635D0D761ADDA2EA00CC0406 /* AnyPromise.test.m in Sources */ = {isa = PBXBuildFile; fileRef = 635D0D741ADDA2C100CC0406 /* AnyPromise.test.m */; };
 		635D0D7B1ADDB11400CC0406 /* ErrorUnhandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D0D7A1ADDB11400CC0406 /* ErrorUnhandler.swift */; };
 		635D0D7C1ADDB11400CC0406 /* ErrorUnhandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D0D7A1ADDB11400CC0406 /* ErrorUnhandler.swift */; };
+		635E207C1B28EED1005E5795 /* afterlife.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D73BE11B20B48F00843146 /* afterlife.swift */; };
 		6362D8B41AF8831200E9E0A2 /* SLComposeViewController+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6302ACC21AEF42F2001F0069 /* SLComposeViewController+Promise.swift */; };
 		636A44EE1AEC0F6700639777 /* TestSocial.m in Sources */ = {isa = PBXBuildFile; fileRef = 637BF6111AEAC62400997C8B /* TestSocial.m */; };
 		63772C9C1AF09B8A00ED2F59 /* ErrorUnhandler.test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63772C9B1AF09B8A00ED2F59 /* ErrorUnhandler.test.swift */; };
