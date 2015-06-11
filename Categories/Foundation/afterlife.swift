@@ -8,7 +8,7 @@ import PromiseKit
  when the provided object is deallocated. So you cannot write code that
  depends on exact timing.
 */
-public func afterlife(object: NSObject) -> Promise<Void> {
+public func after(life object: NSObject) -> Promise<Void> {
     var reaper = objc_getAssociatedObject(object, &handle) as? GrimReaper
     if reaper == nil {
         reaper = GrimReaper()
