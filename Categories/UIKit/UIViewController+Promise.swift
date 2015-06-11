@@ -32,7 +32,7 @@ extension UIViewController {
     }
     
     public func promiseViewController<T>(nc: UINavigationController, animated: Bool = true, completion:(()->Void)? = nil) -> Promise<T> {
-        if let vc = nc.viewControllers.first as? UIViewController {
+        if let vc = nc.viewControllers.first {
             let p: Promise<T> = promise(vc)
             if p.pending {
                 presentViewController(nc, animated: animated, completion: completion)
@@ -100,7 +100,7 @@ private func promise<T>(vc: UIViewController) -> Promise<T> {
         retainCycle = self
     }
 
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [NSObject : AnyObject]) {
+    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         fulfill(info)
         retainCycle = nil
     }

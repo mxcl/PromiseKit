@@ -10,9 +10,9 @@ Promise(1).then { _ in
 }.then {
     return Promise(3)
 }.then { x -> AnyPromise in
-    println(x)
+    print(x)
     return AnyPromise(bound: Promise(1))
-}.then(println)
+}.then(print)
 
 
 firstly {

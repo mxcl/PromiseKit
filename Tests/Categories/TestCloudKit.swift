@@ -36,7 +36,7 @@ class Test_CKContainer_Swift: XCTestCase {
         }
 
         let ex = expectationWithDescription("")
-        let pp = CKApplicationPermissions.PermissionUserDiscoverability
+        let pp = CKApplicationPermissions.UserDiscoverability
         MockContainer().requestApplicationPermission(pp).then { perms -> Void in
             XCTAssertEqual(perms, CKApplicationPermissionStatus.Granted)
             ex.fulfill()
@@ -55,7 +55,7 @@ class Test_CKContainer_Swift: XCTestCase {
         }
 
         let ex = expectationWithDescription("")
-        let pp = CKApplicationPermissions.PermissionUserDiscoverability
+        let pp = CKApplicationPermissions.UserDiscoverability
         MockContainer().statusForApplicationPermission(pp).then {
             XCTAssertEqual($0, CKApplicationPermissionStatus.Granted)
         }.then(ex.fulfill)

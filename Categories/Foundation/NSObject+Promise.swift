@@ -49,10 +49,12 @@ private class KVOProxy: NSObject {
         observee.addObserver(self, forKeyPath: keyPath, options: NSKeyValueObservingOptions.New, context: pointer)
     }
 
-    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
-        if context == pointer {
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+        if let change = change where context == pointer {
             fulfill(change[NSKeyValueChangeNewKey])
-            object.removeObserver(self, forKeyPath: keyPath)
+            if let object = object, keyPath = keyPath {
+                object.removeObserver(self, forKeyPath: keyPath)
+            }
             retainCycle = nil
         }
     }
