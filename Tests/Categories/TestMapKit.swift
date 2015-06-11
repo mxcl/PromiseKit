@@ -7,7 +7,8 @@ class TestMKDirections: XCTestCase {
         let ex = expectationWithDescription("")
 
         class MockDirections: MKDirections {
-            private override func calculateDirectionsWithCompletionHandler(completionHandler: MKDirectionsHandler!) {
+
+            private override func calculateDirectionsWithCompletionHandler(completionHandler: MKDirectionsHandler) {
                 completionHandler(MKDirectionsResponse(), nil)
             }
         }
@@ -25,7 +26,7 @@ class TestMKDirections: XCTestCase {
         let ex = expectationWithDescription("")
 
         class MockDirections: MKDirections {
-            private override func calculateETAWithCompletionHandler(completionHandler: MKETAHandler!) {
+            private override func calculateETAWithCompletionHandler(completionHandler: MKETAHandler) {
                 completionHandler(MKETAResponse(), nil)
             }
         }
@@ -45,7 +46,7 @@ class TestMKSnapshotter: XCTestCase {
         let ex = expectationWithDescription("")
 
         class MockSnapshotter: MKMapSnapshotter {
-            private override func startWithCompletionHandler(completionHandler: MKMapSnapshotCompletionHandler!) {
+            private override func startWithCompletionHandler(completionHandler: MKMapSnapshotCompletionHandler) {
                 completionHandler(MKMapSnapshot(), nil)
             }
         }

@@ -27,7 +27,7 @@ class TestCKContainer: XCTestCase {
     }
 
     func testRequestApplicationPermission() {
-        let pp = CKApplicationPermissions.PermissionUserDiscoverability
+        let pp = CKApplicationPermissions.UserDiscoverability
         __test("requestApplicationPermission:completionHandler:") {
             CKContainer.defaultContainer().requestApplicationPermission(pp).then {
                 XCTAssertEqual($0, .Granted)
@@ -36,7 +36,7 @@ class TestCKContainer: XCTestCase {
     }
 
     func testStatusForApplicationPermission() {
-        let pp = CKApplicationPermissions.PermissionUserDiscoverability
+        let pp = CKApplicationPermissions.UserDiscoverability
         __test("statusForApplicationPermission:completionHandler:") {
             CKContainer.defaultContainer().statusForApplicationPermission(pp).then {
                 XCTAssertEqual($0, .Granted)

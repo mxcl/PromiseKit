@@ -143,14 +143,13 @@ extension NSURLConnection {
 
     public class func promise(rq: NSURLRequest) -> Promise<UIImage> {
         return fetch(rq).then(on: waldo) { data, _ in
-            if let img = UIImage(data: data) {
-                if let img = UIImage(CGImage:img.CGImage, scale:img.scale, orientation:img.imageOrientation) {
-                    return Promise(img)
-                }
+            if let img = UIImage(data: data), cgimg = img.CGImage {
+                let screenReadyImage = UIImage(CGImage: cgimg, scale: img.scale, orientation: img.imageOrientation)
+                return Promise(screenReadyImage)
+            } else {
+                let info = [NSLocalizedDescriptionKey: "The server returned invalid image data"]
+                return Promise(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadServerResponse, userInfo: info))
             }
-
-            let info = [NSLocalizedDescriptionKey: "The server returned invalid image data"]
-            return Promise(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadServerResponse, userInfo: info))
         }
     }
 }
@@ -188,21 +187,21 @@ private func fetch(var request: NSURLRequest) -> Promise<(NSData, NSURLResponse)
                 info[NSURLErrorFailingURLErrorKey] = request.URL
                 info[NSURLErrorFailingURLStringErrorKey] = request.URL?.absoluteString
                 info[PMKURLErrorFailingDataKey] = data
-                if data != nil {
+                if let data = data {
                     info[PMKURLErrorFailingStringKey] = NSString(data: data, encoding: rsp?.stringEncoding ?? NSUTF8StringEncoding)
                 }
                 info[PMKURLErrorFailingURLResponseKey] = rsp
                 prereject(NSError(domain: error.domain, code: error.code, userInfo: info))
             }
 
-            if err != nil {
+            if let err = err {
                 reject(err)
-            } else if let response = rsp as? NSHTTPURLResponse where response.statusCode < 200 || response.statusCode >= 300 {
+            } else if let data = data, rsp = rsp as? NSHTTPURLResponse where rsp.statusCode >= 200 && rsp.statusCode < 300 {
+                fulfill(data, rsp)
+            } else {
                 reject(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadServerResponse, userInfo: [
                     NSLocalizedDescriptionKey: "The server returned a bad HTTP response code"
-                    ]))
-            } else {
-                fulfill(data, rsp)
+                ]))
             }
         }
     }

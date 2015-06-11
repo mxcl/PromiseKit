@@ -63,7 +63,7 @@ private let dummyPlacemark = CLPlacemark()
 class TestCLGeocoder: XCTestCase {
     func testReverseGeocodeLocation() {
         class MockGeocoder: CLGeocoder {
-            private override func reverseGeocodeLocation(location: CLLocation!, completionHandler: CLGeocodeCompletionHandler!) {
+            private override func reverseGeocodeLocation(location: CLLocation, completionHandler: CLGeocodeCompletionHandler) {
                 completionHandler([dummyPlacemark], nil)
             }
         }
@@ -78,7 +78,7 @@ class TestCLGeocoder: XCTestCase {
 
     func testGeocodeAddressDictionary() {
         class MockGeocoder: CLGeocoder {
-            private override func geocodeAddressDictionary(addressDictionary: [NSObject : AnyObject]!, completionHandler: CLGeocodeCompletionHandler!) {
+            private override func geocodeAddressDictionary(addressDictionary: [NSObject : AnyObject], completionHandler: CLGeocodeCompletionHandler) {
                 completionHandler([dummyPlacemark], nil)
             }
         }
@@ -93,7 +93,7 @@ class TestCLGeocoder: XCTestCase {
 
     func testGeocodeAddressString() {
         class MockGeocoder: CLGeocoder {
-            override func geocodeAddressString(addressString: String!, completionHandler: CLGeocodeCompletionHandler!) {
+            override func geocodeAddressString(addressString: String, completionHandler: CLGeocodeCompletionHandler) {
                 completionHandler([dummyPlacemark], nil)
             }
         }
@@ -121,7 +121,7 @@ func swizzle(foo: AnyClass, from: Selector, isClassMethod: Bool = false, @noesca
     method_exchangeImplementations(swizzledMethod, originalMethod)
 }
 
-private let dummy = [CLLocation(latitude: 0, longitude: 0)!, CLLocation(latitude: 10, longitude: 20)!]
+private let dummy = [CLLocation(latitude: 0, longitude: 0), CLLocation(latitude: 10, longitude: 20)]
 
 extension CLLocationManager {
     @objc func pmk_startUpdatingLocation() {

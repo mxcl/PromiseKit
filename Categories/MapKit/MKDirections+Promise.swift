@@ -18,10 +18,12 @@ extension MKDirections {
      cancellation.
     */
     public func promise() -> Promise<MKDirectionsResponse> {
-        return Promise { calculateDirectionsWithCompletionHandler($0.resolve) }
+        return Promise<MKDirectionsResponse>(sealant: { (sealant: Sealant<MKDirectionsResponse>) -> Void in
+            self.calculateDirectionsWithCompletionHandler(sealant.resolve)
+        })
     }
 
     public func promise() -> Promise<MKETAResponse> {
-        return Promise { calculateETAWithCompletionHandler($0.resolve) }
+        return Promise<MKETAResponse> { self.calculateETAWithCompletionHandler($0.resolve) }
     }
 }

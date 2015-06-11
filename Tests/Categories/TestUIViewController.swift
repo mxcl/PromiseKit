@@ -121,21 +121,17 @@ class UIKitTestCase: XCTestCase {
 }
 
 func subviewsOf(v: UIView) -> [UIView] {
-    var vv = v.subviews as! [UIView]
-    for v in v.subviews as! [UIView] {
-        vv += subviewsOf(v)
-    }
-    return vv
+    return v.subviews.flatMap(subviewsOf)
 }
 
-func find<T>(vc: UIViewController, type: AnyClass) -> T! {
-    return find(vc.view, type)
+func find<T>(vc: UIViewController, type: AnyClass) -> T? {
+    return find(vc.view, type: type)
 }
 
-func find<T>(view: UIView, type: AnyClass) -> T! {
+func find<T>(view: UIView, type: AnyClass) -> T? {
     for x in subviewsOf(view) {
         if x is T {
-            return x as! T
+            return x as? T
         }
     }
     return nil
