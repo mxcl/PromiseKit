@@ -30,6 +30,8 @@
 
  @param view The view from which the action sheet originates.
 
+ @warning *Important* If a cancelButtonIndex is set the promise will be *cancelled* if that button is pressed. Cancellation in PromiseKit has special behavior, see the relevant documentation for more details.
+ 
  @return A promise that fulfills with two parameters:
 
   1) The index (NSNumber) of the button that was tapped to dismiss the sheet.

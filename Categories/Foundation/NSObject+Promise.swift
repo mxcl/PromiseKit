@@ -17,6 +17,13 @@ import PromiseKit
     import PromiseKit
 */
 extension NSObject {
+    /**
+      @return A promise that resolves when the provided keyPath changes.
+
+      @warning *Important* The promise must not outlive the object under observation.
+
+      @see Apple’s KVO documentation.
+    */
     public func observe<T>(keyPath: String) -> Promise<T> {
         let (promise, fulfill, reject) = Promise<T>.defer()
         KVOProxy(observee: self, keyPath: keyPath) { obj in

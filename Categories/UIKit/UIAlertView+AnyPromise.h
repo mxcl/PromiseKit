@@ -28,6 +28,8 @@
         //…
     });
 
+ @warning *Important* If a cancelButtonIndex is set the promise will be *cancelled* if that button is pressed. Cancellation in PromiseKit has special behavior, see the relevant documentation for more details.
+
  @return A promise the fulfills with two parameters:
 
   1) The index of the button that was tapped to dismiss the alert.
