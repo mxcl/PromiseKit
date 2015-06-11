@@ -22,6 +22,11 @@ extension UIActionSheet {
         delegate = proxy
         proxy.retainCycle = proxy
         showInView(view)
+
+        if numberOfButtons == 1 && cancelButtonIndex == 0 {
+            NSLog("PromiseKit: An action sheet is being promised with a single button that is set as the cancelButtonIndex. The promise *will* be cancelled which may result in unexpected behavior. See http://promisekit.org/PromiseKit-2.0-Released/ for cancellation documentation.")
+        }
+
         return proxy.promise
     }
 }

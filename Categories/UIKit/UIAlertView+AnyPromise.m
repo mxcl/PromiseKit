@@ -30,6 +30,11 @@
     PMKAlertViewDelegate *d = [PMKAlertViewDelegate new];
     d->retainCycle = self.delegate = d;
     [self show];
+
+    if (self.numberOfButtons == 1 && self.cancelButtonIndex == 0) {
+        NSLog(@"PromiseKit: An alert view is being promised with a single button that is set as the cancelButtonIndex. The promise *will* be cancelled which may result in unexpected behavior. See http://promisekit.org/PromiseKit-2.0-Released/ for cancellation documentation.");
+    }
+
     return [[AnyPromise alloc] initWithResolver:&d->resolve];
 }
 
