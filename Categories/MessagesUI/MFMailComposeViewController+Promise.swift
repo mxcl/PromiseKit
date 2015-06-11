@@ -30,8 +30,8 @@ private class PMKMailComposeViewControllerDelegate: NSObject, MFMailComposeViewC
     let (promise, fulfill, reject) = Promise<MFMailComposeResult>.defer()
     var retainCycle: NSObject?
 
-    @objc func mailComposeController(controller: MFMailComposeViewController!, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
-        if error != nil {
+    @objc func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
+        if let error = error {
             reject(error)
         } else {
             switch result.value {

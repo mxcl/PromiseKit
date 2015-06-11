@@ -9,7 +9,7 @@ class TestPromiseImagePickerController: UIKitTestCase {
     // UIImagePickerController fulfills with edited image
     func test1() {
         class Mock: UIViewController {
-            var info = [NSObject:AnyObject]()
+            var info = [String:AnyObject]()
 
             override func presentViewController(vc: UIViewController, animated flag: Bool, completion: (() -> Void)?) {
                 let ipc = vc as! UIImagePickerController
@@ -35,7 +35,7 @@ class TestPromiseImagePickerController: UIKitTestCase {
     // UIImagePickerController fulfills with original image if no edited image available
     func test2() {
         class Mock: UIViewController {
-            var info = [NSObject:AnyObject]()
+            var info = [String:AnyObject]()
 
             override func presentViewController(vc: UIViewController, animated flag: Bool, completion: (() -> Void)?) {
                 let ipc = vc as! UIImagePickerController

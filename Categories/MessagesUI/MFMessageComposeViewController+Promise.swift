@@ -31,7 +31,7 @@ private class PMKMessageComposeViewControllerDelegate: NSObject, MFMessageCompos
     let (promise, fulfill, reject) = Promise<Void>.defer()
     var retainCycle: NSObject?
 
-    @objc func messageComposeViewController(controller: MFMessageComposeViewController!, didFinishWithResult result: MessageComposeResult) {
+    @objc func messageComposeViewController(controller: MFMessageComposeViewController, didFinishWithResult result: MessageComposeResult) {
 
         switch result.value {
         case MessageComposeResultSent.value:

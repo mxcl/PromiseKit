@@ -13,11 +13,11 @@ import PromiseKit
 */
 extension CKContainer {
     public func accountStatus() -> Promise<CKAccountStatus> {
-        return Promise { accountStatusWithCompletionHandler($0.resolve) }
+        return Promise<CKAccountStatus> { self.accountStatusWithCompletionHandler($0.resolve) }
     }
 
     public func requestApplicationPermission(applicationPermissions: CKApplicationPermissions) -> Promise<CKApplicationPermissionStatus> {
-        return Promise { requestApplicationPermission(applicationPermissions, completionHandler: $0.resolve) }
+        return Promise<CKApplicationPermissionStatus> { self.requestApplicationPermission(applicationPermissions, completionHandler: $0.resolve) }
     }
 
     public func statusForApplicationPermission(applicationPermissions: CKApplicationPermissions) -> Promise<CKApplicationPermissionStatus> {
@@ -25,14 +25,14 @@ extension CKContainer {
     }
 
     public func discoverAllContactUserInfos() -> Promise<[CKDiscoveredUserInfo]> {
-        return Promise<[AnyObject]> { self.discoverAllContactUserInfosWithCompletionHandler($0.resolve) }.then(on: zalgo) { $0 as! [CKDiscoveredUserInfo] }
+        return Promise { self.discoverAllContactUserInfosWithCompletionHandler($0.resolve) }
     }
 
-    public func discoverUserInfo(# email: String) -> Promise<CKDiscoveredUserInfo> {
+    public func discoverUserInfo(email email: String) -> Promise<CKDiscoveredUserInfo> {
         return Promise { discoverUserInfoWithEmailAddress(email, completionHandler: $0.resolve) }
     }
 
-    public func discoverUserInfo(# recordID: CKRecordID) -> Promise<CKDiscoveredUserInfo> {
+    public func discoverUserInfo(recordID recordID: CKRecordID) -> Promise<CKDiscoveredUserInfo> {
         return Promise { discoverUserInfoWithUserRecordID(recordID, completionHandler: $0.resolve) }
     }
 

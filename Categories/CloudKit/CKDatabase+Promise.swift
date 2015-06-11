@@ -25,11 +25,11 @@ extension CKDatabase {
     }
 
     public func fetchAllRecordZones() -> Promise<[CKRecordZone]> {
-        return Promise<[AnyObject]> { fetchAllRecordZonesWithCompletionHandler($0.resolve) }.then(on: zalgo) { $0 as! [CKRecordZone] }
+        return Promise { fetchAllRecordZonesWithCompletionHandler($0.resolve) }
     }
 
     public func fetchAllSubscriptions() -> Promise<[CKSubscription]> {
-        return Promise<[AnyObject]> { fetchAllSubscriptionsWithCompletionHandler($0.resolve) }.then(on: zalgo) { $0 as! [CKSubscription] }
+        return Promise { fetchAllSubscriptionsWithCompletionHandler($0.resolve) }
     }
 
     public func save(record: CKRecord) -> Promise<CKRecord> {
@@ -57,13 +57,13 @@ extension CKDatabase {
     }
 
     public func performQuery(query: CKQuery, inZoneWithID zoneID: CKRecordZoneID? = nil) -> Promise<[CKRecord]> {
-        return Promise<[AnyObject]> { performQuery(query, inZoneWithID: zoneID, completionHandler: $0.resolve) }.then(on: zalgo) { $0 as! [CKRecord] }
+        return Promise { performQuery(query, inZoneWithID: zoneID, completionHandler: $0.resolve) }
     }
 
     public func performQuery(query: CKQuery, inZoneWithID zoneID: CKRecordZoneID? = nil) -> Promise<CKRecord?> {
         return Promise { sealant in
             performQuery(query, inZoneWithID: zoneID) { records, error in
-                sealant.resolve((records as? [CKRecord])?.first, error)
+                sealant.resolve(records?.first, error)
             }
         }
     }

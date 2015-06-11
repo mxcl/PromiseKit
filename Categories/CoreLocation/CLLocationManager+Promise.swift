@@ -28,7 +28,7 @@ extension CLLocationManager {
       value.
      */
     public class func promise(requestAuthorizationType: RequestAuthorizationType = .Automatic) -> Promise<CLLocation> {
-        return promise(requestAuthorizationType: requestAuthorizationType).then(on: zalgo) {
+        return promise(requestAuthorizationType).then(on: zalgo) {
             (locations: [CLLocation]) -> CLLocation in
             return locations.last!
         }
@@ -38,10 +38,10 @@ extension CLLocationManager {
       @return A new promise that fulfills with the first batch of location objects a CLLocationManager instance provides.
      */
     public class func promise(requestAuthorizationType: RequestAuthorizationType = .Automatic) -> Promise<[CLLocation]> {
-        return promise(yield: auther(requestAuthorizationType))
+        return promise(yielding: auther(requestAuthorizationType))
     }
 
-    private class func promise(yield: (CLLocationManager) -> Void = { _ in }) -> Promise<[CLLocation]> {
+    private class func promise(yielding yield: (CLLocationManager) -> Void = { _ in }) -> Promise<[CLLocation]> {
         let manager = LocationManager()
         manager.delegate = manager
         yield(manager)
@@ -73,11 +73,11 @@ extension CLLocationManager {
 private class LocationManager: CLLocationManager, CLLocationManagerDelegate {
     let (promise, fulfill, reject) = Promise<[CLLocation]>.defer()
 
-    @objc func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+    @objc func locationManager(manager: CLLocationManager, didUpdateLocations locations: [AnyObject]) {
         fulfill(locations as! [CLLocation])
     }
 
-    @objc func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
+    @objc func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         reject(error)
     }
 }

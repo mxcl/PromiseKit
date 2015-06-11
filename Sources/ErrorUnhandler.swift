@@ -62,7 +62,7 @@ func unconsume(error: NSError) {
     } else {
         // this is how we know when the error is deallocated
         // because we will be deallocated at the same time
-        objc_setAssociatedObject(error, &handle, Consumable(parent: error), objc_AssociationPolicy(OBJC_ASSOCIATION_RETAIN_NONATOMIC))
+        objc_setAssociatedObject(error, &handle, Consumable(parent: error), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
     }
 }
 
