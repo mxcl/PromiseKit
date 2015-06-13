@@ -42,4 +42,19 @@ extension Promise {
     public var rejected: Bool {
         return error != nil
     }
+
+    /**
+     @return The value with which this promise was fulfilled or nil if this
+     promise is not fulfilled.
+    */
+    public var value: T? {
+        switch state.get() {
+        case .None:
+            return nil
+        case .Some(.Fulfilled(let value)):
+            return (value as! T)
+        case .Some(.Rejected):
+            return nil
+        }
+    }
 }
