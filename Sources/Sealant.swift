@@ -1,20 +1,10 @@
 import Foundation.NSError
 
 public class Sealant<T> {
-    let handler: (Resolution<T>) -> ()
+    private let handler: (Resolution<T>) -> ()
 
     init(body: (Resolution<T>) -> Void) {
         handler = body
-    }
-
-    /** internal because it is dangerous */
-    func __resolve(obj: AnyObject) {
-        switch obj {
-        case is NSError:
-            resolve(obj as! NSError)
-        default:
-            handler(.Fulfilled(obj as! T))
-        }
     }
 
     public func resolve(value: T) {
@@ -47,7 +37,7 @@ public class Sealant<T> {
             resolve(error)
         } else {
             //FIXME couldn't get the constants from the umbrella header :(
-            let error = NSError(domain: PMKErrorDomain, code: /*PMKUnexpectedError*/ 1, userInfo: nil)
+            let error = NSError(domain: PMKErrorDomain, code: PMKUnexpectedError, userInfo: nil)
             resolve(error)
         }
     }

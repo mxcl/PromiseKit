@@ -103,7 +103,7 @@ public class Promise<T> {
     */
     public init(_ error: NSError) {
         unconsume(error)
-        state = SealedState<T>(resolution: .Rejected(error))
+        state = SealedState(resolution: .Rejected(error))
     }
 
     /**
@@ -190,7 +190,7 @@ public class Promise<T> {
      @see thenInBackground
     */
     public func then<U>(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: (T) throws -> U) -> Promise<U> {
-        return Promise<U>(when: self) { (resolution, resolve: (Resolution<U> -> Void)) in
+        return Promise<U>(when: self) { resolution, resolve in
             switch resolution {
             case .Rejected(let error):
                 resolve(.Rejected(error))

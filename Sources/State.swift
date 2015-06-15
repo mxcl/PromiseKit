@@ -11,7 +11,8 @@ enum Seal<T> {
 }
 
 // would be a protocol, but you can't have typed variables of “generic”
-// protocols in Swift 2.
+// protocols in Swift 2. That is, I couldn’t do var state: State<T> when
+// it was a protocol. There is no work around.
 class State<T> {
     func get() -> Resolution<T>? { fatalError("Abstract Base Class") }
     func get(body: (Seal<T>) -> Void) { fatalError("Abstract Base Class") }
