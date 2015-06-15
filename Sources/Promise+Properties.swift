@@ -52,7 +52,7 @@ extension Promise {
         case .None:
             return nil
         case .Some(.Fulfilled(let value)):
-            return (value as! T)
+            return value
         case .Some(.Rejected):
             return nil
         }
