@@ -56,8 +56,8 @@ class TestWhen: XCTestCase {
     
     func testRejected() {
         let e1 = expectationWithDescription("")
-        let p1 = after(0.01).then{ true }
-        let p2 = after(0.01).then{ return Promise<Bool>(error: "Fail") }
+        let p1 = after(0.1).then{ true }
+        let p2 = after(0.2).then{ throw NSError(domain: "a", code: 1, userInfo: nil) }
         let p3 = Promise(false)
             
         when(p1, p2, p3).rescue { _ in

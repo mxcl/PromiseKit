@@ -1,7 +1,9 @@
 import Foundation.NSProgress
 
 private func when<T>(promises: [Promise<T>]) -> Promise<Void> {
-    let (rootPromise, fulfill, reject) = Promise<Void>.pendingPromise()
+
+    //TODO PMKFailingPromiseIndexKey
+
 #if !PMKDisableProgress
     let progress = NSProgress(totalUnitCount: Int64(promises.count))
     progress.cancellable = false
@@ -10,29 +12,30 @@ private func when<T>(promises: [Promise<T>]) -> Promise<Void> {
     var progress: (completedUnitCount: Int, totalUnitCount: Int) = (0, 0)
 #endif
     var countdown = promises.count
-    if countdown == 0 {
-        fulfill()
-    }
+    let barrier = dispatch_queue_create("org.promisekit.barrier.when", DISPATCH_QUEUE_CONCURRENT)
 
-    for promise in promises {
-        promise.pipe { resolution in
-            if rootPromise.pending {
-                switch resolution {
-                case .Rejected(let error):
-                    progress.completedUnitCount = progress.totalUnitCount
-                    //TODO PMKFailingPromiseIndexKey
-                    reject(error)
-                case .Fulfilled:
-                    progress.completedUnitCount++
-                    if --countdown == 0 {
-                        fulfill()
+    return Promise { fulfill, reject in
+        guard promises.count > 0 else { return fulfill() }
+
+        for promise in promises {
+            promise.pipe { resolution in
+                guard progress.fractionCompleted < 1 else { return }
+
+                dispatch_barrier_sync(barrier) {
+                    switch resolution {
+                    case .Rejected(let error):
+                        progress.completedUnitCount = progress.totalUnitCount
+                        reject(error)
+                    case .Fulfilled:
+                        progress.completedUnitCount++
+                        if --countdown == 0 {
+                            fulfill()
+                        }
                     }
                 }
             }
         }
     }
-
-    return rootPromise
 }
 
 public func when<T>(promises: [Promise<T>]) -> Promise<[T]> {
