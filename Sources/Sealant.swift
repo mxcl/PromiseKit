@@ -1,9 +1,9 @@
 import Foundation.NSError
 
 public class Sealant<T> {
-    let handler: (Resolution) -> ()
+    let handler: (Resolution<T>) -> ()
 
-    init(body: (Resolution) -> Void) {
+    init(body: (Resolution<T>) -> Void) {
         handler = body
     }
 
@@ -13,7 +13,7 @@ public class Sealant<T> {
         case is NSError:
             resolve(obj as! NSError)
         default:
-            handler(.Fulfilled(obj))
+            handler(.Fulfilled(obj as! T))
         }
     }
 

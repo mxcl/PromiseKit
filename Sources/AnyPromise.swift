@@ -1,55 +1,21 @@
 import Foundation.NSError
 
-/**
- AnyPromise is a Promise that can be used in Objective-C code
 
- Swift code can only convert Promises to AnyPromises or vice versa.
-
- Libraries that only provide promises will require you to write a
- small Swift function that can convert those promises into AnyPromises
- as you require them.
-
- To effectively use AnyPromise in Objective-C code you must use `#import`
- rather than `@import PromiseKit;`
-
-     #import <PromiseKit/PromiseKit.h>
-*/
-
-/**
- Resolution.Fulfilled takes an Any. When retrieving the Any you cannot
- convert it into an AnyObject?. By giving Fulfilled an object that has
- an AnyObject? property we never have to cast and everything is fine.
-*/
-private class Box {
-    let obj: AnyObject?
-    
-    init(_ obj: AnyObject?) {
-        self.obj = obj
-    }
-}
-
-private func box(obj: AnyObject?) -> Resolution {
-    if let error = obj as? NSError {
-        unconsume(error)
-        return .Rejected(error)
-    } else {
-        return .Fulfilled(Box(obj))
-    }
-}
-
-private func unbox(resolution: Resolution) -> AnyObject? {
+private func unbox(resolution: Resolution<AnyObject?>) -> AnyObject? {
     switch resolution {
-    case .Fulfilled(let box):
-        return (box as! Box).obj
+    case .Fulfilled(let value):
+        return value
     case .Rejected(let error):
         return error
     }
 }
 
 
-
 @objc(PMKAnyPromise) public class AnyPromise: NSObject {
-    var state: State
+    private var state: State
+
+    private typealias Resolution = PromiseKit.Resolution<AnyObject?>
+    private typealias State = UnsealedState<AnyObject?>
 
     /**
      @return A new AnyPromise bound to a Promise<T>.
@@ -60,13 +26,16 @@ private func unbox(resolution: Resolution) -> AnyObject? {
     public init<T: AnyObject>(bound: Promise<T>) {
         //WARNING copy pasta from below. FIXME how?
         var resolve: ((Resolution) -> Void)!
-        state = UnsealedState(resolver: &resolve)
+        state = State(resolver: &resolve)
+
+        //TODO eventually we should be able to just do: bound.pipe(resolve)
         bound.pipe { resolution in
             switch resolution {
-            case .Fulfilled:
-                resolve(box(bound.value))
+            case .Fulfilled(let value):
+                resolve(.Fulfilled(value))
             case .Rejected(let error):
-                resolve(box(error))
+                unconsume(error)
+                resolve(.Rejected(error))
             }
         }
     }
@@ -74,13 +43,14 @@ private func unbox(resolution: Resolution) -> AnyObject? {
     public init<T: AnyObject>(bound: Promise<T?>) {
         //WARNING copy pasta from above. FIXME how?
         var resolve: ((Resolution) -> Void)!
-        state = UnsealedState(resolver: &resolve)
+        state = State(resolver: &resolve)
         bound.pipe { resolution in
             switch resolution {
-            case .Fulfilled:
-                resolve(box(bound.value!))
+            case .Fulfilled(let value):
+                resolve(.Fulfilled(value))
             case .Rejected(let error):
-                resolve(box(error))
+                unconsume(error)
+                resolve(.Rejected(error))
             }
         }
     }
@@ -96,13 +66,14 @@ private func unbox(resolution: Resolution) -> AnyObject? {
     public init<T: AnyObject>(bound: Promise<[T]>) {
         //WARNING copy pasta from above. FIXME how?
         var resolve: ((Resolution) -> Void)!
-        state = UnsealedState(resolver: &resolve)
+        state = State(resolver: &resolve)
         bound.pipe { resolution in
             switch resolution {
-            case .Fulfilled:
-                resolve(box(NSArray(array: bound.value!)))
+            case .Fulfilled(let value):
+                resolve(.Fulfilled(value as NSArray))
             case .Rejected(let error):
-                resolve(box(error))
+                unconsume(error)
+                resolve(.Rejected(error))
             }
         }
     }
@@ -118,13 +89,14 @@ private func unbox(resolution: Resolution) -> AnyObject? {
     public init<T: AnyObject, U: AnyObject>(bound: Promise<[T:U]>) {
         //WARNING copy pasta from above. FIXME how?
         var resolve: ((Resolution) -> Void)!
-        state = UnsealedState(resolver: &resolve)
+        state = State(resolver: &resolve)
         bound.pipe { resolution in
             switch resolution {
-            case .Fulfilled:
-                resolve(box(bound.value! as NSDictionary))
+            case .Fulfilled(let value):
+                resolve(.Fulfilled(value as NSDictionary))
             case .Rejected(let error):
-                resolve(box(error))
+                unconsume(error)
+                resolve(.Rejected(error))
             }
         }
     }
@@ -139,10 +111,15 @@ private func unbox(resolution: Resolution) -> AnyObject? {
 
     @objc init(@noescape bridge: ((AnyObject?) -> Void) -> Void) {
         var resolve: ((Resolution) -> Void)!
-        state = UnsealedState(resolver: &resolve)
+        state = State(resolver: &resolve)
         bridge { result in
             func preresolve(obj: AnyObject?) {
-                resolve(box(obj))
+                if let error = obj as? NSError {
+                    unconsume(error)
+                    resolve(.Rejected(error))
+                } else {
+                    resolve(.Fulfilled(obj))
+                }
             }
             if let next = result as? AnyPromise {
                 next.pipe(preresolve)
@@ -152,16 +129,16 @@ private func unbox(resolution: Resolution) -> AnyObject? {
         }
     }
 
-    @objc func pipe(body: (AnyObject?) -> Void) {
+    @objc func pipe(anybody: (AnyObject?) -> Void) {
         state.get { seal in
-            func prebody(resolution: Resolution) {
-                body(unbox(resolution))
+            func body(resolution: Resolution) {
+                anybody(unbox(resolution))
             }
             switch seal {
             case .Pending(let handlers):
-                handlers.append(prebody)
+                handlers.append(body)
             case .Resolved(let resolution):
-                prebody(resolution)
+                body(resolution)
             }
         }
     }

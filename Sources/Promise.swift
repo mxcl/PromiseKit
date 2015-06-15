@@ -23,7 +23,7 @@ public enum RescuePolicy {
  @see [PromiseKit Chaining Guide](http://promisekit.org/chaining/)
 */
 public class Promise<T> {
-    let state: State
+    let state: State<T>
 
     /**
      Create a new pending promise.
@@ -82,6 +82,7 @@ public class Promise<T> {
      @see init(resolvers:)
     */
     public init(@noescape sealant: (Sealant<T>) throws -> Void) {
+        var resolve: ((Resolution<T>) -> Void)!
         state = UnsealedState(resolver: &resolve)
         do {
             try sealant(Sealant(body: resolve))
@@ -102,7 +103,7 @@ public class Promise<T> {
     */
     public init(_ error: NSError) {
         unconsume(error)
-        state = SealedState(resolution: .Rejected(error))
+        state = SealedState<T>(resolution: .Rejected(error))
     }
 
     /**
@@ -110,8 +111,8 @@ public class Promise<T> {
       public designated unsealed initializer! Making this convenience would be
       inefficient. Not very inefficient, but still it seems distasteful to me.
      */
-    init(passthru: ((Resolution) -> Void) -> Void) {
-        var resolve: ((Resolution) -> Void)!
+    init(passthru: ((Resolution<T>) -> Void) -> Void) {
+        var resolve: ((Resolution<T>) -> Void)!
         state = UnsealedState(resolver: &resolve)
         passthru {
             if case .Rejected(let error) = $0 {
@@ -148,7 +149,7 @@ public class Promise<T> {
         return (promise, sealant.resolve, sealant.resolve)
     }
 
-    func pipe(body: (Resolution) -> Void) {
+    func pipe(body: (Resolution<T>) -> Void) {
         state.get { seal in
             switch seal {
             case .Pending(let handlers):
@@ -159,8 +160,8 @@ public class Promise<T> {
         }
     }
 
-    private convenience init<U>(when: Promise<U>, body: (Resolution, (Resolution) -> Void) -> Void) {
-        self.init(passthru: { resolve in
+    private convenience init<U>(when: Promise<U>, body: (Resolution<U>, (Resolution<T>) -> Void) -> Void) {
+        self.init(passthru: { (resolve: (Resolution<T>) -> Void) in
             when.pipe{ body($0, resolve) }
         })
     }
@@ -189,14 +190,14 @@ public class Promise<T> {
      @see thenInBackground
     */
     public func then<U>(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: (T) throws -> U) -> Promise<U> {
-        return Promise<U>(when: self) { resolution, resolve in
+        return Promise<U>(when: self) { (resolution, resolve: (Resolution<U> -> Void)) in
             switch resolution {
-            case .Rejected:
-                resolve(resolution)
+            case .Rejected(let error):
+                resolve(.Rejected(error))
             case .Fulfilled(let value):
                 contain_zalgo(q) {
                     do {
-                        resolve(.Fulfilled(try body(value as! T)))
+                        resolve(.Fulfilled(try body(value)))
                     } catch let error {
                         resolve(.Rejected(error as NSError))
                     }
@@ -208,12 +209,12 @@ public class Promise<T> {
     public func then<U>(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: (T) throws -> Promise<U>) -> Promise<U> {
         return Promise<U>(when: self) { resolution, resolve in
             switch resolution {
-            case .Rejected:
-                resolve(resolution)
+            case .Rejected(let error):
+                resolve(.Rejected(error))
             case .Fulfilled(let value):
                 contain_zalgo(q) {
                     do {
-                        try body(value as! T).pipe(resolve)
+                        try body(value).pipe(resolve)
                     } catch let error {
                         resolve(.Rejected(error as NSError))
                     }
@@ -225,12 +226,12 @@ public class Promise<T> {
     public func then(on q: dispatch_queue_t = dispatch_get_main_queue(), body: (T) throws -> AnyPromise) -> Promise<AnyObject?> {
         return Promise<AnyObject?>(when: self) { resolution, resolve in
             switch resolution {
-            case .Rejected:
-                resolve(resolution)
+            case .Rejected(let error):
+                resolve(.Rejected(error))
             case .Fulfilled(let value):
                 contain_zalgo(q) {
                     do {
-                        let anypromise = try body(value as! T)
+                        let anypromise = try body(value)
                         anypromise.pipe { obj in
                             if let error = obj as? NSError {
                                 resolve(.Rejected(error))
@@ -283,21 +284,16 @@ public class Promise<T> {
      @see registerCancellationError
     */
     public func rescue(policy policy: RescuePolicy = .AllErrorsExceptCancellation, _ body: (NSError) -> Void) -> RejectedPromise {
-        var reject: ((Resolution) -> Void)!
-        let rp = RejectedPromise(reject: &reject)
+        var resolve: ((Resolution<Void>) -> Void)!
+        let rp = RejectedPromise(resolve: &resolve)
 
         pipe { resolution in
-            switch resolution {
-            case .Fulfilled:
-                break
-            case .Rejected(let error):
-                if policy == .AllErrors || !error.cancelled {
-                    dispatch_async(dispatch_get_main_queue()) {
-                        consume(error)
-                        body(error)
-                        reject(resolution)
-                    }
+            dispatch_async(dispatch_get_main_queue()) {
+                if case .Rejected(let error) = resolution where policy == .AllErrors || !error.cancelled {
+                    consume(error)
+                    body(error)
                 }
+                resolve(.Fulfilled())
             }
         }
 
@@ -443,7 +439,7 @@ extension Promise {
      function.
     */
     public func asAny() -> Promise<Any> {
-        return Promise<Any>(passthru: pipe)
+        return then(on: zalgo) { $0 }
     }
 
     /**
@@ -452,7 +448,7 @@ extension Promise {
      this function.
     */
     public func asAnyObject() -> Promise<AnyObject> {
-        return Promise<AnyObject>(passthru: pipe)
+        return then(on: zalgo) { $0 as! AnyObject }
     }
 
     /**
@@ -497,10 +493,10 @@ public func firstly<T>(promise: () -> Promise<T>) -> Promise<T> {
 
 
 public class RejectedPromise {
-    private let state: State
+    private let state: UnsealedState<Void>
 
-    private init(inout reject: ((Resolution) -> Void)!) {
-        state = UnsealedState(resolver: &reject)
+    private init(inout resolve: ((Resolution<Void>) -> Void)!) {
+        state = UnsealedState(resolver: &resolve)
     }
 
     public func finally(on q: dispatch_queue_t = dispatch_get_main_queue(), body: () -> Void) {
