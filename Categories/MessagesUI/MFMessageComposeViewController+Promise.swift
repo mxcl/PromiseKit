@@ -32,6 +32,7 @@ private class PMKMessageComposeViewControllerDelegate: NSObject, MFMessageCompos
     var retainCycle: NSObject?
 
     @objc func messageComposeViewController(controller: MFMessageComposeViewController, didFinishWithResult result: MessageComposeResult) {
+        defer { retainCycle = nil }
 
         switch result.rawValue {
         case MessageComposeResultSent.rawValue:
@@ -46,7 +47,5 @@ private class PMKMessageComposeViewControllerDelegate: NSObject, MFMessageCompos
         default:
             fatalError("Swift Sucks")
         }
-
-        retainCycle = nil
     }
 }

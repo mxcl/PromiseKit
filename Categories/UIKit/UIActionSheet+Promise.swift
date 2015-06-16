@@ -36,11 +36,12 @@ private class PMKActionSheetDelegate: NSObject, UIActionSheetDelegate {
     var retainCycle: NSObject?
 
     @objc func actionSheet(actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {
+        defer { retainCycle = nil }
+
         if buttonIndex != actionSheet.cancelButtonIndex {
             fulfill(buttonIndex)
         } else {
             reject(NSError.cancelledError())
         }
-        retainCycle = nil
     }
 }
