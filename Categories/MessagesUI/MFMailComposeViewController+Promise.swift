@@ -31,6 +31,8 @@ private class PMKMailComposeViewControllerDelegate: NSObject, MFMailComposeViewC
     var retainCycle: NSObject?
 
     @objc func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
+        defer { retainCycle = nil }
+
         if let error = error {
             reject(error)
         } else {
@@ -46,6 +48,5 @@ private class PMKMailComposeViewControllerDelegate: NSObject, MFMailComposeViewC
                 fulfill(result)
             }
         }
-        retainCycle = nil
     }
 }

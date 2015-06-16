@@ -28,11 +28,8 @@ class UnsealedState: State {
     func get() -> Resolution? {
         var result: Resolution?
         dispatch_sync(barrier) {
-            switch self.seal {
-            case .Resolved(let resolution):
+            if case .Resolved(let resolution) = self.seal {
                 result = resolution
-            case .Pending:
-                break
             }
         }
         return result
@@ -68,12 +65,9 @@ class UnsealedState: State {
         resolver = { resolution in
             var handlers: Handlers?
             dispatch_barrier_sync(self.barrier) {
-                switch self.seal {
-                case .Pending(let hh):
+                if case .Pending(let hh) = self.seal {
                     self.seal = .Resolved(resolution)
                     handlers = hh
-                case .Resolved:
-                    break
                 }
             }
             if let handlers = handlers {
