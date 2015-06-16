@@ -23,19 +23,15 @@ class UnsealedState<T>: State<T> {
     private var seal: Seal<T>
 
     /**
-     Quick return, but will not provide the handlers array
-     because it could be modified while you are using it by
-     another thread. If you need the handlers, use the second
-     `get` variant.
+     Quick return, but will not provide the handlers array because
+     it could be modified while you are using it by another thread.
+     If you need the handlers, use the second `get` variant.
     */
     override func get() -> Resolution<T>? {
         var result: Resolution<T>?
         dispatch_sync(barrier) {
-            switch self.seal {
-            case .Resolved(let resolution):
+            if case .Resolved(let resolution) = self.seal {
                 result = resolution
-            case .Pending:
-                break
             }
         }
         return result
@@ -72,12 +68,9 @@ class UnsealedState<T>: State<T> {
         resolver = { resolution in
             var handlers: Handlers<T>?
             dispatch_barrier_sync(self.barrier) {
-                switch self.seal {
-                case .Pending(let hh):
+                if case .Pending(let hh) = self.seal {
                     self.seal = .Resolved(resolution)
                     handlers = hh
-                case .Resolved:
-                    break
                 }
             }
             if let handlers = handlers {
