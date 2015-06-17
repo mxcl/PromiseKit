@@ -71,7 +71,7 @@ Pod::Spec.new do |s|
     ss.ios.source_files = Dir['Categories/Foundation/*'] - Dir['Categories/Foundation/NSTask*']
     ss.osx.source_files = 'Categories/Foundation/*'
     ss.dependency 'PromiseKit/CorePromise'
-    ss.dependency 'OMGHTTPURLRQ', '~> 2.1.3'
+    ss.dependency 'OMGHTTPURLRQ', '~> 3.0.0'
     ss.frameworks = 'Foundation'
   end
 
