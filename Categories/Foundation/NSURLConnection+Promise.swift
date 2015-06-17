@@ -21,68 +21,133 @@ import PromiseKit
 */
 extension NSURLConnection {
     public class func GET(url: String) -> Promise<NSData> {
-        return promise(NSURLRequest(URL:NSURL(string:url)!))
+        return foo(try OMGHTTPURLRQ.GET(url, nil))
     }
     public class func GET(url: String) -> Promise<String> {
-        return promise(NSURLRequest(URL:NSURL(string:url)!))
+        return foo(try OMGHTTPURLRQ.GET(url, nil))
     }
     public class func GET(url: String) -> Promise<NSArray> {
-        return promise(NSURLRequest(URL:NSURL(string:url)!))
+        return foo(try OMGHTTPURLRQ.GET(url, nil))
     }
     public class func GET(url: String) -> Promise<NSDictionary> {
-        return promise(NSURLRequest(URL:NSURL(string:url)!))
+        return foo(try OMGHTTPURLRQ.GET(url, nil))
     }
 
     public class func GET(url: String, query: [String:AnyObject]) -> Promise<NSData> {
-        return promise(OMGHTTPURLRQ.GET(url, query))
+        return foo(try OMGHTTPURLRQ.GET(url, query))
     }
     public class func GET(url: String, query: [String:AnyObject]) -> Promise<String> {
-        return promise(OMGHTTPURLRQ.GET(url, query))
+        return foo(try OMGHTTPURLRQ.GET(url, query))
     }
     public class func GET(url: String, query: [String:AnyObject]) -> Promise<NSArray> {
-        return promise(OMGHTTPURLRQ.GET(url, query))
+        return foo(try OMGHTTPURLRQ.GET(url, query))
     }
     public class func GET(url: String, query: [String:AnyObject]) -> Promise<NSDictionary> {
-        return promise(OMGHTTPURLRQ.GET(url, query))
+        return foo(try OMGHTTPURLRQ.GET(url, query))
     }
 
-    public class func POST(url: String, formData: [String:String]) -> Promise<NSData> {
-        return promise(OMGHTTPURLRQ.POST(url, formData))
+    public class func POST(url: String) -> Promise<NSData> {
+        return foo(try OMGHTTPURLRQ.POST(url, nil))
     }
-    public class func POST(url: String, formData: [String:String]) -> Promise<String> {
-        return promise(OMGHTTPURLRQ.POST(url, formData))
+    public class func POST(url: String) -> Promise<String> {
+        return foo(try OMGHTTPURLRQ.POST(url, nil))
     }
-    public class func POST(url: String, formData: [String:String]) -> Promise<NSArray> {
-        return promise(OMGHTTPURLRQ.POST(url, formData))
+    public class func POST(url: String) -> Promise<NSArray> {
+        return foo(try OMGHTTPURLRQ.POST(url, nil))
     }
-    public class func POST(url: String, formData: [String:String]) -> Promise<NSDictionary> {
-        return promise(OMGHTTPURLRQ.POST(url, formData))
+    public class func POST(url: String) -> Promise<NSDictionary> {
+        return foo(try OMGHTTPURLRQ.POST(url, nil))
+    }
+
+    public class func POST(url: String, formData: [String:AnyObject]) -> Promise<NSData> {
+        return foo(try OMGHTTPURLRQ.POST(url, formData))
+    }
+    public class func POST(url: String, formData: [String:AnyObject]) -> Promise<String> {
+        return foo(try OMGHTTPURLRQ.POST(url, formData))
+    }
+    public class func POST(url: String, formData: [String:AnyObject]) -> Promise<NSArray> {
+        return foo(try OMGHTTPURLRQ.POST(url, formData))
+    }
+    public class func POST(url: String, formData: [String:AnyObject]) -> Promise<NSDictionary> {
+        return foo(try OMGHTTPURLRQ.POST(url, formData))
     }
 
     public class func POST(url: String, JSON: [String:AnyObject]) -> Promise<NSData> {
-        return promise(OMGHTTPURLRQ.POST(url, JSON: JSON))
+        return foo(try OMGHTTPURLRQ.POST(url, JSON: JSON))
     }
     public class func POST(url: String, JSON: [String:AnyObject]) -> Promise<String> {
-        return promise(OMGHTTPURLRQ.POST(url, JSON: JSON))
+        return foo(try OMGHTTPURLRQ.POST(url, JSON: JSON))
     }
     public class func POST(url: String, JSON: [String:AnyObject]) -> Promise<NSArray> {
-        return promise(OMGHTTPURLRQ.POST(url, JSON: JSON))
+        return foo(try OMGHTTPURLRQ.POST(url, JSON: JSON))
     }
     public class func POST(url: String, JSON: [String:AnyObject]) -> Promise<NSDictionary> {
-      return promise(OMGHTTPURLRQ.POST(url, JSON: JSON))
+        return foo(try OMGHTTPURLRQ.POST(url, JSON: JSON))
     }
 
     public class func POST(url: String, multipartFormData: OMGMultipartFormData) -> Promise<NSData> {
-        return promise(OMGHTTPURLRQ.POST(url, multipartFormData))
+        return foo(try OMGHTTPURLRQ.POST(url, multipartFormData))
     }
     public class func POST(url: String, multipartFormData: OMGMultipartFormData) -> Promise<String> {
-        return promise(OMGHTTPURLRQ.POST(url, multipartFormData))
+        return foo(try OMGHTTPURLRQ.POST(url, multipartFormData))
     }
     public class func POST(url: String, multipartFormData: OMGMultipartFormData) -> Promise<NSArray> {
-        return promise(OMGHTTPURLRQ.POST(url, multipartFormData))
+        return foo(try OMGHTTPURLRQ.POST(url, multipartFormData))
     }
     public class func POST(url: String, multipartFormData: OMGMultipartFormData) -> Promise<NSDictionary> {
-        return promise(OMGHTTPURLRQ.POST(url, multipartFormData))
+        return foo(try OMGHTTPURLRQ.POST(url, multipartFormData))
+    }
+
+    public class func PUT(url: String) -> Promise<NSData> {
+        return foo(try OMGHTTPURLRQ.PUT(url, nil))
+    }
+    public class func PUT(url: String) -> Promise<String> {
+        return foo(try OMGHTTPURLRQ.PUT(url, nil))
+    }
+    public class func PUT(url: String) -> Promise<NSArray> {
+        return foo(try OMGHTTPURLRQ.PUT(url, nil))
+    }
+    public class func PUT(url: String) -> Promise<NSDictionary> {
+        return foo(try OMGHTTPURLRQ.PUT(url, nil))
+    }
+
+    public class func PUT(url: String, formData: [String:AnyObject]) -> Promise<NSData> {
+        return foo(try OMGHTTPURLRQ.PUT(url, formData))
+    }
+    public class func PUT(url: String, formData: [String:AnyObject]) -> Promise<String> {
+        return foo(try OMGHTTPURLRQ.PUT(url, formData))
+    }
+    public class func PUT(url: String, formData: [String:AnyObject]) -> Promise<NSArray> {
+        return foo(try OMGHTTPURLRQ.PUT(url, formData))
+    }
+    public class func PUT(url: String, formData: [String:AnyObject]) -> Promise<NSDictionary> {
+        return foo(try OMGHTTPURLRQ.PUT(url, formData))
+    }
+
+    public class func PUT(url: String, JSON: [String:AnyObject]) -> Promise<NSData> {
+        return foo(try OMGHTTPURLRQ.PUT(url, JSON: JSON))
+    }
+    public class func PUT(url: String, JSON: [String:AnyObject]) -> Promise<String> {
+        return foo(try OMGHTTPURLRQ.PUT(url, JSON: JSON))
+    }
+    public class func PUT(url: String, JSON: [String:AnyObject]) -> Promise<NSArray> {
+        return foo(try OMGHTTPURLRQ.PUT(url, JSON: JSON))
+    }
+    public class func PUT(url: String, JSON: [String:AnyObject]) -> Promise<NSDictionary> {
+        return foo(try OMGHTTPURLRQ.PUT(url, JSON: JSON))
+    }
+
+    public class func DELETE(url: String) -> Promise<NSData> {
+        return foo(try OMGHTTPURLRQ.DELETE(url, nil))
+    }
+    public class func DELETE(url: String) -> Promise<String> {
+        return foo(try OMGHTTPURLRQ.DELETE(url, nil))
+    }
+    public class func DELETE(url: String) -> Promise<NSArray> {
+        return foo(try OMGHTTPURLRQ.DELETE(url, nil))
+    }
+    public class func DELETE(url: String) -> Promise<NSDictionary> {
+        return foo(try OMGHTTPURLRQ.DELETE(url, nil))
     }
 
     public class func promise(request: NSURLRequest) -> Promise<NSData> {
@@ -112,6 +177,41 @@ extension NSURLConnection {
 }
 
 
+extension NSURLConnection {
+    private class func foo(@autoclosure body: () throws -> NSURLRequest) -> Promise<NSData> {
+        do {
+            return promise(try body())
+        } catch {
+            return Promise(error)
+        }
+    }
+
+    private class func foo(@autoclosure body: () throws -> NSURLRequest) -> Promise<String> {
+        do {
+            return promise(try body())
+        } catch {
+            return Promise(error)
+        }
+    }
+
+    private class func foo(@autoclosure body: () throws -> NSURLRequest) -> Promise<NSArray> {
+        do {
+            return promise(try body())
+        } catch {
+            return Promise(error)
+        }
+    }
+
+    private class func foo(@autoclosure body: () throws -> NSURLRequest) -> Promise<NSDictionary> {
+        do {
+            return promise(try body())
+        } catch {
+            return Promise(error)
+        }
+    }
+}
+
+
 #if os(iOS)
 import UIKit.UIImage
 
@@ -126,23 +226,23 @@ extension NSURLConnection {
      @return A promise that fulfills with the image at the specified URL.
     */
     public class func GET(url: String) -> Promise<UIImage> {
-        return promise(NSURLRequest(URL: NSURL(string:url)!))
+        return foo(try OMGHTTPURLRQ.GET(url, nil))
     }
 
     public class func GET(url: String, query: [String:String]) -> Promise<UIImage> {
-        return promise(OMGHTTPURLRQ.GET(url, query))
+        return foo(try OMGHTTPURLRQ.GET(url, query))
     }
 
     public class func POST(url: String, formData: [String:String]) -> Promise<UIImage> {
-        return promise(OMGHTTPURLRQ.POST(url, formData))
+        return foo(try OMGHTTPURLRQ.POST(url, formData))
     }
 
-    public class func POST(url: String, JSON json: [String:String]) -> Promise<UIImage> {
-        return promise(OMGHTTPURLRQ.POST(url, JSON: json))
+    public class func POST(url: String, JSON: [String:String]) -> Promise<UIImage> {
+        return foo(try OMGHTTPURLRQ.POST(url, JSON: JSON))
     }
 
     public class func POST(url: String, multipartFormData: OMGMultipartFormData) -> Promise<UIImage> {
-        return promise(OMGHTTPURLRQ.POST(url, multipartFormData))
+        return foo(try OMGHTTPURLRQ.POST(url, multipartFormData))
     }
 
     public class func promise(rq: NSURLRequest) -> Promise<UIImage> {
@@ -154,7 +254,16 @@ extension NSURLConnection {
             return UIImage(CGImage: cgimg, scale: img.scale, orientation: img.imageOrientation)
         }
     }
+
+    private class func foo(@autoclosure body: () throws -> NSURLRequest) -> Promise<UIImage> {
+        do {
+            return promise(try body())
+        } catch let error {
+            return Promise(error)
+        }
+    }
 }
+
 #endif
 
 
