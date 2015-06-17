@@ -223,6 +223,8 @@
 		63E2997C1AFDCE5600921143 /* TestUIViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E299781AFDCE5600921143 /* TestUIViewController.m */; };
 		63E2997F1AFDF28100921143 /* TestSLComposeViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = 63E2997D1AFDF28100921143 /* TestSLComposeViewController.m */; };
 		63E299811AFDF28100921143 /* TestSLComposeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E2997E1AFDF28100921143 /* TestSLComposeViewController.swift */; };
+		63F064CB1B31C68D004EDAA1 /* NSURLSession+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F064CA1B31C68D004EDAA1 /* NSURLSession+Promise.swift */; };
+		63F064CC1B31C68D004EDAA1 /* NSURLSession+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F064CA1B31C68D004EDAA1 /* NSURLSession+Promise.swift */; };
 		63F803A91AB87A8200E4DEE1 /* Umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 63F803A81AB87A8200E4DEE1 /* Umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63F803C01AB87A9500E4DEE1 /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F803BF1AB87A9500E4DEE1 /* Promise.swift */; };
 		63F803C41AB89A0F00E4DEE1 /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F803BF1AB87A9500E4DEE1 /* Promise.swift */; };
@@ -472,6 +474,7 @@
 		63E299781AFDCE5600921143 /* TestUIViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TestUIViewController.m; path = Categories/TestUIViewController.m; sourceTree = "<group>"; };
 		63E2997D1AFDF28100921143 /* TestSLComposeViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TestSLComposeViewController.m; path = Categories/TestSLComposeViewController.m; sourceTree = "<group>"; };
 		63E2997E1AFDF28100921143 /* TestSLComposeViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestSLComposeViewController.swift; path = Categories/TestSLComposeViewController.swift; sourceTree = "<group>"; };
+		63F064CA1B31C68D004EDAA1 /* NSURLSession+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSURLSession+Promise.swift"; sourceTree = "<group>"; };
 		63F803A31AB87A8200E4DEE1 /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		63F803A71AB87A8200E4DEE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Sources/Info.plist; sourceTree = "<group>"; };
 		63F803A81AB87A8200E4DEE1 /* Umbrella.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Umbrella.h; path = Sources/Umbrella.h; sourceTree = SOURCE_ROOT; };
@@ -608,6 +611,7 @@
 				6302ACB01AEF42F2001F0069 /* NSURLConnection+AnyPromise.m */,
 				6302ACB11AEF42F2001F0069 /* NSURLConnection+Promise.swift */,
 				6306C6BA1AF6CA8500392D37 /* NSObject+Promise.swift */,
+				63F064CA1B31C68D004EDAA1 /* NSURLSession+Promise.swift */,
 			);
 			path = Foundation;
 			sourceTree = "<group>";
@@ -1312,6 +1316,7 @@
 				638E0F181AEF171E0052E28F /* TestCoreLocation.swift in Sources */,
 				638E0F191AEF171E0052E28F /* TestNSURLConnection.m in Sources */,
 				6302ACEC1AEF42F2001F0069 /* CKDatabase+Promise.swift in Sources */,
+				63F064CB1B31C68D004EDAA1 /* NSURLSession+Promise.swift in Sources */,
 				6302AD061AEF42F2001F0069 /* MKDirections+Promise.swift in Sources */,
 				6306C6BB1AF6CA8500392D37 /* NSObject+Promise.swift in Sources */,
 				6302ACFA1AEF42F2001F0069 /* NSNotificationCenter+Promise.swift in Sources */,
@@ -1371,6 +1376,7 @@
 				63DF17051AEAC46E00BE97DD /* TestAccounts.m in Sources */,
 				6302ACF91AEF42F2001F0069 /* NSNotificationCenter+AnyPromise.m in Sources */,
 				6302AD131AEF42F2001F0069 /* CALayer+AnyPromise.m in Sources */,
+				63F064CC1B31C68D004EDAA1 /* NSURLSession+Promise.swift in Sources */,
 				63DF170D1AEAC46E00BE97DD /* TestCloudKit.m in Sources */,
 				6302ACF31AEF42F2001F0069 /* CLLocationManager+AnyPromise.m in Sources */,
 				6302ACED1AEF42F2001F0069 /* CKDatabase+Promise.swift in Sources */,
