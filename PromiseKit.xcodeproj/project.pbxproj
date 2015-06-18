@@ -86,6 +86,7 @@
 		63075EC61AD10471002C46A0 /* race.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63075EC41AD10471002C46A0 /* race.swift */; };
 		630F25F91AF17A8F00BE27FD /* PMKPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 630F25F81AF17A8F00BE27FD /* PMKPromise.m */; };
 		630F25FA1AF17BFE00BE27FD /* PMKPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 630F25F81AF17A8F00BE27FD /* PMKPromise.m */; };
+		6317A8D01B3332FA00B4E119 /* PMKAlertController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6317A8CF1B3332FA00B4E119 /* PMKAlertController.swift */; };
 		63196ABF1AFD8EE300555BCD /* Promise.h in Headers */ = {isa = PBXBuildFile; fileRef = 63196ABE1AFD8B7100555BCD /* Promise.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63196AC01AFD8EF600555BCD /* Promise.h in Headers */ = {isa = PBXBuildFile; fileRef = 63196ABE1AFD8B7100555BCD /* Promise.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63196AC11AFD8F1300555BCD /* AnyPromise+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 63314AE01AEDDD0B0071B6F5 /* AnyPromise+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -370,6 +371,7 @@
 		630AC2ED1AE6AC0400A212AD /* OHHTTPStubs.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OHHTTPStubs.framework; path = Carthage/Build/Mac/OHHTTPStubs.framework; sourceTree = "<group>"; };
 		630AC2EE1AE6AC0400A212AD /* OMGHTTPURLRQ.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OMGHTTPURLRQ.framework; path = Carthage/Build/Mac/OMGHTTPURLRQ.framework; sourceTree = "<group>"; };
 		630F25F81AF17A8F00BE27FD /* PMKPromise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PMKPromise.m; path = Sources/PMKPromise.m; sourceTree = "<group>"; };
+		6317A8CF1B3332FA00B4E119 /* PMKAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PMKAlertController.swift; sourceTree = "<group>"; };
 		63196ABE1AFD8B7100555BCD /* Promise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Promise.h; path = Sources/Promise.h; sourceTree = "<group>"; };
 		63196AC31AFD936300555BCD /* dispatch_promise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = dispatch_promise.m; path = Sources/dispatch_promise.m; sourceTree = "<group>"; };
 		63196AC41AFD936300555BCD /* dispatch_promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = dispatch_promise.swift; path = Sources/dispatch_promise.swift; sourceTree = "<group>"; };
@@ -684,6 +686,7 @@
 				6302ACD11AEF42F2001F0069 /* UIAlertView+AnyPromise.h */,
 				6302ACD21AEF42F2001F0069 /* UIAlertView+AnyPromise.m */,
 				6302ACD31AEF42F2001F0069 /* UIAlertView+Promise.swift */,
+				6317A8CF1B3332FA00B4E119 /* PMKAlertController.swift */,
 				6302ACD41AEF42F2001F0069 /* UIView+AnyPromise.h */,
 				6302ACD51AEF42F2001F0069 /* UIView+AnyPromise.m */,
 				6302ACD61AEF42F2001F0069 /* UIView+Promise.swift */,
@@ -1392,6 +1395,7 @@
 				638DFF5B1AFACC9400465598 /* TestUIActionSheet.swift in Sources */,
 				638DFF5C1AFACC9400465598 /* TestUIAlertView.swift in Sources */,
 				63E299791AFDCE5600921143 /* TestUIActionSheet.m in Sources */,
+				6317A8D01B3332FA00B4E119 /* PMKAlertController.swift in Sources */,
 				63E299721AFDC4CB00921143 /* TestUIImagePickerController.swift in Sources */,
 				63DF17261AEAC46E00BE97DD /* TestUIViewController.swift in Sources */,
 				6302AD3C1AEF4307001F0069 /* ALAssetsLibrary+Promise.swift in Sources */,
