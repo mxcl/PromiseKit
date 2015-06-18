@@ -38,7 +38,7 @@
 
     [NSURLConnection GET:nil].catch(^(NSError *err){
         XCTAssertEqualObjects(err.domain, NSURLErrorDomain);
-        XCTAssertEqual(err.code, -1002);
+        XCTAssertEqual(err.code, NSURLErrorUnsupportedURL);
         [ex fulfill];
     });
 
