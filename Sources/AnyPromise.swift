@@ -18,7 +18,7 @@ private func unbox(resolution: Resolution<AnyObject?>) -> AnyObject? {
     private typealias State = UnsealedState<AnyObject?>
 
     /**
-     @return A new AnyPromise bound to a Promise<T>.
+     - Returns: A new AnyPromise bound to a Promise<T>.
 
      The two promises represent the same task, any changes to either
      will instantly reflect on both.
@@ -56,10 +56,9 @@ private func unbox(resolution: Resolution<AnyObject?>) -> AnyObject? {
     }
 
     /**
-     @return A new AnyPromise bound to a Promise<[T]>.
+     - Returns: A new `AnyPromise` bound to a `Promise<[T]>`.
 
-     The two promises represent the same task, any changes to either
-     will instantly reflect on both.
+     The two promises represent the same task, any changes to either will instantly reflect on both.
     
      The value is converted to an NSArray so Objective-C can use it.
     */
@@ -79,12 +78,11 @@ private func unbox(resolution: Resolution<AnyObject?>) -> AnyObject? {
     }
 
     /**
-    @return A new AnyPromise bound to a Promise<[T]>.
+     - Returns: A new AnyPromise bound to a `Promise<[T:U]>`.
 
-    The two promises represent the same task, any changes to either
-    will instantly reflect on both.
+     The two promises represent the same task, any changes to either will instantly reflect on both.
 
-    The value is converted to an NSArray so Objective-C can use it.
+     The value is converted to an NSArray so Objective-C can use it.
     */
     public init<T: AnyObject, U: AnyObject>(bound: Promise<[T:U]>) {
         //WARNING copy pasta from above. FIXME how?
@@ -154,7 +152,7 @@ private func unbox(resolution: Resolution<AnyObject?>) -> AnyObject? {
     /**
      A promise starts pending and eventually resolves.
 
-     @return `true` if the promise has not yet resolved.
+     - Returns: `true` if the promise has not yet resolved.
     */
     @objc public var pending: Bool {
         return state.get() == nil
@@ -163,7 +161,7 @@ private func unbox(resolution: Resolution<AnyObject?>) -> AnyObject? {
     /**
      A promise starts pending and eventually resolves.
 
-     @return `true` if the promise has resolved.
+     - Returns: `true` if the promise has resolved.
     */
     @objc public var resolved: Bool {
         return !pending
@@ -174,7 +172,7 @@ private func unbox(resolution: Resolution<AnyObject?>) -> AnyObject? {
     
      A fulfilled promise is resolved and succeeded.
 
-     @return `true` if the promise was fulfilled.
+     - Returns: `true` if the promise was fulfilled.
     */
     @objc public var fulfilled: Bool {
         switch state.get() {
@@ -190,7 +188,7 @@ private func unbox(resolution: Resolution<AnyObject?>) -> AnyObject? {
     
      A rejected promise is resolved and failed.
 
-     @return `true` if the promise was rejected.
+     - Returns: `true` if the promise was rejected.
     */
     @objc public var rejected: Bool {
         switch state.get() {
