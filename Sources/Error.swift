@@ -11,6 +11,13 @@ public enum Error: ErrorType {
     case When(Int, ErrorType)
 
     /**
+     The ErrorType for a rejected `join`.
+     - Parameter 0: The promises passed to this `join` that did not *all* fulfill.
+     - Note: The array is untyped because Swift generics are fussy with enums.
+    */
+    case Join([AnyObject])
+
+    /**
      The closure with form (T?, ErrorType?) was called with (nil, nil)
      This is invalid as per the calling convention.
     */
