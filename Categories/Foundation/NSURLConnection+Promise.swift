@@ -153,12 +153,12 @@ extension NSURLConnection {
     }
 
     public class func promise(rq: NSURLRequest) -> Promise<String> {
-        return fetch(rq).then(on: zalgo) { data, rsp -> Promise<String> in
+        return fetch(rq).then(on: zalgo) { data, rsp -> String in
             if let str = NSString(data: data, encoding: rsp.stringEncoding ?? NSUTF8StringEncoding) {
-                return Promise(str as String)
+                return str as String
             } else {
                 let info = [NSLocalizedDescriptionKey: "The server response was not textual"]
-                return Promise(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadServerResponse, userInfo: info))
+                throw NSError(domain: NSURLErrorDomain, code: NSURLErrorBadServerResponse, userInfo: info)
             }
         }
     }
@@ -242,13 +242,12 @@ extension NSURLConnection {
     }
 
     public class func promise(rq: NSURLRequest) -> Promise<UIImage> {
-        return fetch(rq).then(on: waldo) { data, _ in
+        return fetch(rq).then(on: waldo) { data, _ -> UIImage in
             if let img = UIImage(data: data), cgimg = img.CGImage {
-                let screenReadyImage = UIImage(CGImage: cgimg, scale: img.scale, orientation: img.imageOrientation)
-                return Promise(screenReadyImage)
+                return UIImage(CGImage: cgimg, scale: img.scale, orientation: img.imageOrientation)
             } else {
                 let info = [NSLocalizedDescriptionKey: "The server returned invalid image data"]
-                return Promise(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadServerResponse, userInfo: info))
+                throw NSError(domain: NSURLErrorDomain, code: NSURLErrorBadServerResponse, userInfo: info)
             }
         }
     }
