@@ -107,6 +107,8 @@
 		63314ADF1AEDDC070071B6F5 /* when.m in Sources */ = {isa = PBXBuildFile; fileRef = 63314AD91AEDDC070071B6F5 /* when.m */; };
 		633810651B02EC7A00CCD263 /* NSError+Cancellation.h in Headers */ = {isa = PBXBuildFile; fileRef = 633810641B02EC7A00CCD263 /* NSError+Cancellation.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		633810661B02EC7A00CCD263 /* NSError+Cancellation.h in Headers */ = {isa = PBXBuildFile; fileRef = 633810641B02EC7A00CCD263 /* NSError+Cancellation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		6339D2021B34B64C00983965 /* join.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6339D2011B34B64C00983965 /* join.swift */; };
+		6339D2031B34B64C00983965 /* join.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6339D2011B34B64C00983965 /* join.swift */; };
 		634E98AA1AF916AA00094594 /* Stubbilino.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 634E98A91AF916AA00094594 /* Stubbilino.framework */; };
 		634E98AE1AF916BD00094594 /* Stubbilino.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 634E98AC1AF916BD00094594 /* Stubbilino.framework */; };
 		634E98AF1AF917BC00094594 /* Stubbilino.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 634E98A91AF916AA00094594 /* Stubbilino.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
@@ -382,6 +384,7 @@
 		63314AD91AEDDC070071B6F5 /* when.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = when.m; path = Sources/when.m; sourceTree = "<group>"; };
 		63314AE01AEDDD0B0071B6F5 /* AnyPromise+Private.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = "AnyPromise+Private.h"; path = "Sources/AnyPromise+Private.h"; sourceTree = "<group>"; };
 		633810641B02EC7A00CCD263 /* NSError+Cancellation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSError+Cancellation.h"; path = "Sources/NSError+Cancellation.h"; sourceTree = "<group>"; };
+		6339D2011B34B64C00983965 /* join.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = join.swift; path = Sources/join.swift; sourceTree = "<group>"; };
 		634E98A91AF916AA00094594 /* Stubbilino.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Stubbilino.framework; path = Carthage/Build/iOS/Stubbilino.framework; sourceTree = "<group>"; };
 		634E98AC1AF916BD00094594 /* Stubbilino.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Stubbilino.framework; path = Carthage/Build/Mac/Stubbilino.framework; sourceTree = "<group>"; };
 		635121501B0A585B008ED696 /* when.test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = when.test.m; sourceTree = "<group>"; };
@@ -706,6 +709,7 @@
 				63196AC41AFD936300555BCD /* dispatch_promise.swift */,
 				63314AD71AEDDC070071B6F5 /* hang.m */,
 				63314AD81AEDDC070071B6F5 /* join.m */,
+				6339D2011B34B64C00983965 /* join.swift */,
 				63075EC41AD10471002C46A0 /* race.swift */,
 				63314AD91AEDDC070071B6F5 /* when.m */,
 				63075EC01AD0F097002C46A0 /* when.swift */,
@@ -1437,6 +1441,7 @@
 				63B6FE491ABB613500E1F4C2 /* Sealant.swift in Sources */,
 				63BF9DD01AB9E4850049EA39 /* State.swift in Sources */,
 				63314ADE1AEDDC070071B6F5 /* when.m in Sources */,
+				6339D2021B34B64C00983965 /* join.swift in Sources */,
 				63075EC11AD0F097002C46A0 /* when.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -1462,6 +1467,7 @@
 				63B6FE4A1ABB613500E1F4C2 /* Sealant.swift in Sources */,
 				63BF9DD11AB9E5C60049EA39 /* State.swift in Sources */,
 				63314ADF1AEDDC070071B6F5 /* when.m in Sources */,
+				6339D2031B34B64C00983965 /* join.swift in Sources */,
 				63075EC21AD0F097002C46A0 /* when.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
