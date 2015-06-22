@@ -2,7 +2,7 @@ import MessageUI
 import PromiseKit
 import UIKit
 import XCTest
-import KIFFramework
+import KIF
 
 class TestPromisableViewController: UIKitTestCase {
 

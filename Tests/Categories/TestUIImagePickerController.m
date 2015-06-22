@@ -1,4 +1,4 @@
-@import KIFFramework;
+@import KIF;
 #import <PromiseKit/PromiseKit.h>
 @import UIKit;
 #import "UIViewController+AnyPromise.h"

@@ -1,4 +1,4 @@
-import KIFFramework
+import KIF
 import PromiseKit
 import UIKit
 import XCTest
