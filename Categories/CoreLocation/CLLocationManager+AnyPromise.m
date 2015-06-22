@@ -54,7 +54,8 @@
     manager->block = block;
     manager->retainCycle = manager;
 #if TARGET_OS_IPHONE
-    [manager requestWhenInUseAuthorization];
+    if ([manager respondsToSelector:@selector(requestWhenInUseAuthorization)])
+        [manager requestWhenInUseAuthorization];
 #endif
     [manager startUpdatingLocation];
     return [[AnyPromise alloc] initWithResolver:&manager->resolve];

@@ -111,6 +111,8 @@ private class AuthorizationCatcher: CLLocationManager, CLLocationManagerDelegate
 private func auther(requestAuthorizationType: CLLocationManager.RequestAuthorizationType)(manager: CLLocationManager)
 {
   #if os(iOS)
+    if !manager.respondsToSelector("requestWhenInUseAuthorization") { return }
+
     func hasInfoPListKey(key: String) -> Bool {
         let value = NSBundle.mainBundle().objectForInfoDictionaryKey(key) as? String ?? ""
         return !value.isEmpty
@@ -120,9 +122,10 @@ private func auther(requestAuthorizationType: CLLocationManager.RequestAuthoriza
     case .Automatic:
         let always = hasInfoPListKey("NSLocationAlwaysUsageDescription")
         let whenInUse = hasInfoPListKey("NSLocationWhenInUseUsageDescription")
-        if hasInfoPListKey("NSLocationAlwaysUsageDescription") {
+        if always {
             manager.requestAlwaysAuthorization()
         } else {
+            if !whenInUse { NSLog("You didn’t set your NSLocationWhenInUseUsageDescription Info.plist key") }
             manager.requestWhenInUseAuthorization()
         }
     case .WhenInUse:
