@@ -112,7 +112,7 @@ private func auther(requestAuthorizationType: CLLocationManager.RequestAuthoriza
 {
   #if os(iOS)
     func hasInfoPListKey(key: String) -> Bool {
-        let value = NSBundle.mainBundle().objectForInfoDictionaryKey("NSLocationAlwaysUsageDescription") as? String ?? ""
+        let value = NSBundle.mainBundle().objectForInfoDictionaryKey(key) as? String ?? ""
         return !value.isEmpty
     }
 
