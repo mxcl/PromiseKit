@@ -113,7 +113,12 @@ public class Promise<T> {
     init(passthru: ((Resolution) -> Void) -> Void) {
         var resolve: ((Resolution) -> Void)!
         state = UnsealedState(resolver: &resolve)
-        passthru(resolve)
+        passthru {
+            if case .Rejected(let error) = $0 {
+                unconsume(error as NSError)
+            }
+            resolve($0)
+        }
     }
 
     /**
