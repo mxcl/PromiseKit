@@ -56,7 +56,7 @@ public class Promise<T> {
      @return A new promise.
 
      @warning *Note* If you are wrapping a delegate-based system, we recommend
-     to use instead: defer
+     to use instead: Promise.pendingPromise()
 
      @see http://promisekit.org/sealing-your-own-promises/
      @see http://promisekit.org/wrapping-delegation/
