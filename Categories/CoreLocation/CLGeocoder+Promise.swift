@@ -48,7 +48,7 @@ extension CLGeocoder {
 private var onceToken: dispatch_once_t = 0
 
 private class CLPromise<T>: Promise<T> {
-    override init(@noescape sealant: (Sealant<T>) -> Void) {
+    override init(@noescape sealant: (Sealant<T>) throws -> Void) {
         dispatch_once(&onceToken) {
             NSError.registerCancelledErrorDomain(kCLErrorDomain, code: CLError.GeocodeCanceled.rawValue)
         }
