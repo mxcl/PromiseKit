@@ -167,25 +167,19 @@ public class Promise<T> {
     }
 
     /**
-     The provided block is executed when this Promise is resolved.
-
-     If you provide a block that takes a parameter, the value of the receiver will be passed as that parameter.
+     The provided closure is executed when this Promise is resolved.
 
      @param on The queue on which body should be executed.
 
      @param body The closure that is executed when this Promise is fulfilled.
 
-        [NSURLConnection GET:url].then(^(NSData *data){
-            // do something with data
-        });
-
      @return A new promise that is resolved with the value returned from the provided closure. For example:
 
-        [NSURLConnection GET:url].then(^(NSData *data){
-            return data.length;
-        }).then(^(NSNumber *number){
+        NSURLConnection.GET(url).then { (data: NSData) -> Int in
+            return data.length
+        }.then { length in
             //…
-        });
+        }
 
      @see thenInBackground
     */
