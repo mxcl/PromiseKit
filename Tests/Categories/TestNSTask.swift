@@ -26,7 +26,7 @@ class TestNSTask: XCTestCase {
         task.promise().then { (stdout: String, stderr: String, exitStatus: Int) -> Void in
             XCTFail()
         }.report { err in
-            let userInfo = err.userInfo
+            let userInfo = (err as NSError).userInfo
             let expectedStderrData = "ls: \(dir): No such file or directory\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
 
             XCTAssertEqual(userInfo[PMKTaskErrorLaunchPathKey] as! NSString, task.launchPath! as NSString)

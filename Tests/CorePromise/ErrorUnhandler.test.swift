@@ -68,8 +68,8 @@ class TestErrorUnhandler: XCTestCase {
             PMKUnhandledErrorHandler = { err in
                 ex.fulfill()
             }
-            promise.recover { error -> Promise<Int> in
-                return Promise(error)
+            promise.recover { error in
+                throw error
             }
         }
     }

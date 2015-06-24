@@ -80,7 +80,7 @@ class Test2121: XCTestCase {
 let dummy = 123
 
 // we reject with this when we don't intend to test against it
-let dammy = NSError(domain: PMKErrorDomain, code: dummy, userInfo: nil)
+let dammy: ErrorType = NSError(domain: PMKErrorDomain, code: dummy, userInfo: nil)
 
 // a sentinel fulfillment value to test for with strict equality
 var sentinel = 456
@@ -127,7 +127,7 @@ extension XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
     
-    func suiteRejected(numberOfExpectations:Int, test:(Promise<Int>, [XCTestExpectation!], NSError)->Void) {
+    func suiteRejected(numberOfExpectations:Int, test:(Promise<Int>, [XCTestExpectation!], ErrorType)->Void) {
         
         func e(desc: String) -> [XCTestExpectation!] {
             return [Int](1...numberOfExpectations).map{ self.expectationWithDescription("\(desc) (\($0))") }
@@ -155,4 +155,9 @@ extension XCTestCase {
         }
         waitForExpectationsWithTimeout(1, handler: nil)
     }
+}
+
+
+func XCTAssertEqual(e1: ErrorType, _ e2: ErrorType) {
+    XCTAssert(e1 as NSError == e2 as NSError)
 }

@@ -9,9 +9,9 @@ class Test223: XCTestCase {
         // 2.2.3.1: it must be called after `promise` is rejected,
         // with `promise`’s rejection reason as its first argument
         suiteRejected(1) { (promise, exes, memo) -> () in
-            promise.report { error->() in
+            promise.report { (error: ErrorType) in
                 XCTAssertEqual(error, memo)
-                return exes[0].fulfill()
+                exes[0].fulfill()
             }
             return
         }

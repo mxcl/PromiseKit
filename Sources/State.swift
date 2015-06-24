@@ -7,7 +7,7 @@ enum Seal<T> {
 
 enum Resolution<T> {
     case Fulfilled(T)
-    case Rejected(NSError)
+    case Rejected(ErrorType)
 }
 
 // would be a protocol, but you can't have typed variables of “generic”

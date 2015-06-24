@@ -11,7 +11,7 @@ public class Sealant<T> {
         handler(.Fulfilled(value))
     }
 
-    public func resolve(error: NSError) {
+    public func resolve(error: ErrorType) {
         unconsume(error)
         handler(.Rejected(error))
     }

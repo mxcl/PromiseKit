@@ -23,5 +23,15 @@ firstly {
     return Promise(3)
 }
 
+Promise<Int>(Error.When(1, NSURLError.CannotFindHost)).rescue { error in
+    do {
+        throw error
+    } catch NSURLError.CannotFindHost {
+        //…
+    } catch {
+        //…
+    }
+}
+
 
 XCPSetExecutionShouldContinueIndefinitely()
