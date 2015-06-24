@@ -1,6 +1,12 @@
 #import <Foundation/NSTask.h>
 #import <PromiseKit/AnyPromise.h>
 
+#define PMKTaskErrorLaunchPathKey @"PMKTaskErrorLaunchPathKey"
+#define PMKTaskErrorArgumentsKey @"PMKTaskErrorArgumentsKey"
+#define PMKTaskErrorStandardOutputKey @"PMKTaskErrorStandardOutputKey"
+#define PMKTaskErrorStandardErrorKey @"PMKTaskErrorStandardErrorKey"
+#define PMKTaskErrorExitStatusKey @"PMKTaskErrorExitStatusKey"
+
 /**
  To import the `NSTask` category:
 

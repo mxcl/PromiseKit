@@ -218,9 +218,8 @@ public typealias AnyPromise = PMKPromise
                 if let error = object as? NSError {
                     reject(error)
                 } else {
-                    let value: AnyObject? = self.valueForKey("value")
                     contain_zalgo(q) {
-                        fulfill(body(value))
+                        fulfill(body(self.valueForKey("value")))
                     }
                 }
             }

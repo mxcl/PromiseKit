@@ -17,10 +17,10 @@ class TestErrorUnhandler: XCTestCase {
 
         autoreleasepool {
             let ex = expectationWithDescription("Unsealed")
-            let p = Promise<Int>{ sealant in
+            let p = Promise { sealant in
                 sealant.resolve(1)
             }.then { _ -> Promise<Int> in
-                return Promise(error: "a", code: 1)
+                Promise(error: "a", code: 1)
             }
             body(p, ex)
         }
