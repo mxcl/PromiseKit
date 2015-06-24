@@ -16,7 +16,7 @@ private func when<T>(promises: [Promise<T>]) -> Promise<Void> {
     }
     let barrier = dispatch_queue_create("org.promisekit.barrier.when", DISPATCH_QUEUE_CONCURRENT)
 
-    for (index, promise) in enumerate(promises) {
+    for (index, promise) in promises.enumerate() {
         promise.pipe { resolution in
             if !rootPromise.pending { return }
 
