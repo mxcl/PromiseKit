@@ -5,27 +5,27 @@ import XCTest
 
 class TestPromiseMailComposer: UIKitTestCase {
 
-    // cancelling mail composer cancels promise
-    func test7() {
-        let ex = expectationWithDescription("")
-        let mailer = MFMailComposeViewController()
-        let promise = rootvc.promiseViewController(mailer, animated: false, completion: {
-            after(0.05).then { _ -> Void in
-                let button = mailer.viewControllers[0].navigationItem.leftBarButtonItem!
-
-                let control: UIControl = UIControl()
-                control.sendAction(button.action, to: button.target, forEvent: nil)
-            }
-        })
-        promise.rescue { _ -> Void in
-            XCTFail()
-        }
-        promise.rescue(policy: CatchPolicy.AllErrors) { _ -> Void in
-            // seems necessary to give vc stack a bit of time
-            after(0.5).then(ex.fulfill)
-        }
-        waitForExpectationsWithTimeout(10, handler: nil)
-
-        XCTAssertNil(rootvc.presentedViewController)
-    }
+//    // cancelling mail composer cancels promise
+//    func test7() {
+//        let ex = expectationWithDescription("")
+//        let mailer = MFMailComposeViewController()
+//        let promise = rootvc.promiseViewController(mailer, animated: false, completion: {
+//            after(0.05).then { _ -> Void in
+//                let button = mailer.viewControllers[0].navigationItem.leftBarButtonItem!
+//
+//                let control: UIControl = UIControl()
+//                control.sendAction(button.action, to: button.target, forEvent: nil)
+//            }
+//        })
+//        promise.rescue { _ -> Void in
+//            XCTFail()
+//        }
+//        promise.rescue(policy: RescuePolicy.AllErrors) { _ -> Void in
+//            // seems necessary to give vc stack a bit of time
+//            after(0.5).then(ex.fulfill)
+//        }
+//        waitForExpectationsWithTimeout(10, handler: nil)
+//
+//        XCTAssertNil(rootvc.presentedViewController)
+//    }
 }
