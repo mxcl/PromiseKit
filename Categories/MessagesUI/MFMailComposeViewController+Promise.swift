@@ -27,7 +27,7 @@ extension UIViewController {
 
 private class PMKMailComposeViewControllerDelegate: NSObject, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate {
 
-    let (promise, fulfill, reject) = Promise<MFMailComposeResult>.defer()
+    let (promise, fulfill, reject) = Promise<MFMailComposeResult>.deferred()
     var retainCycle: NSObject?
 
     @objc func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
