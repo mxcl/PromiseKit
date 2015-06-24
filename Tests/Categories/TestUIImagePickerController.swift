@@ -72,7 +72,7 @@ class TestPromiseImagePickerController: UIKitTestCase {
         promise.rescue { _ -> Void in
             XCTFail()
         }
-        promise.rescue(policy: CatchPolicy.AllErrors) { _ -> Void in
+        promise.rescue(policy: .AllErrors) { _ -> Void in
             after(0.5).then(ex.fulfill)
         }
         waitForExpectationsWithTimeout(10, handler: nil)
