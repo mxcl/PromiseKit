@@ -101,6 +101,9 @@ extension NSError {
         cancelledErrorIdentifiers.insert(ErrorPair(domain, code))
     }
 
+    // FIXME not thread-safe you idiot! :(
+    // NOTE We could make it so all cancelledErrorIdentifiers must be set at app-start
+    // putting locks on this sort of thing is gross
     public var cancelled: Bool {
         return cancelledErrorIdentifiers.contains(ErrorPair(domain, code))
     }
