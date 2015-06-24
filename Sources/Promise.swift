@@ -16,7 +16,6 @@ public enum ErrorPolicy {
  that promise, which  returns a promise, you can call `then` on that
  promise, et cetera.
 
- 0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2
  Promises start in a pending state and *resolve* with a value to become
  *fulfilled* or with an `NSError` to become rejected.
 

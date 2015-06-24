@@ -22,13 +22,6 @@ extern NSString * const PMKErrorDomain;
 #define PMKOperationFailed 8l
 #define PMKTaskError 9l
 
-#define PMKTaskErrorLaunchPathKey @"PMKTaskErrorLaunchPathKey"
-#define PMKTaskErrorArgumentsKey @"PMKTaskErrorArgumentsKey"
-#define PMKTaskErrorStandardOutputKey @"PMKTaskErrorStandardOutputKey"
-#define PMKTaskErrorStandardErrorKey @"PMKTaskErrorStandardErrorKey"
-#define PMKTaskErrorExitStatusKey @"PMKTaskErrorExitStatusKey"
-
-
 #if defined(PMKEZBake) && defined(SWIFT_CLASS)
     // https://github.com/PromiseKit/EZiOS7/issues/2
     #define AnyPromise PMKPromise

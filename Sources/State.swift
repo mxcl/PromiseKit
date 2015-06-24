@@ -130,7 +130,7 @@ extension Resolution: CustomStringConvertible {
 
 extension UnsealedState: CustomStringConvertible {
     var description: String {
-        var rv: String?
+        var rv: String!
         get { seal in
             switch seal {
             case .Pending(let handlers):
@@ -139,7 +139,7 @@ extension UnsealedState: CustomStringConvertible {
                 rv = "\(resolution)"
             }
         }
-        return "UnsealedState: \(rv!)"
+        return "UnsealedState: \(rv)"
     }
 }
 
