@@ -20,7 +20,7 @@ public func dispatch_promise<T>(on queue: dispatch_queue_t = dispatch_get_global
             do {
                 fulfill(try body())
             } catch let error {
-                reject(error as NSError)
+                reject(error)
             }
         }
     }

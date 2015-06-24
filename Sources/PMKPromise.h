@@ -80,4 +80,4 @@ typedef PMKRejecter PMKPromiseRejecter;
 
 
 
-extern void (^PMKUnhandledErrorHandler)(NSError *) __attribute__((unavailable("Use PMKSetUnhandledErrorHandler()")));
+extern void (^PMKUnhandledErrorHandler)(NSError *) __attribute__((unavailable("Set the Swift PMKUnhandledErrorHandler")));

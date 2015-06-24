@@ -4,7 +4,7 @@ extension Promise {
     /**
      - Returns: The error with which this promise was rejected; `nil` if this promise is not rejected.
     */
-    public var error: NSError? {
+    public var error: ErrorType? {
         switch state.get() {
         case .None:
             return nil

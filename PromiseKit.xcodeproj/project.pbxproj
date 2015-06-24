@@ -370,7 +370,8 @@
 		63196ABE1AFD8B7100555BCD /* Promise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Promise.h; path = Sources/Promise.h; sourceTree = "<group>"; };
 		63196AC31AFD936300555BCD /* dispatch_promise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = dispatch_promise.m; path = Sources/dispatch_promise.m; sourceTree = "<group>"; };
 		63196AC41AFD936300555BCD /* dispatch_promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = dispatch_promise.swift; path = Sources/dispatch_promise.swift; sourceTree = "<group>"; };
-		631A51BB1B29E7E90018606D /* bridging.test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = bridging.test.swift; sourceTree = "<group>"; };
+		631A51BB1B29E7E90018606D /* bridging.test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = bridging.test.swift; path = Tests/CorePromise/bridging.test.swift; sourceTree = SOURCE_ROOT; };
+		631EDA1A1B3A42C000CFB93A /* ErrorUnhandler.test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ErrorUnhandler.test.m; path = CorePromise/ErrorUnhandler.test.m; sourceTree = "<group>"; };
 		631FEA7E1AF28E4900ED9646 /* PMKPromise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PMKPromise.h; path = Sources/PMKPromise.h; sourceTree = "<group>"; };
 		63314AD71AEDDC070071B6F5 /* hang.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = hang.m; path = Sources/hang.m; sourceTree = "<group>"; };
 		63314AD81AEDDC070071B6F5 /* join.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = join.m; path = Sources/join.m; sourceTree = "<group>"; };
@@ -379,7 +380,7 @@
 		633810641B02EC7A00CCD263 /* NSError+Cancellation.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSError+Cancellation.h"; path = "Sources/NSError+Cancellation.h"; sourceTree = "<group>"; };
 		634E98A91AF916AA00094594 /* Stubbilino.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Stubbilino.framework; path = Carthage/Build/iOS/Stubbilino.framework; sourceTree = "<group>"; };
 		634E98AC1AF916BD00094594 /* Stubbilino.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Stubbilino.framework; path = Carthage/Build/Mac/Stubbilino.framework; sourceTree = "<group>"; };
-		635121501B0A585B008ED696 /* when.test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = when.test.m; sourceTree = "<group>"; };
+		635121501B0A585B008ED696 /* when.test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = when.test.m; path = Tests/CorePromise/when.test.m; sourceTree = SOURCE_ROOT; };
 		63533B331AE57A9300C10972 /* PMKAPlusTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PMKAPlusTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		635421DF1B38C53E00401F9B /* KIF.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KIF.framework; path = Carthage/Build/iOS/KIF.framework; sourceTree = "<group>"; };
 		635D0D711ADD7CAE00CC0406 /* PMKPromise.test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PMKPromise.test.m; path = Tests/CorePromise/PMKPromise.test.m; sourceTree = SOURCE_ROOT; };
@@ -708,6 +709,7 @@
 				638D02771AEC06430038201C /* after.test.swift */,
 				635D0D741ADDA2C100CC0406 /* AnyPromise.test.m */,
 				63A538991B741F0A002BB8E6 /* AnyPromise.test.swift */,
+				631EDA1A1B3A42C000CFB93A /* ErrorUnhandler.test.m */,
 				63772C9B1AF09B8A00ED2F59 /* ErrorUnhandler.test.swift */,
 				635D0D711ADD7CAE00CC0406 /* PMKPromise.test.m */,
 				6302AD3F1AEF55A4001F0069 /* Promise.test.swift */,

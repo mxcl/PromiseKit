@@ -19,8 +19,8 @@ class Test234: XCTestCase {
         }
 
         suiteRejected(1) { (promise1, exes, memo)->Void in
-            let promise2 = promise1.recover { (a: NSError)->Promise<Int> in
-                return Promise(1)
+            let promise2 = promise1.recover { _ -> Int in
+                return 1
             }
 
             promise2.then { (a: Int)->Void in

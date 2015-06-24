@@ -6,7 +6,7 @@ private func unbox(resolution: Resolution<AnyObject?>) -> AnyObject? {
     case .Fulfilled(let value):
         return value
     case .Rejected(let error):
-        return error
+        return error as NSError
     }
 }
 
@@ -195,11 +195,17 @@ public typealias AnyPromise = PMKPromise
         }
     }
 
+
     // because you can’t access top-level Swift functions in objc
     @objc class func setUnhandledErrorHandler(body: (NSError) -> Void) -> (NSError) -> Void {
+
+        //FIXME these conversions are hardly ideal, if you set and reset
+        // the same handler you'd be adding one to the call stack everytime!
+        // Swift 2 won't handle the conversion in place for us :(
+
         let oldHandler = PMKUnhandledErrorHandler
-        PMKUnhandledErrorHandler = body
-        return oldHandler
+        PMKUnhandledErrorHandler = { body($0 as NSError) }
+        return { oldHandler($0) }
     }
 
     /**
