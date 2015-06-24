@@ -41,16 +41,16 @@ static id find(UIView *root, id type) {
     UIImagePickerController *picker = [UIImagePickerController new];
 
     [rootvc promiseViewController:picker animated:NO completion:^{
-        PMKAfter(0.5).then(^{
-            UITableView *tv = find(picker.view, [UITableView class]);
-            [tv.visibleCells[1] tap];
-            return PMKAfter(1.5);
-        }).then(^{
-            id vcs = picker.viewControllers;
-            id cv = find([vcs[1] view], UICollectionView.class);
-            id cell = [cv visibleCells][0];
-            [cell tap];
-        });
+//        PMKAfter(0.5).then(^{
+//            UITableView *tv = find(picker.view, [UITableView class]);
+//            [tv.visibleCells[1] tap];
+//            return PMKAfter(1.5);
+//        }).then(^{
+//            id vcs = picker.viewControllers;
+//            id cv = find([vcs[1] view], UICollectionView.class);
+//            id cell = [cv visibleCells][0];
+//            [cell tap];
+//        });
     }].then(^(UIImage *image){
         XCTAssertGreaterThan(image.size.width, 0);
         [ex fulfill];
