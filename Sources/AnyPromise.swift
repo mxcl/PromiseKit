@@ -233,8 +233,8 @@ private func unbox(resolution: Resolution) -> AnyObject? {
 }
 
 
-extension AnyPromise: DebugPrintable {
-    override public var debugDescription: String {
+extension AnyPromise {
+    override public var description: String {
         return "AnyPromise: \(state)"
     }
 }
