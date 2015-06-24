@@ -4,22 +4,6 @@
 #import "UIViewController+AnyPromise.h"
 @import XCTest;
 
-static NSArray *allSubviews(UIView *root) {
-    NSMutableArray *vv = root.subviews.mutableCopy;
-    for (UIView *subview in root.subviews)
-        [vv addObjectsFromArray:allSubviews(subview)];
-    return vv;
-}
-
-static id find(UIView *root, id type) {
-    for (id x in allSubviews(root))
-        if ([x isKindOfClass:type])
-            return x;
-    NSLog(@"%@", allSubviews(root));
-    return nil;
-}
-
-
 @interface TestAnyPromiseImagePickerController: XCTestCase
 @end
 
@@ -33,6 +17,21 @@ static id find(UIView *root, id type) {
 
 - (void)tearDown {
     [UIApplication sharedApplication].keyWindow.rootViewController = nil;
+}
+
+static NSArray *allSubviews(UIView *root) {
+    NSMutableArray *vv = root.subviews.mutableCopy;
+    for (UIView *subview in root.subviews)
+        [vv addObjectsFromArray:allSubviews(subview)];
+    return vv;
+}
+
+static id find(UIView *root, id type) {
+    for (id x in allSubviews(root))
+        if ([x isKindOfClass:type])
+            return x;
+    NSLog(@"%@", allSubviews(root));
+    return nil;
 }
 
 // it fulfills with a UIImage

@@ -21,10 +21,9 @@ class TestPromisableViewController: UIKitTestCase {
         let ex = expectationWithDescription("")
         let p: Promise<Int> = rootvc.promiseViewController(UIViewController(), animated: false)
         p.report { error in
-            let err = error as NSError
-            XCTAssertEqual(err.domain, PMKErrorDomain)
-            XCTAssertEqual(err.code, PMKInvalidUsageError)
-            ex.fulfill()
+            if case UIViewController.Error.NotPromisable = error {
+                ex.fulfill()
+            }
         }
         waitForExpectationsWithTimeout(1, handler: nil)
     }
@@ -33,11 +32,10 @@ class TestPromisableViewController: UIKitTestCase {
     func test1b() {
         let ex = expectationWithDescription("")
         let p: Promise<Int> = rootvc.promiseViewController(MyViewController(), animated: false)
-        p.report { err in
-            let error = err as NSError
-            XCTAssertEqual(error.domain, PMKErrorDomain)
-            XCTAssertEqual(error.code, PMKInvalidUsageError)
-            ex.fulfill()
+        p.report { error in
+            if case UIViewController.Error.NilPromisable = error {
+                ex.fulfill()
+            }
         }
         waitForExpectationsWithTimeout(1, handler: nil)
     }
@@ -49,10 +47,9 @@ class TestPromisableViewController: UIKitTestCase {
         my.promise = Promise(true)
         let p: Promise<Int> = rootvc.promiseViewController(my, animated: false)
         p.report { err in
-            let error = err as NSError
-            XCTAssertEqual(error.domain, PMKErrorDomain)
-            XCTAssertEqual(error.code, PMKInvalidUsageError)
-            ex.fulfill()
+            if case UIViewController.Error.NotGenericallyPromisable = err {
+                ex.fulfill()
+            }
         }
         waitForExpectationsWithTimeout(1, handler: nil)
     }
@@ -124,7 +121,7 @@ class UIKitTestCase: XCTestCase {
 }
 
 func subviewsOf(v: UIView) -> [UIView] {
-    return v.subviews.flatMap(subviewsOf)
+    return v.subviews + v.subviews.flatMap(subviewsOf)
 }
 
 func find<T>(vc: UIViewController, type: AnyClass) -> T? {
@@ -133,8 +130,8 @@ func find<T>(vc: UIViewController, type: AnyClass) -> T? {
 
 func find<T>(view: UIView, type: AnyClass) -> T? {
     for x in subviewsOf(view) {
-        if x is T {
-            return x as? T
+        if let x = x as? T {
+            return x
         }
     }
     return nil
