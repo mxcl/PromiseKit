@@ -55,5 +55,5 @@ public func when<U, V, X>(pu: Promise<U>, _ pv: Promise<V>, _ px: Promise<X>) ->
     return when(pu.asVoid(), pv.asVoid(), px.asVoid()).then(on: zalgo) { (pu.value!, pv.value!, px.value!) }
 }
 
-@availability(*, unavailable, message="Use `when`")
+@available(*, unavailable, message="Use `when`")
 public func join<T>(promises: Promise<T>...) {}
