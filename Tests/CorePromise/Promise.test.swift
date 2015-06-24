@@ -1,7 +1,7 @@
 import PromiseKit
 import XCTest
 
-class TestPromise: XCTestCase {
+class PromiseTestCase: XCTestCase {
     override func tearDown() {
         PMKUnhandledErrorHandler = { _ in }
     }
@@ -94,7 +94,7 @@ class TestPromise: XCTestCase {
         }.report(policy: .AllErrors) { _ in
             ex.fulfill()
         }
-        
+
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
@@ -116,18 +116,5 @@ class TestPromise: XCTestCase {
             ex.fulfill()
         }
         waitForExpectationsWithTimeout(10, handler: nil)
-    }
-}
-
-
-@objc(PMKPromiseBridgeHelper) class PromiseBridgeHelper: NSObject {
-    override init() {
-        super.init()
-    }
-
-    @objc func bridge1() -> AnyPromise {
-        return AnyPromise(bound: dispatch_promise {
-            return 1
-        })
     }
 }

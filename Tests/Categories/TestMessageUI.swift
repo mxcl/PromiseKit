@@ -7,22 +7,26 @@ class TestPromiseMailComposer: UIKitTestCase {
 
     // cancelling mail composer cancels promise
     func test7() {
-        let ex = expectationWithDescription("")
+        let ex1 = expectationWithDescription("")
+        let ex2 = expectationWithDescription("")
+        var order = false
+
         let mailer = MFMailComposeViewController()
         let promise = rootvc.promiseViewController(mailer, animated: false, completion: {
-            after(0.05).then { _ -> Void in
+            after(0.25).then { _ -> Void in
+                XCTAssertFalse(order)
                 let button = mailer.viewControllers[0].navigationItem.leftBarButtonItem!
-
-                let control: UIControl = UIControl()
-                control.sendAction(button.action, to: button.target, forEvent: nil)
+                UIControl().sendAction(button.action, to: button.target, forEvent: nil)
+                ex1.fulfill()
             }
         })
         promise.report { _ -> Void in
             XCTFail()
         }
-        promise.report(policy: CatchPolicy.AllErrors) { _ -> Void in
+        promise.report(policy: .AllErrors) { _ -> Void in
             // seems necessary to give vc stack a bit of time
-            after(0.5).then(ex.fulfill)
+            after(0.5).then(ex2.fulfill)
+            order = true
         }
         waitForExpectationsWithTimeout(10, handler: nil)
 

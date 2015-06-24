@@ -1,7 +1,7 @@
 import PromiseKit
 import XCTest
 
-class TestAfter: XCTestCase {
+class AfterTestCase_Swift: XCTestCase {
     func __test(duration: NSTimeInterval) {
         let ex = expectationWithDescription("")
         var foo = false

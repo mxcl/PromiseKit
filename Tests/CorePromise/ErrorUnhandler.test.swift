@@ -2,10 +2,15 @@ import Foundation
 import XCTest
 import PromiseKit
 
-class TestErrorUnhandler: XCTestCase {
+class ErrorHandlingTests_Swift: XCTestCase {
 
+    var oldHandler: (ErrorType -> Void)!
+
+    override func setUp() {
+        oldHandler = PMKUnhandledErrorHandler
+    }
     override func tearDown() {
-        PMKUnhandledErrorHandler = { _ in }
+        PMKUnhandledErrorHandler = oldHandler
     }
 
     private func twice(@noescape body: (Promise<Int>, XCTestExpectation) -> Void) {

@@ -7,73 +7,127 @@ import XCTest
 
 class TestCKContainer: XCTestCase {
 
-    func __test(swizzler: Selector, body: () -> Promise<Void>) {
-        // again, could not subclass CKContainer as then Swift freaks the fuck out
-        // and won't alow me to call the class initializer
-
-        swizzle(CKContainer.self, swizzler) {
-            let ex = expectationWithDescription("")
-            body().then(ex.fulfill)
-            waitForExpectationsWithTimeout(1, handler: nil)
-        }
-    }
-
     func testAccountStatus() {
-        __test("accountStatusWithCompletionHandler:") { ex in
-            CKContainer.defaultContainer().accountStatus().then {
-                XCTAssertEqual($0, .CouldNotDetermine)
+        class MockContainer: CKContainer {
+            init(_: Bool = false)
+            {}
+
+            private override func accountStatusWithCompletionHandler(completionHandler: (CKAccountStatus, NSError?) -> Void) {
+                completionHandler(.CouldNotDetermine, nil)
             }
         }
+
+        let ex = expectationWithDescription("")
+        MockContainer().accountStatus().then { status -> Void in
+            XCTAssertEqual(status, .CouldNotDetermine)
+            ex.fulfill()
+        }
+        waitForExpectationsWithTimeout(1, handler: nil)
     }
 
     func testRequestApplicationPermission() {
-        let pp = CKApplicationPermissions.UserDiscoverability
-        __test("requestApplicationPermission:completionHandler:") {
-            CKContainer.defaultContainer().requestApplicationPermission(pp).then {
-                XCTAssertEqual($0, .Granted)
+        class MockContainer: CKContainer {
+            init(_: Bool = false)
+            {}
+
+            private override func requestApplicationPermission(applicationPermission: CKApplicationPermissions, completionHandler: CKApplicationPermissionBlock) {
+                completionHandler(.Granted, nil)
             }
         }
+
+        let ex = expectationWithDescription("")
+        let pp = CKApplicationPermissions.UserDiscoverability
+        MockContainer().requestApplicationPermission(pp).then { perms -> Void in
+            XCTAssertEqual(perms, .Granted)
+            ex.fulfill()
+        }
+        waitForExpectationsWithTimeout(1, handler: nil)
     }
 
     func testStatusForApplicationPermission() {
-        let pp = CKApplicationPermissions.UserDiscoverability
-        __test("statusForApplicationPermission:completionHandler:") {
-            CKContainer.defaultContainer().statusForApplicationPermission(pp).then {
-                XCTAssertEqual($0, .Granted)
+        class MockContainer: CKContainer {
+            init(_: Bool = false)
+            {}
+
+            private override func statusForApplicationPermission(applicationPermission: CKApplicationPermissions, completionHandler: CKApplicationPermissionBlock) {
+                completionHandler(.Granted, nil)
             }
         }
+
+        let ex = expectationWithDescription("")
+        let pp = CKApplicationPermissions.UserDiscoverability
+        MockContainer().statusForApplicationPermission(pp).then {
+            XCTAssertEqual($0, .Granted)
+        }.then(ex.fulfill)
+        waitForExpectationsWithTimeout(1, handler: nil)
     }
 
     func testDiscoverAllContactUserInfos() {
-        __test("discoverAllContactUserInfosWithCompletionHandler:") {
-            CKContainer.defaultContainer().discoverAllContactUserInfos().then {
-                XCTAssertEqual($0, [PMKDiscoveredUserInfo()])
+        class MockContainer: CKContainer {
+            init(_: Bool = false)
+            {}
+
+            private override func discoverAllContactUserInfosWithCompletionHandler(completionHandler: ([CKDiscoveredUserInfo]?, NSError?) -> Void) {
+                completionHandler([PMKDiscoveredUserInfo()], nil)
             }
         }
+
+        let ex = expectationWithDescription("")
+        MockContainer().discoverAllContactUserInfos().then {
+            XCTAssertEqual($0, [PMKDiscoveredUserInfo()])
+        }.then(ex.fulfill)
+        waitForExpectationsWithTimeout(1, handler: nil)
     }
 
     func testDiscoverUserInfoWithEmailAddress() {
-        __test("discoverUserInfoWithEmailAddress:completionHandler:") {
-            CKContainer.defaultContainer().discoverUserInfo(email: "mxcl@me.com").then {
-                XCTAssertEqual($0, PMKDiscoveredUserInfo())
+        class MockContainer: CKContainer {
+            init(_: Bool = false)
+            {}
+
+            private override func discoverUserInfoWithEmailAddress(email: String, completionHandler: (CKDiscoveredUserInfo?, NSError?) -> Void) {
+                completionHandler(PMKDiscoveredUserInfo(), nil)
             }
         }
+
+        let ex = expectationWithDescription("")
+        MockContainer().discoverUserInfo(email: "mxcl@me.com").then {
+            XCTAssertEqual($0, PMKDiscoveredUserInfo())
+        }.then(ex.fulfill)
+        waitForExpectationsWithTimeout(1, handler: nil)
     }
 
     func testDiscoverUserInfoWithRecordID() {
-        __test("discoverUserInfoWithUserRecordID:completionHandler:") {
-            CKContainer.defaultContainer().discoverUserInfo(recordID: dummy()).then {
-                XCTAssertEqual($0, PMKDiscoveredUserInfo())
+        class MockContainer: CKContainer {
+            init(_: Bool = false)
+            {}
+
+            private override func discoverUserInfoWithUserRecordID(userRecordID: CKRecordID, completionHandler: (CKDiscoveredUserInfo?, NSError?) -> Void) {
+                completionHandler(PMKDiscoveredUserInfo(), nil)
             }
         }
+
+        let ex = expectationWithDescription("")
+        MockContainer().discoverUserInfo(recordID: dummy()).then {
+            XCTAssertEqual($0, PMKDiscoveredUserInfo())
+        }.then(ex.fulfill)
+        waitForExpectationsWithTimeout(1, handler: nil)
     }
 
     func testFetchUserRecordID() {
-        __test("fetchUserRecordIDWithCompletionHandler:") {
-            CKContainer.defaultContainer().fetchUserRecordID().then {
-                XCTAssertEqual($0, dummy())
+        class MockContainer: CKContainer {
+            init(_: Bool = false)
+            {}
+
+            private override func fetchUserRecordIDWithCompletionHandler(completionHandler: (CKRecordID?, NSError?) -> Void) {
+                completionHandler(dummy(), nil)
             }
         }
+
+        let ex = expectationWithDescription("")
+        MockContainer().fetchUserRecordID().then {
+            XCTAssertEqual($0, dummy())
+        }.then(ex.fulfill)
+        waitForExpectationsWithTimeout(1, handler: nil)
     }
 }
 
@@ -83,35 +137,4 @@ class TestCKContainer: XCTestCase {
 
 private func dummy() -> CKRecordID {
     return CKRecordID(recordName: "foo")
-}
-
-
-extension CKContainer {
-    @objc private func pmk_accountStatusWithCompletionHandler(completionHandler: ((CKAccountStatus, NSError!) -> Void)!) {
-        completionHandler(CKAccountStatus.CouldNotDetermine, nil)
-    }
-
-    @objc private func pmk_requestApplicationPermission(applicationPermission: CKApplicationPermissions, completionHandler: CKApplicationPermissionBlock!) {
-        completionHandler(.Granted, nil)
-    }
-
-    @objc private func pmk_statusForApplicationPermission(applicationPermission: CKApplicationPermissions, completionHandler: CKApplicationPermissionBlock!) {
-        completionHandler(.Granted, nil)
-    }
-
-    @objc private func pmk_discoverAllContactUserInfosWithCompletionHandler(completionHandler: (([AnyObject]!, NSError!) -> Void)!) {
-        completionHandler([PMKDiscoveredUserInfo()], nil)
-    }
-
-    @objc private func pmk_discoverUserInfoWithEmailAddress(email: String!, completionHandler: ((CKDiscoveredUserInfo!, NSError!) -> Void)!) {
-        completionHandler(PMKDiscoveredUserInfo(), nil)
-    }
-
-    @objc private func pmk_discoverUserInfoWithUserRecordID(userRecordID: CKRecordID!, completionHandler: ((CKDiscoveredUserInfo!, NSError!) -> Void)!) {
-        completionHandler(PMKDiscoveredUserInfo(), nil)
-    }
-
-    @objc private func pmk_fetchUserRecordIDWithCompletionHandler(completionHandler: ((CKRecordID!, NSError!) -> Void)!) {
-        completionHandler(dummy(), nil)
-    }
 }

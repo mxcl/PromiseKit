@@ -1,7 +1,7 @@
 import XCTest
 import PromiseKit
 
-class TestRace: XCTestCase {
+class RaceTestCase_Swift: XCTestCase {
     func test1() {
         let ex = expectationWithDescription("")
         race(after(0.01).then{ 1 }, after(1.0).then{ 2 }).then { index -> Void in
