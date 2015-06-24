@@ -277,7 +277,10 @@ public class Promise<T> {
 
      @see registerCancellationError
     */
-    public func snatch(policy policy: CatchPolicy = .AllErrorsExceptCancellation, _ body: (NSError) -> Void) {
+    public func rescue(policy policy: RescuePolicy = .AllErrorsExceptCancellation, _ body: (NSError) -> Void) -> RejectedPromise {
+        var reject: ((Resolution) -> Void)!
+        let rp = RejectedPromise(reject: &reject)
+
         pipe { resolution in
             switch resolution {
             case .Fulfilled:
@@ -287,10 +290,13 @@ public class Promise<T> {
                     dispatch_async(dispatch_get_main_queue()) {
                         consume(error)
                         body(error)
+                        reject(resolution)
                     }
                 }
             }
         }
+
+        return rp
     }
 
     /**
@@ -482,4 +488,24 @@ extension Promise: CustomStringConvertible {
 */
 public func firstly<T>(promise: () -> Promise<T>) -> Promise<T> {
     return promise()
+}
+
+
+public class RejectedPromise {
+    private let state: State
+
+    private init(inout reject: ((Resolution) -> Void)!) {
+        state = UnsealedState(resolver: &reject)
+    }
+
+    public func finally(on q: dispatch_queue_t = dispatch_get_main_queue(), body: () -> Void) {
+        state.get { seal in
+            switch seal {
+            case .Resolved:
+                contain_zalgo(q, block: body)
+            case .Pending(let handlers):
+                handlers.append { _ in contain_zalgo(q, block: body) }
+            }
+        }
+    }
 }
