@@ -44,6 +44,11 @@ Pod::Spec.new do |s|
     ss.ios.frameworks = 'AVFoundation'
   end
 
+  s.subspec 'Bolts' do |ss|
+    ss.ios.source_files = 'Categories/Bolts/*'
+    ss.dependency 'Bolts'
+  end
+
   s.subspec 'CloudKit' do |ss|
     ss.source_files = 'Categories/CloudKit/*'
     ss.dependency 'PromiseKit/CorePromise'
