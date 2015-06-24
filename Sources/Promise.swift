@@ -264,7 +264,7 @@ public class Promise<T> {
 
      @see registerCancellationError
     */
-    public func catch(policy: CatchPolicy = .AllErrorsExceptCancellation, _ body: (NSError) -> Void) {
+    public func snatch(policy policy: CatchPolicy = .AllErrorsExceptCancellation, _ body: (NSError) -> Void) {
         pipe { resolution in
             switch resolution {
             case .Fulfilled:
