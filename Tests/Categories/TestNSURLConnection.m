@@ -33,4 +33,16 @@
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
+- (void)test2 {
+    id ex = [self expectationWithDescription:@""];
+
+    [NSURLConnection GET:nil].catch(^(NSError *err){
+        XCTAssertEqualObjects(err.domain, NSURLErrorDomain);
+        XCTAssertEqual(err.code, -1002);
+        [ex fulfill];
+    });
+
+    [self waitForExpectationsWithTimeout:1 handler:nil];
+}
+
 @end
