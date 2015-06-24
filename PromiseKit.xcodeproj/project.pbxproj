@@ -119,6 +119,7 @@
 		635D0D7C1ADDB11400CC0406 /* ErrorUnhandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D0D7A1ADDB11400CC0406 /* ErrorUnhandler.swift */; };
 		6362D8B41AF8831200E9E0A2 /* SLComposeViewController+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6302ACC21AEF42F2001F0069 /* SLComposeViewController+Promise.swift */; };
 		636A44EE1AEC0F6700639777 /* TestSocial.m in Sources */ = {isa = PBXBuildFile; fileRef = 637BF6111AEAC62400997C8B /* TestSocial.m */; };
+		636B914B1B2BB06D00434FA9 /* afterlife.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D73BE11B20B48F00843146 /* afterlife.swift */; };
 		63772C9C1AF09B8A00ED2F59 /* ErrorUnhandler.test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63772C9B1AF09B8A00ED2F59 /* ErrorUnhandler.test.swift */; };
 		6388E19C1AD310F80074D85B /* NSJSONFromData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B4F8AF1AD19EDB0036A41A /* NSJSONFromData.swift */; };
 		6388E19D1AD311000074D85B /* NSJSONFromData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B4F8AF1AD19EDB0036A41A /* NSJSONFromData.swift */; };
@@ -1317,7 +1318,6 @@
 				6302AD041AEF42F2001F0069 /* MKDirections+AnyPromise.m in Sources */,
 				638E0F201AEF171E0052E28F /* TestStoreKit.m in Sources */,
 				638E0F211AEF171E0052E28F /* TestStoreKit.swift in Sources */,
-				635E207C1B28EED1005E5795 /* afterlife.swift in Sources */,
 				6302ACE41AEF42F2001F0069 /* AVAudioSession+Promise.swift in Sources */,
 				6302ACF81AEF42F2001F0069 /* NSNotificationCenter+AnyPromise.m in Sources */,
 				63CF406A1B29FD1400F0F5FC /* afterlife.swift in Sources */,
@@ -1328,6 +1328,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				636B914B1B2BB06D00434FA9 /* afterlife.swift in Sources */,
 				63DF17071AEAC46E00BE97DD /* TestAccounts.swift in Sources */,
 				6302ACFF1AEF42F2001F0069 /* NSTask+Promise.swift in Sources */,
 				6302AD1D1AEF42F2001F0069 /* SKRequest+Promise.swift in Sources */,
@@ -1360,7 +1361,6 @@
 				63DF17051AEAC46E00BE97DD /* TestAccounts.m in Sources */,
 				6302ACF91AEF42F2001F0069 /* NSNotificationCenter+AnyPromise.m in Sources */,
 				6302AD131AEF42F2001F0069 /* CALayer+AnyPromise.m in Sources */,
-				63D73BE21B20B48F00843146 /* afterlife.swift in Sources */,
 				63DF170D1AEAC46E00BE97DD /* TestCloudKit.m in Sources */,
 				6302ACF31AEF42F2001F0069 /* CLLocationManager+AnyPromise.m in Sources */,
 				6302ACED1AEF42F2001F0069 /* CKDatabase+Promise.swift in Sources */,
