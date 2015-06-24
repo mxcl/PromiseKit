@@ -23,7 +23,7 @@ class Test2131: XCTestCase {
 
     func test2131_2() {
         var onRejectedCalled = false
-        let (promise, fulfiller, rejecter) = Promise<Int>.defer()
+        let (promise, fulfiller, rejecter) = Promise<Int>.pendingPromise()
         promise.then{ a -> Void in
             XCTAssertFalse(onRejectedCalled)
         }
@@ -37,7 +37,7 @@ class Test2131: XCTestCase {
 
     func test2131_3() {
         var onRejectedCalled = false
-        let (promise, fulfiller, rejecter) = Promise<Int>.defer()
+        let (promise, fulfiller, rejecter) = Promise<Int>.pendingPromise()
 
         promise.then{ a->() in
             XCTAssertFalse(onRejectedCalled)
@@ -55,7 +55,7 @@ class Test2131: XCTestCase {
 
     func test2131_4() {
         var onRejectedCalled = false
-        let (promise, fulfiller, rejecter) = Promise<Int>.defer()
+        let (promise, fulfiller, rejecter) = Promise<Int>.pendingPromise()
 
         promise.then{ a in
             XCTAssertFalse(onRejectedCalled)

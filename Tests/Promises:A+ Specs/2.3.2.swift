@@ -26,7 +26,7 @@ class Test232: XCTestCase {
         // 2.3.2.1: If `x` is pending, `promise` must remain pending until `x` is fulfilled or rejected.
 
         testPromiseResolution({
-            return Promise<Int>.defer().promise
+            return Promise<Int>.pendingPromise().promise
         }, test: { promise in
             let ex = self.expectationWithDescription("")
             var wasFulfilled = false
@@ -69,7 +69,7 @@ class Test232: XCTestCase {
         // `x` is eventually-fulfilled
 
         testPromiseResolution({
-            let (promise, fulfiller, _) = Promise<Int>.defer()
+            let (promise, fulfiller, _) = Promise<Int>.pendingPromise()
             later { fulfiller(sentinel) }
             return promise
         }, test: { promise in
@@ -100,7 +100,7 @@ class Test232: XCTestCase {
     func test2323_2() {
         // `x` is eventually-rejected
         testPromiseResolution({
-            let (promise, _, rejecter) = Promise<Int>.defer()
+            let (promise, _, rejecter) = Promise<Int>.pendingPromise()
             later { rejecter(dammy) }
             return promise
         }, test: { promise in
