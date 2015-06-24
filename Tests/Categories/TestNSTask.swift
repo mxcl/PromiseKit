@@ -25,16 +25,16 @@ class TestNSTask: XCTestCase {
 
         task.promise().then { (stdout: String, stderr: String, exitStatus: Int) -> Void in
             XCTFail()
-            }.catch { err in
-                let userInfo = err.userInfo!
-                let expectedStderrData = "ls: \(dir): No such file or directory\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
+        }.report { err in
+            let userInfo = err.userInfo
+            let expectedStderrData = "ls: \(dir): No such file or directory\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
 
-                XCTAssertEqual(userInfo[PMKTaskErrorLaunchPathKey] as! String, task.launchPath!)
-                XCTAssertEqual(userInfo[PMKTaskErrorArgumentsKey] as! [String], task.arguments!)
-                XCTAssertEqual(userInfo[PMKTaskErrorStandardErrorKey] as! NSData, expectedStderrData)
-                XCTAssertEqual(userInfo[PMKTaskErrorExitStatusKey] as! Int, 1)
-                XCTAssertEqual((userInfo[PMKTaskErrorStandardOutputKey] as! NSData).length, 0)
-                ex.fulfill()
+            XCTAssertEqual(userInfo[PMKTaskErrorLaunchPathKey] as! NSString, task.launchPath! as NSString)
+            XCTAssertEqual(userInfo[PMKTaskErrorArgumentsKey] as! [String], task.arguments!)
+            XCTAssertEqual(userInfo[PMKTaskErrorStandardErrorKey] as! NSData, expectedStderrData)
+            XCTAssertEqual(userInfo[PMKTaskErrorExitStatusKey] as! Int, 1)
+            XCTAssertEqual((userInfo[PMKTaskErrorStandardOutputKey] as! NSData).length, 0)
+            ex.fulfill()
         }
         waitForExpectationsWithTimeout(10, handler: nil)
     }

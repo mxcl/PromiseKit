@@ -2,7 +2,7 @@ import Foundation.NSError
 
 public let PMKOperationQueue = NSOperationQueue()
 
-public enum CatchPolicy {
+public enum ErrorPolicy {
     case AllErrors
     case AllErrorsExceptCancellation
 }
@@ -263,7 +263,7 @@ public class Promise<T> {
 
      @see registerCancellationError
     */
-    public func catch(policy: CatchPolicy = .AllErrorsExceptCancellation, _ body: (NSError) -> Void) {
+    public func report(policy policy: ErrorPolicy = .AllErrorsExceptCancellation, _ body: (NSError) -> Void) {
         pipe { resolution in
             switch resolution {
             case .Fulfilled:
