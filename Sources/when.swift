@@ -14,7 +14,7 @@ private func when<T>(promises: [Promise<T>]) -> Promise<Void> {
         fulfill()
     }
 
-    for (index, promise) in enumerate(promises) {
+    for promise in promises {
         promise.pipe { resolution in
             if rootPromise.pending {
                 switch resolution {

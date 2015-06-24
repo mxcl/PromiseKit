@@ -7,7 +7,7 @@ func stressDataRace<T: Equatable>(e1: XCTestExpectation, iterations: Int = 1000,
     let group = dispatch_group_create()
     let queue = dispatch_queue_create("the.domain.of.Zalgo", DISPATCH_QUEUE_CONCURRENT)
 
-    for i in 0..<iterations {
+    for _ in 0..<iterations {
         let (promise, fulfill, _) = Promise<T>.deferred()
 
         dispatch_apply(stressFactor, queue) { n in
