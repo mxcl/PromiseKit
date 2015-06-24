@@ -61,7 +61,6 @@ class Test224: XCTestCase {
 
     func test2242_3() {
         // when `onFulfilled` is added inside an `onRejected`
-        let err = NSError(domain: "a", code: 1, userInfo: nil)
         let resolved = Promise(dummy)
         let rejected = Promise<Int>(dammy)
 
