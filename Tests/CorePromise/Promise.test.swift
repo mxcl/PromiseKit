@@ -58,8 +58,8 @@ class TestPromise: XCTestCase {
             ex1.fulfill()
         }
 
-        after(0).then { _ -> Promise<Int> in
-            return Promise(NSError.cancelledError())
+        after(0).then { _ in
+            throw NSError.cancelledError()
         }.then { _ -> Void in
             XCTFail()
         }.rescue { _ -> Void in
@@ -78,12 +78,12 @@ class TestPromise: XCTestCase {
             ex2.fulfill()
         }
 
-        after(0).then { _ -> Promise<Int> in
-            return Promise(NSError.cancelledError())
-        }.recover { err -> Promise<Int> in
+        after(0).then { _ in
+            throw NSError.cancelledError()
+        }.recover { err in
             ex1.fulfill()
             XCTAssertTrue(err.cancelled)
-            return Promise(err)
+            throw err
         }.then { _ -> Void in
             XCTFail()
         }.rescue { _ -> Void in
@@ -96,8 +96,8 @@ class TestPromise: XCTestCase {
     func testCatchCancellation() {
         let ex = expectationWithDescription("")
 
-        after(0).then { _ -> Promise<Int> in
-            return Promise(NSError.cancelledError())
+        after(0).then { _ in
+            throw NSError.cancelledError()
         }.rescue(policy: .AllErrors) { err -> Void in
             ex.fulfill()
         }

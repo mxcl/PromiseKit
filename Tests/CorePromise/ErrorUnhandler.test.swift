@@ -95,7 +95,7 @@ class TestErrorUnhandler: XCTestCase {
                 XCTFail()
             }
             promise.recover { error in
-                return Promise(error)
+                throw error
             }.then { x in
                 XCTFail()
             }.finally {
