@@ -99,7 +99,7 @@ private class AuthorizationCatcher: CLLocationManager, CLLocationManagerDelegate
         }
     }
 
-    @objc private func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+    @objc private func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         if status != .NotDetermined {
             fulfill(status)
             retainCycle = nil
@@ -108,8 +108,7 @@ private class AuthorizationCatcher: CLLocationManager, CLLocationManagerDelegate
 }
 #endif
 
-private func auther(requestAuthorizationType: CLLocationManager.RequestAuthorizationType)(manager: CLLocationManager)
-{
+private func auther(requestAuthorizationType: CLLocationManager.RequestAuthorizationType)(manager: CLLocationManager) {
   #if os(iOS)
     if !manager.respondsToSelector("requestWhenInUseAuthorization") { return }
 
