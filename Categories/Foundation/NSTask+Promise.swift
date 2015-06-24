@@ -34,8 +34,8 @@ extension NSTask {
             if let out = NSString(data: stdout, encoding: encoding), err = NSString(data: stderr, encoding: encoding) {
                 return Promise(out as String, err as String, terminationStatus)
             } else {
-                return Promise(generateError("Could not decode command output into string.", stdout, stderr,
-                    self))
+                throw NSError("Could not decode command output into string.", stdout, stderr,
+                    self)
             }
         }
     }
@@ -56,21 +56,19 @@ extension NSTask {
         standardOutput = NSPipe()
         standardError = NSPipe()
 
-        return Promise { fulfill, reject in
-            launch()
+        launch()
 
-            dispatch_async(dispatch_get_global_queue(0, 0)) {
-                self.waitUntilExit()
+        return dispatch_promise {
+            self.waitUntilExit()
 
-                let stdout = self.standardOutput!.fileHandleForReading.readDataToEndOfFile()
-                let stderr = self.standardError!.fileHandleForReading.readDataToEndOfFile()
+            let stdout = self.standardOutput!.fileHandleForReading.readDataToEndOfFile()
+            let stderr = self.standardError!.fileHandleForReading.readDataToEndOfFile()
 
-                if self.terminationReason == .Exit && self.terminationStatus == 0 {
-                    fulfill(stdout, stderr, Int(self.terminationStatus))
-                } else {
-                    let cmd = " ".join([self.launchPath!] + (self.arguments! as [String]))
-                    reject(generateError("Failed executing: `\(cmd)`.", stdout, stderr, self))
-                }
+            if self.terminationReason == .Exit && self.terminationStatus == 0 {
+                return (stdout, stderr, Int(self.terminationStatus))
+            } else {
+                let cmd = " ".join([self.launchPath!] + (self.arguments! as [String]))
+                throw NSError("Failed executing: `\(cmd)`.", stdout, stderr, self)
             }
         }
     }
@@ -94,14 +92,15 @@ extension NSTask {
 
 //TODO get file system encoding from LANG as it may not be UTF8
 
-private func generateError(description: String, _ stdout: NSData, _ stderr: NSData, _ task: NSTask) -> NSError {
-    var info: [NSObject: AnyObject] = [:]
-    info[NSLocalizedDescriptionKey] = description
-    info[PMKTaskErrorLaunchPathKey] = task.launchPath
-    info[PMKTaskErrorArgumentsKey] = task.arguments
-    info[PMKTaskErrorStandardOutputKey] = stdout
-    info[PMKTaskErrorStandardErrorKey] = stderr
-    info[PMKTaskErrorExitStatusKey] = Int(task.terminationStatus)
-
-    return NSError(domain: PMKErrorDomain, code: PMKTaskError, userInfo: info)
+extension NSError {
+    private convenience init(_ description: String, _ stdout: NSData, _ stderr: NSData, _ task: NSTask) {
+        var info: [NSObject: AnyObject] = [:]
+        info[NSLocalizedDescriptionKey] = description
+        info[PMKTaskErrorLaunchPathKey] = task.launchPath
+        info[PMKTaskErrorArgumentsKey] = task.arguments
+        info[PMKTaskErrorStandardOutputKey] = stdout
+        info[PMKTaskErrorStandardErrorKey] = stderr
+        info[PMKTaskErrorExitStatusKey] = Int(task.terminationStatus)
+        self.init(domain: PMKErrorDomain, code: PMKTaskError, userInfo: info)
+    }
 }
