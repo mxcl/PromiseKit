@@ -17,10 +17,10 @@ class TestPromiseMailComposer: UIKitTestCase {
                 control.sendAction(button.action, to: button.target, forEvent: nil)
             }
         })
-        promise.snatch { _ -> Void in
+        promise.rescue { _ -> Void in
             XCTFail()
         }
-        promise.snatch(policy: CatchPolicy.AllErrors) { _ -> Void in
+        promise.rescue(policy: CatchPolicy.AllErrors) { _ -> Void in
             // seems necessary to give vc stack a bit of time
             after(0.5).then(ex.fulfill)
         }

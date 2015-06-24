@@ -17,7 +17,7 @@ class TestNSObject: XCTestCase {
             // an ARC problem, but I can’t see what it would be.
             XCTAssert(newValue == "moo")
             ex.fulfill()
-        }.snatch { err in
+        }.rescue { err in
             XCTFail()
         }
         foo.bar = "moo"

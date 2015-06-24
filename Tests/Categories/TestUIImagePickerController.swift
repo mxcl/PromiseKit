@@ -69,10 +69,10 @@ class TestPromiseImagePickerController: UIKitTestCase {
                 UIControl().sendAction(button.action, to: button.target, forEvent: nil)
             }
         })
-        promise.snatch { _ -> Void in
+        promise.rescue { _ -> Void in
             XCTFail()
         }
-        promise.snatch(policy: CatchPolicy.AllErrors) { _ -> Void in
+        promise.rescue(policy: CatchPolicy.AllErrors) { _ -> Void in
             after(0.5).then(ex.fulfill)
         }
         waitForExpectationsWithTimeout(10, handler: nil)

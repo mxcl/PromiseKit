@@ -42,7 +42,7 @@ class TestErrorUnhandler: XCTestCase {
             PMKUnhandledErrorHandler = { err in
                 XCTFail()
             }
-            promise.snatch { error in
+            promise.rescue { error in
                 ex.fulfill()
             }
         }
@@ -100,7 +100,7 @@ class TestErrorUnhandler: XCTestCase {
                 XCTFail()
             }.finally {
                 ex1.fulfill()
-            }.snatch { err in
+            }.rescue { err in
                 ex2.fulfill()
             }
         }

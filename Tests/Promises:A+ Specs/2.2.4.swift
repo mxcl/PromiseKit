@@ -20,7 +20,7 @@ class Test224: XCTestCase {
         }
         suiteRejected(1) { (promise, exes, memo)->() in
             var catchHasReturned = false
-            promise.snatch { _->() in
+            promise.rescue { _->() in
                 XCTAssert(catchHasReturned)
                 exes[0].fulfill()
             }
@@ -67,7 +67,7 @@ class Test224: XCTestCase {
         var firstOnRejectedFinished = false
         let ex = expectationWithDescription("")
 
-        rejected.snatch { _->() in
+        rejected.rescue { _->() in
             resolved.then { _->() in
                 XCTAssert(firstOnRejectedFinished)
                 ex.fulfill()
@@ -100,7 +100,7 @@ class Test224: XCTestCase {
         // when `onRejected` is added immediately before the promise is rejected
         let (promise, _, rejecter) = Promise<Int>.pendingPromise()
         var onRejectedCalled = false
-        promise.snatch{ _->() in
+        promise.rescue{ _->() in
             onRejectedCalled = true
         }
         rejecter(dammy)
@@ -112,7 +112,7 @@ class Test224: XCTestCase {
         let (promise, _, rejecter) = Promise<Int>.pendingPromise()
         var onRejectedCalled = false
         rejecter(dammy)
-        promise.snatch{ _->() in
+        promise.rescue{ _->() in
             onRejectedCalled = true
         }
         XCTAssertFalse(onRejectedCalled)
@@ -126,7 +126,7 @@ class Test224: XCTestCase {
         let ex = expectationWithDescription("")
 
         resolved.then{ _->() in
-            rejected.snatch{ _->() in
+            rejected.rescue{ _->() in
                 XCTAssert(firstOnFulfilledFinished)
                 ex.fulfill()
             }
@@ -141,8 +141,8 @@ class Test224: XCTestCase {
         var firstOnRejectedFinished = false
         let ex = expectationWithDescription("")
 
-        promise.snatch{ _->() in
-            promise.snatch{ _->() in
+        promise.rescue{ _->() in
+            promise.rescue{ _->() in
                 XCTAssertTrue(firstOnRejectedFinished)
                 ex.fulfill()
             }
@@ -162,7 +162,7 @@ class Test224: XCTestCase {
             firstStackFinished = true
         }
 
-        promise.snatch{ _->() in
+        promise.rescue{ _->() in
             XCTAssert(firstStackFinished)
             ex.fulfill()
         }

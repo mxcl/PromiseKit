@@ -2,7 +2,7 @@ import Foundation.NSError
 
 public let PMKOperationQueue = NSOperationQueue()
 
-public enum CatchPolicy {
+public enum RescuePolicy {
     case AllErrors
     case AllErrorsExceptCancellation
 }
