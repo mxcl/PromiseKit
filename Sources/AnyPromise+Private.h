@@ -39,5 +39,7 @@ extern NSError *PMKProcessUnhandledException(id thrown);
     NSError *err = _err; \
     id userInfo = err.userInfo.mutableCopy ?: [NSMutableArray new]; \
     [userInfo addEntriesFromDictionary:supplements]; \
-    [[[err class] alloc] initWithDomain:err.domain code:err.code userInfo:userInfo]; \
+    Class ec = [err class]; \
+    if (ec == NSClassFromString(@"_SwiftNativeNSError")) ec = [NSError class]; \
+    [[ec alloc] initWithDomain:err.domain code:err.code userInfo:userInfo]; \
 })
