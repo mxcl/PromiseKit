@@ -115,10 +115,10 @@ public class Promise<T> {
     }
 
     /**
-     defer is convenient for wrapping delegates or larger asynchronous systems.
+     tuple is convenient for wrapping delegates or larger asynchronous systems.
 
         class Foo: BarDelegate {
-            let (promise, fulfill, reject) = Promise<Int>.deferred()
+            let (promise, fulfill, reject) = Promise<Int>.pendingPromise()
     
             func barDidFinishWithResult(result: Int) {
                 fulfill(result)
@@ -135,8 +135,7 @@ public class Promise<T> {
       2) A function that fulfills that promise
       3) A function that rejects that promise
     */
-
-    public class func deferred() -> (promise: Promise, fulfill: (T) -> Void, reject: (NSError) -> Void) {
+    public class func pendingPromise() -> (promise: Promise, fulfill: (T) -> Void, reject: (NSError) -> Void) {
         var sealant: Sealant<T>!
         let promise = Promise { sealant = $0 }
         return (promise, sealant.resolve, sealant.resolve)

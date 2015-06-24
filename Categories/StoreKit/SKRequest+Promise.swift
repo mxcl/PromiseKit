@@ -23,7 +23,7 @@ extension SKRequest {
 
 
 private class SKDelegate: NSObject, SKProductsRequestDelegate {
-    let (promise, fulfill, reject) = Promise<SKProductsResponse>.deferred()
+    let (promise, fulfill, reject) = Promise<SKProductsResponse>.pendingPromise()
     var retainCycle: SKDelegate?
 
     @objc func request(request: SKRequest, didFailWithError error: NSError) {

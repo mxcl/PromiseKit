@@ -71,7 +71,7 @@ class TestPromisableViewController: UIKitTestCase {
     func test2b() {
         let ex = expectationWithDescription("")
         let my = MyViewController()
-        let (promise, resolve, _) = Promise<Int>.deferred()
+        let (promise, resolve, _) = Promise<Int>.pendingPromise()
         my.promise = promise
         rootvc.promiseViewController(my, animated: false).then { (x: Int) -> Void in
             XCTAssertTrue(my.appeared)

@@ -8,7 +8,7 @@ func stressDataRace<T: Equatable>(e1: XCTestExpectation, iterations: Int = 1000,
     let queue = dispatch_queue_create("the.domain.of.Zalgo", DISPATCH_QUEUE_CONCURRENT)
 
     for _ in 0..<iterations {
-        let (promise, fulfill, _) = Promise<T>.deferred()
+        let (promise, fulfill, _) = Promise<T>.pendingPromise()
 
         dispatch_apply(stressFactor, queue) { n in
             stressFunction(promise)
@@ -42,7 +42,7 @@ class TestZalgo: XCTestCase {
         
         var x = 0
         
-        let (p2, f, _) = Promise<Int>.deferred()
+        let (p2, f, _) = Promise<Int>.pendingPromise()
         p2.then(on: zalgo) { _ in
             x = 1
         }

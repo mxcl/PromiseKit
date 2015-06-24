@@ -32,7 +32,7 @@ class Test224: XCTestCase {
 
     func test2242_1() {
         // when `onFulfilled` is added immediately before the promise is fulfilled
-        let (promise, fulfiller, _) = Promise<Int>.deferred()
+        let (promise, fulfiller, _) = Promise<Int>.pendingPromise()
         var onFulfilledCalled = false
 
         fulfiller(dummy)
@@ -80,7 +80,7 @@ class Test224: XCTestCase {
 
     func test2242_4() {
         // when the promise is fulfilled asynchronously
-        let (promise, fulfiller, _) = Promise<Int>.deferred()
+        let (promise, fulfiller, _) = Promise<Int>.pendingPromise()
         var firstStackFinished = false
         let ex = expectationWithDescription("")
         later {
@@ -98,7 +98,7 @@ class Test224: XCTestCase {
 
     func test2243() {
         // when `onRejected` is added immediately before the promise is rejected
-        let (promise, _, rejecter) = Promise<Int>.deferred()
+        let (promise, _, rejecter) = Promise<Int>.pendingPromise()
         var onRejectedCalled = false
         promise.snatch{ _->() in
             onRejectedCalled = true
@@ -109,7 +109,7 @@ class Test224: XCTestCase {
 
     func test2244() {
         // when `onRejected` is added immediately after the promise is rejected
-        let (promise, _, rejecter) = Promise<Int>.deferred()
+        let (promise, _, rejecter) = Promise<Int>.pendingPromise()
         var onRejectedCalled = false
         rejecter(dammy)
         promise.snatch{ _->() in
@@ -153,7 +153,7 @@ class Test224: XCTestCase {
 
     func test2247() {
         // when the promise is rejected asynchronously
-        let (promise, _, rejecter) = Promise<Int>.deferred()
+        let (promise, _, rejecter) = Promise<Int>.pendingPromise()
         var firstStackFinished = false
         let ex = expectationWithDescription("")
 
