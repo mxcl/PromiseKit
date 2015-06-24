@@ -123,21 +123,21 @@ public class Promise<T> {
     }
 
     /**
-     tuple is convenient for wrapping delegates or larger asynchronous systems.
+     pendingPromise is convenient for wrapping delegates or larger asynchronous systems.
 
-        class Foo: BarDelegate {
-            let (promise, fulfill, reject) = Promise<Int>.pendingPromise()
+         class Foo: BarDelegate {
+             let (promise, fulfill, reject) = Promise<Int>.pendingPromise()
     
-            func barDidFinishWithResult(result: Int) {
-                fulfill(result)
-            }
+             func barDidFinishWithResult(result: Int) {
+                 fulfill(result)
+             }
     
-            func barDidError(error: NSError) {
-                reject(error)
-            }
-        }
+             func barDidError(error: NSError) {
+                 reject(error)
+             }
+         }
 
-     @return A tuple consisting of:
+     :returns: A tuple consisting of:
 
       1) A promise
       2) A function that fulfills that promise
