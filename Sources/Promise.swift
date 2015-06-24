@@ -437,8 +437,8 @@ extension Promise {
 }
 
 
-extension Promise: DebugPrintable {
-    public var debugDescription: String {
+extension Promise: CustomStringConvertible {
+    public var description: String {
         return "Promise: \(state)"
     }
 }

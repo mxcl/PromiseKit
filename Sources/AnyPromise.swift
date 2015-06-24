@@ -293,8 +293,8 @@ public typealias AnyPromise = PMKPromise
 }
 
 
-extension AnyPromise: DebugPrintable {
-    override public var debugDescription: String {
+extension AnyPromise {
+    override public var description: String {
         return "AnyPromise: \(state)"
     }
 }
