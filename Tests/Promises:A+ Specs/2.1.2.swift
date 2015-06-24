@@ -23,7 +23,7 @@ class Test2121: XCTestCase {
 
     func test2() {
         var onFulfilledCalled = false
-        let (promise, fulfiller, rejecter) = Promise<Int>.defer()
+        let (promise, fulfiller, rejecter) = Promise<Int>.deferred()
         promise.then{ a -> Void in
             onFulfilledCalled = true
         }
@@ -37,7 +37,7 @@ class Test2121: XCTestCase {
 
     func test3() {
         var onFulfilledCalled = false
-        let (promise, fulfiller, rejecter) = Promise<Int>.defer()
+        let (promise, fulfiller, rejecter) = Promise<Int>.deferred()
 
         promise.then{ a->() in
             onFulfilledCalled = true;
@@ -55,7 +55,7 @@ class Test2121: XCTestCase {
 
     func test4() {
         var onFulfilledCalled = false
-        let (promise, fulfiller, rejecter) = Promise<Int>.defer()
+        let (promise, fulfiller, rejecter) = Promise<Int>.deferred()
 
         promise.then{ a in
             onFulfilledCalled = true
@@ -110,14 +110,14 @@ extension XCTestCase {
         test(Promise(v1), e1, v1)
         waitForExpectationsWithTimeout(1, handler: nil)
         
-        let (p2, f2, _) = Promise<Int>.defer()
+        let (p2, f2, _) = Promise<Int>.deferred()
         let v2 = Int(rand())
         let e2 = e("immediately-fulfilled")
         test(p2, e2, v2)
         f2(v2)
         waitForExpectationsWithTimeout(1, handler: nil)
         
-        let (p3, f3, _) = Promise<Int>.defer()
+        let (p3, f3, _) = Promise<Int>.deferred()
         let v3 = Int(rand())
         let e3 = e("eventually-fulfilled")
         later {
@@ -140,14 +140,14 @@ extension XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
         
         let e2 = e("immediately-rejected")
-        let (p2, _, r2) = Promise<Int>.defer()
+        let (p2, _, r2) = Promise<Int>.deferred()
         let v2 = NSError(domain:PMKErrorDomain, code:Int(rand()), userInfo:nil)
         test(p2, e2, v2)
         r2(v2)
         waitForExpectationsWithTimeout(1, handler: nil)
         
         let e3 = e("eventually-rejected")
-        let (p3, _, r3) = Promise<Int>.defer()
+        let (p3, _, r3) = Promise<Int>.deferred()
         let v3 = NSError(domain:PMKErrorDomain, code:Int(rand()), userInfo:nil)
         later {
             test(p3, e3, v3)

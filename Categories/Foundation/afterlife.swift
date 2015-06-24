@@ -23,5 +23,5 @@ private class GrimReaper: NSObject {
     deinit {
         fulfill()
     }
-    let (promise, fulfill, _) = Promise<Void>.defer()
+    let (promise, fulfill, _) = Promise<Void>.deferred()
 }

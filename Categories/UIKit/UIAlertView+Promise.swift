@@ -33,7 +33,7 @@ extension UIAlertView {
 }
 
 private class PMKAlertViewDelegate: NSObject, UIAlertViewDelegate {
-    let (promise, fulfill, reject) = Promise<Int>.defer()
+    let (promise, fulfill, reject) = Promise<Int>.deferred()
     var retainCycle: NSObject?
 
     @objc func alertView(alertView: UIAlertView, didDismissWithButtonIndex buttonIndex: Int) {

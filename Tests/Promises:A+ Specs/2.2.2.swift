@@ -23,7 +23,7 @@ class Test222: XCTestCase {
         // 2.2.2.2: it must not be called before `promise` is fulfilled
 
         let e1 = expectationWithDescription("fulfilled after a delay")
-        let (p1, f1, _) = Promise<Int>.defer()
+        let (p1, f1, _) = Promise<Int>.deferred()
         var isFulfilled = false
 
         p1.then { _->() in
@@ -38,7 +38,7 @@ class Test222: XCTestCase {
 
 
         let e2 = expectationWithDescription("never fulfilled")
-        let (p2, f2, _) = Promise<Int>.defer()
+        let (p2, _, _) = Promise<Int>.deferred()
         var onFulfilledCalled = false
 
         p2.then { _->() in
@@ -63,7 +63,7 @@ class Test222: XCTestCase {
 
     func test22232() {
         // trying to fulfill a pending promise more than once, immediately
-        let (promise, fulfiller, _) = Promise<Int>.defer()
+        let (promise, fulfiller, _) = Promise<Int>.deferred()
         var timesCalled = 0
         promise.then { _->() in
             XCTAssertEqual(++timesCalled, 1)
@@ -73,7 +73,7 @@ class Test222: XCTestCase {
     }
 
     func test22233() {
-        let (promise, fulfiller, _) = Promise<Int>.defer()
+        let (promise, fulfiller, _) = Promise<Int>.deferred()
         var timesCalled = 0
         let e1 = expectationWithDescription("trying to fulfill a pending promise more than once, delayed")
 
@@ -89,7 +89,7 @@ class Test222: XCTestCase {
     }
 
     func test22234() {
-        let (promise, fulfiller, _) = Promise<Int>.defer()
+        let (promise, fulfiller, _) = Promise<Int>.deferred()
         var timesCalled = 0
         let e1 = expectationWithDescription("trying to fulfill a pending promise more than once, immediately then delayed")
 
@@ -105,7 +105,7 @@ class Test222: XCTestCase {
     }
 
     func test22235() {
-        let (promise, fulfiller, _) = Promise<Int>.defer()
+        let (promise, fulfiller, _) = Promise<Int>.deferred()
         var timesCalled = [0, 0, 0]
         let desc = "when multiple `then` calls are made, spaced apart in time"
         let e1 = expectationWithDescription(desc)
@@ -137,7 +137,7 @@ class Test222: XCTestCase {
     }
 
     func test2224() {
-        let (promise, fulfiller, _) = Promise<Int>.defer()
+        let (promise, fulfiller, _) = Promise<Int>.deferred()
         var timesCalled = [0, 0]
         let e1 = expectationWithDescription("when `then` is interleaved with fulfillment")
 

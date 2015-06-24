@@ -118,7 +118,7 @@ public class Promise<T> {
      defer is convenient for wrapping delegates or larger asynchronous systems.
 
         class Foo: BarDelegate {
-            let (promise, fulfill, reject) = Promise<Int>.defer()
+            let (promise, fulfill, reject) = Promise<Int>.deferred()
     
             func barDidFinishWithResult(result: Int) {
                 fulfill(result)
@@ -136,7 +136,7 @@ public class Promise<T> {
       3) A function that rejects that promise
     */
 
-    public class func defer() -> (promise: Promise, fulfill: (T) -> Void, reject: (NSError) -> Void) {
+    public class func deferred() -> (promise: Promise, fulfill: (T) -> Void, reject: (NSError) -> Void) {
         var sealant: Sealant<T>!
         let promise = Promise { sealant = $0 }
         return (promise, sealant.resolve, sealant.resolve)

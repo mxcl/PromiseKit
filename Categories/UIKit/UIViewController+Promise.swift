@@ -92,7 +92,7 @@ private func promise<T>(vc: UIViewController) -> Promise<T> {
 
 // internal scope because used by ALAssetsLibrary extension
 @objc class UIImagePickerControllerProxy: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    let (promise, fulfill, reject) = Promise<[NSObject : AnyObject]>.defer()
+    let (promise, fulfill, reject) = Promise<[NSObject : AnyObject]>.deferred()
     var retainCycle: AnyObject?
 
     required override init() {

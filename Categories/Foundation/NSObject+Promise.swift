@@ -25,7 +25,7 @@ extension NSObject {
       @see Apple’s KVO documentation.
     */
     public func observe<T>(keyPath: String) -> Promise<T> {
-        let (promise, fulfill, reject) = Promise<T>.defer()
+        let (promise, fulfill, reject) = Promise<T>.deferred()
         KVOProxy(observee: self, keyPath: keyPath) { obj in
             if let obj = obj as? T {
                 fulfill(obj)

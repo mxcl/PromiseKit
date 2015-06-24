@@ -1,7 +1,7 @@
 import Foundation.NSProgress
 
 private func when<T>(promises: [Promise<T>]) -> Promise<Void> {
-    let (rootPromise, fulfill, reject) = Promise<Void>.defer()
+    let (rootPromise, fulfill, reject) = Promise<Void>.deferred()
 #if !PMKDisableProgress
     let progress = NSProgress(totalUnitCount: Int64(promises.count))
     progress.cancellable = false
