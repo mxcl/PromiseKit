@@ -10,7 +10,7 @@ when(fetchImage(), getLocation()).then { image, location in
     self.label.text = "Buy your cat a house in \(location)"
 }.finally {
     UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-}.catch { error in
+}.report { error in
     UIAlertView(…).show()
 }
 ```
