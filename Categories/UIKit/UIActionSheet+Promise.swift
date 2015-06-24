@@ -32,7 +32,7 @@ extension UIActionSheet {
 }
 
 private class PMKActionSheetDelegate: NSObject, UIActionSheetDelegate {
-    let (promise, fulfill, reject) = Promise<Int>.defer()
+    let (promise, fulfill, reject) = Promise<Int>.pendingPromise()
     var retainCycle: NSObject?
 
     @objc func actionSheet(actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {

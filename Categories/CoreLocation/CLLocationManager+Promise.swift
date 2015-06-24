@@ -71,7 +71,7 @@ extension CLLocationManager {
 
 
 private class LocationManager: CLLocationManager, CLLocationManagerDelegate {
-    let (promise, fulfill, reject) = Promise<[CLLocation]>.defer()
+    let (promise, fulfill, reject) = Promise<[CLLocation]>.pendingPromise()
 
 #if os(iOS)
     @objc func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
@@ -90,7 +90,7 @@ private class LocationManager: CLLocationManager, CLLocationManagerDelegate {
 
 #if os(iOS)
 private class AuthorizationCatcher: CLLocationManager, CLLocationManagerDelegate {
-    let (promise, fulfill, _) = Promise<CLAuthorizationStatus>.defer()
+    let (promise, fulfill, _) = Promise<CLAuthorizationStatus>.pendingPromise()
     var retainCycle: AnyObject?
 
     init(auther: (CLLocationManager)->()) {
