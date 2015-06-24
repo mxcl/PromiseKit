@@ -82,7 +82,7 @@ private func promise<T>(vc: UIViewController) -> Promise<T> {
         return Promise(error: "The provided UIViewController does not conform to the Promisable protocol.", code: PMKInvalidUsageError)
     } else if let promise = vc.valueForKeyPath("promise") as? Promise<T> {
         return promise
-    } else if let promise: AnyObject = vc.valueForKeyPath("promise") {
+    } else if let _: AnyObject = vc.valueForKeyPath("promise") {
         return Promise(error: "The provided UIViewController’s promise has unexpected type specialization.", code: PMKInvalidUsageError)
     } else {
         return Promise(error: "The provided UIViewController’s promise property returned nil", code: PMKInvalidUsageError)
