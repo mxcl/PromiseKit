@@ -3,7 +3,7 @@ import PromiseKit
 
 
 
-func stressDataRace<T: Equatable>(e1: XCTestExpectation, iterations: Int = 1000, stressFactor: Int = 10, # stressFunction: (Promise<T>) -> Void, fulfill f: () -> T) {
+func stressDataRace<T: Equatable>(e1: XCTestExpectation, iterations: Int = 1000, stressFactor: Int = 10, stressFunction: (Promise<T>) -> Void, fulfill f: () -> T) {
     let group = dispatch_group_create()
     let queue = dispatch_queue_create("the.domain.of.Zalgo", DISPATCH_QUEUE_CONCURRENT)
 

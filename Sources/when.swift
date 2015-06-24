@@ -50,11 +50,11 @@ public func when(promises: Promise<Void>...) -> Promise<Void> {
     return when(promises)
 }
 
-public func when<U, V>(pu: Promise<U>, pv: Promise<V>) -> Promise<(U, V)> {
+public func when<U, V>(pu: Promise<U>, _ pv: Promise<V>) -> Promise<(U, V)> {
     return when(pu.asVoid(), pv.asVoid()).then(on: zalgo) { (pu.value!, pv.value!) }
 }
 
-public func when<U, V, X>(pu: Promise<U>, pv: Promise<V>, px: Promise<X>) -> Promise<(U, V, X)> {
+public func when<U, V, X>(pu: Promise<U>, _ pv: Promise<V>, _ px: Promise<X>) -> Promise<(U, V, X)> {
     return when(pu.asVoid(), pv.asVoid(), px.asVoid()).then(on: zalgo) { (pu.value!, pv.value!, px.value!) }
 }
 
