@@ -61,9 +61,9 @@ public class Promise<T> {
      @see http://promisekit.org/sealing-your-own-promises/
      @see http://promisekit.org/wrapping-delegation/
     */
-    public convenience init(@noescape resolvers: (fulfill: (T) -> Void, reject: (NSError) -> Void) -> Void) {
+    public convenience init(@noescape resolvers: (fulfill: (T) -> Void, reject: (NSError) -> Void) throws -> Void) {
         self.init(sealant: { sealant in
-            resolvers(fulfill: sealant.resolve, reject: sealant.resolve)
+            try resolvers(fulfill: sealant.resolve, reject: sealant.resolve)
         })
     }
 
@@ -82,10 +82,14 @@ public class Promise<T> {
      @see Sealant
      @see init(resolvers:)
     */
-    public init(@noescape sealant: (Sealant<T>) -> Void) {
+    public init(@noescape sealant: (Sealant<T>) throws -> Void) {
         var resolve: ((Resolution) -> Void)!
         state = UnsealedState(resolver: &resolve)
-        sealant(Sealant(body: resolve))
+        do {
+            try sealant(Sealant(body: resolve))
+        } catch let error {
+            resolve(.Rejected(error as NSError))
+        }
     }
 
     /**
@@ -181,49 +185,61 @@ public class Promise<T> {
 
      @see thenInBackground
     */
-    public func then<U>(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: (T) -> U) -> Promise<U> {
+    public func then<U>(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: (T) throws -> U) -> Promise<U> {
         return Promise<U>(when: self) { resolution, resolve in
             switch resolution {
             case .Rejected:
                 resolve(resolution)
             case .Fulfilled(let value):
                 contain_zalgo(q) {
-                    resolve(.Fulfilled(body(value as! T)))
+                    do {
+                        resolve(.Fulfilled(try body(value as! T)))
+                    } catch {
+                        resolve(.Rejected(error as NSError))
+                    }
                 }
             }
         }
     }
 
-    public func then<U>(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: (T) -> Promise<U>) -> Promise<U> {
+    public func then<U>(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: (T) throws -> Promise<U>) -> Promise<U> {
         return Promise<U>(when: self) { resolution, resolve in
             switch resolution {
             case .Rejected:
                 resolve(resolution)
             case .Fulfilled(let value):
                 contain_zalgo(q) {
-                    body(value as! T).pipe(resolve)
+                    do {
+                        try body(value as! T).pipe(resolve)
+                    } catch {
+                        resolve(.Rejected(error as NSError))
+                    }
                 }
             }
         }
     }
 
-    public func then(on q: dispatch_queue_t = dispatch_get_main_queue(), body: (T) -> AnyPromise) -> Promise<AnyObject?> {
+    public func then(on q: dispatch_queue_t = dispatch_get_main_queue(), body: (T) throws -> AnyPromise) -> Promise<AnyObject?> {
         return Promise<AnyObject?>(when: self) { resolution, resolve in
             switch resolution {
             case .Rejected:
                 resolve(resolution)
             case .Fulfilled(let value):
                 contain_zalgo(q) {
-                    let anypromise = body(value as! T)
-                    anypromise.pipe { obj in
-                        if let error = obj as? NSError {
-                            resolve(.Rejected(error))
-                        } else {
-                            // possibly the value of this promise is a PMKManifold, if so
-                            // calling the objc `value` method will return the first item.
-                            let obj: AnyObject? = anypromise.valueForKey("value")
-                            resolve(.Fulfilled(obj))
+                    do {
+                        let anypromise = try body(value as! T)
+                        anypromise.pipe { obj in
+                            if let error = obj as? NSError {
+                                resolve(.Rejected(error))
+                            } else {
+                                // possibly the value of this promise is a PMKManifold, if so
+                                // calling the objc `value` method will return the first item.
+                                let obj: AnyObject? = anypromise.valueForKey("value")
+                                resolve(.Fulfilled(obj))
+                            }
                         }
+                    } catch {
+                        resolve(.Rejected(error as NSError))
                     }
                 }
             }
@@ -237,11 +253,11 @@ public class Promise<T> {
 
      @see then
     */
-    public func thenInBackground<U>(body: (T) -> U) -> Promise<U> {
+    public func thenInBackground<U>(body: (T) throws -> U) -> Promise<U> {
         return then(on: dispatch_get_global_queue(0, 0), body)
     }
 
-    public func thenInBackground<U>(body: (T) -> Promise<U>) -> Promise<U> {
+    public func thenInBackground<U>(body: (T) throws -> Promise<U>) -> Promise<U> {
         return then(on: dispatch_get_global_queue(0, 0), body)
     }
 
@@ -290,6 +306,24 @@ public class Promise<T> {
                 contain_zalgo(q) {
                     consume(error)
                     body(error).pipe(resolve)
+                }
+            case .Fulfilled:
+                resolve(resolution)
+            }
+        }
+    }
+
+    public func recover(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: (NSError) throws -> T) -> Promise<T> {
+        return Promise(when: self) { resolution, resolve in
+            switch resolution {
+            case .Rejected(let error):
+                contain_zalgo(q) {
+                    do {
+                        consume(error)
+                        resolve(.Fulfilled(try body(error)))
+                    } catch {
+                        resolve(.Rejected(error as NSError))
+                    }
                 }
             case .Fulfilled:
                 resolve(resolution)
@@ -463,8 +497,12 @@ extension Promise: CustomStringConvertible {
         NSURLConnection.GET(url3)
     }
 */
-public func firstly<T>(promise: () -> Promise<T>) -> Promise<T> {
-    return promise()
+public func firstly<T>(promise: () throws -> Promise<T>) -> Promise<T> {
+    do {
+        return try promise()
+    } catch {
+        return Promise(error as NSError)
+    }
 }
 
 

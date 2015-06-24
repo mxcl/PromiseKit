@@ -17,35 +17,31 @@ import PromiseKit
     import PromiseKit
 */
 extension NSFileManager {
-    func removeItemAtPath(path: String) -> Promise<String> {
+    func removeItem(path path: String) -> Promise<String> {
         return dispatch_promise() {
-            var error: NSError?
-            self.removeItemAtPath(path, error:&error)
-            return (path, error)
+            try self.removeItemAtPath(path)
+            return path
         }
     }
 
-    func copyItem(# from: String, to: String) -> Promise<String> {
+    func copyItem(from from: String, to: String) -> Promise<String> {
         return dispatch_promise() {
-            var error: NSError?
-            self.copyItemAtPath(from, toPath:to, error:&error)
-            return (to, error)
+            try self.copyItemAtPath(from, toPath:to)
+            return to
         }
     }
 
-    func moveItem(# from: String, to: String) -> Promise<String> {
+    func moveItem(from from: String, to: String) -> Promise<String> {
         return dispatch_promise() {
-            var error: NSError?
-            self.moveItemAtPath(from, toPath: to, error: &error)
-            return (to, error)
+            try self.moveItemAtPath(from, toPath: to)
+            return to
         }
     }
 
-    func createDirectoryAtPath(path: String, withIntermediateDirectories with: Bool = true, attributes: [NSObject : AnyObject]? = nil) -> Promise<String> {
+    func createDirectory(path path: String, withIntermediateDirectories with: Bool = true, attributes: [String : AnyObject]? = nil) -> Promise<String> {
         return dispatch_promise() {
-            var error: NSError?
-            self.createDirectoryAtPath(path, withIntermediateDirectories: with, attributes: attributes, error: &error)
-            return (path, error)
+            try self.createDirectoryAtPath(path, withIntermediateDirectories: with, attributes: attributes)
+            return path
         }
     }
 }
