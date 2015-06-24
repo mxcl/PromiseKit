@@ -9,7 +9,7 @@ class TestNSTask: XCTestCase {
         task.launchPath = "/usr/bin/basename"
         task.arguments = ["/foo/doe/bar"]
         task.promise().then { (stdout: String) -> Void in
-            XCTAssertEqual(stdout, "bar\n")
+            XCTAssert(stdout == "bar\n")
             ex.fulfill()
         }
         waitForExpectationsWithTimeout(10, handler: nil)
