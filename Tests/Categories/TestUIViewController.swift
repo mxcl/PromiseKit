@@ -20,7 +20,7 @@ class TestPromisableViewController: UIKitTestCase {
     func test1a() {
         let ex = expectationWithDescription("")
         let p: Promise<Int> = rootvc.promiseViewController(UIViewController(), animated: false)
-        p.catch { err in
+        p.snatch { err in
             XCTAssertEqual(err.domain, PMKErrorDomain)
             XCTAssertEqual(err.code, PMKInvalidUsageError)
             ex.fulfill()
@@ -32,7 +32,7 @@ class TestPromisableViewController: UIKitTestCase {
     func test1b() {
         let ex = expectationWithDescription("")
         let p: Promise<Int> = rootvc.promiseViewController(MyViewController(), animated: false)
-        p.catch { err in
+        p.snatch { err in
             XCTAssertEqual(err.domain, PMKErrorDomain)
             XCTAssertEqual(err.code, PMKInvalidUsageError)
             ex.fulfill()
@@ -46,7 +46,7 @@ class TestPromisableViewController: UIKitTestCase {
         let my = MyViewController()
         my.promise = Promise(true)
         let p: Promise<Int> = rootvc.promiseViewController(my, animated: false)
-        p.catch { err in
+        p.snatch { err in
             XCTAssertEqual(err.domain, PMKErrorDomain)
             XCTAssertEqual(err.code, PMKInvalidUsageError)
             ex.fulfill()

@@ -14,6 +14,7 @@ class TestNSObject: XCTestCase {
         foo.observe("bar").then { (newValue: String) -> Void in
             XCTAssertEqual(newValue, "moo")
             ex.fulfill()
+        }.snatch { err in
             XCTFail()
         }
         foo.bar = "moo"

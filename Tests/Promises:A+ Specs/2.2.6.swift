@@ -75,7 +75,7 @@ class Test226: XCTestCase {
 
             promise.then{ _ -> Promise<Int> in
                 return Promise(NSError(domain:PMKErrorDomain, code:sentinel2, userInfo:nil))
-            }.catch { err in
+            }.snatch { err in
                 XCTAssertEqual(err.code, sentinel2)
                 exes[1].fulfill()
             }
@@ -135,19 +135,19 @@ class Test226: XCTestCase {
 
         suiteRejected(4){ (promise, exes, sentinel) -> () in
             var x = 0
-            promise.catch{ _->() in
+            promise.snatch{ _->() in
                 XCTAssertEqual(++x, 1)
                 exes[0].fulfill()
             }
-            promise.catch{ _->() in
+            promise.snatch{ _->() in
                 XCTAssertEqual(++x, 2)
                 exes[1].fulfill()
             }
-            promise.catch{ _->() in
+            promise.snatch{ _->() in
                 XCTAssertEqual(++x, 3)
                 exes[2].fulfill()
             }
-            promise.catch{ (err:NSError)->() in
+            promise.snatch{ (err:NSError)->() in
                 XCTAssertEqual(err, sentinel)
                 XCTAssertEqual(x, 3)
                 exes[3].fulfill()
@@ -161,12 +161,12 @@ class Test226: XCTestCase {
         suiteRejected(1) { (promise, ee, sentinel) in
             let blah = NSError(domain:PMKErrorDomain, code:923764, userInfo:nil)
             var x = 0
-            promise.catch{ err->() in
+            promise.snatch{ err->() in
                 XCTAssertEqual(err, sentinel)
                 XCTAssertEqual(++x, 1)
                 return
             }
-            promise.catch{ err->() in
+            promise.snatch{ err->() in
                 XCTAssertEqual(err, sentinel)
                 XCTAssertEqual(++x, 2)
                 return
@@ -176,7 +176,7 @@ class Test226: XCTestCase {
                 XCTAssertEqual(++x, 3)
                 return Promise(blah)
             }
-            promise.catch{ err->() in
+            promise.snatch{ err->() in
                 XCTAssertEqual(err, sentinel)
                 XCTAssertEqual(x, 3)
                 ee[0].fulfill()
@@ -202,7 +202,7 @@ class Test226: XCTestCase {
 
             promise.recover{ _ -> Promise<Int> in
                 return Promise(NSError(domain: PMKErrorDomain, code: sentinel2, userInfo: nil))
-            }.catch { err in
+            }.snatch { err in
                 XCTAssertEqual(err.code, sentinel2)
                 exes[1].fulfill()
             }
@@ -222,15 +222,15 @@ class Test226: XCTestCase {
         suiteRejected(3) { (promise, exes, memo) in
             var x = 0
 
-            promise.catch{ _->() in
+            promise.snatch{ _->() in
                 XCTAssertEqual(x++, 0)
                 exes[0].fulfill()
             }
-            promise.catch{ _->() in
+            promise.snatch{ _->() in
                 XCTAssertEqual(x++, 1)
                 exes[1].fulfill()
             }
-            promise.catch{ _->() in
+            promise.snatch{ _->() in
                 XCTAssertEqual(x++, 2)
                 exes[2].fulfill()
             }
@@ -241,15 +241,15 @@ class Test226: XCTestCase {
         // even when one handler is added inside another handler
         suiteRejected(3) { (promise, exes, memo) in
             var x = 0
-            promise.catch{ _->() in
+            promise.snatch{ _->() in
                 XCTAssertEqual(x++, 0)
                 exes[0].fulfill()
-                promise.catch{ _->() in
+                promise.snatch{ _->() in
                     XCTAssertEqual(x++, 2)
                     exes[1].fulfill()
                 }
             }
-            promise.catch{ _->() in
+            promise.snatch{ _->() in
                 XCTAssertEqual(x++, 1)
                 exes[2].fulfill()
             }

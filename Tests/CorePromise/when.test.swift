@@ -60,7 +60,7 @@ class TestWhen: XCTestCase {
         let p2 = after(0.01).then{ return Promise<Bool>(error: "Fail") }
         let p3 = Promise(false)
             
-        when(p1, p2, p3).catch { _ in
+        when(p1, p2, p3).snatch { _ in
             e1.fulfill()
         }
         
@@ -116,7 +116,7 @@ class TestWhen: XCTestCase {
 
         progress.resignCurrent()
 
-        promise.catch { _ in
+        promise.snatch { _ in
             ex2.fulfill()
         }
 

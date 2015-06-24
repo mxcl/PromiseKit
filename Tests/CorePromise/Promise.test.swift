@@ -23,7 +23,7 @@ class TestPromise: XCTestCase {
         let ex = expectationWithDescription("")
         Promise(1).then { _ -> AnyPromise in
             return AnyPromise(bound: after(0).then{ Promise<Int>(error: "") })
-        }.catch { err -> Void in
+        }.snatch { err -> Void in
             ex.fulfill()
         }
         waitForExpectationsWithTimeout(1, handler: nil)
@@ -55,7 +55,7 @@ class TestPromise: XCTestCase {
             return Promise(NSError.cancelledError())
         }.then { _ -> Void in
             XCTFail()
-        }.catch { _ -> Void in
+        }.snatch { _ -> Void in
             XCTFail()
         }
 
@@ -79,7 +79,7 @@ class TestPromise: XCTestCase {
             return Promise(err)
         }.then { _ -> Void in
             XCTFail()
-        }.catch { _ -> Void in
+        }.snatch { _ -> Void in
             XCTFail()
         }
 
@@ -91,7 +91,7 @@ class TestPromise: XCTestCase {
 
         after(0).then { _ -> Promise<Int> in
             return Promise(NSError.cancelledError())
-        }.catch(policy: .AllErrors) { _ -> Void in
+        }.snatch(policy: CatchPolicy.AllErrors) { err -> Void in
             ex.fulfill()
         }
         

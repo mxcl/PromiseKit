@@ -35,7 +35,7 @@ class Test232: XCTestCase {
             promise.then { foo in
                 wasFulfilled = true
             }
-            promise.catch { foo in
+            promise.snatch { foo in
                 wasRejected = true
             }
             later(100){
@@ -90,7 +90,7 @@ class Test232: XCTestCase {
             return Promise(dammy)
         }, test: { promise in
             let ex = self.expectationWithDescription("")
-            promise.catch{ error->Void in
+            promise.snatch{ error->Void in
                 XCTAssertEqual(error, dammy)
                 ex.fulfill()
             }
@@ -105,7 +105,7 @@ class Test232: XCTestCase {
             return promise
         }, test: { promise in
             let ex = self.expectationWithDescription("")
-            promise.catch{ error->Void in
+            promise.snatch{ error->Void in
                 XCTAssertEqual(error, dammy)
                 ex.fulfill()
             }

@@ -12,7 +12,7 @@ class Test2131: XCTestCase {
                 onRejectedCalled = true
                 exes[0].fulfill()
             }
-            promise.catch { e->() in
+            promise.snatch { e->() in
                 XCTAssertFalse(onRejectedCalled)
             }
             later {
@@ -27,7 +27,7 @@ class Test2131: XCTestCase {
         promise.then{ a -> Void in
             XCTAssertFalse(onRejectedCalled)
         }
-        promise.catch{ e -> Void in
+        promise.snatch{ e -> Void in
             onRejectedCalled = true
         }
         fulfiller(dummy)
@@ -42,7 +42,7 @@ class Test2131: XCTestCase {
         promise.then{ a->() in
             XCTAssertFalse(onRejectedCalled)
         }
-        promise.catch{ e->() in
+        promise.snatch{ e->() in
             onRejectedCalled = true;
         }
 
@@ -60,7 +60,7 @@ class Test2131: XCTestCase {
         promise.then{ a in
             XCTAssertFalse(onRejectedCalled)
         }
-        promise.catch{ e->() in
+        promise.snatch{ e->() in
             onRejectedCalled = true
         }
 
