@@ -88,7 +88,7 @@ var sentinel = 456
 func later(block: ()->()) {
     later(50, block)
 }
-func later(timeout: Double, block: ()->()) {
+func later(timeout: Double, _ block: ()->()) {
     let ticks = Double(NSEC_PER_SEC) / (timeout * 1000.0)
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(ticks)), dispatch_get_main_queue(), block)
 }
