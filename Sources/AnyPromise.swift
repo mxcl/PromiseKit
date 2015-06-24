@@ -154,7 +154,7 @@ private func unbox(resolution: Resolution<AnyObject?>) -> AnyObject? {
     /**
      A promise starts pending and eventually resolves.
 
-     @return True if the promise has not yet resolved.
+     @return `true` if the promise has not yet resolved.
     */
     @objc public var pending: Bool {
         return state.get() == nil
@@ -163,7 +163,7 @@ private func unbox(resolution: Resolution<AnyObject?>) -> AnyObject? {
     /**
      A promise starts pending and eventually resolves.
 
-     @return True if the promise has resolved.
+     @return `true` if the promise has resolved.
     */
     @objc public var resolved: Bool {
         return !pending
@@ -174,7 +174,7 @@ private func unbox(resolution: Resolution<AnyObject?>) -> AnyObject? {
     
      A fulfilled promise is resolved and succeeded.
 
-     @return True if the promise was fulfilled.
+     @return `true` if the promise was fulfilled.
     */
     @objc public var fulfilled: Bool {
         switch state.get() {
@@ -190,7 +190,7 @@ private func unbox(resolution: Resolution<AnyObject?>) -> AnyObject? {
     
      A rejected promise is resolved and failed.
 
-     @return True if the promise was rejected.
+     @return `true` if the promise was rejected.
     */
     @objc public var rejected: Bool {
         switch state.get() {
