@@ -13,9 +13,9 @@ import Social
 */
 extension SLRequest {
     public func promise() -> Promise<NSData> {
-        return Promise { sealant in
+        return Promise { resolve in
             performRequestWithHandler { (data, rsp, err) in
-                sealant.resolve(data, err)
+                resolve(data, err)
             }
         }
     }

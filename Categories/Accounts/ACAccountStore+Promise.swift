@@ -13,7 +13,7 @@ import PromiseKit
 */
 extension ACAccountStore {
     public func renewCredentialsForAccount(account: ACAccount) -> Promise<ACAccountCredentialRenewResult> {
-        return Promise { renewCredentialsForAccount(account, completion: $0.resolve) }
+        return Promise { renewCredentialsForAccount(account, completion: $0) }
     }
 
     public func requestAccessToAccountsWithType(type: ACAccountType, options: [String: AnyObject]? = nil) -> Promise<Void> {
@@ -31,11 +31,11 @@ extension ACAccountStore {
     }
 
     public func saveAccount(account: ACAccount) -> Promise<Void> {
-        return Promise<Bool> { saveAccount(account, withCompletionHandler: $0.resolve) }.asVoid()
+        return Promise<Bool> { saveAccount(account, withCompletionHandler: $0) }.asVoid()
     }
 
     public func removeAccount(account: ACAccount) -> Promise<Void> {
-        return Promise<Bool> { removeAccount(account, withCompletionHandler: $0.resolve) }.asVoid()
+        return Promise<Bool> { removeAccount(account, withCompletionHandler: $0) }.asVoid()
     }
 
     public enum Error: ErrorType {

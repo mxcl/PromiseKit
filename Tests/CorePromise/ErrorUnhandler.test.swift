@@ -17,8 +17,8 @@ class TestErrorUnhandler: XCTestCase {
 
         autoreleasepool {
             let ex = expectationWithDescription("Unsealed")
-            let p = Promise { sealant in
-                sealant.resolve(1)
+            let p = Promise { fulfill, _ in
+                fulfill(1)
             }.then { _ -> Promise<Int> in
                 Promise(NSError(domain: "a", code: 1, userInfo: nil))
             }
