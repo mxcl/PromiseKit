@@ -52,23 +52,7 @@ extension CLLocationManager {
         }
         return manager.promise
     }
-
-  #if os(iOS)
-    /**
-      Cannot error, despite the fact this might be more useful in some
-      circumstances, we stick with our decision that errors are errors
-      and errors only. Thus your catch handler is always catching failures
-      and not being abused for logic.
-     */
-    public class func requestAuthorization(type: RequestAuthorizationType = .Automatic) -> Promise<CLAuthorizationStatus> {
-        return AuthorizationCatcher(auther: auther(type)).promise
-    }
-  #endif
 }
-
-
-//TODO authorizations other than .Authorized should probably error
-
 
 private class LocationManager: CLLocationManager, CLLocationManagerDelegate {
     let (promise, fulfill, reject) = Promise<[CLLocation]>.pendingPromise()
@@ -88,7 +72,23 @@ private class LocationManager: CLLocationManager, CLLocationManagerDelegate {
     }
 }
 
+
 #if os(iOS)
+
+extension CLLocationManager {
+    /**
+     Cannot error, despite the fact this might be more useful in some
+     circumstances, we stick with our decision that errors are errors
+     and errors only. Thus your catch handler is always catching failures
+     and not being abused for logic.
+    */
+    @available(iOS 8, *)
+    public class func requestAuthorization(type: RequestAuthorizationType = .Automatic) -> Promise<CLAuthorizationStatus> {
+        return AuthorizationCatcher(auther: auther(type)).promise
+    }
+}
+
+@available(iOS 8, *)
 private class AuthorizationCatcher: CLLocationManager, CLLocationManagerDelegate {
     let (promise, fulfill, _) = Promise<CLAuthorizationStatus>.pendingPromise()
     var retainCycle: AnyObject?
@@ -112,11 +112,9 @@ private class AuthorizationCatcher: CLLocationManager, CLLocationManagerDelegate
         }
     }
 }
-#endif
 
 private func auther(requestAuthorizationType: CLLocationManager.RequestAuthorizationType)(manager: CLLocationManager) {
-  #if os(iOS)
-    if !manager.respondsToSelector("requestWhenInUseAuthorization") { return }
+    guard #available(iOS 8, *) else { return }
 
     func hasInfoPListKey(key: String) -> Bool {
         let value = NSBundle.mainBundle().objectForInfoDictionaryKey(key) as? String ?? ""
@@ -130,7 +128,7 @@ private func auther(requestAuthorizationType: CLLocationManager.RequestAuthoriza
         if always {
             manager.requestAlwaysAuthorization()
         } else {
-            if !whenInUse { NSLog("You didn’t set your NSLocationWhenInUseUsageDescription Info.plist key") }
+            if !whenInUse { NSLog("PromiseKit: Warning: `NSLocationWhenInUseUsageDescription` key not set") }
             manager.requestWhenInUseAuthorization()
         }
     case .WhenInUse:
@@ -141,6 +139,9 @@ private func auther(requestAuthorizationType: CLLocationManager.RequestAuthoriza
         break
 
     }
-  #endif
 }
 
+#else
+    private func auther(requestAuthorizationType: CLLocationManager.RequestAuthorizationType)(manager: CLLocationManager)
+    {}
+#endif

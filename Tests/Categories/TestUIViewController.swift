@@ -20,7 +20,8 @@ class TestPromisableViewController: UIKitTestCase {
     func test1a() {
         let ex = expectationWithDescription("")
         let p: Promise<Int> = rootvc.promiseViewController(UIViewController(), animated: false)
-        p.report { err in
+        p.report { error in
+            let err = error as NSError
             XCTAssertEqual(err.domain, PMKErrorDomain)
             XCTAssertEqual(err.code, PMKInvalidUsageError)
             ex.fulfill()
@@ -33,8 +34,9 @@ class TestPromisableViewController: UIKitTestCase {
         let ex = expectationWithDescription("")
         let p: Promise<Int> = rootvc.promiseViewController(MyViewController(), animated: false)
         p.report { err in
-            XCTAssertEqual(err.domain, PMKErrorDomain)
-            XCTAssertEqual(err.code, PMKInvalidUsageError)
+            let error = err as NSError
+            XCTAssertEqual(error.domain, PMKErrorDomain)
+            XCTAssertEqual(error.code, PMKInvalidUsageError)
             ex.fulfill()
         }
         waitForExpectationsWithTimeout(1, handler: nil)
@@ -47,8 +49,9 @@ class TestPromisableViewController: UIKitTestCase {
         my.promise = Promise(true)
         let p: Promise<Int> = rootvc.promiseViewController(my, animated: false)
         p.report { err in
-            XCTAssertEqual(err.domain, PMKErrorDomain)
-            XCTAssertEqual(err.code, PMKInvalidUsageError)
+            let error = err as NSError
+            XCTAssertEqual(error.domain, PMKErrorDomain)
+            XCTAssertEqual(error.code, PMKInvalidUsageError)
             ex.fulfill()
         }
         waitForExpectationsWithTimeout(1, handler: nil)

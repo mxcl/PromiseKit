@@ -1,5 +1,3 @@
-import Foundation.NSError
-
 extension Promise {
     /**
      - Returns: The error with which this promise was rejected; `nil` if this promise is not rejected.

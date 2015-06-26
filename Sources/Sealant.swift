@@ -1,5 +1,15 @@
 import Foundation.NSError
 
+
+public enum SealantError: ErrorType {
+    /**
+      The closure with form (T?, ErrorType?) was called with (nil, nil)
+      This is an invalid calling convention.
+    */
+    case DoubleOhSux0r
+}
+
+
 public class Sealant<T> {
     private let handler: (Resolution<T>) -> ()
 
@@ -36,9 +46,7 @@ public class Sealant<T> {
         } else if let error = error {
             resolve(error)
         } else {
-            //FIXME couldn't get the constants from the umbrella header :(
-            let error = NSError(domain: PMKErrorDomain, code: PMKUnexpectedError, userInfo: nil)
-            resolve(error)
+            resolve(SealantError.DoubleOhSux0r)
         }
     }
 

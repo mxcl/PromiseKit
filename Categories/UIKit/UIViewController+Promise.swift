@@ -18,6 +18,15 @@ import UIKit
     import PromiseKit
 */
 extension UIViewController {
+
+    public enum Error: ErrorType {
+        case NavigationControllerEmpty
+        case NoImageFound
+        case NotPromisable
+        case NotGenericallyPromisable
+        case NilPromisable
+    }
+
     public func promiseViewController<T>(vc: UIViewController, animated: Bool = true, completion: (() -> Void)? = nil) -> Promise<T> {
 
         let p: Promise<T> = promise(vc)
@@ -42,7 +51,7 @@ extension UIViewController {
             }
             return p
         } else {
-            return Promise(error: "Cannot promise an empty UINavigationController")
+            return Promise(Error.NavigationControllerEmpty)
         }
     }
 
@@ -58,8 +67,8 @@ extension UIViewController {
             if let img = info[UIImagePickerControllerOriginalImage] as? UIImage {
                 return Promise(img)
             }
-            return Promise(error: "No image was found", code: PMKUnexpectedError)
-        }.finally(on: zalgo) {
+            return Promise(Error.NoImageFound)
+        }.finally {
             self.dismissViewControllerAnimated(animated, completion: nil)
         }
     }
@@ -71,7 +80,7 @@ extension UIViewController {
 
     The resulting property must be annotated with @objc.
 
-    Obviously return a Promise. There is an issue with generics and Swift and
+    Obviously return a Promise<T>. There is an issue with generics and Swift and
     protocols currently so we couldn't specify that.
     */
     var promise: AnyObject! { get }
@@ -79,13 +88,13 @@ extension UIViewController {
 
 private func promise<T>(vc: UIViewController) -> Promise<T> {
     if !vc.conformsToProtocol(Promisable) {
-        return Promise(error: "The provided UIViewController does not conform to the Promisable protocol.", code: PMKInvalidUsageError)
+        return Promise(UIViewController.Error.NotPromisable)
     } else if let promise = vc.valueForKeyPath("promise") as? Promise<T> {
         return promise
     } else if let _: AnyObject = vc.valueForKeyPath("promise") {
-        return Promise(error: "The provided UIViewController’s promise has unexpected type specialization.", code: PMKInvalidUsageError)
+        return Promise(UIViewController.Error.NotGenericallyPromisable)
     } else {
-        return Promise(error: "The provided UIViewController’s promise property returned nil", code: PMKInvalidUsageError)
+        return Promise(UIViewController.Error.NilPromisable)
     }
 }
 

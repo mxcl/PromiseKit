@@ -22,7 +22,7 @@ class TestPromise: XCTestCase {
     func test2() {
         let ex = expectationWithDescription("")
         Promise(1).then { _ -> AnyPromise in
-            return AnyPromise(bound: after(0).then{ Promise<Int>(error: "") })
+            return AnyPromise(bound: after(0).then{ Promise<Int>(NSError(domain: "a", code: 1, userInfo: nil)) })
         }.report { err -> Void in
             ex.fulfill()
         }

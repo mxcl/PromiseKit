@@ -1,4 +1,4 @@
-import Foundation.NSError
+import Dispatch
 
 enum Seal<T> {
     case Pending(Handlers<T>)

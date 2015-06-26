@@ -114,7 +114,7 @@
                     }
                     long long length = [rsp expectedContentLength];
                     id bytes = length <= 0 ? @"" : [NSString stringWithFormat:@"%lld bytes", length];
-                    id fmt = @"The server claimed a%@ JSON response, but decoding failed with: %@";
+                    id fmt = @"The server claimed a %@ JSON response, but decoding failed with: %@";
                     userInfo[NSLocalizedDescriptionKey] = [NSString stringWithFormat:fmt, bytes, userInfo[NSLocalizedDescriptionKey]];
                     err = [NSError errorWithDomain:err.domain code:err.code userInfo:userInfo];
                     rejecter(err);

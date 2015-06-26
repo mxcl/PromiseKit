@@ -49,3 +49,7 @@ private class PMKMessageComposeViewControllerDelegate: NSObject, MFMessageCompos
         }
     }
 }
+
+public enum MessageUIError: ErrorType {
+    case Failed
+}

@@ -3,6 +3,23 @@ import CoreFoundation
 import Foundation.NSError
 import PromiseKit
 
+public enum AddressBookError: ErrorType {
+    case NotDetermined
+    case Restricted
+    case Denied
+
+    public var localizedDescription: String {
+        switch self {
+        case .NotDetermined:
+            return "Access to the address book could not be determined."
+        case .Restricted:
+            return "A head of family must grant address book access."
+        case .Denied:
+            return "Address book access has been denied."
+        }
+    }
+}
+
 /**
  Requests access to the address book.
 
@@ -38,20 +55,20 @@ public func ABAddressBookRequestAccess() -> Promise<ABAuthorizationStatus> {
 */
 public func ABAddressBookRequestAccess() -> Promise<ABAddressBook> {
     return ABAddressBookRequestAccess().then(on: zalgo) { (granted, book) -> Promise<ABAddressBook> in
-        if granted {
-            return Promise(book)
-        } else {
+        guard granted else {
             switch ABAddressBookGetAuthorizationStatus() {
             case .NotDetermined:
-                return Promise(error: "Access to the address book could not be determined.")
+                throw AddressBookError.NotDetermined
             case .Restricted:
-                return Promise(error: "A head of family must grant address book access.")
+                throw AddressBookError.Restricted
             case .Denied:
-                return Promise(error: "Address book access has been denied.")
+                throw AddressBookError.Denied
             case .Authorized:
-                return Promise(book)  // shouldn’t be possible
+                fatalError("This should not happen")
             }
         }
+
+        return Promise(book)
     }
 }
 

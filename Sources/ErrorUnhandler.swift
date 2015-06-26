@@ -1,6 +1,16 @@
 import Dispatch
 import Foundation.NSError
 
+public enum Error: ErrorType {
+    /**
+     The ErrorType for a rejected `when`.
+     - Parameter 0: The index of the promise that was rejected.
+     - Parameter 1: The error from the promise that rejected this `when`.
+    */
+    case When(Int, ErrorType)
+}
+
+
 /**
  The unhandled error handler.
 

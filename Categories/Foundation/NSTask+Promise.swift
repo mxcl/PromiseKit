@@ -17,6 +17,21 @@ import PromiseKit
     import PromiseKit
 */
 extension NSTask {
+    public enum Error: ErrorType {
+        case Encoding(stdout: NSData, stderr: NSData)
+        case Execution(task: NSTask, stdout: NSData, stderr: NSData)
+
+        public var localizedDescription: String {
+            switch self {
+            case .Encoding:
+                return "Could not decode command output into string."
+            case .Execution(let task, _, _):
+                let cmd = " ".join([task.launchPath!] + (task.arguments ?? []))
+                return "Failed executing: `\(cmd)`."
+            }
+        }
+    }
+
     /**
      Launches the receiver and resolves when it exits.
 
@@ -30,13 +45,12 @@ extension NSTask {
        3) The exit code.
     */
     public func promise(encoding: NSStringEncoding = NSUTF8StringEncoding) -> Promise<(String, String, Int)> {
-        return promise().then(on: waldo) { (stdout: NSData, stderr: NSData, terminationStatus: Int) -> Promise<(String, String, Int)> in
-            if let out = NSString(data: stdout, encoding: encoding), err = NSString(data: stderr, encoding: encoding) {
-                return Promise(out as String, err as String, terminationStatus)
-            } else {
-                return Promise(generateError("Could not decode command output into string.", stdout, stderr,
-                    self))
+        return promise().then(on: waldo) { (stdout: NSData, stderr: NSData, terminationStatus: Int) -> (String, String, Int) in
+            guard let out = NSString(data: stdout, encoding: encoding), err = NSString(data: stderr, encoding: encoding) else {
+                throw Error.Encoding(stdout: stdout, stderr: stderr)
             }
+
+            return (out as String, err as String, terminationStatus)
         }
     }
 
@@ -56,22 +70,19 @@ extension NSTask {
         standardOutput = NSPipe()
         standardError = NSPipe()
 
-        return Promise { fulfill, reject in
-            launch()
+        launch()
 
-            dispatch_async(dispatch_get_global_queue(0, 0)) {
-                self.waitUntilExit()
+        return dispatch_promise {
+            self.waitUntilExit()
 
-                let stdout = self.standardOutput!.fileHandleForReading.readDataToEndOfFile()
-                let stderr = self.standardError!.fileHandleForReading.readDataToEndOfFile()
+            let stdout = self.standardOutput!.fileHandleForReading.readDataToEndOfFile()
+            let stderr = self.standardError!.fileHandleForReading.readDataToEndOfFile()
 
-                if self.terminationReason == .Exit && self.terminationStatus == 0 {
-                    fulfill(stdout, stderr, Int(self.terminationStatus))
-                } else {
-                    let cmd = " ".join([self.launchPath!] + (self.arguments! as [String]))
-                    reject(generateError("Failed executing: `\(cmd)`.", stdout, stderr, self))
-                }
+            guard self.terminationReason == .Exit && self.terminationStatus == 0 else {
+                throw Error.Execution(task: self, stdout: stdout, stderr: stderr)
             }
+
+            return (stdout, stderr, Int(self.terminationStatus))
         }
     }
 
@@ -89,19 +100,4 @@ extension NSTask {
             return stdout
         }
     }
-}
-
-
-//TODO get file system encoding from LANG as it may not be UTF8
-
-private func generateError(description: String, _ stdout: NSData, _ stderr: NSData, _ task: NSTask) -> NSError {
-    var info: [NSObject: AnyObject] = [:]
-    info[NSLocalizedDescriptionKey] = description
-    info[PMKTaskErrorLaunchPathKey] = task.launchPath
-    info[PMKTaskErrorArgumentsKey] = task.arguments
-    info[PMKTaskErrorStandardOutputKey] = stdout
-    info[PMKTaskErrorStandardErrorKey] = stderr
-    info[PMKTaskErrorExitStatusKey] = Int(task.terminationStatus)
-
-    return NSError(domain: PMKErrorDomain, code: PMKTaskError, userInfo: info)
 }
