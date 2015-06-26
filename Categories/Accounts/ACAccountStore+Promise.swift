@@ -24,8 +24,7 @@ extension ACAccountStore {
                 } else if error != nil {
                     reject(error)
                 } else {
-                    let error = NSError(domain: PMKErrorDomain, code: PMKAccessDeniedError, userInfo:[NSLocalizedDescriptionKey: "Access to the requested social service has been denied. Please enable access in your device settings."])
-                    reject(error)
+                    reject(Error.AccessDenied)
                 }
             })
         }
@@ -37,5 +36,16 @@ extension ACAccountStore {
 
     public func removeAccount(account: ACAccount) -> Promise<Void> {
         return Promise<Bool> { removeAccount(account, withCompletionHandler: $0.resolve) }.asVoid()
+    }
+
+    public enum Error: ErrorType {
+        case AccessDenied
+
+        public var localizedDescription: String {
+            switch self {
+            case .AccessDenied:
+                return "Access to the requested social service has been denied. Please enable access in your device settings."
+            }
+        }
     }
 }

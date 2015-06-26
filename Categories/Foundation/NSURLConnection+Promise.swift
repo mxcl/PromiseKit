@@ -89,12 +89,10 @@ extension NSURLConnection {
 
     public class func promise(rq: NSURLRequest) -> Promise<String> {
         return fetch(rq).then(on: zalgo) { data, rsp -> String in
-            if let str = NSString(data: data, encoding: rsp.stringEncoding ?? NSUTF8StringEncoding) {
-                return str as String
-            } else {
-                let info = [NSLocalizedDescriptionKey: "The server response was not textual"]
-                throw NSError(domain: NSURLErrorDomain, code: NSURLErrorBadServerResponse, userInfo: info)
+            guard let str = NSString(data: data, encoding: rsp.stringEncoding ?? NSUTF8StringEncoding) else {
+                throw Error.StringEncoding(rq, data, rsp)
             }
+            return str as String
         }
     }
 
@@ -143,12 +141,11 @@ extension NSURLConnection {
 
     public class func promise(rq: NSURLRequest) -> Promise<UIImage> {
         return fetch(rq).then(on: waldo) { data, _ -> UIImage in
-            if let img = UIImage(data: data), cgimg = img.CGImage {
-                return UIImage(CGImage: cgimg, scale: img.scale, orientation: img.imageOrientation)
-            } else {
-                let info = [NSLocalizedDescriptionKey: "The server returned invalid image data"]
-                throw NSError(domain: NSURLErrorDomain, code: NSURLErrorBadServerResponse, userInfo: info)
+            guard let img = UIImage(data: data), cgimg = img.CGImage else {
+                throw Error.InvalidImageData(rq, data)
             }
+
+            return UIImage(CGImage: cgimg, scale: img.scale, orientation: img.imageOrientation)
         }
     }
 }
@@ -169,39 +166,56 @@ extension NSURLResponse {
 
 private let Q = NSOperationQueue()
 
-private func fetch(var request: NSURLRequest) -> Promise<(NSData, NSURLResponse)> {
+private func fetch(var request: NSURLRequest) -> Promise<(NSData, NSHTTPURLResponse)> {
     if request.valueForHTTPHeaderField("User-Agent") == nil {
         let rq = request.mutableCopy() as! NSMutableURLRequest
         rq.setValue(OMGUserAgent(), forHTTPHeaderField:"User-Agent")
         request = rq
     }
 
-    return Promise { fulfill, prereject in
-        NSURLConnection.sendAsynchronousRequest(request, queue: Q) { rsp, data, err in
-
-            assert(!NSThread.isMainThread())
-
-            func reject(error: NSError) {
-                var info = error.userInfo ?? [:]
-                info[NSURLErrorFailingURLErrorKey] = request.URL
-                info[NSURLErrorFailingURLStringErrorKey] = request.URL?.absoluteString
-                info[PMKURLErrorFailingDataKey] = data
-                if let data = data {
-                    info[PMKURLErrorFailingStringKey] = NSString(data: data, encoding: rsp?.stringEncoding ?? NSUTF8StringEncoding)
-                }
-                info[PMKURLErrorFailingURLResponseKey] = rsp
-                prereject(NSError(domain: error.domain, code: error.code, userInfo: info))
-            }
-
-            if let err = err {
-                reject(err)
+    return Promise { fulfill, reject in
+        NSURLConnection.sendAsynchronousRequest(request, queue: Q) { rsp, data, error in
+            if let error = error {
+                reject(NSURLConnection.Error.UnderlyingCocoaError(request, data, rsp, error))
             } else if let data = data, rsp = rsp as? NSHTTPURLResponse where rsp.statusCode >= 200 && rsp.statusCode < 300 {
                 fulfill(data, rsp)
             } else {
-                reject(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadServerResponse, userInfo: [
-                    NSLocalizedDescriptionKey: "The server returned a bad HTTP response code"
-                ]))
+                reject(NSURLConnection.Error.BadResponse(request, data, rsp))
             }
         }
+    }
+}
+
+
+extension NSURLConnection {
+    public enum Error: ErrorType {
+        case InvalidImageData(NSURLRequest, NSData)
+        case UnderlyingCocoaError(NSURLRequest, NSData?, NSURLResponse?, NSError)
+        case BadResponse(NSURLRequest, NSData?, NSURLResponse?)
+        case StringEncoding(NSURLRequest, NSData, Foundation.NSHTTPURLResponse)
+
+        public var NSHTTPURLResponse: Foundation.NSHTTPURLResponse! {
+            switch self {
+            case .InvalidImageData:
+                return nil
+            case .UnderlyingCocoaError(_, _, let rsp, _):
+                return rsp as! Foundation.NSHTTPURLResponse
+            case .BadResponse(_, _, let rsp):
+                return rsp as! Foundation.NSHTTPURLResponse
+            case .StringEncoding(_, _, let rsp):
+                return rsp
+            }
+        }
+
+        //        public var stringValue: String {
+        //            let (data: NSData, rsp: NSURLResponse) = { () -> (NSData, NSURLResponse?) in
+        //                switch self {
+        //                    case .InvalidImageData(_, let data): return (data, nil)
+        //                    case .UnderlyingCocoaError(_, _, let data, let rsp): return (data, rsp)
+        //                    case .BadResponse(_, let data, let rsp): return (data, rsp)
+        //                }
+        //            }()
+        //            return NSString(data: data, encoding: rsp?.stringEncoding ?? NSUTF8StringEncoding)
+        //        }
     }
 }

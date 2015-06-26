@@ -21,6 +21,13 @@ firstly {
     return 2
 }.then {
     return Promise(3)
+}.report { error in
+    switch error {
+    case Error.When(let index, NSURLError.Cancelled):
+        break
+    default:
+        break
+    }
 }
 
 Promise<Int>(Error.When(1, NSURLError.CannotFindHost)).rescue { error in

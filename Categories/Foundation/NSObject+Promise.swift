@@ -26,7 +26,7 @@ extension NSObject {
     */
     public func observe<T>(keyPath: String) -> Promise<T> {
         let (promise, fulfill, reject) = Promise<T>.pendingPromise()
-        KVOProxy(observee: self, keyPath: keyPath) { obj in
+        let proxy = KVOProxy(observee: self, keyPath: keyPath) { obj in
             if let obj = obj as? T {
                 fulfill(obj)
             } else {
@@ -34,6 +34,7 @@ extension NSObject {
                 reject(NSError(domain: PMKErrorDomain, code: PMKInvalidUsageError, userInfo: info))
             }
         }
+        proxy.retainCycle = proxy
         return promise
     }
 }
@@ -45,7 +46,6 @@ private class KVOProxy: NSObject {
     init(observee: NSObject, keyPath: String, resolve: (AnyObject?) -> Void) {
         fulfill = resolve
         super.init()
-        retainCycle = self
         observee.addObserver(self, forKeyPath: keyPath, options: NSKeyValueObservingOptions.New, context: pointer)
     }
 

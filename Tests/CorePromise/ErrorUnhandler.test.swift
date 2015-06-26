@@ -11,7 +11,7 @@ class TestErrorUnhandler: XCTestCase {
     private func twice(@noescape body: (Promise<Int>, XCTestExpectation) -> Void) {
         autoreleasepool {
             let ex = expectationWithDescription("Sealed")
-            body(Promise<Int>(error: "HI", code: 1), ex)
+            body(Promise<Int>(NSError(domain: "a", code: 1, userInfo: nil)), ex)
         }
         waitForExpectationsWithTimeout(1, handler: nil)
 
@@ -20,7 +20,7 @@ class TestErrorUnhandler: XCTestCase {
             let p = Promise { sealant in
                 sealant.resolve(1)
             }.then { _ -> Promise<Int> in
-                Promise(error: "a", code: 1)
+                Promise(NSError(domain: "a", code: 1, userInfo: nil))
             }
             body(p, ex)
         }
@@ -81,7 +81,7 @@ class TestErrorUnhandler: XCTestCase {
                 ex.fulfill()
             }
             promise.recover { error -> Promise<Int> in
-                return Promise(error: "a", code: 123)
+                return Promise(NSError(domain: "a", code: 1, userInfo: nil))
             }
         }
     }
