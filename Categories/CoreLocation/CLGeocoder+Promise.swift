@@ -13,33 +13,33 @@ import PromiseKit
 */
 extension CLGeocoder {
     public func reverseGeocodeLocation(location: CLLocation) -> Promise<CLPlacemark> {
-        return CLPromise { sealant in
+        return CLPromise { resolve in
             reverseGeocodeLocation(location) { placemarks, error in
-                sealant.resolve(placemarks?.first, error)
+                resolve(placemarks?.first, error)
             }
         }
     }
     
     public func geocode(addressDictionary: [String: String]) -> Promise<CLPlacemark> {
-        return CLPromise { sealant in
+        return CLPromise { resolve in
             geocodeAddressDictionary(addressDictionary) { placemarks, error in
-                sealant.resolve(placemarks?.first, error)
+                resolve(placemarks?.first, error)
             }
         }
     }
     
     public func geocode(addressString: String) -> Promise<CLPlacemark> {
-        return CLPromise { sealant in
+        return CLPromise { resolve in
             geocodeAddressString(addressString) { placemarks, error in
-                sealant.resolve(placemarks?.first, error)
+                resolve(placemarks?.first, error)
             }
         }
     }
     
     public func geocode(addressString: String, region: CLRegion?) -> Promise<[CLPlacemark]> {
-        return CLPromise { sealant in
+        return CLPromise { resolve in
             geocodeAddressString(addressString, inRegion: region) { placemarks, error in
-                sealant.resolve((placemarks as? [CLPlacemark]), error)
+                resolve(placemarks, error)
             }
         }
     }
@@ -47,11 +47,11 @@ extension CLGeocoder {
 
 private var onceToken: dispatch_once_t = 0
 
-private class CLPromise: Promise<CLPlacemark> {
-    override init(@noescape sealant: (Sealant<CLPlacemark>) throws -> Void) {
+private class CLPromise<T>: Promise<T> {
+    override init(@noescape resolver: ((T?, NSError?) -> Void) throws -> Void) {
         dispatch_once(&onceToken) {
             NSError.registerCancelledErrorDomain(kCLErrorDomain, code: CLError.GeocodeCanceled.rawValue)
         }
-        super.init(sealant: sealant)
+        super.init(resolver: resolver)
     }
 }

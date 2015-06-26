@@ -56,11 +56,16 @@ public class Promise<T> {
 
      - SeeAlso: http://promisekit.org/sealing-your-own-promises/
      - SeeAlso: http://promisekit.org/wrapping-delegation/
+     - SeeAlso: init(resolver:)
     */
-    public convenience init(@noescape resolvers: (fulfill: (T) -> Void, reject: (ErrorType) -> Void) throws -> Void) {
-        self.init(sealant: { sealant in
-            try resolvers(fulfill: sealant.resolve, reject: sealant.resolve)
-        })
+    public init(@noescape resolvers: (fulfill: (T) -> Void, reject: (ErrorType) -> Void) throws -> Void) {
+        var resolve: ((Resolution<T>) -> Void)!
+        state = UnsealedState(resolver: &resolve)
+        do {
+            try resolvers(fulfill: { resolve(.Fulfilled($0)) }, reject: { resolve(.Rejected($0)) })
+        } catch {
+            resolve(.Rejected(error))
+        }
     }
 
     /**
@@ -70,20 +75,57 @@ public class Promise<T> {
      use common patterns. For example:
 
          func fetchKitten() -> Promise<UIImage> {
-             return Promise { sealant in
-                 KittenFetcher.fetchWithCompletionBlock(sealant.resolve)
+             return Promise { resolve in
+                 KittenFetcher.fetchWithCompletionBlock(resolve)
              }
          }
 
-     - SeeAlso: Sealant
      - SeeAlso: init(resolvers:)
     */
-    public init(@noescape sealant: (Sealant<T>) throws -> Void) {
+    public init(@noescape resolver: ((T?, NSError?) -> Void) throws -> Void) {
         var resolve: ((Resolution<T>) -> Void)!
         state = UnsealedState(resolver: &resolve)
         do {
-            try sealant(Sealant(body: resolve))
-        } catch let error {
+            try resolver { obj, err in
+                if let obj = obj {
+                    resolve(.Fulfilled(obj))
+                } else if let err = err {
+                    resolve(.Rejected(err))
+                } else {
+                    resolve(.Rejected(Error.DoubleOhSux0r))
+                }
+            }
+        } catch {
+            resolve(.Rejected(error))
+        }
+    }
+
+    /**
+     Create a new pending promise.
+
+     This initializer is convenient when wrapping asynchronous systems that
+     use common patterns. For example:
+
+         func fetchKitten() -> Promise<UIImage> {
+             return Promise { resolve in
+                 KittenFetcher.fetchWithCompletionBlock(resolve)
+             }
+         }
+
+     - SeeAlso: init(resolvers:)
+    */
+    public init(@noescape resolver: ((T, NSError?) -> Void) throws -> Void) {
+        var resolve: ((Resolution<T>) -> Void)!
+        state = UnsealedState(resolver: &resolve)
+        do {
+            try resolver { obj, err in
+                if let err = err {
+                    resolve(.Rejected(err))
+                } else {
+                    resolve(.Fulfilled(obj))
+                }
+            }
+        } catch {
             resolve(.Rejected(error))
         }
     }
@@ -140,9 +182,10 @@ public class Promise<T> {
        3) A function that rejects that promise
     */
     public class func pendingPromise() -> (promise: Promise, fulfill: (T) -> Void, reject: (ErrorType) -> Void) {
-        var sealant: Sealant<T>!
-        let promise = Promise { sealant = $0 }
-        return (promise, sealant.resolve, sealant.resolve)
+        var fulfill: ((T) -> Void)!
+        var reject: ((ErrorType) -> Void)!
+        let promise = Promise { fulfill = $0; reject = $1 }
+        return (promise, fulfill, reject)
     }
 
     func pipe(body: (Resolution<T>) -> Void) {
@@ -442,32 +485,6 @@ func contain_zalgo(q: dispatch_queue_t, block: () -> Void) {
 
 
 extension Promise {
-    /**
-     Creates a rejected Promise with `PMKErrorDomain` and a specified `localizedDescription` and error code.
-    */
-    public convenience init(error: String, code: Int = PMKUnexpectedError) {
-        let error = NSError(domain: "PMKErrorDomain", code: code, userInfo: [NSLocalizedDescriptionKey: error])
-        self.init(error)
-    }
-    
-    /**
-     Promise<Any> is more flexible, and often needed. However Swift won't cast
-     <T> to <Any> directly. Once that is possible we will deprecate this
-     function.
-    */
-    public func asAny() -> Promise<Any> {
-        return then(on: zalgo) { $0 }
-    }
-
-    /**
-     Promise<AnyObject> is more flexible, and often needed. However Swift won't
-     cast <T> to <AnyObject> directly. Once that is possible we will deprecate
-     this function.
-    */
-    public func asAnyObject() -> Promise<AnyObject> {
-        return then(on: zalgo) { $0 as! AnyObject }
-    }
-
     /**
      Void promises are less prone to generics-of-doom scenarios.
      - SeeAlso: when.swift contains enlightening examples of using `Promise<Void>` to simplify your code.

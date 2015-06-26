@@ -8,6 +8,12 @@ public enum Error: ErrorType {
      - Parameter 1: The error from the promise that rejected this `when`.
     */
     case When(Int, ErrorType)
+
+    /**
+     The closure with form (T?, ErrorType?) was called with (nil, nil)
+     This is an invalid calling convention.
+    */
+    case DoubleOhSux0r
 }
 
 

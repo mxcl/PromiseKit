@@ -13,6 +13,6 @@ import Photos.PHPhotoLibrary
 */
 extension PHPhotoLibrary {
     public class func requestAuthorization() -> Promise<PHAuthorizationStatus> {
-        return Promise { requestAuthorization($0.resolve) }
+        return Promise { fulfill, _ in PHPhotoLibrary.requestAuthorization(fulfill) }
     }
 }
