@@ -2,6 +2,16 @@ import XCTest
 import PromiseKit
 
 class TestWhen: XCTestCase {
+
+    func testEmpty() {
+        let e = expectationWithDescription("")
+        let promises: [Promise<Void>] = []
+        when(promises).then { _ in
+            e.fulfill()
+        }
+        waitForExpectationsWithTimeout(1, handler: nil)
+    }
+
     func testInt() {
         let e1 = expectationWithDescription("")
         let p1 = Promise(1)
