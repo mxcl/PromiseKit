@@ -10,6 +10,9 @@ private func when<T>(promises: [Promise<T>]) -> Promise<Void> {
     var progress: (completedUnitCount: Int, totalUnitCount: Int) = (0, 0)
 #endif
     var countdown = promises.count
+    if countdown == 0 {
+        fulfill()
+    }
 
     for (index, promise) in enumerate(promises) {
         promise.pipe { resolution in
