@@ -41,8 +41,8 @@ private class Consumable: NSObject {
 private var handle: UInt8 = 0
 
 func consume(error: NSError) {
-    let pmke = objc_getAssociatedObject(error, &handle) as! Consumable
-    pmke.consumed = true
+//    let pmke = objc_getAssociatedObject(error, &handle) as! Consumable
+//    pmke.consumed = true
 }
 
 extension AnyPromise {
@@ -54,13 +54,13 @@ extension AnyPromise {
 }
 
 func unconsume(error: NSError) {
-    if let pmke = objc_getAssociatedObject(error, &handle) as! Consumable? {
-        pmke.consumed = false
-    } else {
-        // this is how we know when the error is deallocated
-        // because we will be deallocated at the same time
-        objc_setAssociatedObject(error, &handle, Consumable(parent: error), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
-    }
+//    if let pmke = objc_getAssociatedObject(error, &handle) as! Consumable? {
+//        pmke.consumed = false
+//    } else {
+//        // this is how we know when the error is deallocated
+//        // because we will be deallocated at the same time
+//        objc_setAssociatedObject(error, &handle, Consumable(parent: error), .OBJC_ASSOCIATION_RETAIN_NONATOMIC)
+//    }
 }
 
 
