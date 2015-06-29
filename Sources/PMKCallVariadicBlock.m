@@ -131,7 +131,10 @@ NSError *PMKProcessUnhandledException(id thrown) {
     });
 
     id err = PMKUnhandledExceptionHandler(thrown);
-    if (!err) @throw thrown;
+    if (!err) {
+        NSLog(@"PromiseKit no longer catches *all* exceptions. However you can change this behavior by setting a new PMKProcessUnhandledException handler.");
+        @throw thrown;
+    }
     return err;
 }
 
