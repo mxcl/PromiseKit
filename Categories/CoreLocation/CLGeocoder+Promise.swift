@@ -36,7 +36,7 @@ extension CLGeocoder {
         }
     }
     
-    public func geocode(addressString: String, region: CLRegion) -> Promise<[CLPlacemark]> {
+    public func geocode(addressString: String, region: CLRegion?) -> Promise<[CLPlacemark]> {
         return CLPromise { sealant in
             geocodeAddressString(addressString, inRegion: region) { placemarks, error in
                 sealant.resolve((placemarks as? [CLPlacemark]), error)
