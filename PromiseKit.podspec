@@ -107,7 +107,7 @@ Pod::Spec.new do |s|
   s.mksubspec 'NSNotificationCenter', ios: '4.0', osx: '10.6'
   s.mksubspec 'NSTask', osx: '10.0'
   s.mksubspec 'NSURLConnection', ios: '5.0', osx: '10.7' do |ss|
-    ss.dependency "OMGHTTPURLRQ"
+    ss.dependency "OMGHTTPURLRQ", "~> 2.1"
   end
   s.mksubspec 'SKRequest', ios: '3.0', osx: '10.7'
   s.mksubspec 'SLRequest', ios: '6.0', osx: '10.8'
