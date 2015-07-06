@@ -230,6 +230,24 @@ private func unbox(resolution: Resolution) -> AnyObject? {
         PMKUnhandledErrorHandler = body
         return oldHandler
     }
+
+    /**
+     Continue a Promise<T> chain from an AnyPromise.
+    */
+    public func then<T>(on q: dispatch_queue_t = dispatch_get_main_queue(), body: (AnyObject?) -> T) -> Promise<T> {
+        return Promise { fulfill, reject in
+            pipe { object in
+                if let error = object as? NSError {
+                    reject(error)
+                } else {
+                    let value: AnyObject? = self.valueForKey("value")
+                    contain_zalgo(q) {
+                        fulfill(body(value))
+                    }
+                }
+            }
+        }
+    }
 }
 
 
