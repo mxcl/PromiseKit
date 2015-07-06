@@ -1288,3 +1288,11 @@ __attribute__((objc_subclassing_restricted))
 }
 
 @end
+
+AnyPromise *PMKDummyAnyPromise_YES() {
+    return [AnyPromise promiseWithValue:@YES];
+}
+
+AnyPromise *PMKDummyAnyPromise_Manifold() {
+    return [AnyPromise promiseWithValue:PMKManifold(@YES, @NO, @NO)];
+}
