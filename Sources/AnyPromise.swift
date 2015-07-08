@@ -252,7 +252,7 @@ public typealias AnyPromise = PMKPromise
      Continue a Promise<T> chain from an AnyPromise.
     */
     public func then<T>(on q: dispatch_queue_t = dispatch_get_main_queue(), body: (AnyObject?) -> Promise<T>) -> Promise<T> {
-        return Promise(passthru: { resolve in
+        return Promise(sealant: { resolve in
             pipe { object in
                 if let error = object as? NSError {
                     resolve(.Rejected(error))

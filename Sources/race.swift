@@ -12,7 +12,7 @@
  - Warning: If any of the provided promises reject, the returned promise is rejected.
 */
 public func race<T>(promises: Promise<T>...) -> Promise<T> {
-    return Promise(passthru: { resolve in
+    return Promise(sealant: { resolve in
         for promise in promises {
             promise.pipe(resolve)
         }
