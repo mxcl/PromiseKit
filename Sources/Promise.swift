@@ -58,14 +58,10 @@ public class Promise<T> {
      - SeeAlso: http://promisekit.org/wrapping-delegation/
      - SeeAlso: init(resolver:)
     */
-    public init(@noescape resolvers: (fulfill: (T) -> Void, reject: (ErrorType) -> Void) throws -> Void) {
-        var resolve: ((Resolution<T>) -> Void)!
-        state = UnsealedState(resolver: &resolve)
-        do {
+    public convenience init(@noescape resolvers: (fulfill: (T) -> Void, reject: (ErrorType) -> Void) throws -> Void) {
+        self.init(sealant: { resolve in
             try resolvers(fulfill: { resolve(.Fulfilled($0)) }, reject: { resolve(.Rejected($0)) })
-        } catch {
-            resolve(.Rejected(error))
-        }
+        })
     }
 
     /**
@@ -82,10 +78,8 @@ public class Promise<T> {
 
      - SeeAlso: init(resolvers:)
     */
-    public init(@noescape resolver: ((T?, NSError?) -> Void) throws -> Void) {
-        var resolve: ((Resolution<T>) -> Void)!
-        state = UnsealedState(resolver: &resolve)
-        do {
+    public convenience init(@noescape resolver: ((T?, NSError?) -> Void) throws -> Void) {
+        self.init(sealant: { resolve in
             try resolver { obj, err in
                 if let obj = obj {
                     resolve(.Fulfilled(obj))
@@ -95,9 +89,7 @@ public class Promise<T> {
                     resolve(.Rejected(Error.DoubleOhSux0r))
                 }
             }
-        } catch {
-            resolve(.Rejected(error))
-        }
+        })
     }
 
     /**
@@ -114,10 +106,8 @@ public class Promise<T> {
 
      - SeeAlso: init(resolvers:)
     */
-    public init(@noescape resolver: ((T, NSError?) -> Void) throws -> Void) {
-        var resolve: ((Resolution<T>) -> Void)!
-        state = UnsealedState(resolver: &resolve)
-        do {
+    public convenience init(@noescape resolver: ((T, NSError?) -> Void) throws -> Void) {
+        self.init(sealant: { resolve in
             try resolver { obj, err in
                 if let err = err {
                     resolve(.Rejected(err))
@@ -125,9 +115,7 @@ public class Promise<T> {
                     resolve(.Fulfilled(obj))
                 }
             }
-        } catch {
-            resolve(.Rejected(error))
-        }
+        })
     }
 
     /**
@@ -145,19 +133,13 @@ public class Promise<T> {
         state = SealedState(resolution: .Rejected(error))
     }
 
-    /**
-      I’d prefer this to be the designated initializer, but then there would be no
-      public designated unsealed initializer! Making this convenience would be
-      inefficient. Not very inefficient, but still it seems distasteful to me.
-     */
-    init(@noescape passthru: ((Resolution<T>) -> Void) -> Void) {
+    init(@noescape sealant: ((Resolution<T>) -> Void) throws -> Void) {
         var resolve: ((Resolution<T>) -> Void)!
         state = UnsealedState(resolver: &resolve)
-        passthru {
-            if case .Rejected(let error) = $0 {
-                unconsume(error)
-            }
-            resolve($0)
+        do {
+            try sealant(resolve)
+        } catch {
+            resolve(.Rejected(error))
         }
     }
 
@@ -200,9 +182,11 @@ public class Promise<T> {
     }
 
     private convenience init<U>(when: Promise<U>, body: (Resolution<U>, (Resolution<T>) -> Void) -> Void) {
-        self.init(passthru: { (resolve: (Resolution<T>) -> Void) in
-            when.pipe{ body($0, resolve) }
-        })
+        self.init { resolve in
+            when.pipe { resolution in
+                body(resolution, resolve)
+            }
+        }
     }
 
     /**
