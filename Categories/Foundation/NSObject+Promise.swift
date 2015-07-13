@@ -25,7 +25,7 @@ extension NSObject {
     */
     public func observe<T>(keyPath: String) -> Promise<T> {
         let (promise, fulfill, reject) = Promise<T>.pendingPromise()
-        KVOProxy(observee: self, keyPath: keyPath) { obj in
+        _ = KVOProxy(observee: self, keyPath: keyPath) { obj in
             if let obj = obj as? T {
                 fulfill(obj)
             } else {
