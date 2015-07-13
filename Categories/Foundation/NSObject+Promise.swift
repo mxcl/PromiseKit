@@ -11,7 +11,7 @@ import PromiseKit
 
     use_frameworks!
     pod "PromiseKit"
- 
+
  And then in your sources:
 
     import PromiseKit
@@ -49,7 +49,7 @@ private class KVOProxy: NSObject {
         observee.addObserver(self, forKeyPath: keyPath, options: NSKeyValueObservingOptions.New, context: pointer)
     }
 
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [NSObject : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
         if let change = change where context == pointer {
             fulfill(change[NSKeyValueChangeNewKey])
             if let object = object, keyPath = keyPath {
