@@ -1,5 +1,4 @@
 import MapKit
-import PromiseKit
 
 /**
  To import the `MKMapSnapshotter` category:

@@ -1,5 +1,4 @@
 import Foundation.NSError
-import PromiseKit
 import UIKit
 
 /**
@@ -30,7 +29,7 @@ extension UIViewController {
 
         return p
     }
-    
+
     public func promiseViewController<T>(nc: UINavigationController, animated: Bool = true, completion:(()->Void)? = nil) -> Promise<T> {
         if let vc = nc.viewControllers.first {
             let p: Promise<T> = promise(vc)

@@ -1,4 +1,3 @@
-import PromiseKit
 import UIKit.UIView
 
 /**
@@ -20,7 +19,7 @@ extension UIView {
     /**
      Animate changes to one or more views using the specified duration, delay,
      options, and completion handler.
-     
+
      @param duration The total duration of the animations, measured in
      seconds. If you specify a negative value or 0, the changes are made
      without animating them.
@@ -28,7 +27,7 @@ extension UIView {
      @param delay The amount of time (measured in seconds) to wait before
      beginning the animations. Specify a value of 0 to begin the animations
      immediately.
-     
+
      @param options A mask of options indicating how you want to perform the
      animations. For a list of valid constants, see UIViewAnimationOptions.
 

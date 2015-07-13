@@ -1,4 +1,3 @@
-import PromiseKit
 import Photos.PHPhotoLibrary
 
 /**

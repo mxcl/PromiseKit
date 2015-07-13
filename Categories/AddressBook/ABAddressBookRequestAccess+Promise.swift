@@ -1,7 +1,6 @@
 import AddressBook
 import CoreFoundation
 import Foundation.NSError
-import PromiseKit
 
 /**
  Requests access to the address book.

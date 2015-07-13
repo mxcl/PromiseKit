@@ -1,6 +1,5 @@
 import Foundation
 import MessageUI.MFMessageComposeViewController
-import PromiseKit
 import UIKit.UIViewController
 
 /**

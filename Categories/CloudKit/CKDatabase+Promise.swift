@@ -1,12 +1,11 @@
 import CloudKit.CKDatabase
-import PromiseKit
 
 /**
  To import the `CKDatabase` category:
 
     use_frameworks!
     pod "PromiseKit/CloudKit"
- 
+
  And then in your sources:
 
     #import <PromiseKit/PromiseKit.h>

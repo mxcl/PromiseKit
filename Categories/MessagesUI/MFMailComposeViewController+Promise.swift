@@ -1,4 +1,3 @@
-import PromiseKit
 import MessageUI.MFMailComposeViewController
 import UIKit.UIViewController
 

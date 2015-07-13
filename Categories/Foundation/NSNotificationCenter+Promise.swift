@@ -1,5 +1,4 @@
 import Foundation.NSNotification
-import PromiseKit
 
 /**
  To import the `NSNotificationCenter` category:

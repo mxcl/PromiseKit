@@ -1,5 +1,4 @@
 import CoreLocation.CLLocationManager
-import PromiseKit
 
 /**
  To import the `CLLocationManager` category:
@@ -18,7 +17,7 @@ extension CLLocationManager {
         case Always
         case WhenInUse
     }
-  
+
     /**
       @return A new promise that fulfills with the most recent CLLocation.
 

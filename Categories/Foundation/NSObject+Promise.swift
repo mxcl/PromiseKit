@@ -1,5 +1,4 @@
 import Foundation
-import PromiseKit
 
 /**
  To import the `NSObject` category:

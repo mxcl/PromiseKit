@@ -1,5 +1,4 @@
 import Foundation
-import PromiseKit
 
 /**
  @return A promise that resolves when the provided object deallocates

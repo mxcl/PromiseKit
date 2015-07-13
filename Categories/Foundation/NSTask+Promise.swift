@@ -1,5 +1,4 @@
 import Foundation
-import PromiseKit
 
 /**
  To import the `NSTask` category:
@@ -11,7 +10,7 @@ import PromiseKit
 
     use_frameworks!
     pod "PromiseKit"
- 
+
  And then in your sources:
 
     import PromiseKit

@@ -1,5 +1,4 @@
 import Accounts
-import PromiseKit
 
 /**
  To import the `ACAccountStore` category:

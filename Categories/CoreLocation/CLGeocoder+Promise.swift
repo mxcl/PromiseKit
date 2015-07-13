@@ -1,5 +1,4 @@
 import CoreLocation.CLGeocoder
-import PromiseKit
 
 /**
  To import the `CLGeocoder` category:
@@ -19,7 +18,7 @@ extension CLGeocoder {
             }
         }
     }
-    
+
     public func geocode(addressDictionary: [String: String]) -> Promise<CLPlacemark> {
         return CLPromise { sealant in
             geocodeAddressDictionary(addressDictionary) { placemarks, error in
@@ -27,7 +26,7 @@ extension CLGeocoder {
             }
         }
     }
-    
+
     public func geocode(addressString: String) -> Promise<CLPlacemark> {
         return CLPromise { sealant in
             geocodeAddressString(addressString) { placemarks, error in

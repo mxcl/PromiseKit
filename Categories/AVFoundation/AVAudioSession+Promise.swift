@@ -1,6 +1,5 @@
 import AVFoundation.AVAudioSession
 import Foundation
-import PromiseKit
 
 /**
  To import the `AVAudioSession` category:

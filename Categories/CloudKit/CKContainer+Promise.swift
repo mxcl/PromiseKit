@@ -1,12 +1,11 @@
 import CloudKit
-import PromiseKit
 
 /**
  To import the `CKContainer` category:
 
     use_frameworks!
     pod "PromiseKit/CloudKit"
- 
+
  And then in your sources:
 
     #import <PromiseKit/PromiseKit.h>

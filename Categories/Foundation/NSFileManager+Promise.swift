@@ -1,5 +1,4 @@
 import Foundation.NSFileManager
-import PromiseKit
 
 /**
  To import the `NSFileManager` category:

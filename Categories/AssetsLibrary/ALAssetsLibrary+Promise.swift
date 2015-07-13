@@ -1,6 +1,5 @@
 import AssetsLibrary
 import Foundation.NSData
-import PromiseKit
 import UIKit.UIViewController
 
 /**
@@ -26,7 +25,7 @@ extension UIViewController {
 
         return proxy.promise.then(on: zalgo) { info -> Promise<NSData> in
             let url = info[UIImagePickerControllerReferenceURL] as! NSURL
-            
+
             return Promise { fulfill, reject in
                 ALAssetsLibrary().assetForURL(url, resultBlock: { asset in
                     let N = Int(asset.defaultRepresentation().size())

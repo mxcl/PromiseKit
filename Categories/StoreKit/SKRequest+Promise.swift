@@ -1,5 +1,4 @@
 import StoreKit
-import PromiseKit
 
 /**
  To import the `SKRequest` category:

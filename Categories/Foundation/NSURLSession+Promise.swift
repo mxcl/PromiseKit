@@ -1,12 +1,11 @@
 import Foundation
-import PromiseKit
 import OMGHTTPURLRQ
 
 //TODO cancellation
 
 
 /**
- We provide convenience categories for the `sharedSession`, or 
+ We provide convenience categories for the `sharedSession`, or
  an instance method `promise`. If you need more complicated behavior
  we recommend wrapping that usage in a Promise initializer.
 */
