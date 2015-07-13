@@ -303,7 +303,7 @@ private func fetch(var request: NSURLRequest) -> Promise<(NSData, NSURLResponse)
             if let err = err {
                 reject(err)
             } else if let data = data, rsp = rsp as? NSHTTPURLResponse where rsp.statusCode >= 200 && rsp.statusCode < 300 {
-                fulfill(data, rsp)
+                fulfill((data, rsp))
             } else {
                 reject(NSError(domain: NSURLErrorDomain, code: NSURLErrorBadServerResponse, userInfo: [
                     NSLocalizedDescriptionKey: "The server returned a bad HTTP response code"
