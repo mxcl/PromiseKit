@@ -56,7 +56,7 @@
     static id q = nil;
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
-        q = [NSOperationQueue new];  //TODO use PMKOperationQueue from swift if you can figure out how
+        q = [NSOperationQueue new];
     });
 
     return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {

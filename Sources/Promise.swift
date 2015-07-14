@@ -467,3 +467,9 @@ extension Promise: DebugPrintable {
 public func firstly<T>(promise: () -> Promise<T>) -> Promise<T> {
     return promise()
 }
+
+
+public enum ErrorPolicy {
+    case AllErrors
+    case AllErrorsExceptCancellation
+}

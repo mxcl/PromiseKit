@@ -169,6 +169,7 @@ extension NSURLResponse {
     }
 }
 
+private let Q = NSOperationQueue()
 
 private func fetch(var request: NSURLRequest) -> Promise<(NSData, NSURLResponse)> {
     if request.valueForHTTPHeaderField("User-Agent") == nil {
@@ -178,7 +179,7 @@ private func fetch(var request: NSURLRequest) -> Promise<(NSData, NSURLResponse)
     }
 
     return Promise { fulfill, prereject in
-        NSURLConnection.sendAsynchronousRequest(request, queue: PMKOperationQueue) { rsp, data, err in
+        NSURLConnection.sendAsynchronousRequest(request, queue: Q) { rsp, data, err in
 
             assert(!NSThread.isMainThread())
 
