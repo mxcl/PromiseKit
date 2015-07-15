@@ -137,4 +137,91 @@ class WhenTestCase_Swift: XCTestCase {
 
         waitForExpectationsWithTimeout(1, handler: nil)
     }
+
+    func testUnhandledErrorHandlerDoesNotFire() {
+        enum Error: ErrorType {
+            case Test
+        }
+
+        PMKUnhandledErrorHandler = { error in
+            XCTFail()
+        }
+
+        let ex = expectationWithDescription("")
+        let p1 = Promise<Void>(Error.Test)
+        let p2 = after(0.1)
+        when(p1, p2).then{ XCTFail() }.report { error in
+            if case PromiseKit.Error.When(let index, let underlyingError) = error {
+                XCTAssertEqual(index, 0)
+                XCTAssertEqual(underlyingError as! Error, Error.Test)
+                ex.fulfill()
+            }
+        }
+
+        waitForExpectationsWithTimeout(1, handler: nil)
+    }
+
+    func testUnhandledErrorHandlerDoesNotFireForStragglers() {
+        enum Error: ErrorType {
+            case Test
+            case Straggler
+        }
+
+        PMKUnhandledErrorHandler = { error in
+            XCTFail()
+        }
+
+        let ex1 = expectationWithDescription("")
+        let ex2 = expectationWithDescription("")
+        let ex3 = expectationWithDescription("")
+
+        let p1 = Promise<Void>(Error.Test)
+        let p2 = after(0.1).then { throw Error.Straggler }
+        let p3 = after(0.2).then { throw Error.Straggler }
+
+        when(p1, p2, p3).report { error -> Void in
+            if case PromiseKit.Error.When(let index, let underlyingError) = error {
+                XCTAssertEqual(index, 0)
+                XCTAssertEqual(underlyingError as! Error, Error.Test)
+                ex1.fulfill()
+            }
+        }
+
+        p2.finally { after(0.1).then(ex2.fulfill) }
+        p3.finally { after(0.1).then(ex3.fulfill) }
+
+        waitForExpectationsWithTimeout(1, handler: nil)
+    }
+
+    func testAllSealedRejectedFirstOneRejects() {
+        enum Error: ErrorType {
+            case Test1
+            case Test2
+            case Test3
+        }
+
+        let ex = expectationWithDescription("")
+        let p1 = Promise<Void>(Error.Test1)
+        let p2 = Promise<Void>(Error.Test2)
+        let p3 = Promise<Void>(Error.Test3)
+
+        when(p1, p2, p3).report { error in
+            if case PromiseKit.Error.When(0, Error.Test1) = error {
+                ex.fulfill()
+            } else {
+                XCTFail()
+            }
+        }
+
+        waitForExpectationsWithTimeout(1, handler: nil)
+    }
+
+    var oldHandler: (ErrorType -> Void)!
+
+    override func setUp() {
+        oldHandler = PMKUnhandledErrorHandler
+    }
+    override func tearDown() {
+        PMKUnhandledErrorHandler = oldHandler
+    }
 }
