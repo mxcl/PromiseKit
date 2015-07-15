@@ -110,4 +110,79 @@ class ErrorHandlingTests_Swift: XCTestCase {
             }
         }
     }
+
+    func testDoubleRejectDoesNotTriggerUnhandler() {
+        enum Error: ErrorType {
+            case Test
+        }
+
+        PMKUnhandledErrorHandler = { err in
+            XCTFail()
+        }
+
+        let (p, _, r) = Promise<Void>.pendingPromise()
+
+        let ex1 = expectationWithDescription("")
+        let ex2 = expectationWithDescription("")
+        let ex3 = expectationWithDescription("")
+        let ex4 = expectationWithDescription("")
+
+        after(0.1).then { _ -> Void in r(Error.Test); ex1.fulfill() }
+        after(0.15).then { _ -> Void in r(Error.Test); ex2.fulfill() }.finally { ex3.fulfill() }
+
+        p.report { error in
+            ex4.fulfill()
+        }
+
+        waitForExpectationsWithTimeout(1, handler: nil)
+    }
+
+    func testPassThrough() {
+        let ex = expectationWithDescription("")
+
+        PMKUnhandledErrorHandler = { err in
+            ex.fulfill()
+        }
+
+        enum Error: ErrorType {
+            case Test
+        }
+
+        Promise<Void> { _, reject in
+            after(0.1).then {
+                throw Error.Test
+            }.report(reject)
+        }
+
+        waitForExpectationsWithTimeout(1, handler: nil)
+    }
+
+    func testConsumedPromiseStaysConsumedAsAnyPromise() {
+        enum Error: ErrorType {
+            case Test
+        }
+
+        PMKUnhandledErrorHandler = { err in
+            XCTFail()
+        }
+
+        let ex1 = expectationWithDescription("")
+
+        let p: Promise<Int> = firstly {
+            throw Error.Test
+        }
+
+        XCTAssertTrue(p.rejected)
+
+        let anyp = AnyPromise(bound: p)
+
+        p.report { err in
+            ex1.fulfill()
+        }
+
+        waitForExpectationsWithTimeout(1, handler: nil)
+
+        print(anyp)
+    }
+}
 }
