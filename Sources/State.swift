@@ -7,7 +7,7 @@ enum Seal<R> {
 
 enum Resolution<T> {
     case Fulfilled(T)
-    case Rejected(ErrorType)
+    case Rejected(ErrorType, ErrorConsumptionToken)
 }
 
 // would be a protocol, but you can't have typed variables of “generic”

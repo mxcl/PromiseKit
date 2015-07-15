@@ -30,7 +30,7 @@ firstly {
     }
 }
 
-Promise<Int>(Error.When(1, NSURLError.CannotFindHost)).rescue { error in
+Promise<Int>(Error.When(1, NSURLError.CannotFindHost)).report { error in
     do {
         throw error
     } catch NSURLError.CannotFindHost {

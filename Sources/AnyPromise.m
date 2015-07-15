@@ -63,7 +63,7 @@ static inline AnyPromise *__then(AnyPromise *self, dispatch_queue_t queue, id bl
 static inline AnyPromise *__catch(AnyPromise *self, BOOL includeCancellation, id block) {
     return AnyPromiseWhen(self, ^(id obj, PMKResolver resolve) {
         if (IsError(obj) && (includeCancellation || ![obj cancelled])) {
-            [[self class] __consume:obj];
+            [obj pmk_consume];
             dispatch_async(dispatch_get_main_queue(), ^{
                 resolve(PMKCallVariadicBlock(block, obj));
             });
@@ -152,13 +152,3 @@ static inline AnyPromise *__finally(AnyPromise *self, dispatch_queue_t queue, di
 }
 
 @end
-
-
-
-@interface AnyPromise (XP)
-+ (id)setUnhandledErrorHandler:(id)handler;
-@end
-
-id PMKSetUnhandledErrorHandler(void (^handler)(NSError *)) {
-    return [AnyPromise setUnhandledErrorHandler:handler];
-}
