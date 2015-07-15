@@ -16,7 +16,7 @@ import Foundation.NSError
  - SeeAlso: [PromiseKit Chaining Guide](http://promisekit.org/chaining/)
 */
 public class Promise<T> {
-    let state: State<T>
+    let state: State<Resolution<T>>
 
     /**
      Create a new pending promise.

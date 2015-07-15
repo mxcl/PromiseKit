@@ -1,57 +1,37 @@
 import Foundation.NSError
 
-
-private func unbox(resolution: Resolution<AnyObject?>) -> AnyObject? {
-    switch resolution {
-    case .Fulfilled(let value):
-        return value
-    case .Rejected(let error):
-        return error as NSError
-    }
-}
-
 public typealias AnyPromise = PMKPromise
 
 @objc(PMKAnyPromise) public class AnyPromise: NSObject {
-    private var state: State
 
-    private typealias Resolution = PromiseKit.Resolution<AnyObject?>
-    private typealias State = UnsealedState<AnyObject?>
+    private var state: State
 
     /**
      - Returns: A new AnyPromise bound to a Promise<T?>.
      The two promises represent the same task, any changes to either will instantly reflect on both.
     */
-    public init<T: AnyObject>(bound: Promise<T>) {
-        //WARNING copy pasta from below. FIXME how?
-        var resolve: ((Resolution) -> Void)!
+    public init<T: AnyObject>(bound: Promise<T?>) {
+        var resolve: ((AnyObject?) -> Void)!
         state = State(resolver: &resolve)
-
-        //TODO eventually we should be able to just do: bound.pipe(resolve)
         bound.pipe { resolution in
             switch resolution {
             case .Fulfilled(let value):
-                resolve(.Fulfilled(value))
+                resolve(value)
             case .Rejected(let error):
-                unconsume(error)
-                resolve(.Rejected(error))
+                let nserror = error as NSError
+                unconsume(nserror)
+                resolve(nserror)
             }
         }
     }
 
-    public init<T: AnyObject>(bound: Promise<T?>) {
-        //WARNING copy pasta from above. FIXME how?
-        var resolve: ((Resolution) -> Void)!
-        state = State(resolver: &resolve)
-        bound.pipe { resolution in
-            switch resolution {
-            case .Fulfilled(let value):
-                resolve(.Fulfilled(value))
-            case .Rejected(let error):
-                unconsume(error)
-                resolve(.Rejected(error))
-            }
-        }
+    /**
+     - Returns: A new AnyPromise bound to a Promise<T>.
+     The two promises represent the same task, any changes to either will instantly reflect on both.
+    */
+    convenience public init<T: AnyObject>(bound: Promise<T>) {
+        // FIXME efficiency. Allocating the extra promise for conversion sucks.
+        self.init(bound: bound.then(on: zalgo){ Optional.Some($0) })
     }
 
     /**
@@ -59,19 +39,8 @@ public typealias AnyPromise = PMKPromise
      The two promises represent the same task, any changes to either will instantly reflect on both.
      The value is converted to an NSArray so Objective-C can use it.
     */
-    public init<T: AnyObject>(bound: Promise<[T]>) {
-        //WARNING copy pasta from above. FIXME how?
-        var resolve: ((Resolution) -> Void)!
-        state = State(resolver: &resolve)
-        bound.pipe { resolution in
-            switch resolution {
-            case .Fulfilled(let value):
-                resolve(.Fulfilled(value as NSArray))
-            case .Rejected(let error):
-                unconsume(error)
-                resolve(.Rejected(error))
-            }
-        }
+    convenience public init<T: AnyObject>(bound: Promise<[T]>) {
+        self.init(bound: bound.then(on: zalgo) { NSArray(array: $0) })
     }
 
     /**
@@ -79,19 +48,8 @@ public typealias AnyPromise = PMKPromise
      The two promises represent the same task, any changes to either will instantly reflect on both.
      The value is converted to an NSDictionary so Objective-C can use it.
     */
-    public init<T: AnyObject, U: AnyObject>(bound: Promise<[T:U]>) {
-        //WARNING copy pasta from above. FIXME how?
-        var resolve: ((Resolution) -> Void)!
-        state = State(resolver: &resolve)
-        bound.pipe { resolution in
-            switch resolution {
-            case .Fulfilled(let value):
-                resolve(.Fulfilled(value as NSDictionary))
-            case .Rejected(let error):
-                unconsume(error)
-                resolve(.Rejected(error))
-            }
-        }
+    convenience public init<T: AnyObject, U: AnyObject>(bound: Promise<[T:U]>) {
+        self.init(bound: bound.then(on: zalgo) { NSDictionary(dictionary: $0) })
     }
 
     /**
@@ -108,49 +66,34 @@ public typealias AnyPromise = PMKPromise
      The two promises represent the same task, any changes to either will instantly reflect on both.
     */
     convenience public init(bound: Promise<Void>) {
-        self.init(bound: bound.then(on: zalgo) { _ -> AnyObject? in return nil })
+        self.init(bound: bound.then(on: zalgo) { Optional<AnyObject>.None })
     }
 
     @objc init(@noescape bridge: ((AnyObject?) -> Void) -> Void) {
-        var resolve: ((Resolution) -> Void)!
+        var resolve: ((AnyObject?) -> Void)!
         state = State(resolver: &resolve)
         bridge { result in
-            func preresolve(obj: AnyObject?) {
-                if let error = obj as? NSError {
-                    unconsume(error)
-                    resolve(.Rejected(error))
-                } else {
-                    resolve(.Fulfilled(obj))
-                }
-            }
             if let next = result as? AnyPromise {
-                next.pipe(preresolve)
+                next.pipe(resolve)
             } else {
-                preresolve(result)
+                resolve(result)
             }
         }
     }
 
-    @objc func pipe(anybody: (AnyObject?) -> Void) {
+    @objc func pipe(body: (AnyObject?) -> Void) {
         state.get { seal in
-            func body(resolution: Resolution) {
-                anybody(unbox(resolution))
-            }
             switch seal {
             case .Pending(let handlers):
                 handlers.append(body)
-            case .Resolved(let resolution):
-                body(resolution)
+            case .Resolved(let value):
+                body(value)
             }
         }
     }
 
     @objc var __value: AnyObject? {
-        if let resolution = state.get() {
-            return unbox(resolution)
-        } else {
-            return nil
-        }
+        return state.get() ?? nil
     }
 
     /**
@@ -175,9 +118,11 @@ public typealias AnyPromise = PMKPromise
     */
     @objc public var fulfilled: Bool {
         switch state.get() {
-        case .Some(.Fulfilled):
+        case .Some(let obj) where obj is NSError:
+            return false
+        case .Some:
             return true
-        default:
+        case .None:
             return false
         }
     }
@@ -188,7 +133,7 @@ public typealias AnyPromise = PMKPromise
     */
     @objc public var rejected: Bool {
         switch state.get() {
-        case .Some(.Rejected):
+        case .Some(let obj) where obj is NSError:
             return true
         default:
             return false
@@ -263,6 +208,17 @@ public typealias AnyPromise = PMKPromise
                 }
             }
         })
+    }
+
+    private class State: UnsealedState<AnyObject?> {
+        required init(inout resolver: ((AnyObject?) -> Void)!) {
+            var preresolve: ((AnyObject?) -> Void)!
+            super.init(resolver: &preresolve)
+            resolver = { obj in
+                if obj is NSError { unconsume(obj as! NSError) }
+                preresolve(obj)
+            }
+        }
     }
 }
 

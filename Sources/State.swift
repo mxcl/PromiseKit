@@ -1,8 +1,8 @@
 import Dispatch
 
-enum Seal<T> {
-    case Pending(Handlers<T>)
-    case Resolved(Resolution<T>)
+enum Seal<R> {
+    case Pending(Handlers<R>)
+    case Resolved(R)
 }
 
 enum Resolution<T> {
@@ -11,24 +11,24 @@ enum Resolution<T> {
 }
 
 // would be a protocol, but you can't have typed variables of “generic”
-// protocols in Swift 2. That is, I couldn’t do var state: State<T> when
+// protocols in Swift 2. That is, I couldn’t do var state: State<R> when
 // it was a protocol. There is no work around.
-class State<T> {
-    func get() -> Resolution<T>? { fatalError("Abstract Base Class") }
-    func get(body: (Seal<T>) -> Void) { fatalError("Abstract Base Class") }
+class State<R> {
+    func get() -> R? { fatalError("Abstract Base Class") }
+    func get(body: (Seal<R>) -> Void) { fatalError("Abstract Base Class") }
 }
 
-class UnsealedState<T>: State<T> {
+class UnsealedState<R>: State<R> {
     private let barrier = dispatch_queue_create("org.promisekit.barrier", DISPATCH_QUEUE_CONCURRENT)
-    private var seal: Seal<T>
+    private var seal: Seal<R>
 
     /**
      Quick return, but will not provide the handlers array because
      it could be modified while you are using it by another thread.
      If you need the handlers, use the second `get` variant.
     */
-    override func get() -> Resolution<T>? {
-        var result: Resolution<T>?
+    override func get() -> R? {
+        var result: R?
         dispatch_sync(barrier) {
             if case .Resolved(let resolution) = self.seal {
                 result = resolution
@@ -37,7 +37,7 @@ class UnsealedState<T>: State<T> {
         return result
     }
 
-    override func get(body: (Seal<T>) -> Void) {
+    override func get(body: (Seal<R>) -> Void) {
         var sealed = false
         dispatch_sync(barrier) {
             switch self.seal {
@@ -62,11 +62,11 @@ class UnsealedState<T>: State<T> {
         }
     }
 
-    init(inout resolver: ((Resolution<T>) -> Void)!) {
-        seal = .Pending(Handlers<T>())
+    required init(inout resolver: ((R) -> Void)!) {
+        seal = .Pending(Handlers<R>())
         super.init()
         resolver = { resolution in
-            var handlers: Handlers<T>?
+            var handlers: Handlers<R>?
             dispatch_barrier_sync(self.barrier) {
                 if case .Pending(let hh) = self.seal {
                     self.seal = .Resolved(resolution)
@@ -82,31 +82,31 @@ class UnsealedState<T>: State<T> {
     }
 }
 
-class SealedState<T>: State<T> {
-    private let resolution: Resolution<T>
+class SealedState<R>: State<R> {
+    private let resolution: R
     
-    init(resolution: Resolution<T>) {
+    init(resolution: R) {
         self.resolution = resolution
     }
     
-    override func get() -> Resolution<T>? {
+    override func get() -> R? {
         return resolution
     }
 
-    override func get(body: (Seal<T>) -> Void) {
+    override func get(body: (Seal<R>) -> Void) {
         body(.Resolved(resolution))
     }
 }
 
 
-class Handlers<T>: SequenceType {
-    var bodies: [(Resolution<T>)->()] = []
+class Handlers<R>: SequenceType {
+    var bodies: [(R)->Void] = []
 
-    func append(body: (Resolution<T>)->()) {
+    func append(body: (R)->Void) {
         bodies.append(body)
     }
 
-    func generate() -> IndexingGenerator<[(Resolution<T>)->()]> {
+    func generate() -> IndexingGenerator<[(R)->Void]> {
         return bodies.generate()
     }
 
