@@ -1,26 +1,19 @@
 import Foundation.NSError
 
-public let PMKOperationQueue = NSOperationQueue()
-
-public enum ErrorPolicy {
-    case AllErrors
-    case AllErrorsExceptCancellation
-}
-
 /**
- A promise represents the future value of a task.
+ A *promise* represents the future value of a task.
 
  To obtain the value of a promise we call `then`.
 
  Promises are chainable: `then` returns a promise, you can call `then` on
- that promise, which  returns a promise, you can call `then` on that
+ that promise, which returns a promise, you can call `then` on that
  promise, et cetera.
 
  Promises start in a pending state and *resolve* with a value to become
  *fulfilled* or with an `NSError` to become rejected.
 
- @see [PromiseKit `then` Guide](http://promisekit.org/then/)
- @see [PromiseKit Chaining Guide](http://promisekit.org/chaining/)
+ - SeeAlso: [PromiseKit `then` Guide](http://promisekit.org/then/)
+ - SeeAlso: [PromiseKit Chaining Guide](http://promisekit.org/chaining/)
 */
 public class Promise<T> {
     let state: State<T>
@@ -36,29 +29,29 @@ public class Promise<T> {
 
      The closure you pass is executed immediately on the calling thread.
 
-        func fetchKitten() -> Promise<UIImage> {
-            return Promise { fulfill, reject in
-                KittenFetcher.fetchWithCompletionBlock({ img, err in
-                    if err == nil {
-                        fulfill(img)
-                    } else {
-                        reject(err)
-                    }
-                })
-            }
-        }
+         func fetchKitten() -> Promise<UIImage> {
+             return Promise { fulfill, reject in
+                 KittenFetcher.fetchWithCompletionBlock({ img, err in
+                     if err == nil {
+                         fulfill(img)
+                     } else {
+                         reject(err)
+                     }
+                 })
+             }
+         }
 
-     @param resolvers The provided closure is called immediately. Inside,
-     execute your asynchronous system, calling fulfill if it suceeds and
-     reject for any errors.
+     - Parameter resolvers: The provided closure is called immediately.
+     Inside, execute your asynchronous system, calling fulfill if it suceeds
+     and reject for any errors.
 
-     @return A new promise.
+     - Returns: return A new promise.
 
-     @warning *Note* If you are wrapping a delegate-based system, we recommend
+     - Note: If you are wrapping a delegate-based system, we recommend
      to use instead: Promise.pendingPromise()
 
-     @see http://promisekit.org/sealing-your-own-promises/
-     @see http://promisekit.org/wrapping-delegation/
+     - SeeAlso: http://promisekit.org/sealing-your-own-promises/
+     - SeeAlso: http://promisekit.org/wrapping-delegation/
     */
     public convenience init(@noescape resolvers: (fulfill: (T) -> Void, reject: (NSError) -> Void) throws -> Void) {
         self.init(sealant: { sealant in
@@ -72,14 +65,14 @@ public class Promise<T> {
      This initializer is convenient when wrapping asynchronous systems that
      use common patterns. For example:
 
-        func fetchKitten() -> Promise<UIImage> {
-            return Promise { sealant in
-                KittenFetcher.fetchWithCompletionBlock(sealant.resolve)
-            }
-        }
+         func fetchKitten() -> Promise<UIImage> {
+             return Promise { sealant in
+                 KittenFetcher.fetchWithCompletionBlock(sealant.resolve)
+             }
+         }
 
-     @see Sealant
-     @see init(resolvers:)
+     - SeeAlso: Sealant
+     - SeeAlso: init(resolvers:)
     */
     public init(@noescape sealant: (Sealant<T>) throws -> Void) {
         var resolve: ((Resolution<T>) -> Void)!
@@ -118,25 +111,24 @@ public class Promise<T> {
     }
 
     /**
-     tuple is convenient for wrapping delegates or larger asynchronous systems.
+     Making promises that wrap asynchronous delegation systems or other larger asynchronous systems without a simple completion handler is easier with pendingPromise.
 
-        class Foo: BarDelegate {
-            let (promise, fulfill, reject) = Promise<Int>.pendingPromise()
+         class Foo: BarDelegate {
+             let (promise, fulfill, reject) = Promise<Int>.pendingPromise()
     
-            func barDidFinishWithResult(result: Int) {
-                fulfill(result)
-            }
+             func barDidFinishWithResult(result: Int) {
+                 fulfill(result)
+             }
     
-            func barDidError(error: NSError) {
-                reject(error)
-            }
-        }
+             func barDidError(error: NSError) {
+                 reject(error)
+             }
+         }
 
-     @return A tuple consisting of:
-
-      1) A promise
-      2) A function that fulfills that promise
-      3) A function that rejects that promise
+     - Returns: A tuple consisting of: 
+       1) A promise
+       2) A function that fulfills that promise
+       3) A function that rejects that promise
     */
     public class func pendingPromise() -> (promise: Promise, fulfill: (T) -> Void, reject: (NSError) -> Void) {
         var sealant: Sealant<T>!
@@ -162,27 +154,20 @@ public class Promise<T> {
     }
 
     /**
-     The provided block is executed when this Promise is resolved.
+     The provided closure is executed when this Promise is resolved.
 
-     If you provide a block that takes a parameter, the value of the receiver will be passed as that parameter.
+     - Parameter on: The queue on which body should be executed.
+     - Parameter body: The closure that is executed when this Promise is fulfilled.
+     - Returns: A new promise that is resolved with the value returned from the provided closure. For example:
 
-     @param on The queue on which body should be executed.
+           NSURLConnection.GET(url).then { (data: NSData) -> Int in
+               //…
+               return data.length
+           }.then { length in
+               //…
+           }
 
-     @param body The closure that is executed when this Promise is fulfilled.
-
-        [NSURLConnection GET:url].then(^(NSData *data){
-            // do something with data
-        });
-
-     @return A new promise that is resolved with the value returned from the provided closure. For example:
-
-        [NSURLConnection GET:url].then(^(NSData *data){
-            return data.length;
-        }).then(^(NSNumber *number){
-            //…
-        });
-
-     @see thenInBackground
+     - SeeAlso: `thenInBackground`
     */
     public func then<U>(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: (T) throws -> U) -> Promise<U> {
         return Promise<U>(when: self) { resolution, resolve in
@@ -201,6 +186,22 @@ public class Promise<T> {
         }
     }
 
+    /**
+     The provided closure is executed when this Promise is resolved.
+
+     - Parameter on: The queue on which body should be executed.
+     - Parameter body: The closure that is executed when this Promise is fulfilled.
+     - Returns: A new promise that is resolved when the Promise returned from the provided closure resolves. For example:
+
+           NSURLSession.GET(url1).then { (data: NSData) -> Promise<NSData> in
+               //…
+               return NSURLSession.GET(url2)
+           }.then { data in
+               //…
+           }
+
+     - SeeAlso: `thenInBackground`
+    */
     public func then<U>(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: (T) throws -> Promise<U>) -> Promise<U> {
         return Promise<U>(when: self) { resolution, resolve in
             switch resolution {
@@ -218,6 +219,22 @@ public class Promise<T> {
         }
     }
 
+    /**
+     The provided closure is executed when this Promise is resolved.
+
+     - Parameter on: The queue on which body should be executed.
+     - Parameter body: The closure that is executed when this Promise is fulfilled.
+     - Returns: A new promise that is resolved when the AnyPromise returned from the provided closure resolves. For example:
+
+           NSURLSession.GET(url).then { (data: NSData) -> AnyPromise in
+               //…
+               return SCNetworkReachability()
+           }.then { _ in
+               //…
+           }
+
+     - SeeAlso: `thenInBackground`
+    */
     public func then(on q: dispatch_queue_t = dispatch_get_main_queue(), body: (T) throws -> AnyPromise) -> Promise<AnyObject?> {
         return Promise<AnyObject?>(when: self) { resolution, resolve in
             switch resolution {
@@ -250,18 +267,25 @@ public class Promise<T> {
 
      This method is provided as a convenience for `then`.
 
-     @see then
+     - SeeAlso: `then`
     */
     public func thenInBackground<U>(body: (T) throws -> U) -> Promise<U> {
         return then(on: dispatch_get_global_queue(0, 0), body)
     }
 
+    /**
+     The provided closure is executed on the default background queue when this Promise is fulfilled.
+
+     This method is provided as a convenience for `then`.
+
+     - SeeAlso: `then`
+    */
     public func thenInBackground<U>(body: (T) throws -> Promise<U>) -> Promise<U> {
         return then(on: dispatch_get_global_queue(0, 0), body)
     }
 
     /**
-     The provided closure is executed when this Promise is rejected.
+     The provided closure is executed when this promise is rejected.
 
      Rejecting a promise cascades: rejecting all subsequent promises (unless
      recover is invoked) thus you will typically place your catch at the end
@@ -270,13 +294,9 @@ public class Promise<T> {
 
      The provided closure always runs on the main queue.
 
-     @param policy The default policy does not execute your handler for
-     cancellation errors. See registerCancellationError for more
-     documentation.
-
-     @param body The handler to execute when this Promise is rejected.
-
-     @see registerCancellationError
+     - Parameter policy: The default policy does not execute your handler for cancellation errors. See registerCancellationError for more documentation.
+     - Parameter body: The handler to execute if this promise is rejected.
+     - SeeAlso: `registerCancellationError`
     */
     public func report(policy policy: ErrorPolicy = .AllErrorsExceptCancellation, _ body: (NSError) -> Void) {
         pipe { resolution in
@@ -290,7 +310,7 @@ public class Promise<T> {
     }
 
     /**
-     The provided closure is executed when this Promise is rejected giving you
+     The provided closure is executed when this promise is rejected giving you
      an opportunity to recover from the error and continue the promise chain.
     */
     public func recover(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: (NSError) -> Promise<T>) -> Promise<T> {
@@ -328,16 +348,15 @@ public class Promise<T> {
     /**
      The provided closure is executed when this Promise is resolved.
 
-     @param on The queue on which body should be executed.
-
-     @param body The closure that is executed when this Promise is resolved.
-
          UIApplication.sharedApplication().networkActivityIndicatorVisible = true
          somePromise().then {
              //…
          }.finally {
-            UIApplication.sharedApplication().networkActivityIndicatorVisible = false
+             UIApplication.sharedApplication().networkActivityIndicatorVisible = false
          }
+
+     - Parameter on: The queue on which body should be executed.
+     - Parameter body: The closure that is executed when this Promise is resolved.
     */
     public func finally(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: () -> Void) -> Promise<T> {
         return Promise(when: self) { resolution, resolve in
@@ -365,7 +384,7 @@ public class Promise<T> {
  application code in situations where performance is critical, but be
  careful: read the essay at the provided link to understand the risks.
 
- @see http://blog.izs.me/post/59142742143/designing-apis-for-asynchrony
+ - SeeAlso: http://blog.izs.me/post/59142742143/designing-apis-for-asynchrony
 */
 public let zalgo: dispatch_queue_t = dispatch_queue_create("Zalgo", nil)
 
@@ -394,7 +413,7 @@ public let zalgo: dispatch_queue_t = dispatch_queue_create("Zalgo", nil)
  If you use zalgo or waldo without tests proving their correctness you may
  unwillingly introduce horrendous, near-impossible-to-trace bugs.
 
- @see zalgo
+ - SeeAlso: zalgo
 */
 public let waldo: dispatch_queue_t = dispatch_queue_create("Waldo", nil)
 
@@ -415,7 +434,7 @@ func contain_zalgo(q: dispatch_queue_t, block: () -> Void) {
 
 extension Promise {
     /**
-     Creates a rejected Promise with `PMKErrorDomain` and a specified localizedDescription and error code.
+     Creates a rejected Promise with `PMKErrorDomain` and a specified `localizedDescription` and error code.
     */
     public convenience init(error: String, code: Int = PMKUnexpectedError) {
         let error = NSError(domain: "PMKErrorDomain", code: code, userInfo: [NSLocalizedDescriptionKey: error])
@@ -441,7 +460,8 @@ extension Promise {
     }
 
     /**
-     Swift (1.2) seems to be much less fussy about Void promises.
+     Void promises are less prone to generics-of-doom scenarios.
+     - SeeAlso: when.swift contains enlightening examples of using `Promise<Void>` to simplify your code.
     */
     public func asVoid() -> Promise<Void> {
         return then(on: zalgo) { _ in return }
@@ -456,25 +476,25 @@ extension Promise: CustomStringConvertible {
 }
 
 /**
- Firstly can make chains more readable.
+ `firstly` can make chains more readable.
 
  Compare:
 
-    NSURLConnection.GET(url1).then {
-        NSURLConnection.GET(url2)
-    }.then {
-        NSURLConnection.GET(url3)
-    }
+     NSURLConnection.GET(url1).then {
+         NSURLConnection.GET(url2)
+     }.then {
+         NSURLConnection.GET(url3)
+     }
 
  With:
 
-    firstly {
-        NSURLConnection.GET(url1)
-    }.then {
-        NSURLConnection.GET(url2)
-    }.then {
-        NSURLConnection.GET(url3)
-    }
+     firstly {
+         NSURLConnection.GET(url1)
+     }.then {
+         NSURLConnection.GET(url2)
+     }.then {
+         NSURLConnection.GET(url3)
+     }
 */
 public func firstly<T>(promise: () throws -> Promise<T>) -> Promise<T> {
     do {

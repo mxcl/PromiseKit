@@ -23,10 +23,9 @@ class UnsealedState<T>: State<T> {
     private var seal: Seal<T>
 
     /**
-     Quick return, but will not provide the handlers array
-     because it could be modified while you are using it by
-     another thread. If you need the handlers, use the second
-     `get` variant.
+     Quick return, but will not provide the handlers array because
+     it could be modified while you are using it by another thread.
+     If you need the handlers, use the second `get` variant.
     */
     override func get() -> Resolution<T>? {
         var result: Resolution<T>?
