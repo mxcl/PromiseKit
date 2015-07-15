@@ -1,5 +1,7 @@
 import Foundation.NSFileManager
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 /**
  To import the `NSFileManager` category:

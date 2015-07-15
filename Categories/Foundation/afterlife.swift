@@ -1,5 +1,7 @@
 import Foundation
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 /**
  @return A promise that resolves when the provided object deallocates

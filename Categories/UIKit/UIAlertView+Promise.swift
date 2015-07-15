@@ -1,6 +1,8 @@
 import Foundation
-import PromiseKit
 import UIKit.UIAlertView
+#if !COCOAPODS
+import PromiseKit
+#endif
 
 /**
  To import the `UIActionSheet` category:

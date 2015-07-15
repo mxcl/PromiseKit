@@ -1,6 +1,8 @@
 import AssetsLibrary
 import Foundation.NSData
+#if !COCOAPODS
 import PromiseKit
+#endif
 import UIKit.UIViewController
 
 /**

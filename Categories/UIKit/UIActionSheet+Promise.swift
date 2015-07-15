@@ -1,5 +1,7 @@
-import PromiseKit
 import UIKit.UIActionSheet
+#if !COCOAPODS
+import PromiseKit
+#endif
 
 /**
  To import the `UIActionSheet` category:

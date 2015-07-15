@@ -1,6 +1,8 @@
 import AVFoundation.AVAudioSession
 import Foundation
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 /**
  To import the `AVAudioSession` category:

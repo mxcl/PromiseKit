@@ -1,5 +1,7 @@
 import CloudKit
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 /**
  To import the `CKContainer` category:

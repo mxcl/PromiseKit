@@ -1,5 +1,7 @@
 import Foundation
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 /**
  To import the `NSTask` category:

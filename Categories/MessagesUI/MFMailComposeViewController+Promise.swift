@@ -1,6 +1,8 @@
-import PromiseKit
 import MessageUI.MFMailComposeViewController
 import UIKit.UIViewController
+#if !COCOAPODS
+import PromiseKit
+#endif
 
 /**
  To import this `UIViewController` category:

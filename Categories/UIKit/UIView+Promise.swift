@@ -1,5 +1,7 @@
-import PromiseKit
 import UIKit.UIView
+#if !COCOAPODS
+import PromiseKit
+#endif
 
 /**
  To import the `UIView` category:

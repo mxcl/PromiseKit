@@ -1,6 +1,8 @@
 import Foundation
-import PromiseKit
 import OMGHTTPURLRQ
+#if !COCOAPODS
+import PromiseKit
+#endif
 
 /**
  To import the `NSURLConnection` category:

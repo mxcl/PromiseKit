@@ -1,5 +1,7 @@
-import PromiseKit
 import MapKit
+#if !COCOAPODS
+import PromiseKit
+#endif
 
 /**
  To import the `MKDirections` category:

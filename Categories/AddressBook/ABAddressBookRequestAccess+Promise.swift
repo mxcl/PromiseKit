@@ -1,7 +1,9 @@
 import AddressBook
 import CoreFoundation
 import Foundation.NSError
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 public enum AddressBookError: ErrorType {
     case NotDetermined

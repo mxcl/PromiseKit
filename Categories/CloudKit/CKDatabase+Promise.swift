@@ -1,5 +1,7 @@
 import CloudKit.CKDatabase
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 /**
  To import the `CKDatabase` category:

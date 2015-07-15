@@ -1,5 +1,7 @@
-import PromiseKit
 import Social
+#if !COCOAPODS
+import PromiseKit
+#endif
 
 /**
  To import the `SLRequest` category:

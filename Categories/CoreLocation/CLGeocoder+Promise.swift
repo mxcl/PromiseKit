@@ -1,5 +1,7 @@
 import CoreLocation.CLGeocoder
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 /**
  To import the `CLGeocoder` category:

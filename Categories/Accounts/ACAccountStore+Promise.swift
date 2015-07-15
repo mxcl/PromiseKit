@@ -1,5 +1,7 @@
 import Accounts
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 /**
  To import the `ACAccountStore` category:
