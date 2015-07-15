@@ -185,4 +185,12 @@ class ErrorHandlingTests_Swift: XCTestCase {
         print(anyp)
     }
 }
+
+
+extension NSError {
+    @objc class public func pmk_setUnhandledErrorHandler(handler: (NSError) -> Void) {
+        PMKUnhandledErrorHandler = { (error: ErrorType) -> Void in
+            handler(error as NSError)
+        }
+    }
 }
