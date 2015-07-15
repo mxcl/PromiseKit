@@ -7,16 +7,13 @@ import Foundation.NSError
  If a promise is rejected and no catch handler is called in its chain, the
  provided handler is called. The default handler logs the error.
 
-    PMKUnhandledErrorHandler = { error in
-        println("Unhandled error: \(error)")
-    }
+     PMKUnhandledErrorHandler = { error in
+         println("Unhandled error: \(error)")
+     }
 
- @warning *Important* The handler is executed on an undefined queue.
-
- @warning *Important* Don’t use promises in your handler, or you risk an
- infinite error loop.
-
- @return The previous unhandled error handler.
+ - Warning: The handler is executed on an undefined queue.
+ - Warning: Don’t use promises in your handler, or you risk an infinite error loop.
+ - Returns: The previous unhandled error handler.
 */
 public var PMKUnhandledErrorHandler = { (error: NSError) -> Void in
     dispatch_async(dispatch_get_main_queue()) {
