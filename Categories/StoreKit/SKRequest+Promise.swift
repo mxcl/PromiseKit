@@ -39,6 +39,7 @@ private class SKDelegate: NSObject, SKProductsRequestDelegate {
     }
 
     @objc override class func initialize() {
+        //FIXME Swift can’t see SKError, so can't do CancellableErrorType
         NSError.registerCancelledErrorDomain(SKErrorDomain, code: SKErrorPaymentCancelled)
     }
 }

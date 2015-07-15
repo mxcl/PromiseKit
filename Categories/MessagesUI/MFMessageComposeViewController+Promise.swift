@@ -28,6 +28,12 @@ extension UIViewController {
     }
 }
 
+extension MFMessageComposeViewController {
+    public enum Error: ErrorType {
+        case Cancelled
+    }
+}
+
 private class PMKMessageComposeViewControllerDelegate: NSObject, MFMessageComposeViewControllerDelegate, UINavigationControllerDelegate {
 
     let (promise, fulfill, reject) = Promise<Void>.pendingPromise()
@@ -45,7 +51,7 @@ private class PMKMessageComposeViewControllerDelegate: NSObject, MFMessageCompos
             info[NSUnderlyingErrorKey] = NSNumber(unsignedInt: result.rawValue)
             reject(NSError(domain: PMKErrorDomain, code: PMKOperationFailed, userInfo: info))
         case MessageComposeResultCancelled.rawValue:
-            reject(NSError.cancelledError())
+            reject(MFMessageComposeViewController.Error.Cancelled)
         default:
             fatalError("Swift Sucks")
         }

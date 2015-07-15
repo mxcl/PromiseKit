@@ -30,6 +30,8 @@ class TestUIActionSheet: UIKitTestCase {
         sheet.addButtonWithTitle("1")
         sheet.cancelButtonIndex = sheet.addButtonWithTitle("2")
         sheet.promiseInView(rootvc.view).report(policy: .AllErrors) { err in
+            guard let err = err as? UIActionSheet.Error else { return XCTFail() }
+            XCTAssertTrue(err == UIActionSheet.Error.Cancelled)
             XCTAssertTrue(err.cancelled)
             ex.fulfill()
         }

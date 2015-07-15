@@ -346,7 +346,13 @@ public class Promise<T> {
             dispatch_async(dispatch_get_main_queue()) {
                 defer { resolve() }
 
-                if case .Rejected(let error, let token) = resolution where policy == .AllErrors || !error.cancelled {
+                if case .Rejected(let error, let token) = resolution {
+                    if let error = error as? CancellableErrorType {
+                        if error.cancelled && policy == .AllErrorsExceptCancellation {
+                            return
+                        }
+                    }
+
                     token.consumed = true
                     body(error)
                 }

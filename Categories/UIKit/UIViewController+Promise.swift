@@ -117,7 +117,20 @@ private func promise<T>(vc: UIViewController) -> Promise<T> {
     }
 
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        reject(NSError.cancelledError())
+        reject(UIImagePickerController.Error.Cancelled)
         retainCycle = nil
+    }
+}
+
+
+extension UIImagePickerController {
+    public enum Error: CancellableErrorType {
+        case Cancelled
+
+        public var cancelled: Bool {
+            switch self {
+                case .Cancelled: return true
+            }
+        }
     }
 }

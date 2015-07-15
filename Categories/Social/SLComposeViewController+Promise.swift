@@ -20,12 +20,17 @@ extension UIViewController {
         return Promise { fulfill, reject in
             vc.completionHandler = { result in
                 if result == .Cancelled {
-                    reject(NSError.cancelledError())
+                    reject(SLComposeViewController.Error.Cancelled)
                 } else {
                     fulfill()
                 }
             }
         }
     }
+}
 
+extension SLComposeViewController {
+    public enum Error: ErrorType {
+        case Cancelled
+    }
 }
