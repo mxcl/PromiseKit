@@ -30,6 +30,8 @@ class TestUIAlertView: UIKitTestCase {
         alert.addButtonWithTitle("1")
         alert.cancelButtonIndex = alert.addButtonWithTitle("2")
         alert.promise().report(policy: .AllErrors) { err in
+            guard let err = err as? UIAlertView.Error else { return XCTFail() }
+            XCTAssertTrue(err == .Cancelled)
             XCTAssertTrue(err.cancelled)
             ex.fulfill()
         }

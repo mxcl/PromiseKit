@@ -47,12 +47,12 @@ class PromiseTestCase: XCTestCase {
         let ex1 = expectationWithDescription("")
 
         PMKUnhandledErrorHandler = { err in
-            XCTAssertTrue(err.cancelled);
+            XCTAssertTrue((err as NSError).cancelled);
             ex1.fulfill()
         }
 
         after(0).then { _ in
-            throw NSError.cancelledError()
+            throw NSError(domain: PMKErrorDomain, code: PMKOperationCancelled, userInfo: nil)
         }.then { _ -> Void in
             XCTFail()
         }.report { _ -> Void in
@@ -67,15 +67,15 @@ class PromiseTestCase: XCTestCase {
         let ex2 = expectationWithDescription("")
 
         PMKUnhandledErrorHandler = { err in
-            XCTAssertTrue(err.cancelled);
+            XCTAssertTrue((err as NSError).cancelled);
             ex2.fulfill()
         }
 
         after(0).then { _ in
-            throw NSError.cancelledError()
+            throw NSError(domain: PMKErrorDomain, code: PMKOperationCancelled, userInfo: nil)
         }.recover { err in
             ex1.fulfill()
-            XCTAssertTrue(err.cancelled)
+            XCTAssertTrue((err as NSError).cancelled)
             throw err
         }.then { _ -> Void in
             XCTFail()
@@ -90,8 +90,8 @@ class PromiseTestCase: XCTestCase {
         let ex = expectationWithDescription("")
 
         after(0).then { _ in
-            throw NSError.cancelledError()
-        }.report(policy: .AllErrors) { _ in
+            throw NSError(domain: PMKErrorDomain, code: PMKOperationCancelled, userInfo: nil)
+        }.report(policy: .AllErrors) { err -> Void in
             ex.fulfill()
         }
 

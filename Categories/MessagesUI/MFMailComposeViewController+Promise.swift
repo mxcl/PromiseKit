@@ -27,6 +27,18 @@ extension UIViewController {
     }
 }
 
+extension MFMailComposeViewController {
+    public enum Error: CancellableErrorType {
+        case Cancelled
+
+        public var cancelled: Bool {
+            switch self {
+                case .Cancelled: return true
+            }
+        }
+    }
+}
+
 private class PMKMailComposeViewControllerDelegate: NSObject, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate {
 
     let (promise, fulfill, reject) = Promise<MFMailComposeResult>.pendingPromise()
@@ -45,7 +57,7 @@ private class PMKMailComposeViewControllerDelegate: NSObject, MFMailComposeViewC
                 info[NSUnderlyingErrorKey] = NSNumber(unsignedInt: result.rawValue)
                 reject(NSError(domain: PMKErrorDomain, code: PMKOperationFailed, userInfo: info))
             case MFMailComposeResultCancelled.rawValue:
-                reject(NSError.cancelledError())
+                reject(MFMailComposeViewController.Error.Cancelled)
             default:
                 fulfill(result)
             }
