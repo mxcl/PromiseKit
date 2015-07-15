@@ -5,6 +5,14 @@
 @interface WTFError : NSError @end @implementation WTFError
 @end
 
+@interface NSError (BridgingHack)
++ (void)pmk_setUnhandledErrorHandler:(void (^)(NSError *))block;
+@end
+
+void PMKSetUnhandledErrorHandler(void (^block)(NSError *)) {
+    [NSError pmk_setUnhandledErrorHandler:block];
+}
+
 
 @interface ErrorHandlingTests_ObjC: XCTestCase @end @implementation ErrorHandlingTests_ObjC
 
