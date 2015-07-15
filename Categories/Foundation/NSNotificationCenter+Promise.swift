@@ -1,5 +1,7 @@
 import Foundation.NSNotification
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 /**
  To import the `NSNotificationCenter` category:

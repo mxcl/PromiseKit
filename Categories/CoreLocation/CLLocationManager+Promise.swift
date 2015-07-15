@@ -1,5 +1,7 @@
 import CoreLocation.CLLocationManager
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 /**
  To import the `CLLocationManager` category:

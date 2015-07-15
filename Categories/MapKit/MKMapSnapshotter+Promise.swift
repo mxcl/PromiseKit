@@ -1,5 +1,7 @@
 import MapKit
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 /**
  To import the `MKMapSnapshotter` category:

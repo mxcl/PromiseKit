@@ -1,5 +1,7 @@
 import StoreKit
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 /**
  To import the `SKRequest` category:

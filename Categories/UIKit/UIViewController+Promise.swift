@@ -1,6 +1,8 @@
 import Foundation.NSError
-import PromiseKit
 import UIKit
+#if !COCOAPODS
+import PromiseKit
+#endif
 
 /**
  To import this `UIViewController` category:
