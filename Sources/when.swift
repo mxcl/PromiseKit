@@ -22,7 +22,8 @@ private func when<T>(promises: [Promise<T>]) -> Promise<Void> {
 
             dispatch_barrier_sync(barrier) {
                 switch resolution {
-                case .Rejected(let error):
+                case .Rejected(let error, let token):
+                    token.consumed = true
                     progress.completedUnitCount = progress.totalUnitCount
                     reject(Error.When(index, error))
                 case .Fulfilled:

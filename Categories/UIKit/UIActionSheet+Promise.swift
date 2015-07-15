@@ -43,7 +43,7 @@ private class PMKActionSheetDelegate: NSObject, UIActionSheetDelegate {
         if buttonIndex != actionSheet.cancelButtonIndex {
             fulfill(buttonIndex)
         } else {
-            reject(NSError.cancelledError())
+            reject(Error.Cancelled)
         }
     }
 }

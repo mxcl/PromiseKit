@@ -42,7 +42,7 @@ private class PMKAlertViewDelegate: NSObject, UIAlertViewDelegate {
         if buttonIndex != alertView.cancelButtonIndex {
             fulfill(buttonIndex)
         } else {
-            reject(NSError.cancelledError())
+            reject(Error.Cancelled)
         }
     }
 }

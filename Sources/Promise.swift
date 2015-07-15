@@ -1,3 +1,4 @@
+import Dispatch
 import Foundation.NSError
 
 /**
@@ -60,7 +61,14 @@ public class Promise<T> {
     */
     public convenience init(@noescape resolvers: (fulfill: (T) -> Void, reject: (ErrorType) -> Void) throws -> Void) {
         self.init(sealant: { resolve in
-            try resolvers(fulfill: { resolve(.Fulfilled($0)) }, reject: { resolve(.Rejected($0)) })
+            var counter: Int32 = 0  // can’t use `pending` as we are still initializing
+            try resolvers(fulfill: { resolve(.Fulfilled($0)) }, reject: { error in
+                if OSAtomicIncrement32(&counter) == 1 {
+                    resolve(.Rejected(error, ErrorConsumptionToken(error)))
+                } else {
+                    NSLog("PromiseKit: Warning: reject called on already rejected Promise: %@", "\(error)")
+                }
+            })
         })
     }
 
@@ -84,9 +92,9 @@ public class Promise<T> {
                 if let obj = obj {
                     resolve(.Fulfilled(obj))
                 } else if let err = err {
-                    resolve(.Rejected(err))
+                    resolve(.Rejected(err, ErrorConsumptionToken(err as ErrorType)))
                 } else {
-                    resolve(.Rejected(Error.DoubleOhSux0r))
+                    resolve(.Rejected(Error.DoubleOhSux0r, ErrorConsumptionToken(Error.DoubleOhSux0r)))
                 }
             }
         })
@@ -110,7 +118,7 @@ public class Promise<T> {
         self.init(sealant: { resolve in
             try resolver { obj, err in
                 if let err = err {
-                    resolve(.Rejected(err))
+                    resolve(.Rejected(err, ErrorConsumptionToken(err as ErrorType)))
                 } else {
                     resolve(.Fulfilled(obj))
                 }
@@ -129,8 +137,7 @@ public class Promise<T> {
      Create a new rejected promise.
     */
     public init(_ error: ErrorType) {
-        unconsume(error)
-        state = SealedState(resolution: .Rejected(error))
+        state = SealedState(resolution: .Rejected(error, ErrorConsumptionToken(error)))
     }
 
     init(@noescape sealant: ((Resolution<T>) -> Void) throws -> Void) {
@@ -139,7 +146,7 @@ public class Promise<T> {
         do {
             try sealant(resolve)
         } catch {
-            resolve(.Rejected(error))
+            resolve(.Rejected(error, ErrorConsumptionToken(error)))
         }
     }
 
@@ -215,7 +222,7 @@ public class Promise<T> {
                     do {
                         resolve(.Fulfilled(try body(value)))
                     } catch {
-                        resolve(.Rejected(error))
+                        resolve(.Rejected(error, ErrorConsumptionToken(error)))
                     }
                 }
             }
@@ -248,7 +255,7 @@ public class Promise<T> {
                     do {
                         try body(value).pipe(resolve)
                     } catch {
-                        resolve(.Rejected(error))
+                        resolve(.Rejected(error, ErrorConsumptionToken(error)))
                     }
                 }
             }
@@ -282,7 +289,7 @@ public class Promise<T> {
                         let anypromise = try body(value)
                         anypromise.pipe { obj in
                             if let error = obj as? NSError {
-                                resolve(.Rejected(error))
+                                resolve(.Rejected(error, ErrorConsumptionToken(error as ErrorType)))
                             } else {
                                 // possibly the value of this promise is a PMKManifold, if so
                                 // calling the objc `value` method will return the first item.
@@ -291,7 +298,7 @@ public class Promise<T> {
                             }
                         }
                     } catch {
-                        resolve(.Rejected(error))
+                        resolve(.Rejected(error, ErrorConsumptionToken(error)))
                     }
                 }
             }
@@ -337,8 +344,10 @@ public class Promise<T> {
     public func report(policy policy: ErrorPolicy = .AllErrorsExceptCancellation, _ body: (ErrorType) -> Void) {
         pipe { resolution in
             dispatch_async(dispatch_get_main_queue()) {
-                if case .Rejected(let error) = resolution where policy == .AllErrors || !error.cancelled {
-                    consume(error)
+                defer { resolve() }
+
+                if case .Rejected(let error, let token) = resolution where policy == .AllErrors || !error.cancelled {
+                    token.consumed = true
                     body(error)
                 }
             }
@@ -352,9 +361,9 @@ public class Promise<T> {
     public func recover(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: (ErrorType) -> Promise) -> Promise {
         return Promise(when: self) { resolution, resolve in
             switch resolution {
-            case .Rejected(let error):
+            case .Rejected(let error, let token):
                 contain_zalgo(q) {
-                    consume(error)
+                    token.consumed = true
                     body(error).pipe(resolve)
                 }
             case .Fulfilled:
@@ -366,13 +375,13 @@ public class Promise<T> {
     public func recover(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: (ErrorType) throws -> T) -> Promise {
         return Promise(when: self) { resolution, resolve in
             switch resolution {
-            case .Rejected(let error):
+            case .Rejected(let error, let token):
                 contain_zalgo(q) {
                     do {
-                        consume(error)
+                        token.consumed = true
                         resolve(.Fulfilled(try body(error)))
                     } catch {
-                        resolve(.Rejected(error))
+                        resolve(.Rejected(error, ErrorConsumptionToken(error)))
                     }
                 }
             case .Fulfilled:

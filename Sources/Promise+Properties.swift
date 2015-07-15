@@ -8,7 +8,7 @@ extension Promise {
             return nil
         case .Some(.Fulfilled):
             return nil
-        case .Some(.Rejected(let error)):
+        case .Some(.Rejected(let error, _)):
             return error
         }
     }

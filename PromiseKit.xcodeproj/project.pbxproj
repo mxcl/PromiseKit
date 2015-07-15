@@ -118,8 +118,8 @@
 		635421E01B38C53E00401F9B /* KIF.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 635421DF1B38C53E00401F9B /* KIF.framework */; };
 		635D0D731ADD7CE700CC0406 /* PMKPromise.test.m in Sources */ = {isa = PBXBuildFile; fileRef = 635D0D711ADD7CAE00CC0406 /* PMKPromise.test.m */; };
 		635D0D761ADDA2EA00CC0406 /* AnyPromise.test.m in Sources */ = {isa = PBXBuildFile; fileRef = 635D0D741ADDA2C100CC0406 /* AnyPromise.test.m */; };
-		635D0D7B1ADDB11400CC0406 /* ErrorUnhandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D0D7A1ADDB11400CC0406 /* ErrorUnhandler.swift */; };
-		635D0D7C1ADDB11400CC0406 /* ErrorUnhandler.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D0D7A1ADDB11400CC0406 /* ErrorUnhandler.swift */; };
+		635D0D7B1ADDB11400CC0406 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D0D7A1ADDB11400CC0406 /* Error.swift */; };
+		635D0D7C1ADDB11400CC0406 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D0D7A1ADDB11400CC0406 /* Error.swift */; };
 		6362D8B41AF8831200E9E0A2 /* SLComposeViewController+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6302ACC21AEF42F2001F0069 /* SLComposeViewController+Promise.swift */; };
 		636A44EE1AEC0F6700639777 /* TestSocial.m in Sources */ = {isa = PBXBuildFile; fileRef = 637BF6111AEAC62400997C8B /* TestSocial.m */; };
 		636B914B1B2BB06D00434FA9 /* afterlife.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D73BE11B20B48F00843146 /* afterlife.swift */; };
@@ -394,7 +394,7 @@
 		635421DF1B38C53E00401F9B /* KIF.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = KIF.framework; path = Carthage/Build/iOS/KIF.framework; sourceTree = "<group>"; };
 		635D0D711ADD7CAE00CC0406 /* PMKPromise.test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PMKPromise.test.m; path = Tests/CorePromise/PMKPromise.test.m; sourceTree = SOURCE_ROOT; };
 		635D0D741ADDA2C100CC0406 /* AnyPromise.test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnyPromise.test.m; path = Tests/CorePromise/AnyPromise.test.m; sourceTree = SOURCE_ROOT; };
-		635D0D7A1ADDB11400CC0406 /* ErrorUnhandler.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ErrorUnhandler.swift; path = Sources/ErrorUnhandler.swift; sourceTree = "<group>"; };
+		635D0D7A1ADDB11400CC0406 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Error.swift; path = Sources/Error.swift; sourceTree = "<group>"; };
 		636A44EF1AEC304300639777 /* bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = bridge.h; path = Categories/bridge.h; sourceTree = "<group>"; };
 		63772C9B1AF09B8A00ED2F59 /* ErrorUnhandler.test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ErrorUnhandler.test.swift; path = CorePromise/ErrorUnhandler.test.swift; sourceTree = "<group>"; };
 		637BF6111AEAC62400997C8B /* TestSocial.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = TestSocial.m; path = Categories/TestSocial.m; sourceTree = "<group>"; };
@@ -778,8 +778,8 @@
 			children = (
 				63F803BF1AB87A9500E4DEE1 /* Promise.swift */,
 				639A12701AB9F941002E5C24 /* Promise+Properties.swift */,
-				635D0D7A1ADDB11400CC0406 /* Error.swift */,
 				63BF9DCF1AB9E4850049EA39 /* State.swift */,
+				635D0D7A1ADDB11400CC0406 /* Error.swift */,
 				63A1576A1ABB32EB0002A421 /* AnyPromise.swift */,
 				63A157711ABB59D00002A421 /* AnyPromise.m */,
 			);
@@ -1423,7 +1423,7 @@
 				63A1576B1ABB32EB0002A421 /* AnyPromise.swift in Sources */,
 				63196AC51AFD936300555BCD /* dispatch_promise.m in Sources */,
 				63196AC71AFD936300555BCD /* dispatch_promise.swift in Sources */,
-				635D0D7B1ADDB11400CC0406 /* ErrorUnhandler.swift in Sources */,
+				635D0D7B1ADDB11400CC0406 /* Error.swift in Sources */,
 				63314ADA1AEDDC070071B6F5 /* hang.m in Sources */,
 				63314ADC1AEDDC070071B6F5 /* join.m in Sources */,
 				630F25F91AF17A8F00BE27FD /* PMKPromise.m in Sources */,
@@ -1447,7 +1447,7 @@
 				63A1576C1ABB34250002A421 /* AnyPromise.swift in Sources */,
 				63196AC61AFD936300555BCD /* dispatch_promise.m in Sources */,
 				63196AC81AFD936300555BCD /* dispatch_promise.swift in Sources */,
-				635D0D7C1ADDB11400CC0406 /* ErrorUnhandler.swift in Sources */,
+				635D0D7C1ADDB11400CC0406 /* Error.swift in Sources */,
 				63314ADB1AEDDC070071B6F5 /* hang.m in Sources */,
 				63314ADD1AEDDC070071B6F5 /* join.m in Sources */,
 				630F25FA1AF17BFE00BE27FD /* PMKPromise.m in Sources */,

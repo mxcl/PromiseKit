@@ -1,3 +1,4 @@
+@import Foundation.NSError;
 @import Foundation.NSPointerArray;
 
 #if TARGET_OS_IPHONE
@@ -27,7 +28,6 @@
 @interface AnyPromise (Swift)
 - (void)pipe:(void (^)(id))body;
 - (AnyPromise *)initWithBridge:(void (^)(PMKResolver))resolver;
-+ (void)__consume:(id)obj;
 @end
 
 extern NSError *PMKProcessUnhandledException(id thrown);
@@ -41,3 +41,7 @@ extern NSError *PMKProcessUnhandledException(id thrown);
     [userInfo addEntriesFromDictionary:supplements]; \
     [[[err class] alloc] initWithDomain:err.domain code:err.code userInfo:userInfo]; \
 })
+
+@interface NSError (PMKUnhandledErrorHandler)
+- (void)pmk_consume;
+@end

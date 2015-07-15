@@ -17,9 +17,9 @@ public typealias AnyPromise = PMKPromise
             switch resolution {
             case .Fulfilled(let value):
                 resolve(value)
-            case .Rejected(let error):
+            case .Rejected(let error, let token):
                 let nserror = error as NSError
-                unconsume(nserror)
+                unconsume(error: nserror, reusingToken: token)
                 resolve(nserror)
             }
         }
@@ -200,7 +200,7 @@ public typealias AnyPromise = PMKPromise
         return Promise(sealant: { resolve in
             pipe { object in
                 if let error = object as? NSError {
-                    resolve(.Rejected(error))
+                    resolve(.Rejected(error, error.token))
                 } else {
                     contain_zalgo(q) {
                         body(object).pipe(resolve)
@@ -215,7 +215,7 @@ public typealias AnyPromise = PMKPromise
             var preresolve: ((AnyObject?) -> Void)!
             super.init(resolver: &preresolve)
             resolver = { obj in
-                if obj is NSError { unconsume(obj as! NSError) }
+                if let error = obj as? NSError { unconsume(error: error) }
                 preresolve(obj)
             }
         }
