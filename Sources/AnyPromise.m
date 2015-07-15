@@ -25,7 +25,7 @@ NSString *const PMKErrorDomain = @"PMKErrorDomain";
 }
 
 static inline AnyPromise *AnyPromiseWhen(AnyPromise *when, void(^then)(id, PMKResolver)) {
-    return [[[when class] alloc] initWithBridge:^(PMKResolver resolve){
+    return [[AnyPromise alloc] initWithBridge:^(PMKResolver resolve){
         [when pipe:^(id obj){
             then(obj, resolve);
         }];
