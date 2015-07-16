@@ -29,33 +29,35 @@ class TestCLLocationManager: XCTestCase {
         }
     }
 
-#if os(iOS)
     func testRequestAuthorization1() {
-        let ex = expectationWithDescription("")
+        #if os(iOS)
+            let ex = expectationWithDescription("")
 
-        CLLocationManager.requestAuthorization().then { x -> Void in
-            XCTAssertEqual(x, .Restricted)
-            ex.fulfill()
-        }
+            CLLocationManager.requestAuthorization().then { x -> Void in
+                XCTAssertEqual(x, .Restricted)
+                ex.fulfill()
+            }
 
-        waitForExpectationsWithTimeout(1, handler: nil)
+            waitForExpectationsWithTimeout(1, handler: nil)
+        #endif
     }
 
     func testRequestAuthorization2() {
-        swizzle(CLLocationManager.self, "requestWhenInUseAuthorization") {
-            swizzle(CLLocationManager.self, "authorizationStatus", isClassMethod: true) {
-                let ex = expectationWithDescription("")
+        #if os(iOS)
+            swizzle(CLLocationManager.self, "requestWhenInUseAuthorization") {
+                swizzle(CLLocationManager.self, "authorizationStatus", isClassMethod: true) {
+                    let ex = expectationWithDescription("")
 
-                CLLocationManager.requestAuthorization().then { x -> Void in
-                    XCTAssertEqual(x, .AuthorizedWhenInUse)
-                    ex.fulfill()
+                    CLLocationManager.requestAuthorization().then { x -> Void in
+                        XCTAssertEqual(x, .AuthorizedWhenInUse)
+                        ex.fulfill()
+                    }
+
+                    waitForExpectationsWithTimeout(1, handler: nil)
                 }
-
-                waitForExpectationsWithTimeout(1, handler: nil)
             }
-        }
+        #endif
     }
-#endif
 }
 
 private let dummyPlacemark = CLPlacemark()
