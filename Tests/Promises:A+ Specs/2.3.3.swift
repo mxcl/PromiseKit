@@ -1,8 +1,7 @@
 import PromiseKit
 import XCTest
 
-class Test233: XCTestCase {
-
+//class Test233: XCTestCase {
 //    func testPromiseResolution(xFactory: ()->Promise<Int>, test: (Promise<Int>, XCTestExpectation)->Void) {
 //        // via return from a fulfilled promise
 //        let e1 = expectationWithDescription("")
@@ -51,4 +50,4 @@ class Test233: XCTestCase {
 //            }
 //        }
 //    }
-}
+//}
