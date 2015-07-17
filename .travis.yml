@@ -14,3 +14,7 @@ matrix:
       xcode_sdk: iphonesimulator8.3
     - xcode_scheme: PMKiOS
       xcode_sdk: macosx10.10
+
+branches:
+  only:
+    - master
