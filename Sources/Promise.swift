@@ -330,20 +330,26 @@ public class Promise<T> {
      - SeeAlso: `registerCancellationError`
     */
     public func report(policy policy: ErrorPolicy = .AllErrorsExceptCancellation, _ body: (ErrorType) -> Void) {
+        
+        func consume(error: ErrorType, _ token: ErrorConsumptionToken) {
+            token.consumed = true
+            body(error)
+        }
+
         pipe { resolution in
-            dispatch_async(dispatch_get_main_queue()) {
-                defer { resolve() }
-
-                if case .Rejected(let error, let token) = resolution {
-                    if let error = error as? CancellableErrorType {
-                        if error.cancelled && policy == .AllErrorsExceptCancellation {
-                            return
-                        }
+            switch (resolution, policy) {
+            case (let .Rejected(error as CancellableErrorType, token), .AllErrorsExceptCancellation):
+                dispatch_async(dispatch_get_main_queue()) {
+                    if !error.cancelled {     // cancelled must be called main
+                        consume(error, token)
                     }
-
-                    token.consumed = true
-                    body(error)
                 }
+            case (let .Rejected(error, token), _):
+                dispatch_async(dispatch_get_main_queue()) {
+                    consume(error, token)
+                }
+            case (.Fulfilled, _):
+                break
             }
         }
     }
