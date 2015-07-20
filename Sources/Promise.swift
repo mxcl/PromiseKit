@@ -218,12 +218,8 @@ public class Promise<T> {
             case .Rejected(let error):
                 resolve(.Rejected(error))
             case .Fulfilled(let value):
-                contain_zalgo(q) {
-                    do {
-                        resolve(.Fulfilled(try body(value)))
-                    } catch {
-                        resolve(.Rejected(error, ErrorConsumptionToken(error)))
-                    }
+                contain_zalgo(q, rejecter: resolve) {
+                    resolve(.Fulfilled(try body(value)))
                 }
             }
         }
@@ -251,12 +247,8 @@ public class Promise<T> {
             case .Rejected(let error):
                 resolve(.Rejected(error))
             case .Fulfilled(let value):
-                contain_zalgo(q) {
-                    do {
-                        try body(value).pipe(resolve)
-                    } catch {
-                        resolve(.Rejected(error, ErrorConsumptionToken(error)))
-                    }
+                contain_zalgo(q, rejecter: resolve) {
+                    try body(value).pipe(resolve)
                 }
             }
         }
@@ -284,21 +276,17 @@ public class Promise<T> {
             case .Rejected(let error):
                 resolve(.Rejected(error))
             case .Fulfilled(let value):
-                contain_zalgo(q) {
-                    do {
-                        let anypromise = try body(value)
-                        anypromise.pipe { obj in
-                            if let error = obj as? NSError {
-                                resolve(.Rejected(error, ErrorConsumptionToken(error as ErrorType)))
-                            } else {
-                                // possibly the value of this promise is a PMKManifold, if so
-                                // calling the objc `value` method will return the first item.
-                                let obj: AnyObject? = anypromise.valueForKey("value")
-                                resolve(.Fulfilled(obj))
-                            }
+                contain_zalgo(q, rejecter: resolve) {
+                    let anypromise = try body(value)
+                    anypromise.pipe { obj in
+                        if let error = obj as? NSError {
+                            resolve(.Rejected(error, ErrorConsumptionToken(error as ErrorType)))
+                        } else {
+                            // possibly the value of this promise is a PMKManifold, if so
+                            // calling the objc `value` method will return the first item.
+                            let obj: AnyObject? = anypromise.valueForKey("value")
+                            resolve(.Fulfilled(obj))
                         }
-                    } catch {
-                        resolve(.Rejected(error, ErrorConsumptionToken(error)))
                     }
                 }
             }
@@ -382,13 +370,9 @@ public class Promise<T> {
         return Promise(when: self) { resolution, resolve in
             switch resolution {
             case .Rejected(let error, let token):
-                contain_zalgo(q) {
-                    do {
-                        token.consumed = true
-                        resolve(.Fulfilled(try body(error)))
-                    } catch {
-                        resolve(.Rejected(error, ErrorConsumptionToken(error)))
-                    }
+                contain_zalgo(q, rejecter: resolve) {
+                    token.consumed = true
+                    resolve(.Fulfilled(try body(error)))
                 }
             case .Fulfilled:
                 resolve(resolution)
@@ -479,6 +463,16 @@ func contain_zalgo(q: dispatch_queue_t, block: () -> Void) {
         }
     } else {
         dispatch_async(q, block)
+    }
+}
+
+func contain_zalgo<T>(q: dispatch_queue_t, rejecter resolve: (Resolution<T>) -> Void, block: () throws -> Void) {
+    contain_zalgo(q) {
+        do {
+            try block()
+        } catch {
+            resolve(.Rejected(error, ErrorConsumptionToken(error)))
+        }
     }
 }
 
