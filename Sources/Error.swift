@@ -139,6 +139,10 @@ extension NSError {
             token.consumed = true
         }
     }
+
+    var token: ErrorConsumptionToken! {
+        return objc_getAssociatedObject(self, &handle) as? ErrorConsumptionToken
+    }
 }
 
 func unconsume(error error: NSError, var reusingToken token: ErrorConsumptionToken? = nil) {
