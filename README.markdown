@@ -20,6 +20,11 @@ PromiseKit is a thoughtful and complete implementation of promises for iOS and O
 [![Join the chat at https://gitter.im/mxcl/PromiseKit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mxcl/PromiseKit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) ![](https://img.shields.io/cocoapods/v/PromiseKit.svg?label=Current%20Release)  [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg)](https://github.com/Carthage/Carthage)
 
 
+# Swift 2
+
+The `swift-2.0-beta` branch has a working Swift 2 implementation. Please be aware that both `catch` and `defer` are Swift 2 keywords so we have had to rename these functions and our new choices are not yet final.
+
+
 # PromiseKit 2
 
 PromiseKit 2 contains many interesting and important additions. Check out our our [release announcement](http://promisekit.org/PromiseKit-2.0-Released/) for full details.
