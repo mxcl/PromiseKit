@@ -11,6 +11,7 @@ extern NSString * const PMKErrorDomain;
 #define PMKURLErrorFailingDataKey @"PMKURLErrorFailingDataKey"
 #define PMKURLErrorFailingStringKey @"PMKURLErrorFailingStringKey"
 #define PMKJSONErrorJSONObjectKey @"PMKJSONErrorJSONObjectKey"
+#define PMKJoinPromisesKey @"PMKJoinPromisesKey"
 
 #define PMKUnexpectedError 1l
 #define PMKUnknownError 2l
@@ -21,6 +22,7 @@ extern NSString * const PMKErrorDomain;
 #define PMKJSONError 7l
 #define PMKOperationFailed 8l
 #define PMKTaskError 9l
+#define PMKJoinError 10l
 
 #if defined(PMKEZBake) && defined(SWIFT_CLASS)
     // https://github.com/PromiseKit/EZiOS7/issues/2

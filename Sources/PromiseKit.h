@@ -62,11 +62,19 @@ extern AnyPromise * __nonnull PMKWhen(id __nonnull input);
 
  For example:
 
-    PMKJoin(@[promise1, promise2]).then(^(NSArray *results, NSArray *values, NSArray *errors){
+    PMKJoin(@[promise1, promise2]).then(^(NSArray *resultingValues){
         //…
-    });
+    }).catch(^(NSError *error){
+        assert(error.domain == PMKErrorDomain);
+        assert(error.code == PMKJoinError);
 
- @warning *Important* This promise is not rejectable. Thus it is up to you to propogate an error if you want any subsequent chain to continue being rejected.
+        NSArray *promises = error.userInfo[PMKJoinPromisesKey];
+        for (AnyPromise *promise in promises) {
+            if (promise.rejected) {
+                //…
+            }
+        }
+    });
 
  @param promises An array of promises.
 
