@@ -1,4 +1,5 @@
 import Dispatch
+import Foundation  // NSLog
 
 enum Seal<R> {
     case Pending(Handlers<R>)
@@ -78,6 +79,12 @@ class UnsealedState<R>: State<R> {
                     handler(resolution)
                 }
             }
+        }
+    }
+
+    deinit {
+        if case .Pending = seal {
+            NSLog("PromiseKit: Pending Promise deallocated! This is usually a bug")
         }
     }
 }
