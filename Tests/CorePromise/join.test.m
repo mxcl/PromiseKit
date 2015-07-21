@@ -17,14 +17,20 @@
               [AnyPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:1 userInfo:nil]],
               promise,
               [AnyPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:2 userInfo:nil]]
-              ]).then(^(NSArray *results, NSArray *values, NSArray *errors) {
-        NSUInteger cumv = 0;
-        NSInteger cume = 0;
+              ]).then(^{
+        XCTFail();
+    }).catch(^(NSError *error){
+        id promises = error.userInfo[PMKJoinPromisesKey];
 
-        for (id error in errors)
-            cume |= [error code];
-        for (id value in values)
-            cumv |= [value unsignedIntValue];
+        int cume = 0, cumv = 0;
+
+        for (AnyPromise *promise in promises) {
+            if (promise.rejected) {
+                cume |= [promise.value code];
+            } else {
+                cumv |= [promise.value unsignedIntValue];
+            }
+        }
 
         XCTAssertTrue(cumv == 4);
         XCTAssertTrue(cume == 3);
@@ -40,7 +46,7 @@
     PMKJoin(@[
               [AnyPromise promiseWithValue:@1],
               [AnyPromise promiseWithValue:@2]
-              ]).then(^(NSArray *results, NSArray *values, NSArray *errors) {
+              ]).then(^(NSArray *values, id errors) {
         XCTAssertEqualObjects(values, (@[@1, @2]));
         XCTAssertNil(errors);
         [ex1 fulfill];
@@ -54,9 +60,10 @@
     PMKJoin(@[
               [AnyPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:1 userInfo:nil]],
               [AnyPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:2 userInfo:nil]],
-              ]).then(^(NSArray *results, NSArray *values, NSArray *errors) {
-        XCTAssertEqualObjects(values, @[]);
-        XCTAssertNotNil(errors);
+              ]).then(^{
+        XCTFail();
+    }).catch(^(NSError *error){
+        XCTAssertNotNil(error.userInfo[PMKJoinPromisesKey]);
         [ex1 fulfill];
     });
     [self waitForExpectationsWithTimeout:1 handler:nil];
@@ -66,7 +73,7 @@
     XCTestExpectation *ex1 = [self expectationWithDescription:@""];
     PMKJoin(@[]).then(^(id a, id b, id c){
         XCTAssertEqualObjects(@[], a);
-        XCTAssertEqualObjects(@[], b);
+        XCTAssertNil(b);
         XCTAssertNil(c);
         [ex1 fulfill];
     });

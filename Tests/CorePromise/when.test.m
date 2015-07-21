@@ -60,8 +60,7 @@
 
     [progress resignCurrent];
 
-    PMKJoin(promises).then(^{
-
+    PMKJoin(promises).catch(^{
         XCTAssertLessThanOrEqual(1, progress.fractionCompleted);
         XCTAssertEqual(progress.completedUnitCount, 1);
         [ex1 fulfill];
