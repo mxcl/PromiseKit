@@ -61,7 +61,7 @@ class ErrorHandlingTests_Swift: XCTestCase {
             }
             promise.recover { error -> Promise<Int> in
                 return Promise(1)
-            }.finally {
+            }.ensure {
                 ex.fulfill()
             }
         }
@@ -103,7 +103,7 @@ class ErrorHandlingTests_Swift: XCTestCase {
                 throw error
             }.then { x in
                 XCTFail()
-            }.finally {
+            }.ensure {
                 ex1.fulfill()
             }.report { err in
                 ex2.fulfill()
@@ -128,7 +128,7 @@ class ErrorHandlingTests_Swift: XCTestCase {
         let ex4 = expectationWithDescription("")
 
         after(0.1).then { _ -> Void in r(Error.Test); ex1.fulfill() }
-        after(0.15).then { _ -> Void in r(Error.Test); ex2.fulfill() }.finally { ex3.fulfill() }
+        after(0.15).then { _ -> Void in r(Error.Test); ex2.fulfill() }.ensure { ex3.fulfill() }
 
         p.report { error in
             ex4.fulfill()

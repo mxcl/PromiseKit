@@ -43,7 +43,7 @@ extension UIViewController {
                     }
                 }, failureBlock: nil)
             }
-        }.finally {
+        }.ensure {
             self.dismissViewControllerAnimated(animated, completion: nil)
         }
     }

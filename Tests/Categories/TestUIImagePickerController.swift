@@ -13,7 +13,7 @@ class TestPromiseImagePickerController: UIKitTestCase {
 
             override func presentViewController(vc: UIViewController, animated flag: Bool, completion: (() -> Void)?) {
                 let ipc = vc as! UIImagePickerController
-                after(0.05).finally {
+                after(0.05).ensure {
                     ipc.delegate?.imagePickerController?(ipc, didFinishPickingMediaWithInfo: self.info)
                 }
             }
@@ -39,7 +39,7 @@ class TestPromiseImagePickerController: UIKitTestCase {
 
             override func presentViewController(vc: UIViewController, animated flag: Bool, completion: (() -> Void)?) {
                 let ipc = vc as! UIImagePickerController
-                after(0.05).finally {
+                after(0.05).ensure {
                     ipc.delegate?.imagePickerController?(ipc, didFinishPickingMediaWithInfo: self.info)
                 }
             }
