@@ -392,14 +392,14 @@ public class Promise<T> {
          UIApplication.sharedApplication().networkActivityIndicatorVisible = true
          somePromise().then {
              //…
-         }.finally {
+         }.ensure {
              UIApplication.sharedApplication().networkActivityIndicatorVisible = false
          }
 
      - Parameter on: The queue on which body should be executed.
      - Parameter body: The closure that is executed when this Promise is resolved.
     */
-    public func finally(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: () -> Void) -> Promise<T> {
+    public func ensure(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: () -> Void) -> Promise {
         return Promise(when: self) { resolution, resolve in
             contain_zalgo(q) {
                 body()
@@ -407,6 +407,12 @@ public class Promise<T> {
             }
         }
     }
+
+    @available(*, unavailable, renamed="ensure")
+    public func finally(on: dispatch_queue_t = dispatch_get_main_queue(), body: () -> Void) -> Promise { return Promise { _, _ in } }
+
+    @available(*, unavailable, renamed="report")
+    public func catch_(policy policy: ErrorPolicy = .AllErrorsExceptCancellation, body: () -> Void) -> Promise { return Promise { _, _ in } }
 }
 
 

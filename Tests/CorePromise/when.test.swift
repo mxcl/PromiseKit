@@ -130,10 +130,10 @@ class WhenTestCase_Swift: XCTestCase {
         }
 
         let q = dispatch_get_main_queue()
-        p1.finally(on: q, finally)
-        p2.finally(on: q, finally)
-        p3.finally(on: q, finally)
-        p4.finally(on: q, finally)
+        p1.ensure(on: q, finally)
+        p2.ensure(on: q, finally)
+        p3.ensure(on: q, finally)
+        p4.ensure(on: q, finally)
 
         waitForExpectationsWithTimeout(1, handler: nil)
     }
@@ -187,8 +187,8 @@ class WhenTestCase_Swift: XCTestCase {
             }
         }
 
-        p2.finally { after(0.1).then(ex2.fulfill) }
-        p3.finally { after(0.1).then(ex3.fulfill) }
+        p2.ensure { after(0.1).then(ex2.fulfill) }
+        p3.ensure { after(0.1).then(ex3.fulfill) }
 
         waitForExpectationsWithTimeout(1, handler: nil)
     }
