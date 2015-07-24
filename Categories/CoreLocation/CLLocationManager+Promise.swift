@@ -116,7 +116,8 @@ private class AuthorizationCatcher: CLLocationManager, CLLocationManagerDelegate
 }
 
 private func auther(requestAuthorizationType: CLLocationManager.RequestAuthorizationType)(manager: CLLocationManager) {
-    guard #available(iOS 8, *) else { return }
+
+    //PMKiOS7 guard #available(iOS 8, *) else { return }
 
     func hasInfoPListKey(key: String) -> Bool {
         let value = NSBundle.mainBundle().objectForInfoDictionaryKey(key) as? String ?? ""
