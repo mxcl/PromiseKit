@@ -10,7 +10,9 @@ class TestNSNotificationCenter: XCTestCase {
         let userInfo: [NSObject: AnyObject] = ["a": 1]
 
         NSNotificationCenter.once(PMKTestNotification).then { (d: [NSObject: AnyObject]) -> Void in
-            //XCTAssertEqual(d, userInfo) FIXME swift won't compile this!
+            let a = userInfo as NSDictionary
+            let b = d as NSDictionary
+            XCTAssertTrue(a.isEqual(b))
             ex.fulfill()
         }
 

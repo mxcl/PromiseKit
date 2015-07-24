@@ -30,7 +30,11 @@ extension UIViewController {
 }
 
 extension SLComposeViewController {
-    public enum Error: ErrorType {
+    public enum Error: CancellableErrorType {
         case Cancelled
+
+        public var cancelled: Bool {
+            switch self { case .Cancelled: return true }
+        }
     }
 }

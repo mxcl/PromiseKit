@@ -62,14 +62,14 @@ extension UIViewController {
         vc.delegate = proxy
         vc.mediaTypes = ["public.image"]  // this promise can only resolve with a UIImage
         presentViewController(vc, animated: animated, completion: completion)
-        return proxy.promise.then(on: zalgo) { info -> Promise<UIImage> in
+        return proxy.promise.then(on: zalgo) { info -> UIImage in
             if let img = info[UIImagePickerControllerEditedImage] as? UIImage {
-                return Promise(img)
+                return img
             }
             if let img = info[UIImagePickerControllerOriginalImage] as? UIImage {
-                return Promise(img)
+                return img
             }
-            return Promise(Error.NoImageFound)
+            throw Error.NoImageFound
         }.ensure {
             self.dismissViewControllerAnimated(animated, completion: nil)
         }

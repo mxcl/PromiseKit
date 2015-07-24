@@ -18,6 +18,8 @@
     rootvc = [UIApplication sharedApplication].keyWindow.rootViewController = nil;
 }
 
+#if 0  // not possible to test these in the simulator
+
 - (void)testCanCancelMailComposeViewController {
     id ex = [self expectationWithDescription:@""];
 
@@ -55,5 +57,6 @@
 
     [self waitForExpectationsWithTimeout:10 handler:nil];
 }
+#endif
 
 @end

@@ -29,20 +29,7 @@ class TestCLLocationManager: XCTestCase {
         }
     }
 
-    func testRequestAuthorization1() {
-        #if os(iOS)
-            let ex = expectationWithDescription("")
-
-            CLLocationManager.requestAuthorization().then { x -> Void in
-                XCTAssertEqual(x, .Restricted)
-                ex.fulfill()
-            }
-
-            waitForExpectationsWithTimeout(1, handler: nil)
-        #endif
-    }
-
-    func testRequestAuthorization2() {
+    func testRequestAuthorization() {
         #if os(iOS)
             swizzle(CLLocationManager.self, "requestWhenInUseAuthorization") {
                 swizzle(CLLocationManager.self, "authorizationStatus", isClassMethod: true) {
@@ -127,12 +114,16 @@ private let dummy = [CLLocation(latitude: 0, longitude: 0), CLLocation(latitude:
 
 extension CLLocationManager {
     @objc func pmk_startUpdatingLocation() {
-        delegate!.locationManager?(self, didUpdateLocations: dummy)
+        after(0.1).then {
+            self.delegate!.locationManager?(self, didUpdateLocations: dummy)
+        }
     }
 
     #if os(iOS)
     @objc func pmk_requestWhenInUseAuthorization() {
-        delegate!.locationManager?(self, didChangeAuthorizationStatus: .AuthorizedWhenInUse)
+        after(0.1).then {
+            self.delegate!.locationManager?(self, didChangeAuthorizationStatus: .AuthorizedWhenInUse)
+        }
     }
 
     class func pmk_authorizationStatus() -> CLAuthorizationStatus {
