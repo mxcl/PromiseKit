@@ -1,13 +1,9 @@
-import KIF
 import PromiseKit
 import UIKit
 import XCTest
 
-
-class TestPromiseImagePickerController: UIKitTestCase {
-
-    // UIImagePickerController fulfills with edited image
-    func test1() {
+class Test_UIImagePickerController_Swift: XCTestCase {
+    func test_fulfills_with_edited_image() {
         class Mock: UIViewController {
             var info = [String:AnyObject]()
 
@@ -29,11 +25,10 @@ class TestPromiseImagePickerController: UIKitTestCase {
             XCTAssert(x == editedImage)
             ex.fulfill()
         }
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectationsWithTimeout(10, handler: nil)
     }
 
-    // UIImagePickerController fulfills with original image if no edited image available
-    func test2() {
+    func test_fulfills_with_original_image_if_no_edited_image() {
         class Mock: UIViewController {
             var info = [String:AnyObject]()
 
@@ -57,77 +52,5 @@ class TestPromiseImagePickerController: UIKitTestCase {
             ex.fulfill()
         }
         waitForExpectationsWithTimeout(1, handler: nil)
-    }
-
-    // cancelling picker cancels promise
-    func test3() {
-        let ex = expectationWithDescription("")
-        let picker = UIImagePickerController()
-        let promise: Promise<UIImage> = rootvc.promiseViewController(picker, animated: false, completion: {
-            after(0.05).then { _ -> Void in
-                let button = picker.viewControllers[0].navigationItem.rightBarButtonItem!
-                UIControl().sendAction(button.action, to: button.target, forEvent: nil)
-            }
-        })
-        promise.report { _ -> Void in
-            XCTFail()
-        }
-        promise.report(policy: .AllErrors) { _ -> Void in
-            after(0.5).then(ex.fulfill)
-        }
-        waitForExpectationsWithTimeout(10, handler: nil)
-
-        XCTAssertNil(rootvc.presentedViewController)
-    }
-
-    // can select image from picker
-    func test4() {
-        let ex = expectationWithDescription("")
-        let picker = UIImagePickerController()
-        let promise: Promise<UIImage> = rootvc.promiseViewController(picker, animated: false, completion: {
-            after(0.05).then { _ -> Promise<Void> in
-                let tv: UITableView? = find(picker, type: UITableView.self)
-                let cell = tv!.visibleCells[1]
-                cell.tap()
-                return after(1.5)
-            }.then { _ -> Void in
-                let cv: UICollectionView? = find(picker.viewControllers[1], type: UICollectionView.self)
-                let cell = cv?.visibleCells()[0]
-                cell?.tap()
-            }
-        })
-        promise.then { img -> Void in
-            XCTAssertTrue(img.size.width > 0)
-            ex.fulfill()
-        }
-        waitForExpectationsWithTimeout(10, handler: nil)
-
-        XCTAssertNil(rootvc.presentedViewController)
-    }
-
-    // can select data from picker
-    func test5() {
-        let ex = expectationWithDescription("")
-        let picker = UIImagePickerController()
-        let promise: Promise<NSData> = rootvc.promiseViewController(picker, animated: false, completion: {
-            after(0.05).then { _ -> Promise<Void> in
-                let tv: UITableView? = find(picker, type: UITableView.self)
-                tv?.visibleCells[1].tap()
-                return after(1.5)
-            }.then { _ -> Void in
-                let vcs = picker.viewControllers
-                let cv: UICollectionView? = find(vcs[1], type: UICollectionView.self)
-                let cell = cv?.visibleCells()[0]
-                cell?.tap()
-            }
-        })
-        promise.then { data -> Void in
-            XCTAssertTrue(data.length > 0)
-            XCTAssertNotNil(UIImage(data: data))
-            ex.fulfill()
-        }
-        waitForExpectationsWithTimeout(10, handler: nil)
-        
-        XCTAssertNil(rootvc.presentedViewController)
     }
 }
