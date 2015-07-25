@@ -61,7 +61,7 @@ typedef PMKRejecter PMKPromiseRejecter;
 
 
 
-@import Foundation.NSDate;
+#import <Foundation/NSDate.h>
 
 @interface PMKPromise (Deprecated)
 
