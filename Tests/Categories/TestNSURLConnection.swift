@@ -3,7 +3,7 @@ import OHHTTPStubs
 import PromiseKit
 import XCTest
 
-class TestNSURLConnection: XCTestCase {
+class Test_NSURLConnection_Swift: XCTestCase {
     override func tearDown() {
         OHHTTPStubs.removeAllStubs()
     }

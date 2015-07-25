@@ -5,7 +5,7 @@ import XCTest
 private let dummy = 1_234_765
 
 
-class TestPromisableViewController: UIKitTestCase {
+class Test_UIViewController_Swift: UIKitTestCase {
 
     func test_rejects_if_vc_has_no_promise_property() {
         let ex = expectationWithDescription("")

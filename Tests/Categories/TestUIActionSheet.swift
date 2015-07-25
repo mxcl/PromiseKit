@@ -2,7 +2,7 @@ import PromiseKit
 import UIKit
 import XCTest
 
-class TestUIActionSheet: UIKitTestCase {
+class Test_UIActionSheet_Swift: UIKitTestCase {
     // fulfills with buttonIndex
     func test1() {
         let ex = expectationWithDescription("")

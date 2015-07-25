@@ -2,10 +2,10 @@ import Accounts
 import PromiseKit
 import XCTest
 
-class TestACAccountStore: XCTestCase {
+class Test_ACAccountStore_Swift: XCTestCase {
     var dummy: ACAccount { return ACAccount() }
 
-    func testRenewCredentialsForAccount() {
+    func test_renewCredentialsForAccount() {
         let ex = expectationWithDescription("")
 
         class MockAccountStore: ACAccountStore {
@@ -22,7 +22,7 @@ class TestACAccountStore: XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func testRequestAccessToAccountsWithType() {
+    func test_requestAccessToAccountsWithType() {
         class MockAccountStore: ACAccountStore {
             override func requestAccessToAccountsWithType(accountType: ACAccountType!, options: [NSObject : AnyObject]!, completion: ACAccountStoreRequestAccessCompletionHandler!) {
                 completion(true, nil)
@@ -39,7 +39,7 @@ class TestACAccountStore: XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func testSaveAccount() {
+    func test_saveAccount() {
         class MockAccountStore: ACAccountStore {
             override func saveAccount(account: ACAccount!, withCompletionHandler completionHandler: ACAccountStoreSaveCompletionHandler!) {
                 completionHandler(true, nil)
@@ -53,7 +53,7 @@ class TestACAccountStore: XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func testRemoveAccount() {
+    func test_removeAccount() {
         class MockAccountStore: ACAccountStore {
             override func removeAccount(account: ACAccount!, withCompletionHandler completionHandler: ACAccountStoreSaveCompletionHandler!) {
                 completionHandler(true, nil)

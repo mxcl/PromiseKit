@@ -1,6 +1,4 @@
 #import "SLRequest+AnyPromise.h"
-@import Social;
-@import Stubbilino;
 @import XCTest;
 
 
@@ -18,7 +16,7 @@
 @end
 
 
-@interface TestSLRequestCategory: XCTestCase @end @implementation TestSLRequestCategory
+@implementation Test_SLRequest_ObjC: XCTestCase
 
 - (void)test1 {
     id url = [NSURL URLWithString:@"http://example.com"];
@@ -84,3 +82,55 @@
 }
 
 @end
+
+
+#ifndef TARGET_OS_MAC
+
+#import <PromiseKit/NSError+Cancellation.h>
+@import Social.SLComposeViewController;
+@import Stubbilino;
+#import "UIViewController+AnyPromise.h"
+
+@implementation Test_SLComposeViewController_ObjC: XCTestCase
+
+- (void)__test:(SLComposeViewControllerResult)dummy :(void (^)(AnyPromise *, id expectation))block {
+    id rootvc = [UIViewController new];
+    id ex = [self expectationWithDescription:@""];
+
+    SLComposeViewController *composevc = [SLComposeViewController composeViewControllerForServiceType:SLServiceTypeFacebook];
+
+    id stub = [Stubbilino stubObject:rootvc];
+    [stub stubMethod:@selector(presentViewController:animated:completion:) withBlock:^{
+        dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(0.01 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+            composevc.completionHandler(dummy);
+        });
+    }];
+
+    block([rootvc promiseViewController:composevc animated:NO completion:nil], ex);
+
+    [self waitForExpectationsWithTimeout:1 handler:nil];
+}
+
+- (void)test1 {
+    NSInteger dummy = SLComposeViewControllerResultDone;
+
+    [self __test:dummy :^(AnyPromise *promise, id expectation) {
+        promise.then(^(id result){
+            XCTAssertEqual([result integerValue], dummy);
+            [expectation fulfill];
+        });
+    }];
+}
+
+- (void)test2 {
+    [self __test:SLComposeViewControllerResultCancelled :^(AnyPromise *promise, id expectation) {
+        promise.catchWithPolicy(PMKCatchPolicyAllErrors, ^(NSError *error){
+            XCTAssertTrue(error.cancelled);
+            [expectation fulfill];
+        });
+    }];
+}
+
+@end
+
+#endif

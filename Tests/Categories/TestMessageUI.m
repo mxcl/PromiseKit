@@ -3,10 +3,10 @@
 #import "UIViewController+AnyPromise.h"
 @import XCTest;
 
-@interface TestAnyPromiseMailComposer: XCTestCase
-@end
 
-@implementation TestAnyPromiseMailComposer {
+#if 0  // not possible to test these in the simulator
+
+@implementation Test_MessageUI_ObjC: XCTestCase {
     UIViewController *rootvc;
 }
 
@@ -17,8 +17,6 @@
 - (void)tearDown {
     rootvc = [UIApplication sharedApplication].keyWindow.rootViewController = nil;
 }
-
-#if 0  // not possible to test these in the simulator
 
 - (void)testCanCancelMailComposeViewController {
     id ex = [self expectationWithDescription:@""];
@@ -57,6 +55,7 @@
 
     [self waitForExpectationsWithTimeout:10 handler:nil];
 }
-#endif
 
 @end
+
+#endif

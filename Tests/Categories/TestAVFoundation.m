@@ -2,8 +2,7 @@
 @import AVFoundation;
 @import XCTest;
 
-
-@interface TestAVAudioSession: XCTestCase @end @implementation TestAVAudioSession
+@implementation Test_AVAudioSession_ObjC: XCTestCase
 
 - (void)test {
     id ex = [self expectationWithDescription:@""];

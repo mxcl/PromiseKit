@@ -2,25 +2,7 @@ import PromiseKit
 import UIKit
 import XCTest
 
-class UITest_UIImagePickerController_Swift: XCTestCase {
-
-    var toggle: XCUIElement {
-        // calling this ensures that any other ViewController has dismissed
-        // as a side-effect since otherwise the switch won't be found
-        return XCUIApplication().tables.switches.element
-    }
-
-    var value: Bool {
-        return (toggle.value as! String) == "1"
-    }
-
-    override func setUp() {
-        super.setUp()
-        continueAfterFailure = false
-        XCUIApplication().launch()
-        XCTAssertFalse(value)
-    }
-
+class UITest_UIImagePickerController_Swift: PMKiOSUITestCase {
     func test_rejects_when_cancelled() {
         let app = XCUIApplication()
         let table = app.tables
