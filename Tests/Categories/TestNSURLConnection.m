@@ -1,11 +1,11 @@
 #import <Foundation/Foundation.h>
-#import <OHHTTPStubs/OHHTTPStubs.h>
+@import OHHTTPStubs;
 #import <PromiseKit/PromiseKit.h>
 #import "NSURLConnection+AnyPromise.h"
 @import XCTest;
 
 
-@interface TestNSURLConnectionM: XCTestCase @end @implementation TestNSURLConnectionM
+@implementation Test_NSURLConnection_ObjC: XCTestCase
 
 - (void)tearDown {
     [OHHTTPStubs removeAllStubs];

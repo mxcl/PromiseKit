@@ -3,18 +3,15 @@
 #import <PromiseKit/PromiseKit.h>
 #import "UIViewController+AnyPromise.h"
 
-@interface TestAnyPromiseViewController : XCTestCase
-@end
 
 @interface MyViewController: UIViewController
 @property AnyPromise *promise;
 @end
-
 @implementation MyViewController
 @end
 
 
-@implementation TestAnyPromiseViewController {
+@implementation Test_UIViewController_ObjC: XCTestCase {
     UIViewController *rootvc;
 }
 

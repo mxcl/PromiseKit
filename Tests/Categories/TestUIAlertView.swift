@@ -2,7 +2,7 @@ import PromiseKit
 import UIKit
 import XCTest
 
-class TestUIAlertView: UIKitTestCase {
+class Test_UIAlertView_Swift: UIKitTestCase {
     // fulfills with buttonIndex
     func test1() {
         let ex = expectationWithDescription("")

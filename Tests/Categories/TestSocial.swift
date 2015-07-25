@@ -2,7 +2,7 @@ import PromiseKit
 import Social
 import XCTest
 
-class TestSLRequest: XCTestCase {
+class Test_SLRequest_Swift: XCTestCase {
     func testSLRequest() {
         // I tried to just override SLRequest, but Swift wouldn't let me
         // then use the long initializer, and an exception is thrown inside
@@ -24,7 +24,7 @@ class TestSLRequest: XCTestCase {
 }
 
 extension SLRequest {
-    @objc func pmk_performRequestWithHandler(handler: SLRequestHandler) {
+    @objc private func pmk_performRequestWithHandler(handler: SLRequestHandler) {
         handler(NSData(), nil, nil)
     }
 }

@@ -2,11 +2,7 @@ import Foundation
 import PromiseKit
 import XCTest
 
-private class Foo: NSObject {
-    dynamic var bar: String = "bar"
-}
-
-class TestNSObject: XCTestCase {
+class Test_NSObject_Swift: XCTestCase {
     func testKVO() {
         let ex = expectationWithDescription("")
 
@@ -72,4 +68,8 @@ class TestNSObject: XCTestCase {
 
         waitForExpectationsWithTimeout(1, handler: nil)
     }
+}
+
+private class Foo: NSObject {
+    dynamic var bar: String = "bar"
 }

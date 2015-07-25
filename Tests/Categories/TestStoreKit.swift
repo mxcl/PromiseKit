@@ -2,7 +2,7 @@ import PromiseKit
 import StoreKit
 import XCTest
 
-class TestSKProductsRequest: XCTestCase {
+class Test_SKProductsRequest_Swift: XCTestCase {
     func test() {
         class MockProductsRequest: SKProductsRequest {
             override func start() {

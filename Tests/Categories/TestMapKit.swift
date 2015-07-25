@@ -2,12 +2,11 @@ import PromiseKit
 import MapKit
 import XCTest
 
-class TestMKDirections: XCTestCase {
-    func testDirectionsResponse() {
+class Test_MKDirections_Swift: XCTestCase {
+    func test_directions_response() {
         let ex = expectationWithDescription("")
 
         class MockDirections: MKDirections {
-
             private override func calculateDirectionsWithCompletionHandler(completionHandler: MKDirectionsHandler) {
                 completionHandler(MKDirectionsResponse(), nil)
             }
@@ -22,7 +21,7 @@ class TestMKDirections: XCTestCase {
     }
 
 
-    func testETAResponse() {
+    func test_ETA_response() {
         let ex = expectationWithDescription("")
 
         class MockDirections: MKDirections {
@@ -41,7 +40,7 @@ class TestMKDirections: XCTestCase {
 
 }
 
-class TestMKSnapshotter: XCTestCase {
+class Test_MKSnapshotter_Swift: XCTestCase {
     func test() {
         let ex = expectationWithDescription("")
 

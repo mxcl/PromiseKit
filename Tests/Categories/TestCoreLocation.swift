@@ -2,8 +2,8 @@ import CoreLocation
 import PromiseKit
 import XCTest
 
-class TestCLLocationManager: XCTestCase {
-    func testLocation() {
+class Test_CLLocationManager_Swift: XCTestCase {
+    func test_fulfills_with_one_location() {
         swizzle(CLLocationManager.self, "startUpdatingLocation") {
             let ex = expectationWithDescription("")
 
@@ -16,7 +16,7 @@ class TestCLLocationManager: XCTestCase {
         }
     }
 
-    func testLocations() {
+    func test_fulfills_with_multiple_locations() {
         swizzle(CLLocationManager.self, "startUpdatingLocation") {
             let ex = expectationWithDescription("")
 
@@ -29,7 +29,7 @@ class TestCLLocationManager: XCTestCase {
         }
     }
 
-    func testRequestAuthorization() {
+    func test_requestAuthorization() {
         #if os(iOS)
             swizzle(CLLocationManager.self, "requestWhenInUseAuthorization") {
                 swizzle(CLLocationManager.self, "authorizationStatus", isClassMethod: true) {
@@ -47,10 +47,8 @@ class TestCLLocationManager: XCTestCase {
     }
 }
 
-private let dummyPlacemark = CLPlacemark()
-
-class TestCLGeocoder: XCTestCase {
-    func testReverseGeocodeLocation() {
+class Test_CLGeocoder_Swift: XCTestCase {
+    func test_reverseGeocodeLocation() {
         class MockGeocoder: CLGeocoder {
             private override func reverseGeocodeLocation(location: CLLocation, completionHandler: CLGeocodeCompletionHandler) {
                 completionHandler([dummyPlacemark], nil)
@@ -65,7 +63,7 @@ class TestCLGeocoder: XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func testGeocodeAddressDictionary() {
+    func test_geocodeAddressDictionary() {
         class MockGeocoder: CLGeocoder {
             private override func geocodeAddressDictionary(addressDictionary: [NSObject : AnyObject], completionHandler: CLGeocodeCompletionHandler) {
                 completionHandler([dummyPlacemark], nil)
@@ -80,7 +78,7 @@ class TestCLGeocoder: XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func testGeocodeAddressString() {
+    func test_geocodeAddressString() {
         class MockGeocoder: CLGeocoder {
             override func geocodeAddressString(addressString: String, completionHandler: CLGeocodeCompletionHandler) {
                 completionHandler([dummyPlacemark], nil)
@@ -99,18 +97,8 @@ class TestCLGeocoder: XCTestCase {
 
 
 /////////////////////////////////////////////////////////////// resources
-
-func swizzle(foo: AnyClass, _ from: Selector, isClassMethod: Bool = false, @noescape body: () -> Void) {
-    let get: (AnyClass!, Selector) -> Method = isClassMethod ? class_getClassMethod : class_getInstanceMethod
-    let originalMethod = get(foo, from)
-    let swizzledMethod = get(foo, Selector("pmk_\(from)"))
-
-    method_exchangeImplementations(originalMethod, swizzledMethod)
-    body()
-    method_exchangeImplementations(swizzledMethod, originalMethod)
-}
-
 private let dummy = [CLLocation(latitude: 0, longitude: 0), CLLocation(latitude: 10, longitude: 20)]
+private let dummyPlacemark = CLPlacemark()
 
 extension CLLocationManager {
     @objc func pmk_startUpdatingLocation() {
@@ -119,7 +107,7 @@ extension CLLocationManager {
         }
     }
 
-    #if os(iOS)
+#if os(iOS)
     @objc func pmk_requestWhenInUseAuthorization() {
         after(0.1).then {
             self.delegate!.locationManager?(self, didChangeAuthorizationStatus: .AuthorizedWhenInUse)
@@ -129,5 +117,5 @@ extension CLLocationManager {
     class func pmk_authorizationStatus() -> CLAuthorizationStatus {
         return .NotDetermined
     }
-    #endif
+#endif
 }

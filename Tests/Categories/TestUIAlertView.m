@@ -3,11 +3,7 @@
 @import UIKit;
 @import XCTest;
 
-
-@interface TestUIAlertViewM : XCTestCase
-@end
-
-@implementation TestUIAlertViewM
+@implementation Test_UIAlertView_ObjC: XCTestCase
 
 // fulfills with buttonIndex
 - (void)test1 {

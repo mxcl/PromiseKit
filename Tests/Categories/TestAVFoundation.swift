@@ -2,7 +2,7 @@ import AVFoundation
 import PromiseKit
 import XCTest
 
-class TestAVAudioSession: XCTestCase {
+class Test_AVAudioSession_Swift: XCTestCase {
     func test() {
         let ex = expectationWithDescription("")
 

@@ -3,8 +3,8 @@ import Foundation
 import PromiseKit
 import XCTest
 
-class TestAddressBook: XCTestCase {
-    func test1() {
+class Test_AddressBook_Swift: XCTestCase {
+    func test() {
         let ex = expectationWithDescription("")
         ABAddressBookRequestAccess().then { (auth: ABAuthorizationStatus) in
             XCTAssertEqual(auth, .Authorized)

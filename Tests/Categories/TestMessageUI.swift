@@ -3,10 +3,9 @@ import PromiseKit
 import UIKit
 import XCTest
 
+#if false  // not possible to test these in the simulator
+
 class Test_MessageUI_Swift: UIKitTestCase {
-
-#if false  // cannot test these in simulator
-
     func test_can_cancel_mail_composer() {
         let ex1 = expectationWithDescription("")
         let ex2 = expectationWithDescription("")
@@ -65,5 +64,6 @@ class Test_MessageUI_Swift: UIKitTestCase {
 
         XCTAssertNil(rootvc.presentedViewController)
     }
-#endif
 }
+
+#endif

@@ -2,7 +2,7 @@ import Foundation
 import PromiseKit
 import XCTest
 
-class TestNSTask: XCTestCase {
+class Test_NSTask_Swift: XCTestCase {
     func test1() {
         let ex = expectationWithDescription("")
         let task = NSTask()

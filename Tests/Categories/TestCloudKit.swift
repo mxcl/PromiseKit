@@ -5,9 +5,9 @@ import XCTest
 //TODO possibly we should interpret eg. request permission result of Denied as error
 // PMK should only resolve with values that allow a typical chain to proceed
 
-class TestCKContainer: XCTestCase {
+class Test_CKContainer_Swift: XCTestCase {
 
-    func testAccountStatus() {
+    func test_accountStatus() {
         class MockContainer: CKContainer {
             init(_: Bool = false)
             {}
@@ -25,7 +25,7 @@ class TestCKContainer: XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func testRequestApplicationPermission() {
+    func test_requestApplicationPermission() {
         class MockContainer: CKContainer {
             init(_: Bool = false)
             {}
@@ -44,7 +44,7 @@ class TestCKContainer: XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func testStatusForApplicationPermission() {
+    func test_statusForApplicationPermission() {
         class MockContainer: CKContainer {
             init(_: Bool = false)
             {}
@@ -62,7 +62,7 @@ class TestCKContainer: XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func testDiscoverAllContactUserInfos() {
+    func test_discoverAllContactUserInfos() {
         class MockContainer: CKContainer {
             init(_: Bool = false)
             {}
@@ -79,7 +79,7 @@ class TestCKContainer: XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func testDiscoverUserInfoWithEmailAddress() {
+    func test_discoverUserInfoWithEmailAddress() {
         class MockContainer: CKContainer {
             init(_: Bool = false)
             {}
@@ -96,7 +96,7 @@ class TestCKContainer: XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func testDiscoverUserInfoWithRecordID() {
+    func test_discoverUserInfoWithRecordID() {
         class MockContainer: CKContainer {
             init(_: Bool = false)
             {}
@@ -113,7 +113,7 @@ class TestCKContainer: XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func testFetchUserRecordID() {
+    func test_fetchUserRecordID() {
         class MockContainer: CKContainer {
             init(_: Bool = false)
             {}
