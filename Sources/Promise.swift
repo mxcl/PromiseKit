@@ -270,8 +270,8 @@ public class Promise<T> {
             case .Fulfilled:
                 break
             case .Rejected(let error):
-                if policy == .AllErrors || !error.cancelled {
-                    dispatch_async(dispatch_get_main_queue()) {
+                dispatch_async(dispatch_get_main_queue()) {
+                    if policy == .AllErrors || !error.cancelled {
                         consume(error)
                         body(error)
                     }

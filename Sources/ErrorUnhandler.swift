@@ -1,3 +1,4 @@
+import Dispatch
 import Foundation.NSError
 
 /**
@@ -18,8 +19,10 @@ import Foundation.NSError
  @return The previous unhandled error handler.
 */
 public var PMKUnhandledErrorHandler = { (error: NSError) -> Void in
-    if !error.cancelled {
-        NSLog("PromiseKit: Unhandled error: %@", error)
+    dispatch_async(dispatch_get_main_queue()) {
+        if !error.cancelled {
+            NSLog("PromiseKit: Unhandled error: %@", error)
+        }
     }
 }
 
@@ -101,6 +104,9 @@ extension NSError {
         cancelledErrorIdentifiers.insert(ErrorPair(domain, code))
     }
 
+    /**
+     You may only call this on the main thread.
+    */
     public var cancelled: Bool {
         return cancelledErrorIdentifiers.contains(ErrorPair(domain, code))
     }
