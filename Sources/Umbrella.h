@@ -27,3 +27,43 @@ extern NSString * const PMKErrorDomain;
 #define PMKTaskErrorStandardOutputKey @"PMKTaskErrorStandardOutputKey"
 #define PMKTaskErrorStandardErrorKey @"PMKTaskErrorStandardErrorKey"
 #define PMKTaskErrorExitStatusKey @"PMKTaskErrorExitStatusKey"
+
+
+#if defined(PMKEZBake) && defined(SWIFT_CLASS)
+    // https://github.com/PromiseKit/EZiOS7/issues/2
+    #define PMKPromise AnyPromise
+#else
+    #if !defined(SWIFT_PASTE)
+    # define SWIFT_PASTE_HELPER(x, y) x##y
+    # define SWIFT_PASTE(x, y) SWIFT_PASTE_HELPER(x, y)
+    #endif
+    #if !defined(SWIFT_METATYPE)
+    # define SWIFT_METATYPE(X) Class
+    #endif
+
+    #if defined(__has_attribute) && __has_attribute(objc_runtime_name)
+    # define SWIFT_RUNTIME_NAME(X) __attribute__((objc_runtime_name(X)))
+    #else
+    # define SWIFT_RUNTIME_NAME(X)
+    #endif
+    #if !defined(SWIFT_CLASS_EXTRA)
+    # define SWIFT_CLASS_EXTRA
+    #endif
+    #if !defined(SWIFT_CLASS)
+    # if defined(__has_attribute) && __has_attribute(objc_subclassing_restricted)
+    #  define SWIFT_CLASS(SWIFT_NAME) SWIFT_RUNTIME_NAME(SWIFT_NAME) __attribute__((objc_subclassing_restricted)) SWIFT_CLASS_EXTRA
+    # else
+    #  define SWIFT_CLASS(SWIFT_NAME) SWIFT_RUNTIME_NAME(SWIFT_NAME) SWIFT_CLASS_EXTRA
+    # endif
+    #endif
+
+    SWIFT_CLASS("PMKAnyPromise")
+    @interface PMKPromise : NSObject
+    @property (nonatomic, readonly) BOOL pending;
+    @property (nonatomic, readonly) BOOL resolved;
+    @property (nonatomic, readonly) BOOL fulfilled;
+    @property (nonatomic, readonly) BOOL rejected;
+    @end
+
+    @compatibility_alias AnyPromise PMKPromise;
+#endif

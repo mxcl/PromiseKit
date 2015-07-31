@@ -47,8 +47,10 @@ private func unbox(resolution: Resolution) -> AnyObject? {
 }
 
 
+public typealias AnyPromise = PMKPromise
 
-@objc(PMKAnyPromise) public class AnyPromise: NSObject {
+
+@objc(PMKAnyPromise) public class PMKPromise: NSObject {
     var state: State
 
     /**
