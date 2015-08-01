@@ -11,7 +11,7 @@ class Test2121: XCTestCase {
             promise.then { a in
                 onFulfilledCalled = true
             }
-            promise.catch { e->() in
+            promise.catch_ { e->() in
                 XCTAssertFalse(onFulfilledCalled)
                 ee[0].fulfill()
             }
@@ -23,11 +23,11 @@ class Test2121: XCTestCase {
 
     func test2() {
         var onFulfilledCalled = false
-        let (promise, fulfiller, rejecter) = Promise<Int>.defer()
+        let (promise, fulfiller, rejecter) = Promise<Int>.defer_()
         promise.then{ a -> Void in
             onFulfilledCalled = true
         }
-        promise.catch{ e -> Void in
+        promise.catch_{ e -> Void in
             XCTAssertFalse(onFulfilledCalled)
         }
         fulfiller(dummy)
@@ -37,12 +37,12 @@ class Test2121: XCTestCase {
 
     func test3() {
         var onFulfilledCalled = false
-        let (promise, fulfiller, rejecter) = Promise<Int>.defer()
+        let (promise, fulfiller, rejecter) = Promise<Int>.defer_()
 
         promise.then{ a->() in
             onFulfilledCalled = true;
         }
-        promise.catch{ e->() in
+        promise.catch_{ e->() in
             XCTAssertFalse(onFulfilledCalled)
         }
 
@@ -55,12 +55,12 @@ class Test2121: XCTestCase {
 
     func test4() {
         var onFulfilledCalled = false
-        let (promise, fulfiller, rejecter) = Promise<Int>.defer()
+        let (promise, fulfiller, rejecter) = Promise<Int>.defer_()
 
         promise.then{ a in
             onFulfilledCalled = true
         }
-        promise.catch{ e->() in
+        promise.catch_{ e->() in
             XCTAssertFalse(onFulfilledCalled)
         }
 
@@ -88,7 +88,7 @@ var sentinel = 456
 func later(block: ()->()) {
     later(50, block)
 }
-func later(timeout: Double, block: ()->()) {
+func later(timeout: Double, _ block: ()->()) {
     let ticks = Double(NSEC_PER_SEC) / (timeout * 1000.0)
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(ticks)), dispatch_get_main_queue(), block)
 }
@@ -110,14 +110,14 @@ extension XCTestCase {
         test(Promise(v1), e1, v1)
         waitForExpectationsWithTimeout(1, handler: nil)
         
-        let (p2, f2, _) = Promise<Int>.defer()
+        let (p2, f2, _) = Promise<Int>.defer_()
         let v2 = Int(rand())
         let e2 = e("immediately-fulfilled")
         test(p2, e2, v2)
         f2(v2)
         waitForExpectationsWithTimeout(1, handler: nil)
         
-        let (p3, f3, _) = Promise<Int>.defer()
+        let (p3, f3, _) = Promise<Int>.defer_()
         let v3 = Int(rand())
         let e3 = e("eventually-fulfilled")
         later {
@@ -140,14 +140,14 @@ extension XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
         
         let e2 = e("immediately-rejected")
-        let (p2, _, r2) = Promise<Int>.defer()
+        let (p2, _, r2) = Promise<Int>.defer_()
         let v2 = NSError(domain:PMKErrorDomain, code:Int(rand()), userInfo:nil)
         test(p2, e2, v2)
         r2(v2)
         waitForExpectationsWithTimeout(1, handler: nil)
         
         let e3 = e("eventually-rejected")
-        let (p3, _, r3) = Promise<Int>.defer()
+        let (p3, _, r3) = Promise<Int>.defer_()
         let v3 = NSError(domain:PMKErrorDomain, code:Int(rand()), userInfo:nil)
         later {
             test(p3, e3, v3)

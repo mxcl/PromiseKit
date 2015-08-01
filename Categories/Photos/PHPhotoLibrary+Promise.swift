@@ -1,4 +1,6 @@
+#if !COCOAPODS
 import PromiseKit
+#endif
 import Photos.PHPhotoLibrary
 
 /**
@@ -9,7 +11,9 @@ import Photos.PHPhotoLibrary
 
  And then in your sources:
 
-    import PromiseKit
+    #if !COCOAPODS
+import PromiseKit
+#endif
 */
 extension PHPhotoLibrary {
     public class func requestAuthorization() -> Promise<PHAuthorizationStatus> {

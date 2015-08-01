@@ -1,6 +1,8 @@
 import AssetsLibrary
 import Foundation.NSData
+#if !COCOAPODS
 import PromiseKit
+#endif
 import UIKit.UIViewController
 
 /**
@@ -11,7 +13,9 @@ import UIKit.UIViewController
 
  And then in your sources:
 
-    import PromiseKit
+    #if !COCOAPODS
+import PromiseKit
+#endif
 */
 extension UIViewController {
     /**

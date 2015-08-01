@@ -1,5 +1,7 @@
 import CoreLocation.CLGeocoder
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 /**
  To import the `CLGeocoder` category:
@@ -9,13 +11,15 @@ import PromiseKit
 
  And then in your sources:
 
-    import PromiseKit
+    #if !COCOAPODS
+import PromiseKit
+#endif
 */
 extension CLGeocoder {
     public func reverseGeocodeLocation(location: CLLocation) -> Promise<CLPlacemark> {
         return CLPromise { sealant in
             reverseGeocodeLocation(location) { placemarks, error in
-                sealant.resolve((placemarks as? [CLPlacemark])?.first, error)
+                sealant.resolve(placemarks?.first, error)
             }
         }
     }
@@ -23,7 +27,7 @@ extension CLGeocoder {
     public func geocode(addressDictionary: [String: String]) -> Promise<CLPlacemark> {
         return CLPromise { sealant in
             geocodeAddressDictionary(addressDictionary) { placemarks, error in
-                sealant.resolve((placemarks as? [CLPlacemark])?.first, error)
+                sealant.resolve(placemarks?.first, error)
             }
         }
     }
@@ -31,7 +35,7 @@ extension CLGeocoder {
     public func geocode(addressString: String) -> Promise<CLPlacemark> {
         return CLPromise { sealant in
             geocodeAddressString(addressString) { placemarks, error in
-                sealant.resolve((placemarks as? [CLPlacemark])?.first, error)
+                sealant.resolve(placemarks?.first, error)
             }
         }
     }
@@ -39,7 +43,7 @@ extension CLGeocoder {
     public func geocode(addressString: String, region: CLRegion?) -> Promise<[CLPlacemark]> {
         return CLPromise { sealant in
             geocodeAddressString(addressString, inRegion: region) { placemarks, error in
-                sealant.resolve((placemarks as? [CLPlacemark]), error)
+                sealant.resolve(placemarks, error)
             }
         }
     }

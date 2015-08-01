@@ -1,4 +1,6 @@
+#if !COCOAPODS
 import PromiseKit
+#endif
 import UIKit.UIView
 
 /**
@@ -14,7 +16,9 @@ import UIKit.UIView
 
  And then in your sources:
 
-    import PromiseKit
+    #if !COCOAPODS
+import PromiseKit
+#endif
 */
 extension UIView {
     /**

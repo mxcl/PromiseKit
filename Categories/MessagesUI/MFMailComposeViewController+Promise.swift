@@ -1,4 +1,6 @@
+#if !COCOAPODS
 import PromiseKit
+#endif
 import MessageUI.MFMailComposeViewController
 import UIKit.UIViewController
 
@@ -10,7 +12,9 @@ import UIKit.UIViewController
 
  And then in your sources:
 
-    import PromiseKit
+    #if !COCOAPODS
+import PromiseKit
+#endif
 */
 extension UIViewController {
     public func promiseViewController(vc: MFMailComposeViewController, animated: Bool = true, completion:(() -> Void)? = nil) -> Promise<MFMailComposeResult> {
@@ -27,20 +31,20 @@ extension UIViewController {
 
 private class PMKMailComposeViewControllerDelegate: NSObject, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate {
 
-    let (promise, fulfill, reject) = Promise<MFMailComposeResult>.defer()
+    let (promise, fulfill, reject) = Promise<MFMailComposeResult>.defer_()
     var retainCycle: NSObject?
 
-    @objc func mailComposeController(controller: MFMailComposeViewController!, didFinishWithResult result: MFMailComposeResult, error: NSError!) {
-        if error != nil {
+    @objc func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
+        if let error = error {
             reject(error)
         } else {
-            switch result.value {
-            case MFMailComposeResultFailed.value:
+            switch result.rawValue {
+            case MFMailComposeResultFailed.rawValue:
                 var info = [NSObject: AnyObject]()
                 info[NSLocalizedDescriptionKey] = "The attempt to save or send the message was unsuccessful."
-                info[NSUnderlyingErrorKey] = NSNumber(unsignedInt: result.value)
+                info[NSUnderlyingErrorKey] = NSNumber(unsignedInt: result.rawValue)
                 reject(NSError(domain: PMKErrorDomain, code: PMKOperationFailed, userInfo: info))
-            case MFMailComposeResultCancelled.value:
+            case MFMailComposeResultCancelled.rawValue:
                 reject(NSError.cancelledError())
             default:
                 fulfill(result)

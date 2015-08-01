@@ -1,7 +1,9 @@
 import AddressBook
 import CoreFoundation
 import Foundation.NSError
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 /**
  Requests access to the address book.
@@ -13,7 +15,9 @@ import PromiseKit
 
  And then in your sources:
 
-    import PromiseKit
+    #if !COCOAPODS
+import PromiseKit
+#endif
 
  @return A promise that fulfills with the ABAuthorizationStatus.
 */
@@ -32,7 +36,9 @@ public func ABAddressBookRequestAccess() -> Promise<ABAuthorizationStatus> {
 
  And then in your sources:
 
-    import PromiseKit
+    #if !COCOAPODS
+import PromiseKit
+#endif
 
  @return A promise that fulfills with the ABAddressBook instance if access was granted.
 */

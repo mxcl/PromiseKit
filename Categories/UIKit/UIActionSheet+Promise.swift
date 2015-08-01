@@ -1,4 +1,6 @@
+#if !COCOAPODS
 import PromiseKit
+#endif
 import UIKit.UIActionSheet
 
 /**
@@ -14,7 +16,9 @@ import UIKit.UIActionSheet
 
  And then in your sources:
 
-    import PromiseKit
+    #if !COCOAPODS
+import PromiseKit
+#endif
 */
 extension UIActionSheet {
     public func promiseInView(view: UIView) -> Promise<Int> {
@@ -32,7 +36,7 @@ extension UIActionSheet {
 }
 
 private class PMKActionSheetDelegate: NSObject, UIActionSheetDelegate {
-    let (promise, fulfill, reject) = Promise<Int>.defer()
+    let (promise, fulfill, reject) = Promise<Int>.defer_()
     var retainCycle: NSObject?
 
     @objc func actionSheet(actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {

@@ -1,5 +1,7 @@
 import Foundation
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 /**
  To import the `NSTask` category:
@@ -14,7 +16,9 @@ import PromiseKit
  
  And then in your sources:
 
-    import PromiseKit
+    #if !COCOAPODS
+import PromiseKit
+#endif
 */
 extension NSTask {
     /**
@@ -62,13 +66,14 @@ extension NSTask {
             dispatch_async(dispatch_get_global_queue(0, 0)) {
                 self.waitUntilExit()
 
-                let stdout = self.standardOutput.fileHandleForReading.readDataToEndOfFile()
-                let stderr = self.standardError.fileHandleForReading.readDataToEndOfFile()
+                let stdout = self.standardOutput!.fileHandleForReading.readDataToEndOfFile()
+                let stderr = self.standardError!.fileHandleForReading.readDataToEndOfFile()
 
                 if self.terminationReason == .Exit && self.terminationStatus == 0 {
-                    fulfill(stdout, stderr, Int(self.terminationStatus))
+                    let a = Int(self.terminationStatus)
+                    fulfill(stdout, stderr, a)
                 } else {
-                    let cmd = " ".join([self.launchPath] + (self.arguments as! [String]))
+                    let cmd = " ".join([self.launchPath!] + (self.arguments ?? []))
                     reject(generateError("Failed executing: `\(cmd)`.", stdout, stderr, self))
                 }
             }
@@ -94,14 +99,14 @@ extension NSTask {
 
 //TODO get file system encoding from LANG as it may not be UTF8
 
-private func generateError(description: String, stdout: NSData, stderr: NSData, task: NSTask) -> NSError {
-    let info: [NSObject: AnyObject] = [
-        NSLocalizedDescriptionKey: description,
-        PMKTaskErrorLaunchPathKey: task.launchPath,
-        PMKTaskErrorArgumentsKey: task.arguments,
-        PMKTaskErrorStandardOutputKey: stdout,
-        PMKTaskErrorStandardErrorKey: stderr,
-        PMKTaskErrorExitStatusKey: Int(task.terminationStatus),
-    ]
+private func generateError(description: String, _ stdout: NSData, _ stderr: NSData, _ task: NSTask) -> NSError {
+    var info = [NSObject: AnyObject]()
+    info[NSLocalizedDescriptionKey] = description
+    info[PMKTaskErrorLaunchPathKey] = task.launchPath
+    info[PMKTaskErrorArgumentsKey] = task.arguments
+    info[PMKTaskErrorStandardOutputKey] = stdout
+    info[PMKTaskErrorStandardErrorKey] = stderr
+    info[PMKTaskErrorExitStatusKey] = Int(task.terminationStatus)
+
     return NSError(domain: PMKErrorDomain, code: PMKTaskError, userInfo: info)
 }

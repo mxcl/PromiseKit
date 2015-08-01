@@ -1,4 +1,6 @@
+#if !COCOAPODS
 import PromiseKit
+#endif
 import MapKit
 
 /**
@@ -9,7 +11,9 @@ import MapKit
 
  And then in your sources:
 
-    import PromiseKit
+    #if !COCOAPODS
+import PromiseKit
+#endif
 */
 extension MKDirections {
     /**

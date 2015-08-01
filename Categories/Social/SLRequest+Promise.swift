@@ -1,4 +1,6 @@
+#if !COCOAPODS
 import PromiseKit
+#endif
 import Social
 
 /**
@@ -9,7 +11,9 @@ import Social
 
  And then in your sources:
 
-    import PromiseKit
+    #if !COCOAPODS
+import PromiseKit
+#endif
 */
 extension SLRequest {
     public func promise() -> Promise<NSData> {

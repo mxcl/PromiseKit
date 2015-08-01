@@ -1,5 +1,7 @@
 import CoreLocation.CLLocationManager
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 /**
  To import the `CLLocationManager` category:
@@ -9,7 +11,9 @@ import PromiseKit
 
  And then in your sources:
 
-    import PromiseKit
+    #if !COCOAPODS
+import PromiseKit
+#endif
 */
 extension CLLocationManager {
 
@@ -27,7 +31,7 @@ extension CLLocationManager {
       want to force one or the other, change this parameter from its default
       value.
      */
-    public class func promise(requestAuthorizationType: RequestAuthorizationType = .Automatic) -> Promise<CLLocation> {
+    public class func promise(requestAuthorizationType requestAuthorizationType: RequestAuthorizationType = .Automatic) -> Promise<CLLocation> {
         return promise(requestAuthorizationType: requestAuthorizationType).then(on: zalgo) {
             (locations: [CLLocation]) -> CLLocation in
             return locations.last!
@@ -37,11 +41,11 @@ extension CLLocationManager {
     /**
       @return A new promise that fulfills with the first batch of location objects a CLLocationManager instance provides.
      */
-    public class func promise(requestAuthorizationType: RequestAuthorizationType = .Automatic) -> Promise<[CLLocation]> {
+    public class func promise(requestAuthorizationType requestAuthorizationType: RequestAuthorizationType = .Automatic) -> Promise<[CLLocation]> {
         return promise(yield: auther(requestAuthorizationType))
     }
 
-    private class func promise(yield: (CLLocationManager) -> Void = { _ in }) -> Promise<[CLLocation]> {
+    private class func promise(yield yield: (CLLocationManager) -> Void = { _ in }) -> Promise<[CLLocation]> {
         let manager = LocationManager()
         manager.delegate = manager
         yield(manager)
@@ -71,20 +75,26 @@ extension CLLocationManager {
 
 
 private class LocationManager: CLLocationManager, CLLocationManagerDelegate {
-    let (promise, fulfill, reject) = Promise<[CLLocation]>.defer()
+    let (promise, fulfill, reject) = Promise<[CLLocation]>.defer_()
 
-    @objc func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
+#if os(iOS)
+    @objc func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        fulfill(locations)
+    }
+#else
+    @objc func locationManager(manager: CLLocationManager, didUpdateLocations locations: [AnyObject]) {
         fulfill(locations as! [CLLocation])
     }
+#endif
 
-    @objc func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
+    @objc func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         reject(error)
     }
 }
 
 #if os(iOS)
 private class AuthorizationCatcher: CLLocationManager, CLLocationManagerDelegate {
-    let (promise, fulfill, _) = Promise<CLAuthorizationStatus>.defer()
+    let (promise, fulfill, _) = Promise<CLAuthorizationStatus>.defer_()
     var retainCycle: AnyObject?
 
     init(auther: (CLLocationManager)->()) {
@@ -99,7 +109,7 @@ private class AuthorizationCatcher: CLLocationManager, CLLocationManagerDelegate
         }
     }
 
-    @objc private func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+    @objc private func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         if status != .NotDetermined {
             fulfill(status)
             retainCycle = nil

@@ -16,7 +16,6 @@ public enum CatchPolicy {
  that promise, which  returns a promise, you can call `then` on that
  promise, et cetera.
 
- 0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2.4.6.8.0.2
  Promises start in a pending state and *resolve* with a value to become
  *fulfilled* or with an `NSError` to become rejected.
 
@@ -115,10 +114,10 @@ public class Promise<T> {
     }
 
     /**
-     defer is convenient for wrapping delegates or larger asynchronous systems.
+     defer_ is convenient for wrapping delegates or larger asynchronous systems.
 
         class Foo: BarDelegate {
-            let (promise, fulfill, reject) = Promise<Int>.defer()
+            let (promise, fulfill, reject) = Promise<Int>.defer_()
     
             func barDidFinishWithResult(result: Int) {
                 fulfill(result)
@@ -136,7 +135,7 @@ public class Promise<T> {
       3) A function that rejects that promise
     */
 
-    public class func defer() -> (promise: Promise, fulfill: (T) -> Void, reject: (NSError) -> Void) {
+    public class func defer_() -> (promise: Promise, fulfill: (T) -> Void, reject: (NSError) -> Void) {
         var sealant: Sealant<T>!
         let promise = Promise { sealant = $0 }
         return (promise, sealant.resolve, sealant.resolve)
@@ -264,7 +263,7 @@ public class Promise<T> {
 
      @see registerCancellationError
     */
-    public func catch(policy: CatchPolicy = .AllErrorsExceptCancellation, _ body: (NSError) -> Void) {
+    public func catch_(policy policy: CatchPolicy = .AllErrorsExceptCancellation, _ body: (NSError) -> Void) {
         pipe { resolution in
             switch resolution {
             case .Fulfilled:
@@ -437,7 +436,7 @@ extension Promise {
 }
 
 
-extension Promise: DebugPrintable {
+extension Promise: CustomDebugStringConvertible {
     public var debugDescription: String {
         return "Promise: \(state)"
     }

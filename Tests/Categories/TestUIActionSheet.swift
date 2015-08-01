@@ -29,7 +29,7 @@ class TestUIActionSheet: UIKitTestCase {
         sheet.addButtonWithTitle("0")
         sheet.addButtonWithTitle("1")
         sheet.cancelButtonIndex = sheet.addButtonWithTitle("2")
-        sheet.promiseInView(rootvc.view).catch(policy: .AllErrors) { err in
+        sheet.promiseInView(rootvc.view).catch_(policy: .AllErrors) { err in
             XCTAssertTrue(err.cancelled)
             ex.fulfill()
         }
@@ -60,7 +60,7 @@ class TestUIActionSheet: UIKitTestCase {
 
         let sheet = UIActionSheet()
         sheet.cancelButtonIndex = sheet.addButtonWithTitle("0")
-        sheet.promiseInView(rootvc.view).catch(policy: .AllErrors) { _ in
+        sheet.promiseInView(rootvc.view).catch_(policy: .AllErrors) { _ in
             ex.fulfill()
         }
         after(0.5).then {

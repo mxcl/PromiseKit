@@ -11,7 +11,7 @@ class TestNSURLConnection: XCTestCase {
     func test1() {
         let json = ["key1": "value1", "key2": ["value2A", "value2B"]]
 
-        OHHTTPStubs.stubRequestsPassingTest({ $0.URL!.host == "example.com" }) { _ in
+        OHHTTPStubs.stubRequestsPassingTest({ ObjCBool($0.URL!.host == "example.com") }) { _ in
             return OHHTTPStubsResponse(JSONObject: json, statusCode: 200, headers: nil)
         }
 

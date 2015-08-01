@@ -1,6 +1,8 @@
 import Foundation
 import MessageUI.MFMessageComposeViewController
+#if !COCOAPODS
 import PromiseKit
+#endif
 import UIKit.UIViewController
 
 /**
@@ -11,7 +13,9 @@ import UIKit.UIViewController
 
  And then in your sources:
 
-    import PromiseKit
+    #if !COCOAPODS
+import PromiseKit
+#endif
 */
 extension UIViewController {
     public func promiseViewController(vc: MFMessageComposeViewController, animated: Bool = true, completion:(() -> Void)? = nil) -> Promise<Void> {
@@ -28,20 +32,20 @@ extension UIViewController {
 
 private class PMKMessageComposeViewControllerDelegate: NSObject, MFMessageComposeViewControllerDelegate, UINavigationControllerDelegate {
 
-    let (promise, fulfill, reject) = Promise<Void>.defer()
+    let (promise, fulfill, reject) = Promise<Void>.defer_()
     var retainCycle: NSObject?
 
-    @objc func messageComposeViewController(controller: MFMessageComposeViewController!, didFinishWithResult result: MessageComposeResult) {
+    @objc func messageComposeViewController(controller: MFMessageComposeViewController, didFinishWithResult result: MessageComposeResult) {
 
-        switch result.value {
-        case MessageComposeResultSent.value:
+        switch result.rawValue {
+        case MessageComposeResultSent.rawValue:
             fulfill()
-        case MessageComposeResultFailed.value:
+        case MessageComposeResultFailed.rawValue:
             var info = [NSObject: AnyObject]()
             info[NSLocalizedDescriptionKey] = "The attempt to save or send the message was unsuccessful."
-            info[NSUnderlyingErrorKey] = NSNumber(unsignedInt: result.value)
+            info[NSUnderlyingErrorKey] = NSNumber(unsignedInt: result.rawValue)
             reject(NSError(domain: PMKErrorDomain, code: PMKOperationFailed, userInfo: info))
-        case MessageComposeResultCancelled.value:
+        case MessageComposeResultCancelled.rawValue:
             reject(NSError.cancelledError())
         default:
             fatalError("Swift Sucks")

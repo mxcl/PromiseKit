@@ -293,7 +293,7 @@ public typealias AnyPromise = PMKPromise
 }
 
 
-extension AnyPromise: DebugPrintable {
+extension AnyPromise: CustomDebugStringConvertible {
     override public var debugDescription: String {
         return "AnyPromise: \(state)"
     }

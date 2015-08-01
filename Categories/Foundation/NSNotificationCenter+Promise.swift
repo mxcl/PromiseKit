@@ -1,5 +1,7 @@
 import Foundation.NSNotification
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 /**
  To import the `NSNotificationCenter` category:
@@ -14,7 +16,9 @@ import PromiseKit
 
  And then in your sources:
 
-    import PromiseKit
+    #if !COCOAPODS
+import PromiseKit
+#endif
 */
 extension NSNotificationCenter {
     public class func once(name: String) -> Promise<[NSObject: AnyObject]> {

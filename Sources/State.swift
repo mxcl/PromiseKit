@@ -118,7 +118,7 @@ class Handlers: SequenceType {
 }
 
 
-extension Resolution: DebugPrintable {
+extension Resolution: CustomDebugStringConvertible {
     var debugDescription: String {
         switch self {
         case Fulfilled(let value):
@@ -129,7 +129,7 @@ extension Resolution: DebugPrintable {
     }
 }
 
-extension UnsealedState: DebugPrintable {
+extension UnsealedState: CustomDebugStringConvertible {
     var debugDescription: String {
         var rv: String?
         get { seal in
@@ -144,7 +144,7 @@ extension UnsealedState: DebugPrintable {
     }
 }
 
-extension SealedState: DebugPrintable {
+extension SealedState: CustomDebugStringConvertible {
     var debugDescription: String {
         return "SealedState: \(resolution)"
     }

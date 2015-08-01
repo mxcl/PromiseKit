@@ -26,7 +26,7 @@ class Test232: XCTestCase {
         // 2.3.2.1: If `x` is pending, `promise` must remain pending until `x` is fulfilled or rejected.
 
         testPromiseResolution({
-            return Promise<Int>.defer().promise
+            return Promise<Int>.defer_().promise
         }, test: { promise in
             let ex = self.expectationWithDescription("")
             var wasFulfilled = false
@@ -35,7 +35,7 @@ class Test232: XCTestCase {
             promise.then { foo in
                 wasFulfilled = true
             }
-            promise.catch { foo in
+            promise.catch_ { foo in
                 wasRejected = true
             }
             later(100){
@@ -69,7 +69,7 @@ class Test232: XCTestCase {
         // `x` is eventually-fulfilled
 
         testPromiseResolution({
-            let (promise, fulfiller, _) = Promise<Int>.defer()
+            let (promise, fulfiller, _) = Promise<Int>.defer_()
             later { fulfiller(sentinel) }
             return promise
         }, test: { promise in
@@ -90,7 +90,7 @@ class Test232: XCTestCase {
             return Promise(dammy)
         }, test: { promise in
             let ex = self.expectationWithDescription("")
-            promise.catch{ error->Void in
+            promise.catch_{ error->Void in
                 XCTAssertEqual(error, dammy)
                 ex.fulfill()
             }
@@ -100,12 +100,12 @@ class Test232: XCTestCase {
     func test2323_2() {
         // `x` is eventually-rejected
         testPromiseResolution({
-            let (promise, _, rejecter) = Promise<Int>.defer()
+            let (promise, _, rejecter) = Promise<Int>.defer_()
             later { rejecter(dammy) }
             return promise
         }, test: { promise in
             let ex = self.expectationWithDescription("")
-            promise.catch{ error->Void in
+            promise.catch_{ error->Void in
                 XCTAssertEqual(error, dammy)
                 ex.fulfill()
             }

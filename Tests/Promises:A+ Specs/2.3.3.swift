@@ -13,7 +13,7 @@ class Test233: XCTestCase {
 //
 //        // via return from a rejected promise
 //        let e2 = expectationWithDescription("")
-//        var p2 = Promise(error:dammy).catch { _->Promise<Int> in
+//        var p2 = Promise(error:dammy).catch_ { _->Promise<Int> in
 //            return xFactory()
 //        }
 //        test(p2, e2)

@@ -40,10 +40,10 @@ public class Sealant<T> {
      To get this to work you often have to help the compiler by specifiying
      the type. In future versions of Swift, this should become unecessary.
     */
-    public func resolve(obj: T!, var _ error: NSError!) {
-        if obj != nil {
+    public func resolve(obj: T?, var _ error: NSError?) {
+        if let obj = obj {
             handler(.Fulfilled(obj))
-        } else if error != nil {
+        } else if let error = error {
             resolve(error)
         } else {
             //FIXME couldn't get the constants from the umbrella header :(
@@ -52,7 +52,7 @@ public class Sealant<T> {
         }
     }
     
-    public func resolve(obj: T, _ error: NSError!) {
+    public func resolve(obj: T, _ error: NSError?) {
         if error == nil {
             handler(.Fulfilled(obj))
         } else  {

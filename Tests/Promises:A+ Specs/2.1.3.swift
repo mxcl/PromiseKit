@@ -12,7 +12,7 @@ class Test2131: XCTestCase {
                 onRejectedCalled = true
                 exes[0].fulfill()
             }
-            promise.catch { e->() in
+            promise.catch_ { e->() in
                 XCTAssertFalse(onRejectedCalled)
             }
             later {
@@ -23,11 +23,11 @@ class Test2131: XCTestCase {
 
     func test2131_2() {
         var onRejectedCalled = false
-        let (promise, fulfiller, rejecter) = Promise<Int>.defer()
+        let (promise, fulfiller, rejecter) = Promise<Int>.defer_()
         promise.then{ a -> Void in
             XCTAssertFalse(onRejectedCalled)
         }
-        promise.catch{ e -> Void in
+        promise.catch_{ e -> Void in
             onRejectedCalled = true
         }
         fulfiller(dummy)
@@ -37,12 +37,12 @@ class Test2131: XCTestCase {
 
     func test2131_3() {
         var onRejectedCalled = false
-        let (promise, fulfiller, rejecter) = Promise<Int>.defer()
+        let (promise, fulfiller, rejecter) = Promise<Int>.defer_()
 
         promise.then{ a->() in
             XCTAssertFalse(onRejectedCalled)
         }
-        promise.catch{ e->() in
+        promise.catch_{ e->() in
             onRejectedCalled = true;
         }
 
@@ -55,12 +55,12 @@ class Test2131: XCTestCase {
 
     func test2131_4() {
         var onRejectedCalled = false
-        let (promise, fulfiller, rejecter) = Promise<Int>.defer()
+        let (promise, fulfiller, rejecter) = Promise<Int>.defer_()
 
         promise.then{ a in
             XCTAssertFalse(onRejectedCalled)
         }
-        promise.catch{ e->() in
+        promise.catch_{ e->() in
             onRejectedCalled = true
         }
 

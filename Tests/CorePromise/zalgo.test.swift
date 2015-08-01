@@ -3,12 +3,12 @@ import PromiseKit
 
 
 
-func stressDataRace<T: Equatable>(e1: XCTestExpectation, iterations: Int = 1000, stressFactor: Int = 10, # stressFunction: (Promise<T>) -> Void, fulfill f: () -> T) {
+func stressDataRace<T: Equatable>(e1: XCTestExpectation, iterations: Int = 1000, stressFactor: Int = 10, stressFunction: (Promise<T>) -> Void, fulfill f: () -> T) {
     let group = dispatch_group_create()
     let queue = dispatch_queue_create("the.domain.of.Zalgo", DISPATCH_QUEUE_CONCURRENT)
 
-    for i in 0..<iterations {
-        let (promise, fulfill, reject) = Promise<T>.defer()
+    for _ in 0..<iterations {
+        let (promise, fulfill, _) = Promise<T>.defer_()
 
         dispatch_apply(stressFactor, queue) { n in
             stressFunction(promise)
@@ -42,7 +42,7 @@ class TestZalgo: XCTestCase {
         
         var x = 0
         
-        let (p2, f, _) = Promise<Int>.defer()
+        let (p2, f, _) = Promise<Int>.defer_()
         p2.then(on: zalgo) { _ in
             x = 1
         }

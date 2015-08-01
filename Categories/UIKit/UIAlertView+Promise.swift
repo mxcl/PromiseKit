@@ -1,5 +1,7 @@
 import Foundation
+#if !COCOAPODS
 import PromiseKit
+#endif
 import UIKit.UIAlertView
 
 /**
@@ -15,7 +17,9 @@ import UIKit.UIAlertView
 
  And then in your sources:
 
-    import PromiseKit
+    #if !COCOAPODS
+import PromiseKit
+#endif
 */
 extension UIAlertView {
     public func promise() -> Promise<Int> {
@@ -33,7 +37,7 @@ extension UIAlertView {
 }
 
 private class PMKAlertViewDelegate: NSObject, UIAlertViewDelegate {
-    let (promise, fulfill, reject) = Promise<Int>.defer()
+    let (promise, fulfill, reject) = Promise<Int>.defer_()
     var retainCycle: NSObject?
 
     @objc func alertView(alertView: UIAlertView, didDismissWithButtonIndex buttonIndex: Int) {

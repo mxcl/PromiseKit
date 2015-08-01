@@ -1,6 +1,8 @@
 import AVFoundation.AVAudioSession
 import Foundation
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 /**
  To import the `AVAudioSession` category:
@@ -10,7 +12,9 @@ import PromiseKit
 
  And then in your sources:
 
-    import PromiseKit
+    #if !COCOAPODS
+import PromiseKit
+#endif
 */
 extension AVAudioSession {
     public func requestRecordPermission() -> Promise<Bool> {

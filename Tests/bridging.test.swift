@@ -7,6 +7,7 @@ class TestPromiseBridge: XCTestCase {
     func testCanBridgeSwiftArray() {
         let p = Promise([NSString(),NSString(),NSString()])
         let ap = AnyPromise(bound: p)
+        XCTAssertGreaterThan(ap.description.characters.count, 0)
 
         // no test since we'd need to write objc, but also
         // mainly we are just testing the above compiles
@@ -15,6 +16,7 @@ class TestPromiseBridge: XCTestCase {
     func testCanBridgeSwiftDictionary() {
         let p = Promise([NSString():NSString()])
         let ap = AnyPromise(bound: p)
+        XCTAssertGreaterThan(ap.description.characters.count, 0)
 
         // no test since we'd need to write objc, but also
         // mainly we are just testing the above compiles

@@ -1,5 +1,7 @@
 import MapKit
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 /**
  To import the `MKMapSnapshotter` category:
@@ -9,7 +11,9 @@ import PromiseKit
 
  And then in your sources:
 
-    import PromiseKit
+    #if !COCOAPODS
+import PromiseKit
+#endif
 */
 extension MKMapSnapshotter {
     /**

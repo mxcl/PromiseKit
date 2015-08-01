@@ -1845,6 +1845,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = Sources/PMK.modulemap;
+				PRODUCT_BUNDLE_IDENTIFIER = org.promisekit;
 				PRODUCT_NAME = PromiseKit;
 				SKIP_INSTALL = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1865,6 +1866,7 @@
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = Sources/PMK.modulemap;
+				PRODUCT_BUNDLE_IDENTIFIER = org.promisekit;
 				PRODUCT_NAME = PromiseKit;
 				SKIP_INSTALL = YES;
 			};
@@ -1880,6 +1882,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = Sources/PMK.modulemap;
+				PRODUCT_BUNDLE_IDENTIFIER = org.promisekit;
 				PRODUCT_NAME = PromiseKit;
 				SDKROOT = macosx;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
@@ -1896,6 +1899,7 @@
 				INFOPLIST_FILE = "$(SRCROOT)/Sources/Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
 				MODULEMAP_FILE = Sources/PMK.modulemap;
+				PRODUCT_BUNDLE_IDENTIFIER = org.promisekit;
 				PRODUCT_NAME = PromiseKit;
 				SDKROOT = macosx;
 			};
