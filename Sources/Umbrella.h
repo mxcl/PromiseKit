@@ -24,10 +24,7 @@ extern NSString * const PMKErrorDomain;
 #define PMKTaskError 9l
 #define PMKJoinError 10l
 
-#if defined(PMKEZBake) && defined(SWIFT_CLASS)
-    // https://github.com/PromiseKit/EZiOS7/issues/2
-    #define AnyPromise PMKPromise
-#else
+#if !(defined(PMKEZBake) && defined(SWIFT_CLASS))
     #if !defined(SWIFT_PASTE)
     # define SWIFT_PASTE_HELPER(x, y) x##y
     # define SWIFT_PASTE(x, y) SWIFT_PASTE_HELPER(x, y)
@@ -53,12 +50,10 @@ extern NSString * const PMKErrorDomain;
     #endif
 
     SWIFT_CLASS("PMKAnyPromise")
-    @interface PMKPromise : NSObject
+    @interface AnyPromise : NSObject
     @property (nonatomic, readonly) BOOL pending;
     @property (nonatomic, readonly) BOOL resolved;
     @property (nonatomic, readonly) BOOL fulfilled;
     @property (nonatomic, readonly) BOOL rejected;
     @end
-
-    @compatibility_alias AnyPromise PMKPromise;
 #endif

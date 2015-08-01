@@ -17,10 +17,6 @@
 		63075EC61AD10471002C46A0 /* race.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63075EC41AD10471002C46A0 /* race.swift */; };
 		6307B67A1B615BB60003AC3A /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63F803A31AB87A8200E4DEE1 /* PromiseKit.framework */; };
 		6307B67B1B615BB60003AC3A /* PromiseKit.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 63F803A31AB87A8200E4DEE1 /* PromiseKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		630F25F91AF17A8F00BE27FD /* PMKPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 630F25F81AF17A8F00BE27FD /* PMKPromise.m */; };
-		630F25FA1AF17BFE00BE27FD /* PMKPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 630F25F81AF17A8F00BE27FD /* PMKPromise.m */; };
-		63196ABF1AFD8EE300555BCD /* Promise.h in Headers */ = {isa = PBXBuildFile; fileRef = 63196ABE1AFD8B7100555BCD /* Promise.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		63196AC01AFD8EF600555BCD /* Promise.h in Headers */ = {isa = PBXBuildFile; fileRef = 63196ABE1AFD8B7100555BCD /* Promise.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63196AC11AFD8F1300555BCD /* AnyPromise+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 63314AE01AEDDD0B0071B6F5 /* AnyPromise+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		63196AC21AFD8F1600555BCD /* AnyPromise+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 63314AE01AEDDD0B0071B6F5 /* AnyPromise+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		63196AC51AFD936300555BCD /* dispatch_promise.m in Sources */ = {isa = PBXBuildFile; fileRef = 63196AC31AFD936300555BCD /* dispatch_promise.m */; };
@@ -29,8 +25,6 @@
 		63196AC81AFD936300555BCD /* dispatch_promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63196AC41AFD936300555BCD /* dispatch_promise.swift */; };
 		63196AC91AFD9F6E00555BCD /* after.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A60E1F1AFD795B00C4E692 /* after.m */; };
 		631A51BC1B29E7E90018606D /* bridging.test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631A51BB1B29E7E90018606D /* bridging.test.swift */; };
-		631FEA7F1AF28E4900ED9646 /* PMKPromise.h in Headers */ = {isa = PBXBuildFile; fileRef = 631FEA7E1AF28E4900ED9646 /* PMKPromise.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		631FEA801AF28E4900ED9646 /* PMKPromise.h in Headers */ = {isa = PBXBuildFile; fileRef = 631FEA7E1AF28E4900ED9646 /* PMKPromise.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63314ADA1AEDDC070071B6F5 /* hang.m in Sources */ = {isa = PBXBuildFile; fileRef = 63314AD71AEDDC070071B6F5 /* hang.m */; };
 		63314ADB1AEDDC070071B6F5 /* hang.m in Sources */ = {isa = PBXBuildFile; fileRef = 63314AD71AEDDC070071B6F5 /* hang.m */; };
 		63314ADC1AEDDC070071B6F5 /* join.m in Sources */ = {isa = PBXBuildFile; fileRef = 63314AD81AEDDC070071B6F5 /* join.m */; };
@@ -64,7 +58,6 @@
 		634E98B01AF917CF00094594 /* Stubbilino.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 634E98AC1AF916BD00094594 /* Stubbilino.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		635121511B0A585B008ED696 /* when.test.m in Sources */ = {isa = PBXBuildFile; fileRef = 635121501B0A585B008ED696 /* when.test.m */; };
 		63533B391AE57A9300C10972 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63F803CC1AB89A0F00E4DEE1 /* PromiseKit.framework */; };
-		635D0D731ADD7CE700CC0406 /* PMKPromise.test.m in Sources */ = {isa = PBXBuildFile; fileRef = 635D0D711ADD7CAE00CC0406 /* PMKPromise.test.m */; };
 		635D0D761ADDA2EA00CC0406 /* AnyPromise.test.m in Sources */ = {isa = PBXBuildFile; fileRef = 635D0D741ADDA2C100CC0406 /* AnyPromise.test.m */; };
 		635D0D7B1ADDB11400CC0406 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D0D7A1ADDB11400CC0406 /* Error.swift */; };
 		635D0D7C1ADDB11400CC0406 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D0D7A1ADDB11400CC0406 /* Error.swift */; };
@@ -384,14 +377,11 @@
 		63075EC41AD10471002C46A0 /* race.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = race.swift; path = Sources/race.swift; sourceTree = "<group>"; };
 		630AC2ED1AE6AC0400A212AD /* OHHTTPStubs.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OHHTTPStubs.framework; path = Carthage/Build/Mac/OHHTTPStubs.framework; sourceTree = "<group>"; };
 		630AC2EE1AE6AC0400A212AD /* OMGHTTPURLRQ.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OMGHTTPURLRQ.framework; path = Carthage/Build/Mac/OMGHTTPURLRQ.framework; sourceTree = "<group>"; };
-		630F25F81AF17A8F00BE27FD /* PMKPromise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PMKPromise.m; path = Sources/PMKPromise.m; sourceTree = "<group>"; };
 		6317A8CF1B3332FA00B4E119 /* PMKAlertController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PMKAlertController.swift; sourceTree = "<group>"; };
-		63196ABE1AFD8B7100555BCD /* Promise.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Promise.h; path = Sources/Promise.h; sourceTree = "<group>"; };
 		63196AC31AFD936300555BCD /* dispatch_promise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = dispatch_promise.m; path = Sources/dispatch_promise.m; sourceTree = "<group>"; };
 		63196AC41AFD936300555BCD /* dispatch_promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = dispatch_promise.swift; path = Sources/dispatch_promise.swift; sourceTree = "<group>"; };
 		631A51BB1B29E7E90018606D /* bridging.test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = bridging.test.swift; path = Tests/CorePromise/bridging.test.swift; sourceTree = SOURCE_ROOT; };
 		631EDA1A1B3A42C000CFB93A /* ErrorUnhandler.test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = ErrorUnhandler.test.m; path = CorePromise/ErrorUnhandler.test.m; sourceTree = "<group>"; };
-		631FEA7E1AF28E4900ED9646 /* PMKPromise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PMKPromise.h; path = Sources/PMKPromise.h; sourceTree = "<group>"; };
 		63314AD71AEDDC070071B6F5 /* hang.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = hang.m; path = Sources/hang.m; sourceTree = "<group>"; };
 		63314AD81AEDDC070071B6F5 /* join.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = join.m; path = Sources/join.m; sourceTree = "<group>"; };
 		63314AD91AEDDC070071B6F5 /* when.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = when.m; path = Sources/when.m; sourceTree = "<group>"; };
@@ -402,7 +392,6 @@
 		634E98AC1AF916BD00094594 /* Stubbilino.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Stubbilino.framework; path = Carthage/Build/Mac/Stubbilino.framework; sourceTree = "<group>"; };
 		635121501B0A585B008ED696 /* when.test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = when.test.m; path = Tests/CorePromise/when.test.m; sourceTree = SOURCE_ROOT; };
 		63533B331AE57A9300C10972 /* PMKAPlusTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PMKAPlusTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		635D0D711ADD7CAE00CC0406 /* PMKPromise.test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PMKPromise.test.m; path = Tests/CorePromise/PMKPromise.test.m; sourceTree = SOURCE_ROOT; };
 		635D0D741ADDA2C100CC0406 /* AnyPromise.test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnyPromise.test.m; path = Tests/CorePromise/AnyPromise.test.m; sourceTree = SOURCE_ROOT; };
 		635D0D7A1ADDB11400CC0406 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Error.swift; path = Sources/Error.swift; sourceTree = "<group>"; };
 		636A44EF1AEC304300639777 /* bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = bridge.h; path = Categories/bridge.h; sourceTree = "<group>"; };
@@ -745,7 +734,6 @@
 				63DEC3531B41C07D002F0FB4 /* hang.test.m */,
 				63DEC3501B41BDAB002F0FB4 /* join.test.m */,
 				63DEC34D1B41BCE3002F0FB4 /* PMKManifold.test.m */,
-				635D0D711ADD7CAE00CC0406 /* PMKPromise.test.m */,
 				6302AD3F1AEF55A4001F0069 /* Promise.test.swift */,
 				6388E1B01AD316CB0074D85B /* race.test.swift */,
 				6388E1AE1AD316690074D85B /* when.test.swift */,
@@ -860,16 +848,6 @@
 			path = Categories;
 			sourceTree = "<group>";
 		};
-		63A60E1E1AFD519F00C4E692 /* Deprecated */ = {
-			isa = PBXGroup;
-			children = (
-				63196ABE1AFD8B7100555BCD /* Promise.h */,
-				631FEA7E1AF28E4900ED9646 /* PMKPromise.h */,
-				630F25F81AF17A8F00BE27FD /* PMKPromise.m */,
-			);
-			name = Deprecated;
-			sourceTree = "<group>";
-		};
 		63BCB8BD1AD3279C000AF3D0 /* Promises/A+ Specs */ = {
 			isa = PBXGroup;
 			children = (
@@ -959,7 +937,6 @@
 				638E0F2D1AEF19B90052E28F /* Sources */,
 				63D953C11AED8121004981FF /* Headers */,
 				63075EC31AD1045D002C46A0 /* Features */,
-				63A60E1E1AFD519F00C4E692 /* Deprecated */,
 				6388E16E1AD2F1DB0074D85B /* Internal Utilities */,
 				6398C8991AE985D9006E06E1 /* Categories */,
 				6388E1A31AD315F90074D85B /* Tests */,
@@ -986,8 +963,6 @@
 			files = (
 				63D953CA1AEDA4D0004981FF /* AnyPromise.h in Headers */,
 				633810651B02EC7A00CCD263 /* NSError+Cancellation.h in Headers */,
-				631FEA7F1AF28E4900ED9646 /* PMKPromise.h in Headers */,
-				63196ABF1AFD8EE300555BCD /* Promise.h in Headers */,
 				63A157751ABB59DC0002A421 /* PromiseKit.h in Headers */,
 				63F803A91AB87A8200E4DEE1 /* Umbrella.h in Headers */,
 				63196AC21AFD8F1600555BCD /* AnyPromise+Private.h in Headers */,
@@ -1000,8 +975,6 @@
 			files = (
 				63D953C91AEDA3B1004981FF /* AnyPromise.h in Headers */,
 				633810661B02EC7A00CCD263 /* NSError+Cancellation.h in Headers */,
-				631FEA801AF28E4900ED9646 /* PMKPromise.h in Headers */,
-				63196AC01AFD8EF600555BCD /* Promise.h in Headers */,
 				63A157741ABB59D80002A421 /* PromiseKit.h in Headers */,
 				63F803C71AB89A0F00E4DEE1 /* Umbrella.h in Headers */,
 				63196AC11AFD8F1300555BCD /* AnyPromise+Private.h in Headers */,
@@ -1300,7 +1273,6 @@
 				63DEC3551B41C0B8002F0FB4 /* hang.test.m in Sources */,
 				63DEC3521B41BDD2002F0FB4 /* join.test.m in Sources */,
 				63DEC34F1B41BD25002F0FB4 /* PMKManifold.test.m in Sources */,
-				635D0D731ADD7CE700CC0406 /* PMKPromise.test.m in Sources */,
 				6302AD401AEF55A4001F0069 /* Promise.test.swift in Sources */,
 				63A5389A1B741F0A002BB8E6 /* AnyPromise.test.swift in Sources */,
 				6388E1B21AD316CB0074D85B /* race.test.swift in Sources */,
@@ -1477,7 +1449,6 @@
 				635D0D7B1ADDB11400CC0406 /* Error.swift in Sources */,
 				63314ADA1AEDDC070071B6F5 /* hang.m in Sources */,
 				63314ADC1AEDDC070071B6F5 /* join.m in Sources */,
-				630F25F91AF17A8F00BE27FD /* PMKPromise.m in Sources */,
 				63F803C01AB87A9500E4DEE1 /* Promise.swift in Sources */,
 				639A12711AB9F941002E5C24 /* Promise+Properties.swift in Sources */,
 				6388E19C1AD310F80074D85B /* NSJSONFromData.swift in Sources */,
@@ -1502,7 +1473,6 @@
 				635D0D7C1ADDB11400CC0406 /* Error.swift in Sources */,
 				63314ADB1AEDDC070071B6F5 /* hang.m in Sources */,
 				63314ADD1AEDDC070071B6F5 /* join.m in Sources */,
-				630F25FA1AF17BFE00BE27FD /* PMKPromise.m in Sources */,
 				63F803C41AB89A0F00E4DEE1 /* Promise.swift in Sources */,
 				639A12721AB9F997002E5C24 /* Promise+Properties.swift in Sources */,
 				6388E19D1AD311000074D85B /* NSJSONFromData.swift in Sources */,

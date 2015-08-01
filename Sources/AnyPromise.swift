@@ -1,7 +1,5 @@
 import Foundation.NSError
 
-public typealias AnyPromise = PMKPromise
-
 @objc(PMKAnyPromise) public class AnyPromise: NSObject {
 
     private var state: State
