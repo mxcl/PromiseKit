@@ -31,7 +31,7 @@ extern NSString * const PMKErrorDomain;
 
 #if defined(PMKEZBake) && defined(SWIFT_CLASS)
     // https://github.com/PromiseKit/EZiOS7/issues/2
-    #define PMKPromise AnyPromise
+    #define AnyPromise PMKPromise
 #else
     #if !defined(SWIFT_PASTE)
     # define SWIFT_PASTE_HELPER(x, y) x##y
