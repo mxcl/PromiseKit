@@ -36,7 +36,7 @@ PromiseKit 2.0 has two promise types:
  * `Promise<T>` (Swift)
  * `AnyPromise` (Objective-C)
  
-Each is designed to be an approproate promise implementation for the strong points of its language.
+Each is designed to be an approproate promise implementation for the strong points of its language:
 
 * `Promise<T>` is strict, defined and precise.
 * `AnyPromise` is loose, flexible and dynamic.
