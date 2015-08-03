@@ -3,7 +3,7 @@ category: docs
 layout: default
 ---
 
-# Sealing Your Own Promises
+# Sealing Your Own Promises — Objective C
 
 To start your own promise chain, use `+promiseWithResolverBlock:`. Here we show how to wrap a [Parse](http://parse.com) query:
 
@@ -47,5 +47,43 @@ Often you may need to do some work in a background queue as part of your new pro
 Here we synchronously fetched the kitten images in a background queue, then returned the same array again.
 
 If you immediately need to work in the background we provide `dispatch_promise`.
+
+
+# Sealing Your Own Promises — Swift
+
+{% highlight swift %}
+func users() -> Promise<PFUser> {
+    return Promise { fulfill, reject in
+        let query = PFUser.query()
+        query.whereKey("name", equals: "mxcl")
+        query.findObjectsInBackgroundWithBlock { objects, error in
+            switch (objects, error) {
+            case .Some(objects), _:
+                fulfill(objects)
+            case _, .Some(error):
+                reject(error)
+            default:
+                abort()
+            }
+        }
+    }
+}
+
+users().then { users in
+    //…
+}
+{% endhighlight %}
+
+Though for such completion blocks we provide a convenience initializer:
+
+{% highlight swift %}
+func users() -> Promise<PFUser> {
+    return Promise { adapter in
+        let query = PFUser.query()
+        query.whereKey("name", equals: "mxcl")
+        query.findObjectsInBackgroundWithBlock(adapter)
+    }
+}
+{% endhighlight %}
 
 <div><a class="pagination" href="/retain-cycle-considerations">Next: Retain Cycle Considerations</a></div>

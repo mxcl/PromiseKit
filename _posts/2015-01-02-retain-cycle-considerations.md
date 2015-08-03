@@ -28,7 +28,7 @@ somePromise.then(self.handler);
 
 The above is a classic retain cycle. Don’t do that.
 
-In cases where you think the promise will outlive the object that `self` refers to and you want that object to be deallocated, use weak references to `self`.
+In cases where you think the promise will outlive the object that `self` refers to and you want that object to be deallocated, use weak references to `self` (or `unowned self` in Swift).
 
 It’s easy to do code like this though, and this code has a retain cycle, though it’s not because of the promises:
 

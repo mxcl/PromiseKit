@@ -5,22 +5,9 @@ layout: default
 
 For instructions on how to install PromiseKit with CocoaPods [see the Getting Started guide](/getting-started).
 
-# Pods That Add Promises To Third Party Libraries
+# Pods That Come With Promises
 
-Use PromiseKit with your favorite third party libraries:
-
-* [Parse](https://github.com/hathway/Parse-PromiseKit)
-* [RevMob](https://github.com/mxcl/PromiseKit/pull/47)
-* [AFNetworking](https://github.com/csotiriou/AFNetworking-PromiseKit) (alternatives:  [1](https://github.com/skeeet/AFNetworking-PromiseKit))
-* [Facebook SDK](https://github.com/FastrBooks/Facebook-PromiseKit)
-
-Or see if there’s anything that uses PromiseKit on CocoaPods that you could use:
-
-* [uses:PromiseKit](https://cocoapods.org/?q=uses%3Apromisekit*)
-
-# Pods Built on PromiseKit
-
-* [MBTNetworking](https://github.com/madbat/MBTNetworking) (pretty interesting networking library built on AFNetworking, Mantle and PromiseKit)
+Many pods come with promises or add promises to other famous libraries (eg. AFNetworking). [uses:PromiseKit](https://cocoapods.org/?q=uses%3Apromisekit).
 
 # How To Add Promises to Third Party Libraries
 
@@ -103,12 +90,19 @@ end
 
 ## Adding PromiseKit to a Pod You Don’t Maintain
 
-Firstly you should try submitting the above to the project itself. If they won’t add it then you'll need to make your own pod. Use the naming scheme: `ABCKitten+PromiseKit`. Don’t name it with `PromiseKit` first (it’s not PromiseKit plus foo it’s foo plus PromiseKit!). Also use a `+`: there’s enough dashes in project names already. `+` is more descriptive, it’s more distinctive and CocoaPods accepts such names *just fine*.
+Firstly you should try submitting the above to the project itself. If they won’t
+add it then you'll need to make your own pod. Use the naming scheme:
+`ABCKitten+PromiseKit`. Don’t name it with `PromiseKit` first (it’s not
+PromiseKit plus foo it’s foo plus PromiseKit!). Also use a `+`: there’s enough
+dashes in project names already. `+` is more descriptive, it’s more distinctive
+and CocoaPods accepts such names *just fine*.
 
 
 ## `Promise<T>` or `AnyPromise`?
 
-If your library is Swift, provide `Promise<T>` and if your library is ObjC, provide `AnyPromise`. We don’t suggest providing both. PromiseKit itself provides bridging mechanisms, support the language you like.
+If your library is Swift, provide `Promise<T>` and if your library is ObjC,
+provide `AnyPromise`. We don’t suggest providing both. PromiseKit itself
+provides bridging mechanisms, support the language you like.
 
 
 <div><a class="pagination" href="/troubleshooting">Next: Troubleshooting</a></div>

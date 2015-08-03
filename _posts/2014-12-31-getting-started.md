@@ -126,6 +126,10 @@ Or:
 
 * Use our [iOS 7 EZ-Bake](https://github.com/PromiseKit/EZiOS7)
 
+Or:
+
+* We provide [pre-built binaries](https://github.com/mxcl/PromiseKit/releases).
+
 It is not recommended to add the sources directly to your application target; it will work, you'll just have to do a bunch of hacks.
 
 
@@ -142,4 +146,4 @@ Sorry, but it cannot be helped.
 
 PromiseKit will work back to iOS 6, but not with Carthage as Carthage builds frameworks and frameworks only work on iOS 8 and above. The Swift version *will* work on iOS 7, but you cannot use CocoaPods to install it (because CocoaPods will only build frameworks for Swift projects and frameworks only work on iOS 8), you will need to copy the source files into your project and have them compile by hand. This *does* work! But you will need to make sure you copy only what you need (only copy `.swift` files), and if you need the `NSURLConnection` categories, you will still need `OMGHTTPURLRQ`, which you can simply install with CocoaPods, or just copy all the sources in (OMGHTTPURLRQ is much simpler so it’s just 3 `.m` files and 3 `.h` files).
 
-<div><a class="pagination" href="/swift">Next: Specifics Regarding Swift PromiseKit</a></div>
+<div><a class="pagination" href="/language-bridging">Next: Bridging Between ObjC and Swift</a></div>

@@ -39,7 +39,7 @@ This isn't even a complicated example.
 Promises streamline error handling:
 
 {% highlight objectivec %}
-[NSURLConnection GET:url].then(^(NSDictionary *json){
+[NSURLSession GET:url].then(^(NSDictionary *json){
     return [NSURLConnection GET:json[@"avatar_url"]];
 }).then(^(UIImage *image){
     self.imageView.image = image;
@@ -48,13 +48,24 @@ Promises streamline error handling:
 })
 {% endhighlight %}
 
-This is a somewhat unfair example: PromiseKit’s `NSURLConnection` category detects the JSON and the image HTTP responses and automatically decode them for you (with thoroughly filled `NSError` objects). But the key here is that any errors that happen anywhere in the chain propogate to the error handler skipping any intermediary `then` handlers.
+{% highlight swift %}
+firstly {
+    NSURLSession.GET(url)
+}.then { json in
+    NSURLConnection.GET(json["avatar_url"])
+}.then { image in
+    self.imageView.image = image
+}.catch { error in
+    UIAlertView(…).show()
+}
+{% endhighlight %}
+
+
+This is a somewhat unfair example: PromiseKit’s `NSURLSession` category detects the JSON and the image HTTP responses and automatically decode them for you (with thoroughly filled `NSError` objects). But the key here is that any errors that happen anywhere in the chain propogate to the error handler skipping any intermediary `then` handlers.
 
 It’s important to remember that in order for your errors to propogate they must occur in the chain. **If you don’t return your promise, thus inserting it into the chain, the error won’t propogate**.
 
 PromiseKit has an additional bonus: unhandled errors (ie. errors that never get handled in a `catch`) are logged. If you like, we even provide [a mechanism][ueh] to execute your own code whenever errors are not caught.
-
-<aside>PromiseKit 1 would catch all exceptions. PromiseKit 2 will only catch exceptions that <i>you</i> throw within (only) <code>AnyPromise</code> handlers and only if they are of type <code>NSString</code> or <code>NSError</code>.</aside>
 
 <div><a class="pagination" href="/when">Next: `when`</a></div>
 
