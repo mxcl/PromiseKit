@@ -4,6 +4,7 @@
 @import Foundation.NSError;
 @import Foundation.NSProgress;
 @import Foundation.NSNull;
+#import <libkern/OSAtomic.h>
 #import "Umbrella.h"
 
 // NSProgress resources:
@@ -11,7 +12,6 @@
 //  * http://oleb.net/blog/2014/03/nsprogress/
 // NSProgress! Beware!
 //  * https://github.com/AFNetworking/AFNetworking/issues/2261
-
 
 AnyPromise *PMKWhen(id promises) {
     if (promises == nil)
@@ -30,54 +30,57 @@ AnyPromise *PMKWhen(id promises) {
     NSProgress *progress = [NSProgress progressWithTotalUnitCount:[promises count]];
     progress.pausable = NO;
     progress.cancellable = NO;
+#else
+    struct PMKProgress {
+        int completedUnitCount;
+        int totalUnitCount;
+    };
+    __block struct PMKProgress progress;
 #endif
 
-    PMKResolver resolve;
-    AnyPromise *rootPromise = [[AnyPromise alloc] initWithResolver:&resolve];
-    __block void (^fulfill)();
+    __block int32_t countdown = (int32_t)[promises count];
+    BOOL const isdict = [promises isKindOfClass:[NSDictionary class]];
 
-    __block NSInteger countdown = [promises count];
-    void (^yield)(id, id, void(^)(id)) = ^(AnyPromise *promise, id key, void(^set)(id)) {
-        if (![promise isKindOfClass:[AnyPromise class]])
-            promise = [AnyPromise promiseWithValue:promise];
-        [promise pipe:^(id value){
-            if (!rootPromise.pending) {
-                // suppress “already resolved” log message
-            } else if (IsError(value)) {
-              #ifndef PMKDisableProgress
-                progress.completedUnitCount = progress.totalUnitCount;
-              #endif
-                resolve(NSErrorSupplement(value, @{PMKFailingPromiseIndexKey: key}));
-            } else {
-              #ifndef PMKDisableProgress
-                progress.completedUnitCount++;
-              #endif
-                set(promise.value);  // we use -value to unwrap PMKManifolds
-                if (--countdown == 0)
-                    fulfill();
-            }
-        }];
-    };
+    return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
+        NSInteger index = 0;
 
-    if ([promises isKindOfClass:[NSDictionary class]]) {
-        NSMutableDictionary *results = [NSMutableDictionary new];
-        fulfill = ^{ resolve(results); };
+        for (__strong id key in promises) {
+            AnyPromise *promise = isdict ? promises[key] : key;
+            if (!isdict) key = @(index);
 
-        for (id key in promises) {
-            yield(promises[key], key, ^(id value){
-                results[key] = value;
-            });
+            if (![promise isKindOfClass:[AnyPromise class]])
+                promise = [AnyPromise promiseWithValue:promise];
+
+            [promise pipe:^(id value){
+                if (progress.fractionCompleted >= 1)
+                    return;
+
+                if (IsError(value)) {
+                    progress.completedUnitCount = progress.totalUnitCount;
+                    resolve(NSErrorSupplement(value, @{PMKFailingPromiseIndexKey: key}));
+                }
+                else if (OSAtomicDecrement32(&countdown) == 0) {
+                    progress.completedUnitCount = progress.totalUnitCount;
+
+                    id results;
+                    if (isdict) {
+                        results = [NSMutableDictionary new];
+                        for (id key in promises) {
+                            id promise = promises[key];
+                            results[key] = IsPromise(promise) ? ((AnyPromise *)promise).value : promise;
+                        }
+                    } else {
+                        results = [NSMutableArray new];
+                        for (AnyPromise *promise in promises) {
+                            id value = IsPromise(promise) ? (promise.value ?: [NSNull null]) : promise;
+                            [results addObject:value];
+                        }
+                    }
+                    resolve(results);
+                } else {
+                    progress.completedUnitCount++;
+                }
+            }];
         }
-    } else {
-        NSPointerArray *results = NSPointerArrayMake([promises count]);
-        fulfill = ^{ resolve(results.allObjects); };
-
-        [promises enumerateObjectsUsingBlock:^(id promise, NSUInteger ii, BOOL *stop) {
-            yield(promise, @(ii), ^(id value){
-                [results replacePointerAtIndex:ii withPointer:(__bridge void *)(value ?: [NSNull null])];
-            });
-        }];
-    }
-    
-    return rootPromise;
+    }];
 }

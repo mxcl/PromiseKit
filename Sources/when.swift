@@ -12,15 +12,18 @@ private func when<T>(promises: [Promise<T>]) -> Promise<Void> {
     var countdown = promises.count
     if countdown == 0 {
         fulfill()
+        return rootPromise
     }
+    let barrier = dispatch_queue_create("org.promisekit.barrier.when", DISPATCH_QUEUE_CONCURRENT)
 
     for (index, promise) in enumerate(promises) {
         promise.pipe { resolution in
-            if rootPromise.pending {
+            if !rootPromise.pending { return }
+
+            dispatch_barrier_sync(barrier) {
                 switch resolution {
                 case .Rejected(let error):
                     progress.completedUnitCount = progress.totalUnitCount
-                    //TODO PMKFailingPromiseIndexKey
                     reject(error)
                 case .Fulfilled:
                     progress.completedUnitCount++
