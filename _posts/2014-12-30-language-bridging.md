@@ -18,16 +18,16 @@ layout: default
 {% endhighlight %}
 
 {% highlight swift %}
-Foo.bar().then { (foo: NSString) in
-    // you must specialize the type in your then, AnyObject? is acceptable
+Foo.bar().then { (param: NSString) in
+    // **Note** that param must be specialized
 }
 
 // or:
 
 moo().then {
     Foo.bar()
-}.then { (foo: NSString) in
-    // you must specify the type in your then, AnyObject? is acceptable
+}.then { param in
+    // param is AnyObject?
 }
 {% endhighlight %}
 
