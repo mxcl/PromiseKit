@@ -86,7 +86,7 @@ extension NSError {
 private func ABAddressBookRequestAccess() -> Promise<(Bool, ABAddressBook)> {
     var error: Unmanaged<CFError>? = nil
     guard let ubook = ABAddressBookCreateWithOptions(nil, &error) else {
-        return Promise(NSError(CFError: error!.takeRetainedValue()))
+        return Promise(error: NSError(CFError: error!.takeRetainedValue()))
     }
 
     let book: ABAddressBook = ubook.takeRetainedValue()

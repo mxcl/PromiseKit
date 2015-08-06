@@ -178,7 +178,7 @@ extension NSURLConnection {
         do {
             return promise(try body())
         } catch {
-            return Promise(error)
+            return Promise(error: error)
         }
     }
 
@@ -186,7 +186,7 @@ extension NSURLConnection {
         do {
             return promise(try body())
         } catch {
-            return Promise(error)
+            return Promise(error: error)
         }
     }
 
@@ -194,7 +194,7 @@ extension NSURLConnection {
         do {
             return promise(try body())
         } catch {
-            return Promise(error)
+            return Promise(error: error)
         }
     }
 
@@ -202,7 +202,7 @@ extension NSURLConnection {
         do {
             return promise(try body())
         } catch {
-            return Promise(error)
+            return Promise(error: error)
         }
     }
 }
@@ -255,7 +255,7 @@ extension NSURLConnection {
         do {
             return promise(try body())
         } catch let error {
-            return Promise(error)
+            return Promise(error: error)
         }
     }
 }
