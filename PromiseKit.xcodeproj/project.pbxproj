@@ -85,7 +85,6 @@
 		638AF8CD1B62B1AF0045C3E8 /* CLLocationManager+AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 6302ACA51AEF42F2001F0069 /* CLLocationManager+AnyPromise.m */; };
 		638AF8CE1B62B1AF0045C3E8 /* CLLocationManager+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6302ACA61AEF42F2001F0069 /* CLLocationManager+Promise.swift */; };
 		638AF8CF1B62B1AF0045C3E8 /* afterlife.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D73BE11B20B48F00843146 /* afterlife.swift */; };
-		638AF8D01B62B1AF0045C3E8 /* NSFileManager+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6302ACA81AEF42F2001F0069 /* NSFileManager+Promise.swift */; };
 		638AF8D21B62B1AF0045C3E8 /* NSNotificationCenter+AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 6302ACAA1AEF42F2001F0069 /* NSNotificationCenter+AnyPromise.m */; };
 		638AF8D31B62B1AF0045C3E8 /* NSNotificationCenter+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6302ACAB1AEF42F2001F0069 /* NSNotificationCenter+Promise.swift */; };
 		638AF8D81B62B1AF0045C3E8 /* NSURLConnection+AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 6302ACB01AEF42F2001F0069 /* NSURLConnection+AnyPromise.m */; };
@@ -126,7 +125,6 @@
 		638AF90F1B62B1D80045C3E8 /* CLLocationManager+AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 6302ACA51AEF42F2001F0069 /* CLLocationManager+AnyPromise.m */; };
 		638AF9101B62B1D80045C3E8 /* CLLocationManager+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6302ACA61AEF42F2001F0069 /* CLLocationManager+Promise.swift */; };
 		638AF9111B62B1D80045C3E8 /* afterlife.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D73BE11B20B48F00843146 /* afterlife.swift */; };
-		638AF9121B62B1D80045C3E8 /* NSFileManager+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6302ACA81AEF42F2001F0069 /* NSFileManager+Promise.swift */; };
 		638AF9141B62B1D80045C3E8 /* NSNotificationCenter+AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 6302ACAA1AEF42F2001F0069 /* NSNotificationCenter+AnyPromise.m */; };
 		638AF9151B62B1D80045C3E8 /* NSNotificationCenter+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6302ACAB1AEF42F2001F0069 /* NSNotificationCenter+Promise.swift */; };
 		638AF9171B62B1D80045C3E8 /* NSTask+AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 6302ACAD1AEF42F2001F0069 /* NSTask+AnyPromise.m */; };
@@ -1313,7 +1311,6 @@
 				638AF8CD1B62B1AF0045C3E8 /* CLLocationManager+AnyPromise.m in Sources */,
 				638AF8CE1B62B1AF0045C3E8 /* CLLocationManager+Promise.swift in Sources */,
 				638AF8CF1B62B1AF0045C3E8 /* afterlife.swift in Sources */,
-				638AF8D01B62B1AF0045C3E8 /* NSFileManager+Promise.swift in Sources */,
 				6391FD251B62E0FF00671798 /* TestUIImagePickerController.swift in Sources */,
 				638AF8D21B62B1AF0045C3E8 /* NSNotificationCenter+AnyPromise.m in Sources */,
 				638AF8D31B62B1AF0045C3E8 /* NSNotificationCenter+Promise.swift in Sources */,
@@ -1387,7 +1384,6 @@
 				638AF90D1B62B1D80045C3E8 /* CLGeocoder+Promise.swift in Sources */,
 				638AF90F1B62B1D80045C3E8 /* CLLocationManager+AnyPromise.m in Sources */,
 				638AF9101B62B1D80045C3E8 /* CLLocationManager+Promise.swift in Sources */,
-				638AF9121B62B1D80045C3E8 /* NSFileManager+Promise.swift in Sources */,
 				638AF9141B62B1D80045C3E8 /* NSNotificationCenter+AnyPromise.m in Sources */,
 				638AF9151B62B1D80045C3E8 /* NSNotificationCenter+Promise.swift in Sources */,
 				638AF9171B62B1D80045C3E8 /* NSTask+AnyPromise.m in Sources */,
