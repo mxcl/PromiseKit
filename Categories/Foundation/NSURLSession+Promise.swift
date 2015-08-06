@@ -6,128 +6,66 @@ import PromiseKit
 
 //TODO cancellation
 
-
 /**
+ To import the `NSURLConnection` category:
+
+    use_frameworks!
+    pod "PromiseKit/Foundation"
+
+ Or `NSURLConnection` is one of the categories imported by the umbrella pod:
+
+    use_frameworks!
+    pod "PromiseKit"
+
+ And then in your sources:
+
+    import PromiseKit
+
  We provide convenience categories for the `sharedSession`, or 
  an instance method `promise`. If you need more complicated behavior
  we recommend wrapping that usage in a Promise initializer.
 */
 extension NSURLSession {
-    public class func GET(urlString: String) -> Promise<NSData> {
-        return start(try OMGHTTPURLRQ.GET(urlString, nil))
+    public class func GET(URL: String, query: [NSObject: AnyObject]? = nil) -> URLDataPromise {
+        return start(try OMGHTTPURLRQ.GET(URL, query))
     }
 
-    public class func GET(urlString: String, query: [NSString: AnyObject]) -> Promise<NSData> {
-        return start(try OMGHTTPURLRQ.GET(urlString, query))
+    public class func POST(URL: String, formData: [NSObject: AnyObject]? = nil) -> URLDataPromise {
+        return start(try OMGHTTPURLRQ.POST(URL, formData))
     }
 
-    public class func POST(urlString: String, formData: [String: AnyObject]) -> Promise<NSData> {
-        return start(try OMGHTTPURLRQ.POST(urlString, formData))
+    public class func POST(URL: String, multipartFormData: OMGMultipartFormData) -> URLDataPromise {
+        return start(try OMGHTTPURLRQ.POST(URL, multipartFormData))
     }
 
-    public class func POST(urlString: String, multipartFormData: OMGMultipartFormData) -> Promise<NSData> {
-        return start(try OMGHTTPURLRQ.POST(urlString, multipartFormData))
+    public class func PUT(URL: String) -> URLDataPromise {
+        return start(try OMGHTTPURLRQ.PUT(URL, nil))
     }
 
-    public class func PUT(urlString: String) -> Promise<NSData> {
-        return start(try OMGHTTPURLRQ.PUT(urlString, nil))
+    public class func DELETE(URL: String) -> URLDataPromise {
+        return start(try OMGHTTPURLRQ.DELETE(URL, nil))
     }
 
-    public class func DELETE(urlString: String) -> Promise<NSData> {
-        return start(try OMGHTTPURLRQ.DELETE(urlString, nil))
-    }
-
-    private class func start(@autoclosure body: () throws -> NSURLRequest) -> Promise<NSData> {
-        do {
-            return NSURLSession.sharedSession().promise(try body())
-        } catch {
-            return Promise(error: error)
-        }
-    }
-
-    public func promise(rq: NSURLRequest) -> Promise<NSData> {
-        return Promise { (resolve: (NSData?, NSError?) -> Void) in
-            let completion = { (data: NSData?, _: NSURLResponse?, error: NSError?) -> Void in
-                //TODO add more error info to error
-                resolve(data, error)
-            }
-            dataTaskWithRequest(rq, completionHandler: completion).resume()
-        }
-    }
-
-    public enum Error: ErrorType {
-        case InvalidImage(NSData)
+    public func promise(request: NSURLRequest) -> URLDataPromise {
+        return start(request, session: self)
     }
 }
 
-extension NSURLSession {
-    public class func GET(urlString: String) -> Promise<NSDictionary> {
-        return start(try OMGHTTPURLRQ.GET(urlString, nil))
-    }
+private func start(@autoclosure body: () throws -> NSURLRequest, session: NSURLSession = NSURLSession.sharedSession()) -> URLDataPromise {
+    do {
+        var request = try body()
 
-    public class func GET(urlString: String, query: [NSString: AnyObject]) -> Promise<NSDictionary> {
-        return start(try OMGHTTPURLRQ.GET(urlString, query))
-    }
-
-    public class func POST(urlString: String, formData: [String: AnyObject]) -> Promise<NSDictionary> {
-        return start(try OMGHTTPURLRQ.POST(urlString, formData))
-    }
-
-    public class func POST(urlString: String, multipartFormData: OMGMultipartFormData) -> Promise<NSDictionary> {
-        return start(try OMGHTTPURLRQ.POST(urlString, multipartFormData))
-    }
-
-    public class func PUT(urlString: String) -> Promise<NSDictionary> {
-        return start(try OMGHTTPURLRQ.PUT(urlString, nil))
-    }
-
-    public class func DELETE(urlString: String) -> Promise<NSDictionary> {
-        return start(try OMGHTTPURLRQ.DELETE(urlString, nil))
-    }
-
-    private class func start(@autoclosure body: () throws -> NSURLRequest) -> Promise<NSDictionary> {
-        do {
-            return NSURLSession.sharedSession().promise(try body())
-        } catch {
-            return Promise(error: error)
+        if request.valueForHTTPHeaderField("User-Agent") == nil {
+            let rq = request.mutableCopy() as! NSMutableURLRequest
+            rq.setValue(OMGUserAgent(), forHTTPHeaderField: "User-Agent")
+            request = rq
         }
-    }
 
-    public func promise(rq: NSURLRequest) -> Promise<NSDictionary> {
-        return promise(rq).then(on: waldo) { try NSJSONFromData($0) }
+        return URLDataPromise.go(request) { completionHandler in
+            let task = session.dataTaskWithRequest(request, completionHandler: completionHandler)
+            task.resume()
+        }
+    } catch {
+        return URLDataPromise(error: error)
     }
 }
-
-
-#if os(iOS)
-
-import UIKit.UIImage
-
-extension NSURLSession {
-    public class func GET(urlString: String) -> Promise<UIImage> {
-        return start(try OMGHTTPURLRQ.GET(urlString, nil))
-    }
-
-    public class func GET(urlString: String, query: [NSString: AnyObject]) -> Promise<UIImage> {
-        return start(try OMGHTTPURLRQ.GET(urlString, query))
-    }
-
-    private class func start(@autoclosure body: () throws -> NSURLRequest) -> Promise<UIImage> {
-        do {
-            return NSURLSession.sharedSession().promise(try body())
-        } catch let error {
-            return Promise(error: error)
-        }
-    }
-
-    public func promise(rq: NSURLRequest) -> Promise<UIImage> {
-        return promise(rq).then(on: waldo) { (data: NSData) -> UIImage in
-            guard let img = UIImage(data: data), cgimg = img.CGImage else {
-                throw Error.InvalidImage(data)
-            }
-            return UIImage(CGImage: cgimg, scale: img.scale, orientation: img.imageOrientation)
-        }
-    }
-}
-
-#endif

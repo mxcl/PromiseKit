@@ -16,7 +16,7 @@ class Test_NSURLConnection_Swift: XCTestCase {
         }
 
         let ex = expectationWithDescription("")
-        NSURLConnection.GET("http://example.com").then { (rsp: NSDictionary) -> Void in
+        NSURLConnection.GET("http://example.com").asDictionary().then { rsp -> Void in
             XCTAssertEqual(json, rsp)
             ex.fulfill()
         }

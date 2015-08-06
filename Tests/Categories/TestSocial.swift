@@ -14,7 +14,7 @@ class Test_SLRequest_Swift: XCTestCase {
             let rq = SLRequest(forServiceType: SLServiceTypeTwitter, requestMethod: SLRequestMethod.GET, URL: url, parameters: params)
 
             let ex = expectationWithDescription("")
-            rq.promise().then { (x: NSData) -> Void in
+            rq.promise().then { x -> Void in
                 XCTAssertEqual(x, NSData())
                 ex.fulfill()
             }
@@ -25,6 +25,9 @@ class Test_SLRequest_Swift: XCTestCase {
 
 extension SLRequest {
     @objc private func pmk_performRequestWithHandler(handler: SLRequestHandler) {
-        handler(NSData(), nil, nil)
+        after(0.0).then { _ -> Void in
+            let rsp = NSHTTPURLResponse(URL: NSURL(string: "http://example.com")!, statusCode: 200, HTTPVersion: "2.0", headerFields: [:])
+            handler(NSData(), rsp, nil)
+        }
     }
 }

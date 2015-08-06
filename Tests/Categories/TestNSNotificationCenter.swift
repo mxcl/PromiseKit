@@ -7,7 +7,7 @@ class Test_NSNotificationCenter_Swift: XCTestCase {
         let ex = expectationWithDescription("")
         let userInfo: [NSObject: AnyObject] = ["a": 1]
 
-        NSNotificationCenter.once(PMKTestNotification).then { (d: [NSObject: AnyObject]) -> Void in
+        NSNotificationCenter.once(PMKTestNotification).then { d -> Void in
             let a = userInfo as NSDictionary
             let b = d as NSDictionary
             XCTAssertTrue(a.isEqual(b))

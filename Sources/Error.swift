@@ -30,6 +30,53 @@ public enum Error: ErrorType {
     case ReturnedSelf
 }
 
+public enum URLError: ErrorType {
+    /**
+     The URLRequest succeeded but a valid UIImage could not be decoded from
+     the data that was received.
+    */
+    case InvalidImageData(NSURLRequest, NSData)
+
+    /**
+     An NSError was received from an underlying Cocoa function.
+     FIXME sucks?
+    */
+    case UnderlyingCocoaError(NSURLRequest, NSData?, NSURLResponse?, NSError)
+
+    /**
+     The HTTP request returned a non-200 status code.
+    */
+    case BadResponse(NSURLRequest, NSData?, NSURLResponse?)
+
+    /**
+     The data could not be decoded using the encoding specified by the HTTP
+     response headers.
+    */
+    case StringEncoding(NSURLRequest, NSData, NSURLResponse)
+
+    /**
+     Usually the `NSURLResponse` is actually an `NSHTTPURLResponse`, if so you
+     can access it using this property. Since it is returned as an unwrapped
+     optional: be sure.
+    */
+    public var NSHTTPURLResponse: Foundation.NSHTTPURLResponse! {
+        switch self {
+        case .InvalidImageData:
+            return nil
+        case .UnderlyingCocoaError(_, _, let rsp, _):
+            return rsp as! Foundation.NSHTTPURLResponse
+        case .BadResponse(_, _, let rsp):
+            return rsp as! Foundation.NSHTTPURLResponse
+        case .StringEncoding(_, _, let rsp):
+            return rsp as! Foundation.NSHTTPURLResponse
+        }
+    }
+}
+
+public enum JSONError: ErrorType {
+    case UnexpectedRootNode(AnyObject)
+}
+
 
 //////////////////////////////////////////////////////////// Cancellation
 private struct ErrorPair: Hashable {
@@ -70,7 +117,9 @@ extension NSError: CancellableErrorType {
      - Warning: You may only call this method on the main thread.
     */
     @objc public var cancelled: Bool {
-        if !NSThread.isMainThread() { NSLog("PromiseKit: Warning: `cancelled` called on background thread.") }
+        if !NSThread.isMainThread() {
+            NSLog("PromiseKit: Warning: `cancelled` called on background thread.")
+        }
 
         return cancelledErrorIdentifiers.contains(ErrorPair(domain, code))
     }

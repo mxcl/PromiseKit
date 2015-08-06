@@ -28,7 +28,7 @@ extension NSTask {
             case .Encoding:
                 return "Could not decode command output into string."
             case .Execution(let task, _, _):
-                let cmd = " ".join([task.launchPath!] + (task.arguments ?? []))
+                let cmd = " ".join([task.launchPath ?? ""] + (task.arguments ?? []))
                 return "Failed executing: `\(cmd)`."
             }
         }

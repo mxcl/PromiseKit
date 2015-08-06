@@ -62,14 +62,14 @@ static inline AnyPromise *__then(AnyPromise *self, dispatch_queue_t queue, id bl
 
 static inline AnyPromise *__catch(AnyPromise *self, BOOL includeCancellation, id block) {
     return AnyPromiseWhen(self, ^(id obj, PMKResolver resolve) {
-        if (IsError(obj) && (includeCancellation || ![obj cancelled])) {
-            [obj pmk_consume];
-            dispatch_async(dispatch_get_main_queue(), ^{
+        dispatch_async(dispatch_get_main_queue(), ^{
+            if (IsError(obj) && (includeCancellation || ![obj cancelled])) {
+                [obj pmk_consume];
                 resolve(PMKCallVariadicBlock(block, obj));
-            });
-        } else {
-            resolve(obj);
-        }
+            } else {
+                resolve(obj);
+            }
+        });
     });
 }
 

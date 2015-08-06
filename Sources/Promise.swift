@@ -59,17 +59,20 @@ public class Promise<T> {
      - SeeAlso: http://promisekit.org/wrapping-delegation/
      - SeeAlso: init(resolver:)
     */
-    public convenience init(@noescape resolvers: (fulfill: (T) -> Void, reject: (ErrorType) -> Void) throws -> Void) {
-        self.init(sealant: { resolve in
-            var counter: Int32 = 0  // can’t use `pending` as we are still initializing
+    public init(@noescape resolvers: (fulfill: (T) -> Void, reject: (ErrorType) -> Void) throws -> Void) {
+        var resolve: ((Resolution<T>) -> Void)!
+        state = UnsealedState(resolver: &resolve)
+        do {
             try resolvers(fulfill: { resolve(.Fulfilled($0)) }, reject: { error in
-                if OSAtomicIncrement32(&counter) == 1 {
+                if self.pending {
                     resolve(.Rejected(error, ErrorConsumptionToken(error)))
                 } else {
                     NSLog("PromiseKit: Warning: reject called on already rejected Promise: %@", "\(error)")
                 }
             })
-        })
+        } catch {
+            resolve(.Rejected(error, ErrorConsumptionToken(error)))
+        }
     }
 
     /**

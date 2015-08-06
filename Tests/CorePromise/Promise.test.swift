@@ -12,7 +12,7 @@ class PromiseTestCase: XCTestCase {
         Promise(1).then { _ -> AnyPromise in
             return AnyPromise(bound: after(0).then{ 1 })
         }.then { x -> Void in
-            XCTAssertEqual(x as! Int, 1)
+            XCTAssertEqual(x as? Int, 1)
             ex.fulfill()
         }
         waitForExpectationsWithTimeout(1, handler: nil)

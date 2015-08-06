@@ -7,7 +7,7 @@ class Test_CLLocationManager_Swift: XCTestCase {
         swizzle(CLLocationManager.self, "startUpdatingLocation") {
             let ex = expectationWithDescription("")
 
-            CLLocationManager.promise().then { (x: CLLocation) -> Void in
+            CLLocationManager.promise().then { x -> Void in
                 XCTAssertEqual(x, dummy.last!)
                 ex.fulfill()
             }
@@ -20,7 +20,7 @@ class Test_CLLocationManager_Swift: XCTestCase {
         swizzle(CLLocationManager.self, "startUpdatingLocation") {
             let ex = expectationWithDescription("")
 
-            CLLocationManager.promise().then { (x: [CLLocation]) -> Void in
+            CLLocationManager.promise().allResults().then { x -> Void in
                 XCTAssertEqual(x, dummy)
                 ex.fulfill()
             }
@@ -51,7 +51,9 @@ class Test_CLGeocoder_Swift: XCTestCase {
     func test_reverseGeocodeLocation() {
         class MockGeocoder: CLGeocoder {
             private override func reverseGeocodeLocation(location: CLLocation, completionHandler: CLGeocodeCompletionHandler) {
-                completionHandler([dummyPlacemark], nil)
+                after(0.0).then {
+                    completionHandler([dummyPlacemark], nil)
+                }
             }
         }
 
@@ -66,7 +68,9 @@ class Test_CLGeocoder_Swift: XCTestCase {
     func test_geocodeAddressDictionary() {
         class MockGeocoder: CLGeocoder {
             private override func geocodeAddressDictionary(addressDictionary: [NSObject : AnyObject], completionHandler: CLGeocodeCompletionHandler) {
-                completionHandler([dummyPlacemark], nil)
+                after(0.0).then {
+                    completionHandler([dummyPlacemark], nil)
+                }
             }
         }
 
@@ -81,7 +85,9 @@ class Test_CLGeocoder_Swift: XCTestCase {
     func test_geocodeAddressString() {
         class MockGeocoder: CLGeocoder {
             override func geocodeAddressString(addressString: String, completionHandler: CLGeocodeCompletionHandler) {
-                completionHandler([dummyPlacemark], nil)
+                after(0.0).then {
+                    completionHandler([dummyPlacemark], nil)
+                }
             }
         }
 

@@ -153,7 +153,7 @@ class WhenTestCase_Swift: XCTestCase {
         when(p1, p2).then{ XCTFail() }.report { error in
             if case PromiseKit.Error.When(let index, let underlyingError) = error {
                 XCTAssertEqual(index, 0)
-                XCTAssertEqual(underlyingError as! Error, Error.Test)
+                XCTAssertEqual(underlyingError as? Error, Error.Test)
                 ex.fulfill()
             }
         }
@@ -182,7 +182,7 @@ class WhenTestCase_Swift: XCTestCase {
         when(p1, p2, p3).report { error -> Void in
             if case PromiseKit.Error.When(let index, let underlyingError) = error {
                 XCTAssertEqual(index, 0)
-                XCTAssertEqual(underlyingError as! Error, Error.Test)
+                XCTAssertEqual(underlyingError as? Error, Error.Test)
                 ex1.fulfill()
             }
         }
