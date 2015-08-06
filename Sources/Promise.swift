@@ -292,17 +292,7 @@ public class Promise<T> {
                 resolve(.Rejected(error))
             case .Fulfilled(let value):
                 contain_zalgo(q, rejecter: resolve) {
-                    let anypromise = try body(value)
-                    anypromise.pipe { obj in
-                        if let error = obj as? NSError {
-                            resolve(.Rejected(error, ErrorConsumptionToken(error as ErrorType)))
-                        } else {
-                            // possibly the value of this promise is a PMKManifold, if so
-                            // calling the objc `value` method will return the first item.
-                            let obj: AnyObject? = anypromise.valueForKey("value")
-                            resolve(.Fulfilled(obj))
-                        }
-                    }
+                    try body(value).pipe(resolve)
                 }
             }
         }
@@ -553,6 +543,32 @@ public func firstly<T>(@noescape promise: () throws -> Promise<T>) -> Promise<T>
     }
 }
 
+/**
+ `firstly` can make chains more readable.
+
+ Compare:
+
+     SCNetworkReachability().then {
+         NSURLSession.GET(url2)
+     }.then {
+         NSURLSession.GET(url3)
+     }
+
+ With:
+
+     firstly {
+         SCNetworkReachability()
+     }.then {
+         NSURLSession.GET(url2)
+     }.then {
+         NSURLSession.GET(url3)
+     }
+*/
+public func firstly(@noescape promise: () throws -> AnyPromise) -> Promise<AnyObject?> {
+    return Promise { resolve in
+        try promise().pipe(resolve)
+    }
+}
 
 @available(*, unavailable, message="Instead, throw")
 public func firstly<T: ErrorType>(@noescape promise: () throws -> Promise<T>) -> Promise<T> {
@@ -563,6 +579,21 @@ public func firstly<T: ErrorType>(@noescape promise: () throws -> Promise<T>) ->
 public enum ErrorPolicy {
     case AllErrors
     case AllErrorsExceptCancellation
+}
+
+
+extension AnyPromise {
+    private func pipe(resolve: (Resolution<AnyObject?>) -> Void) -> Void {
+        pipe { (obj: AnyObject?) in
+            if let error = obj as? NSError {
+                resolve(.Rejected(error, ErrorConsumptionToken(error)))
+            } else {
+                // possibly the value of this promise is a PMKManifold, if so
+                // calling the objc `value` method will return the first item.
+                resolve(.Fulfilled(self.valueForKey("value")))
+            }
+        }
+    }
 }
 
 
