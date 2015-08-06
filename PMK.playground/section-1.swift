@@ -40,5 +40,10 @@ Promise<Int>(Error.When(1, NSURLError.CannotFindHost)).report { error in
     }
 }
 
+//TODO this should not work
+after(0.1).then { Error.DoubleOhSux0r }
+
 
 XCPSetExecutionShouldContinueIndefinitely()
+
+

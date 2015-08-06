@@ -133,10 +133,25 @@ public class Promise<T> {
         state = SealedState(resolution: .Fulfilled(value))
     }
 
+    @available(*, unavailable, message="T cannot conform to ErrorType")
+    public init<T: ErrorType>(_ value: T) { abort() }
+
     /**
      Create a new rejected promise.
     */
-    public init(_ error: ErrorType) {
+    public init(error: ErrorType) {
+        /**
+          Implementation note, the error label is necessary to prevent:
+
+             let p = Promise(ErrorType())
+
+          Resulting in Promise<ErrorType>. The above available annotation
+          does not help for some reason. A work-around is:
+
+             let p: Promise<Void> = Promise(ErrorType())
+        
+          But I can’t expect users to do this.
+        */
         state = SealedState(resolution: .Rejected(error, ErrorConsumptionToken(error)))
     }
 
@@ -409,10 +424,13 @@ public class Promise<T> {
     }
 
     @available(*, unavailable, renamed="ensure")
-    public func finally(on: dispatch_queue_t = dispatch_get_main_queue(), body: () -> Void) -> Promise { return Promise { _, _ in } }
+    public func finally(on: dispatch_queue_t = dispatch_get_main_queue(), body: () -> Void) -> Promise { abort() }
 
     @available(*, unavailable, renamed="report")
-    public func catch_(policy policy: ErrorPolicy = .AllErrorsExceptCancellation, body: () -> Void) -> Promise { return Promise { _, _ in } }
+    public func catch_(policy policy: ErrorPolicy = .AllErrorsExceptCancellation, body: () -> Void) -> Promise { abort() }
+
+    @available(*, unavailable, renamed="pendingPromise")
+    public class func defer_() -> (promise: Promise, fulfill: (T) -> Void, reject: (ErrorType) -> Void) { abort() }
 }
 
 
@@ -527,16 +545,49 @@ extension Promise: CustomStringConvertible {
          NSURLConnection.GET(url3)
      }
 */
-public func firstly<T>(promise: () throws -> Promise<T>) -> Promise<T> {
+public func firstly<T>(@noescape promise: () throws -> Promise<T>) -> Promise<T> {
     do {
         return try promise()
     } catch {
-        return Promise(error)
+        return Promise(error: error)
     }
+}
+
+
+@available(*, unavailable, message="Instead, throw")
+public func firstly<T: ErrorType>(@noescape promise: () throws -> Promise<T>) -> Promise<T> {
+    fatalError("Unavailable function")
 }
 
 
 public enum ErrorPolicy {
     case AllErrors
     case AllErrorsExceptCancellation
+}
+
+
+extension Promise {
+    @available(*, unavailable, message="T cannot conform to ErrorType")
+    public convenience init<T: ErrorType>(@noescape resolvers: (fulfill: (T) -> Void, reject: (ErrorType) -> Void) throws -> Void) { abort() }
+
+    @available(*, unavailable, message="T cannot conform to ErrorType")
+    public convenience init<T: ErrorType>(@noescape resolver: ((T?, NSError?) -> Void) throws -> Void) { abort() }
+
+    @available(*, unavailable, message="T cannot conform to ErrorType")
+    public convenience init<T: ErrorType>(@noescape resolver: ((T, NSError?) -> Void) throws -> Void) { abort() }
+
+    @available(*, unavailable, message="T cannot conform to ErrorType")
+    public class func pendingPromise<T: ErrorType>() -> (promise: Promise, fulfill: (T) -> Void, reject: (ErrorType) -> Void) { abort() }
+
+    @available (*, unavailable, message="U cannot conform to ErrorType")
+    public func then<U: ErrorType>(on: dispatch_queue_t = dispatch_get_main_queue(), _ body: (T) throws -> U) -> Promise<U> { abort() }
+
+    @available (*, unavailable, message="U cannot conform to ErrorType")
+    public func then<U: ErrorType>(on: dispatch_queue_t = dispatch_get_main_queue(), _ body: (T) throws -> Promise<U>) -> Promise<U> { abort() }
+
+    @available(*, unavailable, message="U cannot conform to ErrorType")
+    public func thenInBackground<U: ErrorType>(body: (T) throws -> U) -> Promise<U> { abort() }
+
+    @available(*, unavailable, message="U cannot conform to ErrorType")
+    public func thenInBackground<U: ErrorType>(body: (T) throws -> Promise<U>) -> Promise<U> { abort() }
 }
