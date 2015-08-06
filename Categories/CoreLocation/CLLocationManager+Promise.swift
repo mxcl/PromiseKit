@@ -30,16 +30,13 @@ extension CLLocationManager {
       value.
      */
     public class func promise(requestAuthorizationType: RequestAuthorizationType = .Automatic) -> Promise<CLLocation> {
-        return promise(requestAuthorizationType).then(on: zalgo) {
-            (locations: [CLLocation]) -> CLLocation in
-            return locations.last!
-        }
+        return promiseAll(requestAuthorizationType).then(on: zalgo) { $0.last! }
     }
 
     /**
       @return A new promise that fulfills with the first batch of location objects a CLLocationManager instance provides.
      */
-    public class func promise(requestAuthorizationType: RequestAuthorizationType = .Automatic) -> Promise<[CLLocation]> {
+    public class func promiseAll(requestAuthorizationType: RequestAuthorizationType = .Automatic) -> Promise<[CLLocation]> {
         return promise(yielding: auther(requestAuthorizationType))
     }
 

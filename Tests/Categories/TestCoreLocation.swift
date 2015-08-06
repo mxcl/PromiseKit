@@ -7,7 +7,7 @@ class Test_CLLocationManager_Swift: XCTestCase {
         swizzle(CLLocationManager.self, "startUpdatingLocation") {
             let ex = expectationWithDescription("")
 
-            CLLocationManager.promise().then { (x: CLLocation) -> Void in
+            CLLocationManager.promise().then { x -> Void in
                 XCTAssertEqual(x, dummy.last!)
                 ex.fulfill()
             }
@@ -20,7 +20,7 @@ class Test_CLLocationManager_Swift: XCTestCase {
         swizzle(CLLocationManager.self, "startUpdatingLocation") {
             let ex = expectationWithDescription("")
 
-            CLLocationManager.promise().then { (x: [CLLocation]) -> Void in
+            CLLocationManager.promiseAll().then { x -> Void in
                 XCTAssertEqual(x, dummy)
                 ex.fulfill()
             }
