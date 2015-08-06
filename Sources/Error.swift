@@ -22,6 +22,12 @@ public enum Error: ErrorType {
      This is invalid as per the calling convention.
     */
     case DoubleOhSux0r
+
+    /**
+     A handler returned its own promise. 99% of the time, this is likely a 
+     programming error. It is also invalid per Promises/A+.
+    */
+    case ReturnedSelf
 }
 
 

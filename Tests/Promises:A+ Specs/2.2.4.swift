@@ -1,74 +1,100 @@
 import PromiseKit
 import XCTest
 
+// 2.2.4: `onFulfilled` or `onRejected` must not be called until
+// the execution context stack contains only platform code
 
 class Test224: XCTestCase {
 
-    // 2.2.4: `onFulfilled` or `onRejected` must not be called until
-    // the execution context stack contains only platform code
+    // describe: `then` returns before the promise becomes fulfilled or rejected"
 
-    func test2241() {
-        // `then` returns before the promise becomes fulfilled or rejected
-
-        suiteFulfilled(1) { (promise, exes, dummy)->() in
+    func test1() {
+        testFulfilled { promise, expectations, dummy in
             var thenHasReturned = false
-            promise.then { _->() in
+            promise.then { _ -> Void in
                 XCTAssert(thenHasReturned)
-                exes[0].fulfill()
+                expectations[0].fulfill()
             }
             thenHasReturned = true
         }
-        suiteRejected(1) { (promise, exes, memo)->() in
+        testRejected { promise, expectations, memo in
             var catchHasReturned = false
             promise.report { _->() in
                 XCTAssert(catchHasReturned)
-                exes[0].fulfill()
+                expectations[0].fulfill()
             }
             catchHasReturned = true
         }
     }
+}
 
-    // Clean-stack execution ordering tests (fulfillment case)
+class Test2242: XCTestCase {
 
-    func test2242_1() {
-        // when `onFulfilled` is added immediately before the promise is fulfilled
-        let (promise, fulfiller, _) = Promise<Int>.pendingPromise()
+    // describe: Clean-stack execution ordering tests (fulfillment case)
+
+    func test1() {
+
+        // specify: when `onFulfilled` is added immediately before the promise is fulfilled
+
+        let (promise, fulfill, _) = Promise<Void>.pendingPromise()
         var onFulfilledCalled = false
 
-        fulfiller(dummy)
-        promise.then{ _->() in
+        promise.then {
+            onFulfilledCalled = true
+        }
+
+        fulfill()
+
+        XCTAssertFalse(onFulfilledCalled)
+    }
+
+    func test2() {
+
+        // specify: "when `onFulfilled` is added immediately after the promise is fulfilled"
+
+        let (promise, fulfill, _) = Promise<Void>.pendingPromise()
+        var onFulfilledCalled = false
+
+        fulfill()
+
+        promise.then {
             onFulfilledCalled = true
         }
 
         XCTAssertFalse(onFulfilledCalled)
     }
 
-    func test2242_2() {
-        // when one `onFulfilled` is added inside another `onFulfilled`
-        let promise = Promise(dummy)
+    func test3() {
+
+        // specify: when one `onFulfilled` is added inside another `onFulfilled`
+
+        let promise = Promise()
         var firstOnFulfilledFinished = false
         let ex = expectationWithDescription("")
 
-        promise.then { _->() in
-            promise.then { _->() in
-                XCTAssert(firstOnFulfilledFinished)
+        promise.then { _ -> Void in
+            promise.then { _ -> Void in
+                XCTAssertTrue(firstOnFulfilledFinished)
                 ex.fulfill()
             }
             firstOnFulfilledFinished = true
         }
+
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func test2242_3() {
-        // when `onFulfilled` is added inside an `onRejected`
-        let resolved = Promise(dummy)
-        let rejected = Promise<Int>(dammy)
+    func test4() {
+
+        // specify: when `onFulfilled` is added inside an `onRejected`
+
+        let resolved = Promise()
+        let rejected = Promise<Void>(error: Error.Dummy)
 
         var firstOnRejectedFinished = false
         let ex = expectationWithDescription("")
 
-        rejected.report { _->() in
-            resolved.then { _->() in
+        rejected.report { _ in
+            resolved.then { _ -> Void in
                 XCTAssert(firstOnRejectedFinished)
                 ex.fulfill()
             }
@@ -78,55 +104,75 @@ class Test224: XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func test2242_4() {
-        // when the promise is fulfilled asynchronously
-        let (promise, fulfiller, _) = Promise<Int>.pendingPromise()
+    func test5() {
+
+        // specify: when the promise is fulfilled asynchronously
+
+        let (promise, fulfill, _) = Promise<Void>.pendingPromise()
         var firstStackFinished = false
         let ex = expectationWithDescription("")
+
         later {
-            fulfiller(dummy)
+            fulfill()
             firstStackFinished = true
         }
-        promise.then { _->() in
+
+        promise.then { _ -> Void in
             XCTAssert(firstStackFinished)
             ex.fulfill()
         }
+
         waitForExpectationsWithTimeout(1, handler: nil)
     }
+}
 
-    // Clean-stack execution ordering tests (rejection case)
+class Test2243: XCTestCase {
 
-    func test2243() {
-        // when `onRejected` is added immediately before the promise is rejected
-        let (promise, _, rejecter) = Promise<Int>.pendingPromise()
+    // describe: Clean-stack execution ordering tests (rejection case)
+
+    func test1() {
+
+        // specify: when `onRejected` is added immediately before the promise is rejected
+
+        let (promise, _, reject) = Promise<Void>.pendingPromise()
         var onRejectedCalled = false
-        promise.report{ _->() in
+
+        promise.report { _ in
             onRejectedCalled = true
         }
-        rejecter(dammy)
+
+        reject(Error.Dummy)
+
         XCTAssertFalse(onRejectedCalled)
     }
 
-    func test2244() {
-        // when `onRejected` is added immediately after the promise is rejected
-        let (promise, _, rejecter) = Promise<Int>.pendingPromise()
+    func test2() {
+
+        // specify: when `onRejected` is added immediately after the promise is rejected
+
+        let (promise, _, reject) = Promise<Void>.pendingPromise()
         var onRejectedCalled = false
-        rejecter(dammy)
-        promise.report{ _->() in
+
+        reject(Error.Dummy)
+
+        promise.report { _ in
             onRejectedCalled = true
         }
+
         XCTAssertFalse(onRejectedCalled)
     }
 
-    func test2245() {
-        // when `onRejected` is added inside an `onFulfilled`
-        let resolved = Promise(dummy)
-        let rejected = Promise<Int>(dammy)
+    func test3() {
+
+        // specify: when `onRejected` is added inside an `onFulfilled`
+
+        let resolved = Promise()
+        let rejected = Promise<Void>(error: Error.Dummy)
         var firstOnFulfilledFinished = false
         let ex = expectationWithDescription("")
 
-        resolved.then{ _->() in
-            rejected.report{ _->() in
+        resolved.then { _ -> Void in
+            rejected.report{ _ in
                 XCTAssert(firstOnFulfilledFinished)
                 ex.fulfill()
             }
@@ -135,14 +181,16 @@ class Test224: XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func test2246() {
-        // when one `onRejected` is added inside another `onRejected`
-        let promise = Promise<Int>(dammy)
+    func test4() {
+
+        // specify: when one `onRejected` is added inside another `onRejected`
+
+        let promise = Promise<Void>(error: Error.Dummy)
         var firstOnRejectedFinished = false
         let ex = expectationWithDescription("")
 
-        promise.report{ _->() in
-            promise.report{ _->() in
+        promise.report { _ in
+            promise.report { _ in
                 XCTAssertTrue(firstOnRejectedFinished)
                 ex.fulfill()
             }
@@ -151,18 +199,20 @@ class Test224: XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func test2247() {
-        // when the promise is rejected asynchronously
-        let (promise, _, rejecter) = Promise<Int>.pendingPromise()
+    func test5() {
+
+        // specify: when the promise is rejected asynchronously
+
+        let (promise, _, reject) = Promise<Void>.pendingPromise()
         var firstStackFinished = false
         let ex = expectationWithDescription("")
 
         later {
-            rejecter(dammy)
+            reject(Error.Dummy)
             firstStackFinished = true
         }
 
-        promise.report{ _->() in
+        promise.report { _ in
             XCTAssert(firstStackFinished)
             ex.fulfill()
         }

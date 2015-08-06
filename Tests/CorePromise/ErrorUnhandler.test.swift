@@ -2,6 +2,11 @@ import Foundation
 import XCTest
 import PromiseKit
 
+
+private enum Error: ErrorType {
+    case Dummy
+}
+
 class ErrorHandlingTests_Swift: XCTestCase {
 
     var oldHandler: (ErrorType -> Void)!
@@ -16,7 +21,7 @@ class ErrorHandlingTests_Swift: XCTestCase {
     private func twice(@noescape body: (Promise<Int>, XCTestExpectation) -> Void) {
         autoreleasepool {
             let ex = expectationWithDescription("Sealed")
-            body(Promise<Int>(NSError(domain: "a", code: 1, userInfo: nil)), ex)
+            body(Promise<Int>(error: Error.Dummy), ex)
         }
         waitForExpectationsWithTimeout(1, handler: nil)
 
@@ -24,8 +29,8 @@ class ErrorHandlingTests_Swift: XCTestCase {
             let ex = expectationWithDescription("Unsealed")
             let p = Promise { fulfill, _ in
                 fulfill(1)
-            }.then { _ -> Promise<Int> in
-                Promise(NSError(domain: "a", code: 1, userInfo: nil))
+            }.then { _ -> Int in
+                throw Error.Dummy
             }
             body(p, ex)
         }
@@ -73,7 +78,7 @@ class ErrorHandlingTests_Swift: XCTestCase {
             PMKUnhandledErrorHandler = { err in
                 ex.fulfill()
             }
-            promise.recover { error in
+            promise.recover { error -> Int in
                 throw error
             }
         }
@@ -86,7 +91,7 @@ class ErrorHandlingTests_Swift: XCTestCase {
                 ex.fulfill()
             }
             promise.recover { error -> Promise<Int> in
-                return Promise(NSError(domain: "a", code: 1, userInfo: nil))
+                firstly { throw Error.Dummy }
             }
         }
     }
@@ -99,7 +104,7 @@ class ErrorHandlingTests_Swift: XCTestCase {
             PMKUnhandledErrorHandler = { err in
                 XCTFail()
             }
-            promise.recover { error in
+            promise.recover { error -> Int in
                 throw error
             }.then { x in
                 XCTFail()
