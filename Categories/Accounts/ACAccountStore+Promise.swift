@@ -33,11 +33,11 @@ extension ACAccountStore {
     }
 
     public func saveAccount(account: ACAccount) -> Promise<Void> {
-        return Promise<Bool> { saveAccount(account, withCompletionHandler: $0) }.asVoid()
+        return Promise<ObjCBool> { saveAccount(account, withCompletionHandler: $0) }.asVoid()
     }
 
     public func removeAccount(account: ACAccount) -> Promise<Void> {
-        return Promise<Bool> { removeAccount(account, withCompletionHandler: $0) }.asVoid()
+        return Promise<ObjCBool> { removeAccount(account, withCompletionHandler: $0) }.asVoid()
     }
 
     public enum Error: ErrorType {

@@ -28,10 +28,17 @@ private class SKDelegate: NSObject, SKProductsRequestDelegate {
     let (promise, fulfill, reject) = Promise<SKProductsResponse>.pendingPromise()
     var retainCycle: SKDelegate?
 
+#if os(iOS)
     @objc func request(request: SKRequest, didFailWithError error: NSError) {
         reject(error)
         retainCycle = nil
     }
+#else
+    @objc func request(request: SKRequest, didFailWithError error: NSError?) {
+        reject(error!)
+        retainCycle = nil
+    }
+#endif
 
     @objc func productsRequest(request: SKProductsRequest, didReceiveResponse response: SKProductsResponse) {
         fulfill(response)

@@ -19,7 +19,7 @@ class Test_CKContainer_Swift: XCTestCase {
 
         let ex = expectationWithDescription("")
         MockContainer().accountStatus().then { status -> Void in
-            XCTAssertEqual(status, .CouldNotDetermine)
+            XCTAssertEqual(status, CKAccountStatus.CouldNotDetermine)
             ex.fulfill()
         }
         waitForExpectationsWithTimeout(1, handler: nil)
@@ -38,7 +38,7 @@ class Test_CKContainer_Swift: XCTestCase {
         let ex = expectationWithDescription("")
         let pp = CKApplicationPermissions.UserDiscoverability
         MockContainer().requestApplicationPermission(pp).then { perms -> Void in
-            XCTAssertEqual(perms, .Granted)
+            XCTAssertEqual(perms, CKApplicationPermissionStatus.Granted)
             ex.fulfill()
         }
         waitForExpectationsWithTimeout(1, handler: nil)
@@ -57,7 +57,7 @@ class Test_CKContainer_Swift: XCTestCase {
         let ex = expectationWithDescription("")
         let pp = CKApplicationPermissions.UserDiscoverability
         MockContainer().statusForApplicationPermission(pp).then {
-            XCTAssertEqual($0, .Granted)
+            XCTAssertEqual($0, CKApplicationPermissionStatus.Granted)
         }.then(ex.fulfill)
         waitForExpectationsWithTimeout(1, handler: nil)
     }
