@@ -21,9 +21,11 @@ class PromiseTestCase: XCTestCase {
     // can return AnyPromise (that rejects) in then handler
     func test2() {
         let ex = expectationWithDescription("")
+
         Promise(1).then { _ -> AnyPromise in
-            return AnyPromise(bound: after(0).then{ Promise<Int>(NSError(domain: "a", code: 1, userInfo: nil)) })
-        }.report { err -> Void in
+            let promise = after(0.1).then{ throw NSError(domain: "a", code: 1, userInfo: nil) }
+            return AnyPromise(bound: promise)
+        }.report { err in
             ex.fulfill()
         }
         waitForExpectationsWithTimeout(1, handler: nil)
@@ -38,7 +40,7 @@ class PromiseTestCase: XCTestCase {
                 XCTAssertEqual("ok", s)
                 return
             }
-            }, fulfill: { "ok" })
+        }, fulfill: { "ok" })
 
         waitForExpectationsWithTimeout(10, handler: nil)
     }
@@ -73,7 +75,7 @@ class PromiseTestCase: XCTestCase {
 
         after(0).then { _ in
             throw NSError(domain: PMKErrorDomain, code: PMKOperationCancelled, userInfo: nil)
-        }.recover { err in
+        }.recover { err -> Void in
             ex1.fulfill()
             XCTAssertTrue((err as NSError).cancelled)
             throw err

@@ -263,7 +263,9 @@ public class Promise<T> {
                 resolve(.Rejected(error))
             case .Fulfilled(let value):
                 contain_zalgo(q, rejecter: resolve) {
-                    try body(value).pipe(resolve)
+                    let promise = try body(value)
+                    guard promise !== self else { throw Error.ReturnedSelf }
+                    promise.pipe(resolve)
                 }
             }
         }
@@ -345,7 +347,7 @@ public class Promise<T> {
             switch (resolution, policy) {
             case (let .Rejected(error as CancellableErrorType, token), .AllErrorsExceptCancellation):
                 dispatch_async(dispatch_get_main_queue()) {
-                    if !error.cancelled {     // cancelled must be called main
+                    if !error.cancelled {     // cancelled must be called on main
                         consume(error, token)
                     }
                 }
@@ -363,13 +365,15 @@ public class Promise<T> {
      The provided closure is executed when this promise is rejected giving you
      an opportunity to recover from the error and continue the promise chain.
     */
-    public func recover(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: (ErrorType) -> Promise) -> Promise {
+    public func recover(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: (ErrorType) throws -> Promise) -> Promise {
         return Promise(when: self) { resolution, resolve in
             switch resolution {
             case .Rejected(let error, let token):
-                contain_zalgo(q) {
+                contain_zalgo(q, rejecter: resolve) {
                     token.consumed = true
-                    body(error).pipe(resolve)
+                    let promise = try body(error)
+                    guard promise !== self else { throw Error.ReturnedSelf }
+                    promise.pipe(resolve)
                 }
             case .Fulfilled:
                 resolve(resolution)
