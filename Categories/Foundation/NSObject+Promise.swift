@@ -61,7 +61,7 @@ private class KVOProxy: NSObject {
         }
     }
 
-    private lazy var pointer: UnsafeMutablePointer<KVOProxy> = {
-        return UnsafeMutablePointer<KVOProxy>(Unmanaged<KVOProxy>.passUnretained(self).toOpaque())
+    private lazy var pointer: UnsafeMutablePointer<Void> = {
+        return UnsafeMutablePointer<Void>(Unmanaged<KVOProxy>.passUnretained(self).toOpaque())
     }()
 }

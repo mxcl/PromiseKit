@@ -156,7 +156,9 @@ class ErrorHandlingTests_Swift: XCTestCase {
         Promise<Void> { _, reject in
             after(0.1).then {
                 throw Error.Test
-            }.report(reject)
+            }.report { err in
+                reject(err)
+            }
         }
 
         waitForExpectationsWithTimeout(1, handler: nil)

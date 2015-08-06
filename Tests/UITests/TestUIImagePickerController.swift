@@ -19,7 +19,7 @@ class UITest_UIImagePickerController_Swift: PMKiOSUITestCase {
         let tablesQuery = app.tables
         tablesQuery.staticTexts["2"].tap()
         tablesQuery.buttons["Moments"].tap()
-        app.collectionViews.cells["Photo, Landscape, March 12, 2011, 4:17 PM"].tap()
+        app.collectionViews.childrenMatchingType(.Cell).matchingIdentifier("Photo, Landscape, August 08, 2012, 9:52 AM").elementBoundByIndex(0).tap()
         app.windows.childrenMatchingType(.Other).element.tap()
 
         XCTAssertTrue(value)
@@ -30,8 +30,8 @@ class UITest_UIImagePickerController_Swift: PMKiOSUITestCase {
         let app = XCUIApplication()
         let tablesQuery = app.tables
         tablesQuery.staticTexts["3"].tap()
-        tablesQuery.buttons["Moments"].tap()
-        app.collectionViews.cells["Photo, Landscape, March 12, 2011, 4:17 PM"].tap()
+        tablesQuery.childrenMatchingType(.Cell).elementBoundByIndex(0).childrenMatchingType(.TextField).element.tap()
+        app.collectionViews.childrenMatchingType(.Cell).matchingIdentifier("Photo, Landscape, August 08, 2012, 9:52 AM").elementBoundByIndex(0).tap()
 
         XCTAssertTrue(value)
     }
@@ -41,7 +41,7 @@ class UITest_UIImagePickerController_Swift: PMKiOSUITestCase {
         let tablesQuery = app.tables
         tablesQuery.staticTexts["4"].tap()
         tablesQuery.buttons["Moments"].tap()
-        app.collectionViews.cells["Photo, Landscape, March 12, 2011, 4:17 PM"].tap()
+        app.collectionViews.childrenMatchingType(.Cell).matchingIdentifier("Photo, Landscape, August 08, 2012, 9:52 AM").elementBoundByIndex(0).tap()
 
         XCTAssertTrue(value)
     }
