@@ -271,6 +271,9 @@ public class Promise<T> {
         }
     }
 
+    @available(*, unavailable)
+    public func then<U>(on: dispatch_queue_t = dispatch_get_main_queue(), _ body: (T) throws -> Promise<U>?) -> Promise<U> { abort() }
+
     /**
      The provided closure is executed when this Promise is resolved.
 
@@ -300,6 +303,9 @@ public class Promise<T> {
         }
     }
 
+    @available(*, unavailable)
+    public func then(on: dispatch_queue_t = dispatch_get_main_queue(), body: (T) throws -> AnyPromise?) -> Promise<AnyObject?> { abort() }
+
     /**
      The provided closure is executed on the default background queue when this Promise is fulfilled.
 
@@ -321,6 +327,9 @@ public class Promise<T> {
     public func thenInBackground<U>(body: (T) throws -> Promise<U>) -> Promise<U> {
         return then(on: dispatch_get_global_queue(0, 0), body)
     }
+
+    @available(*, unavailable)
+    public func thenInBackground<U>(body: (T) throws -> Promise<U>?) -> Promise<U> { abort() }
 
     /**
      The provided closure is executed when this promise is rejected.
@@ -380,6 +389,9 @@ public class Promise<T> {
             }
         }
     }
+
+    @available(*, unavailable)
+    public func recover(on: dispatch_queue_t = dispatch_get_main_queue(), _ body: (ErrorType) throws -> Promise?) -> Promise { abort() }
 
     public func recover(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: (ErrorType) throws -> T) -> Promise {
         return Promise(when: self) { resolution, resolve in
