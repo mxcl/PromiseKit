@@ -167,6 +167,7 @@
 		63A157731ABB59D00002A421 /* AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A157711ABB59D00002A421 /* AnyPromise.m */; };
 		63A157741ABB59D80002A421 /* PromiseKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 63A157701ABB59490002A421 /* PromiseKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63A157751ABB59DC0002A421 /* PromiseKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 63A157701ABB59490002A421 /* PromiseKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63A5389A1B741F0A002BB8E6 /* AnyPromise.test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A538991B741F0A002BB8E6 /* AnyPromise.test.swift */; };
 		63A60E201AFD795B00C4E692 /* after.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A60E1F1AFD795B00C4E692 /* after.m */; };
 		63B6FE491ABB613500E1F4C2 /* Sealant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B6FE481ABB613500E1F4C2 /* Sealant.swift */; };
 		63B6FE4A1ABB613500E1F4C2 /* Sealant.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B6FE481ABB613500E1F4C2 /* Sealant.swift */; };
@@ -409,6 +410,7 @@
 		63A157701ABB59490002A421 /* PromiseKit.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = PromiseKit.h; path = Sources/PromiseKit.h; sourceTree = SOURCE_ROOT; };
 		63A157711ABB59D00002A421 /* AnyPromise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnyPromise.m; path = Sources/AnyPromise.m; sourceTree = "<group>"; };
 		63A157771ABB5C3B0002A421 /* PMKCallVariadicBlock.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = PMKCallVariadicBlock.m; path = Sources/PMKCallVariadicBlock.m; sourceTree = "<group>"; };
+		63A538991B741F0A002BB8E6 /* AnyPromise.test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AnyPromise.test.swift; sourceTree = "<group>"; };
 		63A60E1F1AFD795B00C4E692 /* after.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = after.m; path = Sources/after.m; sourceTree = "<group>"; };
 		63B4F8AF1AD19EDB0036A41A /* NSJSONFromData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = NSJSONFromData.swift; path = Sources/NSJSONFromData.swift; sourceTree = SOURCE_ROOT; };
 		63B6FE461ABB5EC700E1F4C2 /* NSMethodSignatureForBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSMethodSignatureForBlock.m; path = Sources/NSMethodSignatureForBlock.m; sourceTree = "<group>"; };
@@ -704,6 +706,7 @@
 			children = (
 				638D02771AEC06430038201C /* after.test.swift */,
 				635D0D741ADDA2C100CC0406 /* AnyPromise.test.m */,
+				63A538991B741F0A002BB8E6 /* AnyPromise.test.swift */,
 				63772C9B1AF09B8A00ED2F59 /* ErrorUnhandler.test.swift */,
 				635D0D711ADD7CAE00CC0406 /* PMKPromise.test.m */,
 				6302AD3F1AEF55A4001F0069 /* Promise.test.swift */,
@@ -1227,6 +1230,7 @@
 				638D02781AEC06430038201C /* after.test.swift in Sources */,
 				635D0D761ADDA2EA00CC0406 /* AnyPromise.test.m in Sources */,
 				6302AD401AEF55A4001F0069 /* Promise.test.swift in Sources */,
+				63A5389A1B741F0A002BB8E6 /* AnyPromise.test.swift in Sources */,
 				6388E1B21AD316CB0074D85B /* race.test.swift in Sources */,
 				63772C9C1AF09B8A00ED2F59 /* ErrorUnhandler.test.swift in Sources */,
 				6388E1AF1AD316690074D85B /* when.test.swift in Sources */,

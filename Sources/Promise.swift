@@ -108,7 +108,7 @@ public class Promise<T> {
       public designated unsealed initializer! Making this convenience would be
       inefficient. Not very inefficient, but still it seems distasteful to me.
      */
-    init(passthru: ((Resolution) -> Void) -> Void) {
+    init(@noescape passthru: ((Resolution) -> Void) -> Void) {
         var resolve: ((Resolution) -> Void)!
         state = UnsealedState(resolver: &resolve)
         passthru(resolve)

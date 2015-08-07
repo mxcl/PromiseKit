@@ -250,6 +250,46 @@ public typealias AnyPromise = PMKPromise
             }
         }
     }
+
+    /**
+     Continue a Promise<T> chain from an AnyPromise.
+    */
+    public func then(on q: dispatch_queue_t = dispatch_get_main_queue(), body: (AnyObject?) -> AnyPromise) -> Promise<AnyObject?> {
+        return Promise { fulfill, reject in
+            pipe { object in
+                if let error = object as? NSError {
+                    reject(error)
+                } else {
+                    contain_zalgo(q) {
+                        body(object).pipe { object in
+                            if let error = object as? NSError {
+                                reject(error)
+                            } else {
+                                fulfill(object)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     Continue a Promise<T> chain from an AnyPromise.
+    */
+    public func then<T>(on q: dispatch_queue_t = dispatch_get_main_queue(), body: (AnyObject?) -> Promise<T>) -> Promise<T> {
+        return Promise(passthru: { resolve in
+            pipe { object in
+                if let error = object as? NSError {
+                    resolve(.Rejected(error))
+                } else {
+                    contain_zalgo(q) {
+                        body(object).pipe(resolve)
+                    }
+                }
+            }
+        })
+    }
 }
 
 
