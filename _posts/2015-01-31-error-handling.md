@@ -51,9 +51,9 @@ Promises streamline error handling:
 {% highlight swift %}
 firstly {
     NSURLSession.GET(url)
-}.then { json in
+}.then { (json: NSDictionary) in
     NSURLConnection.GET(json["avatar_url"])
-}.then { image in
+}.then { (image: UIImage) in
     self.imageView.image = image
 }.catch { error in
     UIAlertView(…).show()
