@@ -53,7 +53,7 @@ github "mxcl/PromiseKit" ~> 2.0
 
 ### Standalone Distributions
 
-* [iOS 8 & OS X 10.9  Frameworks](https://github.com/mxcl/PromiseKit/releases/download/2.2.1/PromiseKit-2.2.1.zip) (Binaries)
+* [iOS 8 & OS X 10.9  Frameworks](https://github.com/mxcl/PromiseKit/releases/download/2.2.2/PromiseKit-2.2.2.zip) (Binaries)
 
 *Please note*, the preferred way to integrate PromiseKit is CocoaPods or Carthage.
 
