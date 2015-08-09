@@ -172,5 +172,5 @@ void PMKSetJSONMIMETypes(NSArray * __nonnull JSONMIMETypes)
 
 NSArray * __nonnull PMKJSONMIMETypes()
 {
-    return PMK_JSONMIMETypes ?: @[@"application/json", @"text/json", @"text/javascript"];
+    return PMK_JSONMIMETypes ?: @[@"application/json", @"text/json", @"text/javascript", @"application/x-javascript", @"application/javascript"];
 }
