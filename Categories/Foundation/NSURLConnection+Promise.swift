@@ -87,6 +87,10 @@ extension NSURLConnection {
         return fetch(request).then(on: zalgo){ x, _ -> NSData in return x }
     }
 
+    public class func promise(request: NSURLRequest) -> Promise<(NSData, NSURLResponse)> {
+        return fetch(request)
+    }
+
     public class func promise(rq: NSURLRequest) -> Promise<String> {
         return fetch(rq).then(on: zalgo) { data, rsp -> Promise<String> in
             if let str = NSString(data: data, encoding: rsp.stringEncoding ?? NSUTF8StringEncoding) {
