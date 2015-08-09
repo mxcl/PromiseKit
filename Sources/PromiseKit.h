@@ -191,7 +191,15 @@ extern AnyPromise * __nonnull dispatch_promise(id __nonnull block);
 */
 extern AnyPromise * __nonnull dispatch_promise_on(dispatch_queue_t __nonnull queue, id __nonnull block);
 
-
+/**
+ Set the supported set of JSON MIME types.
+ 
+ If JSONMIMETypes are set to nil, then the default set of JSON MIME types is used.
+ 
+ @param JSONMIMETypes The new MIME types that are deserialized as JSON.
+ */
+void PMKSetJSONMIMETypes(NSArray * __nullable JSONMIMETypes);
+NSArray * __nonnull PMKJSONMIMETypes();
 
 #define PMKJSONDeserializationOptions ((NSJSONReadingOptions)(NSJSONReadingAllowFragments | NSJSONReadingMutableContainers))
 
@@ -201,7 +209,7 @@ extern AnyPromise * __nonnull dispatch_promise_on(dispatch_queue_t __nonnull que
  for the apps we write it *will be* JSON. Thus if you actually want
  a JavaScript String, use the promise variant of our category functions.
 */
-#define PMKHTTPURLResponseIsJSON(rsp) [@[@"application/json", @"text/json", @"text/javascript", @"application/x-javascript", @"application/javascript"] containsObject:[rsp MIMEType]]
+#define PMKHTTPURLResponseIsJSON(rsp) [PMKJSONMIMETypes() containsObject:[rsp MIMEType]]
 #define PMKHTTPURLResponseIsImage(rsp) [@[@"image/tiff", @"image/jpeg", @"image/gif", @"image/png", @"image/ico", @"image/x-icon", @"image/bmp", @"image/x-bmp", @"image/x-xbitmap", @"image/x-win-bitmap"] containsObject:[rsp MIMEType]]
 #define PMKHTTPURLResponseIsText(rsp) [[rsp MIMEType] hasPrefix:@"text/"]
 
