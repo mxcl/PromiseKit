@@ -61,7 +61,9 @@ firstly {
 {% endhighlight %}
 
 
-This is a somewhat unfair example: PromiseKit’s `NSURLSession` category detects the JSON and the image HTTP responses and automatically decode them for you (with thoroughly filled `NSError` objects). But the key here is that any errors that happen anywhere in the chain propogate to the error handler skipping any intermediary `then` handlers.
+Any errors that happen anywhere in the chain propogate to the error handler skipping any intermediary `then` handlers.
+
+<aside>This is a somewhat unfair example: PromiseKit’s Objective-C `NSURLSession` category detects the JSON and the image HTTP responses and automatically decode them for you (with thoroughly filled `NSError` objects). The Swift version does not detect, but you still get decoded responses by specializing the then to the response type you want.</aside>
 
 It’s important to remember that in order for your errors to propogate they must occur in the chain. **If you don’t return your promise, thus inserting it into the chain, the error won’t propogate**.
 
