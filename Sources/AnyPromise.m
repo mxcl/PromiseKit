@@ -162,3 +162,15 @@ static inline AnyPromise *__finally(AnyPromise *self, dispatch_queue_t queue, di
 id PMKSetUnhandledErrorHandler(void (^handler)(NSError *)) {
     return [AnyPromise setUnhandledErrorHandler:handler];
 }
+
+static NSArray *PMK_JSONMIMETypes;
+
+void PMKSetJSONMIMETypes(NSArray * __nonnull JSONMIMETypes)
+{
+    PMK_JSONMIMETypes = [JSONMIMETypes copy];
+}
+
+NSArray * __nonnull PMKJSONMIMETypes()
+{
+    return PMK_JSONMIMETypes ?: @[@"application/json", @"text/json", @"text/javascript"];
+}
