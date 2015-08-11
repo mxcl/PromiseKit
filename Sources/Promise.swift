@@ -121,7 +121,7 @@ public class Promise<T> {
         self.init(sealant: { resolve in
             try resolver { obj, err in
                 if let err = err {
-                    resolve(.Rejected(err, ErrorConsumptionToken(err as ErrorType)))
+                    resolve(.Rejected(err, ErrorConsumptionToken(err)))
                 } else {
                     resolve(.Fulfilled(obj))
                 }
@@ -148,7 +148,7 @@ public class Promise<T> {
 
              let p = Promise(ErrorType())
 
-          Resulting in Promise<ErrorType>. The above available annotation
+          Resulting in Promise<ErrorType>. The above @available annotation
           does not help for some reason. A work-around is:
 
              let p: Promise<Void> = Promise(ErrorType())
@@ -158,6 +158,11 @@ public class Promise<T> {
         state = SealedState(resolution: .Rejected(error, ErrorConsumptionToken(error)))
     }
 
+    /**
+     Careful with this, it is imperative that sealant can only be called once
+     or you will end up with spurious unhandled-errors due to possible double
+     rejections and thus immediately deallocated ErrorConsumptionTokens.
+    */
     init(@noescape sealant: ((Resolution<T>) -> Void) throws -> Void) {
         var resolve: ((Resolution<T>) -> Void)!
         state = UnsealedState(resolver: &resolve)
