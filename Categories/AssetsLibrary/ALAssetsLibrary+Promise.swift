@@ -41,7 +41,7 @@ extension UIViewController {
                     } else {
                         fulfill(NSData(bytesNoCopy: bytes, length: N))
                     }
-                }, failureBlock: nil)
+                }, failureBlock: { reject($0) } )
             }
         }.ensure {
             self.dismissViewControllerAnimated(animated, completion: nil)
