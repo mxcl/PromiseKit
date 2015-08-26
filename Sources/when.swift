@@ -1,6 +1,6 @@
 import Foundation.NSProgress
 
-private func when<T>(promises: [Promise<T>]) -> Promise<Void> {
+private func _when<T>(promises: [Promise<T>]) -> Promise<Void> {
     let (rootPromise, fulfill, reject) = Promise<Void>.pendingPromise()
 #if !PMKDisableProgress
     let progress = NSProgress(totalUnitCount: Int64(promises.count))
@@ -63,7 +63,7 @@ private func when<T>(promises: [Promise<T>]) -> Promise<Void> {
  - SeeAlso: `join()`
 */
 public func when<T>(promises: [Promise<T>]) -> Promise<[T]> {
-    return when(promises).then(on: zalgo) { promises.map{ $0.value! } }
+    return _when(promises).then(on: zalgo) { promises.map{ $0.value! } }
 }
 
 public func when<T>(promises: Promise<T>...) -> Promise<[T]> {
@@ -71,13 +71,17 @@ public func when<T>(promises: Promise<T>...) -> Promise<[T]> {
 }
 
 public func when(promises: Promise<Void>...) -> Promise<Void> {
-    return when(promises)
+    return _when(promises)
+}
+
+public func when(promises: [Promise<Void>]) -> Promise<Void> {
+    return _when(promises)
 }
 
 public func when<U, V>(pu: Promise<U>, _ pv: Promise<V>) -> Promise<(U, V)> {
-    return when(pu.asVoid(), pv.asVoid()).then(on: zalgo) { (pu.value!, pv.value!) }
+    return _when([pu.asVoid(), pv.asVoid()]).then(on: zalgo) { (pu.value!, pv.value!) }
 }
 
 public func when<U, V, X>(pu: Promise<U>, _ pv: Promise<V>, _ px: Promise<X>) -> Promise<(U, V, X)> {
-    return when(pu.asVoid(), pv.asVoid(), px.asVoid()).then(on: zalgo) { (pu.value!, pv.value!, px.value!) }
+    return _when([pu.asVoid(), pv.asVoid(), px.asVoid()]).then(on: zalgo) { (pu.value!, pv.value!, px.value!) }
 }
