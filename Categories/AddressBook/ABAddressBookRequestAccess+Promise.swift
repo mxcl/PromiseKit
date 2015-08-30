@@ -83,10 +83,16 @@ extension NSError {
     }
 }
 
-private func ABAddressBookRequestAccess() -> Promise<(Bool, ABAddressBook)> {
+private func ABAddressBookRequestAccess() -> Promise<(Bool, ABAddressBook?)> {
     var error: Unmanaged<CFError>? = nil
     guard let ubook = ABAddressBookCreateWithOptions(nil, &error) else {
-        return Promise(error: NSError(CFError: error!.takeRetainedValue()))
+        let error = error!.takeRetainedValue()
+        if CFErrorGetCode(error) == kABOperationNotPermittedByUserError {
+            let deniedResponse: (Bool, ABAddressBook?) = (false, nil)
+            return Promise(deniedResponse)
+        }
+
+        return Promise(error: NSError(CFError: error))
     }
 
     let book: ABAddressBook = ubook.takeRetainedValue()
