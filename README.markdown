@@ -56,6 +56,8 @@ pod "PromiseKit", "~> 2.0"
 github "mxcl/PromiseKit" ~> 2.0
 ```
 
+*Note*: In order to avoid linking nearly all system frameworks with PromiseKit, the convenience categories have not been included with the Carthage framework . You must manually copy the categories you need in from the Carthage checkout.
+
 ### Standalone Distributions
 
 * [iOS 8 & OS X 10.9  Frameworks](https://github.com/mxcl/PromiseKit/releases/download/2.2.2/PromiseKit-2.2.2.zip) (Binaries)
