@@ -56,4 +56,6 @@ extern NSString * const PMKErrorDomain;
     @property (nonatomic, readonly) BOOL fulfilled;
     @property (nonatomic, readonly) BOOL rejected;
     @end
+
+    @compatibility_alias PMKAnyPromise AnyPromise;
 #endif
