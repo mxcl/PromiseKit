@@ -30,8 +30,8 @@ class UITest_UIImagePickerController_Swift: PMKiOSUITestCase {
         let app = XCUIApplication()
         let tablesQuery = app.tables
         tablesQuery.staticTexts["3"].tap()
-        tablesQuery.childrenMatchingType(.Cell).elementBoundByIndex(0).childrenMatchingType(.TextField).element.tap()
-        app.collectionViews.childrenMatchingType(.Cell).matchingIdentifier("Photo, Landscape, August 08, 2012, 9:52 AM").elementBoundByIndex(0).tap()
+        tablesQuery.childrenMatchingType(.Cell).elementBoundByIndex(0).tap()
+        app.collectionViews.childrenMatchingType(.Cell).matchingIdentifier("Photo, Landscape, August 08, 2012, 11:52 AM").elementBoundByIndex(0).tap()
 
         XCTAssertTrue(value)
     }
@@ -41,7 +41,7 @@ class UITest_UIImagePickerController_Swift: PMKiOSUITestCase {
         let tablesQuery = app.tables
         tablesQuery.staticTexts["4"].tap()
         tablesQuery.buttons["Moments"].tap()
-        app.collectionViews.childrenMatchingType(.Cell).matchingIdentifier("Photo, Landscape, August 08, 2012, 9:52 AM").elementBoundByIndex(0).tap()
+        app.collectionViews.childrenMatchingType(.Cell).matchingIdentifier("Photo, Landscape, August 08, 2012, 11:52 AM").elementBoundByIndex(0).tap()
 
         XCTAssertTrue(value)
     }

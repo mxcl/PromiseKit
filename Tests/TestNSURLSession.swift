@@ -10,7 +10,7 @@ class Test_NSURLSession_Swift: XCTestCase {
     func test1() {
         let json = ["key1": "value1", "key2": ["value2A", "value2B"]]
 
-        OHHTTPStubs.stubRequestsPassingTest({ ObjCBool($0.URL!.host == "example.com") }) { _ in
+        OHHTTPStubs.stubRequestsPassingTest({ Bool($0.URL!.host == "example.com") }) { _ in
             return OHHTTPStubsResponse(JSONObject: json, statusCode: 200, headers: nil)
         }
 
@@ -29,7 +29,7 @@ class Test_NSURLSession_Swift: XCTestCase {
 
         let dummy = ("fred" as NSString).dataUsingEncoding(NSUTF8StringEncoding)!
 
-        OHHTTPStubs.stubRequestsPassingTest({ ObjCBool($0.URL!.host == "example.com") }) { _ in
+        OHHTTPStubs.stubRequestsPassingTest({ Bool($0.URL!.host == "example.com") }) { _ in
             return OHHTTPStubsResponse(data: dummy, statusCode: 200, headers: [:])
         }
 

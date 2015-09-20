@@ -49,7 +49,7 @@ extern NSString * const PMKErrorDomain;
     # endif
     #endif
 
-    SWIFT_CLASS("PMKAnyPromise")
+    SWIFT_CLASS("AnyPromise")
     @interface AnyPromise : NSObject
     @property (nonatomic, readonly) BOOL pending;
     @property (nonatomic, readonly) BOOL resolved;
