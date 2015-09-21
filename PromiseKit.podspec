@@ -109,7 +109,8 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'QuartzCore' do |ss|
-    ss.source_files = 'Categories/QuartzCore/*'
+    ss.ios.source_files = 'Categories/QuartzCore/*'
+	ss.osx.source_files = 'Categories/QuartzCore/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'QuartzCore'
   end
