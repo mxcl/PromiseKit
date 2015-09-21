@@ -80,14 +80,14 @@ Pod::Spec.new do |s|
     ss.dependency 'PromiseKit/CorePromise'
     ss.dependency 'OMGHTTPURLRQ', '~> 3.0.0'
     ss.frameworks = 'Foundation'
-	
-	ss.subspec 'Lite' do |sss|
-      sss.ios.source_files = Dir['Categories/Foundation/*'] - Dir['Categories/Foundation/NSTask*', 'Categories/Foundation/NSURL*']
-      sss.osx.source_files = Dir['Categories/Foundation/*'] - Dir['Categories/Foundation/NSURL*']
-	  ss.watchos.source_files = Dir['Categories/Foundation/*'] - Dir['Categories/Foundation/NSTask*', 'Categories/Foundation/NSURL*']
-      sss.dependency 'PromiseKit/CorePromise'
-      sss.frameworks = 'Foundation'
-	end  
+  end
+  
+  s.subspec 'DietFoundation' do |ss|
+    ss.ios.source_files = Dir['Categories/Foundation/*'] - Dir['Categories/Foundation/NSTask*', 'Categories/Foundation/NSURL*']
+    ss.osx.source_files = Dir['Categories/Foundation/*'] - Dir['Categories/Foundation/NSURL*']
+    ss.watchos.source_files = Dir['Categories/Foundation/*'] - Dir['Categories/Foundation/NSTask*', 'Categories/Foundation/NSURL*']
+    ss.dependency 'PromiseKit/CorePromise'
+    ss.frameworks = 'Foundation'
   end
 
   s.subspec 'MapKit' do |ss|
