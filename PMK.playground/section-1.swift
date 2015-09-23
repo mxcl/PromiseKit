@@ -12,7 +12,10 @@ Promise(1).then { _ in
 }.then { x -> AnyPromise in
     print(x)
     return AnyPromise(bound: Promise(1))
-}.then(print)
+}.then {
+    print($0)
+}
+
 
 
 firstly {
@@ -30,7 +33,7 @@ firstly {
     }
 }
 
-Promise<Int>(Error.When(1, NSURLError.CannotFindHost)).report { error in
+Promise<Int>(error: Error.When(1, NSURLError.CannotFindHost)).report { error in
     do {
         throw error
     } catch NSURLError.CannotFindHost {
