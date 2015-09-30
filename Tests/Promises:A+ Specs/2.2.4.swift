@@ -19,7 +19,7 @@ class Test224: XCTestCase {
         }
         testRejected { promise, expectations, memo in
             var catchHasReturned = false
-            promise.report { _->() in
+            promise.error { _->() in
                 XCTAssert(catchHasReturned)
                 expectations[0].fulfill()
             }
@@ -93,7 +93,7 @@ class Test2242: XCTestCase {
         var firstOnRejectedFinished = false
         let ex = expectationWithDescription("")
 
-        rejected.report { _ in
+        rejected.error { _ in
             resolved.then { _ -> Void in
                 XCTAssert(firstOnRejectedFinished)
                 ex.fulfill()
@@ -137,7 +137,7 @@ class Test2243: XCTestCase {
         let (promise, _, reject) = Promise<Void>.pendingPromise()
         var onRejectedCalled = false
 
-        promise.report { _ in
+        promise.error { _ in
             onRejectedCalled = true
         }
 
@@ -155,7 +155,7 @@ class Test2243: XCTestCase {
 
         reject(Error.Dummy)
 
-        promise.report { _ in
+        promise.error { _ in
             onRejectedCalled = true
         }
 
@@ -172,7 +172,7 @@ class Test2243: XCTestCase {
         let ex = expectationWithDescription("")
 
         resolved.then { _ -> Void in
-            rejected.report{ _ in
+            rejected.error{ _ in
                 XCTAssert(firstOnFulfilledFinished)
                 ex.fulfill()
             }
@@ -189,8 +189,8 @@ class Test2243: XCTestCase {
         var firstOnRejectedFinished = false
         let ex = expectationWithDescription("")
 
-        promise.report { _ in
-            promise.report { _ in
+        promise.error { _ in
+            promise.error { _ in
                 XCTAssertTrue(firstOnRejectedFinished)
                 ex.fulfill()
             }
@@ -212,7 +212,7 @@ class Test2243: XCTestCase {
             firstStackFinished = true
         }
 
-        promise.report { _ in
+        promise.error { _ in
             XCTAssert(firstStackFinished)
             ex.fulfill()
         }

@@ -353,7 +353,7 @@ public class Promise<T> {
      - Parameter body: The handler to execute if this promise is rejected.
      - SeeAlso: `registerCancellationError`
     */
-    public func report(policy policy: ErrorPolicy = .AllErrorsExceptCancellation, _ body: (ErrorType) -> Void) {
+    public func error(policy policy: ErrorPolicy = .AllErrorsExceptCancellation, _ body: (ErrorType) -> Void) {
         
         func consume(error: ErrorType, _ token: ErrorConsumptionToken) {
             token.consumed = true
@@ -445,6 +445,9 @@ public class Promise<T> {
 
     @available(*, unavailable, renamed="pendingPromise")
     public class func defer_() -> (promise: Promise, fulfill: (T) -> Void, reject: (ErrorType) -> Void) { abort() }
+
+    @available(*, deprecated, renamed="error")
+    public func report(policy policy: ErrorPolicy = .AllErrorsExceptCancellation, _ body: (ErrorType) -> Void) { error(policy: policy, body) }
 
     @available(*, deprecated, renamed="always")
     public func ensure(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: () -> Void) -> Promise { return ensure(on: q, body) }

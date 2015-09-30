@@ -24,7 +24,7 @@ firstly {
     return 2
 }.then {
     return Promise(3)
-}.report { error in
+}.error { error in
     switch error {
     case Error.When(let index, NSURLError.Cancelled):
         break
@@ -33,7 +33,7 @@ firstly {
     }
 }
 
-Promise<Int>(error: Error.When(1, NSURLError.CannotFindHost)).report { error in
+Promise<Int>(error: Error.When(1, NSURLError.CannotFindHost)).error { error in
     do {
         throw error
     } catch NSURLError.CannotFindHost {

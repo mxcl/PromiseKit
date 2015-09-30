@@ -10,7 +10,7 @@ class Test_UIViewController_Swift: UIKitTestCase {
     func test_rejects_if_vc_has_no_promise_property() {
         let ex = expectationWithDescription("")
         let p: Promise<Int> = rootvc.promiseViewController(UIViewController(), animated: false)
-        p.report { error in
+        p.error { error in
             if case UIViewController.Error.NotPromisable = error {
                 ex.fulfill()
             }
@@ -21,7 +21,7 @@ class Test_UIViewController_Swift: UIKitTestCase {
     func test_rejects_if_promise_property_returns_nil() {
         let ex = expectationWithDescription("")
         let p: Promise<Int> = rootvc.promiseViewController(MockViewController(), animated: false)
-        p.report { error in
+        p.error { error in
             if case UIViewController.Error.NilPromisable = error {
                 ex.fulfill()
             }
@@ -34,7 +34,7 @@ class Test_UIViewController_Swift: UIKitTestCase {
         let my = MockViewController()
         my.promise = Promise(true)
         let p: Promise<Int> = rootvc.promiseViewController(my, animated: false)
-        p.report { err in
+        p.error { err in
             if case UIViewController.Error.NotGenericallyPromisable = err {
                 ex.fulfill()
             }

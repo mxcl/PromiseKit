@@ -25,7 +25,7 @@ class Test_NSTask_Swift: XCTestCase {
 
         task.promise().then { (stdout: String, stderr: String, exitStatus: Int) -> Void in
             XCTFail()
-        }.report { err in
+        }.error { err in
             if case NSTask.Error.Execution(let info) = err {
                 let expectedStderrData = "ls: \(dir): No such file or directory\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
 

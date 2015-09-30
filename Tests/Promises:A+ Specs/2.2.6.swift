@@ -19,19 +19,19 @@ class Test2261: XCTestCase {
                 XCTAssertEqual(++x, 1)
                 ee[0].fulfill()
             }
-            promise.report { _ in XCTFail() }
+            promise.error { _ in XCTFail() }
             promise.then { value -> Void in
                 XCTAssertEqual(value, sentinel)
                 XCTAssertEqual(++x, 2)
                 ee[1].fulfill()
             }
-            promise.report { _ in XCTFail() }
+            promise.error { _ in XCTFail() }
             promise.then { value -> Void in
                 XCTAssertEqual(value, sentinel)
                 XCTAssertEqual(++x, 3)
                 ee[2].fulfill()
             }
-            promise.report { _ in XCTFail() }
+            promise.error { _ in XCTFail() }
             promise.then { value -> Void in
                 XCTAssertEqual(value, sentinel)
                 XCTAssertEqual(x, 3)
@@ -51,20 +51,20 @@ class Test2261: XCTestCase {
                 XCTAssertEqual(++x, 1)
                 ee[0].fulfill()
             }
-            promise.report { _ in XCTFail() }
+            promise.error { _ in XCTFail() }
             promise.then { value -> Void in
                 XCTAssertEqual(value, sentinel)
                 XCTAssertEqual(++x, 2)
                 ee[1].fulfill()
             }
-            promise.report { _ in XCTFail() }
+            promise.error { _ in XCTFail() }
             promise.then { value -> Void in
                 XCTAssertEqual(value, sentinel)
                 XCTAssertEqual(++x, 3)
                 ee[2].fulfill()
                 throw Error.Dummy
             }
-            promise.report { value in XCTFail() }
+            promise.error { value in XCTFail() }
             promise.then { value -> Void in
                 XCTAssertEqual(value, sentinel)
                 XCTAssertEqual(x, 3)
@@ -91,7 +91,7 @@ class Test2261: XCTestCase {
 
             promise.then { _ -> Int in
                 throw NSError(domain: PMKErrorDomain, code: sentinel2, userInfo: nil)
-            }.report { err in
+            }.error { err in
                 XCTAssertEqual((err as NSError).code, sentinel2)
                 ee[1].fulfill()
             }
@@ -160,25 +160,25 @@ class Test2262: XCTestCase {
 
         testRejected(4) { promise, exes, sentinel in
             var x = 0
-            promise.report { err in
+            promise.error { err in
                 XCTAssertEqual(err, sentinel)
                 XCTAssertEqual(++x, 1)
                 exes[0].fulfill()
             }
             promise.then { _ in XCTFail() }
-            promise.report { err in
+            promise.error { err in
                 XCTAssertEqual(err, sentinel)
                 XCTAssertEqual(++x, 2)
                 exes[1].fulfill()
             }
             promise.then { _ in XCTFail() }
-            promise.report { err in
+            promise.error { err in
                 XCTAssertEqual(err, sentinel)
                 XCTAssertEqual(++x, 3)
                 exes[2].fulfill()
             }
             promise.then { _ in XCTFail() }
-            promise.report { err in
+            promise.error { err in
                 XCTAssertEqual(err, sentinel)
                 XCTAssertEqual(x, 3)
                 exes[3].fulfill()
@@ -193,13 +193,13 @@ class Test2262: XCTestCase {
         testRejected(4) { promise, ee, sentinel in
             let blah = NSError(domain: PMKErrorDomain, code: 923764, userInfo: nil)
             var x = 0
-            promise.report{ err in
+            promise.error{ err in
                 XCTAssertEqual(err, sentinel)
                 XCTAssertEqual(++x, 1)
                 ee[0].fulfill()
             }
             promise.then { _ in XCTFail() }
-            promise.report{ err in
+            promise.error{ err in
                 XCTAssertEqual(err, sentinel)
                 XCTAssertEqual(++x, 2)
                 ee[1].fulfill()
@@ -212,7 +212,7 @@ class Test2262: XCTestCase {
                 throw blah
             }
             promise.then { _ in XCTFail() }
-            promise.report{ err in
+            promise.error{ err in
                 XCTAssertEqual(err, sentinel)
                 XCTAssertEqual(x, 3)
                 ee[3].fulfill()
@@ -239,7 +239,7 @@ class Test2262: XCTestCase {
 
             promise.recover { _ -> Int in
                 throw NSError(domain: PMKErrorDomain, code: sentinel2, userInfo: nil)
-            }.report { err in
+            }.error { err in
                 XCTAssertEqual((err as NSError).code, sentinel2)
                 exes[1].fulfill()
             }
@@ -259,15 +259,15 @@ class Test2262: XCTestCase {
         testRejected(3) { promise, exes, memo in
             var x = 0
 
-            promise.report { _ in
+            promise.error { _ in
                 XCTAssertEqual(x++, 0)
                 exes[0].fulfill()
             }
-            promise.report{ _ in
+            promise.error{ _ in
                 XCTAssertEqual(x++, 1)
                 exes[1].fulfill()
             }
-            promise.report{ _ in
+            promise.error{ _ in
                 XCTAssertEqual(x++, 2)
                 exes[2].fulfill()
             }
@@ -281,15 +281,15 @@ class Test2262: XCTestCase {
         testRejected(3) { promise, exes, memo in
             var x = 0
 
-            promise.report { _ in
+            promise.error { _ in
                 XCTAssertEqual(x++, 0)
                 exes[0].fulfill()
-                promise.report { _ in
+                promise.error { _ in
                     XCTAssertEqual(x++, 2)
                     exes[1].fulfill()
                 }
             }
-            promise.report{ _ in
+            promise.error{ _ in
                 XCTAssertEqual(x++, 1)
                 exes[2].fulfill()
             }

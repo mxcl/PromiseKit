@@ -14,7 +14,7 @@ class Test231: XCTestCase {
         let promise1 = after(0.1)
         let promise2 = promise1.then { promise1 }
 
-        promise2.report { err in
+        promise2.error { err in
             XCTAssertEqual(err, PromiseKit.Error.ReturnedSelf)
             ex.fulfill()
         }
@@ -30,7 +30,7 @@ class Test231: XCTestCase {
         let promise1 = Promise<Void>(error: Error.Dummy)
         let promise2 = promise1.recover { _ in promise1 }
 
-        promise2.report { err in
+        promise2.error { err in
             XCTAssertEqual(err, PromiseKit.Error.ReturnedSelf)
             ex.fulfill()
         }

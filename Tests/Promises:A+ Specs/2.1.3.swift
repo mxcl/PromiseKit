@@ -13,7 +13,7 @@ class Test2131: XCTestCase {
             promise.then { _ in
                 XCTFail()
             }
-            promise.report { _ in
+            promise.error { _ in
                 expectations[0].fulfill()
             }
         }
@@ -27,7 +27,7 @@ class Test2131: XCTestCase {
             promise.then { _ in
                 XCTFail()
             }
-            promise.report{ _ in
+            promise.error{ _ in
                 ex.fulfill()
             }
             reject(Error.Dummy)
@@ -43,7 +43,7 @@ class Test2131: XCTestCase {
             promise.then { _ in
                 XCTFail()
             }
-            promise.report { _ in
+            promise.error { _ in
                 ex.fulfill()
             }
             later {
@@ -61,7 +61,7 @@ class Test2131: XCTestCase {
             promise.then { _ in
                 XCTFail()
             }
-            promise.report { _ in
+            promise.error { _ in
                 ex.fulfill()
             }
             reject(Error.Dummy)
