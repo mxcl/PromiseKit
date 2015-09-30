@@ -38,7 +38,7 @@ extension CLLocationManager {
         manager.delegate = manager
         yield(manager)
         manager.startUpdatingLocation()
-        manager.promise.ensure {
+        manager.promise.always {
             manager.delegate = nil
             manager.stopUpdatingLocation()
         }

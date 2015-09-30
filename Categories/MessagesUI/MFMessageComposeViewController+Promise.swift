@@ -21,7 +21,7 @@ extension UIViewController {
         proxy.retainCycle = proxy
         vc.messageComposeDelegate = proxy
         presentViewController(vc, animated: animated, completion: completion)
-        proxy.promise.ensure {
+        proxy.promise.always {
             vc.dismissViewControllerAnimated(animated, completion: nil)
         }
         return proxy.promise

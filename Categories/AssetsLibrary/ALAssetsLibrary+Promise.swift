@@ -43,7 +43,7 @@ extension UIViewController {
                     }
                 }, failureBlock: { reject($0) } )
             }
-        }.ensure {
+        }.always {
             self.dismissViewControllerAnimated(animated, completion: nil)
         }
     }
