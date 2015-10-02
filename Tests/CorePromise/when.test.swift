@@ -60,7 +60,7 @@ class WhenTestCase_Swift: XCTestCase {
         let p2 = after(0.2).then{ throw NSError(domain: "a", code: 1, userInfo: nil) }
         let p3 = Promise(false)
             
-        when(p1, p2, p3).report { _ in
+        when(p1, p2, p3).error { _ in
             e1.fulfill()
         }
         
@@ -116,7 +116,7 @@ class WhenTestCase_Swift: XCTestCase {
 
         progress.resignCurrent()
 
-        promise.report { _ in
+        promise.error { _ in
             ex2.fulfill()
         }
 
@@ -130,10 +130,10 @@ class WhenTestCase_Swift: XCTestCase {
         }
 
         let q = dispatch_get_main_queue()
-        p1.ensure(on: q, finally)
-        p2.ensure(on: q, finally)
-        p3.ensure(on: q, finally)
-        p4.ensure(on: q, finally)
+        p1.always(on: q, finally)
+        p2.always(on: q, finally)
+        p3.always(on: q, finally)
+        p4.always(on: q, finally)
 
         waitForExpectationsWithTimeout(1, handler: nil)
     }
@@ -150,7 +150,7 @@ class WhenTestCase_Swift: XCTestCase {
         let ex = expectationWithDescription("")
         let p1 = Promise<Void>(error: Error.Test)
         let p2 = after(0.1)
-        when(p1, p2).then{ XCTFail() }.report { error in
+        when(p1, p2).then{ XCTFail() }.error { error in
             if case PromiseKit.Error.When(let index, let underlyingError) = error {
                 XCTAssertEqual(index, 0)
                 XCTAssertEqual(underlyingError as? Error, Error.Test)
@@ -179,7 +179,7 @@ class WhenTestCase_Swift: XCTestCase {
         let p2 = after(0.1).then { throw Error.Straggler }
         let p3 = after(0.2).then { throw Error.Straggler }
 
-        when(p1, p2, p3).report { error -> Void in
+        when(p1, p2, p3).error { error -> Void in
             if case PromiseKit.Error.When(let index, let underlyingError) = error {
                 XCTAssertEqual(index, 0)
                 XCTAssertEqual(underlyingError as? Error, Error.Test)
@@ -187,8 +187,8 @@ class WhenTestCase_Swift: XCTestCase {
             }
         }
 
-        p2.ensure { after(0.1).then(ex2.fulfill) }
-        p3.ensure { after(0.1).then(ex3.fulfill) }
+        p2.always { after(0.1).then(ex2.fulfill) }
+        p3.always { after(0.1).then(ex3.fulfill) }
 
         waitForExpectationsWithTimeout(1, handler: nil)
     }
@@ -205,7 +205,7 @@ class WhenTestCase_Swift: XCTestCase {
         let p2 = Promise<Void>(error: Error.Test2)
         let p3 = Promise<Void>(error: Error.Test3)
 
-        when(p1, p2, p3).report { error in
+        when(p1, p2, p3).error { error in
             if case PromiseKit.Error.When(0, Error.Test1) = error {
                 ex.fulfill()
             } else {

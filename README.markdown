@@ -8,9 +8,9 @@ UIApplication.sharedApplication().networkActivityIndicatorVisible = true
 when(fetchImage(), getLocation()).then { image, location in
     self.imageView.image = image;
     self.label.text = "Buy your cat a house in \(location)"
-}.ensure {
+}.always {
     UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-}.report { error in
+}.error { error in
     UIAlertView(…).show()
 }
 ```

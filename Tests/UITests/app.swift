@@ -33,11 +33,11 @@ class App: UITableViewController, UIApplicationDelegate {
         switch Row(indexPath)! {
         case .ImagePickerCancel:
             let p: Promise<UIImage> = promiseViewController(UIImagePickerController())
-            p.report(policy: .AllErrors) { error in
+            p.error(policy: .AllErrors) { error in
                 guard (error as! CancellableErrorType).cancelled else { abort() }
                 self.testSuceededSwitch.on = true
             }
-            p.report { error in
+            p.error { error in
                 abort()
             }
         case .ImagePickerEditImage:
@@ -56,7 +56,7 @@ class App: UITableViewController, UIApplicationDelegate {
             }
         case .SocialComposeCancel:
             let composer = SLComposeViewController(forServiceType: SLServiceTypeFacebook)
-            promiseViewController(composer).report(policy: .AllErrors) { error in
+            promiseViewController(composer).error(policy: .AllErrors) { error in
                 guard (error as! CancellableErrorType).cancelled else { abort() }
                 self.testSuceededSwitch.on = true
             }

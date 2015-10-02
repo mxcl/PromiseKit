@@ -10,7 +10,7 @@ class Test_NSObject_Swift: XCTestCase {
         foo.observe("bar").then { (newValue: String) -> Void in
             XCTAssertEqual(newValue, "moo")
             ex.fulfill()
-        }.report { err in
+        }.error { err in
             XCTFail()
         }
         foo.bar = "moo"

@@ -10,7 +10,7 @@ class Test223: XCTestCase {
 
     func test2231() {
         testRejected { promise, expectations, memo in
-            promise.report { error in
+            promise.error { error in
                 XCTAssertEqual(error, memo)
                 expectations[0].fulfill()
             }
@@ -30,7 +30,7 @@ class Test2232: XCTestCase {
         let (promise, _, reject) = Promise<Int>.pendingPromise()
         var isRejected = false
 
-        promise.report { _ in
+        promise.error { _ in
             XCTAssertTrue(isRejected)
             expectation.fulfill()
         }
@@ -54,7 +54,7 @@ class Test2232: XCTestCase {
         let expectation = expectationWithDescription("")
         let (promise, _, _) = TestPromise.pendingPromise()
 
-        promise.report { _ in
+        promise.error { _ in
             XCTFail()
         }
         later {
@@ -75,7 +75,7 @@ class Test2233: XCTestCase {
         let ex = expectationWithDescription("")
 
         let p: Promise<Void> = Promise(error: Error.Dummy)
-        p.report { _ in
+        p.error { _ in
             ex.fulfill()
         }
 
@@ -90,7 +90,7 @@ class Test2233: XCTestCase {
         let ex = expectationWithDescription("")
         let (promise, _, reject) = Promise<Void>.pendingPromise()
 
-        promise.report { _ in ex.fulfill() }
+        promise.error { _ in ex.fulfill() }
 
         reject(Error.Dummy)
         reject(Error.Dummy)
@@ -106,7 +106,7 @@ class Test2233: XCTestCase {
         let ex = expectationWithDescription("")
         let (promise, _, reject) = Promise<Void>.pendingPromise()
 
-        promise.report { _ in ex.fulfill() }
+        promise.error { _ in ex.fulfill() }
 
         later {
             reject(Error.Dummy)
@@ -124,7 +124,7 @@ class Test2233: XCTestCase {
         let ex = expectationWithDescription("")
         let (promise, _, reject) = Promise<Void>.pendingPromise()
 
-        promise.report { _ in ex.fulfill() }
+        promise.error { _ in ex.fulfill() }
 
         reject(Error.Dummy)
         later { reject(Error.Dummy) }
@@ -144,13 +144,13 @@ class Test2233: XCTestCase {
         let e2 = expectationWithDescription(desc)
         let e3 = expectationWithDescription(desc)
 
-        promise.report { _ in e1.fulfill() }
+        promise.error { _ in e1.fulfill() }
 
         later(1) {
-            promise.report { _ in e2.fulfill() }
+            promise.error { _ in e2.fulfill() }
         }
         later(2) {
-            promise.report { _ in e3.fulfill() }
+            promise.error { _ in e3.fulfill() }
         }
         later(3) {
             reject(Error.Dummy)
@@ -168,9 +168,9 @@ class Test2233: XCTestCase {
         let e1 = expectationWithDescription("")
         let e2 = expectationWithDescription("")
 
-        promise.report { _ in e1.fulfill() }
+        promise.error { _ in e1.fulfill() }
         reject(Error.Dummy)
-        promise.report { _ in e2.fulfill() }
+        promise.error { _ in e2.fulfill() }
 
         later(4, expectationWithDescription("").fulfill)
         waitForExpectationsWithTimeout(1, handler: nil)

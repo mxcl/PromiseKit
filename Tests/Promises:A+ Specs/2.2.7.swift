@@ -20,7 +20,7 @@ class Test2272: XCTestCase {
         testFulfilled { promise1, expectations, _ in
             let promise2 = promise1.then { _ in throw Error.Dummy }
 
-            promise2.report {
+            promise2.error {
                 XCTAssertEqual(Error.Dummy, $0)
                 expectations[0].fulfill()
             }
@@ -31,7 +31,7 @@ class Test2272: XCTestCase {
         testRejected { promise1, expectations, _ in
             let promise2 = promise1.recover { _ -> Int in throw Error.Dummy }
 
-            promise2.report {
+            promise2.error {
                 XCTAssertEqual(Error.Dummy, $0)
                 expectations[0].fulfill()
             }

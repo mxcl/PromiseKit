@@ -29,7 +29,7 @@ class Test_UIAlertView_Swift: UIKitTestCase {
         alert.addButtonWithTitle("0")
         alert.addButtonWithTitle("1")
         alert.cancelButtonIndex = alert.addButtonWithTitle("2")
-        alert.promise().report(policy: .AllErrors) { err in
+        alert.promise().error(policy: .AllErrors) { err in
             guard let err = err as? UIAlertView.Error else { return XCTFail() }
             XCTAssertTrue(err == .Cancelled)
             XCTAssertTrue(err.cancelled)
@@ -62,7 +62,7 @@ class Test_UIAlertView_Swift: UIKitTestCase {
 
         let alert = UIAlertView()
         alert.cancelButtonIndex = alert.addButtonWithTitle("0")
-        alert.promise().report(policy: .AllErrors) { _ in
+        alert.promise().error(policy: .AllErrors) { _ in
             ex.fulfill()
         }
         after(0.5).then {

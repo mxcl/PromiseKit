@@ -18,7 +18,7 @@ class Test2321: XCTestCase {
             promise.then { _ in
                 wasFulfilled = true
             }
-            promise.report { _ in
+            promise.error { _ in
                 wasRejected = true
             }
             later(4) {
@@ -84,7 +84,7 @@ class Test2323: XCTestCase {
         }, test: { promise in
             let ex = self.expectationWithDescription("")
 
-            promise.report { error -> Void in
+            promise.error { error -> Void in
                 XCTAssertEqual(error, sentinel)
                 ex.fulfill()
             }
@@ -102,7 +102,7 @@ class Test2323: XCTestCase {
         }, test: { promise in
             let ex = self.expectationWithDescription("")
 
-            promise.report { error -> Void in
+            promise.error { error -> Void in
                 XCTAssertEqual(error, sentinel)
                 ex.fulfill()
             }

@@ -38,7 +38,7 @@ extension CLLocationManager {
         manager.delegate = manager
         yield(manager)
         manager.startUpdatingLocation()
-        manager.promise.ensure {
+        manager.promise.always {
             manager.delegate = nil
             manager.stopUpdatingLocation()
         }
@@ -157,7 +157,7 @@ public class LocationPromise: Promise<CLLocation> {
         let promise = LocationPromise { fulfill = $0; reject = $1 }
 
         promise.parentPromise.then(on: zalgo) { fulfill($0.last!) }
-        promise.parentPromise.report { reject($0) }
+        promise.parentPromise.error { reject($0) }
 
         return (promise, promise.fulfill, promise.reject)
     }

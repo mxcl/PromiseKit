@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "63F803C21AB89A0F00E4DEE1"
+               BlueprintIdentifier = "63CD9A461BB102EE008D916F"
                BuildableName = "PromiseKit.framework"
-               BlueprintName = "PMKOSX"
+               BlueprintName = "PMKwatchOS"
                ReferencedContainer = "container:PromiseKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -28,46 +28,7 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6388E1A11AD315F90074D85B"
-               BuildableName = "PMKTests.xctest"
-               BlueprintName = "PMKTests"
-               ReferencedContainer = "container:PromiseKit.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "63533B321AE57A9300C10972"
-               BuildableName = "PMKAPlusTests.xctest"
-               BlueprintName = "PMKAPlusTests"
-               ReferencedContainer = "container:PromiseKit.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "63CA14481AE9FBD000223904"
-               BuildableName = "PMKOSXCategoryTests.xctest"
-               BlueprintName = "PMKOSXCategoryTests"
-               ReferencedContainer = "container:PromiseKit.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "63F803C21AB89A0F00E4DEE1"
-            BuildableName = "PromiseKit.framework"
-            BlueprintName = "PMKOSX"
-            ReferencedContainer = "container:PromiseKit.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -84,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "63F803C21AB89A0F00E4DEE1"
+            BlueprintIdentifier = "63CD9A461BB102EE008D916F"
             BuildableName = "PromiseKit.framework"
-            BlueprintName = "PMKOSX"
+            BlueprintName = "PMKwatchOS"
             ReferencedContainer = "container:PromiseKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -102,9 +63,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "63F803C21AB89A0F00E4DEE1"
+            BlueprintIdentifier = "63CD9A461BB102EE008D916F"
             BuildableName = "PromiseKit.framework"
-            BlueprintName = "PMKOSX"
+            BlueprintName = "PMKwatchOS"
             ReferencedContainer = "container:PromiseKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

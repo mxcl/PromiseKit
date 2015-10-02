@@ -11,7 +11,7 @@ class Test2121: XCTestCase {
             promise.then { _ in
                 expectations[0].fulfill()
             }
-            promise.report { _ in
+            promise.error { _ in
                 XCTFail()
             }
         }
@@ -21,7 +21,7 @@ class Test2121: XCTestCase {
 
         specify("trying to fulfill then immediately reject") { promise, fulfill, reject, expectation in
             promise.then(expectation.fulfill)
-            promise.report { _ in XCTFail() }
+            promise.error { _ in XCTFail() }
             fulfill()
             reject(Error.Dummy)
         }
@@ -31,7 +31,7 @@ class Test2121: XCTestCase {
 
         specify("trying to fulfill then reject, delayed") { promise, fulfill, reject, expectation in
             promise.then(expectation.fulfill)
-            promise.report { _ in XCTFail() }
+            promise.error { _ in XCTFail() }
             later {
                 fulfill()
                 reject(Error.Dummy)
@@ -43,7 +43,7 @@ class Test2121: XCTestCase {
 
         specify("trying to fulfill immediately then reject delayed") { promise, fulfill, reject, expectation in
             promise.then(expectation.fulfill)
-            promise.report { _ in XCTFail() }
+            promise.error { _ in XCTFail() }
             fulfill()
             later {
                 reject(Error.Dummy)

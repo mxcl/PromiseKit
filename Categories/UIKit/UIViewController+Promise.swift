@@ -34,7 +34,7 @@ extension UIViewController {
         let p: Promise<T> = promise(vc)
         if p.pending {
             presentViewController(vc, animated: animated, completion: completion)
-            p.ensure {
+            p.always {
                 self.dismissViewControllerAnimated(animated, completion: nil)
             }
         }
@@ -47,7 +47,7 @@ extension UIViewController {
             let p: Promise<T> = promise(vc)
             if p.pending {
                 presentViewController(nc, animated: animated, completion: completion)
-                p.ensure {
+                p.always {
                     self.dismissViewControllerAnimated(animated, completion: nil)
                 }
             }
@@ -70,7 +70,7 @@ extension UIViewController {
                 return img
             }
             throw Error.NoImageFound
-        }.ensure {
+        }.always {
             self.dismissViewControllerAnimated(animated, completion: nil)
         }
     }

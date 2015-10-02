@@ -30,7 +30,7 @@ class Test_SKProductsRequest_Swift: XCTestCase {
         }
 
         let ex = expectationWithDescription("")
-        MockProductsRequest().promise().report(policy: .AllErrors) { err in
+        MockProductsRequest().promise().error(policy: .AllErrors) { err in
             XCTAssert((err as NSError).cancelled)
             ex.fulfill()
         }

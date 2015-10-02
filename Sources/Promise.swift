@@ -353,7 +353,7 @@ public class Promise<T> {
      - Parameter body: The handler to execute if this promise is rejected.
      - SeeAlso: `registerCancellationError`
     */
-    public func report(policy policy: ErrorPolicy = .AllErrorsExceptCancellation, _ body: (ErrorType) -> Void) {
+    public func error(policy policy: ErrorPolicy = .AllErrorsExceptCancellation, _ body: (ErrorType) -> Void) {
         
         func consume(error: ErrorType, _ token: ErrorConsumptionToken) {
             token.consumed = true
@@ -421,14 +421,14 @@ public class Promise<T> {
          UIApplication.sharedApplication().networkActivityIndicatorVisible = true
          somePromise().then {
              //…
-         }.ensure {
+         }.always {
              UIApplication.sharedApplication().networkActivityIndicatorVisible = false
          }
 
      - Parameter on: The queue on which body should be executed.
      - Parameter body: The closure that is executed when this Promise is resolved.
     */
-    public func ensure(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: () -> Void) -> Promise {
+    public func always(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: () -> Void) -> Promise {
         return Promise(when: self) { resolution, resolve in
             contain_zalgo(q) {
                 body()
@@ -445,6 +445,12 @@ public class Promise<T> {
 
     @available(*, unavailable, renamed="pendingPromise")
     public class func defer_() -> (promise: Promise, fulfill: (T) -> Void, reject: (ErrorType) -> Void) { abort() }
+
+    @available(*, deprecated, renamed="error")
+    public func report(policy policy: ErrorPolicy = .AllErrorsExceptCancellation, _ body: (ErrorType) -> Void) { error(policy: policy, body) }
+
+    @available(*, deprecated, renamed="always")
+    public func ensure(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: () -> Void) -> Promise { return ensure(on: q, body) }
 }
 
 

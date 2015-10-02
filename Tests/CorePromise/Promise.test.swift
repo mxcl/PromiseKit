@@ -25,7 +25,7 @@ class PromiseTestCase: XCTestCase {
         Promise(1).then { _ -> AnyPromise in
             let promise = after(0.1).then{ throw NSError(domain: "a", code: 1, userInfo: nil) }
             return AnyPromise(bound: promise)
-        }.report { err in
+        }.error { err in
             ex.fulfill()
         }
         waitForExpectationsWithTimeout(1, handler: nil)
@@ -57,7 +57,7 @@ class PromiseTestCase: XCTestCase {
             throw NSError(domain: PMKErrorDomain, code: PMKOperationCancelled, userInfo: nil)
         }.then { _ -> Void in
             XCTFail()
-        }.report { _ -> Void in
+        }.error { _ -> Void in
             XCTFail()
         }
 
@@ -81,7 +81,7 @@ class PromiseTestCase: XCTestCase {
             throw err
         }.then { _ -> Void in
             XCTFail()
-        }.report { _ -> Void in
+        }.error { _ -> Void in
             XCTFail()
         }
 
@@ -93,7 +93,7 @@ class PromiseTestCase: XCTestCase {
 
         after(0).then { _ in
             throw NSError(domain: PMKErrorDomain, code: PMKOperationCancelled, userInfo: nil)
-        }.report(policy: .AllErrors) { err -> Void in
+        }.error(policy: .AllErrors) { err -> Void in
             ex.fulfill()
         }
 

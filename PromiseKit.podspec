@@ -18,7 +18,6 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '8.0'
   s.osx.deployment_target = '10.9'
   s.watchos.deployment_target = '2.0'
-  
   s.module_map = 'Sources/PMK.modulemap'
   s.xcconfig = { 'SWIFT_INSTALL_OBJC_HEADER' => 'NO' }
 
@@ -77,8 +76,17 @@ Pod::Spec.new do |s|
   s.subspec 'Foundation' do |ss|
     ss.ios.source_files = Dir['Categories/Foundation/*'] - Dir['Categories/Foundation/NSTask*']
     ss.osx.source_files = 'Categories/Foundation/*'
+	ss.watchos.source_files = Dir['Categories/Foundation/*'] - Dir['Categories/Foundation/NSTask*']
     ss.dependency 'PromiseKit/CorePromise'
     ss.dependency 'OMGHTTPURLRQ', '~> 3.0.0'
+    ss.frameworks = 'Foundation'
+  end
+  
+  s.subspec 'DietFoundation' do |ss|
+    ss.ios.source_files = Dir['Categories/Foundation/*'] - Dir['Categories/Foundation/NSTask*', 'Categories/Foundation/NSURL*']
+    ss.osx.source_files = Dir['Categories/Foundation/*'] - Dir['Categories/Foundation/NSURL*']
+    ss.watchos.source_files = Dir['Categories/Foundation/*'] - Dir['Categories/Foundation/NSTask*', 'Categories/Foundation/NSURL*']
+    ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'Foundation'
   end
 
@@ -101,7 +109,8 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'QuartzCore' do |ss|
-    ss.source_files = 'Categories/QuartzCore/*'
+    ss.ios.source_files = 'Categories/QuartzCore/*'
+	ss.osx.source_files = 'Categories/QuartzCore/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'QuartzCore'
   end
