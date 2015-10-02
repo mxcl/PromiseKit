@@ -96,8 +96,8 @@ Pod::Spec.new do |s|
     ss.frameworks = 'MapKit'
   end
 
-  s.subspec 'MessageUI' do |ss|
-    ss.ios.source_files = 'Categories/MessageUI/*'
+  s.subspec 'MessagesUI' do |ss|
+    ss.ios.source_files = 'Categories/MessagesUI/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.ios.frameworks = 'MessageUI'
   end
