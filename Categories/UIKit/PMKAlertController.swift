@@ -41,9 +41,9 @@ public class PMKAlertController {
     public func addActionWithTitle(title: String, style: UIAlertActionStyle = .Default) -> UIAlertAction {
         let action = UIAlertAction(title: title, style: style) { action in
             if style == UIAlertActionStyle.Cancel {
-                self.fulfill(action)
-            } else {
                 self.reject(Error.Cancelled)
+            } else {
+                self.fulfill(action)
             }
         }
         UIAlertController.addAction(action)
