@@ -61,7 +61,8 @@ private class LocationManager: CLLocationManager, CLLocationManagerDelegate {
 #endif
 
     @objc func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
-        reject(error)
+      if error.domain == kCLErrorDomain && error.code == CLError.LocationUnknown { return }
+      reject(error)
     }
 }
 
