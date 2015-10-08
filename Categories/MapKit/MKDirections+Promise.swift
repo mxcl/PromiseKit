@@ -1,5 +1,7 @@
-import PromiseKit
 import MapKit
+#if !COCOAPODS
+import PromiseKit
+#endif
 
 /**
  To import the `MKDirections` category:
@@ -18,10 +20,10 @@ extension MKDirections {
      cancellation.
     */
     public func promise() -> Promise<MKDirectionsResponse> {
-        return Promise { calculateDirectionsWithCompletionHandler($0.resolve) }
+        return Promise { calculateDirectionsWithCompletionHandler($0) }
     }
 
     public func promise() -> Promise<MKETAResponse> {
-        return Promise { calculateETAWithCompletionHandler($0.resolve) }
+        return Promise { calculateETAWithCompletionHandler($0) }
     }
 }

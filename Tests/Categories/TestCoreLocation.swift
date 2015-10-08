@@ -2,12 +2,12 @@ import CoreLocation
 import PromiseKit
 import XCTest
 
-class TestCLLocationManager: XCTestCase {
-    func testLocation() {
+class Test_CLLocationManager_Swift: XCTestCase {
+    func test_fulfills_with_one_location() {
         swizzle(CLLocationManager.self, "startUpdatingLocation") {
             let ex = expectationWithDescription("")
 
-            CLLocationManager.promise().then { (x: CLLocation) -> Void in
+            CLLocationManager.promise().then { x -> Void in
                 XCTAssertEqual(x, dummy.last!)
                 ex.fulfill()
             }
@@ -16,11 +16,11 @@ class TestCLLocationManager: XCTestCase {
         }
     }
 
-    func testLocations() {
+    func test_fulfills_with_multiple_locations() {
         swizzle(CLLocationManager.self, "startUpdatingLocation") {
             let ex = expectationWithDescription("")
 
-            CLLocationManager.promise().then { (x: [CLLocation]) -> Void in
+            CLLocationManager.promise().allResults().then { x -> Void in
                 XCTAssertEqual(x, dummy)
                 ex.fulfill()
             }
@@ -29,42 +29,31 @@ class TestCLLocationManager: XCTestCase {
         }
     }
 
-#if os(iOS)
-    func testRequestAuthorization1() {
-        let ex = expectationWithDescription("")
+    func test_requestAuthorization() {
+        #if os(iOS)
+            swizzle(CLLocationManager.self, "requestWhenInUseAuthorization") {
+                swizzle(CLLocationManager.self, "authorizationStatus", isClassMethod: true) {
+                    let ex = expectationWithDescription("")
 
-        CLLocationManager.requestAuthorization().then { x -> Void in
-            XCTAssertEqual(x, .Restricted)
-            ex.fulfill()
-        }
+                    CLLocationManager.requestAuthorization().then { x -> Void in
+                        XCTAssertEqual(x, CLAuthorizationStatus.AuthorizedWhenInUse)
+                        ex.fulfill()
+                    }
 
-        waitForExpectationsWithTimeout(1, handler: nil)
-    }
-
-    func testRequestAuthorization2() {
-        swizzle(CLLocationManager.self, "requestWhenInUseAuthorization") {
-            swizzle(CLLocationManager.self, "authorizationStatus", isClassMethod: true) {
-                let ex = expectationWithDescription("")
-
-                CLLocationManager.requestAuthorization().then { x -> Void in
-                    XCTAssertEqual(x, .AuthorizedWhenInUse)
-                    ex.fulfill()
+                    waitForExpectationsWithTimeout(1, handler: nil)
                 }
-
-                waitForExpectationsWithTimeout(1, handler: nil)
             }
-        }
+        #endif
     }
-#endif
 }
 
-private let dummyPlacemark = CLPlacemark()
-
-class TestCLGeocoder: XCTestCase {
-    func testReverseGeocodeLocation() {
+class Test_CLGeocoder_Swift: XCTestCase {
+    func test_reverseGeocodeLocation() {
         class MockGeocoder: CLGeocoder {
-            private override func reverseGeocodeLocation(location: CLLocation!, completionHandler: CLGeocodeCompletionHandler!) {
-                completionHandler([dummyPlacemark], nil)
+            private override func reverseGeocodeLocation(location: CLLocation, completionHandler: CLGeocodeCompletionHandler) {
+                after(0.0).then {
+                    completionHandler([dummyPlacemark], nil)
+                }
             }
         }
 
@@ -76,10 +65,12 @@ class TestCLGeocoder: XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func testGeocodeAddressDictionary() {
+    func test_geocodeAddressDictionary() {
         class MockGeocoder: CLGeocoder {
-            private override func geocodeAddressDictionary(addressDictionary: [NSObject : AnyObject]!, completionHandler: CLGeocodeCompletionHandler!) {
-                completionHandler([dummyPlacemark], nil)
+            private override func geocodeAddressDictionary(addressDictionary: [NSObject : AnyObject], completionHandler: CLGeocodeCompletionHandler) {
+                after(0.0).then {
+                    completionHandler([dummyPlacemark], nil)
+                }
             }
         }
 
@@ -91,10 +82,12 @@ class TestCLGeocoder: XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func testGeocodeAddressString() {
+    func test_geocodeAddressString() {
         class MockGeocoder: CLGeocoder {
-            override func geocodeAddressString(addressString: String!, completionHandler: CLGeocodeCompletionHandler!) {
-                completionHandler([dummyPlacemark], nil)
+            override func geocodeAddressString(addressString: String, completionHandler: CLGeocodeCompletionHandler) {
+                after(0.0).then {
+                    completionHandler([dummyPlacemark], nil)
+                }
             }
         }
 
@@ -110,31 +103,25 @@ class TestCLGeocoder: XCTestCase {
 
 
 /////////////////////////////////////////////////////////////// resources
-
-func swizzle(foo: AnyClass, from: Selector, isClassMethod: Bool = false, @noescape body: () -> Void) {
-    let get: (AnyClass!, Selector) -> Method = isClassMethod ? class_getClassMethod : class_getInstanceMethod
-    let originalMethod = get(foo, from)
-    let swizzledMethod = get(foo, Selector("pmk_\(from)"))
-
-    method_exchangeImplementations(originalMethod, swizzledMethod)
-    body()
-    method_exchangeImplementations(swizzledMethod, originalMethod)
-}
-
-private let dummy = [CLLocation(latitude: 0, longitude: 0)!, CLLocation(latitude: 10, longitude: 20)!]
+private let dummy = [CLLocation(latitude: 0, longitude: 0), CLLocation(latitude: 10, longitude: 20)]
+private let dummyPlacemark = CLPlacemark()
 
 extension CLLocationManager {
     @objc func pmk_startUpdatingLocation() {
-        delegate!.locationManager?(self, didUpdateLocations: dummy)
+        after(0.1).then {
+            self.delegate!.locationManager?(self, didUpdateLocations: dummy)
+        }
     }
 
-    #if os(iOS)
+#if os(iOS)
     @objc func pmk_requestWhenInUseAuthorization() {
-        delegate!.locationManager?(self, didChangeAuthorizationStatus: .AuthorizedWhenInUse)
+        after(0.1).then {
+            self.delegate!.locationManager?(self, didChangeAuthorizationStatus: .AuthorizedWhenInUse)
+        }
     }
 
     class func pmk_authorizationStatus() -> CLAuthorizationStatus {
         return .NotDetermined
     }
-    #endif
+#endif
 }

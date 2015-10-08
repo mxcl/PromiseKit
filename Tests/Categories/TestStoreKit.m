@@ -4,10 +4,8 @@
 @import Stubbilino;
 @import XCTest;
 
-@interface TestSKProductsRequestM: XCTestCase
-@end
+@implementation Test_SKProductsRequest_ObjC: XCTestCase
 
-@implementation TestSKProductsRequestM
 - (void)test {
     id ex = [self expectationWithDescription:@""];
     SKProductsRequest *rq = [SKProductsRequest new];

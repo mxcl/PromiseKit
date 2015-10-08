@@ -6,25 +6,23 @@ class Test234: XCTestCase {
 
     // 2.3.4: If `x` is not an object or function, fulfill `promise` with `x`
 
-    func test234() {
-        suiteFulfilled(1) { (promise1, exes, memo)->Void in
-            let promise2 = promise1.then { (a: Int)->Int in
+    func test1() {
+        testFulfilled { promise, exes, memo in
+            promise.then { value -> Int in
                 return 1
-            }
-
-            promise2.then { (a: Int)->Void in
-                XCTAssertEqual(a, 1)
+            }.then { value -> Void in
+                XCTAssertEqual(value, 1)
                 exes[0].fulfill()
             }
         }
+    }
 
-        suiteRejected(1) { (promise1, exes, memo)->Void in
-            let promise2 = promise1.recover { (a: NSError)->Promise<Int> in
-                return Promise(1)
-            }
-
-            promise2.then { (a: Int)->Void in
-                XCTAssertEqual(a, 1)
+    func test2() {
+        testRejected { promise, exes, memo in
+            promise.recover { _ -> Int in
+                return 1
+            }.then { value -> Void in
+                XCTAssertEqual(value, 1)
                 exes[0].fulfill()
             }
         }

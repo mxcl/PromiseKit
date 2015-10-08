@@ -1,156 +1,178 @@
 import PromiseKit
 import XCTest
 
+// describe: 2.2.3: If `onRejected` is a function
 
 class Test223: XCTestCase {
-    // 2.2.3: If `onRejected` is a function
+
+    // describe: 2.2.3.1: it must be called after `promise` is rejected,
+    // with `promise`’s rejection reason as its first argument
 
     func test2231() {
-        // 2.2.3.1: it must be called after `promise` is rejected,
-        // with `promise`’s rejection reason as its first argument
-        suiteRejected(1) { (promise, exes, memo) -> () in
-            promise.catch { error->() in
+        testRejected { promise, expectations, memo in
+            promise.error { error in
                 XCTAssertEqual(error, memo)
-                return exes[0].fulfill()
+                expectations[0].fulfill()
             }
-            return
         }
     }
+}
 
-    func test22321() {
-        // 2.2.3.2: it must not be called before `promise` is fulfilled
+class Test2232: XCTestCase {
+
+    // describe: 2.2.3.2: it must not be called before `promise` is rejected
+
+    func test1() {
+
+        // specify: rejected after a delay
 
         let expectation = expectationWithDescription("rejected after a delay")
-        let (promise, _, rejecter) = Promise<Int>.defer()
+        let (promise, _, reject) = Promise<Int>.pendingPromise()
         var isRejected = false
 
-        promise.catch { _->() in
+        promise.error { _ in
             XCTAssertTrue(isRejected)
             expectation.fulfill()
         }
         later {
-            rejecter(dammy)
+            reject(Error.Dummy)
             isRejected = true
         }
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func test22322() {
-        let expectation = expectationWithDescription("never rejected")
-        let (promise, _, rejecter) = Promise<Int>.defer()
-        var onRejectedCalled = false
+    func test2() {
 
-        promise.catch { _->() in
-            onRejectedCalled = true
-            expectation.fulfill()
+        // specify: never rejected
+
+        class TestPromise : Promise<Void> {
+            deinit {
+                XCTAssertFalse(rejected)
+            }
+        }
+
+        let expectation = expectationWithDescription("")
+        let (promise, _, _) = TestPromise.pendingPromise()
+
+        promise.error { _ in
+            XCTFail()
         }
         later {
-            XCTAssertFalse(onRejectedCalled)
             expectation.fulfill()
         }
         waitForExpectationsWithTimeout(1, handler: nil)
     }
+}
 
-    func test22331() {
-        // 2.2.3.3: it must not be called more than once.
-        // already-rejected
-        var timesCalled = 0
-        Promise(dammy).catch { _ in
-            XCTAssertEqual(++timesCalled, 1)
-        }
-    }
+class Test2233: XCTestCase {
 
-    func test22332() {
-        // trying to reject a pending promise more than once, immediately
-        let (promise, _, rejecter) = Promise<Int>.defer()
-        var timesCalled = 0
-        promise.catch { _->() in
-            XCTAssertEqual(++timesCalled, 1)
-        }
-        rejecter(dammy)
-        rejecter(dammy)
-    }
+    // describe 2.2.3.3: it must not be called more than once.
 
-    func test22333() {
-        let (promise, _, rejecter) = Promise<Int>.defer()
-        var timesCalled = 0
-        let expectation = expectationWithDescription("trying to reject a pending promise more than once, delayed")
+    func test1() {
 
-        promise.catch { _->() in
-            XCTAssertEqual(++timesCalled, 1)
-            expectation.fulfill()
+        // specify: already-rejected
+
+        let ex = expectationWithDescription("")
+
+        let p: Promise<Void> = Promise(error: Error.Dummy)
+        p.error { _ in
+            ex.fulfill()
         }
-        later {
-            rejecter(dammy)
-            rejecter(dammy)
-        }
+
+        later(4, expectationWithDescription("").fulfill)
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func test22334() {
-        let (promise, _, rejecter) = Promise<Int>.defer()
-        var timesCalled = 0
-        let expectation = expectationWithDescription("trying to fulfill a pending promise more than once, immediately then delayed")
+    func test2() {
 
-        promise.catch { _->() in
-            XCTAssertEqual(++timesCalled, 1)
-            expectation.fulfill()
-        }
-        rejecter(dammy)
-        later {
-            rejecter(dammy)
-        }
+        // specify: trying to reject a pending promise more than once, immediately
+
+        let ex = expectationWithDescription("")
+        let (promise, _, reject) = Promise<Void>.pendingPromise()
+
+        promise.error { _ in ex.fulfill() }
+
+        reject(Error.Dummy)
+        reject(Error.Dummy)
+
+        later(4, expectationWithDescription("").fulfill)
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func test22335() {
-        let (promise, _, rejecter) = Promise<Int>.defer()
-        var timesCalled = [0, 0, 0]
+    func test3() {
+
+        // specify: trying to reject a pending promise more than once, delayed
+
+        let ex = expectationWithDescription("")
+        let (promise, _, reject) = Promise<Void>.pendingPromise()
+
+        promise.error { _ in ex.fulfill() }
+
+        later {
+            reject(Error.Dummy)
+            reject(Error.Dummy)
+        }
+
+        later(4, expectationWithDescription("").fulfill)
+        waitForExpectationsWithTimeout(1, handler: nil)
+    }
+
+    func test4() {
+
+        // specify: trying to reject a pending promise more than once, immediately then delayed
+
+        let ex = expectationWithDescription("")
+        let (promise, _, reject) = Promise<Void>.pendingPromise()
+
+        promise.error { _ in ex.fulfill() }
+
+        reject(Error.Dummy)
+        later { reject(Error.Dummy) }
+
+        later(4, expectationWithDescription("").fulfill)
+        waitForExpectationsWithTimeout(1, handler: nil)
+    }
+
+    func test5() {
+
+        // when multiple `then` calls are made, spaced apart in time
+
+        let (promise, _, reject) = Promise<Void>.pendingPromise()
+
         let desc = "when multiple `then` calls are made, spaced apart in time"
         let e1 = expectationWithDescription(desc)
         let e2 = expectationWithDescription(desc)
         let e3 = expectationWithDescription(desc)
 
-        promise.catch { _->() in
-            XCTAssertEqual(++timesCalled[0], 1)
-            e1.fulfill()
+        promise.error { _ in e1.fulfill() }
+
+        later(1) {
+            promise.error { _ in e2.fulfill() }
         }
-        later(50.0) {
-            promise.catch { _->() in
-                XCTAssertEqual(++timesCalled[1], 1)
-                e2.fulfill()
-            }
-            return
+        later(2) {
+            promise.error { _ in e3.fulfill() }
         }
-        later(100.0) {
-            promise.catch { _->() in
-                XCTAssertEqual(++timesCalled[2], 1)
-                e3.fulfill()
-            }
-            return
+        later(3) {
+            reject(Error.Dummy)
         }
-        later(150) {
-            rejecter(dammy)
-        }
+
+        later(4, expectationWithDescription("").fulfill)
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func test2234() {
-        let (promise, _, rejecter) = Promise<Int>.defer()
-        var timesCalled = [0, 0]
-        let expectation = expectationWithDescription("when `then` is interleaved with fulfillment")
+    func test6() {
 
-        promise.catch { _->() in
-            XCTAssertEqual(++timesCalled[0], 1)
-        }
+        // specify: when `then` is interleaved with rejection
 
-        rejecter(dammy)
+        let (promise, _, reject) = Promise<Void>.pendingPromise()
+        let e1 = expectationWithDescription("")
+        let e2 = expectationWithDescription("")
 
-        promise.catch { _->() in
-            XCTAssertEqual(++timesCalled[1], 1)
-            expectation.fulfill()
-        }
+        promise.error { _ in e1.fulfill() }
+        reject(Error.Dummy)
+        promise.error { _ in e2.fulfill() }
 
+        later(4, expectationWithDescription("").fulfill)
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 }

@@ -3,7 +3,6 @@
 #import <Foundation/NSObject.h>
 #import <PromiseKit/AnyPromise.h>
 #import <PromiseKit/NSError+Cancellation.h>
-#import <PromiseKit/PMKPromise.h>
 #import <PromiseKit/Umbrella.h>
 
 
@@ -62,11 +61,19 @@ extern AnyPromise * __nonnull PMKWhen(id __nonnull input);
 
  For example:
 
-    PMKJoin(@[promise1, promise2]).then(^(NSArray *results, NSArray *values, NSArray *errors){
+    PMKJoin(@[promise1, promise2]).then(^(NSArray *resultingValues){
         //…
-    });
+    }).catch(^(NSError *error){
+        assert(error.domain == PMKErrorDomain);
+        assert(error.code == PMKJoinError);
 
- @warning *Important* This promise is not rejectable. Thus it is up to you to propogate an error if you want any subsequent chain to continue being rejected.
+        NSArray *promises = error.userInfo[PMKJoinPromisesKey];
+        for (AnyPromise *promise in promises) {
+            if (promise.rejected) {
+                //…
+            }
+        }
+    });
 
  @param promises An array of promises.
 
@@ -94,33 +101,6 @@ AnyPromise *__nonnull PMKJoin(NSArray * __nonnull promises);
  @warning T SAFE. IT IS NOT SAFE. IT IS NOT SAFE. IT IS NOT SAFE. IT IS NO
 */
 extern id __nullable PMKHang(AnyPromise * __nonnull promise);
-
-
-
-/**
- Sets the unhandled error handler.
-
- If a promise is rejected and no catch handler is called in its chain, the
- provided handler is called. The default handler logs the error.
-
-    PMKSetUnhandledErrorHandler(^(NSError *error){
-        NSLog(@"Unhandled error: %@", error);
-    });
-
- @warning *Important* The handler is executed on an undefined queue.
- 
- @warning *Important* Don’t use promises in your handler, or you risk an
- infinite error loop.
- 
- @warning *Important* This function is totally not thread-safe and if
- some promise is already executing when you set this the results are
- undefined (though safe if you are programming safely because either
- your handler or the previous handler will be called). So do this at
- application startup and *NOWHERE ELSE!*
-
- @return The previous unhandled error handler.
-*/
-extern id __nonnull PMKSetUnhandledErrorHandler(void (^__nonnull handler)(NSError * __nonnull));
 
 
 
@@ -197,9 +177,9 @@ extern AnyPromise * __nonnull dispatch_promise_on(dispatch_queue_t __nonnull que
 
 /**
  Really we shouldn’t assume JSON for (application|text)/(x-)javascript,
- really we should return a String *of* JavaScript. However in practice
+ really we should return a String of Javascript. However in practice
  for the apps we write it *will be* JSON. Thus if you actually want
- a JavaScript String, use the promise variant of our category functions.
+ a Javascript String, use the promise variant of our category functions.
 */
 #define PMKHTTPURLResponseIsJSON(rsp) [@[@"application/json", @"text/json", @"text/javascript", @"application/x-javascript", @"application/javascript"] containsObject:[rsp MIMEType]]
 #define PMKHTTPURLResponseIsImage(rsp) [@[@"image/tiff", @"image/jpeg", @"image/gif", @"image/png", @"image/ico", @"image/x-icon", @"image/bmp", @"image/x-bmp", @"image/x-xbitmap", @"image/x-win-bitmap"] containsObject:[rsp MIMEType]]

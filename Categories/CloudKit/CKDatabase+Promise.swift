@@ -1,5 +1,7 @@
 import CloudKit.CKDatabase
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 /**
  To import the `CKDatabase` category:
@@ -13,57 +15,57 @@ import PromiseKit
 */
 extension CKDatabase {
     public func fetchRecordWithID(recordID: CKRecordID) -> Promise<CKRecord> {
-        return Promise { fetchRecordWithID(recordID, completionHandler: $0.resolve) }
+        return Promise { fetchRecordWithID(recordID, completionHandler: $0) }
     }
 
     public func fetchRecordZoneWithID(recordZoneID: CKRecordZoneID) -> Promise<CKRecordZone> {
-        return Promise { fetchRecordZoneWithID(recordZoneID, completionHandler: $0.resolve) }
+        return Promise { fetchRecordZoneWithID(recordZoneID, completionHandler: $0) }
     }
 
     public func fetchSubscriptionWithID(subscriptionID: String) -> Promise<CKSubscription> {
-        return Promise { fetchSubscriptionWithID(subscriptionID, completionHandler: $0.resolve) }
+        return Promise { fetchSubscriptionWithID(subscriptionID, completionHandler: $0) }
     }
 
     public func fetchAllRecordZones() -> Promise<[CKRecordZone]> {
-        return Promise<[AnyObject]> { fetchAllRecordZonesWithCompletionHandler($0.resolve) }.then(on: zalgo) { $0 as! [CKRecordZone] }
+        return Promise { fetchAllRecordZonesWithCompletionHandler($0) }
     }
 
     public func fetchAllSubscriptions() -> Promise<[CKSubscription]> {
-        return Promise<[AnyObject]> { fetchAllSubscriptionsWithCompletionHandler($0.resolve) }.then(on: zalgo) { $0 as! [CKSubscription] }
+        return Promise { fetchAllSubscriptionsWithCompletionHandler($0) }
     }
 
     public func save(record: CKRecord) -> Promise<CKRecord> {
-        return Promise { saveRecord(record, completionHandler: $0.resolve) }
+        return Promise { saveRecord(record, completionHandler: $0) }
     }
 
     public func save(recordZone: CKRecordZone) -> Promise<CKRecordZone> {
-        return Promise { saveRecordZone(recordZone, completionHandler: $0.resolve) }
+        return Promise { saveRecordZone(recordZone, completionHandler: $0) }
     }
 
     public func save(subscription: CKSubscription) -> Promise<CKSubscription> {
-        return Promise { saveSubscription(subscription, completionHandler: $0.resolve) }
+        return Promise { saveSubscription(subscription, completionHandler: $0) }
     }
 
     public func deleteRecordWithID(recordID: CKRecordID) -> Promise<CKRecordID> {
-        return Promise { deleteRecordWithID(recordID, completionHandler: $0.resolve) }
+        return Promise { deleteRecordWithID(recordID, completionHandler: $0) }
     }
 
     public func deleteRecordZoneWithID(zoneID: CKRecordZoneID) -> Promise<CKRecordZoneID> {
-        return Promise { deleteRecordZoneWithID(zoneID, completionHandler: $0.resolve) }
+        return Promise { deleteRecordZoneWithID(zoneID, completionHandler: $0) }
     }
 
     public func deleteSubscriptionWithID(subscriptionID: String) -> Promise<String> {
-        return Promise { deleteSubscriptionWithID(subscriptionID, completionHandler: $0.resolve) }
+        return Promise { deleteSubscriptionWithID(subscriptionID, completionHandler: $0) }
     }
 
     public func performQuery(query: CKQuery, inZoneWithID zoneID: CKRecordZoneID? = nil) -> Promise<[CKRecord]> {
-        return Promise<[AnyObject]> { performQuery(query, inZoneWithID: zoneID, completionHandler: $0.resolve) }.then(on: zalgo) { $0 as! [CKRecord] }
+        return Promise { performQuery(query, inZoneWithID: zoneID, completionHandler: $0) }
     }
 
     public func performQuery(query: CKQuery, inZoneWithID zoneID: CKRecordZoneID? = nil) -> Promise<CKRecord?> {
-        return Promise { sealant in
+        return Promise { resolve in
             performQuery(query, inZoneWithID: zoneID) { records, error in
-                sealant.resolve((records as? [CKRecord])?.first, error)
+                resolve(records?.first, error)
             }
         }
     }

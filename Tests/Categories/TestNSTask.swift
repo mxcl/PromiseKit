@@ -2,7 +2,7 @@ import Foundation
 import PromiseKit
 import XCTest
 
-class TestNSTask: XCTestCase {
+class Test_NSTask_Swift: XCTestCase {
     func test1() {
         let ex = expectationWithDescription("")
         let task = NSTask()
@@ -25,16 +25,16 @@ class TestNSTask: XCTestCase {
 
         task.promise().then { (stdout: String, stderr: String, exitStatus: Int) -> Void in
             XCTFail()
-            }.catch { err in
-                let userInfo = err.userInfo!
+        }.error { err in
+            if case NSTask.Error.Execution(let info) = err {
                 let expectedStderrData = "ls: \(dir): No such file or directory\n".dataUsingEncoding(NSUTF8StringEncoding, allowLossyConversion: false)!
 
-                XCTAssertEqual(userInfo[PMKTaskErrorLaunchPathKey] as! String, task.launchPath)
-                XCTAssertEqual(userInfo[PMKTaskErrorArgumentsKey] as! [String], task.arguments as! [String])
-                XCTAssertEqual(userInfo[PMKTaskErrorStandardErrorKey] as! NSData, expectedStderrData)
-                XCTAssertEqual(userInfo[PMKTaskErrorExitStatusKey] as! Int, 1)
-                XCTAssertEqual((userInfo[PMKTaskErrorStandardOutputKey] as! NSData).length, 0)
+                XCTAssertEqual(info.task, task)
+                XCTAssertEqual(info.stderr, expectedStderrData)
+                XCTAssertEqual(info.task.terminationStatus, 1)
+                XCTAssertEqual(info.stdout.length, 0)
                 ex.fulfill()
+            }
         }
         waitForExpectationsWithTimeout(10, handler: nil)
     }

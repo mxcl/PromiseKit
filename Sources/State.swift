@@ -1,44 +1,44 @@
-import Foundation.NSError
+import Dispatch
+import Foundation  // NSLog
 
-enum Resolution {
-    case Fulfilled(Any)    //TODO make type T when Swift can handle it
-    case Rejected(NSError)
+enum Seal<R> {
+    case Pending(Handlers<R>)
+    case Resolved(R)
 }
 
-enum Seal {
-    case Pending(Handlers)
-    case Resolved(Resolution)
+enum Resolution<T> {
+    case Fulfilled(T)
+    case Rejected(ErrorType, ErrorConsumptionToken)
 }
 
-protocol State {
-    func get() -> Resolution?
-    func get(body: (Seal) -> Void)
+// would be a protocol, but you can't have typed variables of “generic”
+// protocols in Swift 2. That is, I couldn’t do var state: State<R> when
+// it was a protocol. There is no work around.
+class State<R> {
+    func get() -> R? { fatalError("Abstract Base Class") }
+    func get(body: (Seal<R>) -> Void) { fatalError("Abstract Base Class") }
 }
 
-class UnsealedState: State {
+class UnsealedState<R>: State<R> {
     private let barrier = dispatch_queue_create("org.promisekit.barrier", DISPATCH_QUEUE_CONCURRENT)
-    private var seal: Seal
+    private var seal: Seal<R>
 
     /**
-     Quick return, but will not provide the handlers array
-     because it could be modified while you are using it by
-     another thread. If you need the handlers, use the second
-     `get` variant.
+     Quick return, but will not provide the handlers array because
+     it could be modified while you are using it by another thread.
+     If you need the handlers, use the second `get` variant.
     */
-    func get() -> Resolution? {
-        var result: Resolution?
+    override func get() -> R? {
+        var result: R?
         dispatch_sync(barrier) {
-            switch self.seal {
-            case .Resolved(let resolution):
+            if case .Resolved(let resolution) = self.seal {
                 result = resolution
-            case .Pending:
-                break
             }
         }
         return result
     }
 
-    func get(body: (Seal) -> Void) {
+    override func get(body: (Seal<R>) -> Void) {
         var sealed = false
         dispatch_sync(barrier) {
             switch self.seal {
@@ -63,17 +63,15 @@ class UnsealedState: State {
         }
     }
 
-    init(inout resolver: ((Resolution) -> Void)!) {
-        seal = .Pending(Handlers())
+    required init(inout resolver: ((R) -> Void)!) {
+        seal = .Pending(Handlers<R>())
+        super.init()
         resolver = { resolution in
-            var handlers: Handlers?
+            var handlers: Handlers<R>?
             dispatch_barrier_sync(self.barrier) {
-                switch self.seal {
-                case .Pending(let hh):
+                if case .Pending(let hh) = self.seal {
                     self.seal = .Resolved(resolution)
                     handlers = hh
-                case .Resolved:
-                    break
                 }
             }
             if let handlers = handlers {
@@ -83,32 +81,39 @@ class UnsealedState: State {
             }
         }
     }
+
+    deinit {
+        if case .Pending = seal {
+            NSLog("PromiseKit: Pending Promise deallocated! This is usually a bug")
+        }
+    }
 }
 
-class SealedState: State {
-    private let resolution: Resolution
+class SealedState<R>: State<R> {
+    private let resolution: R
     
-    init(resolution: Resolution) {
+    init(resolution: R) {
         self.resolution = resolution
     }
     
-    func get() -> Resolution? {
+    override func get() -> R? {
         return resolution
     }
-    func get(body: (Seal) -> Void) {
+
+    override func get(body: (Seal<R>) -> Void) {
         body(.Resolved(resolution))
     }
 }
 
 
-class Handlers: SequenceType {
-    var bodies: [(Resolution)->()] = []
+class Handlers<R>: SequenceType {
+    var bodies: [(R)->Void] = []
 
-    func append(body: (Resolution)->()) {
+    func append(body: (R)->Void) {
         bodies.append(body)
     }
 
-    func generate() -> IndexingGenerator<[(Resolution)->()]> {
+    func generate() -> IndexingGenerator<[(R)->Void]> {
         return bodies.generate()
     }
 
@@ -118,20 +123,20 @@ class Handlers: SequenceType {
 }
 
 
-extension Resolution: DebugPrintable {
-    var debugDescription: String {
+extension Resolution: CustomStringConvertible {
+    var description: String {
         switch self {
-        case Fulfilled(let value):
+        case .Fulfilled(let value):
             return "Fulfilled with value: \(value)"
-        case Rejected(let error):
+        case .Rejected(let error):
             return "Rejected with error: \(error)"
         }
     }
 }
 
-extension UnsealedState: DebugPrintable {
-    var debugDescription: String {
-        var rv: String?
+extension UnsealedState: CustomStringConvertible {
+    var description: String {
+        var rv: String!
         get { seal in
             switch seal {
             case .Pending(let handlers):
@@ -140,12 +145,12 @@ extension UnsealedState: DebugPrintable {
                 rv = "\(resolution)"
             }
         }
-        return "UnsealedState: \(rv!)"
+        return "UnsealedState: \(rv)"
     }
 }
 
-extension SealedState: DebugPrintable {
-    var debugDescription: String {
+extension SealedState: CustomStringConvertible {
+    var description: String {
         return "SealedState: \(resolution)"
     }
 }

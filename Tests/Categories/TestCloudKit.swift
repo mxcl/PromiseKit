@@ -12,7 +12,7 @@ class Test_CKContainer_Swift: XCTestCase {
             init(_: Bool = false)
             {}
 
-            private override func accountStatusWithCompletionHandler(completionHandler: ((CKAccountStatus, NSError!) -> Void)!) {
+            private override func accountStatusWithCompletionHandler(completionHandler: (CKAccountStatus, NSError?) -> Void) {
                 completionHandler(.CouldNotDetermine, nil)
             }
         }
@@ -30,13 +30,13 @@ class Test_CKContainer_Swift: XCTestCase {
             init(_: Bool = false)
             {}
 
-            private override func requestApplicationPermission(applicationPermission: CKApplicationPermissions, completionHandler: CKApplicationPermissionBlock!) {
+            private override func requestApplicationPermission(applicationPermission: CKApplicationPermissions, completionHandler: CKApplicationPermissionBlock) {
                 completionHandler(.Granted, nil)
             }
         }
 
         let ex = expectationWithDescription("")
-        let pp = CKApplicationPermissions.PermissionUserDiscoverability
+        let pp = CKApplicationPermissions.UserDiscoverability
         MockContainer().requestApplicationPermission(pp).then { perms -> Void in
             XCTAssertEqual(perms, CKApplicationPermissionStatus.Granted)
             ex.fulfill()
@@ -49,13 +49,13 @@ class Test_CKContainer_Swift: XCTestCase {
             init(_: Bool = false)
             {}
 
-            private override func statusForApplicationPermission(applicationPermission: CKApplicationPermissions, completionHandler: CKApplicationPermissionBlock!) {
+            private override func statusForApplicationPermission(applicationPermission: CKApplicationPermissions, completionHandler: CKApplicationPermissionBlock) {
                 completionHandler(.Granted, nil)
             }
         }
 
         let ex = expectationWithDescription("")
-        let pp = CKApplicationPermissions.PermissionUserDiscoverability
+        let pp = CKApplicationPermissions.UserDiscoverability
         MockContainer().statusForApplicationPermission(pp).then {
             XCTAssertEqual($0, CKApplicationPermissionStatus.Granted)
         }.then(ex.fulfill)
@@ -67,7 +67,7 @@ class Test_CKContainer_Swift: XCTestCase {
             init(_: Bool = false)
             {}
 
-            private override func discoverAllContactUserInfosWithCompletionHandler(completionHandler: (([AnyObject]!, NSError!) -> Void)!) {
+            private override func discoverAllContactUserInfosWithCompletionHandler(completionHandler: ([CKDiscoveredUserInfo]?, NSError?) -> Void) {
                 completionHandler([PMKDiscoveredUserInfo()], nil)
             }
         }
@@ -84,7 +84,7 @@ class Test_CKContainer_Swift: XCTestCase {
             init(_: Bool = false)
             {}
 
-            private override func discoverUserInfoWithEmailAddress(email: String!, completionHandler: ((CKDiscoveredUserInfo!, NSError!) -> Void)!) {
+            private override func discoverUserInfoWithEmailAddress(email: String, completionHandler: (CKDiscoveredUserInfo?, NSError?) -> Void) {
                 completionHandler(PMKDiscoveredUserInfo(), nil)
             }
         }
@@ -101,7 +101,7 @@ class Test_CKContainer_Swift: XCTestCase {
             init(_: Bool = false)
             {}
 
-            private override func discoverUserInfoWithUserRecordID(userRecordID: CKRecordID!, completionHandler: ((CKDiscoveredUserInfo!, NSError!) -> Void)!) {
+            private override func discoverUserInfoWithUserRecordID(userRecordID: CKRecordID, completionHandler: (CKDiscoveredUserInfo?, NSError?) -> Void) {
                 completionHandler(PMKDiscoveredUserInfo(), nil)
             }
         }
@@ -118,7 +118,7 @@ class Test_CKContainer_Swift: XCTestCase {
             init(_: Bool = false)
             {}
 
-            private override func fetchUserRecordIDWithCompletionHandler(completionHandler: ((CKRecordID!, NSError!) -> Void)!) {
+            private override func fetchUserRecordIDWithCompletionHandler(completionHandler: (CKRecordID?, NSError?) -> Void) {
                 completionHandler(dummy(), nil)
             }
         }

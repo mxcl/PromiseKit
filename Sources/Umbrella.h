@@ -11,6 +11,7 @@ extern NSString * const PMKErrorDomain;
 #define PMKURLErrorFailingDataKey @"PMKURLErrorFailingDataKey"
 #define PMKURLErrorFailingStringKey @"PMKURLErrorFailingStringKey"
 #define PMKJSONErrorJSONObjectKey @"PMKJSONErrorJSONObjectKey"
+#define PMKJoinPromisesKey @"PMKJoinPromisesKey"
 
 #define PMKUnexpectedError 1l
 #define PMKUnknownError 2l
@@ -21,18 +22,9 @@ extern NSString * const PMKErrorDomain;
 #define PMKJSONError 7l
 #define PMKOperationFailed 8l
 #define PMKTaskError 9l
+#define PMKJoinError 10l
 
-#define PMKTaskErrorLaunchPathKey @"PMKTaskErrorLaunchPathKey"
-#define PMKTaskErrorArgumentsKey @"PMKTaskErrorArgumentsKey"
-#define PMKTaskErrorStandardOutputKey @"PMKTaskErrorStandardOutputKey"
-#define PMKTaskErrorStandardErrorKey @"PMKTaskErrorStandardErrorKey"
-#define PMKTaskErrorExitStatusKey @"PMKTaskErrorExitStatusKey"
-
-
-#if defined(PMKEZBake) && defined(SWIFT_CLASS)
-    // https://github.com/PromiseKit/EZiOS7/issues/2
-    #define AnyPromise PMKPromise
-#else
+#if !(defined(PMKEZBake) && defined(SWIFT_CLASS))
     #if !defined(SWIFT_PASTE)
     # define SWIFT_PASTE_HELPER(x, y) x##y
     # define SWIFT_PASTE(x, y) SWIFT_PASTE_HELPER(x, y)
@@ -57,13 +49,11 @@ extern NSString * const PMKErrorDomain;
     # endif
     #endif
 
-    SWIFT_CLASS("PMKAnyPromise")
-    @interface PMKPromise : NSObject
+    SWIFT_CLASS("AnyPromise")
+    @interface AnyPromise : NSObject
     @property (nonatomic, readonly) BOOL pending;
     @property (nonatomic, readonly) BOOL resolved;
     @property (nonatomic, readonly) BOOL fulfilled;
     @property (nonatomic, readonly) BOOL rejected;
     @end
-
-    @compatibility_alias AnyPromise PMKPromise;
 #endif

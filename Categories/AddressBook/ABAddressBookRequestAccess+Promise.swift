@@ -1,7 +1,26 @@
 import AddressBook
 import CoreFoundation
 import Foundation.NSError
+#if !COCOAPODS
 import PromiseKit
+#endif
+
+public enum AddressBookError: ErrorType {
+    case NotDetermined
+    case Restricted
+    case Denied
+
+    public var localizedDescription: String {
+        switch self {
+        case .NotDetermined:
+            return "Access to the address book could not be determined."
+        case .Restricted:
+            return "A head of family must grant address book access."
+        case .Denied:
+            return "Address book access has been denied."
+        }
+    }
+}
 
 /**
  Requests access to the address book.
@@ -38,20 +57,20 @@ public func ABAddressBookRequestAccess() -> Promise<ABAuthorizationStatus> {
 */
 public func ABAddressBookRequestAccess() -> Promise<ABAddressBook> {
     return ABAddressBookRequestAccess().then(on: zalgo) { (granted, book) -> Promise<ABAddressBook> in
-        if granted {
-            return Promise(book)
-        } else {
+        guard granted else {
             switch ABAddressBookGetAuthorizationStatus() {
             case .NotDetermined:
-                return Promise(error: "Access to the address book could not be determined.")
+                throw AddressBookError.NotDetermined
             case .Restricted:
-                return Promise(error: "A head of family must grant address book access.")
+                throw AddressBookError.Restricted
             case .Denied:
-                return Promise(error: "Address book access has been denied.")
+                throw AddressBookError.Denied
             case .Authorized:
-                return Promise(book)  // shouldn’t be possible
+                fatalError("This should not happen")
             }
         }
+
+        return Promise(book)
     }
 }
 
@@ -66,19 +85,18 @@ extension NSError {
 
 private func ABAddressBookRequestAccess() -> Promise<(Bool, ABAddressBook)> {
     var error: Unmanaged<CFError>? = nil
-    let ubook = ABAddressBookCreateWithOptions(nil, &error)
-    if ubook != nil {
-        let book: ABAddressBook = ubook.takeRetainedValue()
-        return Promise { fulfill, reject in
-            ABAddressBookRequestAccessWithCompletion(book) { granted, error in
-                if error == nil {
-                    fulfill(granted, book)
-                } else {
-                    reject(NSError(CFError: error))
-                }
+    guard let ubook = ABAddressBookCreateWithOptions(nil, &error) else {
+        return Promise(error: NSError(CFError: error!.takeRetainedValue()))
+    }
+
+    let book: ABAddressBook = ubook.takeRetainedValue()
+    return Promise { fulfill, reject in
+        ABAddressBookRequestAccessWithCompletion(book) { granted, error in
+            if error == nil {
+                fulfill(granted, book)
+            } else {
+                reject(NSError(CFError: error))
             }
         }
-    } else {
-        return Promise(NSError(CFError: error!.takeRetainedValue()))
     }
 }
