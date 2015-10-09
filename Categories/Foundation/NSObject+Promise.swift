@@ -1,5 +1,7 @@
 import Foundation
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 /**
  To import the `NSObject` category:
@@ -25,8 +27,8 @@ extension NSObject {
       @see Apple’s KVO documentation.
     */
     public func observe<T>(keyPath: String) -> Promise<T> {
-        let (promise, fulfill, reject) = Promise<T>.defer()
-        KVOProxy(observee: self, keyPath: keyPath) { obj in
+        let (promise, fulfill, reject) = Promise<T>.pendingPromise()
+        let proxy = KVOProxy(observee: self, keyPath: keyPath) { obj in
             if let obj = obj as? T {
                 fulfill(obj)
             } else {
@@ -34,6 +36,7 @@ extension NSObject {
                 reject(NSError(domain: PMKErrorDomain, code: PMKInvalidUsageError, userInfo: info))
             }
         }
+        proxy.retainCycle = proxy
         return promise
     }
 }
@@ -45,19 +48,20 @@ private class KVOProxy: NSObject {
     init(observee: NSObject, keyPath: String, resolve: (AnyObject?) -> Void) {
         fulfill = resolve
         super.init()
-        retainCycle = self
         observee.addObserver(self, forKeyPath: keyPath, options: NSKeyValueObservingOptions.New, context: pointer)
     }
 
-    override func observeValueForKeyPath(keyPath: String, ofObject object: AnyObject, change: [NSObject : AnyObject], context: UnsafeMutablePointer<Void>) {
-        if context == pointer {
+    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+        if let change = change where context == pointer {
+            defer { retainCycle = nil }
             fulfill(change[NSKeyValueChangeNewKey])
-            object.removeObserver(self, forKeyPath: keyPath)
-            retainCycle = nil
+            if let object = object, keyPath = keyPath {
+                object.removeObserver(self, forKeyPath: keyPath)
+            }
         }
     }
 
-    private lazy var pointer: UnsafeMutablePointer<KVOProxy> = {
-        return UnsafeMutablePointer<KVOProxy>(Unmanaged<KVOProxy>.passUnretained(self).toOpaque())
+    private lazy var pointer: UnsafeMutablePointer<Void> = {
+        return UnsafeMutablePointer<Void>(Unmanaged<KVOProxy>.passUnretained(self).toOpaque())
     }()
 }

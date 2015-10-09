@@ -1,6 +1,8 @@
 import AssetsLibrary
 import Foundation.NSData
+#if !COCOAPODS
 import PromiseKit
+#endif
 import UIKit.UIViewController
 
 /**
@@ -27,18 +29,21 @@ extension UIViewController {
         return proxy.promise.then(on: zalgo) { info -> Promise<NSData> in
             let url = info[UIImagePickerControllerReferenceURL] as! NSURL
             
-            return Promise { sealant in
+            return Promise { fulfill, reject in
                 ALAssetsLibrary().assetForURL(url, resultBlock: { asset in
                     let N = Int(asset.defaultRepresentation().size())
                     let bytes = UnsafeMutablePointer<UInt8>.alloc(N)
                     var error: NSError?
                     asset.defaultRepresentation().getBytes(bytes, fromOffset: 0, length: N, error: &error)
-                    
-                    sealant.resolve(NSData(bytesNoCopy: bytes, length: N), error as NSError!)
-                    
-                }, failureBlock: sealant.resolve)
+
+                    if let error = error {
+                        reject(error)
+                    } else {
+                        fulfill(NSData(bytesNoCopy: bytes, length: N))
+                    }
+                }, failureBlock: { reject($0) } )
             }
-        }.finally {
+        }.always {
             self.dismissViewControllerAnimated(animated, completion: nil)
         }
     }

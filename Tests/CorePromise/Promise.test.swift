@@ -1,7 +1,7 @@
 import PromiseKit
 import XCTest
 
-class TestPromise: XCTestCase {
+class PromiseTestCase: XCTestCase {
     override func tearDown() {
         PMKUnhandledErrorHandler = { _ in }
     }
@@ -12,7 +12,7 @@ class TestPromise: XCTestCase {
         Promise(1).then { _ -> AnyPromise in
             return AnyPromise(bound: after(0).then{ 1 })
         }.then { x -> Void in
-            XCTAssertEqual(x as! Int, 1)
+            XCTAssertEqual(x as? Int, 1)
             ex.fulfill()
         }
         waitForExpectationsWithTimeout(1, handler: nil)
@@ -21,9 +21,11 @@ class TestPromise: XCTestCase {
     // can return AnyPromise (that rejects) in then handler
     func test2() {
         let ex = expectationWithDescription("")
+
         Promise(1).then { _ -> AnyPromise in
-            return AnyPromise(bound: after(0).then{ Promise<Int>(error: "") })
-        }.catch { err -> Void in
+            let promise = after(0.1).then{ throw NSError(domain: "a", code: 1, userInfo: nil) }
+            return AnyPromise(bound: promise)
+        }.error { err in
             ex.fulfill()
         }
         waitForExpectationsWithTimeout(1, handler: nil)
@@ -38,7 +40,7 @@ class TestPromise: XCTestCase {
                 XCTAssertEqual("ok", s)
                 return
             }
-            }, fulfill: { "ok" })
+        }, fulfill: { "ok" })
 
         waitForExpectationsWithTimeout(10, handler: nil)
     }
@@ -47,15 +49,15 @@ class TestPromise: XCTestCase {
         let ex1 = expectationWithDescription("")
 
         PMKUnhandledErrorHandler = { err in
-            XCTAssertTrue(err.cancelled);
+            XCTAssertTrue((err as NSError).cancelled);
             ex1.fulfill()
         }
 
-        after(0).then { _ -> Promise<Int> in
-            return Promise(NSError.cancelledError())
+        after(0).then { _ in
+            throw NSError(domain: PMKErrorDomain, code: PMKOperationCancelled, userInfo: nil)
         }.then { _ -> Void in
             XCTFail()
-        }.catch { _ -> Void in
+        }.error { _ -> Void in
             XCTFail()
         }
 
@@ -67,19 +69,19 @@ class TestPromise: XCTestCase {
         let ex2 = expectationWithDescription("")
 
         PMKUnhandledErrorHandler = { err in
-            XCTAssertTrue(err.cancelled);
+            XCTAssertTrue((err as NSError).cancelled);
             ex2.fulfill()
         }
 
-        after(0).then { _ -> Promise<Int> in
-            return Promise(NSError.cancelledError())
-        }.recover { err -> Promise<Int> in
+        after(0).then { _ in
+            throw NSError(domain: PMKErrorDomain, code: PMKOperationCancelled, userInfo: nil)
+        }.recover { err -> Void in
             ex1.fulfill()
-            XCTAssertTrue(err.cancelled)
-            return Promise(err)
+            XCTAssertTrue((err as NSError).cancelled)
+            throw err
         }.then { _ -> Void in
             XCTFail()
-        }.catch { _ -> Void in
+        }.error { _ -> Void in
             XCTFail()
         }
 
@@ -89,12 +91,12 @@ class TestPromise: XCTestCase {
     func testCatchCancellation() {
         let ex = expectationWithDescription("")
 
-        after(0).then { _ -> Promise<Int> in
-            return Promise(NSError.cancelledError())
-        }.catch(policy: .AllErrors) { _ -> Void in
+        after(0).then { _ in
+            throw NSError(domain: PMKErrorDomain, code: PMKOperationCancelled, userInfo: nil)
+        }.error(policy: .AllErrors) { err -> Void in
             ex.fulfill()
         }
-        
+
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
@@ -116,18 +118,5 @@ class TestPromise: XCTestCase {
             ex.fulfill()
         }
         waitForExpectationsWithTimeout(10, handler: nil)
-    }
-}
-
-
-@objc(PMKPromiseBridgeHelper) class PromiseBridgeHelper: NSObject {
-    override init() {
-        super.init()
-    }
-
-    @objc func bridge1() -> AnyPromise {
-        return AnyPromise(bound: dispatch_promise {
-            return 1
-        })
     }
 }

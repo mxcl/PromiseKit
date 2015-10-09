@@ -2,7 +2,7 @@ import PromiseKit
 import UIKit
 import XCTest
 
-class TestUIActionSheet: UIKitTestCase {
+class Test_UIActionSheet_Swift: UIKitTestCase {
     // fulfills with buttonIndex
     func test1() {
         let ex = expectationWithDescription("")
@@ -29,7 +29,9 @@ class TestUIActionSheet: UIKitTestCase {
         sheet.addButtonWithTitle("0")
         sheet.addButtonWithTitle("1")
         sheet.cancelButtonIndex = sheet.addButtonWithTitle("2")
-        sheet.promiseInView(rootvc.view).catch(policy: .AllErrors) { err in
+        sheet.promiseInView(rootvc.view).error(policy: .AllErrors) { err in
+            guard let err = err as? UIActionSheet.Error else { return XCTFail() }
+            XCTAssertTrue(err == UIActionSheet.Error.Cancelled)
             XCTAssertTrue(err.cancelled)
             ex.fulfill()
         }
@@ -60,7 +62,7 @@ class TestUIActionSheet: UIKitTestCase {
 
         let sheet = UIActionSheet()
         sheet.cancelButtonIndex = sheet.addButtonWithTitle("0")
-        sheet.promiseInView(rootvc.view).catch(policy: .AllErrors) { _ in
+        sheet.promiseInView(rootvc.view).error(policy: .AllErrors) { _ in
             ex.fulfill()
         }
         after(0.5).then {

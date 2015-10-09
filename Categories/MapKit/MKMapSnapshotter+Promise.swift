@@ -1,5 +1,7 @@
 import MapKit
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 /**
  To import the `MKMapSnapshotter` category:
@@ -17,6 +19,6 @@ extension MKMapSnapshotter {
       you do. Which means the promise will never resolve.
      */
     public func promise() -> Promise<MKMapSnapshot> {
-        return Promise { startWithCompletionHandler($0.resolve) }
+        return Promise { startWithCompletionHandler($0) }
     }
 }

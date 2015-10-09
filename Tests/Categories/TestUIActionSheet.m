@@ -4,10 +4,7 @@
 @import XCTest;
 
 
-@interface TestUIActionSheetM : XCTestCase
-@end
-
-@implementation TestUIActionSheetM {
+@implementation Test_UIActionSheet_Objc : XCTestCase {
     UIViewController *rootvc;
 }
 

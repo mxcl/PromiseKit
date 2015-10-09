@@ -29,27 +29,46 @@
     } else {
         urlFormat = [urlFormat description];
     }
-    return [self promise:[OMGHTTPURLRQ GET:urlFormat:nil]];
+    id err;
+    id rq = [OMGHTTPURLRQ GET:urlFormat:nil error:&err];
+    if (err) return [AnyPromise promiseWithValue:err];
+    return [self promise:rq];
 }
 
 + (AnyPromise *)GET:(NSString *)url query:(NSDictionary *)params {
-    return [self promise:[OMGHTTPURLRQ GET:url:params]];
+    id err;
+    id rq = [OMGHTTPURLRQ GET:url:params error:&err];
+    if (err) return [AnyPromise promiseWithValue:err];
+    return [self promise:rq];
 }
 
 + (AnyPromise *)POST:(NSString *)url formURLEncodedParameters:(NSDictionary *)params {
-    return [self promise:[OMGHTTPURLRQ POST:url:params]];
+    id err;
+    id rq = [OMGHTTPURLRQ POST:url:params error:&err];
+    if (err) return [AnyPromise promiseWithValue:err];
+    return [self promise:rq];
 }
 
 + (AnyPromise *)POST:(NSString *)urlString JSON:(NSDictionary *)params {
-    return [self promise:[OMGHTTPURLRQ POST:urlString JSON:params]];
+    id err;
+    id rq = [OMGHTTPURLRQ POST:urlString JSON:params error:&err];
+    if (err) [AnyPromise promiseWithValue:err];
+    return [self promise:rq];
 }
 
 + (AnyPromise *)PUT:(NSString *)url formURLEncodedParameters:(NSDictionary *)params {
-    return [self promise:[OMGHTTPURLRQ PUT:url:params]];
+    id err;
+    id rq = [OMGHTTPURLRQ PUT:url:params error:&err];
+    if (err) [AnyPromise promiseWithValue:err];
+    return [self promise:rq];
+
 }
 
 + (AnyPromise *)DELETE:(NSString *)url formURLEncodedParameters:(NSDictionary *)params {
-    return [self promise:[OMGHTTPURLRQ DELETE:url:params]];
+    id err;
+    id rq = [OMGHTTPURLRQ DELETE:url :params error:&err];
+    if (err) [AnyPromise promiseWithValue:err];
+    return [self promise:rq];
 }
 
 + (AnyPromise *)promise:(NSURLRequest *)rq {
@@ -114,7 +133,7 @@
                     }
                     long long length = [rsp expectedContentLength];
                     id bytes = length <= 0 ? @"" : [NSString stringWithFormat:@"%lld bytes", length];
-                    id fmt = @"The server claimed a%@ JSON response, but decoding failed with: %@";
+                    id fmt = @"The server claimed a %@ JSON response, but decoding failed with: %@";
                     userInfo[NSLocalizedDescriptionKey] = [NSString stringWithFormat:fmt, bytes, userInfo[NSLocalizedDescriptionKey]];
                     err = [NSError errorWithDomain:err.domain code:err.code userInfo:userInfo];
                     rejecter(err);

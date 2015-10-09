@@ -1,63 +1,50 @@
-import MessageUI
 import PromiseKit
 import UIKit
 import XCTest
-import KIF
 
-class TestPromisableViewController: UIKitTestCase {
+private let dummy = 1_234_765
 
-    private class MyViewController: UIViewController, Promisable {
-        @objc var promise: AnyObject! = nil
 
-        var appeared = false
+class Test_UIViewController_Swift: UIKitTestCase {
 
-        private override func viewDidAppear(animated: Bool) {
-            appeared = true
-        }
-    }
-
-    // fails if promised ViewController has no promise property
-    func test1a() {
+    func test_rejects_if_vc_has_no_promise_property() {
         let ex = expectationWithDescription("")
         let p: Promise<Int> = rootvc.promiseViewController(UIViewController(), animated: false)
-        p.catch { err in
-            XCTAssertEqual(err.domain, PMKErrorDomain)
-            XCTAssertEqual(err.code, PMKInvalidUsageError)
-            ex.fulfill()
+        p.error { error in
+            if case UIViewController.Error.NotPromisable = error {
+                ex.fulfill()
+            }
         }
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    // fails if promised ViewController has nil promise property
-    func test1b() {
+    func test_rejects_if_promise_property_returns_nil() {
         let ex = expectationWithDescription("")
-        let p: Promise<Int> = rootvc.promiseViewController(MyViewController(), animated: false)
-        p.catch { err in
-            XCTAssertEqual(err.domain, PMKErrorDomain)
-            XCTAssertEqual(err.code, PMKInvalidUsageError)
-            ex.fulfill()
+        let p: Promise<Int> = rootvc.promiseViewController(MockViewController(), animated: false)
+        p.error { error in
+            if case UIViewController.Error.NilPromisable = error {
+                ex.fulfill()
+            }
         }
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    // fails if promised ViewController has promise property of wrong specialization
-    func test1c() {
+    func test_rejects_if_promise_property_casts_wrongly() {
         let ex = expectationWithDescription("")
-        let my = MyViewController()
+        let my = MockViewController()
         my.promise = Promise(true)
         let p: Promise<Int> = rootvc.promiseViewController(my, animated: false)
-        p.catch { err in
-            XCTAssertEqual(err.domain, PMKErrorDomain)
-            XCTAssertEqual(err.code, PMKInvalidUsageError)
-            ex.fulfill()
+        p.error { err in
+            if case UIViewController.Error.NotGenericallyPromisable = err {
+                ex.fulfill()
+            }
         }
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    // A ViewController with a resolved promise does not appear
-    func test2a() {
+    func test_resolved_promise_property_means_vc_does_not_appear() {
         let ex = expectationWithDescription("")
-        let my = MyViewController()
+        let my = MockViewController()
         my.promise = Promise(dummy)
         rootvc.promiseViewController(my, animated: false).then { (x: Int) -> Void in
             XCTAssertFalse(my.appeared)
@@ -67,11 +54,10 @@ class TestPromisableViewController: UIKitTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    // A ViewController with an unresolved promise appears and disappears once resolved
-    func test2b() {
+    func test_vc_dismisses_once_promise_is_resolved() {
         let ex = expectationWithDescription("")
-        let my = MyViewController()
-        let (promise, resolve, _) = Promise<Int>.defer()
+        let my = MockViewController()
+        let (promise, resolve, _) = Promise<Int>.pendingPromise()
         my.promise = promise
         rootvc.promiseViewController(my, animated: false).then { (x: Int) -> Void in
             XCTAssertTrue(my.appeared)
@@ -84,11 +70,10 @@ class TestPromisableViewController: UIKitTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    // promised nav controllers use their root vc’s promise property
-    func test3() {
+    func test_nav_controllers_use_their_root_vc_promise_property() {
         let ex = expectationWithDescription("")
         let nc = UINavigationController()
-        let my = MyViewController()
+        let my = MockViewController()
         my.promise = after(0.1).then{ dummy }
         nc.viewControllers = [my]
         rootvc.promiseViewController(nc, animated: false).then { (x: Int) -> Void in
@@ -101,53 +86,13 @@ class TestPromisableViewController: UIKitTestCase {
 }
 
 
-/////////////////////////////////////////////////////////////// resources
 
-private let dummy = 1_234_765
+private class MockViewController: UIViewController, Promisable {
+    @objc var promise: AnyObject! = nil
 
+    var appeared = false
 
-class UIKitTestCase: XCTestCase {
-    var rootvc: UIViewController {
-        return UIApplication.sharedApplication().keyWindow!.rootViewController!
-    }
-
-    override func setUp() {
-        UIApplication.sharedApplication().keyWindow!.rootViewController = UIViewController()
-    }
-
-    override func tearDown() {
-        UIApplication.sharedApplication().keyWindow!.rootViewController = nil
-    }
-}
-
-func subviewsOf(v: UIView) -> [UIView] {
-    var vv = v.subviews as! [UIView]
-    for v in v.subviews as! [UIView] {
-        vv += subviewsOf(v)
-    }
-    return vv
-}
-
-func find<T>(vc: UIViewController, type: AnyClass) -> T! {
-    return find(vc.view, type)
-}
-
-func find<T>(view: UIView, type: AnyClass) -> T! {
-    for x in subviewsOf(view) {
-        if x is T {
-            return x as! T
-        }
-    }
-    return nil
-}
-
-
-extension XCTestCase {
-    func tester(_ file : String = __FILE__, _ line : Int = __LINE__) -> KIFUITestActor {
-        return KIFUITestActor(inFile: file, atLine: line, delegate: self)
-    }
-
-    func system(_ file : String = __FILE__, _ line : Int = __LINE__) -> KIFSystemTestActor {
-        return KIFSystemTestActor(inFile: file, atLine: line, delegate: self)
+    private override func viewDidAppear(animated: Bool) {
+        appeared = true
     }
 }

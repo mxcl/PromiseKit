@@ -1,5 +1,7 @@
 import Accounts
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 /**
  To import the `ACAccountStore` category:
@@ -13,7 +15,7 @@ import PromiseKit
 */
 extension ACAccountStore {
     public func renewCredentialsForAccount(account: ACAccount) -> Promise<ACAccountCredentialRenewResult> {
-        return Promise { renewCredentialsForAccount(account, completion: $0.resolve) }
+        return Promise { renewCredentialsForAccount(account, completion: $0) }
     }
 
     public func requestAccessToAccountsWithType(type: ACAccountType, options: [String: AnyObject]? = nil) -> Promise<Void> {
@@ -24,18 +26,28 @@ extension ACAccountStore {
                 } else if error != nil {
                     reject(error)
                 } else {
-                    let error = NSError(domain: PMKErrorDomain, code: PMKAccessDeniedError, userInfo:[NSLocalizedDescriptionKey: "Access to the requested social service has been denied. Please enable access in your device settings."])
-                    reject(error)
+                    reject(Error.AccessDenied)
                 }
             })
         }
     }
 
     public func saveAccount(account: ACAccount) -> Promise<Void> {
-        return Promise<Bool> { saveAccount(account, withCompletionHandler: $0.resolve) }.asVoid()
+        return Promise<Bool> { saveAccount(account, withCompletionHandler: $0) }.asVoid()
     }
 
     public func removeAccount(account: ACAccount) -> Promise<Void> {
-        return Promise<Bool> { removeAccount(account, withCompletionHandler: $0.resolve) }.asVoid()
+        return Promise<Bool> { removeAccount(account, withCompletionHandler: $0) }.asVoid()
+    }
+
+    public enum Error: ErrorType {
+        case AccessDenied
+
+        public var localizedDescription: String {
+            switch self {
+            case .AccessDenied:
+                return "Access to the requested social service has been denied. Please enable access in your device settings."
+            }
+        }
     }
 }

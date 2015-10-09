@@ -1,31 +1,7 @@
 import XCTest
 import PromiseKit
 
-
-
-func stressDataRace<T: Equatable>(e1: XCTestExpectation, iterations: Int = 1000, stressFactor: Int = 10, # stressFunction: (Promise<T>) -> Void, fulfill f: () -> T) {
-    let group = dispatch_group_create()
-    let queue = dispatch_queue_create("the.domain.of.Zalgo", DISPATCH_QUEUE_CONCURRENT)
-
-    for i in 0..<iterations {
-        let (promise, fulfill, reject) = Promise<T>.defer()
-
-        dispatch_apply(stressFactor, queue) { n in
-            stressFunction(promise)
-        }
-
-        dispatch_group_async(group, queue) {
-            fulfill(f())
-        }
-    }
-
-    dispatch_group_notify(group, queue) {
-        e1.fulfill()
-    }
-}
-
-
-class TestZalgo: XCTestCase {
+class ZalgoTestCase_Swift: XCTestCase {
     func test1() {
         var resolved = false
         Promise(1).then(on: zalgo) { _ in
@@ -42,7 +18,7 @@ class TestZalgo: XCTestCase {
         
         var x = 0
         
-        let (p2, f, _) = Promise<Int>.defer()
+        let (p2, f, _) = Promise<Int>.pendingPromise()
         p2.then(on: zalgo) { _ in
             x = 1
         }
@@ -88,4 +64,26 @@ class TestZalgo: XCTestCase {
         waitForExpectationsWithTimeout(10, handler: nil)
     }
 
+}
+
+
+func stressDataRace<T: Equatable>(e1: XCTestExpectation, iterations: Int = 1000, stressFactor: Int = 10, stressFunction: (Promise<T>) -> Void, fulfill f: () -> T) {
+    let group = dispatch_group_create()
+    let queue = dispatch_queue_create("the.domain.of.Zalgo", DISPATCH_QUEUE_CONCURRENT)
+
+    for _ in 0..<iterations {
+        let (promise, fulfill, _) = Promise<T>.pendingPromise()
+
+        dispatch_apply(stressFactor, queue) { n in
+            stressFunction(promise)
+        }
+
+        dispatch_group_async(group, queue) {
+            fulfill(f())
+        }
+    }
+
+    dispatch_group_notify(group, queue) {
+        e1.fulfill()
+    }
 }

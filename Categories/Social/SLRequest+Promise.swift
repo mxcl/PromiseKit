@@ -1,5 +1,7 @@
-import PromiseKit
 import Social
+#if !COCOAPODS
+import PromiseKit
+#endif
 
 /**
  To import the `SLRequest` category:
@@ -12,19 +14,9 @@ import Social
     import PromiseKit
 */
 extension SLRequest {
-    public func promise() -> Promise<NSData> {
-        return Promise { sealant in
-            performRequestWithHandler { (data, rsp, err) in
-                sealant.resolve(data, err)
-            }
+    public func promise() -> URLDataPromise {
+        return URLDataPromise.go(preparedURLRequest()) { completionHandler in
+            performRequestWithHandler(completionHandler)
         }
-    }
-
-    public func promise() -> Promise<NSDictionary> {
-        return promise().then(on: waldo, NSJSONFromData)
-    }
-
-    public func promise() -> Promise<NSArray> {
-        return promise().then(on: waldo, NSJSONFromData)
     }
 }

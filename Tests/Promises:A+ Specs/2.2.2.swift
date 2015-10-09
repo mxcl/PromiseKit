@@ -1,157 +1,176 @@
 import PromiseKit
 import XCTest
 
+// describe 2.2.2: If `onFulfilled` is a function,
 
 class Test222: XCTestCase {
-    // 2.2.2: If `onFulfilled` is a function,
 
-    func test2221() {
-        // 2.2.2.1: it must be called after `promise` is fulfilled,
-        // with `promise`’s fulfillment value as its first argument.
+    // describe: 2.2.2.1: it must be called after `promise` is fulfilled,
+    // with `promise`’s fulfillment value as its first argument
 
-        suiteFulfilled(1) { (promise, exes, sentinel) -> () in
-            promise.then { value->() in
+    func test1() {
+        testFulfilled { promise, expectations, sentinel in
+            promise.then { value -> Void in
                 XCTAssertEqual(value, sentinel)
-                exes[0].fulfill()
-                return
+                expectations[0].fulfill()
             }
-            return
         }
     }
+}
 
-    func test2222() {
-        // 2.2.2.2: it must not be called before `promise` is fulfilled
 
-        let e1 = expectationWithDescription("fulfilled after a delay")
-        let (p1, f1, _) = Promise<Int>.defer()
+class Test2222: XCTestCase {
+
+    // describe: 2.2.2.2: it must not be called before `promise` is fulfilled
+
+    func test1() {
+
+        // specify: fulfilled after a delay
+
+        let expectation = expectationWithDescription("")
+        let (promise, fulfill, _) = Promise<Void>.pendingPromise()
         var isFulfilled = false
 
-        p1.then { _->() in
+        promise.then { _ -> Void in
             XCTAssertTrue(isFulfilled)
-            e1.fulfill()
+            expectation.fulfill()
         }
         later {
-            f1(dummy)
+            fulfill()
             isFulfilled = true
         }
         waitForExpectationsWithTimeout(1, handler: nil)
+    }
 
+    func test2() {
 
-        let e2 = expectationWithDescription("never fulfilled")
-        let (p2, f2, _) = Promise<Int>.defer()
-        var onFulfilledCalled = false
+        // specify: never fulfilled
 
-        p2.then { _->() in
-            onFulfilledCalled = true
-            e2.fulfill()
+        class TestPromise : Promise<Void> {
+            deinit {
+                XCTAssertFalse(fulfilled)
+            }
+        }
+
+        let expectation = expectationWithDescription("")
+        let (promise, _, _) = TestPromise.pendingPromise()
+
+        promise.then { _ in
+            XCTFail()
         }
         later {
-            XCTAssertFalse(onFulfilledCalled)
-            e2.fulfill()
+            expectation.fulfill()
         }
         waitForExpectationsWithTimeout(1, handler: nil)
     }
+}
 
-    func test22231() {
-        // 2.2.2.3: it must not be called more than once.
-        // already-fulfilled
-        var timesCalled = 0
-        Promise(dummy).then { _->() in
-            XCTAssertEqual(++timesCalled, 1)
-        }
-    }
 
-    func test22232() {
-        // trying to fulfill a pending promise more than once, immediately
-        let (promise, fulfiller, _) = Promise<Int>.defer()
-        var timesCalled = 0
-        promise.then { _->() in
-            XCTAssertEqual(++timesCalled, 1)
-        }
-        fulfiller(dummy)
-        fulfiller(dummy)
-    }
+class Test2223: XCTestCase {
 
-    func test22233() {
-        let (promise, fulfiller, _) = Promise<Int>.defer()
-        var timesCalled = 0
-        let e1 = expectationWithDescription("trying to fulfill a pending promise more than once, delayed")
+    // describe: 2.2.2.3: it must not be called more than once
 
-        promise.then { _->() in
-            XCTAssertEqual(++timesCalled, 1)
-            e1.fulfill()
-        }
-        later {
-            fulfiller(dummy)
-            fulfiller(dummy)
-        }
+    func test1() {
+
+        // specify: already-fulfilled
+
+        let ex = expectationWithDescription("")
+
+        Promise().then(ex.fulfill)
+
+        later(4, expectationWithDescription("").fulfill)
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func test22234() {
-        let (promise, fulfiller, _) = Promise<Int>.defer()
-        var timesCalled = 0
-        let e1 = expectationWithDescription("trying to fulfill a pending promise more than once, immediately then delayed")
+    func test2() {
 
-        promise.then { _->() in
-            XCTAssertEqual(++timesCalled, 1)
-            e1.fulfill()
-        }
-        fulfiller(dummy)
-        later {
-            fulfiller(dummy)
-        }
+        // specify: trying to fulfill a pending promise more than once, immediately
+
+        let ex = expectationWithDescription("")
+        let (promise, fulfill, _) = Promise<Void>.pendingPromise()
+
+        promise.then(ex.fulfill)
+
+        fulfill()
+        fulfill()
+
+        later(4, expectationWithDescription("").fulfill)
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func test22235() {
-        let (promise, fulfiller, _) = Promise<Int>.defer()
-        var timesCalled = [0, 0, 0]
+    func test3() {
+
+        // specify: trying to fulfill a pending promise more than once, delayed
+
+        let ex = expectationWithDescription("")
+        let (promise, fulfill, _) = Promise<Void>.pendingPromise()
+        promise.then(ex.fulfill)
+
+        later {
+            fulfill()
+            fulfill()
+        }
+
+        later(4, expectationWithDescription("").fulfill)
+        waitForExpectationsWithTimeout(1, handler: nil)
+    }
+
+    func test4() {
+
+        // specify: trying to fulfill a pending promise more than once, immediately then delayed
+
+        let ex = expectationWithDescription("")
+        let (promise, fulfill, _) = Promise<Void>.pendingPromise()
+
+        promise.then(ex.fulfill)
+
+        fulfill()
+        later { fulfill() }
+
+        later(4, expectationWithDescription("").fulfill)
+        waitForExpectationsWithTimeout(1, handler: nil)
+    }
+
+    func test5() {
+
+        // specify: when multiple `then` calls are made, spaced apart in time
+
+        let (promise, fulfill, _) = Promise<Void>.pendingPromise()
+
         let desc = "when multiple `then` calls are made, spaced apart in time"
         let e1 = expectationWithDescription(desc)
         let e2 = expectationWithDescription(desc)
         let e3 = expectationWithDescription(desc)
 
-        promise.then { _->() in
-            XCTAssertEqual(++timesCalled[0], 1)
-            e1.fulfill()
+        promise.then(e1.fulfill)
+
+        later(1) {
+            promise.then(e2.fulfill)
         }
-        later(50.0) {
-            promise.then { _->() in
-                XCTAssertEqual(++timesCalled[1], 1)
-                e2.fulfill()
-            }
-            return
+        later(2) {
+            promise.then(e3.fulfill)
         }
-        later(100.0) {
-            promise.then { _->() in
-                XCTAssertEqual(++timesCalled[2], 1)
-                e3.fulfill()
-            }
-            return
+        later(3) {
+            fulfill()
         }
-        later(150) {
-            fulfiller(dummy)
-        }
+
+        later(4, expectationWithDescription("").fulfill)
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func test2224() {
-        let (promise, fulfiller, _) = Promise<Int>.defer()
-        var timesCalled = [0, 0]
-        let e1 = expectationWithDescription("when `then` is interleaved with fulfillment")
+    func test6() {
 
-        promise.then { _->() in
-            XCTAssertEqual(++timesCalled[0], 1)
-        }
+        //specify: when `then` is interleaved with fulfillment
 
-        fulfiller(dummy)
+        let (promise, fulfill, _) = Promise<Void>.pendingPromise()
+        let e1 = expectationWithDescription("")
+        let e2 = expectationWithDescription("")
 
-        promise.then { _->() in
-            XCTAssertEqual(++timesCalled[1], 1)
-            e1.fulfill()
-        }
+        promise.then(e1.fulfill)
+        fulfill()
+        promise.then(e2.fulfill)
 
+        later(4, expectationWithDescription("").fulfill)
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 }

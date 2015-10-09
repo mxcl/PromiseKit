@@ -1,11 +1,11 @@
 #import <Foundation/Foundation.h>
-#import <OHHTTPStubs/OHHTTPStubs.h>
+@import OHHTTPStubs;
 #import <PromiseKit/PromiseKit.h>
 #import "NSURLConnection+AnyPromise.h"
 @import XCTest;
 
 
-@interface TestNSURLConnectionM: XCTestCase @end @implementation TestNSURLConnectionM
+@implementation Test_NSURLConnection_ObjC: XCTestCase
 
 - (void)tearDown {
     [OHHTTPStubs removeAllStubs];
@@ -27,6 +27,18 @@
         XCTAssertEqual(err.code, 3840);
         XCTAssertEqualObjects(err.userInfo[PMKURLErrorFailingDataKey], stubData);
         XCTAssertNotNil(err.userInfo[PMKURLErrorFailingURLResponseKey]);
+        [ex fulfill];
+    });
+
+    [self waitForExpectationsWithTimeout:1 handler:nil];
+}
+
+- (void)test2 {
+    id ex = [self expectationWithDescription:@""];
+
+    [NSURLConnection GET:nil].catch(^(NSError *err){
+        XCTAssertEqualObjects(err.domain, NSURLErrorDomain);
+        XCTAssertEqual(err.code, NSURLErrorUnsupportedURL);
         [ex fulfill];
     });
 

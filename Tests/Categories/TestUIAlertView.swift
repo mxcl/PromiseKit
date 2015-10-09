@@ -2,7 +2,7 @@ import PromiseKit
 import UIKit
 import XCTest
 
-class TestUIAlertView: UIKitTestCase {
+class Test_UIAlertView_Swift: UIKitTestCase {
     // fulfills with buttonIndex
     func test1() {
         let ex = expectationWithDescription("")
@@ -29,7 +29,9 @@ class TestUIAlertView: UIKitTestCase {
         alert.addButtonWithTitle("0")
         alert.addButtonWithTitle("1")
         alert.cancelButtonIndex = alert.addButtonWithTitle("2")
-        alert.promise().catch(policy: .AllErrors) { err in
+        alert.promise().error(policy: .AllErrors) { err in
+            guard let err = err as? UIAlertView.Error else { return XCTFail() }
+            XCTAssertTrue(err == .Cancelled)
             XCTAssertTrue(err.cancelled)
             ex.fulfill()
         }
@@ -60,7 +62,7 @@ class TestUIAlertView: UIKitTestCase {
 
         let alert = UIAlertView()
         alert.cancelButtonIndex = alert.addButtonWithTitle("0")
-        alert.promise().catch(policy: .AllErrors) { _ in
+        alert.promise().error(policy: .AllErrors) { _ in
             ex.fulfill()
         }
         after(0.5).then {

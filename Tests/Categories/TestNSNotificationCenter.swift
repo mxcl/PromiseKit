@@ -2,15 +2,15 @@ import Foundation
 import PromiseKit
 import XCTest
 
-private let PMKTestNotification = "PMKTestNotification"
-
-class TestNSNotificationCenter: XCTestCase {
+class Test_NSNotificationCenter_Swift: XCTestCase {
     func test() {
         let ex = expectationWithDescription("")
         let userInfo: [NSObject: AnyObject] = ["a": 1]
 
-        NSNotificationCenter.once(PMKTestNotification).then { (d: [NSObject: AnyObject]) -> Void in
-            //XCTAssertEqual(d, userInfo) FIXME swift won't compile this!
+        NSNotificationCenter.once(PMKTestNotification).then { d -> Void in
+            let a = userInfo as NSDictionary
+            let b = d as NSDictionary
+            XCTAssertTrue(a.isEqual(b))
             ex.fulfill()
         }
 
@@ -19,3 +19,5 @@ class TestNSNotificationCenter: XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 }
+
+private let PMKTestNotification = "PMKTestNotification"

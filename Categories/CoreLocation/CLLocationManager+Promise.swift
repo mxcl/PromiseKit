@@ -1,5 +1,7 @@
 import CoreLocation.CLLocationManager
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 /**
  To import the `CLLocationManager` category:
@@ -27,64 +29,61 @@ extension CLLocationManager {
       want to force one or the other, change this parameter from its default
       value.
      */
-    public class func promise(requestAuthorizationType: RequestAuthorizationType = .Automatic) -> Promise<CLLocation> {
-        return promise(requestAuthorizationType: requestAuthorizationType).then(on: zalgo) {
-            (locations: [CLLocation]) -> CLLocation in
-            return locations.last!
-        }
+    public class func promise(requestAuthorizationType: RequestAuthorizationType = .Automatic) -> LocationPromise {
+        return promise(yielding: auther(requestAuthorizationType))
     }
 
-    /**
-      @return A new promise that fulfills with the first batch of location objects a CLLocationManager instance provides.
-     */
-    public class func promise(requestAuthorizationType: RequestAuthorizationType = .Automatic) -> Promise<[CLLocation]> {
-        return promise(yield: auther(requestAuthorizationType))
-    }
-
-    private class func promise(yield: (CLLocationManager) -> Void = { _ in }) -> Promise<[CLLocation]> {
+    private class func promise(yielding yield: (CLLocationManager) -> Void = { _ in }) -> LocationPromise {
         let manager = LocationManager()
         manager.delegate = manager
         yield(manager)
         manager.startUpdatingLocation()
-        manager.promise.finally {
+        manager.promise.always {
             manager.delegate = nil
             manager.stopUpdatingLocation()
         }
         return manager.promise
     }
-
-  #if os(iOS)
-    /**
-      Cannot error, despite the fact this might be more useful in some
-      circumstances, we stick with our decision that errors are errors
-      and errors only. Thus your catch handler is always catching failures
-      and not being abused for logic.
-     */
-    public class func requestAuthorization(type: RequestAuthorizationType = .Automatic) -> Promise<CLAuthorizationStatus> {
-        return AuthorizationCatcher(auther: auther(type)).promise
-    }
-  #endif
 }
 
-
-//TODO authorizations other than .Authorized should probably error
-
-
 private class LocationManager: CLLocationManager, CLLocationManagerDelegate {
-    let (promise, fulfill, reject) = Promise<[CLLocation]>.defer()
+    let (promise, fulfill, reject) = LocationPromise.foo()
 
-    @objc func locationManager(manager: CLLocationManager!, didUpdateLocations locations: [AnyObject]!) {
-        fulfill(locations as! [CLLocation])
+#if os(iOS)
+    @objc func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+        fulfill(locations)
     }
+#else
+    @objc func locationManager(manager: CLLocationManager, didUpdateLocations ll: [AnyObject]) {
+        let locations = ll as! [CLLocation]
+        fulfill(locations)
+    }
+#endif
 
-    @objc func locationManager(manager: CLLocationManager!, didFailWithError error: NSError!) {
+    @objc func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         reject(error)
     }
 }
 
+
 #if os(iOS)
+
+extension CLLocationManager {
+    /**
+     Cannot error, despite the fact this might be more useful in some
+     circumstances, we stick with our decision that errors are errors
+     and errors only. Thus your catch handler is always catching failures
+     and not being abused for logic.
+    */
+    @available(iOS 8, *)
+    public class func requestAuthorization(type: RequestAuthorizationType = .Automatic) -> Promise<CLAuthorizationStatus> {
+        return AuthorizationCatcher(auther: auther(type)).promise
+    }
+}
+
+@available(iOS 8, *)
 private class AuthorizationCatcher: CLLocationManager, CLLocationManagerDelegate {
-    let (promise, fulfill, _) = Promise<CLAuthorizationStatus>.defer()
+    let (promise, fulfill, _) = Promise<CLAuthorizationStatus>.pendingPromise()
     var retainCycle: AnyObject?
 
     init(auther: (CLLocationManager)->()) {
@@ -99,19 +98,17 @@ private class AuthorizationCatcher: CLLocationManager, CLLocationManagerDelegate
         }
     }
 
-    @objc private func locationManager(manager: CLLocationManager!, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+    @objc private func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
         if status != .NotDetermined {
             fulfill(status)
             retainCycle = nil
         }
     }
 }
-#endif
 
-private func auther(requestAuthorizationType: CLLocationManager.RequestAuthorizationType)(manager: CLLocationManager)
-{
-  #if os(iOS)
-    if !manager.respondsToSelector("requestWhenInUseAuthorization") { return }
+private func auther(requestAuthorizationType: CLLocationManager.RequestAuthorizationType)(manager: CLLocationManager) {
+
+    //PMKiOS7 guard #available(iOS 8, *) else { return }
 
     func hasInfoPListKey(key: String) -> Bool {
         let value = NSBundle.mainBundle().objectForInfoDictionaryKey(key) as? String ?? ""
@@ -125,7 +122,7 @@ private func auther(requestAuthorizationType: CLLocationManager.RequestAuthoriza
         if always {
             manager.requestAlwaysAuthorization()
         } else {
-            if !whenInUse { NSLog("You didn’t set your NSLocationWhenInUseUsageDescription Info.plist key") }
+            if !whenInUse { NSLog("PromiseKit: Warning: `NSLocationWhenInUseUsageDescription` key not set") }
             manager.requestWhenInUseAuthorization()
         }
     case .WhenInUse:
@@ -136,6 +133,36 @@ private func auther(requestAuthorizationType: CLLocationManager.RequestAuthoriza
         break
 
     }
-  #endif
 }
 
+#else
+    private func auther(requestAuthorizationType: CLLocationManager.RequestAuthorizationType)(manager: CLLocationManager)
+    {}
+#endif
+
+
+public class LocationPromise: Promise<CLLocation> {
+
+    // convoluted for concurrency guarantees
+
+    private let (parentPromise, fulfill, reject) = Promise<[CLLocation]>.pendingPromise()
+
+    public func allResults() -> Promise<[CLLocation]> {
+        return parentPromise
+    }
+
+    private class func foo() -> (LocationPromise, ([CLLocation]) -> Void, (ErrorType) -> Void) {
+        var fulfill: ((CLLocation) -> Void)!
+        var reject: ((ErrorType) -> Void)!
+        let promise = LocationPromise { fulfill = $0; reject = $1 }
+
+        promise.parentPromise.then(on: zalgo) { fulfill($0.last!) }
+        promise.parentPromise.error { reject($0) }
+
+        return (promise, promise.fulfill, promise.reject)
+    }
+
+    private override init(@noescape resolvers: (fulfill: (CLLocation) -> Void, reject: (ErrorType) -> Void) throws -> Void) {
+        super.init(resolvers: resolvers)
+    }
+}
