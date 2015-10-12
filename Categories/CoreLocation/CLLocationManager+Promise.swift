@@ -20,7 +20,7 @@ extension CLLocationManager {
         case Always
         case WhenInUse
     }
-  
+
     /**
       @return A new promise that fulfills with the most recent CLLocation.
 
@@ -61,8 +61,13 @@ private class LocationManager: CLLocationManager, CLLocationManagerDelegate {
 #endif
 
     @objc func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
-      if error.domain == kCLErrorDomain && error.code == CLError.LocationUnknown.rawValue { return }
-      reject(error)
+      if error.domain == kCLErrorDomain && error.code == CLError.LocationUnknown.rawValue {
+        dispatch_after(
+          dispatch_time(DISPATCH_TIME_NOW, Int64(3 * Double(NSEC_PER_SEC))),
+          dispatch_get_main_queue()) { [weak self] in self?.reject(error) }
+      } else {
+        reject(error)
+      }
     }
 }
 
