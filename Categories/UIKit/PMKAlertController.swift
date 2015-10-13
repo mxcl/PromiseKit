@@ -41,9 +41,9 @@ public class PMKAlertController {
     public func addActionWithTitle(title: String, style: UIAlertActionStyle = .Default) -> UIAlertAction {
         let action = UIAlertAction(title: title, style: style) { action in
             if style == UIAlertActionStyle.Cancel {
-                self.fulfill(action)
-            } else {
                 self.reject(Error.Cancelled)
+            } else {
+                self.fulfill(action)
             }
         }
         UIAlertController.addAction(action)
@@ -58,8 +58,12 @@ public class PMKAlertController {
     private let (promise, fulfill, reject) = Promise<UIAlertAction>.pendingPromise()
     private var retainCycle: PMKAlertController?
 
-    public enum Error: ErrorType {
+    public enum Error: CancellableErrorType {
         case Cancelled
+      
+      public var cancelled: Bool {
+          return self == .Cancelled
+      }
     }
 }
 
