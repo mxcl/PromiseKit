@@ -578,6 +578,31 @@ public func firstly<T>(@noescape promise: () throws -> Promise<T>) -> Promise<T>
 
  Compare:
 
+     NSURLConnection.GET(url1).then {
+         NSURLConnection.GET(url2)
+     }.then {
+         NSURLConnection.GET(url3)
+     }
+
+ With:
+
+     firstly(on:  {
+         NSURLConnection.GET(url1)
+     }.then {
+         NSURLConnection.GET(url2)
+     }.then {
+         NSURLConnection.GET(url3)
+     }
+*/
+public func firstly<T>(on on: dispatch_queue_t = dispatch_get_main_queue(), promise: () throws -> Promise<T>) -> Promise<T> {
+    return Promise().then(on: on, promise)
+}
+
+/**
+ `firstly` can make chains more readable.
+
+ Compare:
+
      SCNetworkReachability().then {
          NSURLSession.GET(url2)
      }.then {
