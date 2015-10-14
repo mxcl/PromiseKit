@@ -45,10 +45,11 @@ Pod::Spec.new do |s|
     ss.ios.frameworks = 'AVFoundation'
   end
 
-  s.subspec 'Bolts' do |ss|
-    ss.ios.source_files = 'Categories/Bolts/*'
-    ss.dependency 'Bolts'
-  end
+  # FIXME wouldn’t lint
+  # s.subspec 'Bolts' do |ss|
+  #   ss.ios.source_files = 'Categories/Bolts/*'
+  #   ss.ios.dependency 'Bolts', '~> 1.3.0'
+  # end
 
   s.subspec 'CloudKit' do |ss|
     ss.source_files = 'Categories/CloudKit/*'
