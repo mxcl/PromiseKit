@@ -25,24 +25,29 @@ Pod::Spec.new do |s|
     ss.source_files = 'Categories/Accounts/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'Accounts'
+    ss.ios.deployment_target = '8.0'
+    ss.osx.deployment_target = '10.9'
   end
 
   s.subspec 'AddressBook' do |ss|
     ss.ios.source_files = 'Categories/AddressBook/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.ios.frameworks = 'AddressBook'
+    ss.ios.deployment_target = '8.0'
   end
 
   s.subspec 'AssetsLibrary' do |ss|
     ss.ios.source_files = 'Categories/AssetsLibrary/*'
     ss.dependency 'PromiseKit/UIKit'
     ss.ios.frameworks = 'AssetsLibrary'
+    ss.ios.deployment_target = '8.0'
   end
 
   s.subspec 'AVFoundation' do |ss|
     ss.ios.source_files = 'Categories/AVFoundation/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.ios.frameworks = 'AVFoundation'
+    ss.ios.deployment_target = '8.0'
   end
 
 #  s.subspec 'Bolts' do |ss|
@@ -71,6 +76,8 @@ Pod::Spec.new do |s|
     ss.source_files = 'Categories/CoreLocation/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'CoreLocation'
+    ss.ios.deployment_target = '8.0'
+    ss.osx.deployment_target = '10.9'
   end
   
   s.subspec 'Foundation' do |ss|
@@ -94,18 +101,24 @@ Pod::Spec.new do |s|
     ss.source_files = 'Categories/MapKit/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'MapKit'
+    ss.ios.deployment_target = '8.0'
+    ss.osx.deployment_target = '10.9'
   end
 
   s.subspec 'MessageUI' do |ss|
     ss.ios.source_files = 'Categories/MessageUI/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.ios.frameworks = 'MessageUI'
+    ss.ios.deployment_target = '8.0'
+    ss.osx.deployment_target = '10.9'
   end
 
   s.subspec 'Photos' do |ss|
     ss.ios.source_files = 'Categories/Photos/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.ios.frameworks = 'Photos'
+    ss.ios.deployment_target = '8.0'
+    ss.osx.deployment_target = '10.9'
   end
 
   s.subspec 'QuartzCore' do |ss|
@@ -113,6 +126,8 @@ Pod::Spec.new do |s|
 	ss.osx.source_files = 'Categories/QuartzCore/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'QuartzCore'
+    ss.ios.deployment_target = '8.0'
+    ss.osx.deployment_target = '10.9'
   end
 
   s.subspec 'Social' do |ss|
@@ -120,23 +135,30 @@ Pod::Spec.new do |s|
     ss.osx.source_files = Dir['Categories/Social/*'] - ['Categories/Social/SLComposeViewController+Promise.swift']
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'Social'
+    ss.ios.deployment_target = '8.0'
+    ss.osx.deployment_target = '10.9'
   end
 
   s.subspec 'StoreKit' do |ss|
     ss.source_files = 'Categories/StoreKit/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'StoreKit'
+    ss.ios.deployment_target = '8.0'
+    ss.osx.deployment_target = '10.9'
   end
 
   s.subspec 'SystemConfiguration' do |ss|
     ss.source_files = 'Categories/SystemConfiguration/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'SystemConfiguration'
+    ss.ios.deployment_target = '8.0'
+    ss.osx.deployment_target = '10.9'
   end
 
   s.subspec 'UIKit' do |ss|
     ss.ios.source_files = 'Categories/UIKit/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.ios.frameworks = 'UIKit'
+    ss.ios.deployment_target = '8.0'
   end
 end
