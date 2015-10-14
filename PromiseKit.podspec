@@ -22,7 +22,7 @@ Pod::Spec.new do |s|
   s.xcconfig = { 'SWIFT_INSTALL_OBJC_HEADER' => 'NO' }
 
   s.subspec 'Accounts' do |ss|
-    ss.source_files = 'Categories/Accounts/*'
+    ss.ios.source_files = ss.osx.source_files = 'Categories/Accounts/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'Accounts'
   end
@@ -68,7 +68,9 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'CoreLocation' do |ss|
-    ss.source_files = 'Categories/CoreLocation/*'
+    ss.ios.source_files = 'Categories/CoreLocation/*'
+    ss.osx.source_files = 'Categories/CoreLocation/*'
+    ss.watchos.source_files = Dir['*/CLGeocoder*']
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'CoreLocation'
   end
@@ -76,7 +78,7 @@ Pod::Spec.new do |s|
   s.subspec 'Foundation' do |ss|
     ss.ios.source_files = Dir['Categories/Foundation/*'] - Dir['Categories/Foundation/NSTask*']
     ss.osx.source_files = 'Categories/Foundation/*'
-	ss.watchos.source_files = Dir['Categories/Foundation/*'] - Dir['Categories/Foundation/NSTask*']
+    ss.watchos.source_files = Dir['Categories/Foundation/*'] - Dir['Categories/Foundation/NSTask*', 'Categories/Foundation/NSURL*']
     ss.dependency 'PromiseKit/CorePromise'
     ss.dependency 'OMGHTTPURLRQ', '~> 3.0.0'
     ss.frameworks = 'Foundation'
@@ -91,7 +93,8 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'MapKit' do |ss|
-    ss.source_files = 'Categories/MapKit/*'
+    ss.ios.source_files = 'Categories/MapKit/*'
+    ss.osx.source_files = 'Categories/MapKit/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'MapKit'
   end
@@ -110,7 +113,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'QuartzCore' do |ss|
     ss.ios.source_files = 'Categories/QuartzCore/*'
-	ss.osx.source_files = 'Categories/QuartzCore/*'
+	  ss.osx.source_files = 'Categories/QuartzCore/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'QuartzCore'
   end
@@ -123,13 +126,13 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'StoreKit' do |ss|
-    ss.source_files = 'Categories/StoreKit/*'
+    ss.ios.source_files = ss.osx.source_files = 'Categories/StoreKit/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'StoreKit'
   end
 
   s.subspec 'SystemConfiguration' do |ss|
-    ss.source_files = 'Categories/SystemConfiguration/*'
+    ss.ios.source_files = ss.osx.source_files = 'Categories/SystemConfiguration/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'SystemConfiguration'
   end
