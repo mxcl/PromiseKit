@@ -64,7 +64,7 @@ private func go(@autoclosure body: () throws -> NSURLRequest) -> URLDataPromise 
         }
 
         return URLDataPromise.go(request) { completionHandler in
-            NSURLConnection.sendAsynchronousRequest(request, queue: Q, completionHandler: { completionHandler($1, $0, $2) })
+            NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration(), delegate: nil, delegateQueue: Q).dataTaskWithRequest(request, completionHandler:completionHandler)
         }
     } catch {
         return URLDataPromise(error: error)

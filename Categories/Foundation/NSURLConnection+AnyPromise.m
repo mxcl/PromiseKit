@@ -8,6 +8,7 @@
 #import <Foundation/NSURLError.h>
 #import <Foundation/NSURL.h>
 #import <Foundation/NSURLResponse.h>
+#import <Foundation/NSURLSession.h>
 #import "NSURLConnection+AnyPromise.h"
 #import <PromiseKit/PromiseKit.h>
 #import <OMGHTTPURLRQ/OMGHTTPURLRQ.h>
@@ -79,7 +80,7 @@
     });
 
     return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
-        [NSURLConnection sendAsynchronousRequest:rq queue:q completionHandler:^(id rsp, id data, id urlError) {
+        [[NSURLSession sessionWithConfiguration:[NSURLSessionConfiguration defaultSessionConfiguration] delegate:nil delegateQueue:q] dataTaskWithRequest:rq completionHandler:^(id data, id rsp, id urlError) {
             assert(![NSThread isMainThread]);
 
             PMKResolver fulfiller = ^(id responseObject){
