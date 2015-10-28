@@ -76,7 +76,7 @@ extension UIViewController {
     }
 
     public func promiseViewController(vc: UIImagePickerController, animated: Bool = true, completion: (() -> Void)? = nil) -> Promise<[String: AnyObject]> {
-        let proxy = UIImagePickerControllerInfoProxy()
+        let proxy = UIImagePickerControllerProxy()
         vc.delegate = proxy
         presentViewController(vc, animated: animated, completion: completion)
         return proxy.promise.always {
@@ -112,41 +112,19 @@ private func promise<T>(vc: UIViewController) -> Promise<T> {
 
 // internal scope because used by ALAssetsLibrary extension
 @objc class UIImagePickerControllerProxy: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    let (promise, fulfill, reject) = Promise<[NSObject : AnyObject]>.pendingPromise()
-    var retainCycle: AnyObject?
-
-    required override init() {
-        super.init()
-        retainCycle = self
-    }
-
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
-        fulfill(info)
-        retainCycle = nil
-    }
-
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
-        reject(UIImagePickerController.Error.Cancelled)
-        retainCycle = nil
-    }
-}
-
-
-// internal scope because used by ALAssetsLibrary extension
-@objc class UIImagePickerControllerInfoProxy: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
     let (promise, fulfill, reject) = Promise<[String : AnyObject]>.pendingPromise()
     var retainCycle: AnyObject?
-  
+
     required override init() {
         super.init()
         retainCycle = self
     }
-  
+
     func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         fulfill(info)
         retainCycle = nil
     }
-  
+
     func imagePickerControllerDidCancel(picker: UIImagePickerController) {
         reject(UIImagePickerController.Error.Cancelled)
         retainCycle = nil
