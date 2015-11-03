@@ -362,9 +362,9 @@ public class Promise<T> {
 
         pipe { resolution in
             switch (resolution, policy) {
-            case (let .Rejected(error as CancellableErrorType, token), .AllErrorsExceptCancellation):
+            case (let .Rejected(error, token), .AllErrorsExceptCancellation):
                 dispatch_async(dispatch_get_main_queue()) {
-                    if !error.cancelled {     // cancelled must be called on main
+                    if let cancellableError = error as? CancellableErrorType where !cancellableError.cancelled {
                         consume(error, token)
                     }
                 }
