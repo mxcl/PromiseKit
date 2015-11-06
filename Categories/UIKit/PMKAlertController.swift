@@ -33,6 +33,7 @@ public class PMKAlertController {
     public var preferredStyle: UIAlertControllerStyle { return UIAlertController.preferredStyle }
     public var actions: [UIAlertAction] { return UIAlertController.actions }
     public var textFields: [UITextField]? { return UIAlertController.textFields }
+    public var popoverPresentationController: UIPopoverPresentationController? { return UIAlertController.popoverPresentationController }
 
     public required init(title: String?, message: String?  = nil, preferredStyle: UIAlertControllerStyle = .Alert) {
         UIAlertController = UIKit.UIAlertController(title: title, message: message, preferredStyle: preferredStyle)
