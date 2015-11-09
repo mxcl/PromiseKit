@@ -364,8 +364,9 @@ public class Promise<T> {
             switch (resolution, policy) {
             case (let .Rejected(error, token), .AllErrorsExceptCancellation):
                 dispatch_async(dispatch_get_main_queue()) {
-                    if let cancellableError = error as? CancellableErrorType where !cancellableError.cancelled {
+                    guard let cancellableError = error as? CancellableErrorType where cancellableError.cancelled else {
                         consume(error, token)
+                        return
                     }
                 }
             case (let .Rejected(error, token), _):
