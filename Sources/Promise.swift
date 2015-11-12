@@ -437,6 +437,54 @@ public class Promise<T> {
         }
     }
 
+    /**
+     The provided closure is executed when this Promise is resolved.
+
+         somePromise().then {
+            //…
+         }.always { () -> Int
+            //…
+            return myIntVar
+         }.then { (i: Int) in
+            //…
+         }
+
+     - Parameter on: The queue on which body should be executed.
+     - Parameter body: The closure that is executed when this Promise is resolved.
+     */
+    public func always<U>(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: () throws -> U) -> Promise<U> {
+        return Promise<U>(when: self) { resolution, resolve in
+            contain_zalgo(q, rejecter: resolve) {
+                resolve(.Fulfilled(try body()))
+            }
+        }
+    }
+
+    /**
+     The provided closure is executed when this Promise is resolved.
+
+         somePromise().then { (loginData: NSData) in
+            //…
+         }.always { () -> Promise<NSData>
+            //…
+            return NSURLConnection.GET(dataUrl)
+         }.then { (data: NSData) in
+            //…
+         }
+
+     - Parameter on: The queue on which body should be executed.
+     - Parameter body: The closure that is executed when this Promise is resolved.
+     */
+    public func always<U>(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: () throws -> Promise<U>) -> Promise<U> {
+        return Promise<U>(when: self) { resolution, resolve in
+            contain_zalgo(q, rejecter: resolve) {
+                let promise = try body()
+                guard promise !== self else { throw Error.ReturnedSelf }
+                promise.pipe(resolve)
+            }
+        }
+    }
+
     @available(*, unavailable, renamed="ensure")
     public func finally(on: dispatch_queue_t = dispatch_get_main_queue(), body: () -> Void) -> Promise { abort() }
 
