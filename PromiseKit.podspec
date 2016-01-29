@@ -18,6 +18,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '8.0'
   s.osx.deployment_target = '10.9'
   s.watchos.deployment_target = '2.0'
+  s.tvos.deployment_target = '9.0'
   s.module_map = 'Sources/PMK.modulemap'
   s.xcconfig = { 'SWIFT_INSTALL_OBJC_HEADER' => 'NO' }
 
@@ -81,7 +82,7 @@ Pod::Spec.new do |s|
     ss.osx.source_files = 'Categories/Foundation/*'
     ss.watchos.source_files = Dir['Categories/Foundation/*'] - Dir['Categories/Foundation/NSTask*', 'Categories/Foundation/NSURL*']
     ss.dependency 'PromiseKit/CorePromise'
-    ss.dependency 'OMGHTTPURLRQ', '~> 3.0.0'
+    ss.dependency 'OMGHTTPURLRQ', '~> 3.1.0'
     ss.frameworks = 'Foundation'
   end
   
