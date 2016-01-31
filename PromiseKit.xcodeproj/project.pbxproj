@@ -7,6 +7,28 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		43EF78B41C5AB88600BCD8FB /* after.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A60E1F1AFD795B00C4E692 /* after.m */; };
+		43EF78B51C5AB88600BCD8FB /* after.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63075EBD1AD0EDB3002C46A0 /* after.swift */; };
+		43EF78B61C5AB88600BCD8FB /* AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A157711ABB59D00002A421 /* AnyPromise.m */; };
+		43EF78B71C5AB88600BCD8FB /* AnyPromise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A1576A1ABB32EB0002A421 /* AnyPromise.swift */; };
+		43EF78B81C5AB88600BCD8FB /* dispatch_promise.m in Sources */ = {isa = PBXBuildFile; fileRef = 63196AC31AFD936300555BCD /* dispatch_promise.m */; };
+		43EF78B91C5AB88600BCD8FB /* dispatch_promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63196AC41AFD936300555BCD /* dispatch_promise.swift */; };
+		43EF78BA1C5AB88600BCD8FB /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D0D7A1ADDB11400CC0406 /* Error.swift */; };
+		43EF78BB1C5AB88600BCD8FB /* hang.m in Sources */ = {isa = PBXBuildFile; fileRef = 63314AD71AEDDC070071B6F5 /* hang.m */; };
+		43EF78BC1C5AB88600BCD8FB /* join.m in Sources */ = {isa = PBXBuildFile; fileRef = 63314AD81AEDDC070071B6F5 /* join.m */; };
+		43EF78BD1C5AB88600BCD8FB /* URLDataPromise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E36A181B791BB2009BAFBF /* URLDataPromise.swift */; };
+		43EF78BE1C5AB88600BCD8FB /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F803BF1AB87A9500E4DEE1 /* Promise.swift */; };
+		43EF78BF1C5AB88600BCD8FB /* Promise+Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639A12701AB9F941002E5C24 /* Promise+Properties.swift */; };
+		43EF78C01C5AB88600BCD8FB /* race.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63075EC41AD10471002C46A0 /* race.swift */; };
+		43EF78C11C5AB88600BCD8FB /* State.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63BF9DCF1AB9E4850049EA39 /* State.swift */; };
+		43EF78C21C5AB88600BCD8FB /* when.m in Sources */ = {isa = PBXBuildFile; fileRef = 63314AD91AEDDC070071B6F5 /* when.m */; };
+		43EF78C31C5AB88600BCD8FB /* join.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6339D2011B34B64C00983965 /* join.swift */; };
+		43EF78C41C5AB88600BCD8FB /* when.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63075EC01AD0F097002C46A0 /* when.swift */; };
+		43EF78C51C5AB88600BCD8FB /* AnyPromise.h in Headers */ = {isa = PBXBuildFile; fileRef = 63D953C71AEDA3B1004981FF /* AnyPromise.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43EF78C61C5AB88600BCD8FB /* NSError+Cancellation.h in Headers */ = {isa = PBXBuildFile; fileRef = 633810641B02EC7A00CCD263 /* NSError+Cancellation.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43EF78C71C5AB88600BCD8FB /* PromiseKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 63A157701ABB59490002A421 /* PromiseKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43EF78C81C5AB88600BCD8FB /* Umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 63F803A81AB87A8200E4DEE1 /* Umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		43EF78C91C5AB88600BCD8FB /* AnyPromise+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 63314AE01AEDDD0B0071B6F5 /* AnyPromise+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
 		63015EF51B41C7F000D03D4D /* ErrorUnhandler.test.m in Sources */ = {isa = PBXBuildFile; fileRef = 631EDA1A1B3A42C000CFB93A /* ErrorUnhandler.test.m */; };
 		6302AD401AEF55A4001F0069 /* Promise.test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6302AD3F1AEF55A4001F0069 /* Promise.test.swift */; };
 		63075EBE1AD0EDB3002C46A0 /* after.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63075EBD1AD0EDB3002C46A0 /* after.swift */; };
@@ -335,6 +357,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		43EF78A61C5AA12B00BCD8FB /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6302AC8E1AEF42F2001F0069 /* ACAccountStore+AnyPromise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ACAccountStore+AnyPromise.h"; sourceTree = "<group>"; };
 		6302AC8F1AEF42F2001F0069 /* ACAccountStore+AnyPromise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ACAccountStore+AnyPromise.m"; sourceTree = "<group>"; };
 		6302AC901AEF42F2001F0069 /* ACAccountStore+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ACAccountStore+Promise.swift"; sourceTree = "<group>"; };
@@ -474,7 +497,7 @@
 		63CA14C61AEA9E7400223904 /* OHHTTPStubs.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OHHTTPStubs.framework; path = Carthage/Build/iOS/OHHTTPStubs.framework; sourceTree = "<group>"; };
 		63CA14C71AEA9E7400223904 /* OMGHTTPURLRQ.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OMGHTTPURLRQ.framework; path = Carthage/Build/iOS/OMGHTTPURLRQ.framework; sourceTree = "<group>"; };
 		63CD9A621BB102EE008D916F /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		63D1BAA01B256DE500435BF3 /* BFTask+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "BFTask+Promise.swift"; path = "../Bolts/BFTask+Promise.swift"; sourceTree = "<group>"; };
+		63D1BAA01B256DE500435BF3 /* BFTask+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "BFTask+Promise.swift"; path = "Categories/Bolts/BFTask+Promise.swift"; sourceTree = "<group>"; };
 		63D1BAA31B256E1A00435BF3 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = Carthage/Build/iOS/Bolts.framework; sourceTree = "<group>"; };
 		63D73BE11B20B48F00843146 /* afterlife.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = afterlife.swift; sourceTree = "<group>"; };
 		63D953C71AEDA3B1004981FF /* AnyPromise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnyPromise.h; path = Sources/AnyPromise.h; sourceTree = "<group>"; };
@@ -511,6 +534,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		43EF78A21C5AA12B00BCD8FB /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		6307B67C1B615BB60003AC3A /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -569,6 +599,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		43EA5FF21C5AC38C000BAEA7 /* tvOS */ = {
+			isa = PBXGroup;
+			children = (
+				43EF78A61C5AA12B00BCD8FB /* PromiseKit.framework */,
+			);
+			name = tvOS;
+			sourceTree = "<group>";
+		};
 		6302AC8D1AEF42F2001F0069 /* Accounts */ = {
 			isa = PBXGroup;
 			children = (
@@ -1009,6 +1047,7 @@
 			children = (
 				63CA14C51AEA9E1500223904 /* iOS */,
 				63CA14C41AEA9E0C00223904 /* OS X */,
+				43EA5FF21C5AC38C000BAEA7 /* tvOS */,
 				63CD9A821BB104F6008D916F /* watchOS */,
 				63F803A71AB87A8200E4DEE1 /* Info.plist */,
 			);
@@ -1018,6 +1057,18 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
+		43EF78A31C5AA12B00BCD8FB /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43EF78C51C5AB88600BCD8FB /* AnyPromise.h in Headers */,
+				43EF78C61C5AB88600BCD8FB /* NSError+Cancellation.h in Headers */,
+				43EF78C71C5AB88600BCD8FB /* PromiseKit.h in Headers */,
+				43EF78C81C5AB88600BCD8FB /* Umbrella.h in Headers */,
+				43EF78C91C5AB88600BCD8FB /* AnyPromise+Private.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		63CD9A591BB102EE008D916F /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
@@ -1057,6 +1108,24 @@
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
+		43EF78A51C5AA12B00BCD8FB /* PMKtvOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 43EF78AD1C5AA12B00BCD8FB /* Build configuration list for PBXNativeTarget "PMKtvOS" */;
+			buildPhases = (
+				43EF78A11C5AA12B00BCD8FB /* Sources */,
+				43EF78A21C5AA12B00BCD8FB /* Frameworks */,
+				43EF78A31C5AA12B00BCD8FB /* Headers */,
+				43EF78A41C5AA12B00BCD8FB /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PMKtvOS;
+			productName = PromisesXP;
+			productReference = 43EF78A61C5AA12B00BCD8FB /* PromiseKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		63533B321AE57A9300C10972 /* PMKAPlusTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 63533B3C1AE57A9300C10972 /* Build configuration list for PBXNativeTarget "PMKAPlusTests" */;
@@ -1225,6 +1294,9 @@
 				LastUpgradeCheck = 0700;
 				ORGANIZATIONNAME = "Max Howell";
 				TargetAttributes = {
+					43EF78A51C5AA12B00BCD8FB = {
+						CreatedOnToolsVersion = 7.2;
+					};
 					63533B321AE57A9300C10972 = {
 						CreatedOnToolsVersion = 6.3;
 					};
@@ -1263,6 +1335,7 @@
 				63F803A21AB87A8200E4DEE1 /* PMKiOS */,
 				63F803C21AB89A0F00E4DEE1 /* PMKOSX */,
 				63CD9A461BB102EE008D916F /* PMKwatchOS */,
+				43EF78A51C5AA12B00BCD8FB /* PMKtvOS */,
 				6388E1A11AD315F90074D85B /* PMKTests */,
 				63533B321AE57A9300C10972 /* PMKAPlusTests */,
 				638E0ED41AEF16530052E28F /* PMKiOSCategoryTests */,
@@ -1274,6 +1347,13 @@
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		43EF78A41C5AA12B00BCD8FB /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		638CDF011AEE734B0023A543 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1334,6 +1414,30 @@
 /* End PBXShellScriptBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		43EF78A11C5AA12B00BCD8FB /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				43EF78B41C5AB88600BCD8FB /* after.m in Sources */,
+				43EF78B51C5AB88600BCD8FB /* after.swift in Sources */,
+				43EF78B61C5AB88600BCD8FB /* AnyPromise.m in Sources */,
+				43EF78B71C5AB88600BCD8FB /* AnyPromise.swift in Sources */,
+				43EF78B81C5AB88600BCD8FB /* dispatch_promise.m in Sources */,
+				43EF78B91C5AB88600BCD8FB /* dispatch_promise.swift in Sources */,
+				43EF78BA1C5AB88600BCD8FB /* Error.swift in Sources */,
+				43EF78BB1C5AB88600BCD8FB /* hang.m in Sources */,
+				43EF78BC1C5AB88600BCD8FB /* join.m in Sources */,
+				43EF78BD1C5AB88600BCD8FB /* URLDataPromise.swift in Sources */,
+				43EF78BE1C5AB88600BCD8FB /* Promise.swift in Sources */,
+				43EF78BF1C5AB88600BCD8FB /* Promise+Properties.swift in Sources */,
+				43EF78C01C5AB88600BCD8FB /* race.swift in Sources */,
+				43EF78C11C5AB88600BCD8FB /* State.swift in Sources */,
+				43EF78C21C5AB88600BCD8FB /* when.m in Sources */,
+				43EF78C31C5AB88600BCD8FB /* join.swift in Sources */,
+				43EF78C41C5AB88600BCD8FB /* when.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		63533B2F1AE57A9300C10972 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -1637,6 +1741,36 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		43EF78AB1C5AA12B00BCD8FB /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = Sources/PMK.modulemap;
+				PRODUCT_NAME = PromiseKit;
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = Debug;
+		};
+		43EF78AC1C5AA12B00BCD8FB /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = Sources/PMK.modulemap;
+				PRODUCT_NAME = PromiseKit;
+				SDKROOT = appletvos;
+				TARGETED_DEVICE_FAMILY = 3;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+			};
+			name = Release;
+		};
 		63533B3D1AE57A9300C10972 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -2112,6 +2246,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		43EF78AD1C5AA12B00BCD8FB /* Build configuration list for PBXNativeTarget "PMKtvOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				43EF78AB1C5AA12B00BCD8FB /* Debug */,
+				43EF78AC1C5AA12B00BCD8FB /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		63533B3C1AE57A9300C10972 /* Build configuration list for PBXNativeTarget "PMKAPlusTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

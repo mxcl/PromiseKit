@@ -18,6 +18,7 @@ Pod::Spec.new do |s|
   s.ios.deployment_target = '8.0'
   s.osx.deployment_target = '10.9'
   s.watchos.deployment_target = '2.0'
+  s.tvos.deployment_target = '9.0'
   s.module_map = 'Sources/PMK.modulemap'
   s.xcconfig = { 'SWIFT_INSTALL_OBJC_HEADER' => 'NO' }
 
@@ -46,9 +47,13 @@ Pod::Spec.new do |s|
   end
 
   # FIXME wouldn’t lint
+  # Still won't lint as of 1/31/2016 on cocoapods 0.39.0
+  # getting 'include of non-modular header inside framework module' errors
+  # that were supposed to be fixed by https://github.com/CocoaPods/CocoaPods/pull/4476
   # s.subspec 'Bolts' do |ss|
-  #   ss.ios.source_files = 'Categories/Bolts/*'
-  #   ss.ios.dependency 'Bolts', '~> 1.3.0'
+  #   ss.source_files = 'Categories/Bolts/*'
+  #   ss.dependency 'PromiseKit/CorePromise'
+  #   ss.dependency 'Bolts', '~> 1.6.0'
   # end
 
   s.subspec 'CloudKit' do |ss|
@@ -81,7 +86,7 @@ Pod::Spec.new do |s|
     ss.osx.source_files = 'Categories/Foundation/*'
     ss.watchos.source_files = Dir['Categories/Foundation/*'] - Dir['Categories/Foundation/NSTask*', 'Categories/Foundation/NSURL*']
     ss.dependency 'PromiseKit/CorePromise'
-    ss.dependency 'OMGHTTPURLRQ', '~> 3.0.0'
+    ss.dependency 'OMGHTTPURLRQ', '~> 3.1.0'
     ss.frameworks = 'Foundation'
   end
   
@@ -114,7 +119,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'QuartzCore' do |ss|
     ss.ios.source_files = 'Categories/QuartzCore/*'
-	  ss.osx.source_files = 'Categories/QuartzCore/*'
+	ss.osx.source_files = 'Categories/QuartzCore/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'QuartzCore'
   end
