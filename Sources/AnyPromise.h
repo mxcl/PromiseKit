@@ -216,7 +216,7 @@ typedef void (^PMKBooleanAdapter)(BOOL, NSError * __nullable);
  provide this convenience adapter to make wrapping such systems more
  elegant.
 
-    return [PMKPromise promiseWithAdapter:^(PMKAdapter adapter){
+    return [PMKPromise promiseWithAdapterBlock:^(PMKAdapter adapter){
         PFQuery *query = [PFQuery …];
         [query findObjectsInBackgroundWithBlock:adapter];
     }];
