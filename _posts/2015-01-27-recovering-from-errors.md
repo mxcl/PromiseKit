@@ -35,16 +35,16 @@ This is useful for error-correction. If the error is fatal, then “rethrow” t
 
 # Recovering From Errors — Swift
 
-Swift `catch` is terminating (the chain cannot continue), instead we provide `recover`:
+In Swift, `catch` is `error`. However, unlike Objective-C `catch`, `error` is terminating (the chain cannot continue). So we provide `recover`:
 
-{% highlight objectivec %}
+{% highlight swift %}
 
 CLLocationManager.promise().recover { err in
     guard !err.fatal else { throw err }
     return CLLocationChicago
 }.then { location in
     // the user’s location, or Chicago if an error occurred
-}.catch { err in
+}.error { err in
     // the error was fatal
 }
 

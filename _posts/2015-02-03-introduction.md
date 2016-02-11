@@ -45,7 +45,7 @@ login().then {
     self.kittens = fetchedKittens
     self.tableView.reloadData()
 
-}.catch { error in
+}.error { error in
 
     // any errors in any of the above promises land here
     UIAlertView(…).show()

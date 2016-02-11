@@ -55,7 +55,7 @@ firstly {
     NSURLConnection.GET(json["avatar_url"])
 }.then { (image: UIImage) in
     self.imageView.image = image
-}.catch { error in
+}.error { error in
     UIAlertView(…).show()
 }
 {% endhighlight %}
@@ -67,7 +67,7 @@ Any errors that happen anywhere in the chain propogate to the error handler skip
 
 It’s important to remember that in order for your errors to propogate they must occur in the chain. **If you don’t return your promise, thus inserting it into the chain, the error won’t propogate**.
 
-PromiseKit has an additional bonus: unhandled errors (ie. errors that never get handled in a `catch`) are logged. If you like, we even provide [a mechanism][ueh] to execute your own code whenever errors are not caught.
+PromiseKit has an additional bonus: unhandled errors (ie. errors that never get handled in a `catch`, `error`, or `recover`) are logged. If you like, we even provide [a mechanism][ueh] to execute your own code whenever errors are not caught.
 
 <div><a class="pagination" href="/when">Next: `when`</a></div>
 
