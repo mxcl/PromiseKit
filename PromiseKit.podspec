@@ -64,6 +64,12 @@ Pod::Spec.new do |s|
     ss.osx.deployment_target = '10.10'
   end
 
+  s.subspec 'CoreBluetooth' do |ss|
+    ss.source_files = 'Categories/CoreBluetooth/*'
+    ss.dependency 'PromiseKit/CorePromise'
+    ss.frameworks = 'CoreBluetooth'
+  end
+
   s.subspec 'CorePromise' do |ss|
     hh = Dir['Sources/*.h'] - Dir['Sources/*+Private.h']
     

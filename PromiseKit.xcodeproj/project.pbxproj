@@ -11,7 +11,6 @@
 		17470C5D1CBF8B17004FBBB8 /* PMKDefaultDispatchQueueTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17470C5C1CBF8B17004FBBB8 /* PMKDefaultDispatchQueueTest.swift */; };
 		17470C5F1CBF912E004FBBB8 /* PMKDefaultDispatchQueueTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 17470C5E1CBF912E004FBBB8 /* PMKDefaultDispatchQueueTest.m */; };
 		2F0BAE0C1C901E9300A4DCA1 /* TestEventKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0BAE0B1C901E9300A4DCA1 /* TestEventKit.swift */; };
-		2F814F131C73A8C800ABF4D1 /* EKEventStore+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F814F111C73782100ABF4D1 /* EKEventStore+Promise.swift */; };
 		431B66E41CAC8022006CFC50 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6373805B1B3E1C8E0060B7CA /* Bolts.framework */; };
 		43EF78B41C5AB88600BCD8FB /* after.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A60E1F1AFD795B00C4E692 /* after.m */; };
 		43EF78B51C5AB88600BCD8FB /* after.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63075EBD1AD0EDB3002C46A0 /* after.swift */; };
@@ -89,6 +88,9 @@
 		635D0D761ADDA2EA00CC0406 /* AnyPromise.test.m in Sources */ = {isa = PBXBuildFile; fileRef = 635D0D741ADDA2C100CC0406 /* AnyPromise.test.m */; };
 		635D0D7B1ADDB11400CC0406 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D0D7A1ADDB11400CC0406 /* Error.swift */; };
 		635D0D7C1ADDB11400CC0406 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D0D7A1ADDB11400CC0406 /* Error.swift */; };
+		636DF8A41D43317C004770EA /* EKEventStore+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636DF8A31D43317C004770EA /* EKEventStore+Promise.swift */; };
+		636DF8A51D43317C004770EA /* EKEventStore+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 636DF8A31D43317C004770EA /* EKEventStore+Promise.swift */; };
+		636DF8A61D4331D7004770EA /* CBCentralManager+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1912DEE91C728B6800BB3C37 /* CBCentralManager+Promise.swift */; };
 		63772C9C1AF09B8A00ED2F59 /* ErrorUnhandler.test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63772C9B1AF09B8A00ED2F59 /* ErrorUnhandler.test.swift */; };
 		6384F5FA1B41F3EE00CB9679 /* PromiseKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63F803CC1AB89A0F00E4DEE1 /* PromiseKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		63877E721B792C680042195F /* TestNSURLSession.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63877E711B792C680042195F /* TestNSURLSession.swift */; };
@@ -211,6 +213,7 @@
 		6391FD2A1B62EC6700671798 /* utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6391FD291B62EC6700671798 /* utils.swift */; };
 		639A12711AB9F941002E5C24 /* Promise+Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639A12701AB9F941002E5C24 /* Promise+Properties.swift */; };
 		639A12721AB9F997002E5C24 /* Promise+Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639A12701AB9F941002E5C24 /* Promise+Properties.swift */; };
+		639D55101D432CE20035D578 /* CBCentralManager+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1912DEE91C728B6800BB3C37 /* CBCentralManager+Promise.swift */; };
 		63A1576B1ABB32EB0002A421 /* AnyPromise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A1576A1ABB32EB0002A421 /* AnyPromise.swift */; };
 		63A1576C1ABB34250002A421 /* AnyPromise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A1576A1ABB32EB0002A421 /* AnyPromise.swift */; };
 		63A157721ABB59D00002A421 /* AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A157711ABB59D00002A421 /* AnyPromise.m */; };
@@ -365,8 +368,8 @@
 		17470C5A1CBF8A9D004FBBB8 /* PMKDefaultDispatchQueueTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PMKDefaultDispatchQueueTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		17470C5C1CBF8B17004FBBB8 /* PMKDefaultDispatchQueueTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PMKDefaultDispatchQueueTest.swift; path = CorePromise/PMKDefaultDispatchQueueTest.swift; sourceTree = "<group>"; };
 		17470C5E1CBF912E004FBBB8 /* PMKDefaultDispatchQueueTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PMKDefaultDispatchQueueTest.m; path = CorePromise/PMKDefaultDispatchQueueTest.m; sourceTree = "<group>"; };
+		1912DEE91C728B6800BB3C37 /* CBCentralManager+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CBCentralManager+Promise.swift"; sourceTree = "<group>"; };
 		2F0BAE0B1C901E9300A4DCA1 /* TestEventKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestEventKit.swift; sourceTree = "<group>"; };
-		2F814F111C73782100ABF4D1 /* EKEventStore+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EKEventStore+Promise.swift"; sourceTree = "<group>"; };
 		43EF78A61C5AA12B00BCD8FB /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6302AC8E1AEF42F2001F0069 /* ACAccountStore+AnyPromise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ACAccountStore+AnyPromise.h"; sourceTree = "<group>"; };
 		6302AC8F1AEF42F2001F0069 /* ACAccountStore+AnyPromise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ACAccountStore+AnyPromise.m"; sourceTree = "<group>"; };
@@ -454,6 +457,7 @@
 		635D0D741ADDA2C100CC0406 /* AnyPromise.test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = AnyPromise.test.m; path = Tests/CorePromise/AnyPromise.test.m; sourceTree = SOURCE_ROOT; };
 		635D0D7A1ADDB11400CC0406 /* Error.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Error.swift; path = Sources/Error.swift; sourceTree = "<group>"; };
 		636A44EF1AEC304300639777 /* bridge.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = bridge.h; path = Categories/bridge.h; sourceTree = "<group>"; };
+		636DF8A31D43317C004770EA /* EKEventStore+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EKEventStore+Promise.swift"; sourceTree = "<group>"; };
 		6373805B1B3E1C8E0060B7CA /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = Carthage/Build/iOS/Bolts.framework; sourceTree = "<group>"; };
 		6373805D1B3E1C9D0060B7CA /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = Carthage/Build/Mac/Bolts.framework; sourceTree = "<group>"; };
 		63772C9B1AF09B8A00ED2F59 /* ErrorUnhandler.test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ErrorUnhandler.test.swift; path = CorePromise/ErrorUnhandler.test.swift; sourceTree = "<group>"; };
@@ -616,12 +620,12 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2F814F101C73779800ABF4D1 /* EventKit */ = {
+		1912DEE81C728B4200BB3C37 /* CoreBluetooth */ = {
 			isa = PBXGroup;
 			children = (
-				2F814F111C73782100ABF4D1 /* EKEventStore+Promise.swift */,
+				1912DEE91C728B6800BB3C37 /* CBCentralManager+Promise.swift */,
 			);
-			path = EventKit;
+			name = CoreBluetooth;
 			sourceTree = "<group>";
 		};
 		43EA5FF21C5AC38C000BAEA7 /* tvOS */ = {
@@ -846,6 +850,15 @@
 			name = Core;
 			sourceTree = "<group>";
 		};
+		636DF8A21D43317C004770EA /* EventKit */ = {
+			isa = PBXGroup;
+			children = (
+				636DF8A31D43317C004770EA /* EKEventStore+Promise.swift */,
+			);
+			name = EventKit;
+			path = Categories/EventKit;
+			sourceTree = SOURCE_ROOT;
+		};
 		6388E16E1AD2F1DB0074D85B /* Internal Utilities */ = {
 			isa = PBXGroup;
 			children = (
@@ -938,8 +951,9 @@
 				6302AC951AEF42F2001F0069 /* AVFoundation */,
 				63D1BA9D1B256DE500435BF3 /* Bolts */,
 				6302AC991AEF42F2001F0069 /* CloudKit */,
+				1912DEE81C728B4200BB3C37 /* CoreBluetooth */,
 				6302ACA01AEF42F2001F0069 /* CoreLocation */,
-				2F814F101C73779800ABF4D1 /* EventKit */,
+				636DF8A21D43317C004770EA /* EventKit */,
 				6302ACA71AEF42F2001F0069 /* Foundation */,
 				6302ACB21AEF42F2001F0069 /* MapKit */,
 				6302ACB91AEF42F2001F0069 /* MessageUI */,
@@ -1570,6 +1584,7 @@
 				638AF9691B62B8370045C3E8 /* utils.swift in Sources */,
 				638AF8BD1B62B1AF0045C3E8 /* ACAccountStore+Promise.swift in Sources */,
 				638AF8BE1B62B1AF0045C3E8 /* ABAddressBookRequestAccess+Promise.swift in Sources */,
+				639D55101D432CE20035D578 /* CBCentralManager+Promise.swift in Sources */,
 				638AF8BF1B62B1AF0045C3E8 /* ALAssetsLibrary+Promise.swift in Sources */,
 				638AF8C11B62B1AF0045C3E8 /* AVAudioSession+AnyPromise.m in Sources */,
 				638AF8C21B62B1AF0045C3E8 /* AVAudioSession+Promise.swift in Sources */,
@@ -1617,6 +1632,7 @@
 				638AF9491B62B7230045C3E8 /* TestAddressBook.swift in Sources */,
 				638AF94A1B62B7230045C3E8 /* TestAVFoundation.m in Sources */,
 				638AF94B1B62B7230045C3E8 /* TestAVFoundation.swift in Sources */,
+				636DF8A41D43317C004770EA /* EKEventStore+Promise.swift in Sources */,
 				638AF94C1B62B7230045C3E8 /* utils.m in Sources */,
 				638AF94D1B62B7230045C3E8 /* TestCloudKit.swift in Sources */,
 				638AF94F1B62B7230045C3E8 /* TestCoreLocation.swift in Sources */,
@@ -1629,7 +1645,6 @@
 				638AF9561B62B7230045C3E8 /* TestMapKit.swift in Sources */,
 				638AF9571B62B7230045C3E8 /* TestQuartzCore.m in Sources */,
 				638AF95A1B62B7230045C3E8 /* TestSocial.m in Sources */,
-				2F814F131C73A8C800ABF4D1 /* EKEventStore+Promise.swift in Sources */,
 				638AF95B1B62B7230045C3E8 /* TestSocial.swift in Sources */,
 				638AF95C1B62B7230045C3E8 /* TestStoreKit.m in Sources */,
 				638AF95D1B62B7230045C3E8 /* TestStoreKit.swift in Sources */,
@@ -1660,11 +1675,13 @@
 				638AF9141B62B1D80045C3E8 /* NSNotificationCenter+AnyPromise.m in Sources */,
 				638AF9151B62B1D80045C3E8 /* NSNotificationCenter+Promise.swift in Sources */,
 				638AF9171B62B1D80045C3E8 /* NSTask+AnyPromise.m in Sources */,
+				636DF8A51D43317C004770EA /* EKEventStore+Promise.swift in Sources */,
 				638AF9181B62B1D80045C3E8 /* NSTask+Promise.swift in Sources */,
 				638AF91A1B62B1D80045C3E8 /* NSURLConnection+AnyPromise.m in Sources */,
 				638AF91B1B62B1D80045C3E8 /* NSURLConnection+Promise.swift in Sources */,
 				638AF91C1B62B1D80045C3E8 /* NSObject+Promise.swift in Sources */,
 				638AF91D1B62B1D80045C3E8 /* NSURLSession+Promise.swift in Sources */,
+				636DF8A61D4331D7004770EA /* CBCentralManager+Promise.swift in Sources */,
 				638AF91F1B62B1D80045C3E8 /* MKDirections+AnyPromise.m in Sources */,
 				7FB6D8EC1CA1B84D007CF0AF /* BFTask+Promise.swift in Sources */,
 				638AF9201B62B1D80045C3E8 /* MKDirections+Promise.swift in Sources */,
