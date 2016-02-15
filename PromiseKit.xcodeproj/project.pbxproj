@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1912DEEA1C728B6800BB3C37 /* CBCentralManager+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1912DEE91C728B6800BB3C37 /* CBCentralManager+Promise.swift */; };
 		43EF78B41C5AB88600BCD8FB /* after.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A60E1F1AFD795B00C4E692 /* after.m */; };
 		43EF78B51C5AB88600BCD8FB /* after.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63075EBD1AD0EDB3002C46A0 /* after.swift */; };
 		43EF78B61C5AB88600BCD8FB /* AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A157711ABB59D00002A421 /* AnyPromise.m */; };
@@ -357,6 +358,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		1912DEE91C728B6800BB3C37 /* CBCentralManager+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CBCentralManager+Promise.swift"; sourceTree = "<group>"; };
 		43EF78A61C5AA12B00BCD8FB /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6302AC8E1AEF42F2001F0069 /* ACAccountStore+AnyPromise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ACAccountStore+AnyPromise.h"; sourceTree = "<group>"; };
 		6302AC8F1AEF42F2001F0069 /* ACAccountStore+AnyPromise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ACAccountStore+AnyPromise.m"; sourceTree = "<group>"; };
@@ -599,6 +601,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		1912DEE81C728B4200BB3C37 /* CoreBluetooth */ = {
+			isa = PBXGroup;
+			children = (
+				1912DEE91C728B6800BB3C37 /* CBCentralManager+Promise.swift */,
+			);
+			name = CoreBluetooth;
+			sourceTree = "<group>";
+		};
 		43EA5FF21C5AC38C000BAEA7 /* tvOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -904,6 +914,7 @@
 		6398C8991AE985D9006E06E1 /* Categories */ = {
 			isa = PBXGroup;
 			children = (
+				1912DEE81C728B4200BB3C37 /* CoreBluetooth */,
 				6302AC8D1AEF42F2001F0069 /* Accounts */,
 				6302AC911AEF42F2001F0069 /* AddressBook */,
 				6302AC931AEF42F2001F0069 /* AssetsLibrary */,
@@ -1665,6 +1676,7 @@
 				63075EBE1AD0EDB3002C46A0 /* after.swift in Sources */,
 				63A157721ABB59D00002A421 /* AnyPromise.m in Sources */,
 				63A1576B1ABB32EB0002A421 /* AnyPromise.swift in Sources */,
+				1912DEEA1C728B6800BB3C37 /* CBCentralManager+Promise.swift in Sources */,
 				63196AC51AFD936300555BCD /* dispatch_promise.m in Sources */,
 				63196AC71AFD936300555BCD /* dispatch_promise.swift in Sources */,
 				635D0D7B1ADDB11400CC0406 /* Error.swift in Sources */,
