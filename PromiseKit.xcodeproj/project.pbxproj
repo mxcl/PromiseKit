@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F814F131C73A8C800ABF4D1 /* EKEventStore+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F814F111C73782100ABF4D1 /* EKEventStore+Promise.swift */; };
 		43EF78B41C5AB88600BCD8FB /* after.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A60E1F1AFD795B00C4E692 /* after.m */; };
 		43EF78B51C5AB88600BCD8FB /* after.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63075EBD1AD0EDB3002C46A0 /* after.swift */; };
 		43EF78B61C5AB88600BCD8FB /* AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A157711ABB59D00002A421 /* AnyPromise.m */; };
@@ -357,6 +358,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2F814F111C73782100ABF4D1 /* EKEventStore+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EKEventStore+Promise.swift"; sourceTree = "<group>"; };
 		43EF78A61C5AA12B00BCD8FB /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6302AC8E1AEF42F2001F0069 /* ACAccountStore+AnyPromise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ACAccountStore+AnyPromise.h"; sourceTree = "<group>"; };
 		6302AC8F1AEF42F2001F0069 /* ACAccountStore+AnyPromise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ACAccountStore+AnyPromise.m"; sourceTree = "<group>"; };
@@ -599,6 +601,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2F814F101C73779800ABF4D1 /* EventKit */ = {
+			isa = PBXGroup;
+			children = (
+				2F814F111C73782100ABF4D1 /* EKEventStore+Promise.swift */,
+			);
+			path = EventKit;
+			sourceTree = "<group>";
+		};
 		43EA5FF21C5AC38C000BAEA7 /* tvOS */ = {
 			isa = PBXGroup;
 			children = (
@@ -911,6 +921,7 @@
 				63D1BA9D1B256DE500435BF3 /* Bolts */,
 				6302AC991AEF42F2001F0069 /* CloudKit */,
 				6302ACA01AEF42F2001F0069 /* CoreLocation */,
+				2F814F101C73779800ABF4D1 /* EventKit */,
 				6302ACA71AEF42F2001F0069 /* Foundation */,
 				6302ACB21AEF42F2001F0069 /* MapKit */,
 				6302ACB91AEF42F2001F0069 /* MessageUI */,
@@ -1556,6 +1567,7 @@
 				638AF9561B62B7230045C3E8 /* TestMapKit.swift in Sources */,
 				638AF9571B62B7230045C3E8 /* TestQuartzCore.m in Sources */,
 				638AF95A1B62B7230045C3E8 /* TestSocial.m in Sources */,
+				2F814F131C73A8C800ABF4D1 /* EKEventStore+Promise.swift in Sources */,
 				638AF95B1B62B7230045C3E8 /* TestSocial.swift in Sources */,
 				638AF95C1B62B7230045C3E8 /* TestStoreKit.m in Sources */,
 				638AF95D1B62B7230045C3E8 /* TestStoreKit.swift in Sources */,
