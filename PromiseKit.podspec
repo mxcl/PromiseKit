@@ -12,7 +12,7 @@ Pod::Spec.new do |s|
   s.description = 'UIActionSheet UIAlertView CLLocationManager MFMailComposeViewController ACAccountStore StoreKit SKRequest SKProductRequest blocks'
   s.social_media_url = 'https://twitter.com/mxcl'
   s.authors  = { 'Max Howell' => 'mxcl@me.com' }
-  s.documentation_url = 'http://promisekit.org/introduction/'
+  s.documentation_url = 'http://promisekit.org/introduction'
   s.default_subspecs = 'Foundation', 'UIKit', 'QuartzCore'
   s.requires_arc = true
   s.ios.deployment_target = '8.0'
