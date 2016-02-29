@@ -193,9 +193,9 @@ public class Promise<T> {
        2) A function that fulfills that promise
        3) A function that rejects that promise
     */
-    public typealias ExpandedPromise = (promise: Promise, fulfill: (T) -> Void, reject: (ErrorType) -> Void)
+    public typealias PendingPromise = (promise: Promise, fulfill: (T) -> Void, reject: (ErrorType) -> Void)
     
-    public class func pendingPromise() -> ExpandedPromise {
+    public class func pendingPromise() -> PendingPromise {
         var fulfill: ((T) -> Void)!
         var reject: ((ErrorType) -> Void)!
         let promise = Promise { fulfill = $0; reject = $1 }
