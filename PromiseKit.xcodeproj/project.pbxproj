@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F0BAE0C1C901E9300A4DCA1 /* TestEventKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0BAE0B1C901E9300A4DCA1 /* TestEventKit.swift */; };
 		2F814F131C73A8C800ABF4D1 /* EKEventStore+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F814F111C73782100ABF4D1 /* EKEventStore+Promise.swift */; };
 		43EF78B41C5AB88600BCD8FB /* after.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A60E1F1AFD795B00C4E692 /* after.m */; };
 		43EF78B51C5AB88600BCD8FB /* after.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63075EBD1AD0EDB3002C46A0 /* after.swift */; };
@@ -358,6 +359,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2F0BAE0B1C901E9300A4DCA1 /* TestEventKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestEventKit.swift; sourceTree = "<group>"; };
 		2F814F111C73782100ABF4D1 /* EKEventStore+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EKEventStore+Promise.swift"; sourceTree = "<group>"; };
 		43EF78A61C5AA12B00BCD8FB /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6302AC8E1AEF42F2001F0069 /* ACAccountStore+AnyPromise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ACAccountStore+AnyPromise.h"; sourceTree = "<group>"; };
@@ -1022,6 +1024,7 @@
 				63DF16F71AEAC46E00BE97DD /* TestAVFoundation.swift */,
 				63DF16F91AEAC46E00BE97DD /* TestCloudKit.swift */,
 				63DF16FB1AEAC46E00BE97DD /* TestCoreLocation.swift */,
+				2F0BAE0B1C901E9300A4DCA1 /* TestEventKit.swift */,
 				63DF17031AEAC46E00BE97DD /* TestMessageUI.m */,
 				638AF9661B62B7DE0045C3E8 /* TestMessageUI.swift */,
 				6391FD2C1B62ED7D00671798 /* TestFoundation */,
@@ -1534,6 +1537,7 @@
 				638AF8E11B62B1AF0045C3E8 /* MKMapSnapshotter+Promise.swift in Sources */,
 				638AF8E21B62B1AF0045C3E8 /* MFMailComposeViewController+Promise.swift in Sources */,
 				638AF8E31B62B1AF0045C3E8 /* MFMessageComposeViewController+Promise.swift in Sources */,
+				2F0BAE0C1C901E9300A4DCA1 /* TestEventKit.swift in Sources */,
 				638AF8E41B62B1AF0045C3E8 /* PHPhotoLibrary+Promise.swift in Sources */,
 				638AF8E61B62B1AF0045C3E8 /* CALayer+AnyPromise.m in Sources */,
 				638AF8E71B62B1AF0045C3E8 /* SLComposeViewController+Promise.swift in Sources */,
