@@ -33,7 +33,7 @@
 extern NSError * __nullable PMKProcessUnhandledException(id __nonnull thrown);
 
 // TODO really this is not valid, we should instead nest the errors with NSUnderlyingError
-// since a special error subclass may be being used and we may not setup it up correctly
+// since a special error subclass may be being used and we may not set it up correctly
 // with our copy
 #define NSErrorSupplement(_err, supplements) ({ \
     NSError *err = _err; \

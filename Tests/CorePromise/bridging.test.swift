@@ -43,10 +43,17 @@ class BridgingTestCase_Swift: XCTestCase {
     }
 
     func testCanBridgeString() {
-        let sentinel = "a" as NSString
+        let sentinel = "a"
         let p = Promise(sentinel)
         let ap = AnyPromise(bound: p)
-        XCTAssertEqual(ap.valueForKey("value") as? NSString, sentinel)
+        XCTAssertEqual(ap.valueForKey("value") as? String, sentinel)
+    }
+
+    func testCanBridgeBool() {
+        let sentinel = true
+        let p = Promise(sentinel)
+        let ap = AnyPromise(bound: p)
+        XCTAssertEqual(ap.valueForKey("value") as? Bool, sentinel)
     }
 
     func testCanChainOffAnyPromiseReturn() {
