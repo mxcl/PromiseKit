@@ -12,17 +12,18 @@ Pod::Spec.new do |s|
   s.description = 'UIActionSheet UIAlertView CLLocationManager MFMailComposeViewController ACAccountStore StoreKit SKRequest SKProductRequest blocks'
   s.social_media_url = 'https://twitter.com/mxcl'
   s.authors  = { 'Max Howell' => 'mxcl@me.com' }
-  s.documentation_url = 'http://promisekit.org/introduction/'
+  s.documentation_url = 'http://promisekit.org/introduction'
   s.default_subspecs = 'Foundation', 'UIKit', 'QuartzCore'
   s.requires_arc = true
   s.ios.deployment_target = '8.0'
   s.osx.deployment_target = '10.9'
   s.watchos.deployment_target = '2.0'
+  s.tvos.deployment_target = '9.0'
   s.module_map = 'Sources/PMK.modulemap'
   s.xcconfig = { 'SWIFT_INSTALL_OBJC_HEADER' => 'NO' }
 
   s.subspec 'Accounts' do |ss|
-    ss.source_files = 'Categories/Accounts/*'
+    ss.ios.source_files = ss.osx.source_files = 'Categories/Accounts/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'Accounts'
   end
@@ -45,10 +46,15 @@ Pod::Spec.new do |s|
     ss.ios.frameworks = 'AVFoundation'
   end
 
-  s.subspec 'Bolts' do |ss|
-    ss.ios.source_files = 'Categories/Bolts/*'
-    ss.dependency 'Bolts'
-  end
+  # FIXME wouldn’t lint
+  # Still won't lint as of 1/31/2016 on cocoapods 0.39.0
+  # getting 'include of non-modular header inside framework module' errors
+  # that were supposed to be fixed by https://github.com/CocoaPods/CocoaPods/pull/4476
+  # s.subspec 'Bolts' do |ss|
+  #   ss.source_files = 'Categories/Bolts/*'
+  #   ss.dependency 'PromiseKit/CorePromise'
+  #   ss.dependency 'Bolts', '~> 1.6.0'
+  # end
 
   s.subspec 'CloudKit' do |ss|
     ss.source_files = 'Categories/CloudKit/*'
@@ -68,7 +74,9 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'CoreLocation' do |ss|
-    ss.source_files = 'Categories/CoreLocation/*'
+    ss.ios.source_files = 'Categories/CoreLocation/*'
+    ss.osx.source_files = 'Categories/CoreLocation/*'
+    ss.watchos.source_files = Dir['*/CLGeocoder*']
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'CoreLocation'
   end
@@ -76,9 +84,9 @@ Pod::Spec.new do |s|
   s.subspec 'Foundation' do |ss|
     ss.ios.source_files = Dir['Categories/Foundation/*'] - Dir['Categories/Foundation/NSTask*']
     ss.osx.source_files = 'Categories/Foundation/*'
-	ss.watchos.source_files = Dir['Categories/Foundation/*'] - Dir['Categories/Foundation/NSTask*']
+    ss.watchos.source_files = Dir['Categories/Foundation/*'] - Dir['Categories/Foundation/NSTask*', 'Categories/Foundation/NSURL*']
     ss.dependency 'PromiseKit/CorePromise'
-    ss.dependency 'OMGHTTPURLRQ', '~> 3.0.0'
+    ss.dependency 'OMGHTTPURLRQ', '~> 3.1.0'
     ss.frameworks = 'Foundation'
   end
   
@@ -91,7 +99,8 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'MapKit' do |ss|
-    ss.source_files = 'Categories/MapKit/*'
+    ss.ios.source_files = 'Categories/MapKit/*'
+    ss.osx.source_files = 'Categories/MapKit/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'MapKit'
   end
@@ -123,13 +132,13 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'StoreKit' do |ss|
-    ss.source_files = 'Categories/StoreKit/*'
+    ss.ios.source_files = ss.osx.source_files = 'Categories/StoreKit/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'StoreKit'
   end
 
   s.subspec 'SystemConfiguration' do |ss|
-    ss.source_files = 'Categories/SystemConfiguration/*'
+    ss.ios.source_files = ss.osx.source_files = 'Categories/SystemConfiguration/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'SystemConfiguration'
   end
@@ -140,79 +149,4 @@ Pod::Spec.new do |s|
     ss.ios.frameworks = 'UIKit'
   end
 
-
-####################################################### deprecated
-  %w{base Promise Pause Until When Join Hang Zalgo}.each do |name|
-    s.subspec name do |ss|
-      #ss.deprecated = true
-      ss.dependency 'PromiseKit/CorePromise'
-    end
-  end
-
-  s.subspec 'all' do |ss|
-    #ss.deprecated = true
-    ss.dependency 'PromiseKit/Accounts'
-    ss.dependency 'PromiseKit/AVFoundation'
-    ss.dependency 'PromiseKit/CloudKit'
-    ss.dependency 'PromiseKit/CoreLocation'
-    ss.dependency 'PromiseKit/Foundation'
-    ss.dependency 'PromiseKit/MapKit'
-    ss.dependency 'PromiseKit/Social'
-    ss.dependency 'PromiseKit/StoreKit'
-    ss.dependency 'PromiseKit/UIKit'
-    ss.dependency 'PromiseKit/QuartzCore'
-  end
-
-  %w{ACAccountStore AVAudioSession CLGeocoder CKContainer CKDatabase CLLocationManager MKDirections MKMapSnapshotter NSFileManager NSNotificationCenter NSTask NSURLConnection SKRequest SKProductsRequest SLRequest UIActionSheet UIAlertView UIView UIViewController CALayer}.each do |name|
-    prefix = name[0..1]
-    framework = case prefix
-      when 'UI' then 'UIKit'
-      when 'CL' then 'CoreLocation'
-      when 'MK' then 'MapKit'
-      when 'AV' then 'AVFoundation'
-      when 'AC' then 'Accounts'
-      when 'SL' then 'Social'
-      when 'SK' then 'StoreKit'
-      when 'CK' then 'CloudKit'
-      when 'CA' then 'QuartzCore'
-      else 'Foundation'
-    end
-    s.subspec name do |ss|
-      ss.dependency "PromiseKit/#{framework}"
-      #ss.deprecated = true
-    end
-  end
-
-  s.subspec 'Swift' do |ss|
-    #ss.deprecated = true
-    ss.default_subspecs = 'Foundation', 'UIKit'
-
-    ss.subspec 'Promise' do |sss|
-      #sss.deprecated = true
-      sss.dependency 'PromiseKit/CorePromise'
-    end
-    
-    ss.subspec 'NSJSONFromData' do |sss|
-      #sss.deprecated = true
-      sss.dependency 'PromiseKit/CorePromise'
-    end      
-
-    %w{CloudKit UIKit CoreLocation MapKit Social StoreKit Foundation NSNotificationCenter Accounts AVFoundation}.each do |name|
-      ss.subspec(name) do |sss|
-        #sss.deprecated = true
-        sss.dependency "PromiseKit/#{name}"
-      end
-    end
-
-    ss.subspec 'all' do |sss|
-      #sss.deprecated = true
-      sss.dependency 'PromiseKit/Swift/CloudKit'
-      sss.dependency 'PromiseKit/Swift/CoreLocation'
-      sss.dependency 'PromiseKit/Swift/Foundation'
-      sss.dependency 'PromiseKit/Swift/MapKit'
-      sss.dependency 'PromiseKit/Swift/Social'
-      sss.dependency 'PromiseKit/Swift/StoreKit'
-      sss.dependency 'PromiseKit/Swift/UIKit'
-    end
-  end  
 end

@@ -95,7 +95,7 @@ private func ==(lhs: ErrorPair, rhs: ErrorPair) -> Bool {
 }
 
 extension NSError {
-    @objc class func cancelledError() -> NSError {
+    @objc public class func cancelledError() -> NSError {
         let info: [NSObject: AnyObject] = [NSLocalizedDescriptionKey: "The operation was cancelled"]
         return NSError(domain: PMKErrorDomain, code: PMKOperationCancelled, userInfo: info)
     }

@@ -18,6 +18,19 @@ when(fetchImage(), getLocation()).then { image, location in
 PromiseKit is a thoughtful and complete implementation of promises for iOS and OS X with first-class support for **both** Objective-C *and* Swift.
 
 [![Join the chat at https://gitter.im/mxcl/PromiseKit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mxcl/PromiseKit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) ![](https://img.shields.io/cocoapods/v/PromiseKit.svg?label=Current%20Release)  [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg)](https://github.com/Carthage/Carthage)
+[![codebeat](https://codebeat.co/badges/6a2fc7b4-cc8f-4865-a81d-644edd38c662)](https://codebeat.co/projects/github-com-mxcl-promisekit)
+
+# Which PromiseKit Should I Use?
+
+If you are writing a library, **use PromiseKit 1.6**. This is because PromiseKit > 2 breaks everytime Swift changes. While Swift is in flux it is not feasible to depend on a library that will break every time Xcode updates.
+
+If you are making an app then PromiseKit 3 is the best PromiseKit, you may have to make some fixes when Xcode updates, but probably you will be OK as long as you update PromiseKit when Xcode updates.
+
+PromiseKit 1 and 3 can be installed in parallel if necessary, but CocoaPods will not support this.
+
+Once Swift becomes ABI or API stable we can all just move to the latest PromiseKit.
+
+Thus we intend to support PromiseKit 1.x for longer than expected.
 
 
 # PromiseKit 3
@@ -32,7 +45,11 @@ If you still are using Xcode 6 and Swift 1.2 then use PromiseKit 2.
 
 # PromiseKit 2
 
-PromiseKit 2 contains many interesting and important additions. Check out our our [release announcement](http://promisekit.org/PromiseKit-2.0-Released/) for full details.
+PromiseKit 2 contains many interesting and important additions. Check out our our [release announcement](http://promisekit.org/PromiseKit-2.0-Released) for full details.
+
+# PromiseKit 1
+
+The original, nice to use with Objective-C, less nice to use with Swift, hence PromiseKit 2.
 
 
 # How To Get Started

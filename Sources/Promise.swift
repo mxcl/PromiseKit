@@ -174,6 +174,18 @@ public class Promise<T> {
     }
 
     /**
+     A `typealias` for the return values of `pendingPromise()`. Simplifies declaration of properties that reference the values' containing tuple when this is necessary. For example, when working with multiple `pendingPromise()`s within the same scope, or when the promise initialization must occur outside of the caller's initialization.
+
+         ```
+         class Foo: BarDelegate {
+         var pendingPromise: Promise<Int>.PendingPromise?
+         }
+         ```
+     - SeeAlso: pendingPromise()
+     */
+    public typealias PendingPromise = (promise: Promise, fulfill: (T) -> Void, reject: (ErrorType) -> Void)
+
+    /**
      Making promises that wrap asynchronous delegation systems or other larger asynchronous systems without a simple completion handler is easier with pendingPromise.
 
          class Foo: BarDelegate {
@@ -193,7 +205,7 @@ public class Promise<T> {
        2) A function that fulfills that promise
        3) A function that rejects that promise
     */
-    public class func pendingPromise() -> (promise: Promise, fulfill: (T) -> Void, reject: (ErrorType) -> Void) {
+    public class func pendingPromise() -> PendingPromise {
         var fulfill: ((T) -> Void)!
         var reject: ((ErrorType) -> Void)!
         let promise = Promise { fulfill = $0; reject = $1 }
@@ -362,10 +374,11 @@ public class Promise<T> {
 
         pipe { resolution in
             switch (resolution, policy) {
-            case (let .Rejected(error as CancellableErrorType, token), .AllErrorsExceptCancellation):
+            case (let .Rejected(error, token), .AllErrorsExceptCancellation):
                 dispatch_async(dispatch_get_main_queue()) {
-                    if !error.cancelled {     // cancelled must be called on main
+                    guard let cancellableError = error as? CancellableErrorType where cancellableError.cancelled else {
                         consume(error, token)
+                        return
                     }
                 }
             case (let .Rejected(error, token), _):
@@ -450,7 +463,7 @@ public class Promise<T> {
     public func report(policy policy: ErrorPolicy = .AllErrorsExceptCancellation, _ body: (ErrorType) -> Void) { error(policy: policy, body) }
 
     @available(*, deprecated, renamed="always")
-    public func ensure(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: () -> Void) -> Promise { return ensure(on: q, body) }
+    public func ensure(on q: dispatch_queue_t = dispatch_get_main_queue(), _ body: () -> Void) -> Promise { return always(on: q, body) }
 }
 
 
