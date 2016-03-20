@@ -17,6 +17,12 @@ import Dispatch
  - Returns: A new promise that resolves once all the provided promises resolve.
 */
 public func join<T>(promises: Promise<T>...) -> Promise<[T]> {
+    return join(promises)
+}
+
+public func join<T>(promises: [Promise<T>]) -> Promise<[T]> {
+    guard !promises.isEmpty else { return Promise<[T]>([]) }
+  
     var countdown = promises.count
     let barrier = dispatch_queue_create("org.promisekit.barrier.join", DISPATCH_QUEUE_CONCURRENT)
     var rejected = false
