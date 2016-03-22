@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2F0BAE071C901CD700A4DCA1 /* Bolts.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 6373805B1B3E1C8E0060B7CA /* Bolts.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		2F0BAE081C901D1900A4DCA1 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6373805B1B3E1C8E0060B7CA /* Bolts.framework */; };
 		43EF78B41C5AB88600BCD8FB /* after.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A60E1F1AFD795B00C4E692 /* after.m */; };
 		43EF78B51C5AB88600BCD8FB /* after.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63075EBD1AD0EDB3002C46A0 /* after.swift */; };
 		43EF78B61C5AB88600BCD8FB /* AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A157711ABB59D00002A421 /* AnyPromise.m */; };
@@ -257,7 +259,6 @@
 		63CD9A5C1BB102EE008D916F /* PromiseKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 63A157701ABB59490002A421 /* PromiseKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63CD9A5D1BB102EE008D916F /* Umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 63F803A81AB87A8200E4DEE1 /* Umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63CD9A5E1BB102EE008D916F /* AnyPromise+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 63314AE01AEDDD0B0071B6F5 /* AnyPromise+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
-		63D1BAA41B256E1A00435BF3 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63D1BAA31B256E1A00435BF3 /* Bolts.framework */; };
 		63D953C91AEDA3B1004981FF /* AnyPromise.h in Headers */ = {isa = PBXBuildFile; fileRef = 63D953C71AEDA3B1004981FF /* AnyPromise.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63D953CA1AEDA4D0004981FF /* AnyPromise.h in Headers */ = {isa = PBXBuildFile; fileRef = 63D953C71AEDA3B1004981FF /* AnyPromise.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63DEC34F1B41BD25002F0FB4 /* PMKManifold.test.m in Sources */ = {isa = PBXBuildFile; fileRef = 63DEC34D1B41BCE3002F0FB4 /* PMKManifold.test.m */; };
@@ -336,6 +337,7 @@
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				2F0BAE071C901CD700A4DCA1 /* Bolts.framework in CopyFiles */,
 				638E0F311AEF1B740052E28F /* OHHTTPStubs.framework in CopyFiles */,
 				638E0F321AEF1B750052E28F /* OMGHTTPURLRQ.framework in CopyFiles */,
 				634E98AF1AF917BC00094594 /* Stubbilino.framework in CopyFiles */,
@@ -499,7 +501,6 @@
 		63CA14C71AEA9E7400223904 /* OMGHTTPURLRQ.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OMGHTTPURLRQ.framework; path = Carthage/Build/iOS/OMGHTTPURLRQ.framework; sourceTree = "<group>"; };
 		63CD9A621BB102EE008D916F /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		63D1BAA01B256DE500435BF3 /* BFTask+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "BFTask+Promise.swift"; path = "Categories/Bolts/BFTask+Promise.swift"; sourceTree = "<group>"; };
-		63D1BAA31B256E1A00435BF3 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = Carthage/Build/iOS/Bolts.framework; sourceTree = "<group>"; };
 		63D73BE11B20B48F00843146 /* afterlife.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = afterlife.swift; sourceTree = "<group>"; };
 		63D953C71AEDA3B1004981FF /* AnyPromise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnyPromise.h; path = Sources/AnyPromise.h; sourceTree = "<group>"; };
 		63DEC34D1B41BCE3002F0FB4 /* PMKManifold.test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PMKManifold.test.m; path = CorePromise/PMKManifold.test.m; sourceTree = "<group>"; };
@@ -571,7 +572,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63D1BAA41B256E1A00435BF3 /* Bolts.framework in Frameworks */,
+				2F0BAE081C901D1900A4DCA1 /* Bolts.framework in Frameworks */,
 				638E0F2E1AEF1A0A0052E28F /* OHHTTPStubs.framework in Frameworks */,
 				638E0F2F1AEF1A0A0052E28F /* OMGHTTPURLRQ.framework in Frameworks */,
 				638E0EDB1AEF16530052E28F /* PromiseKit.framework in Frameworks */,
