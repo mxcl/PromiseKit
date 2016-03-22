@@ -64,20 +64,22 @@ extension XCTestCase {
 
 /////////////////////////////////////////////////////////////////////////
 
-    private func mkspecify<T>(numberOfExpectations: Int, generator: () -> T, body: (Promise<Int>, [XCTestExpectation], T) -> Void)(_ desc: String, feed: (T) -> (Promise<Int>, () -> Void)) {
-        let floater = expectationWithDescription("")
-        later(2, floater.fulfill)
-
-        let value = generator()
-        let (promise, after) = feed(value)
-        let expectations = (1...numberOfExpectations).map {
-            expectationWithDescription("\(desc) (\($0))")
+    private func mkspecify<T>(numberOfExpectations: Int, generator: () -> T, body: (Promise<Int>, [XCTestExpectation], T) -> Void) -> (String, feed: (T) -> (Promise<Int>, () -> Void)) -> Void {
+        return { desc, feed in
+            let floater = self.expectationWithDescription("")
+			later(2, floater.fulfill)
+			
+            let value = generator()
+            let (promise, after) = feed(value)
+            let expectations = (1...numberOfExpectations).map {
+                self.expectationWithDescription("\(desc) (\($0))")
+            }
+            body(promise, expectations, value)
+            
+            after()
+            
+            self.waitForExpectationsWithTimeout(1, handler: nil)
         }
-        body(promise, expectations, value)
-
-        after()
-
-        waitForExpectationsWithTimeout(1, handler: nil)
     }
 }
 

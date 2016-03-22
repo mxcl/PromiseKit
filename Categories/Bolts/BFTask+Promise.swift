@@ -10,7 +10,7 @@ extension Promise {
                     if task.completed {
                         fulfill(task.result)
                     } else {
-                        reject(task.error)
+                        reject(task.error!)
                     }
                     return nil
                 }
@@ -28,7 +28,7 @@ extension BFTask {
                         fulfill(body(task.result))
                     }
                 } else {
-                    reject(task.error)
+                    reject(task.error!)
                 }
                 return nil
             }
