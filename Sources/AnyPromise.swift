@@ -213,6 +213,20 @@ import Foundation.NSError
         })
     }
 
+    /**
+     - Returns: downcasted (typed) `Promise<T>`.
+     Throws `CastingError.CastingAnyPromiseFailed(T)` if self's value cannot be downcasted to the given type.
+     Usage: `anyPromise.toPromise(T).then { (t: T) -> U in ... }`
+    */
+    public func toPromise<T>(type: T.Type) -> Promise<T> {
+        return self.then { (value: AnyObject?) -> T in
+            if let value = value as? T {
+                return value
+            }
+            throw CastingError.CastingAnyPromiseFailed(type)
+        }
+    }
+
     private class State: UnsealedState<AnyObject?> {
         required init(inout resolver: ((AnyObject?) -> Void)!) {
             var preresolve: ((AnyObject?) -> Void)!
