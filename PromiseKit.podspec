@@ -20,6 +20,8 @@ Pod::Spec.new do |s|
   s.requires_arc = true
   s.ios.deployment_target = '6.0'    # due to https://github.com/CocoaPods/CocoaPods/issues/1001
   s.osx.deployment_target = '10.7'
+  s.watchos.deployment_target = '2.0'
+  s.tvos.deployment_target = '9.0'
 
   def s.mksubspec name, ios: nil, osx: nil
     prefix = name[0..1]
