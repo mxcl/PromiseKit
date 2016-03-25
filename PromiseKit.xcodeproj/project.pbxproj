@@ -206,7 +206,6 @@
 		6391FD2A1B62EC6700671798 /* utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6391FD291B62EC6700671798 /* utils.swift */; };
 		639A12711AB9F941002E5C24 /* Promise+Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639A12701AB9F941002E5C24 /* Promise+Properties.swift */; };
 		639A12721AB9F997002E5C24 /* Promise+Properties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639A12701AB9F941002E5C24 /* Promise+Properties.swift */; };
-		639CAADE1B7DBA8000774D54 /* BFTask+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D1BAA01B256DE500435BF3 /* BFTask+Promise.swift */; };
 		63A1576B1ABB32EB0002A421 /* AnyPromise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A1576A1ABB32EB0002A421 /* AnyPromise.swift */; };
 		63A1576C1ABB34250002A421 /* AnyPromise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63A1576A1ABB32EB0002A421 /* AnyPromise.swift */; };
 		63A157721ABB59D00002A421 /* AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A157711ABB59D00002A421 /* AnyPromise.m */; };
@@ -270,6 +269,7 @@
 		63F803C01AB87A9500E4DEE1 /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F803BF1AB87A9500E4DEE1 /* Promise.swift */; };
 		63F803C41AB89A0F00E4DEE1 /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63F803BF1AB87A9500E4DEE1 /* Promise.swift */; };
 		63F803C71AB89A0F00E4DEE1 /* Umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 63F803A81AB87A8200E4DEE1 /* Umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		7FB6D8EC1CA1B84D007CF0AF /* BFTask+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7FB6D8EB1CA1B84D007CF0AF /* BFTask+Promise.swift */; };
 		D9693C1C1C9D28AE004A00CE /* join.test.swift in Sources */ = {isa = PBXBuildFile; fileRef = D9693C111C9D17A6004A00CE /* join.test.swift */; };
 /* End PBXBuildFile section */
 
@@ -498,7 +498,6 @@
 		63CA14C61AEA9E7400223904 /* OHHTTPStubs.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OHHTTPStubs.framework; path = Carthage/Build/iOS/OHHTTPStubs.framework; sourceTree = "<group>"; };
 		63CA14C71AEA9E7400223904 /* OMGHTTPURLRQ.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OMGHTTPURLRQ.framework; path = Carthage/Build/iOS/OMGHTTPURLRQ.framework; sourceTree = "<group>"; };
 		63CD9A621BB102EE008D916F /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		63D1BAA01B256DE500435BF3 /* BFTask+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "BFTask+Promise.swift"; path = "Categories/Bolts/BFTask+Promise.swift"; sourceTree = "<group>"; };
 		63D1BAA31B256E1A00435BF3 /* Bolts.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Bolts.framework; path = Carthage/Build/iOS/Bolts.framework; sourceTree = "<group>"; };
 		63D73BE11B20B48F00843146 /* afterlife.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = afterlife.swift; sourceTree = "<group>"; };
 		63D953C71AEDA3B1004981FF /* AnyPromise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = AnyPromise.h; path = Sources/AnyPromise.h; sourceTree = "<group>"; };
@@ -532,6 +531,7 @@
 		63F803BF1AB87A9500E4DEE1 /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Promise.swift; path = Sources/Promise.swift; sourceTree = "<group>"; };
 		63F803C11AB8876B00E4DEE1 /* PMK.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = PMK.playground; sourceTree = "<group>"; };
 		63F803CC1AB89A0F00E4DEE1 /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7FB6D8EB1CA1B84D007CF0AF /* BFTask+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "BFTask+Promise.swift"; path = "Categories/Bolts/BFTask+Promise.swift"; sourceTree = SOURCE_ROOT; };
 		D9693C111C9D17A6004A00CE /* join.test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = join.test.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -988,7 +988,7 @@
 		63D1BA9D1B256DE500435BF3 /* Bolts */ = {
 			isa = PBXGroup;
 			children = (
-				63D1BAA01B256DE500435BF3 /* BFTask+Promise.swift */,
+				7FB6D8EB1CA1B84D007CF0AF /* BFTask+Promise.swift */,
 			);
 			name = Bolts;
 			path = Categories/BFTask;
@@ -1596,7 +1596,7 @@
 				638AF91C1B62B1D80045C3E8 /* NSObject+Promise.swift in Sources */,
 				638AF91D1B62B1D80045C3E8 /* NSURLSession+Promise.swift in Sources */,
 				638AF91F1B62B1D80045C3E8 /* MKDirections+AnyPromise.m in Sources */,
-				639CAADE1B7DBA8000774D54 /* BFTask+Promise.swift in Sources */,
+				7FB6D8EC1CA1B84D007CF0AF /* BFTask+Promise.swift in Sources */,
 				638AF9201B62B1D80045C3E8 /* MKDirections+Promise.swift in Sources */,
 				638AF9221B62B1D80045C3E8 /* MKMapSnapshotter+AnyPromise.m in Sources */,
 				638AF9231B62B1D80045C3E8 /* MKMapSnapshotter+Promise.swift in Sources */,

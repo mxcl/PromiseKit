@@ -153,7 +153,7 @@ class ErrorHandlingTests_Swift: XCTestCase {
             case Test
         }
 
-        Promise<Void> { _, reject in
+        _ = Promise<Void> { _, reject in
             after(0.1).then {
                 throw Error.Test
             }.error { err in

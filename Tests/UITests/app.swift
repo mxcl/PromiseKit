@@ -88,7 +88,9 @@ enum Row: Int {
 
     static var count: Int {
         var x = 0
-        while Row(rawValue: x++) != nil {}
+        while Row(rawValue: x) != nil {
+            x += 1
+        }
         return x
     }
 }

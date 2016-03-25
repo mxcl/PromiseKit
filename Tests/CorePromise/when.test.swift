@@ -122,7 +122,8 @@ class WhenTestCase_Swift: XCTestCase {
 
         var x = 0
         func finally() {
-            if ++x == 4 {
+            x += 1
+            if x == 4 {
                 XCTAssertLessThanOrEqual(1, progress.fractionCompleted)
                 XCTAssertEqual(progress.completedUnitCount, 1)
                 ex1.fulfill()

@@ -251,7 +251,7 @@ public class Promise<T> {
         return Promise<U>(when: self) { resolution, resolve in
             switch resolution {
             case .Rejected(let error):
-                resolve(.Rejected(error))
+                resolve(.Rejected((error.0, error.1)))
             case .Fulfilled(let value):
                 contain_zalgo(q, rejecter: resolve) {
                     resolve(.Fulfilled(try body(value)))
@@ -280,7 +280,7 @@ public class Promise<T> {
         return Promise<U>(when: self) { resolution, resolve in
             switch resolution {
             case .Rejected(let error):
-                resolve(.Rejected(error))
+                resolve(.Rejected((error.0, error.1)))
             case .Fulfilled(let value):
                 contain_zalgo(q, rejecter: resolve) {
                     let promise = try body(value)
@@ -314,7 +314,7 @@ public class Promise<T> {
         return Promise<AnyObject?>(when: self) { resolution, resolve in
             switch resolution {
             case .Rejected(let error):
-                resolve(.Rejected(error))
+                resolve(.Rejected((error.0, error.1)))
             case .Fulfilled(let value):
                 contain_zalgo(q, rejecter: resolve) {
                     try body(value).pipe(resolve)

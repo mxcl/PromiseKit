@@ -35,8 +35,8 @@ public func join<T>(promises: [Promise<T>]) -> Promise<[T]> {
                         token.consumed = true  // the parent Error.Join consumes all
                         rejected = true
                     }
-
-                    if --countdown == 0 {
+                    countdown -= 1
+                    if countdown == 0 {
                         if rejected {
                             reject(Error.Join(promises))
                         } else {

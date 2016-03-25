@@ -106,10 +106,10 @@ private class AuthorizationCatcher: CLLocationManager, CLLocationManagerDelegate
     }
 }
 
-private func auther(requestAuthorizationType: CLLocationManager.RequestAuthorizationType)(manager: CLLocationManager) {
+private func auther(requestAuthorizationType: CLLocationManager.RequestAuthorizationType) -> (CLLocationManager -> Void) {
 
     //PMKiOS7 guard #available(iOS 8, *) else { return }
-
+    return { manager in
     func hasInfoPListKey(key: String) -> Bool {
         let value = NSBundle.mainBundle().objectForInfoDictionaryKey(key) as? String ?? ""
         return !value.isEmpty
@@ -133,11 +133,14 @@ private func auther(requestAuthorizationType: CLLocationManager.RequestAuthoriza
         break
 
     }
+    }
 }
 
 #else
-    private func auther(requestAuthorizationType: CLLocationManager.RequestAuthorizationType)(manager: CLLocationManager)
-    {}
+    private func auther(requestAuthorizationType: CLLocationManager.RequestAuthorizationType) -> (CLLocationManager -> Void)
+    {
+        return { _ in }
+    }
 #endif
 
 

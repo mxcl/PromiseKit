@@ -16,19 +16,22 @@ class Test2261: XCTestCase {
             var x = 0
             promise.then { value -> Void in
                 XCTAssertEqual(value, sentinel)
-                XCTAssertEqual(++x, 1)
+                x += 1
+                XCTAssertEqual(x, 1)
                 ee[0].fulfill()
             }
             promise.error { _ in XCTFail() }
             promise.then { value -> Void in
                 XCTAssertEqual(value, sentinel)
-                XCTAssertEqual(++x, 2)
+                x += 1
+                XCTAssertEqual(x, 2)
                 ee[1].fulfill()
             }
             promise.error { _ in XCTFail() }
             promise.then { value -> Void in
                 XCTAssertEqual(value, sentinel)
-                XCTAssertEqual(++x, 3)
+                x += 1
+                XCTAssertEqual(x, 3)
                 ee[2].fulfill()
             }
             promise.error { _ in XCTFail() }
@@ -48,19 +51,22 @@ class Test2261: XCTestCase {
             var x = 0
             promise.then { value -> Void in
                 XCTAssertEqual(value, sentinel)
-                XCTAssertEqual(++x, 1)
+                x += 1
+                XCTAssertEqual(x, 1)
                 ee[0].fulfill()
             }
             promise.error { _ in XCTFail() }
             promise.then { value -> Void in
                 XCTAssertEqual(value, sentinel)
-                XCTAssertEqual(++x, 2)
+                x += 1
+                XCTAssertEqual(x, 2)
                 ee[1].fulfill()
             }
             promise.error { _ in XCTFail() }
             promise.then { value -> Void in
                 XCTAssertEqual(value, sentinel)
-                XCTAssertEqual(++x, 3)
+                x += 1
+				XCTAssertEqual(++x, 3)
                 ee[2].fulfill()
                 throw Error.Dummy
             }
@@ -113,15 +119,18 @@ class Test2261: XCTestCase {
             var x = 0
 
             promise.then { _ -> Void in
-                XCTAssertEqual(x++, 0)
+                XCTAssertEqual(x, 0)
+                x += 1
                 ee[0].fulfill()
             }
             promise.then { _ -> Void in
-                XCTAssertEqual(x++, 1)
+                XCTAssertEqual(x, 1)
+                x += 1
                 ee[1].fulfill()
             }
             promise.then { _ -> Void in
-                XCTAssertEqual(x++, 2)
+                XCTAssertEqual(x, 2)
+                x += 1
                 ee[2].fulfill()
             }
         }
@@ -134,15 +143,18 @@ class Test2261: XCTestCase {
         testFulfilled(3) { promise, exes, memo in
             var x = 0
             promise.then { _ -> Void in
-                XCTAssertEqual(x++, 0)
+                XCTAssertEqual(x, 0)
+                x += 1
                 exes[0].fulfill()
                 promise.then{ _ -> Void in
-                    XCTAssertEqual(x++, 2)
+                    XCTAssertEqual(x, 2)
+                    x += 1
                     exes[1].fulfill()
                 }
             }
             promise.then { _ -> Void in
-                XCTAssertEqual(x++, 1)
+                XCTAssertEqual(x, 1)
+                x += 1
                 exes[2].fulfill()
             }
         }
@@ -162,19 +174,22 @@ class Test2262: XCTestCase {
             var x = 0
             promise.error { err in
                 XCTAssertEqual(err, sentinel)
-                XCTAssertEqual(++x, 1)
+                x += 1
+                XCTAssertEqual(x, 1)
                 exes[0].fulfill()
             }
             promise.then { _ in XCTFail() }
             promise.error { err in
                 XCTAssertEqual(err, sentinel)
-                XCTAssertEqual(++x, 2)
+                x += 1
+                XCTAssertEqual(x, 2)
                 exes[1].fulfill()
             }
             promise.then { _ in XCTFail() }
             promise.error { err in
                 XCTAssertEqual(err, sentinel)
-                XCTAssertEqual(++x, 3)
+                x += 1
+                XCTAssertEqual(x, 3)
                 exes[2].fulfill()
             }
             promise.then { _ in XCTFail() }
@@ -195,19 +210,22 @@ class Test2262: XCTestCase {
             var x = 0
             promise.error{ err in
                 XCTAssertEqual(err, sentinel)
-                XCTAssertEqual(++x, 1)
+                x += 1
+                XCTAssertEqual(x, 1)
                 ee[0].fulfill()
             }
             promise.then { _ in XCTFail() }
             promise.error{ err in
                 XCTAssertEqual(err, sentinel)
-                XCTAssertEqual(++x, 2)
+                x += 1
+                XCTAssertEqual(x, 2)
                 ee[1].fulfill()
             }
             promise.then { _ in XCTFail() }
             promise.recover { err -> Int in
                 XCTAssertEqual(err, sentinel)
-                XCTAssertEqual(++x, 3)
+                x += 1
+                XCTAssertEqual(x, 3)
                 ee[2].fulfill()
                 throw blah
             }
@@ -260,15 +278,18 @@ class Test2262: XCTestCase {
             var x = 0
 
             promise.error { _ in
-                XCTAssertEqual(x++, 0)
+                XCTAssertEqual(x, 0)
+                x += 1
                 exes[0].fulfill()
             }
             promise.error{ _ in
-                XCTAssertEqual(x++, 1)
+                XCTAssertEqual(x, 1)
+                x += 1
                 exes[1].fulfill()
             }
             promise.error{ _ in
-                XCTAssertEqual(x++, 2)
+                XCTAssertEqual(x, 2)
+                x += 1
                 exes[2].fulfill()
             }
         }
@@ -282,15 +303,18 @@ class Test2262: XCTestCase {
             var x = 0
 
             promise.error { _ in
-                XCTAssertEqual(x++, 0)
+                XCTAssertEqual(x, 0)
+                x += 1
                 exes[0].fulfill()
                 promise.error { _ in
-                    XCTAssertEqual(x++, 2)
+                    XCTAssertEqual(x, 2)
+                    x += 1
                     exes[1].fulfill()
                 }
             }
             promise.error{ _ in
-                XCTAssertEqual(x++, 1)
+                XCTAssertEqual(x, 1)
+                x += 1
                 exes[2].fulfill()
             }
         }
