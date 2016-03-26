@@ -66,7 +66,7 @@ class Test2261: XCTestCase {
             promise.then { value -> Void in
                 XCTAssertEqual(value, sentinel)
                 x += 1
-				XCTAssertEqual(++x, 3)
+				XCTAssertEqual(x, 3)
                 ee[2].fulfill()
                 throw Error.Dummy
             }
