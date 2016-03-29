@@ -7,7 +7,6 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		639339B01ABCF37B00B7AAA9 /* test-utils.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63FCFEF51950F0FB00FB3A47 /* test-utils.swift */; };
 		63A8E52F1ABD016A00BEBB1A /* PMKPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334B1AAF65050078F9B6 /* PMKPromise.m */; };
 		63A8E5301ABD016A00BEBB1A /* PMKPromise+Hang.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334C1AAF65050078F9B6 /* PMKPromise+Hang.m */; };
 		63A8E5311ABD016A00BEBB1A /* PMKPromise+Join.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334D1AAF65050078F9B6 /* PMKPromise+Join.m */; };
@@ -93,7 +92,6 @@
 		639339771ABCF32B00B7AAA9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		6393397E1ABCF32B00B7AAA9 /* PMKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PMKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		639339841ABCF32B00B7AAA9 /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Tests-Info.plist"; path = "Specs/Tests-Info.plist"; sourceTree = "<group>"; };
-		63FCFEF51950F0FB00FB3A47 /* test-utils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "test-utils.swift"; path = "Specs/test-utils.swift"; sourceTree = SOURCE_ROOT; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -226,7 +224,6 @@
 				636337131ABD03FA006D9F67 /* iOS */,
 				639339771ABCF32B00B7AAA9 /* Info.plist */,
 				639339841ABCF32B00B7AAA9 /* Tests-Info.plist */,
-				63FCFEF51950F0FB00FB3A47 /* test-utils.swift */,
 				6393397E1ABCF32B00B7AAA9 /* PMKTests.xctest */,
 			);
 			name = "…";
@@ -300,7 +297,6 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				639339B01ABCF37B00B7AAA9 /* test-utils.swift in Sources */,
 				63A8E52F1ABD016A00BEBB1A /* PMKPromise.m in Sources */,
 				63A8E5301ABD016A00BEBB1A /* PMKPromise+Hang.m in Sources */,
 				63A8E5311ABD016A00BEBB1A /* PMKPromise+Join.m in Sources */,
