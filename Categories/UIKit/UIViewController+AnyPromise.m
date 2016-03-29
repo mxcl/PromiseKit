@@ -15,7 +15,7 @@
 
 - (AnyPromise *)promiseViewController:(UIViewController *)vc animated:(BOOL)animated completion:(void (^)(void))block
 {
-    id vc2present = vc;
+    UIViewController *vc2present = vc;
     AnyPromise *promise = nil;
 
     if ([vc isKindOfClass:NSClassFromString(@"MFMailComposeViewController")]) {
@@ -72,8 +72,7 @@
     [self presentViewController:vc2present animated:animated completion:block];
 
     promise.finally(^{
-        //TODO can we be more specific?
-        [self dismissViewControllerAnimated:animated completion:nil];
+        [vc2present.presentingViewController dismissViewControllerAnimated:animated completion:nil];
     });
 
     return promise;
