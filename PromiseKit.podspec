@@ -13,7 +13,7 @@ Pod::Spec.new do |s|
   s.description = 'UIActionSheet UIAlertView CLLocationManager MFMailComposeViewController ACAccountStore StoreKit SKRequest SKProductRequest blocks'
   s.social_media_url = 'https://twitter.com/mxcl'
   s.authors  = { 'Max Howell' => 'mxcl@me.com' }
-  s.documentation_url = 'http://promisekit.org/api/'
+  s.documentation_url = 'http://promisekit.org/api'
   s.default_subspecs = 'CALayer', 'NSURLConnection', 'NSNotificationCenter',
                        'UIActionSheet', 'UIAlertView', 'UIViewController', 'UIView',
                        'Pause', 'When', 'Until'
