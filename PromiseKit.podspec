@@ -80,6 +80,12 @@ Pod::Spec.new do |s|
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'CoreLocation'
   end
+
+  s.subspec 'EventKit' do |ss|
+    ss.ios.source_files = 'Categories/EventKit/*'
+    ss.dependency 'PromiseKit/CorePromise'
+    ss.ios.frameworks = 'EventKit'
+  end
   
   s.subspec 'Foundation' do |ss|
     ss.ios.source_files = Dir['Categories/Foundation/*'] - Dir['Categories/Foundation/NSTask*']
