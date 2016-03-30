@@ -28,36 +28,6 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6388E1A11AD315F90074D85B"
-               BuildableName = "PMKTests.xctest"
-               BlueprintName = "PMKTests"
-               ReferencedContainer = "container:PromiseKit.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "63533B321AE57A9300C10972"
-               BuildableName = "PMKAPlusTests.xctest"
-               BlueprintName = "PMKAPlusTests"
-               ReferencedContainer = "container:PromiseKit.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "63CA14481AE9FBD000223904"
-               BuildableName = "PMKOSXCategoryTests.xctest"
-               BlueprintName = "PMKOSXCategoryTests"
-               ReferencedContainer = "container:PromiseKit.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
