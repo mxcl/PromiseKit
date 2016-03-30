@@ -23,7 +23,7 @@ Pod::Spec.new do |s|
   s.watchos.deployment_target = '2.0'
   s.tvos.deployment_target = '9.0'
 
-  def s.mksubspec name, ios: nil, osx: nil
+  def s.mksubspec name, ios: nil, osx: nil, watchos: nil, tvos: nil
     prefix = name[0..1]
     framework = case prefix
       when 'UI' then 'UIKit'
@@ -61,22 +61,36 @@ Pod::Spec.new do |s|
         #ss.osx.deployment_target = max.call(osx, self.deployment_target(:osx))
         ss.osx.deployment_target = deployment_target(:osx)
       end
+	  if watchos
+	  	ss.watchos.deployment_target = deployment_target(:watchos)
+	  end
+	  if tvos
+	  	ss.tvos.deployment_target = deployment_target(:tvos)
+	  end
+		
       
       yield(ss) if block_given?
-
-      ss = if !ios
-        ss.ios.deployment_target = nil
-        ss.osx
-      elsif !osx
-        ss.osx.deployment_target = nil
-        ss.ios
-      else
-        ss
-      end
-
-      ss.framework = framework
-      ss.source_files = (ss.source_files rescue []) + ["objc/#{name}+PromiseKit.h", "objc/#{name}+PromiseKit.m"]
-      ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_#{name.upcase}=1" }
+	  
+	  
+	  operating_systems = method(__method__).parameters.select{ |arg| arg[1] != :name }.map { |arg| arg[1].to_s }
+	  
+	  operating_systems.each do |os_name|
+	  	os, version = case os_name
+		  when 'ios' then [ss.ios, ios]
+		  when 'osx' then [ss.osx, osx]
+		  when 'watchos' then [ss.watchos, watchos]
+		  when 'tvos' then [ss.tvos, tvos]
+		end
+		
+	  	if version
+	      os.framework = framework
+	      os.source_files = (ss.source_files rescue []) + ["objc/#{name}+PromiseKit.h", "objc/#{name}+PromiseKit.m"]
+	      os.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_#{name.upcase}=1" }
+		else
+		  os.deployment_target = nil
+		end
+	  end
+	  
     end
   end
 
@@ -98,20 +112,27 @@ Pod::Spec.new do |s|
   end
 
   s.mksubspec 'ACAccountStore', ios: '6.0', osx: '10.8'
-  s.mksubspec 'AVAudioSession', ios: '7.0'
-  s.mksubspec 'CLGeocoder', ios: '5.0', osx: '10.8'
-  s.mksubspec 'CKContainer', ios: '8.0', osx: '10.10'
-  s.mksubspec 'CKDatabase', ios: '8.0', osx: '10.10'
+  s.mksubspec 'AVAudioSession', ios: '7.0'#, tvos: '9.0' # `requestRecordPermission:` not available on tvOS
+  s.mksubspec 'CLGeocoder', ios: '5.0', osx: '10.8', watchos: '2.0', tvos: '9.0'
+  s.mksubspec 'CKContainer', ios: '8.0', osx: '10.10'#, tvos: '9.0' # `discoverAllContactUserInfosWithCompletionHandler:` not available on tvOS
+  s.mksubspec 'CKDatabase', ios: '8.0', osx: '10.10', tvos: '9.0'
   s.mksubspec 'CLLocationManager', ios: '2.0', osx: '10.6'
   s.mksubspec 'MKDirections', ios: '7.0', osx: '10.9'
-  s.mksubspec 'MKMapSnapshotter', ios: '7.0', osx: '10.9'
-  s.mksubspec 'NSFileManager', ios: '2.0', osx: '10.5'
-  s.mksubspec 'NSNotificationCenter', ios: '4.0', osx: '10.6'
+  s.mksubspec 'MKMapSnapshotter', ios: '7.0', osx: '10.9', tvos: '9.0'
+  s.mksubspec 'NSFileManager', ios: '2.0', osx: '10.5', watchos: '2.0', tvos: '9.0'
+  s.mksubspec 'NSNotificationCenter', ios: '4.0', osx: '10.6', watchos: '2.0', tvos: '9.0'
   s.mksubspec 'NSTask', osx: '10.0'
-  s.mksubspec 'NSURLConnection', ios: '5.0', osx: '10.7' do |ss|
-    ss.dependency "OMGHTTPURLRQ", "~> 2.1"
+  s.mksubspec 'NSURLConnection', ios: '5.0', osx: '10.7' do |ss| 
+  	# `sendAsynchronousRequest:` not available on tvOS and watchOS
+	# Need OMG 3.x for tv/watch support but PK 1.x NSURLConnection+PK files need updated for it - Nathan
+	
+	# ss.dependency "OMGHTTPURLRQ", "~> 2.1"
+  	# Even though watchos and tvos versions are not specified for this subspec, for some
+	# reason their dependencies are still being set if we're not explicit here - Nathan
+    ss.ios.dependency "OMGHTTPURLRQ", "~> 2.1"
+	ss.osx.dependency "OMGHTTPURLRQ", "~> 2.1"
   end
-  s.mksubspec 'SKRequest', ios: '3.0', osx: '10.7'
+  s.mksubspec 'SKRequest', ios: '3.0', osx: '10.7', tvos: '9.0'
   s.mksubspec 'SLRequest', ios: '6.0', osx: '10.8'
   s.mksubspec 'UIActionSheet', ios: '2.0'
   s.mksubspec 'UIAlertView', ios: '2.0'
@@ -120,7 +141,7 @@ Pod::Spec.new do |s|
   s.mksubspec 'UIViewController', ios: '5.0' do |ss|
     ss.ios.weak_frameworks = 'AssetsLibrary'
   end
-  s.mksubspec 'CALayer', ios: '2.0', osx: '10.5'
+  s.mksubspec 'CALayer', ios: '2.0', osx: '10.5', tvos: '9.0'
 
   s.subspec 'Accounts' do |ss|
     ss.dependency 'PromiseKit/ACAccountStore'
