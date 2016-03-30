@@ -22,7 +22,7 @@ PromiseKit is a thoughtful and complete implementation of promises for iOS and O
 
 # Which PromiseKit Should I Use?
 
-If you are writing a library, **use PromiseKit 1.6**. This is because PromiseKit > 2 breaks everytime Swift changes. While Swift is in flux it is not feasible to depend on a library that will break every time Xcode updates.
+If you are writing a library, [**use PromiseKit 1.x**](https://github.com/mxcl/PromiseKit/tree/legacy-1.x). This is because PromiseKit > 2 breaks everytime Swift changes. While Swift is in flux it is not feasible to depend on a library that will break every time Xcode updates.
 
 If you are making an app then PromiseKit 3 is the best PromiseKit, you may have to make some fixes when Xcode updates, but probably you will be OK as long as you update PromiseKit when Xcode updates.
 
@@ -85,7 +85,7 @@ github "mxcl/PromiseKit" ~> 2.0
 
 Neither CocoaPods or Carthage will install PromiseKit 2 for an iOS 7 target. Your options are:
 
- 1. `pod "PromiseKit", "~> 1.5"` †‡
+ 1. `pod "PromiseKit", "~> 1.7"` †‡
  2. Use our [iOS 7 EZ-Bake](https://github.com/PromiseKit/EZiOS7)
  3. Download our pre-built static framework (coming soon!)
 
