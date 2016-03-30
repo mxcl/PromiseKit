@@ -35,7 +35,7 @@ extension UIViewController {
         if p.pending {
             presentViewController(vc, animated: animated, completion: completion)
             p.always {
-                self.dismissViewControllerAnimated(animated, completion: nil)
+                vc.presentingViewController!.dismissViewControllerAnimated(animated, completion: nil)
             }
         }
 
@@ -48,7 +48,7 @@ extension UIViewController {
             if p.pending {
                 presentViewController(nc, animated: animated, completion: completion)
                 p.always {
-                    self.dismissViewControllerAnimated(animated, completion: nil)
+                    vc.presentingViewController!.dismissViewControllerAnimated(animated, completion: nil)
                 }
             }
             return p
@@ -71,7 +71,7 @@ extension UIViewController {
             }
             throw Error.NoImageFound
         }.always {
-            self.dismissViewControllerAnimated(animated, completion: nil)
+            vc.presentingViewController!.dismissViewControllerAnimated(animated, completion: nil)
         }
     }
 
@@ -80,7 +80,7 @@ extension UIViewController {
         vc.delegate = proxy
         presentViewController(vc, animated: animated, completion: completion)
         return proxy.promise.always {
-            self.dismissViewControllerAnimated(animated, completion: nil)
+            vc.presentingViewController!.dismissViewControllerAnimated(animated, completion: nil)
         }
     }
 }

@@ -13,9 +13,8 @@
 
 @implementation UIViewController (PromiseKit)
 
-- (AnyPromise *)promiseViewController:(UIViewController *)vc animated:(BOOL)animated completion:(void (^)(void))block
-{
-    UIViewController *vc2present = vc;
+- (AnyPromise *)promiseViewController:(UIViewController *)vc animated:(BOOL)animated completion:(void (^)(void))block {
+    __kindof UIViewController *vc2present = vc;
     AnyPromise *promise = nil;
 
     if ([vc isKindOfClass:NSClassFromString(@"MFMailComposeViewController")]) {
