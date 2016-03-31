@@ -391,6 +391,14 @@ public class Promise<T> {
     }
 
     /**
+     Provides an alias for the `error` function for cases where the Swift compiler gets into trouble inferring the right
+     types. If `error` does not work, consider using `onError` instead which does the same thing.
+    */
+    public func onError(policy policy: ErrorPolicy = .AllErrorsExceptCancellation, _ body: (ErrorType) -> Void) {
+        error(policy: policy, body)
+    }
+
+    /**
      The provided closure is executed when this promise is rejected giving you
      an opportunity to recover from the error and continue the promise chain.
     */

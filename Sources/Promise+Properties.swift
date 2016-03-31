@@ -14,6 +14,14 @@ extension Promise {
     }
 
     /**
+     - Returns: The error with which this promise was rejected; `nil` if this promise is not rejected.
+       Alternative for the cases where the Swift compiler gets confused over the name of the `error` property
+    */
+    public var errorValue: ErrorType? {
+        return self.error
+    }
+
+    /**
      - Returns: `true` if the promise has not yet resolved.
     */
     public var pending: Bool {
