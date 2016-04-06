@@ -1,3 +1,4 @@
 /Carthage
 /Cartfile.resolved
 /Build
+*.xcodeproj/xcuserdata/
