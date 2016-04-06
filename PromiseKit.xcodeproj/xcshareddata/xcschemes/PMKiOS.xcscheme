@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
    LastUpgradeVersion = "0700"
-   version = "1.7">
+   version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
       buildImplicitDependencies = "YES">
@@ -20,20 +20,6 @@
                ReferencedContainer = "container:PromiseKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "YES"
-            buildForArchiving = "YES"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "63EBEAC41B6151AA0097FA42"
-               BuildableName = "PMKiOSUITests.xctest"
-               BlueprintName = "PMKiOSUITests"
-               ReferencedContainer = "container:PromiseKit.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
       </BuildActionEntries>
    </BuildAction>
    <TestAction
@@ -42,30 +28,6 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "638E0ED41AEF16530052E28F"
-               BuildableName = "PMKiOSCategoryTests.xctest"
-               BlueprintName = "PMKiOSCategoryTests"
-               ReferencedContainer = "container:PromiseKit.xcodeproj">
-            </BuildableReference>
-            <LocationScenarioReference
-               identifier = "London, England"
-               referenceType = "1">
-            </LocationScenarioReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "63EBEAC41B6151AA0097FA42"
-               BuildableName = "PMKiOSUITests.xctest"
-               BlueprintName = "PMKiOSUITests"
-               ReferencedContainer = "container:PromiseKit.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference
