@@ -116,8 +116,7 @@ class ErrorHandlingTests_Swift: XCTestCase {
         }
     }
 
-
-    // an alias called `onError` exists for the `error` function
+    // a temporary alias `onError` exists for the `error` function
     func test7() {
         twice { promise, ex in
             PMKUnhandledErrorHandler = { err in
