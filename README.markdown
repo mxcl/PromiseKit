@@ -37,7 +37,7 @@ Thus we intend to support PromiseKit 1.x for longer than expected.
 
 In Swift 2.0 `catch` and `defer` became reserved keywords mandating we rename our functions with these names. This forced a major semantic version change on PromiseKit and thus we took the opportunity to make other minor (source compatability breaking) improvements.
 
-Thus if you cannot afford to adapt to PromiseKit 3 but still want to use Xcode-7.0/Swift-2.0 we provide a [minimal changes branch] where `catch` and `defer` are renamed `catch_` and `defer_` and all other changes are the bare minimum to make PromiseKit 2 compile against Swift 2.
+Thus if you cannot afford to adapt to PromiseKit 3 but still want to use Xcode-7.0/Swift-2.0 we provide a [minimal changes branch] \(Swift 2.2 version [here](https://github.com/mxcl/PromiseKit/tree/swift-2.2-minimal-changes)\) where `catch` and `defer` are renamed `catch_` and `defer_` and all other changes are the bare minimum to make PromiseKit 2 compile against Swift 2.
 
 If you still are using Xcode 6 and Swift 1.2 then use PromiseKit 2.
 
