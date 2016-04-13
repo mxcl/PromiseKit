@@ -1,4 +1,4 @@
-permalink:   /:title
+permalink:   /:title/
 highlighter: pygments
 paginate:    1
 markdown:    kramdown
