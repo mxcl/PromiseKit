@@ -159,7 +159,7 @@ import Foundation.NSError
     /**
      Continue a Promise<T> chain from an AnyPromise.
     */
-    public func then<T>(on q: dispatch_queue_t = dispatch_get_main_queue(), body: (AnyObject?) throws -> T) -> Promise<T> {
+    public func then<T>(on q: dispatch_queue_t = PMKDefaultDispatchQueue(), body: (AnyObject?) throws -> T) -> Promise<T> {
         return Promise(sealant: { resolve in
             pipe { object in
                 if let error = object as? NSError {
@@ -176,7 +176,7 @@ import Foundation.NSError
     /**
      Continue a Promise<T> chain from an AnyPromise.
     */
-    public func then(on q: dispatch_queue_t = dispatch_get_main_queue(), body: (AnyObject?) -> AnyPromise) -> Promise<AnyObject?> {
+    public func then(on q: dispatch_queue_t = PMKDefaultDispatchQueue(), body: (AnyObject?) -> AnyPromise) -> Promise<AnyObject?> {
         return Promise { fulfill, reject in
             pipe { object in
                 if let error = object as? NSError {
@@ -199,7 +199,7 @@ import Foundation.NSError
     /**
      Continue a Promise<T> chain from an AnyPromise.
     */
-    public func then<T>(on q: dispatch_queue_t = dispatch_get_main_queue(), body: (AnyObject?) -> Promise<T>) -> Promise<T> {
+    public func then<T>(on q: dispatch_queue_t = PMKDefaultDispatchQueue(), body: (AnyObject?) -> Promise<T>) -> Promise<T> {
         return Promise(sealant: { resolve in
             pipe { object in
                 if let error = object as? NSError {

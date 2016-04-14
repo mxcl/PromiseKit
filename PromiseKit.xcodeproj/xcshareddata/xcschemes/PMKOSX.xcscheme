@@ -58,6 +58,16 @@
                ReferencedContainer = "container:PromiseKit.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "17470C421CBF8A9D004FBBB8"
+               BuildableName = "PMKDefaultDispatchQueueTests.xctest"
+               BlueprintName = "PMKDefaultDispatchQueueTests"
+               ReferencedContainer = "container:PromiseKit.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
       <MacroExpansion>
          <BuildableReference

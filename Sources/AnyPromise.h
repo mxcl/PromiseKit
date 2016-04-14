@@ -10,6 +10,12 @@ typedef NS_ENUM(NSInteger, PMKCatchPolicy) {
     PMKCatchPolicyAllErrorsExceptCancellation
 };
 
+/**
+ This block lets you override the default dispatch queue for Promises.
+ 
+ By default this returns dispatch_get_main_queue()
+ */
+extern __nonnull dispatch_queue_t (^__nonnull PMKDefaultDispatchQueue)();
 
 /**
  @see AnyPromise.swift
