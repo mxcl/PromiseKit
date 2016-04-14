@@ -422,7 +422,7 @@
 		6302ACD61AEF42F2001F0069 /* UIView+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+Promise.swift"; sourceTree = "<group>"; };
 		6302ACD71AEF42F2001F0069 /* UIViewController+AnyPromise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "UIViewController+AnyPromise.h"; sourceTree = "<group>"; };
 		6302ACD81AEF42F2001F0069 /* UIViewController+AnyPromise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "UIViewController+AnyPromise.m"; sourceTree = "<group>"; };
-		6302ACD91AEF42F2001F0069 /* UIViewController+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIViewController+Promise.swift"; sourceTree = "<group>"; };
+		6302ACD91AEF42F2001F0069 /* UIViewController+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = "UIViewController+Promise.swift"; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		6302AD3F1AEF55A4001F0069 /* Promise.test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Promise.test.swift; path = CorePromise/Promise.test.swift; sourceTree = "<group>"; };
 		6306C6BA1AF6CA8500392D37 /* NSObject+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "NSObject+Promise.swift"; sourceTree = "<group>"; };
 		63075EBD1AD0EDB3002C46A0 /* after.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = after.swift; path = Sources/after.swift; sourceTree = "<group>"; };
