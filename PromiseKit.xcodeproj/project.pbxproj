@@ -7,9 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		431B66E41CAC8022006CFC50 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6373805B1B3E1C8E0060B7CA /* Bolts.framework */; };
 		2F0BAE0C1C901E9300A4DCA1 /* TestEventKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0BAE0B1C901E9300A4DCA1 /* TestEventKit.swift */; };
 		2F814F131C73A8C800ABF4D1 /* EKEventStore+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F814F111C73782100ABF4D1 /* EKEventStore+Promise.swift */; };
+		431B66E41CAC8022006CFC50 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6373805B1B3E1C8E0060B7CA /* Bolts.framework */; };
 		43EF78B41C5AB88600BCD8FB /* after.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A60E1F1AFD795B00C4E692 /* after.m */; };
 		43EF78B51C5AB88600BCD8FB /* after.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63075EBD1AD0EDB3002C46A0 /* after.swift */; };
 		43EF78B61C5AB88600BCD8FB /* AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A157711ABB59D00002A421 /* AnyPromise.m */; };
@@ -585,7 +585,6 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				6373805E1B3E1C9D0060B7CA /* Bolts.framework in Frameworks */,
 				63CA144D1AE9FBD000223904 /* PromiseKit.framework in Frameworks */,
 				63CA144E1AE9FBD000223904 /* OHHTTPStubs.framework in Frameworks */,
 				63CA144F1AE9FBD000223904 /* OMGHTTPURLRQ.framework in Frameworks */,
