@@ -1,5 +1,5 @@
 //
-//  create_default_dispatch_queue.test.swift
+//  PMKDefaultDispatchQueue.test.swift
 //  PromiseKit
 //
 //  Created by David Rodriguez on 4/14/16.
@@ -9,12 +9,12 @@
 import XCTest
 @testable import PromiseKit
 
-class create_default_dispatch_queue_Tests_Swift: XCTestCase {
+class PMKDefaultDispatchQueueTest_Swift: XCTestCase {
     
     override func tearDown() {
         super.tearDown()
         
-        create_default_promise_dispatch_queue = { () -> dispatch_queue_t in dispatch_get_main_queue() }
+        PMKDefaultDispatchQueue = { () -> dispatch_queue_t in dispatch_get_main_queue() }
     }
     
     func testThenWithDefaultQueue() {
@@ -33,7 +33,7 @@ class create_default_dispatch_queue_Tests_Swift: XCTestCase {
     }
     
     func testThenWithDifferentQueue() {
-        create_default_promise_dispatch_queue = { () -> dispatch_queue_t in
+        PMKDefaultDispatchQueue = { () -> dispatch_queue_t in
             dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0)
         }
         
@@ -54,7 +54,7 @@ class create_default_dispatch_queue_Tests_Swift: XCTestCase {
     }
     
     func testThenWithZalgo() {
-        create_default_promise_dispatch_queue = { () -> dispatch_queue_t in zalgo }
+        PMKDefaultDispatchQueue = { () -> dispatch_queue_t in zalgo }
         
         var fulfilled = false
         Promise(1).then { _ in
@@ -82,7 +82,7 @@ class create_default_dispatch_queue_Tests_Swift: XCTestCase {
     }
     
     func testErrorWithDifferentQueue() {
-        create_default_promise_dispatch_queue = { () -> dispatch_queue_t in
+        PMKDefaultDispatchQueue = { () -> dispatch_queue_t in
             dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0)
         }
         
@@ -106,7 +106,7 @@ class create_default_dispatch_queue_Tests_Swift: XCTestCase {
     }
     
     func testErrorWithZalgo() {
-        create_default_promise_dispatch_queue = { () -> dispatch_queue_t in zalgo }
+        PMKDefaultDispatchQueue = { () -> dispatch_queue_t in zalgo }
         
         var rejected = false
         let err = NSError(domain: "test", code: 0, userInfo: nil)
@@ -133,7 +133,7 @@ class create_default_dispatch_queue_Tests_Swift: XCTestCase {
     }
     
     func testAlwaysWithDifferentQueue() {
-        create_default_promise_dispatch_queue = { () -> dispatch_queue_t in
+        PMKDefaultDispatchQueue = { () -> dispatch_queue_t in
             dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0)
         }
         
@@ -153,7 +153,7 @@ class create_default_dispatch_queue_Tests_Swift: XCTestCase {
     }
     
     func testAlwaysWithZalgo() {
-        create_default_promise_dispatch_queue = { () -> dispatch_queue_t in zalgo }
+        PMKDefaultDispatchQueue = { () -> dispatch_queue_t in zalgo }
         
         var fulfilled = false
         Promise(1).always {

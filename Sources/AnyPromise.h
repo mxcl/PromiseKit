@@ -15,7 +15,7 @@ typedef NS_ENUM(NSInteger, PMKCatchPolicy) {
  
  By default this returns dispatch_get_main_queue()
  */
-extern __nonnull dispatch_queue_t (^__nonnull create_default_promise_dispatch_queue)();
+extern __nonnull dispatch_queue_t (^__nonnull PMKDefaultDispatchQueue)();
 
 /**
  @see AnyPromise.swift

@@ -8,8 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		17470C551CBF8A9D004FBBB8 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63F803A31AB87A8200E4DEE1 /* PromiseKit.framework */; };
-		17470C5D1CBF8B17004FBBB8 /* create_default_dispatch_queue.test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17470C5C1CBF8B17004FBBB8 /* create_default_dispatch_queue.test.swift */; };
-		17470C5F1CBF912E004FBBB8 /* create_default_dispatch_queue.test.m in Sources */ = {isa = PBXBuildFile; fileRef = 17470C5E1CBF912E004FBBB8 /* create_default_dispatch_queue.test.m */; };
+		17470C5D1CBF8B17004FBBB8 /* PMKDefaultDispatchQueueTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17470C5C1CBF8B17004FBBB8 /* PMKDefaultDispatchQueueTest.swift */; };
+		17470C5F1CBF912E004FBBB8 /* PMKDefaultDispatchQueueTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 17470C5E1CBF912E004FBBB8 /* PMKDefaultDispatchQueueTest.m */; };
 		2F0BAE0C1C901E9300A4DCA1 /* TestEventKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0BAE0B1C901E9300A4DCA1 /* TestEventKit.swift */; };
 		2F814F131C73A8C800ABF4D1 /* EKEventStore+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F814F111C73782100ABF4D1 /* EKEventStore+Promise.swift */; };
 		431B66E41CAC8022006CFC50 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6373805B1B3E1C8E0060B7CA /* Bolts.framework */; };
@@ -363,8 +363,8 @@
 
 /* Begin PBXFileReference section */
 		17470C5A1CBF8A9D004FBBB8 /* PMKDefaultDispatchQueueTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PMKDefaultDispatchQueueTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
-		17470C5C1CBF8B17004FBBB8 /* create_default_dispatch_queue.test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = create_default_dispatch_queue.test.swift; path = CorePromise/create_default_dispatch_queue.test.swift; sourceTree = "<group>"; };
-		17470C5E1CBF912E004FBBB8 /* create_default_dispatch_queue.test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = create_default_dispatch_queue.test.m; path = CorePromise/create_default_dispatch_queue.test.m; sourceTree = "<group>"; };
+		17470C5C1CBF8B17004FBBB8 /* PMKDefaultDispatchQueueTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PMKDefaultDispatchQueueTest.swift; path = CorePromise/PMKDefaultDispatchQueueTest.swift; sourceTree = "<group>"; };
+		17470C5E1CBF912E004FBBB8 /* PMKDefaultDispatchQueueTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PMKDefaultDispatchQueueTest.m; path = CorePromise/PMKDefaultDispatchQueueTest.m; sourceTree = "<group>"; };
 		2F0BAE0B1C901E9300A4DCA1 /* TestEventKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestEventKit.swift; sourceTree = "<group>"; };
 		2F814F111C73782100ABF4D1 /* EKEventStore+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EKEventStore+Promise.swift"; sourceTree = "<group>"; };
 		43EF78A61C5AA12B00BCD8FB /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -840,8 +840,8 @@
 				6388E1B11AD316CB0074D85B /* zalgo.test.swift */,
 				63C845191B4B072500623517 /* bridge.h */,
 				D9693C111C9D17A6004A00CE /* join.test.swift */,
-				17470C5E1CBF912E004FBBB8 /* create_default_dispatch_queue.test.m */,
-				17470C5C1CBF8B17004FBBB8 /* create_default_dispatch_queue.test.swift */,
+				17470C5E1CBF912E004FBBB8 /* PMKDefaultDispatchQueueTest.m */,
+				17470C5C1CBF8B17004FBBB8 /* PMKDefaultDispatchQueueTest.swift */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -1480,8 +1480,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				17470C5F1CBF912E004FBBB8 /* create_default_dispatch_queue.test.m in Sources */,
-				17470C5D1CBF8B17004FBBB8 /* create_default_dispatch_queue.test.swift in Sources */,
+				17470C5F1CBF912E004FBBB8 /* PMKDefaultDispatchQueueTest.m in Sources */,
+				17470C5D1CBF8B17004FBBB8 /* PMKDefaultDispatchQueueTest.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -2348,6 +2348,7 @@
 				MODULEMAP_FILE = Sources/PMK.modulemap;
 				PRODUCT_NAME = PromiseKit;
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -2365,6 +2366,7 @@
 				MODULEMAP_FILE = Sources/PMK.modulemap;
 				PRODUCT_NAME = PromiseKit;
 				SDKROOT = macosx;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 			};
 			name = Release;
 		};

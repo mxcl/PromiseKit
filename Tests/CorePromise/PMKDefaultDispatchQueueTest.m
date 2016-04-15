@@ -1,5 +1,5 @@
 //
-//  create_default_dispatch_queue.test.m
+//  PMKDefaultDispatchQueue.test.m
 //  PromiseKit
 //
 //  Created by David Rodriguez on 4/14/16.
@@ -9,12 +9,12 @@
 #import <PromiseKit/AnyPromise.h>
 @import XCTest;
 
-@interface create_default_dispatch_queue_Tests : XCTestCase @end @implementation create_default_dispatch_queue_Tests
+@interface PMKDefaultDispatchQueueTest : XCTestCase @end @implementation PMKDefaultDispatchQueueTest
 
 - (void)tearDown {
     [super tearDown];
     
-    create_default_promise_dispatch_queue = ^ {
+    PMKDefaultDispatchQueue = ^ {
         return dispatch_get_main_queue();
     };
 }
@@ -45,7 +45,7 @@
     
     __block dispatch_queue_t q1 = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0);
     
-    create_default_promise_dispatch_queue = ^ {
+    PMKDefaultDispatchQueue = ^ {
         return q1;
     };
     
@@ -100,7 +100,7 @@
     
     __block dispatch_queue_t q1 = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0);
     
-    create_default_promise_dispatch_queue = ^ {
+    PMKDefaultDispatchQueue = ^ {
         return q1;
     };
     
@@ -152,7 +152,7 @@
     
     __block dispatch_queue_t q1 = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0);
     
-    create_default_promise_dispatch_queue = ^ {
+    PMKDefaultDispatchQueue = ^ {
         return q1;
     };
     

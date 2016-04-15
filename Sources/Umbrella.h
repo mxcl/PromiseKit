@@ -1,5 +1,6 @@
 #import <Foundation/NSObjCRuntime.h>
 #import <Foundation/NSString.h>
+#import <dispatch/dispatch.h>
 
 FOUNDATION_EXPORT double PromiseKitVersionNumber;
 FOUNDATION_EXPORT const unsigned char PromiseKitVersionString[];
@@ -23,6 +24,13 @@ extern NSString * const PMKErrorDomain;
 #define PMKOperationFailed 8l
 #define PMKTaskError 9l
 #define PMKJoinError 10l
+
+/**
+ This block lets you override the default dispatch queue for Promises.
+ 
+ By default this returns dispatch_get_main_queue()
+ */
+FOUNDATION_EXPORT dispatch_queue_t (^PMKDefaultDispatchQueue)();
 
 #if !(defined(PMKEZBake) && defined(SWIFT_CLASS))
     #if !defined(SWIFT_PASTE)

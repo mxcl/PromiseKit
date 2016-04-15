@@ -2,13 +2,6 @@ import Dispatch
 import Foundation.NSError
 
 /**
- This closure lets you override the default dispatch queue for Promises.
- 
- By default this returns dispatch_get_main_queue()
- */
-public var create_default_promise_dispatch_queue = { () -> dispatch_queue_t in dispatch_get_main_queue() }
-
-/**
  A *promise* represents the future value of a task.
 
  To obtain the value of a promise we call `then`.
@@ -253,7 +246,7 @@ public class Promise<T> {
 
      - SeeAlso: `thenInBackground`
     */
-    public func then<U>(on q: dispatch_queue_t = create_default_promise_dispatch_queue(), _ body: (T) throws -> U) -> Promise<U> {
+    public func then<U>(on q: dispatch_queue_t = PMKDefaultDispatchQueue(), _ body: (T) throws -> U) -> Promise<U> {
         return Promise<U>(when: self) { resolution, resolve in
             switch resolution {
             case .Rejected(let error):
@@ -282,7 +275,7 @@ public class Promise<T> {
 
      - SeeAlso: `thenInBackground`
     */
-    public func then<U>(on q: dispatch_queue_t = create_default_promise_dispatch_queue(), _ body: (T) throws -> Promise<U>) -> Promise<U> {
+    public func then<U>(on q: dispatch_queue_t = PMKDefaultDispatchQueue(), _ body: (T) throws -> Promise<U>) -> Promise<U> {
         return Promise<U>(when: self) { resolution, resolve in
             switch resolution {
             case .Rejected(let error):
@@ -298,7 +291,7 @@ public class Promise<T> {
     }
 
     @available(*, unavailable)
-    public func then<U>(on: dispatch_queue_t = create_default_promise_dispatch_queue(), _ body: (T) throws -> Promise<U>?) -> Promise<U> { abort() }
+    public func then<U>(on: dispatch_queue_t = PMKDefaultDispatchQueue(), _ body: (T) throws -> Promise<U>?) -> Promise<U> { abort() }
 
     /**
      The provided closure is executed when this Promise is resolved.
@@ -316,7 +309,7 @@ public class Promise<T> {
 
      - SeeAlso: `thenInBackground`
     */
-    public func then(on q: dispatch_queue_t = create_default_promise_dispatch_queue(), body: (T) throws -> AnyPromise) -> Promise<AnyObject?> {
+    public func then(on q: dispatch_queue_t = PMKDefaultDispatchQueue(), body: (T) throws -> AnyPromise) -> Promise<AnyObject?> {
         return Promise<AnyObject?>(when: self) { resolution, resolve in
             switch resolution {
             case .Rejected(let error):
@@ -330,7 +323,7 @@ public class Promise<T> {
     }
 
     @available(*, unavailable)
-    public func then(on: dispatch_queue_t = create_default_promise_dispatch_queue(), body: (T) throws -> AnyPromise?) -> Promise<AnyObject?> { abort() }
+    public func then(on: dispatch_queue_t = PMKDefaultDispatchQueue(), body: (T) throws -> AnyPromise?) -> Promise<AnyObject?> { abort() }
 
     /**
      The provided closure is executed on the default background queue when this Promise is fulfilled.
@@ -381,14 +374,14 @@ public class Promise<T> {
         pipe { resolution in
             switch (resolution, policy) {
             case (let .Rejected(error, token), .AllErrorsExceptCancellation):
-                contain_zalgo(create_default_promise_dispatch_queue()) {
+                contain_zalgo(PMKDefaultDispatchQueue()) {
                     guard let cancellableError = error as? CancellableErrorType where cancellableError.cancelled else {
                         consume(error, token)
                         return
                     }
                 }
             case (let .Rejected(error, token), _):
-                contain_zalgo(create_default_promise_dispatch_queue()) {
+                contain_zalgo(PMKDefaultDispatchQueue()) {
                     consume(error, token)
                 }
             case (.Fulfilled, _):
@@ -428,7 +421,7 @@ public class Promise<T> {
      The provided closure is executed when this promise is rejected giving you
      an opportunity to recover from the error and continue the promise chain.
     */
-    public func recover(on q: dispatch_queue_t = create_default_promise_dispatch_queue(), _ body: (ErrorType) throws -> Promise) -> Promise {
+    public func recover(on q: dispatch_queue_t = PMKDefaultDispatchQueue(), _ body: (ErrorType) throws -> Promise) -> Promise {
         return Promise(when: self) { resolution, resolve in
             switch resolution {
             case .Rejected(let error, let token):
@@ -445,9 +438,9 @@ public class Promise<T> {
     }
 
     @available(*, unavailable)
-    public func recover(on: dispatch_queue_t = create_default_promise_dispatch_queue(), _ body: (ErrorType) throws -> Promise?) -> Promise { abort() }
+    public func recover(on: dispatch_queue_t = PMKDefaultDispatchQueue(), _ body: (ErrorType) throws -> Promise?) -> Promise { abort() }
 
-    public func recover(on q: dispatch_queue_t = create_default_promise_dispatch_queue(), _ body: (ErrorType) throws -> T) -> Promise {
+    public func recover(on q: dispatch_queue_t = PMKDefaultDispatchQueue(), _ body: (ErrorType) throws -> T) -> Promise {
         return Promise(when: self) { resolution, resolve in
             switch resolution {
             case .Rejected(let error, let token):
@@ -474,7 +467,7 @@ public class Promise<T> {
      - Parameter on: The queue on which body should be executed.
      - Parameter body: The closure that is executed when this Promise is resolved.
     */
-    public func always(on q: dispatch_queue_t = create_default_promise_dispatch_queue(), _ body: () -> Void) -> Promise {
+    public func always(on q: dispatch_queue_t = PMKDefaultDispatchQueue(), _ body: () -> Void) -> Promise {
         return Promise(when: self) { resolution, resolve in
             contain_zalgo(q) {
                 body()
@@ -484,7 +477,7 @@ public class Promise<T> {
     }
 
     @available(*, unavailable, renamed="ensure")
-    public func finally(on: dispatch_queue_t = create_default_promise_dispatch_queue(), body: () -> Void) -> Promise { abort() }
+    public func finally(on: dispatch_queue_t = PMKDefaultDispatchQueue(), body: () -> Void) -> Promise { abort() }
 
     @available(*, unavailable, renamed="report")
     public func catch_(policy policy: ErrorPolicy = .AllErrorsExceptCancellation, body: () -> Void) -> Promise { abort() }
@@ -496,7 +489,7 @@ public class Promise<T> {
     public func report(policy policy: ErrorPolicy = .AllErrorsExceptCancellation, _ body: (ErrorType) -> Void) { error(policy: policy, body) }
 
     @available(*, deprecated, renamed="always")
-    public func ensure(on q: dispatch_queue_t = create_default_promise_dispatch_queue(), _ body: () -> Void) -> Promise { return always(on: q, body) }
+    public func ensure(on q: dispatch_queue_t = PMKDefaultDispatchQueue(), _ body: () -> Void) -> Promise { return always(on: q, body) }
 }
 
 /**
@@ -686,10 +679,10 @@ extension Promise {
     public class func pendingPromise<T: ErrorType>() -> (promise: Promise, fulfill: (T) -> Void, reject: (ErrorType) -> Void) { abort() }
 
     @available (*, unavailable, message="U cannot conform to ErrorType")
-    public func then<U: ErrorType>(on: dispatch_queue_t = create_default_promise_dispatch_queue(), _ body: (T) throws -> U) -> Promise<U> { abort() }
+    public func then<U: ErrorType>(on: dispatch_queue_t = PMKDefaultDispatchQueue(), _ body: (T) throws -> U) -> Promise<U> { abort() }
 
     @available (*, unavailable, message="U cannot conform to ErrorType")
-    public func then<U: ErrorType>(on: dispatch_queue_t = create_default_promise_dispatch_queue(), _ body: (T) throws -> Promise<U>) -> Promise<U> { abort() }
+    public func then<U: ErrorType>(on: dispatch_queue_t = PMKDefaultDispatchQueue(), _ body: (T) throws -> Promise<U>) -> Promise<U> { abort() }
 
     @available(*, unavailable, message="U cannot conform to ErrorType")
     public func thenInBackground<U: ErrorType>(body: (T) throws -> U) -> Promise<U> { abort() }
