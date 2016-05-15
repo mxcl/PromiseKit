@@ -16,11 +16,11 @@ import Dispatch
 
  - Returns: A new promise that resolves once all the provided promises resolve.
 */
-public func join<T>(promises: Promise<T>...) -> Promise<[T]> {
+public func join<T>(_ promises: Promise<T>...) -> Promise<[T]> {
     return join(promises)
 }
 
-public func join<T>(promises: [Promise<T>]) -> Promise<[T]> {
+public func join<T>(_ promises: [Promise<T>]) -> Promise<[T]> {
     guard !promises.isEmpty else { return Promise<[T]>([]) }
   
     var countdown = promises.count
@@ -30,15 +30,15 @@ public func join<T>(promises: [Promise<T>]) -> Promise<[T]> {
     return Promise { fulfill, reject in
         for promise in promises {
             promise.pipe { resolution in
-                dispatch_barrier_sync(barrier) {
-                    if case .Rejected(_, let token) = resolution {
+                dispatch_barrier_sync(barrier!) {
+                    if case .rejected(_, let token) = resolution {
                         token.consumed = true  // the parent Error.Join consumes all
                         rejected = true
                     }
                     countdown -= 1
                     if countdown == 0 {
                         if rejected {
-                            reject(Error.Join(promises))
+                            reject(Error.join(promises))
                         } else {
                             fulfill(promises.map{ $0.value! })
                         }

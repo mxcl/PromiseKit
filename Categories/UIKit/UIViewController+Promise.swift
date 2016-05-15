@@ -21,7 +21,7 @@ import PromiseKit
 */
 extension UIViewController {
 
-    public enum Error: ErrorType {
+    public enum Error: ErrorProtocol {
         case NavigationControllerEmpty
         case NoImageFound
         case NotPromisable
@@ -33,9 +33,9 @@ extension UIViewController {
 
         let p: Promise<T> = promise(vc)
         if p.pending {
-            presentViewController(vc, animated: animated, completion: completion)
+            present(vc, animated: animated, completion: completion)
             p.always {
-                vc.presentingViewController?.dismissViewControllerAnimated(animated, completion: nil)
+                vc.presenting?.dismiss(animated: animated, completion: nil)
             }
         }
 
@@ -46,9 +46,9 @@ extension UIViewController {
         if let vc = nc.viewControllers.first {
             let p: Promise<T> = promise(vc)
             if p.pending {
-                presentViewController(nc, animated: animated, completion: completion)
+                present(nc, animated: animated, completion: completion)
                 p.always {
-                    vc.presentingViewController?.dismissViewControllerAnimated(animated, completion: nil)
+                    vc.presenting?.dismiss(animated: animated, completion: nil)
                 }
             }
             return p
@@ -61,7 +61,7 @@ extension UIViewController {
         let proxy = UIImagePickerControllerProxy()
         vc.delegate = proxy
         vc.mediaTypes = ["public.image"]  // this promise can only resolve with a UIImage
-        presentViewController(vc, animated: animated, completion: completion)
+        present(vc, animated: animated, completion: completion)
         return proxy.promise.then(on: zalgo) { info -> UIImage in
             if let img = info[UIImagePickerControllerEditedImage] as? UIImage {
                 return img
@@ -71,16 +71,16 @@ extension UIViewController {
             }
             throw Error.NoImageFound
         }.always {
-            vc.presentingViewController?.dismissViewControllerAnimated(animated, completion: nil)
+            vc.presenting?.dismiss(animated: animated, completion: nil)
         }
     }
 
     public func promiseViewController(vc: UIImagePickerController, animated: Bool = true, completion: (() -> Void)? = nil) -> Promise<[String: AnyObject]> {
         let proxy = UIImagePickerControllerProxy()
         vc.delegate = proxy
-        presentViewController(vc, animated: animated, completion: completion)
+        present(vc, animated: animated, completion: completion)
         return proxy.promise.always {
-            vc.presentingViewController?.dismissViewControllerAnimated(animated, completion: nil)
+            vc.presenting?.dismiss(animated: animated, completion: nil)
         }
     }
 }
@@ -97,12 +97,12 @@ extension UIViewController {
     var promise: AnyObject! { get }
 }
 
-private func promise<T>(vc: UIViewController) -> Promise<T> {
-    if !vc.conformsToProtocol(Promisable) {
+private func promise<T>(_ vc: UIViewController) -> Promise<T> {
+    if !(vc is Promisable) {
         return Promise(error: UIViewController.Error.NotPromisable)
-    } else if let promise = vc.valueForKeyPath("promise") as? Promise<T> {
+    } else if let promise = vc.value(forKeyPath: "promise") as? Promise<T> {
         return promise
-    } else if let _: AnyObject = vc.valueForKeyPath("promise") {
+    } else if let _: AnyObject = vc.value(forKeyPath: "promise") {
         return Promise(error: UIViewController.Error.NotGenericallyPromisable)
     } else {
         return Promise(error: UIViewController.Error.NilPromisable)
@@ -120,12 +120,12 @@ private func promise<T>(vc: UIViewController) -> Promise<T> {
         retainCycle = self
     }
 
-    func imagePickerController(picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
+    @objc(imagePickerController:didFinishPickingMediaWithInfo:) func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [String : AnyObject]) {
         fulfill(info)
         retainCycle = nil
     }
 
-    func imagePickerControllerDidCancel(picker: UIImagePickerController) {
+    @objc(imagePickerControllerDidCancel:) func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
         reject(UIImagePickerController.Error.Cancelled)
         retainCycle = nil
     }
