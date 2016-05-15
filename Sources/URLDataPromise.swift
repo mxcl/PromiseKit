@@ -12,48 +12,48 @@ public class URLDataPromise: Promise<NSData> {
     public func asString() -> Promise<String> {
         return then(on: waldo) { data -> String in
             guard let str = NSString(data: data, encoding: self.URLResponse.stringEncoding ?? NSUTF8StringEncoding) else {
-                throw URLError.StringEncoding(self.URLRequest, data, self.URLResponse)
+                throw URLError.stringEncoding(self.URLRequest, data, self.URLResponse)
             }
             return str as String
         }
     }
 
-    public func asArray(encoding: Encoding = .JSON(.AllowFragments)) -> Promise<NSArray> {
+    public func asArray(encoding: Encoding = .JSON(.allowFragments)) -> Promise<NSArray> {
         return then(on: waldo) { data -> NSArray in
             switch encoding {
             case .JSON(let options):
                 guard !data.b0rkedEmptyRailsResponse else { return NSArray() }
-                let json = try NSJSONSerialization.JSONObjectWithData(data, options: options)
+                let json = try NSJSONSerialization.jsonObject(with: data, options: options)
                 guard let array = json as? NSArray else { throw JSONError.UnexpectedRootNode(json) }
                 return array
             }
         }
     }
 
-    public func asDictionary(encoding: Encoding = .JSON(.AllowFragments)) -> Promise<NSDictionary> {
+    public func asDictionary(encoding: Encoding = .JSON(.allowFragments)) -> Promise<NSDictionary> {
         return then(on: waldo) { data -> NSDictionary in
             switch encoding {
             case .JSON(let options):
                 guard !data.b0rkedEmptyRailsResponse else { return NSDictionary() }
-                let json = try NSJSONSerialization.JSONObjectWithData(data, options: options)
+                let json = try NSJSONSerialization.jsonObject(with: data, options: options)
                 guard let dict = json as? NSDictionary else { throw JSONError.UnexpectedRootNode(json) }
                 return dict
             }
         }
     }
 
-    private override init(@noescape resolvers: (fulfill: (NSData) -> Void, reject: (ErrorType) -> Void) throws -> Void) {
+    private override init(resolvers: @noescape (fulfill: (NSData) -> Void, reject: (ErrorProtocol) -> Void) throws -> Void) {
         super.init(resolvers: resolvers)
     }
 
-    public override init(error: ErrorType) {
+    public override init(error: ErrorProtocol) {
         super.init(error: error)
     }
 
     private var URLRequest: NSURLRequest!
     private var URLResponse: NSURLResponse!
 
-    public class func go(request: NSURLRequest, @noescape body: ((NSData?, NSURLResponse?, NSError?) -> Void) -> Void) -> URLDataPromise {
+    public class func go(request: NSURLRequest, body: @noescape ((NSData?, NSURLResponse?, NSError?) -> Void) -> Void) -> URLDataPromise {
         var promise: URLDataPromise!
         promise = URLDataPromise { fulfill, reject in
             body { data, rsp, error in
@@ -61,13 +61,13 @@ public class URLDataPromise: Promise<NSData> {
                 promise.URLResponse = rsp
 
                 if let error = error {
-                    reject(URLError.UnderlyingCocoaError(request, data, rsp, error))
+                    reject(URLError.underlyingCocoaError(request, data, rsp, error))
                 } else if let data = data, rsp = rsp as? NSHTTPURLResponse where rsp.statusCode >= 200 && rsp.statusCode < 300 {
                     fulfill(data)
                 } else if let data = data where !(rsp is NSHTTPURLResponse) {
                     fulfill(data)
                 } else {
-                    reject(URLError.BadResponse(request, data, rsp))
+                    reject(URLError.badResponse(request, data, rsp))
                 }
             }
         }
@@ -81,10 +81,10 @@ public class URLDataPromise: Promise<NSData> {
     extension URLDataPromise {
         public func asImage() -> Promise<UIImage> {
             return then(on: waldo) { data -> UIImage in
-                guard let img = UIImage(data: data), cgimg = img.CGImage else {
-                    throw URLError.InvalidImageData(self.URLRequest, data)
+                guard let img = UIImage(data: data), cgimg = img.cgImage else {
+                    throw URLError.invalidImageData(self.URLRequest, data)
                 }
-                return UIImage(CGImage: cgimg, scale: img.scale, orientation: img.imageOrientation)
+                return UIImage(cgImage: cgimg, scale: img.scale, orientation: img.imageOrientation)
             }
         }
     }
@@ -93,7 +93,7 @@ public class URLDataPromise: Promise<NSData> {
 extension NSURLResponse {
     private var stringEncoding: UInt? {
         guard let encodingName = textEncodingName else { return nil }
-        let encoding = CFStringConvertIANACharSetNameToEncoding(encodingName)
+        let encoding = CFStringConvertIANACharSetNameToEncoding(encodingName as NSString)
         guard encoding != kCFStringEncodingInvalidId else { return nil }
         return CFStringConvertEncodingToNSStringEncoding(encoding)
     }

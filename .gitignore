@@ -2,3 +2,4 @@
 /Cartfile.resolved
 /Build
 *.xcodeproj/xcuserdata/
+.build

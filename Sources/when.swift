@@ -1,11 +1,11 @@
 import Foundation.NSProgress
 
-private func _when<T>(promises: [Promise<T>]) -> Promise<Void> {
+private func _when<T>(_ promises: [Promise<T>]) -> Promise<Void> {
     let (rootPromise, fulfill, reject) = Promise<Void>.pendingPromise()
 #if !PMKDisableProgress
     let progress = NSProgress(totalUnitCount: Int64(promises.count))
-    progress.cancellable = false
-    progress.pausable = false
+    progress.isCancellable = false
+    progress.isPausable = false
 #else
     var progress: (completedUnitCount: Int, totalUnitCount: Int) = (0, 0)
 #endif
@@ -16,17 +16,17 @@ private func _when<T>(promises: [Promise<T>]) -> Promise<Void> {
     }
     let barrier = dispatch_queue_create("org.promisekit.barrier.when", DISPATCH_QUEUE_CONCURRENT)
 
-    for (index, promise) in promises.enumerate() {
+    for (index, promise) in promises.enumerated() {
         promise.pipe { resolution in
-            dispatch_barrier_sync(barrier) {
+            dispatch_barrier_sync(barrier!) {
                 switch resolution {
-                case .Rejected(let error, let token):
+                case .rejected(let error, let token):
                     token.consumed = true   // all errors are consumed by the parent Error.When
                     if rootPromise.pending {
                         progress.completedUnitCount = progress.totalUnitCount
-                        reject(Error.When(index, error))
+                        reject(Error.when(index, error))
                     }
-                case .Fulfilled:
+                case .fulfilled:
                     guard rootPromise.pending else { return }
                     progress.completedUnitCount += 1
                     countdown -= 1
@@ -63,26 +63,26 @@ private func _when<T>(promises: [Promise<T>]) -> Promise<Void> {
  - Returns: A new promise that resolves when all the provided promises fulfill or one of the provided promises rejects.
  - SeeAlso: `join()`
 */
-public func when<T>(promises: [Promise<T>]) -> Promise<[T]> {
+public func when<T>(_ promises: [Promise<T>]) -> Promise<[T]> {
     return _when(promises).then(on: zalgo) { promises.map{ $0.value! } }
 }
 
-public func when<T>(promises: Promise<T>...) -> Promise<[T]> {
+public func when<T>(_ promises: Promise<T>...) -> Promise<[T]> {
     return when(promises)
 }
 
-public func when(promises: Promise<Void>...) -> Promise<Void> {
+public func when(_ promises: Promise<Void>...) -> Promise<Void> {
     return _when(promises)
 }
 
-public func when(promises: [Promise<Void>]) -> Promise<Void> {
+public func when(_ promises: [Promise<Void>]) -> Promise<Void> {
     return _when(promises)
 }
 
-public func when<U, V>(pu: Promise<U>, _ pv: Promise<V>) -> Promise<(U, V)> {
+public func when<U, V>(_ pu: Promise<U>, _ pv: Promise<V>) -> Promise<(U, V)> {
     return _when([pu.asVoid(), pv.asVoid()]).then(on: zalgo) { (pu.value!, pv.value!) }
 }
 
-public func when<U, V, X>(pu: Promise<U>, _ pv: Promise<V>, _ px: Promise<X>) -> Promise<(U, V, X)> {
+public func when<U, V, X>(_ pu: Promise<U>, _ pv: Promise<V>, _ px: Promise<X>) -> Promise<(U, V, X)> {
     return _when([pu.asVoid(), pv.asVoid(), px.asVoid()]).then(on: zalgo) { (pu.value!, pv.value!, px.value!) }
 }
