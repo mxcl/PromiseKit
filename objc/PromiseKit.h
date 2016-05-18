@@ -41,13 +41,13 @@
 #import <NSFileManager+PromiseKit.h>
 #endif
 #ifdef PMK_NSNOTIFICATIONCENTER
-#import <NSNotificationCenter+PromiseKit.h>
+#import "NSNotificationCenter+PromiseKit.h"
 #endif
 #ifdef PMK_NSTASK
 #import <NSTask+PromiseKit.h>
 #endif
 #ifdef PMK_NSURLCONNECTION
-#import <NSURLConnection+PromiseKit.h>
+#import "NSURLConnection+PromiseKit.h"
 #endif
 #ifdef PMK_SKREQUEST
 #import <SKRequest+PromiseKit.h>
@@ -56,16 +56,16 @@
 #import <SLRequest+PromiseKit.h>
 #endif
 #ifdef PMK_UIACTIONSHEET
-#import <UIActionSheet+PromiseKit.h>
+#import "UIActionSheet+PromiseKit.h"
 #endif
 #ifdef PMK_UIALERTVIEW
-#import <UIAlertView+PromiseKit.h>
+#import "UIAlertView+PromiseKit.h"
 #endif
 #ifdef PMK_UIVIEW
-#import <UIView+PromiseKit.h>
+#import "UIView+PromiseKit.h"
 #endif
 #ifdef PMK_UIVIEWCONTROLLER
-#import <UIViewController+PromiseKit.h>
+#import "UIViewController+PromiseKit.h"
 #endif
 
 
