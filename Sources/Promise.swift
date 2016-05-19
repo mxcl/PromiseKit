@@ -358,14 +358,33 @@ public class Promise<T> {
      of a chain. Often utility promises will not have a catch, instead
      delegating the error handling to the caller.
 
-     The provided closure always runs on the main queue.
+     The provided closure runs on PMKDefaultDispatchQueue by default.
 
      - Parameter policy: The default policy does not execute your handler for cancellation errors. See registerCancellationError for more documentation.
      - Parameter body: The handler to execute if this promise is rejected.
-     - SeeAlso: `registerCancellationError`
+     - SeeAlso: `errorOnQueue`
     */
     public func error(policy policy: ErrorPolicy = .AllErrorsExceptCancellation, _ body: (ErrorType) -> Void) {
-        
+        errorOnQueue(policy: policy, body)
+    }
+
+    /**
+     The provided closure is executed when this promise is rejected.
+
+     Rejecting a promise cascades: rejecting all subsequent promises (unless
+     recover is invoked) thus you will typically place your catch at the end
+     of a chain. Often utility promises will not have a catch, instead
+     delegating the error handling to the caller.
+
+     The provided closure runs on PMKDefaultDispatchQueue by default.
+
+     - Parameter on: The queue on which body should be executed.
+     - Parameter policy: The default policy does not execute your handler for cancellation errors. See registerCancellationError for more documentation.
+     - Parameter body: The handler to execute if this promise is rejected.
+     - SeeAlso: `registerCancellationError`
+     */
+    public func errorOnQueue(on q: dispatch_queue_t = PMKDefaultDispatchQueue(), policy: ErrorPolicy = .AllErrorsExceptCancellation, _ body: (ErrorType) -> Void) {
+
         func consume(error: ErrorType, _ token: ErrorConsumptionToken) {
             token.consumed = true
             body(error)
@@ -374,14 +393,14 @@ public class Promise<T> {
         pipe { resolution in
             switch (resolution, policy) {
             case (let .Rejected(error, token), .AllErrorsExceptCancellation):
-                contain_zalgo(PMKDefaultDispatchQueue()) {
+                contain_zalgo(q) {
                     guard let cancellableError = error as? CancellableErrorType where cancellableError.cancelled else {
                         consume(error, token)
                         return
                     }
                 }
             case (let .Rejected(error, token), _):
-                contain_zalgo(PMKDefaultDispatchQueue()) {
+                contain_zalgo(q) {
                     consume(error, token)
                 }
             case (.Fulfilled, _):
