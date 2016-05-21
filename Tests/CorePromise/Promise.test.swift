@@ -31,6 +31,38 @@ class PromiseTestCase: XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
+    func testErrorOnQueue1() {
+        let ex = expectationWithDescription("")
+
+        Promise(1).then { _ -> AnyPromise in
+            let promise = after(0.1).then{ throw NSError(domain: "a", code: 1, userInfo: nil) }
+            return AnyPromise(bound: promise)
+            }.errorOnQueue { err in
+                XCTAssertEqual(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL), dispatch_queue_get_label(PMKDefaultDispatchQueue()))
+
+                ex.fulfill()
+        }
+
+        waitForExpectationsWithTimeout(1, handler: nil)
+    }
+
+    func testErrorOnQueue2() {
+        let ex = expectationWithDescription("")
+
+        let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+
+        Promise(1).then { _ -> AnyPromise in
+            let promise = after(0.1).then{ throw NSError(domain: "a", code: 1, userInfo: nil) }
+            return AnyPromise(bound: promise)
+            }.errorOnQueue(on: queue) { err in
+                XCTAssertEqual(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL), dispatch_queue_get_label(queue))
+                
+                ex.fulfill()
+        }
+        
+        waitForExpectationsWithTimeout(1, handler: nil)
+    }
+
     func testThenDataRace() {
         let e1 = expectationWithDescription("")
 
