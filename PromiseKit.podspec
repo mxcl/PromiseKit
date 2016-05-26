@@ -155,4 +155,12 @@ Pod::Spec.new do |s|
     ss.ios.frameworks = 'UIKit'
   end
 
+  s.subspec 'WatchConnectivity' do |ss|
+    ss.source_files = 'Categories/WatchConnectivity/*'
+    ss.dependency 'PromiseKit/CorePromise'
+    ss.frameworks = 'WatchConnectivity'
+    ss.ios.deployment_target = '8.0' # Watch Connectivity only works in iOS 9 but apps with a deployment target of 8.0 can still include it because of the availability check
+    ss.watchos.deployment_target = '2.0'
+  end
+
 end
