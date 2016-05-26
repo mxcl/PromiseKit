@@ -11,6 +11,8 @@
 		17470C5D1CBF8B17004FBBB8 /* PMKDefaultDispatchQueueTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 17470C5C1CBF8B17004FBBB8 /* PMKDefaultDispatchQueueTest.swift */; };
 		17470C5F1CBF912E004FBBB8 /* PMKDefaultDispatchQueueTest.m in Sources */ = {isa = PBXBuildFile; fileRef = 17470C5E1CBF912E004FBBB8 /* PMKDefaultDispatchQueueTest.m */; };
 		2F0BAE0C1C901E9300A4DCA1 /* TestEventKit.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F0BAE0B1C901E9300A4DCA1 /* TestEventKit.swift */; };
+		2F764A4D1CF6D53B00F6F7AD /* WCSession+Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F764A4B1CF6D3BE00F6F7AD /* WCSession+Promise.swift */; };
+		2F764A501CF6D65000F6F7AD /* TestWatchConnectivity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2F764A4E1CF6D61E00F6F7AD /* TestWatchConnectivity.swift */; };
 		431B66E41CAC8022006CFC50 /* Bolts.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6373805B1B3E1C8E0060B7CA /* Bolts.framework */; };
 		43EF78B41C5AB88600BCD8FB /* after.m in Sources */ = {isa = PBXBuildFile; fileRef = 63A60E1F1AFD795B00C4E692 /* after.m */; };
 		43EF78B51C5AB88600BCD8FB /* after.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63075EBD1AD0EDB3002C46A0 /* after.swift */; };
@@ -370,6 +372,8 @@
 		17470C5E1CBF912E004FBBB8 /* PMKDefaultDispatchQueueTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PMKDefaultDispatchQueueTest.m; path = CorePromise/PMKDefaultDispatchQueueTest.m; sourceTree = "<group>"; };
 		1912DEE91C728B6800BB3C37 /* CBCentralManager+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CBCentralManager+Promise.swift"; sourceTree = "<group>"; };
 		2F0BAE0B1C901E9300A4DCA1 /* TestEventKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestEventKit.swift; sourceTree = "<group>"; };
+		2F764A4B1CF6D3BE00F6F7AD /* WCSession+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "WCSession+Promise.swift"; sourceTree = "<group>"; };
+		2F764A4E1CF6D61E00F6F7AD /* TestWatchConnectivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestWatchConnectivity.swift; path = Categories/TestWatchConnectivity.swift; sourceTree = "<group>"; };
 		43EF78A61C5AA12B00BCD8FB /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		6302AC8E1AEF42F2001F0069 /* ACAccountStore+AnyPromise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ACAccountStore+AnyPromise.h"; sourceTree = "<group>"; };
 		6302AC8F1AEF42F2001F0069 /* ACAccountStore+AnyPromise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ACAccountStore+AnyPromise.m"; sourceTree = "<group>"; };
@@ -620,6 +624,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2F764A4A1CF6D34E00F6F7AD /* WatchConnectivity */ = {
+			isa = PBXGroup;
+			children = (
+				2F764A4B1CF6D3BE00F6F7AD /* WCSession+Promise.swift */,
+			);
+			path = WatchConnectivity;
+			sourceTree = "<group>";
+		};
 		1912DEE81C728B4200BB3C37 /* CoreBluetooth */ = {
 			isa = PBXGroup;
 			children = (
@@ -963,6 +975,7 @@
 				6302ACC61AEF42F2001F0069 /* StoreKit */,
 				6302ACCA1AEF42F2001F0069 /* SystemConfiguration */,
 				6302ACCD1AEF42F2001F0069 /* UIKit */,
+				2F764A4A1CF6D34E00F6F7AD /* WatchConnectivity */,
 			);
 			path = Categories;
 			sourceTree = "<group>";
@@ -1057,6 +1070,7 @@
 				2F0BAE0B1C901E9300A4DCA1 /* TestEventKit.swift */,
 				63DF17031AEAC46E00BE97DD /* TestMessageUI.m */,
 				638AF9661B62B7DE0045C3E8 /* TestMessageUI.swift */,
+				2F764A4E1CF6D61E00F6F7AD /* TestWatchConnectivity.swift */,
 				6391FD2C1B62ED7D00671798 /* TestFoundation */,
 				63DF16FF1AEAC46E00BE97DD /* TestMapKit.swift */,
 				63DF17001AEAC46E00BE97DD /* TestQuartzCore.m */,
@@ -1599,6 +1613,7 @@
 				638AF8CF1B62B1AF0045C3E8 /* afterlife.swift in Sources */,
 				6391FD251B62E0FF00671798 /* TestUIImagePickerController.swift in Sources */,
 				638AF8D21B62B1AF0045C3E8 /* NSNotificationCenter+AnyPromise.m in Sources */,
+				2F764A4D1CF6D53B00F6F7AD /* WCSession+Promise.swift in Sources */,
 				638AF8D31B62B1AF0045C3E8 /* NSNotificationCenter+Promise.swift in Sources */,
 				638AF8D81B62B1AF0045C3E8 /* NSURLConnection+AnyPromise.m in Sources */,
 				638AF8D91B62B1AF0045C3E8 /* NSURLConnection+Promise.swift in Sources */,
@@ -1641,6 +1656,7 @@
 				638AF9531B62B7230045C3E8 /* TestNSURLConnection.swift in Sources */,
 				638AF9671B62B7DE0045C3E8 /* TestMessageUI.swift in Sources */,
 				638AF9541B62B7230045C3E8 /* TestNSNotificationCenter.swift in Sources */,
+				2F764A501CF6D65000F6F7AD /* TestWatchConnectivity.swift in Sources */,
 				638AF9551B62B7230045C3E8 /* TestNSObject.swift in Sources */,
 				638AF9561B62B7230045C3E8 /* TestMapKit.swift in Sources */,
 				638AF9571B62B7230045C3E8 /* TestQuartzCore.m in Sources */,
