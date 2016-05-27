@@ -10,6 +10,7 @@
 #import <Foundation/NSURLResponse.h>
 #import "NSURLConnection+AnyPromise.h"
 #import <PromiseKit/PromiseKit.h>
+// When using Carthage add `github "mxcl/OMGHTTPURLRQ"` to your Cartfile.
 #import <OMGHTTPURLRQ/OMGHTTPURLRQ.h>
 #import <OMGHTTPURLRQ/OMGUserAgent.h>
 

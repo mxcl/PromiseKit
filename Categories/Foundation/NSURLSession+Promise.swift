@@ -1,4 +1,5 @@
 import Foundation
+// When using Carthage add `github "mxcl/OMGHTTPURLRQ"` to your Cartfile.
 import OMGHTTPURLRQ
 #if !COCOAPODS
 import PromiseKit
