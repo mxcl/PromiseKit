@@ -138,7 +138,7 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'StoreKit' do |ss|
-    ss.ios.source_files = ss.osx.source_files = 'Categories/StoreKit/*'
+    ss.ios.source_files = ss.osx.source_files = ss.tvos.source_files = 'Categories/StoreKit/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'StoreKit'
   end
