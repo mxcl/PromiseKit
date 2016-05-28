@@ -29,7 +29,7 @@ private class SKDelegate: NSObject, SKProductsRequestDelegate {
     let (promise, fulfill, reject) = Promise<SKProductsResponse>.pendingPromise()
     var retainCycle: SKDelegate?
 
-#if os(iOS)
+#if os(iOS) || os(tvOS)
     @objc func request(request: SKRequest, didFailWithError error: NSError) {
         reject(error)
         retainCycle = nil
@@ -48,7 +48,7 @@ private class SKDelegate: NSObject, SKProductsRequestDelegate {
 
     @objc override class func initialize() {
         //FIXME Swift can’t see SKError, so can't do CancellableErrorType
-        #if os(iOS)
+        #if os(iOS) || os(tvOS)
             NSError.registerCancelledErrorDomain(SKErrorDomain, code: SKErrorCode.PaymentCancelled.rawValue)
         #else
             NSError.registerCancelledErrorDomain(SKErrorDomain, code: SKErrorPaymentCancelled)
