@@ -14,58 +14,58 @@
 #endif
 
 #ifdef PMK_ACACCOUNTSTORE
-#import <ACAccountStore+PromiseKit.h>
+#import <PromiseKit/ACAccountStore+PromiseKit.h>
 #endif
 #ifdef PMK_AVAUDIOSESSION
-#import <AVAudioSession+PromiseKit.h>
+#import <PromiseKit/AVAudioSession+PromiseKit.h>
 #endif
 #ifdef PMK_CLGEOCODER
-#import <CLGeocoder+PromiseKit.h>
+#import <PromiseKit/CLGeocoder+PromiseKit.h>
 #endif
 #ifdef PMK_CLLOCATIONMANAGER
-#import <CLLocationManager+PromiseKit.h>
+#import <PromiseKit/CLLocationManager+PromiseKit.h>
 #endif
 #ifdef PMK_CKCONTAINER
-#import <CKContainer+PromiseKit.h>
+#import <PromiseKit/CKContainer+PromiseKit.h>
 #endif
 #ifdef PMK_CKDATABASE
-#import <CKDatabase+PromiseKit.h>
+#import <PromiseKit/CKDatabase+PromiseKit.h>
 #endif
 #ifdef PMK_MKDIRECTIONS
-#import <MKDirections+PromiseKit.h>
+#import <PromiseKit/MKDirections+PromiseKit.h>
 #endif
 #ifdef PMK_MKMAPSNAPSHOTTER
-#import <MKMapSnapshotter+PromiseKit.h>
+#import <PromiseKit/MKMapSnapshotter+PromiseKit.h>
 #endif
 #ifdef PMK_NSFILEMANAGER
-#import <NSFileManager+PromiseKit.h>
+#import <PromiseKit/NSFileManager+PromiseKit.h>
 #endif
 #ifdef PMK_NSNOTIFICATIONCENTER
-#import <NSNotificationCenter+PromiseKit.h>
+#import <PromiseKit/NSNotificationCenter+PromiseKit.h>
 #endif
 #ifdef PMK_NSTASK
-#import <NSTask+PromiseKit.h>
+#import <PromiseKit/NSTask+PromiseKit.h>
 #endif
 #ifdef PMK_NSURLCONNECTION
-#import <NSURLConnection+PromiseKit.h>
+#import <PromiseKit/NSURLConnection+PromiseKit.h>
 #endif
 #ifdef PMK_SKREQUEST
-#import <SKRequest+PromiseKit.h>
+#import <PromiseKit/SKRequest+PromiseKit.h>
 #endif
 #ifdef PMK_SLREQUEST
-#import <SLRequest+PromiseKit.h>
+#import <PromiseKit/SLRequest+PromiseKit.h>
 #endif
 #ifdef PMK_UIACTIONSHEET
-#import <UIActionSheet+PromiseKit.h>
+#import <PromiseKit/UIActionSheet+PromiseKit.h>
 #endif
 #ifdef PMK_UIALERTVIEW
-#import <UIAlertView+PromiseKit.h>
+#import <PromiseKit/UIAlertView+PromiseKit.h>
 #endif
 #ifdef PMK_UIVIEW
-#import <UIView+PromiseKit.h>
+#import <PromiseKit/UIView+PromiseKit.h>
 #endif
 #ifdef PMK_UIVIEWCONTROLLER
-#import <UIViewController+PromiseKit.h>
+#import <PromiseKit/UIViewController+PromiseKit.h>
 #endif
 
 
