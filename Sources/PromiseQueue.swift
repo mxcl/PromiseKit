@@ -23,7 +23,6 @@ import Foundation.NSProgress
  */
 
 public class PromiseQueue<T> {
-
     public let maxPendingPromises: Int
     public let maxQueuedPromises: Int
 
@@ -37,7 +36,7 @@ public class PromiseQueue<T> {
 
     public func add(generator: () throws -> Promise<T>) -> Promise<T> {
         guard self.queue.count <= self.maxQueuedPromises else {
-            return Promise(error: NSError(domain: "sdsd", code: 1, userInfo: nil))
+            return Promise(error: Error.QueueIsFull)
         }
 
         return Promise { fulfill, reject in
