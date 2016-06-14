@@ -109,6 +109,10 @@ public class PromiseQueue<T> {
  */
 
 public func when<U, V>(items: [U], maxPendingPromises: Int = 1, generator: (U) throws -> Promise<V>) -> Promise<[V]> {
+    guard items.count > 0 else {
+        return Promise([])
+    }
+
     return Promise { fulfill, reject in
         var values = [V?](count: items.count, repeatedValue: nil)
         var pendingPromises = items.count
