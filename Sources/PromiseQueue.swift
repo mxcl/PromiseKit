@@ -26,8 +26,12 @@ public class PromiseQueue<T> {
     public let maxPendingPromises: Int
     public let maxQueuedPromises: Int
 
-    private var pendingPromises: Int = 0
     private var queue: [(generator: () throws -> Promise<T>, fulfill: (T) -> Void, reject: (ErrorType) -> Void)] = []
+
+    public private(set) var pendingPromises: Int = 0
+    public var queuedPromises: Int {
+        return self.queue.count
+    }
 
     public init(maxPendingPromises: Int = 1, maxQueuedPromises: Int = Int.max) {
         self.maxPendingPromises = maxPendingPromises
@@ -35,7 +39,7 @@ public class PromiseQueue<T> {
     }
 
     public func add(generator: () throws -> Promise<T>) -> Promise<T> {
-        guard self.queue.count <= self.maxQueuedPromises else {
+        guard self.queue.count < self.maxQueuedPromises else {
             return Promise(error: Error.QueueIsFull)
         }
 
@@ -61,30 +65,28 @@ public class PromiseQueue<T> {
 
         let item = self.queue.removeFirst()
 
-        self.pendingPromises += 1
 
         let promise: Promise<T>
         do {
             promise = try item.generator()
         }
         catch (let error) {
-            self.pendingPromises -= 1
             item.reject(error)
             self.dequeue()
             return
         }
 
+        self.pendingPromises += 1
+
         promise
-            .always {
-                self.pendingPromises -= 1
-            }
             .then { value -> Void in
+                self.pendingPromises -= 1
                 item.fulfill(value)
+                self.dequeue()
             }
-            .recover { error in
+            .recover { error -> Void in
+                self.pendingPromises -= 1
                 item.reject(error)
-            }
-            .always {
                 self.dequeue()
             }
     }

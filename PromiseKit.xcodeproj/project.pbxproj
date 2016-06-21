@@ -39,6 +39,7 @@
 		59AD19541D0C61FF00099CE7 /* PromiseQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59AD19521D0C61FF00099CE7 /* PromiseQueue.swift */; };
 		59AD19551D0C61FF00099CE7 /* PromiseQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59AD19521D0C61FF00099CE7 /* PromiseQueue.swift */; };
 		59AD19561D0C61FF00099CE7 /* PromiseQueue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59AD19521D0C61FF00099CE7 /* PromiseQueue.swift */; };
+		59AD19591D111F5C00099CE7 /* PromiseQueue.test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 59AD19581D111F5500099CE7 /* PromiseQueue.test.swift */; };
 		63015EF51B41C7F000D03D4D /* ErrorUnhandler.test.m in Sources */ = {isa = PBXBuildFile; fileRef = 631EDA1A1B3A42C000CFB93A /* ErrorUnhandler.test.m */; };
 		6302AD401AEF55A4001F0069 /* Promise.test.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6302AD3F1AEF55A4001F0069 /* Promise.test.swift */; };
 		63075EBE1AD0EDB3002C46A0 /* after.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63075EBD1AD0EDB3002C46A0 /* after.swift */; };
@@ -373,6 +374,7 @@
 		2F814F111C73782100ABF4D1 /* EKEventStore+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "EKEventStore+Promise.swift"; sourceTree = "<group>"; };
 		43EF78A61C5AA12B00BCD8FB /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		59AD19521D0C61FF00099CE7 /* PromiseQueue.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PromiseQueue.swift; path = Sources/PromiseQueue.swift; sourceTree = "<group>"; };
+		59AD19581D111F5500099CE7 /* PromiseQueue.test.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = PromiseQueue.test.swift; path = CorePromise/PromiseQueue.test.swift; sourceTree = "<group>"; };
 		6302AC8E1AEF42F2001F0069 /* ACAccountStore+AnyPromise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = "ACAccountStore+AnyPromise.h"; sourceTree = "<group>"; };
 		6302AC8F1AEF42F2001F0069 /* ACAccountStore+AnyPromise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = "ACAccountStore+AnyPromise.m"; sourceTree = "<group>"; };
 		6302AC901AEF42F2001F0069 /* ACAccountStore+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "ACAccountStore+Promise.swift"; sourceTree = "<group>"; };
@@ -848,6 +850,7 @@
 				D9693C111C9D17A6004A00CE /* join.test.swift */,
 				17470C5E1CBF912E004FBBB8 /* PMKDefaultDispatchQueueTest.m */,
 				17470C5C1CBF8B17004FBBB8 /* PMKDefaultDispatchQueueTest.swift */,
+				59AD19581D111F5500099CE7 /* PromiseQueue.test.swift */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -1546,6 +1549,7 @@
 				631A51BC1B29E7E90018606D /* bridging.test.swift in Sources */,
 				63015EF51B41C7F000D03D4D /* ErrorUnhandler.test.m in Sources */,
 				63772C9C1AF09B8A00ED2F59 /* ErrorUnhandler.test.swift in Sources */,
+				59AD19591D111F5C00099CE7 /* PromiseQueue.test.swift in Sources */,
 				63DEC3551B41C0B8002F0FB4 /* hang.test.m in Sources */,
 				63DEC3521B41BDD2002F0FB4 /* join.test.m in Sources */,
 				63DEC34F1B41BD25002F0FB4 /* PMKManifold.test.m in Sources */,
