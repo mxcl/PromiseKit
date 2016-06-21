@@ -20,6 +20,11 @@ extension CLLocationManager {
         case Always
         case WhenInUse
     }
+
+    private class func promiseDoneForLocationManager(manager: CLLocationManager) -> Void {
+        manager.delegate = nil
+        manager.stopUpdatingLocation()
+    }
   
     /**
       @return A new promise that fulfills with the most recent CLLocation.
@@ -39,8 +44,7 @@ extension CLLocationManager {
         yield(manager)
         manager.startUpdatingLocation()
         manager.promise.always {
-            manager.delegate = nil
-            manager.stopUpdatingLocation()
+            CLLocationManager.promiseDoneForLocationManager(manager)
         }
         return manager.promise
     }
@@ -52,16 +56,19 @@ private class LocationManager: CLLocationManager, CLLocationManagerDelegate {
 #if os(iOS)
     @objc func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         fulfill(locations)
+        CLLocationManager.promiseDoneForLocationManager(manager)
     }
 #else
     @objc func locationManager(manager: CLLocationManager, didUpdateLocations ll: [AnyObject]) {
         let locations = ll as! [CLLocation]
         fulfill(locations)
+        CLLocationManager.promiseDoneForLocationManager(manager)
     }
 #endif
 
     @objc func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         reject(error)
+        CLLocationManager.promiseDoneForLocationManager(manager)
     }
 }
 
