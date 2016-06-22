@@ -54,7 +54,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'CorePromise' do |ss|
     hh = Dir['Sources/*.h'] - Dir['Sources/*+Private.h']
-
+    
     ss.source_files = 'Sources/*.{swift}', 'Sources/{after,AnyPromise,dispatch_promise,hang,join,PMKPromise,when}.m', *hh
     ss.public_header_files = hh
     ss.preserve_paths = 'Sources/AnyPromise+Private.h', 'Sources/PMKCallVariadicBlock.m', 'Sources/NSMethodSignatureForBlock.m'
@@ -66,7 +66,7 @@ Pod::Spec.new do |s|
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'CoreLocation'
   end
-
+  
   s.subspec 'Foundation' do |ss|
     ss.ios.source_files = Dir['Categories/Foundation/*'] - Dir['Categories/Foundation/NSTask*']
     ss.osx.source_files = 'Categories/Foundation/*'
@@ -169,17 +169,17 @@ Pod::Spec.new do |s|
 
   s.subspec 'Swift' do |ss|
     #ss.deprecated = true
-    # ss.default_subspecs = 'Foundation', 'UIKit'
+    #ss.default_subspecs = 'Foundation', 'UIKit'
 
     ss.subspec 'Promise' do |sss|
       #sss.deprecated = true
       sss.dependency 'PromiseKit/CorePromise'
     end
-
+    
     ss.subspec 'NSJSONFromData' do |sss|
       #sss.deprecated = true
       sss.dependency 'PromiseKit/CorePromise'
-    end
+    end      
 
     %w{CloudKit UIKit CoreLocation MapKit Social StoreKit Foundation NSNotificationCenter Accounts AVFoundation}.each do |name|
       ss.subspec(name) do |sss|
@@ -198,5 +198,5 @@ Pod::Spec.new do |s|
       sss.dependency 'PromiseKit/Swift/StoreKit'
       sss.dependency 'PromiseKit/Swift/UIKit'
     end
-  end
+  end  
 end
