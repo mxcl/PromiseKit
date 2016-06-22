@@ -5,25 +5,32 @@ import UIKit
 class UIKitTestCase: XCTestCase {
 
     var rootvc: UIViewController {
-        return UIApplication.sharedApplication().keyWindow!.rootViewController!
+        return UIApplication.shared().keyWindow!.rootViewController!
     }
 
     override func setUp() {
-        UIApplication.sharedApplication().keyWindow!.rootViewController = UIViewController()
+        UIApplication.shared().keyWindow!.rootViewController = UIViewController()
     }
 
     override func tearDown() {
-        UIApplication.sharedApplication().keyWindow!.rootViewController = nil
+        UIApplication.shared().keyWindow!.rootViewController = nil
     }
 }
 #endif
 
 import ObjectiveC
 
-func swizzle(foo: AnyClass, _ from: Selector, isClassMethod: Bool = false, @noescape body: () -> Void) {
-    let get: (AnyClass!, Selector) -> Method = isClassMethod ? class_getClassMethod : class_getInstanceMethod
-    let originalMethod = get(foo, from)
-    let swizzledMethod = get(foo, Selector("pmk_\(from)"))
+func swizzle(_ foo: AnyClass, _ from: Selector, isClassMethod: Bool = false, @noescape body: () -> Void) {
+    let originalMethod: Method
+    let swizzledMethod: Method
+
+    if isClassMethod {
+        originalMethod = class_getClassMethod(foo, from)
+        swizzledMethod = class_getClassMethod(foo, Selector("pmk_\(from)"))
+    } else {
+        originalMethod = class_getInstanceMethod(foo, from)
+        swizzledMethod = class_getInstanceMethod(foo, Selector("pmk_\(from)"))
+    }
 
     method_exchangeImplementations(originalMethod, swizzledMethod)
     body()

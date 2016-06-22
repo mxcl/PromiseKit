@@ -1,22 +1,24 @@
 #import "SKRequest+AnyPromise.h"
 #import <PromiseKit/PromiseKit.h>
 @import StoreKit;
-@import Stubbilino;
 @import XCTest;
+
+
+@implementation PMKSKProductsRequest: SKProductsRequest
+- (void)start {
+    PMKAfter(0.5).then(^{
+        [self.delegate productsRequest:self didReceiveResponse:[SKProductsResponse new]];
+    });
+}
+@end
+
+
 
 @implementation Test_SKProductsRequest_ObjC: XCTestCase
 
 - (void)test {
     id ex = [self expectationWithDescription:@""];
-    SKProductsRequest *rq = [SKProductsRequest new];
-
-    id stub = [Stubbilino stubObject:rq];
-    [stub stubMethod:@selector(start) withBlock:^{
-        PMKAfter(0.5).then(^{
-            [rq.delegate productsRequest:rq didReceiveResponse:[SKProductsResponse new]];
-        });
-    }];
-
+    SKProductsRequest *rq = [PMKSKProductsRequest new];
     [rq promise].then(^{
         [ex fulfill];
     });

@@ -30,7 +30,7 @@ class Test2131: XCTestCase {
             promise.error{ _ in
                 ex.fulfill()
             }
-            reject(Error.Dummy)
+            reject(Error.dummy)
             fulfill(dummy)
         }
     }
@@ -47,7 +47,7 @@ class Test2131: XCTestCase {
                 ex.fulfill()
             }
             later {
-                reject(Error.Dummy)
+                reject(Error.dummy)
                 fulfill(dummy)
             }
         }
@@ -64,7 +64,7 @@ class Test2131: XCTestCase {
             promise.error { _ in
                 ex.fulfill()
             }
-            reject(Error.Dummy)
+            reject(Error.dummy)
             later {
                 fulfill(dummy)
             }
@@ -74,9 +74,9 @@ class Test2131: XCTestCase {
 
 /////////////////////////////////////////////////////////////////////////
 
-    private func harness(body: (Promise<Int>, (Int) -> Void, (ErrorType) -> Void, XCTestExpectation) -> Void) {
-        let ex1 = expectationWithDescription("")
-        let ex2 = expectationWithDescription("")
+    private func harness(_ body: (Promise<Int>, (Int) -> Void, (ErrorProtocol) -> Void, XCTestExpectation) -> Void) {
+        let ex1 = expectation(withDescription: "")
+        let ex2 = expectation(withDescription: "")
         let (promise, fulfill, reject) = Promise<Int>.pendingPromise()
 
         body(promise, fulfill, reject, ex2)
@@ -85,6 +85,6 @@ class Test2131: XCTestCase {
             ex1.fulfill()
         }
 
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 }

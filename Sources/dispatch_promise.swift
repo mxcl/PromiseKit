@@ -14,10 +14,10 @@ import Foundation.NSError
  - Parameter body: The closure that resolves this promise.
  - Returns: A new promise resolved by the provided closure.
 */
-public func dispatch_promise<T>(on queue: dispatch_queue_t = dispatch_get_global_queue(0, 0), body: () throws -> T) -> Promise<T> {
+public func dispatch_promise<T>(on queue: DispatchQueue = DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes(rawValue: UInt64(0))), body: () throws -> T) -> Promise<T> {
     return Promise(sealant: { resolve in
         contain_zalgo(queue, rejecter: resolve) {
-            resolve(.Fulfilled(try body()))
+            resolve(.fulfilled(try body()))
         }
     })
 }

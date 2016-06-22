@@ -4,7 +4,7 @@ import XCTest
 
 class AnyPromiseTestSuite_Swift: XCTestCase {
     func test1() {
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
 
         // AnyPromise.then { return x }
 
@@ -16,11 +16,11 @@ class AnyPromiseTestSuite_Swift: XCTestCase {
             ex.fulfill()
         }
 
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func test2() {
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
 
         // AnyPromise.then { return AnyPromise }
 
@@ -32,11 +32,11 @@ class AnyPromiseTestSuite_Swift: XCTestCase {
             ex.fulfill()
         }
 
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func test3() {
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
 
         // AnyPromise.then { return Promise<Int> }
 
@@ -48,6 +48,6 @@ class AnyPromiseTestSuite_Swift: XCTestCase {
             ex.fulfill()
         }
 
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 }

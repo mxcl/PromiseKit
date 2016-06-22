@@ -2,13 +2,13 @@ import Dispatch
 import Foundation  // NSLog
 
 enum Seal<R> {
-    case Pending(Handlers<R>)
-    case Resolved(R)
+    case pending(Handlers<R>)
+    case resolved(R)
 }
 
 enum Resolution<T> {
-    case Fulfilled(T)
-    case Rejected(ErrorType, ErrorConsumptionToken)
+    case fulfilled(T)
+    case rejected(ErrorProtocol, ErrorConsumptionToken)
 }
 
 // would be a protocol, but you can't have typed variables of “generic”
@@ -16,11 +16,11 @@ enum Resolution<T> {
 // it was a protocol. There is no work around.
 class State<R> {
     func get() -> R? { fatalError("Abstract Base Class") }
-    func get(body: (Seal<R>) -> Void) { fatalError("Abstract Base Class") }
+    func get(_ body: (Seal<R>) -> Void) { fatalError("Abstract Base Class") }
 }
 
 class UnsealedState<R>: State<R> {
-    private let barrier = dispatch_queue_create("org.promisekit.barrier", DISPATCH_QUEUE_CONCURRENT)
+    private let barrier = DispatchQueue(label: "org.promisekit.barrier", attributes: .concurrent)
     private var seal: Seal<R>
 
     /**
@@ -30,30 +30,30 @@ class UnsealedState<R>: State<R> {
     */
     override func get() -> R? {
         var result: R?
-        dispatch_sync(barrier) {
-            if case .Resolved(let resolution) = self.seal {
+        barrier.sync {
+            if case .resolved(let resolution) = self.seal {
                 result = resolution
             }
         }
         return result
     }
 
-    override func get(body: (Seal<R>) -> Void) {
+    override func get(_ body: (Seal<R>) -> Void) {
         var sealed = false
-        dispatch_sync(barrier) {
+        barrier.sync {
             switch self.seal {
-            case .Resolved:
+            case .resolved:
                 sealed = true
-            case .Pending:
+            case .pending:
                 sealed = false
             }
         }
         if !sealed {
-            dispatch_barrier_sync(barrier) {
+            __dispatch_barrier_sync(barrier) {
                 switch (self.seal) {
-                case .Pending:
+                case .pending:
                     body(self.seal)
-                case .Resolved:
+                case .resolved:
                     sealed = true  // welcome to race conditions
                 }
             }
@@ -63,14 +63,14 @@ class UnsealedState<R>: State<R> {
         }
     }
 
-    required init(inout resolver: ((R) -> Void)!) {
-        seal = .Pending(Handlers<R>())
+    required init(resolver: inout ((R) -> Void)!) {
+        seal = .pending(Handlers<R>())
         super.init()
         resolver = { resolution in
             var handlers: Handlers<R>?
-            dispatch_barrier_sync(self.barrier) {
-                if case .Pending(let hh) = self.seal {
-                    self.seal = .Resolved(resolution)
+            __dispatch_barrier_sync(self.barrier) {
+                if case .pending(let hh) = self.seal {
+                    self.seal = .resolved(resolution)
                     handlers = hh
                 }
             }
@@ -83,7 +83,7 @@ class UnsealedState<R>: State<R> {
     }
 
     deinit {
-        if case .Pending = seal {
+        if case .pending = seal {
             NSLog("PromiseKit: Pending Promise deallocated! This is usually a bug")
         }
     }
@@ -100,21 +100,21 @@ class SealedState<R>: State<R> {
         return resolution
     }
 
-    override func get(body: (Seal<R>) -> Void) {
-        body(.Resolved(resolution))
+    override func get(_ body: (Seal<R>) -> Void) {
+        body(.resolved(resolution))
     }
 }
 
 
-class Handlers<R>: SequenceType {
+class Handlers<R>: Sequence {
     var bodies: [(R)->Void] = []
 
-    func append(body: (R)->Void) {
+    func append(_ body: (R)->Void) {
         bodies.append(body)
     }
 
-    func generate() -> IndexingGenerator<[(R)->Void]> {
-        return bodies.generate()
+    func makeIterator() -> IndexingIterator<[(R)->Void]> {
+        return bodies.makeIterator()
     }
 
     var count: Int {
@@ -126,9 +126,9 @@ class Handlers<R>: SequenceType {
 extension Resolution: CustomStringConvertible {
     var description: String {
         switch self {
-        case .Fulfilled(let value):
+        case .fulfilled(let value):
             return "Fulfilled with value: \(value)"
-        case .Rejected(let error):
+        case .rejected(let error):
             return "Rejected with error: \(error)"
         }
     }
@@ -139,9 +139,9 @@ extension UnsealedState: CustomStringConvertible {
         var rv: String!
         get { seal in
             switch seal {
-            case .Pending(let handlers):
+            case .pending(let handlers):
                 rv = "Pending with \(handlers.count) handlers"
-            case .Resolved(let resolution):
+            case .resolved(let resolution):
                 rv = "\(resolution)"
             }
         }

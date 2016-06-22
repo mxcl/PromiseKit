@@ -16,7 +16,7 @@
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "63F803C21AB89A0F00E4DEE1"
                BuildableName = "PromiseKit.framework"
-               BlueprintName = "PMKOSX"
+               BlueprintName = "PMKmacOS"
                ReferencedContainer = "container:PromiseKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -33,8 +33,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "6388E1A11AD315F90074D85B"
-               BuildableName = "PMKTests.xctest"
-               BlueprintName = "PMKTests"
+               BuildableName = "PMKCore.xctest"
+               BlueprintName = "PMKTests/Core"
                ReferencedContainer = "container:PromiseKit.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -43,8 +43,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "63533B321AE57A9300C10972"
-               BuildableName = "PMKAPlusTests.xctest"
-               BlueprintName = "PMKAPlusTests"
+               BuildableName = "PMKA+.xctest"
+               BlueprintName = "PMKTests/A+"
                ReferencedContainer = "container:PromiseKit.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -53,8 +53,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "63CA14481AE9FBD000223904"
-               BuildableName = "PMKOSXCategoryTests.xctest"
-               BlueprintName = "PMKOSXCategoryTests"
+               BuildableName = "PMKCategories.macOS.xctest"
+               BlueprintName = "PMKTests/Categories/macOS"
                ReferencedContainer = "container:PromiseKit.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -63,8 +63,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "17470C421CBF8A9D004FBBB8"
-               BuildableName = "PMKDefaultDispatchQueueTests.xctest"
-               BlueprintName = "PMKDefaultDispatchQueueTests"
+               BuildableName = "PMKDefaultDispatchQueue.xctest"
+               BlueprintName = "PMKTests/DefaultDispatchQueue"
                ReferencedContainer = "container:PromiseKit.xcodeproj">
             </BuildableReference>
          </TestableReference>
@@ -74,7 +74,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "63F803C21AB89A0F00E4DEE1"
             BuildableName = "PromiseKit.framework"
-            BlueprintName = "PMKOSX"
+            BlueprintName = "PMKmacOS"
             ReferencedContainer = "container:PromiseKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -96,7 +96,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "63F803C21AB89A0F00E4DEE1"
             BuildableName = "PromiseKit.framework"
-            BlueprintName = "PMKOSX"
+            BlueprintName = "PMKmacOS"
             ReferencedContainer = "container:PromiseKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -114,7 +114,7 @@
             BuildableIdentifier = "primary"
             BlueprintIdentifier = "63F803C21AB89A0F00E4DEE1"
             BuildableName = "PromiseKit.framework"
-            BlueprintName = "PMKOSX"
+            BlueprintName = "PMKmacOS"
             ReferencedContainer = "container:PromiseKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

@@ -5,7 +5,7 @@
 
 NSString *const PMKErrorDomain = @"PMKErrorDomain";
 
-dispatch_queue_t (^PMKDefaultDispatchQueue)()  = ^{ return dispatch_get_main_queue(); };
+dispatch_queue_t (^PMKDefaultDispatchQueue)() = ^{ return dispatch_get_main_queue(); };
 
 @implementation AnyPromise (objc)
 

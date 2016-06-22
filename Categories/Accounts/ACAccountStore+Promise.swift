@@ -14,38 +14,38 @@ import PromiseKit
     import PromiseKit
 */
 extension ACAccountStore {
-    public func renewCredentialsForAccount(account: ACAccount) -> Promise<ACAccountCredentialRenewResult> {
-        return Promise { renewCredentialsForAccount(account, completion: $0) }
+    public func renewCredentialsForAccount(_ account: ACAccount) -> Promise<ACAccountCredentialRenewResult> {
+        return Promise { renewCredentials(for: account, completion: $0) }
     }
 
-    public func requestAccessToAccountsWithType(type: ACAccountType, options: [String: AnyObject]? = nil) -> Promise<Void> {
+    public func requestAccessToAccountsWithType(_ type: ACAccountType, options: [String: AnyObject]? = nil) -> Promise<Void> {
         return Promise<Void> { fulfill, reject in
-            requestAccessToAccountsWithType(type, options: options, completion: { granted, error in
+            requestAccessToAccounts(with: type, options: options, completion: { granted, error in
                 if granted {
                     fulfill()
-                } else if error != nil {
+                } else if let error = error {
                     reject(error)
                 } else {
-                    reject(Error.AccessDenied)
+                    reject(Error.accessDenied)
                 }
             })
         }
     }
 
-    public func saveAccount(account: ACAccount) -> Promise<Void> {
+    public func saveAccount(_ account: ACAccount) -> Promise<Void> {
         return Promise<Bool> { saveAccount(account, withCompletionHandler: $0) }.asVoid()
     }
 
-    public func removeAccount(account: ACAccount) -> Promise<Void> {
+    public func removeAccount(_ account: ACAccount) -> Promise<Void> {
         return Promise<Bool> { removeAccount(account, withCompletionHandler: $0) }.asVoid()
     }
 
-    public enum Error: ErrorType {
-        case AccessDenied
+    public enum Error: ErrorProtocol {
+        case accessDenied
 
         public var localizedDescription: String {
             switch self {
-            case .AccessDenied:
+            case .accessDenied:
                 return "Access to the requested social service has been denied. Please enable access in your device settings."
             }
         }

@@ -14,34 +14,34 @@ import PromiseKit
     import PromiseKit
 */
 extension CLGeocoder {
-    public func reverseGeocodeLocation(location: CLLocation) -> PlacemarkPromise {
+    public func reverseGeocodeLocation(_ location: CLLocation) -> PlacemarkPromise {
         return PlacemarkPromise.go { resolve in
             reverseGeocodeLocation(location, completionHandler: resolve)
         }
     }
     
-    public func geocode(addressDictionary: [String: String]) -> PlacemarkPromise {
+    public func geocode(_ addressDictionary: [String: String]) -> PlacemarkPromise {
         return PlacemarkPromise.go { resolve in
             geocodeAddressDictionary(addressDictionary, completionHandler: resolve)
         }
     }
     
-    public func geocode(addressString: String) -> PlacemarkPromise {
+    public func geocode(_ addressString: String) -> PlacemarkPromise {
         return PlacemarkPromise.go { resolve in
             geocodeAddressString(addressString, completionHandler: resolve)
         }
     }
     
-    public func geocode(addressString: String, region: CLRegion?) -> PlacemarkPromise {
+    public func geocode(_ addressString: String, region: CLRegion?) -> PlacemarkPromise {
         return PlacemarkPromise.go { resolve in
-            geocodeAddressString(addressString, inRegion: region, completionHandler: resolve)
+            geocodeAddressString(addressString, in: region, completionHandler: resolve)
         }
     }
 }
 
 extension CLError: CancellableErrorType {
     public var cancelled: Bool {
-        return self == .GeocodeCanceled
+        return self == .geocodeCanceled
     }
 }
 
@@ -53,7 +53,7 @@ public class PlacemarkPromise: Promise<CLPlacemark> {
 
     private var placemarks: [CLPlacemark]!
 
-    private class func go(@noescape body: (([CLPlacemark]?, NSError?) -> Void) -> Void) -> PlacemarkPromise {
+    private class func go(@noescape _ body: (([CLPlacemark]?, NSError?) -> Void) -> Void) -> PlacemarkPromise {
         var promise: PlacemarkPromise!
         promise = PlacemarkPromise { fulfill, reject in
             body { placemarks, error in
@@ -68,7 +68,7 @@ public class PlacemarkPromise: Promise<CLPlacemark> {
         return promise
     }
 
-    private override init(@noescape resolvers: (fulfill: (CLPlacemark) -> Void, reject: (ErrorType) -> Void) throws -> Void) {
+    private override init(@noescape resolvers: (fulfill: (CLPlacemark) -> Void, reject: (ErrorProtocol) -> Void) throws -> Void) {
         super.init(resolvers: resolvers)
     }
 }

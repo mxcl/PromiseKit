@@ -2,20 +2,20 @@ import PromiseKit
 import XCTest
 
 // we reject with this when we don't intend to test against it
-enum Error: ErrorType { case Dummy }
+enum Error: ErrorProtocol { case dummy }
 
-func later(ticks: Int = 1, _ body: () -> Void) {
+func later(_ ticks: Int = 1, _ body: () -> Void) {
     let ticks = Double(NSEC_PER_SEC) / (Double(ticks) * 50.0 * 1000.0)
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, Int64(ticks)), dispatch_get_main_queue(), body)
+    DispatchQueue.main.after(when: DispatchTime.now() + Double(Int64(ticks)) / Double(NSEC_PER_SEC), execute: body)
 }
 
 
 
 extension XCTestCase {
 
-    func testFulfilled(numberOfExpectations: Int  = 1, body: (Promise<Int>, [XCTestExpectation], Int) -> Void) {
+    func testFulfilled(_ numberOfExpectations: Int  = 1, body: (Promise<Int>, [XCTestExpectation], Int) -> Void) {
 
-        let specify = mkspecify(numberOfExpectations, generator: { Int(rand()) }, body: body)
+        let specify = mkspecify(numberOfExpectations, generator: { Int(arc4random()) }, body: body)
 
         specify("already-fulfilled") { value in
             return (Promise(value), {})
@@ -36,10 +36,10 @@ extension XCTestCase {
         }
     }
 
-    func testRejected(numberOfExpectations: Int = 1, body: (Promise<Int>, [XCTestExpectation], ErrorType) -> Void) {
+    func testRejected(_ numberOfExpectations: Int = 1, body: (Promise<Int>, [XCTestExpectation], ErrorProtocol) -> Void) {
 
-        let specify = mkspecify(numberOfExpectations, generator: { _ -> ErrorType in
-            return NSError(domain: PMKErrorDomain, code: Int(rand()), userInfo: nil)
+        let specify = mkspecify(numberOfExpectations, generator: { _ -> ErrorProtocol in
+            return NSError(domain: PMKErrorDomain, code: Int(arc4random()), userInfo: nil)
         }, body: body)
 
         specify("already-rejected") { error in
@@ -64,26 +64,26 @@ extension XCTestCase {
 
 /////////////////////////////////////////////////////////////////////////
 
-    private func mkspecify<T>(numberOfExpectations: Int, generator: () -> T, body: (Promise<Int>, [XCTestExpectation], T) -> Void) -> (String, feed: (T) -> (Promise<Int>, () -> Void)) -> Void {
+    private func mkspecify<T>(_ numberOfExpectations: Int, generator: () -> T, body: (Promise<Int>, [XCTestExpectation], T) -> Void) -> (String, feed: (T) -> (Promise<Int>, () -> Void)) -> Void {
         return { desc, feed in
-            let floater = self.expectationWithDescription("")
+            let floater = self.expectation(withDescription: "")
 			later(2, floater.fulfill)
 			
             let value = generator()
             let (promise, after) = feed(value)
             let expectations = (1...numberOfExpectations).map {
-                self.expectationWithDescription("\(desc) (\($0))")
+                self.expectation(withDescription: "\(desc) (\($0))")
             }
             body(promise, expectations, value)
             
             after()
             
-            self.waitForExpectationsWithTimeout(1, handler: nil)
+            self.waitForExpectations(withTimeout: 1, handler: nil)
         }
     }
 }
 
 
-func XCTAssertEqual(e1: ErrorType, _ e2: ErrorType) {
+func XCTAssertEqual(_ e1: ErrorProtocol, _ e2: ErrorProtocol) {
     XCTAssert(e1 as NSError == e2 as NSError)
 }

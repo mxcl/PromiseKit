@@ -21,47 +21,45 @@ import PromiseKit
     import PromiseKit
 */
 extension NSURLConnection {
-    public class func GET(URL: String, query: [NSObject:AnyObject]? = nil) -> URLDataPromise {
-        return go(try OMGHTTPURLRQ.GET(URL, query))
+    public class func GET(_ URL: String, query: [NSObject:AnyObject]? = nil) -> URLDataPromise {
+        return go(try OMGHTTPURLRQ.get(URL, query) as URLRequest)
     }
 
-    public class func POST(URL: String, formData: [NSObject:AnyObject]? = nil) -> URLDataPromise {
-        return go(try OMGHTTPURLRQ.POST(URL, formData))
+    public class func POST(_ URL: String, formData: [NSObject:AnyObject]? = nil) -> URLDataPromise {
+        return go(try OMGHTTPURLRQ.post(URL, formData) as URLRequest)
     }
 
-    public class func POST(URL: String, JSON: [NSObject:AnyObject]) -> URLDataPromise {
-        return go(try OMGHTTPURLRQ.POST(URL, JSON: JSON))
+    public class func POST(_ URL: String, JSON: [NSObject:AnyObject]) -> URLDataPromise {
+        return go(try OMGHTTPURLRQ.post(URL, json: JSON) as URLRequest)
     }
 
-    public class func POST(URL: String, multipartFormData: OMGMultipartFormData) -> URLDataPromise {
-        return go(try OMGHTTPURLRQ.POST(URL, multipartFormData))
+    public class func POST(_ URL: String, multipartFormData: OMGMultipartFormData) -> URLDataPromise {
+        return go(try OMGHTTPURLRQ.post(URL, multipartFormData) as URLRequest)
     }
 
-    public class func PUT(URL: String, formData: [NSObject:AnyObject]? = nil) -> URLDataPromise {
-        return go(try OMGHTTPURLRQ.PUT(URL, formData))
+    public class func PUT(_ URL: String, formData: [NSObject:AnyObject]? = nil) -> URLDataPromise {
+        return go(try OMGHTTPURLRQ.put(URL, formData) as URLRequest)
     }
 
-    public class func PUT(URL: String, JSON: [NSObject:AnyObject]) -> URLDataPromise {
-        return go(try OMGHTTPURLRQ.PUT(URL, JSON: JSON))
+    public class func PUT(_ URL: String, JSON: [NSObject:AnyObject]) -> URLDataPromise {
+        return go(try OMGHTTPURLRQ.put(URL, json: JSON) as URLRequest)
     }
 
-    public class func DELETE(URL: String) -> URLDataPromise {
-        return go(try OMGHTTPURLRQ.DELETE(URL, nil))
+    public class func DELETE(_ URL: String) -> URLDataPromise {
+        return go(try OMGHTTPURLRQ.delete(URL, nil) as URLRequest)
     }
 
-    public class func promise(request: NSURLRequest) -> URLDataPromise {
+    public class func promise(_ request: URLRequest) -> URLDataPromise {
         return go(request)
     }
 }
 
-private func go(@autoclosure body: () throws -> NSURLRequest) -> URLDataPromise {
+private func go(_ body: @autoclosure () throws -> URLRequest) -> URLDataPromise {
     do {
         var request = try body()
 
-        if request.valueForHTTPHeaderField("User-Agent") == nil {
-            let rq = request.mutableCopy() as! NSMutableURLRequest
-            rq.setValue(OMGUserAgent(), forHTTPHeaderField: "User-Agent")
-            request = rq
+        if request.value(forHTTPHeaderField: "User-Agent") == nil {
+            request.setValue(OMGUserAgent(), forHTTPHeaderField: "User-Agent")
         }
 
         return URLDataPromise.go(request) { completionHandler in
@@ -72,4 +70,4 @@ private func go(@autoclosure body: () throws -> NSURLRequest) -> URLDataPromise 
     }
 }
 
-private let Q = NSOperationQueue()
+private let Q = OperationQueue()

@@ -16,7 +16,7 @@ import PromiseKit
 extension SLRequest {
     public func promise() -> URLDataPromise {
         return URLDataPromise.go(preparedURLRequest()) { completionHandler in
-            performRequestWithHandler(completionHandler)
+            perform(handler: completionHandler)
         }
     }
 }

@@ -68,7 +68,7 @@ class Test2261: XCTestCase {
                 x += 1
 				XCTAssertEqual(x, 3)
                 ee[2].fulfill()
-                throw Error.Dummy
+                throw Error.dummy
             }
             promise.error { value in XCTFail() }
             promise.then { value -> Void in

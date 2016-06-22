@@ -18,17 +18,17 @@ import PromiseKit
 
     import PromiseKit
 */
-extension NSTask {
-    public enum Error: ErrorType {
-        case Encoding(stdout: NSData, stderr: NSData)
-        case Execution(task: NSTask, stdout: NSData, stderr: NSData)
+extension Task {
+    public enum Error: ErrorProtocol {
+        case encoding(stdout: Data, stderr: Data)
+        case execution(task: Task, stdout: Data, stderr: Data)
 
         public var localizedDescription: String {
             switch self {
-            case .Encoding:
+            case .encoding:
                 return "Could not decode command output into string."
-            case .Execution(let task, _, _):
-                let cmd = ([task.launchPath ?? ""] + (task.arguments ?? [])).joinWithSeparator(" ")
+            case .execution(let task, _, _):
+                let cmd = ([task.launchPath ?? ""] + (task.arguments ?? [])).joined(separator: " ")
                 return "Failed executing: `\(cmd)`."
             }
         }
@@ -46,10 +46,10 @@ extension NSTask {
        2) The stderr interpreted as a UTF8 string.
        3) The exit code.
     */
-    public func promise(encoding: NSStringEncoding = NSUTF8StringEncoding) -> Promise<(String, String, Int)> {
-        return promise().then(on: waldo) { (stdout: NSData, stderr: NSData, terminationStatus: Int) -> (String, String, Int) in
-            guard let out = NSString(data: stdout, encoding: encoding), err = NSString(data: stderr, encoding: encoding) else {
-                throw Error.Encoding(stdout: stdout, stderr: stderr)
+    public func promise(_ encoding: String.Encoding = String.Encoding.utf8) -> Promise<(String, String, Int)> {
+        return promise().then(on: waldo) { (stdout: Data, stderr: Data, terminationStatus: Int) -> (String, String, Int) in
+            guard let out = String(bytes: stdout, encoding: encoding), err = String(bytes: stderr, encoding: encoding) else {
+                throw Error.encoding(stdout: stdout, stderr: stderr)
             }
 
             return (out as String, err as String, terminationStatus)
@@ -68,9 +68,9 @@ extension NSTask {
        2) The stderr as `NSData`.
        3) The exit code.
     */
-    public func promise() -> Promise<(NSData, NSData, Int)> {
-        standardOutput = NSPipe()
-        standardError = NSPipe()
+    public func promise() -> Promise<(Data, Data, Int)> {
+        standardOutput = Pipe()
+        standardError = Pipe()
 
         launch()
 
@@ -80,8 +80,8 @@ extension NSTask {
             let stdout = self.standardOutput!.fileHandleForReading.readDataToEndOfFile()
             let stderr = self.standardError!.fileHandleForReading.readDataToEndOfFile()
 
-            guard self.terminationReason == .Exit && self.terminationStatus == 0 else {
-                throw Error.Execution(task: self, stdout: stdout, stderr: stderr)
+            guard self.terminationReason == .exit && self.terminationStatus == 0 else {
+                throw Error.execution(task: self, stdout: stdout, stderr: stderr)
             }
 
             return (stdout, stderr, Int(self.terminationStatus))

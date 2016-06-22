@@ -4,10 +4,10 @@ import XCTest
 
 class Test_MKDirections_Swift: XCTestCase {
     func test_directions_response() {
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
 
         class MockDirections: MKDirections {
-            private override func calculateDirectionsWithCompletionHandler(completionHandler: MKDirectionsHandler) {
+            private override func calculate(completionHandler: MKDirectionsHandler) {
                 completionHandler(MKDirectionsResponse(), nil)
             }
         }
@@ -17,15 +17,15 @@ class Test_MKDirections_Swift: XCTestCase {
             ex.fulfill()
         }
 
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
 
     func test_ETA_response() {
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
 
         class MockDirections: MKDirections {
-            private override func calculateETAWithCompletionHandler(completionHandler: MKETAHandler) {
+            private override func calculateETA(completionHandler: MKETAHandler) {
                 completionHandler(MKETAResponse(), nil)
             }
         }
@@ -35,17 +35,17 @@ class Test_MKDirections_Swift: XCTestCase {
             ex.fulfill()
         }
 
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
 }
 
 class Test_MKSnapshotter_Swift: XCTestCase {
     func test() {
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
 
         class MockSnapshotter: MKMapSnapshotter {
-            private override func startWithCompletionHandler(completionHandler: MKMapSnapshotCompletionHandler) {
+            private override func start(completionHandler: MKMapSnapshotCompletionHandler) {
                 completionHandler(MKMapSnapshot(), nil)
             }
         }
@@ -54,6 +54,6 @@ class Test_MKSnapshotter_Swift: XCTestCase {
             ex.fulfill()
         }
 
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 }

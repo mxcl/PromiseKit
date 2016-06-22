@@ -20,16 +20,16 @@ extension UIViewController {
         let proxy = PMKMessageComposeViewControllerDelegate()
         proxy.retainCycle = proxy
         vc.messageComposeDelegate = proxy
-        presentViewController(vc, animated: animated, completion: completion)
+        present(vc, animated: animated, completion: completion)
         proxy.promise.always {
-            vc.dismissViewControllerAnimated(animated, completion: nil)
+            vc.dismiss(animated: animated, completion: nil)
         }
         return proxy.promise
     }
 }
 
 extension MFMessageComposeViewController {
-    public enum Error: ErrorType {
+    public enum Error: ErrorProtocol {
         case Cancelled
     }
 }
@@ -39,18 +39,18 @@ private class PMKMessageComposeViewControllerDelegate: NSObject, MFMessageCompos
     let (promise, fulfill, reject) = Promise<Void>.pendingPromise()
     var retainCycle: NSObject?
 
-    @objc func messageComposeViewController(controller: MFMessageComposeViewController, didFinishWithResult result: MessageComposeResult) {
+    @objc func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {
         defer { retainCycle = nil }
 
-        switch result.rawValue {
-        case MessageComposeResultSent.rawValue:
+        switch result {
+        case .sent:
             fulfill()
-        case MessageComposeResultFailed.rawValue:
+        case .failed:
             var info = [NSObject: AnyObject]()
             info[NSLocalizedDescriptionKey] = "The attempt to save or send the message was unsuccessful."
-            info[NSUnderlyingErrorKey] = NSNumber(unsignedInt: result.rawValue)
+            info[NSUnderlyingErrorKey] = NSNumber(value: result.rawValue)
             reject(NSError(domain: PMKErrorDomain, code: PMKOperationFailed, userInfo: info))
-        case MessageComposeResultCancelled.rawValue:
+        case .cancelled:
             reject(MFMessageComposeViewController.Error.Cancelled)
         default:
             fatalError("Swift Sucks")
@@ -58,6 +58,6 @@ private class PMKMessageComposeViewControllerDelegate: NSObject, MFMessageCompos
     }
 }
 
-public enum MessageUIError: ErrorType {
-    case Failed
+public enum MessageUIError: ErrorProtocol {
+    case failed
 }

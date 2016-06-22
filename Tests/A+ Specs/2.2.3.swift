@@ -26,7 +26,7 @@ class Test2232: XCTestCase {
 
         // specify: rejected after a delay
 
-        let expectation = expectationWithDescription("rejected after a delay")
+        let expectation = self.expectation(withDescription: "rejected after a delay")
         let (promise, _, reject) = Promise<Int>.pendingPromise()
         var isRejected = false
 
@@ -35,10 +35,10 @@ class Test2232: XCTestCase {
             expectation.fulfill()
         }
         later {
-            reject(Error.Dummy)
+            reject(Error.dummy)
             isRejected = true
         }
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func test2() {
@@ -51,7 +51,7 @@ class Test2232: XCTestCase {
             }
         }
 
-        let expectation = expectationWithDescription("")
+        let expectation = self.expectation(withDescription: "")
         let (promise, _, _) = TestPromise.pendingPromise()
 
         promise.error { _ in
@@ -60,7 +60,7 @@ class Test2232: XCTestCase {
         later {
             expectation.fulfill()
         }
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 }
 
@@ -72,65 +72,65 @@ class Test2233: XCTestCase {
 
         // specify: already-rejected
 
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
 
-        let p: Promise<Void> = Promise(error: Error.Dummy)
+        let p: Promise<Void> = Promise(error: Error.dummy)
         p.error { _ in
             ex.fulfill()
         }
 
-        later(4, expectationWithDescription("").fulfill)
-        waitForExpectationsWithTimeout(1, handler: nil)
+        later(4, expectation(withDescription: "").fulfill)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func test2() {
 
         // specify: trying to reject a pending promise more than once, immediately
 
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
         let (promise, _, reject) = Promise<Void>.pendingPromise()
 
         promise.error { _ in ex.fulfill() }
 
-        reject(Error.Dummy)
-        reject(Error.Dummy)
+        reject(Error.dummy)
+        reject(Error.dummy)
 
-        later(4, expectationWithDescription("").fulfill)
-        waitForExpectationsWithTimeout(1, handler: nil)
+        later(4, expectation(withDescription: "").fulfill)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func test3() {
 
         // specify: trying to reject a pending promise more than once, delayed
 
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
         let (promise, _, reject) = Promise<Void>.pendingPromise()
 
         promise.error { _ in ex.fulfill() }
 
         later {
-            reject(Error.Dummy)
-            reject(Error.Dummy)
+            reject(Error.dummy)
+            reject(Error.dummy)
         }
 
-        later(4, expectationWithDescription("").fulfill)
-        waitForExpectationsWithTimeout(1, handler: nil)
+        later(4, expectation(withDescription: "").fulfill)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func test4() {
 
         // specify: trying to reject a pending promise more than once, immediately then delayed
 
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
         let (promise, _, reject) = Promise<Void>.pendingPromise()
 
         promise.error { _ in ex.fulfill() }
 
-        reject(Error.Dummy)
-        later { reject(Error.Dummy) }
+        reject(Error.dummy)
+        later { reject(Error.dummy) }
 
-        later(4, expectationWithDescription("").fulfill)
-        waitForExpectationsWithTimeout(1, handler: nil)
+        later(4, expectation(withDescription: "").fulfill)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func test5() {
@@ -140,9 +140,9 @@ class Test2233: XCTestCase {
         let (promise, _, reject) = Promise<Void>.pendingPromise()
 
         let desc = "when multiple `then` calls are made, spaced apart in time"
-        let e1 = expectationWithDescription(desc)
-        let e2 = expectationWithDescription(desc)
-        let e3 = expectationWithDescription(desc)
+        let e1 = expectation(withDescription: desc)
+        let e2 = expectation(withDescription: desc)
+        let e3 = expectation(withDescription: desc)
 
         promise.error { _ in e1.fulfill() }
 
@@ -153,11 +153,11 @@ class Test2233: XCTestCase {
             promise.error { _ in e3.fulfill() }
         }
         later(3) {
-            reject(Error.Dummy)
+            reject(Error.dummy)
         }
 
-        later(4, expectationWithDescription("").fulfill)
-        waitForExpectationsWithTimeout(1, handler: nil)
+        later(4, expectation(withDescription: "").fulfill)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func test6() {
@@ -165,14 +165,14 @@ class Test2233: XCTestCase {
         // specify: when `then` is interleaved with rejection
 
         let (promise, _, reject) = Promise<Void>.pendingPromise()
-        let e1 = expectationWithDescription("")
-        let e2 = expectationWithDescription("")
+        let e1 = expectation(withDescription: "")
+        let e2 = expectation(withDescription: "")
 
         promise.error { _ in e1.fulfill() }
-        reject(Error.Dummy)
+        reject(Error.dummy)
         promise.error { _ in e2.fulfill() }
 
-        later(4, expectationWithDescription("").fulfill)
-        waitForExpectationsWithTimeout(1, handler: nil)
+        later(4, expectation(withDescription: "").fulfill)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 }

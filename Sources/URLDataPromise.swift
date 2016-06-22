@@ -1,59 +1,59 @@
 import Foundation
 
 public enum Encoding {
-    case JSON(NSJSONReadingOptions)
+    case json(JSONSerialization.ReadingOptions)
 }
 
-public class URLDataPromise: Promise<NSData> {
-    public func asDataAndResponse() -> Promise<(NSData, NSURLResponse)> {
+public class URLDataPromise: Promise<Data> {
+    public func asDataAndResponse() -> Promise<(Data, Foundation.URLResponse)> {
         return then(on: zalgo) { ($0, self.URLResponse) }
     }
 
     public func asString() -> Promise<String> {
         return then(on: waldo) { data -> String in
-            guard let str = NSString(data: data, encoding: self.URLResponse.stringEncoding ?? NSUTF8StringEncoding) else {
-                throw URLError.StringEncoding(self.URLRequest, data, self.URLResponse)
+            guard let str = String(bytes: data, encoding: self.URLResponse.stringEncoding ?? .utf8) else {
+                throw URLError.stringEncoding(self.URLRequest, data, self.URLResponse)
             }
-            return str as String
+            return str
         }
     }
 
-    public func asArray(encoding: Encoding = .JSON(.AllowFragments)) -> Promise<NSArray> {
+    public func asArray(_ encoding: Encoding = .json(.allowFragments)) -> Promise<NSArray> {
         return then(on: waldo) { data -> NSArray in
             switch encoding {
-            case .JSON(let options):
+            case .json(let options):
                 guard !data.b0rkedEmptyRailsResponse else { return NSArray() }
-                let json = try NSJSONSerialization.JSONObjectWithData(data, options: options)
-                guard let array = json as? NSArray else { throw JSONError.UnexpectedRootNode(json) }
+                let json = try JSONSerialization.jsonObject(with: data, options: options)
+                guard let array = json as? NSArray else { throw JSONError.unexpectedRootNode(json) }
                 return array
             }
         }
     }
 
-    public func asDictionary(encoding: Encoding = .JSON(.AllowFragments)) -> Promise<NSDictionary> {
+    public func asDictionary(_ encoding: Encoding = .json(.allowFragments)) -> Promise<NSDictionary> {
         return then(on: waldo) { data -> NSDictionary in
             switch encoding {
-            case .JSON(let options):
+            case .json(let options):
                 guard !data.b0rkedEmptyRailsResponse else { return NSDictionary() }
-                let json = try NSJSONSerialization.JSONObjectWithData(data, options: options)
-                guard let dict = json as? NSDictionary else { throw JSONError.UnexpectedRootNode(json) }
+                let json = try JSONSerialization.jsonObject(with: data, options: options)
+                guard let dict = json as? NSDictionary else { throw JSONError.unexpectedRootNode(json) }
                 return dict
             }
         }
     }
 
-    private override init(@noescape resolvers: (fulfill: (NSData) -> Void, reject: (ErrorType) -> Void) throws -> Void) {
+    private override init(resolvers: @noescape (fulfill: (Data) -> Void, reject: (ErrorProtocol) -> Void) throws -> Void) {
         super.init(resolvers: resolvers)
     }
 
-    public override init(error: ErrorType) {
+    public override init(error: ErrorProtocol) {
         super.init(error: error)
     }
 
-    private var URLRequest: NSURLRequest!
-    private var URLResponse: NSURLResponse!
+    private var URLRequest: Foundation.URLRequest!
+    private var URLResponse: Foundation.URLResponse!
 
-    public class func go(request: NSURLRequest, @noescape body: ((NSData?, NSURLResponse?, NSError?) -> Void) -> Void) -> URLDataPromise {
+    public class func go(_ request: Foundation.URLRequest, body: @noescape ((Data?, Foundation.URLResponse?, NSError?) -> Void) -> Void) -> URLDataPromise {
         var promise: URLDataPromise!
         promise = URLDataPromise { fulfill, reject in
             body { data, rsp, error in
@@ -61,13 +61,13 @@ public class URLDataPromise: Promise<NSData> {
                 promise.URLResponse = rsp
 
                 if let error = error {
-                    reject(URLError.UnderlyingCocoaError(request, data, rsp, error))
-                } else if let data = data, rsp = rsp as? NSHTTPURLResponse where rsp.statusCode >= 200 && rsp.statusCode < 300 {
+                    reject(URLError.underlyingCocoaError(request, data, rsp, error))
+                } else if let data = data, rsp = rsp as? HTTPURLResponse where rsp.statusCode >= 200 && rsp.statusCode < 300 {
                     fulfill(data)
-                } else if let data = data where !(rsp is NSHTTPURLResponse) {
+                } else if let data = data where !(rsp is HTTPURLResponse) {
                     fulfill(data)
                 } else {
-                    reject(URLError.BadResponse(request, data, rsp))
+                    reject(URLError.badResponse(request, data, rsp))
                 }
             }
         }
@@ -81,26 +81,26 @@ public class URLDataPromise: Promise<NSData> {
     extension URLDataPromise {
         public func asImage() -> Promise<UIImage> {
             return then(on: waldo) { data -> UIImage in
-                guard let img = UIImage(data: data), cgimg = img.CGImage else {
-                    throw URLError.InvalidImageData(self.URLRequest, data)
+                guard let img = UIImage(data: data), cgimg = img.cgImage else {
+                    throw URLError.invalidImageData(self.URLRequest, data)
                 }
-                return UIImage(CGImage: cgimg, scale: img.scale, orientation: img.imageOrientation)
+                return UIImage(cgImage: cgimg, scale: img.scale, orientation: img.imageOrientation)
             }
         }
     }
 #endif
 
-extension NSURLResponse {
-    private var stringEncoding: UInt? {
+extension URLResponse {
+    private var stringEncoding: String.Encoding? {
         guard let encodingName = textEncodingName else { return nil }
         let encoding = CFStringConvertIANACharSetNameToEncoding(encodingName)
         guard encoding != kCFStringEncodingInvalidId else { return nil }
-        return CFStringConvertEncodingToNSStringEncoding(encoding)
+        return String.Encoding(rawValue: CFStringConvertEncodingToNSStringEncoding(encoding))
     }
 }
 
-extension NSData {
+extension Data {
     private var b0rkedEmptyRailsResponse: Bool {
-        return self == NSData(bytes: " ", length: 1)
+        return count == 1 && withUnsafeBytes{ $0[0] == " " }
     }
 }

@@ -18,37 +18,34 @@ import PromiseKit
 
     import PromiseKit
 */
-extension NSNotificationCenter {
-    public class func once(name: String) -> NotificationPromise {
-        return NSNotificationCenter.defaultCenter().once(name)
+extension NotificationCenter {
+    public class func once(_ name: String) -> NotificationPromise {
+        return NotificationCenter.default().once(name)
     }
 
-    public func once(name: String) -> NotificationPromise {
+    public func once(_ name: String) -> NotificationPromise {
         let (promise, fulfill) = NotificationPromise.go()
-        let id = addObserverForName(name, object: nil, queue: nil, usingBlock: fulfill)
+        let id = addObserver(forName: NSNotification.Name(rawValue: name), object: nil, queue: nil, using: fulfill)
         promise.then(on: zalgo) { _ in self.removeObserver(id) }
         return promise
     }
 }
 
-public class NotificationPromise: Promise<[NSObject: AnyObject]> {
-    /// Hack to fix https://github.com/mxcl/PromiseKit/issues/415
-    private class NotePromise: Promise<NSNotification> {}
+public class NotificationPromise: Promise<[String: Any]> {
+    private let (parentPromise, parentFulfill, _) = Promise<Notification>.pendingPromise()
 
-    private let (parentPromise, parentFulfill, _) = NotePromise.pendingPromise()
-
-    public func asNotification() -> Promise<NSNotification> {
+    public func asNotification() -> Promise<Notification> {
         return parentPromise
     }
 
-    private class func go() -> (NotificationPromise, (NSNotification) -> Void) {
-        var fulfill: (([NSObject: AnyObject]) -> Void)!
+    private class func go() -> (NotificationPromise, (Notification) -> Void) {
+        var fulfill: (([String: Any]) -> Void)!
         let promise = NotificationPromise { f, _ in fulfill = f }
-        promise.parentPromise.then { fulfill($0.userInfo ?? [:]) }
+        promise.parentPromise.then { fulfill!($0.userInfo ?? [:]) }
         return (promise, promise.parentFulfill)
     }
 
-    private override init(@noescape resolvers: (fulfill: ([NSObject: AnyObject]) -> Void, reject: (ErrorType) -> Void) throws -> Void) {
+    private override init(@noescape resolvers: (fulfill: ([String: Any]) -> Void, reject: (ErrorProtocol) -> Void) throws -> Void) {
         super.init(resolvers: resolvers)
     }
 }

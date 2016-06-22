@@ -70,7 +70,7 @@ class Test2242: XCTestCase {
 
         let promise = Promise()
         var firstOnFulfilledFinished = false
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
 
         promise.then { _ -> Void in
             promise.then { _ -> Void in
@@ -80,7 +80,7 @@ class Test2242: XCTestCase {
             firstOnFulfilledFinished = true
         }
 
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func test4() {
@@ -88,10 +88,10 @@ class Test2242: XCTestCase {
         // specify: when `onFulfilled` is added inside an `onRejected`
 
         let resolved = Promise()
-        let rejected = Promise<Void>(error: Error.Dummy)
+        let rejected = Promise<Void>(error: Error.dummy)
 
         var firstOnRejectedFinished = false
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
 
         rejected.error { _ in
             resolved.then { _ -> Void in
@@ -101,7 +101,7 @@ class Test2242: XCTestCase {
             firstOnRejectedFinished = true
         }
 
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func test5() {
@@ -110,7 +110,7 @@ class Test2242: XCTestCase {
 
         let (promise, fulfill, _) = Promise<Void>.pendingPromise()
         var firstStackFinished = false
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
 
         later {
             fulfill()
@@ -122,7 +122,7 @@ class Test2242: XCTestCase {
             ex.fulfill()
         }
 
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 }
 
@@ -141,7 +141,7 @@ class Test2243: XCTestCase {
             onRejectedCalled = true
         }
 
-        reject(Error.Dummy)
+        reject(Error.dummy)
 
         XCTAssertFalse(onRejectedCalled)
     }
@@ -153,7 +153,7 @@ class Test2243: XCTestCase {
         let (promise, _, reject) = Promise<Void>.pendingPromise()
         var onRejectedCalled = false
 
-        reject(Error.Dummy)
+        reject(Error.dummy)
 
         promise.error { _ in
             onRejectedCalled = true
@@ -167,9 +167,9 @@ class Test2243: XCTestCase {
         // specify: when `onRejected` is added inside an `onFulfilled`
 
         let resolved = Promise()
-        let rejected = Promise<Void>(error: Error.Dummy)
+        let rejected = Promise<Void>(error: Error.dummy)
         var firstOnFulfilledFinished = false
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
 
         resolved.then { _ -> Void in
             rejected.error{ _ in
@@ -178,16 +178,16 @@ class Test2243: XCTestCase {
             }
             firstOnFulfilledFinished = true
         }
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func test4() {
 
         // specify: when one `onRejected` is added inside another `onRejected`
 
-        let promise = Promise<Void>(error: Error.Dummy)
+        let promise = Promise<Void>(error: Error.dummy)
         var firstOnRejectedFinished = false
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
 
         promise.error { _ in
             promise.error { _ in
@@ -196,7 +196,7 @@ class Test2243: XCTestCase {
             }
             firstOnRejectedFinished = true
         }
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func test5() {
@@ -205,10 +205,10 @@ class Test2243: XCTestCase {
 
         let (promise, _, reject) = Promise<Void>.pendingPromise()
         var firstStackFinished = false
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
 
         later {
-            reject(Error.Dummy)
+            reject(Error.dummy)
             firstStackFinished = true
         }
 
@@ -217,6 +217,6 @@ class Test2243: XCTestCase {
             ex.fulfill()
         }
 
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 }

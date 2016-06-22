@@ -14,12 +14,12 @@ class PMKDefaultDispatchQueueTest_Swift: XCTestCase {
     override func tearDown() {
         super.tearDown()
         
-        PMKDefaultDispatchQueue = { () -> dispatch_queue_t in dispatch_get_main_queue() }
+        PMKDefaultDispatchQueue = { () -> DispatchQueue in DispatchQueue.main }
     }
     
     func testThenWithDefaultQueue() {
         var fulfilled = false
-        let testExpectation = expectationWithDescription("resolving")
+        let testExpectation = expectation(withDescription: "resolving")
         Promise(1).then { (_) -> Promise<Void> in
             fulfilled = true
             testExpectation.fulfill()
@@ -27,20 +27,20 @@ class PMKDefaultDispatchQueueTest_Swift: XCTestCase {
         }
         XCTAssertFalse(fulfilled)
         
-        waitForExpectationsWithTimeout(1) { _ in
+        waitForExpectations(withTimeout: 1) { _ in
             XCTAssertTrue(fulfilled)
         }
     }
     
     func testThenWithDifferentQueue() {
-        PMKDefaultDispatchQueue = { () -> dispatch_queue_t in
-            dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0)
+        PMKDefaultDispatchQueue = { () -> DispatchQueue in
+            DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosUtility)
         }
         
         var fulfilled = false
-        let testExpectation = expectationWithDescription("resolving")
+        let testExpectation = expectation(withDescription: "resolving")
         Promise(1).then { (_) -> Promise<Void> in
-            XCTAssertFalse(NSThread.isMainThread());
+            XCTAssertFalse(Thread.isMainThread());
             
             fulfilled = true
             testExpectation.fulfill()
@@ -48,13 +48,13 @@ class PMKDefaultDispatchQueueTest_Swift: XCTestCase {
         }
         XCTAssertFalse(fulfilled)
         
-        waitForExpectationsWithTimeout(1) { _ in
+        waitForExpectations(withTimeout: 1) { _ in
             XCTAssertTrue(fulfilled)
         }
     }
     
     func testThenWithZalgo() {
-        PMKDefaultDispatchQueue = { () -> dispatch_queue_t in zalgo }
+        PMKDefaultDispatchQueue = { () -> DispatchQueue in zalgo }
         
         var fulfilled = false
         Promise(1).then { _ in
@@ -66,7 +66,7 @@ class PMKDefaultDispatchQueueTest_Swift: XCTestCase {
     func testErrorWithDefaultQueue() {
         var rejected = false
         let err = NSError(domain: "test", code: 0, userInfo: nil)
-        let testExpectation = expectationWithDescription("resolving")
+        let testExpectation = expectation(withDescription: "resolving")
         Promise(error: err).then {
             XCTFail()
             }.error { _ in
@@ -76,23 +76,23 @@ class PMKDefaultDispatchQueueTest_Swift: XCTestCase {
         
         XCTAssertFalse(rejected)
         
-        waitForExpectationsWithTimeout(1) { _ in
+        waitForExpectations(withTimeout: 1) { _ in
             XCTAssertTrue(rejected)
         }
     }
     
     func testErrorWithDifferentQueue() {
-        PMKDefaultDispatchQueue = { () -> dispatch_queue_t in
-            dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0)
+        PMKDefaultDispatchQueue = { () -> DispatchQueue in
+            DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosUtility)
         }
         
         var rejected = false
         let err = NSError(domain: "test", code: 0, userInfo: nil)
-        let testExpectation = expectationWithDescription("resolving")
+        let testExpectation = expectation(withDescription: "resolving")
         Promise(error: err).then {
             XCTFail()
             }.error { _ in
-                XCTAssertFalse(NSThread.isMainThread());
+                XCTAssertFalse(Thread.isMainThread());
                 
                 rejected = true
                 testExpectation.fulfill()
@@ -100,13 +100,13 @@ class PMKDefaultDispatchQueueTest_Swift: XCTestCase {
         
         XCTAssertFalse(rejected)
         
-        waitForExpectationsWithTimeout(1) { _ in
+        waitForExpectations(withTimeout: 1) { _ in
             XCTAssertTrue(rejected)
         }
     }
     
     func testErrorWithZalgo() {
-        PMKDefaultDispatchQueue = { () -> dispatch_queue_t in zalgo }
+        PMKDefaultDispatchQueue = { () -> DispatchQueue in zalgo }
         
         var rejected = false
         let err = NSError(domain: "test", code: 0, userInfo: nil)
@@ -120,40 +120,40 @@ class PMKDefaultDispatchQueueTest_Swift: XCTestCase {
     
     func testAlwaysWithDefaultQueue() {
         var fulfilled = false
-        let testExpectation = expectationWithDescription("resolving")
+        let testExpectation = expectation(withDescription: "resolving")
         Promise(1).always {
             fulfilled = true
             testExpectation.fulfill()
         }
         XCTAssertFalse(fulfilled)
         
-        waitForExpectationsWithTimeout(1) { _ in
+        waitForExpectations(withTimeout: 1) { _ in
             XCTAssertTrue(fulfilled)
         }
     }
     
     func testAlwaysWithDifferentQueue() {
-        PMKDefaultDispatchQueue = { () -> dispatch_queue_t in
-            dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0)
+        PMKDefaultDispatchQueue = { () -> DispatchQueue in
+            DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosUtility)
         }
         
         var fulfilled = false
-        let testExpectation = expectationWithDescription("resolving")
+        let testExpectation = expectation(withDescription: "resolving")
         Promise(1).always {
-            XCTAssertFalse(NSThread.isMainThread());
+            XCTAssertFalse(Thread.isMainThread());
             
             fulfilled = true
             testExpectation.fulfill()
         }
         XCTAssertFalse(fulfilled)
         
-        waitForExpectationsWithTimeout(1) { _ in
+        waitForExpectations(withTimeout: 1) { _ in
             XCTAssertTrue(fulfilled)
         }
     }
     
     func testAlwaysWithZalgo() {
-        PMKDefaultDispatchQueue = { () -> dispatch_queue_t in zalgo }
+        PMKDefaultDispatchQueue = { () -> DispatchQueue in zalgo }
         
         var fulfilled = false
         Promise(1).always {

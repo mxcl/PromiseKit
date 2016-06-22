@@ -27,7 +27,7 @@ class Test2222: XCTestCase {
 
         // specify: fulfilled after a delay
 
-        let expectation = expectationWithDescription("")
+        let expectation = self.expectation(withDescription: "")
         let (promise, fulfill, _) = Promise<Void>.pendingPromise()
         var isFulfilled = false
 
@@ -39,7 +39,7 @@ class Test2222: XCTestCase {
             fulfill()
             isFulfilled = true
         }
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func test2() {
@@ -52,7 +52,7 @@ class Test2222: XCTestCase {
             }
         }
 
-        let expectation = expectationWithDescription("")
+        let expectation = self.expectation(withDescription: "")
         let (promise, _, _) = TestPromise.pendingPromise()
 
         promise.then { _ in
@@ -61,7 +61,7 @@ class Test2222: XCTestCase {
         later {
             expectation.fulfill()
         }
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 }
 
@@ -74,19 +74,19 @@ class Test2223: XCTestCase {
 
         // specify: already-fulfilled
 
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
 
         Promise().then(ex.fulfill)
 
-        later(4, expectationWithDescription("").fulfill)
-        waitForExpectationsWithTimeout(1, handler: nil)
+        later(4, expectation(withDescription: "").fulfill)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func test2() {
 
         // specify: trying to fulfill a pending promise more than once, immediately
 
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
         let (promise, fulfill, _) = Promise<Void>.pendingPromise()
 
         promise.then(ex.fulfill)
@@ -94,15 +94,15 @@ class Test2223: XCTestCase {
         fulfill()
         fulfill()
 
-        later(4, expectationWithDescription("").fulfill)
-        waitForExpectationsWithTimeout(1, handler: nil)
+        later(4, expectation(withDescription: "").fulfill)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func test3() {
 
         // specify: trying to fulfill a pending promise more than once, delayed
 
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
         let (promise, fulfill, _) = Promise<Void>.pendingPromise()
         promise.then(ex.fulfill)
 
@@ -111,15 +111,15 @@ class Test2223: XCTestCase {
             fulfill()
         }
 
-        later(4, expectationWithDescription("").fulfill)
-        waitForExpectationsWithTimeout(1, handler: nil)
+        later(4, expectation(withDescription: "").fulfill)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func test4() {
 
         // specify: trying to fulfill a pending promise more than once, immediately then delayed
 
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
         let (promise, fulfill, _) = Promise<Void>.pendingPromise()
 
         promise.then(ex.fulfill)
@@ -127,8 +127,8 @@ class Test2223: XCTestCase {
         fulfill()
         later { fulfill() }
 
-        later(4, expectationWithDescription("").fulfill)
-        waitForExpectationsWithTimeout(1, handler: nil)
+        later(4, expectation(withDescription: "").fulfill)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func test5() {
@@ -138,9 +138,9 @@ class Test2223: XCTestCase {
         let (promise, fulfill, _) = Promise<Void>.pendingPromise()
 
         let desc = "when multiple `then` calls are made, spaced apart in time"
-        let e1 = expectationWithDescription(desc)
-        let e2 = expectationWithDescription(desc)
-        let e3 = expectationWithDescription(desc)
+        let e1 = expectation(withDescription: desc)
+        let e2 = expectation(withDescription: desc)
+        let e3 = expectation(withDescription: desc)
 
         promise.then(e1.fulfill)
 
@@ -154,8 +154,8 @@ class Test2223: XCTestCase {
             fulfill()
         }
 
-        later(4, expectationWithDescription("").fulfill)
-        waitForExpectationsWithTimeout(1, handler: nil)
+        later(4, expectation(withDescription: "").fulfill)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func test6() {
@@ -163,14 +163,14 @@ class Test2223: XCTestCase {
         //specify: when `then` is interleaved with fulfillment
 
         let (promise, fulfill, _) = Promise<Void>.pendingPromise()
-        let e1 = expectationWithDescription("")
-        let e2 = expectationWithDescription("")
+        let e1 = expectation(withDescription: "")
+        let e2 = expectation(withDescription: "")
 
         promise.then(e1.fulfill)
         fulfill()
         promise.then(e2.fulfill)
 
-        later(4, expectationWithDescription("").fulfill)
-        waitForExpectationsWithTimeout(1, handler: nil)
+        later(4, expectation(withDescription: "").fulfill)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 }

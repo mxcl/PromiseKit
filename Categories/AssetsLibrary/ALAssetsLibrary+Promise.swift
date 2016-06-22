@@ -24,27 +24,27 @@ extension UIViewController {
         let proxy = UIImagePickerControllerProxy()
         vc.delegate = proxy
 
-        presentViewController(vc, animated: animated, completion: completion)
+        present(vc, animated: animated, completion: completion)
 
         return proxy.promise.then(on: zalgo) { info -> Promise<NSData> in
-            let url = info[UIImagePickerControllerReferenceURL] as! NSURL
+            let url = info[UIImagePickerControllerReferenceURL] as! URL
             
             return Promise { fulfill, reject in
-                ALAssetsLibrary().assetForURL(url, resultBlock: { asset in
-                    let N = Int(asset.defaultRepresentation().size())
-                    let bytes = UnsafeMutablePointer<UInt8>.alloc(N)
+                ALAssetsLibrary().asset(for: url, resultBlock: { asset in
+                    let N = Int(asset!.defaultRepresentation().size())
+                    let bytes = UnsafeMutablePointer<UInt8>(allocatingCapacity: N)
                     var error: NSError?
-                    asset.defaultRepresentation().getBytes(bytes, fromOffset: 0, length: N, error: &error)
+                    asset!.defaultRepresentation().getBytes(bytes, fromOffset: 0, length: N, error: &error)
 
                     if let error = error {
                         reject(error)
                     } else {
                         fulfill(NSData(bytesNoCopy: bytes, length: N))
                     }
-                }, failureBlock: { reject($0) } )
+                }, failureBlock: { reject($0!) } )
             }
         }.always {
-            self.dismissViewControllerAnimated(animated, completion: nil)
+            self.dismiss(animated: animated, completion: nil)
         }
     }
 }
