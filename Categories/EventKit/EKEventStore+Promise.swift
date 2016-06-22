@@ -14,15 +14,15 @@ import EventKit
     import PromiseKit
 #endif
 
-public enum EventKitError: ErrorType {
-    case Restricted
-    case Denied
+public enum EventKitError: ErrorProtocol {
+    case restricted
+    case denied
 
     public var localizedDescription: String {
         switch self {
-        case .Restricted:
+        case .restricted:
             return "A head of family must grant calendar access."
-        case .Denied:
+        case .denied:
             return "Calendar access has been denied."
         }
     }
@@ -46,20 +46,20 @@ public func EKEventStoreRequestAccess() -> Promise<(EKEventStore)> {
     let eventStore = EKEventStore()
     return Promise { fulfill, reject in
 
-        let authorization = EKEventStore.authorizationStatusForEntityType(EKEntityType.Event)
+        let authorization = EKEventStore.authorizationStatus(for: .event)
         switch authorization {
-        case .Authorized:
+        case .authorized:
             fulfill(eventStore)
-        case .Denied:
-            reject(EventKitError.Denied)
-        case .Restricted:
-            reject(EventKitError.Restricted)
-        case .NotDetermined:
-            eventStore.requestAccessToEntityType(EKEntityType.Event) { granted, error in
+        case .denied:
+            reject(EventKitError.denied)
+        case .restricted:
+            reject(EventKitError.restricted)
+        case .notDetermined:
+            eventStore.requestAccess(to: EKEntityType.event) { granted, error in
                 if granted {
                     fulfill(eventStore)
                 } else {
-                    reject(EventKitError.Denied)
+                    reject(EventKitError.denied)
                 }
             }
         }

@@ -15,30 +15,30 @@ import PromiseKit
 */
 extension CKContainer {
     public func accountStatus() -> Promise<CKAccountStatus> {
-        return Promise<CKAccountStatus> { self.accountStatusWithCompletionHandler($0) }
+        return Promise<CKAccountStatus> { self.accountStatus(completionHandler: $0) }
     }
 
-    public func requestApplicationPermission(applicationPermissions: CKApplicationPermissions) -> Promise<CKApplicationPermissionStatus> {
+    public func requestApplicationPermission(_ applicationPermissions: CKApplicationPermissions) -> Promise<CKApplicationPermissionStatus> {
         return Promise<CKApplicationPermissionStatus> { self.requestApplicationPermission(applicationPermissions, completionHandler: $0) }
     }
 
-    public func statusForApplicationPermission(applicationPermissions: CKApplicationPermissions) -> Promise<CKApplicationPermissionStatus> {
-        return Promise { statusForApplicationPermission(applicationPermissions, completionHandler: $0) }
+    public func statusForApplicationPermission(_ applicationPermissions: CKApplicationPermissions) -> Promise<CKApplicationPermissionStatus> {
+        return Promise { status(forApplicationPermission: applicationPermissions, completionHandler: $0) }
     }
 
     public func discoverAllContactUserInfos() -> Promise<[CKDiscoveredUserInfo]> {
-        return Promise(resolver: { self.discoverAllContactUserInfosWithCompletionHandler($0) })
+        return Promise(resolver: { self.discoverAllContactUserInfos(completionHandler: $0) })
     }
 
-    public func discoverUserInfo(email email: String) -> Promise<CKDiscoveredUserInfo> {
-        return Promise { discoverUserInfoWithEmailAddress(email, completionHandler: $0) }
+    public func discoverUserInfo(email: String) -> Promise<CKDiscoveredUserInfo> {
+        return Promise { self.discoverUserInfo(withEmailAddress: email, completionHandler: $0) }
     }
 
-    public func discoverUserInfo(recordID recordID: CKRecordID) -> Promise<CKDiscoveredUserInfo> {
-        return Promise { discoverUserInfoWithUserRecordID(recordID, completionHandler: $0) }
+    public func discoverUserInfo(recordID: CKRecordID) -> Promise<CKDiscoveredUserInfo> {
+        return Promise { self.discoverUserInfo(withUserRecordID: recordID, completionHandler: $0) }
     }
 
     public func fetchUserRecordID() -> Promise<CKRecordID> {
-        return Promise { fetchUserRecordIDWithCompletionHandler($0) }
+        return Promise { self.fetchUserRecordID(completionHandler: $0) }
     }
 }

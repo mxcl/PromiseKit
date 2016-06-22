@@ -3,13 +3,13 @@ import XCTest
 import PromiseKit
 
 
-private enum Error: ErrorType {
-    case Dummy
+private enum Error: ErrorProtocol {
+    case dummy
 }
 
 class ErrorHandlingTests_Swift: XCTestCase {
 
-    var oldHandler: (ErrorType -> Void)!
+    var oldHandler: ((ErrorProtocol) -> Void)!
 
     override func setUp() {
         oldHandler = PMKUnhandledErrorHandler
@@ -18,23 +18,23 @@ class ErrorHandlingTests_Swift: XCTestCase {
         PMKUnhandledErrorHandler = oldHandler
     }
 
-    private func twice(@noescape body: (Promise<Int>, XCTestExpectation) -> Void) {
+    private func twice(@noescape _ body: (Promise<Int>, XCTestExpectation) -> Void) {
         autoreleasepool {
-            let ex = expectationWithDescription("Sealed")
-            body(Promise<Int>(error: Error.Dummy), ex)
+            let ex = expectation(withDescription: "Sealed")
+            body(Promise<Int>(error: Error.dummy), ex)
         }
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
 
         autoreleasepool {
-            let ex = expectationWithDescription("Unsealed")
+            let ex = expectation(withDescription: "Unsealed")
             let p = Promise { fulfill, _ in
                 fulfill(1)
-            }.then { _ -> Int in
-                throw Error.Dummy
+            }.then { (_: Int) -> Int in
+                throw Error.dummy
             }
             body(p, ex)
         }
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     // handler is called if error is not handled
@@ -91,7 +91,7 @@ class ErrorHandlingTests_Swift: XCTestCase {
                 ex.fulfill()
             }
             promise.recover { error -> Promise<Int> in
-                firstly { throw Error.Dummy }
+                firstly { throw Error.dummy }
             }
         }
     }
@@ -99,7 +99,7 @@ class ErrorHandlingTests_Swift: XCTestCase {
     // handler is *not* called if error recovery fails with same error but eventually error is caught
     func test6() {
         twice { promise, ex2 in
-            let ex1 = expectationWithDescription("")
+            let ex1 = expectation(withDescription: "")
 
             PMKUnhandledErrorHandler = { err in
                 XCTFail()
@@ -130,8 +130,8 @@ class ErrorHandlingTests_Swift: XCTestCase {
     }
 
     func testDoubleRejectDoesNotTriggerUnhandler() {
-        enum Error: ErrorType {
-            case Test
+        enum Error: ErrorProtocol {
+            case test
         }
 
         PMKUnhandledErrorHandler = { err in
@@ -140,56 +140,56 @@ class ErrorHandlingTests_Swift: XCTestCase {
 
         let (p, _, r) = Promise<Void>.pendingPromise()
 
-        let ex1 = expectationWithDescription("")
-        let ex2 = expectationWithDescription("")
-        let ex3 = expectationWithDescription("")
-        let ex4 = expectationWithDescription("")
+        let ex1 = expectation(withDescription: "")
+        let ex2 = expectation(withDescription: "")
+        let ex3 = expectation(withDescription: "")
+        let ex4 = expectation(withDescription: "")
 
-        after(0.1).then { _ -> Void in r(Error.Test); ex1.fulfill() }
-        after(0.15).then { _ -> Void in r(Error.Test); ex2.fulfill() }.always { ex3.fulfill() }
+        after(0.1).then { _ -> Void in r(Error.test); ex1.fulfill() }
+        after(0.15).then { _ -> Void in r(Error.test); ex2.fulfill() }.always { ex3.fulfill() }
 
         p.error { error in
             ex4.fulfill()
         }
 
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func testPassThrough() {
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
 
         PMKUnhandledErrorHandler = { err in
             ex.fulfill()
         }
 
-        enum Error: ErrorType {
-            case Test
+        enum Error: ErrorProtocol {
+            case test
         }
 
         _ = Promise<Void> { _, reject in
             after(0.1).then {
-                throw Error.Test
+                throw Error.test
             }.error { err in
                 reject(err)
             }
         }
 
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func testConsumedPromiseStaysConsumedAsAnyPromise() {
-        enum Error: ErrorType {
-            case Test
+        enum Error: ErrorProtocol {
+            case test
         }
 
         PMKUnhandledErrorHandler = { err in
             XCTFail()
         }
 
-        let ex1 = expectationWithDescription("")
+        let ex1 = expectation(withDescription: "")
 
         let p: Promise<Int> = firstly {
-            throw Error.Test
+            throw Error.test
         }
 
         XCTAssertTrue(p.rejected)
@@ -200,7 +200,7 @@ class ErrorHandlingTests_Swift: XCTestCase {
             ex1.fulfill()
         }
 
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
 
         print(anyp)
     }
@@ -208,8 +208,8 @@ class ErrorHandlingTests_Swift: XCTestCase {
 
 
 extension NSError {
-    @objc class public func pmk_setUnhandledErrorHandler(handler: (NSError) -> Void) {
-        PMKUnhandledErrorHandler = { (error: ErrorType) -> Void in
+    @objc class public func pmk_setUnhandledErrorHandler(_ handler: (NSError) -> Void) {
+        PMKUnhandledErrorHandler = { (error: ErrorProtocol) -> Void in
             handler(error as NSError)
         }
     }

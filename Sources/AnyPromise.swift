@@ -13,9 +13,9 @@ import Foundation.NSError
         state = State(resolver: &resolve)
         bound.pipe { resolution in
             switch resolution {
-            case .Fulfilled(let value):
+            case .fulfilled(let value):
                 resolve(value)
-            case .Rejected(let error, let token):
+            case .rejected(let error, let token):
                 let nserror = error as NSError
                 unconsume(error: nserror, reusingToken: token)
                 resolve(nserror)
@@ -29,7 +29,7 @@ import Foundation.NSError
     */
     convenience public init<T: AnyObject>(bound: Promise<T>) {
         // FIXME efficiency. Allocating the extra promise for conversion sucks.
-        self.init(bound: bound.then(on: zalgo){ Optional.Some($0) })
+        self.init(bound: bound.then(on: zalgo){ Optional.some($0) })
     }
 
     /**
@@ -65,7 +65,7 @@ import Foundation.NSError
      The value is converted to an NSNumber so Objective-C can use it.
     */
     convenience public init(bound: Promise<Int>) {
-        self.init(bound: bound.then(on: zalgo) { NSNumber(integer: $0) })
+        self.init(bound: bound.then(on: zalgo) { NSNumber(value: $0) })
     }
 
     /**
@@ -74,7 +74,7 @@ import Foundation.NSError
      The value is converted to an NSNumber so Objective-C can use it.
      */
     convenience public init(bound: Promise<Bool>) {
-        self.init(bound: bound.then(on: zalgo) { NSNumber(bool: $0) })
+        self.init(bound: bound.then(on: zalgo) { NSNumber(value: $0) })
     }
 
     /**
@@ -82,10 +82,10 @@ import Foundation.NSError
      The two promises represent the same task, any changes to either will instantly reflect on both.
     */
     convenience public init(bound: Promise<Void>) {
-        self.init(bound: bound.then(on: zalgo) { Optional<AnyObject>.None })
+        self.init(bound: bound.then(on: zalgo) { Optional<AnyObject>.none })
     }
 
-    @objc init(@noescape bridge: ((AnyObject?) -> Void) -> Void) {
+    @objc init(bridge: @noescape ((AnyObject?) -> Void) -> Void) {
         var resolve: ((AnyObject?) -> Void)!
         state = State(resolver: &resolve)
         bridge { result in
@@ -97,12 +97,12 @@ import Foundation.NSError
         }
     }
 
-    @objc func pipe(body: (AnyObject?) -> Void) {
+    @objc func pipe(_ body: (AnyObject?) -> Void) {
         state.get { seal in
             switch seal {
-            case .Pending(let handlers):
+            case .pending(let handlers):
                 handlers.append(body)
-            case .Resolved(let value):
+            case .resolved(let value):
                 body(value)
             }
         }
@@ -134,11 +134,11 @@ import Foundation.NSError
     */
     @objc public var fulfilled: Bool {
         switch state.get() {
-        case .Some(let obj) where obj is NSError:
+        case .some(let obj) where obj is NSError:
             return false
-        case .Some:
+        case .some:
             return true
-        case .None:
+        case .none:
             return false
         }
     }
@@ -149,7 +149,7 @@ import Foundation.NSError
     */
     @objc public var rejected: Bool {
         switch state.get() {
-        case .Some(let obj) where obj is NSError:
+        case .some(let obj) where obj is NSError:
             return true
         default:
             return false
@@ -159,14 +159,14 @@ import Foundation.NSError
     /**
      Continue a Promise<T> chain from an AnyPromise.
     */
-    public func then<T>(on q: dispatch_queue_t = PMKDefaultDispatchQueue(), body: (AnyObject?) throws -> T) -> Promise<T> {
+    public func then<T>(on q: DispatchQueue = PMKDefaultDispatchQueue(), body: (AnyObject?) throws -> T) -> Promise<T> {
         return Promise(sealant: { resolve in
             pipe { object in
                 if let error = object as? NSError {
-                    resolve(.Rejected(error, error.token))
+                    resolve(.rejected(error, error.token))
                 } else {
                     contain_zalgo(q, rejecter: resolve) {
-                        resolve(.Fulfilled(try body(self.valueForKey("value"))))
+                        resolve(.fulfilled(try body(self.value(forKey: "value"))))
                     }
                 }
             }
@@ -176,7 +176,7 @@ import Foundation.NSError
     /**
      Continue a Promise<T> chain from an AnyPromise.
     */
-    public func then(on q: dispatch_queue_t = PMKDefaultDispatchQueue(), body: (AnyObject?) -> AnyPromise) -> Promise<AnyObject?> {
+    public func then(on q: DispatchQueue = PMKDefaultDispatchQueue(), body: (AnyObject?) -> AnyPromise) -> Promise<AnyObject?> {
         return Promise { fulfill, reject in
             pipe { object in
                 if let error = object as? NSError {
@@ -199,11 +199,11 @@ import Foundation.NSError
     /**
      Continue a Promise<T> chain from an AnyPromise.
     */
-    public func then<T>(on q: dispatch_queue_t = PMKDefaultDispatchQueue(), body: (AnyObject?) -> Promise<T>) -> Promise<T> {
+    public func then<T>(on q: DispatchQueue = PMKDefaultDispatchQueue(), body: (AnyObject?) -> Promise<T>) -> Promise<T> {
         return Promise(sealant: { resolve in
             pipe { object in
                 if let error = object as? NSError {
-                    resolve(.Rejected(error, error.token))
+                    resolve(.rejected(error, error.token))
                 } else {
                     contain_zalgo(q) {
                         body(object).pipe(resolve)
@@ -214,7 +214,7 @@ import Foundation.NSError
     }
 
     private class State: UnsealedState<AnyObject?> {
-        required init(inout resolver: ((AnyObject?) -> Void)!) {
+        required init(resolver: inout ((AnyObject?) -> Void)!) {
             var preresolve: ((AnyObject?) -> Void)!
             super.init(resolver: &preresolve)
             resolver = { obj in

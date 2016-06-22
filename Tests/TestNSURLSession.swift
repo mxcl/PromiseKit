@@ -14,12 +14,12 @@ class Test_NSURLSession_Swift: XCTestCase {
             return OHHTTPStubsResponse(JSONObject: json, statusCode: 200, headers: nil)
         }
 
-        let ex = expectationWithDescription("")
-        NSURLSession.GET("http://example.com").asDictionary().then { rsp -> Void in
+        let ex = expectation(withDescription: "")
+        URLSession.GET("http://example.com").asDictionary().then { rsp -> Void in
             XCTAssertEqual(json, rsp)
             ex.fulfill()
         }
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func test2() {
@@ -27,20 +27,20 @@ class Test_NSURLSession_Swift: XCTestCase {
         // test that URLDataPromise chains thens
         // this test because I don’t trust the Swift compiler
 
-        let dummy = ("fred" as NSString).dataUsingEncoding(NSUTF8StringEncoding)!
+        let dummy = ("fred" as NSString).data(using: String.Encoding.utf8.rawValue)!
 
         OHHTTPStubs.stubRequestsPassingTest({ Bool($0.URL!.host == "example.com") }) { _ in
             return OHHTTPStubsResponse(data: dummy, statusCode: 200, headers: [:])
         }
 
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
 
         after(0.1).then {
-            NSURLSession.GET("http://example.com")
+            URLSession.GET("http://example.com")
         }.then { x -> Void in
             XCTAssertEqual(x, dummy)
         }.then(ex.fulfill)
 
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 }

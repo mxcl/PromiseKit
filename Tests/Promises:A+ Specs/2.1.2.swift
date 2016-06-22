@@ -23,7 +23,7 @@ class Test2121: XCTestCase {
             promise.then(expectation.fulfill)
             promise.error { _ in XCTFail() }
             fulfill()
-            reject(Error.Dummy)
+            reject(Error.dummy)
         }
     }
 
@@ -34,7 +34,7 @@ class Test2121: XCTestCase {
             promise.error { _ in XCTFail() }
             later {
                 fulfill()
-                reject(Error.Dummy)
+                reject(Error.dummy)
             }
         }
     }
@@ -46,7 +46,7 @@ class Test2121: XCTestCase {
             promise.error { _ in XCTFail() }
             fulfill()
             later {
-                reject(Error.Dummy)
+                reject(Error.dummy)
             }
         }
     }
@@ -54,9 +54,9 @@ class Test2121: XCTestCase {
 
 /////////////////////////////////////////////////////////////////////////
 
-    private func specify(desc: String, body: (Promise<Void>, () -> Void, (ErrorType) -> Void, XCTestExpectation) -> Void) {
-        let ex1 = expectationWithDescription("")
-        let ex2 = expectationWithDescription("")
+    private func specify(_ desc: String, body: (Promise<Void>, () -> Void, (ErrorProtocol) -> Void, XCTestExpectation) -> Void) {
+        let ex1 = expectation(withDescription: "")
+        let ex2 = expectation(withDescription: "")
         let (promise, fulfill, reject) = Promise<Void>.pendingPromise()
 
         body(promise, fulfill, reject, ex2)
@@ -65,6 +65,6 @@ class Test2121: XCTestCase {
             ex1.fulfill()
         }
 
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 }

@@ -7,8 +7,8 @@ import XCTest
 
 class Test_MessageUI_Swift: UIKitTestCase {
     func test_can_cancel_mail_composer() {
-        let ex1 = expectationWithDescription("")
-        let ex2 = expectationWithDescription("")
+        let ex1 = expectation(withDescription: "")
+        let ex2 = expectation(withDescription: "")
         var order = false
 
         let mailer = MFMailComposeViewController()
@@ -30,14 +30,14 @@ class Test_MessageUI_Swift: UIKitTestCase {
             after(0.5).then(ex2.fulfill)
             order = true
         }
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(withTimeout: 10, handler: nil)
 
         XCTAssertNil(rootvc.presentedViewController)
     }
 
     func test_can_cancel_message_composer() {
-        let ex1 = expectationWithDescription("")
-        let ex2 = expectationWithDescription("")
+        let ex1 = expectation(withDescription: "")
+        let ex2 = expectation(withDescription: "")
         var order = false
 
         let messager = MFMessageComposeViewController()
@@ -60,7 +60,7 @@ class Test_MessageUI_Swift: UIKitTestCase {
             after(0.5).then(ex2.fulfill)
             order = true
         }
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(withTimeout: 10, handler: nil)
 
         XCTAssertNil(rootvc.presentedViewController)
     }

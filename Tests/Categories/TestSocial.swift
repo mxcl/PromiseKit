@@ -8,26 +8,26 @@ class Test_SLRequest_Swift: XCTestCase {
         // then use the long initializer, and an exception is thrown inside
         // init()
 
-        swizzle(SLRequest.self, #selector(SLRequest.performRequestWithHandler(_:))) {
-            let url = NSURL(string: "https://api.twitter.com/1.1/statuses/user_timeline.json")
+        swizzle(SLRequest.self, #selector(SLRequest.perform(handler:))) {
+            let url = URL(string: "https://api.twitter.com/1.1/statuses/user_timeline.json")
             let params = ["foo": "bar"]
-            let rq = SLRequest(forServiceType: SLServiceTypeTwitter, requestMethod: SLRequestMethod.GET, URL: url, parameters: params)
+            let rq = SLRequest(forServiceType: SLServiceTypeTwitter, requestMethod: .GET, url: url, parameters: params)!
 
-            let ex = expectationWithDescription("")
+            let ex = expectation(withDescription: "")
             rq.promise().then { x -> Void in
                 XCTAssertEqual(x, NSData())
                 ex.fulfill()
             }
-            waitForExpectationsWithTimeout(1, handler: nil)
+            waitForExpectations(withTimeout: 1, handler: nil)
         }
     }
 }
 
 extension SLRequest {
-    @objc private func pmk_performRequestWithHandler(handler: SLRequestHandler) {
+    @objc private func pmk_performRequestWithHandler(_ handler: SLRequestHandler) {
         after(0.0).then { _ -> Void in
-            let rsp = NSHTTPURLResponse(URL: NSURL(string: "http://example.com")!, statusCode: 200, HTTPVersion: "2.0", headerFields: [:])
-            handler(NSData(), rsp, nil)
+            let rsp = HTTPURLResponse(url: URL(string: "http://example.com")!, statusCode: 200, httpVersion: "2.0", headerFields: [:])
+            handler(Data(), rsp, nil)
         }
     }
 }

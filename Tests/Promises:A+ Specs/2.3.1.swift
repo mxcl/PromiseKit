@@ -7,7 +7,7 @@ class Test231: XCTestCase {
     // `promise` with a `TypeError' as the reason.
 
     func test1() {
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
 
         // specify: via return from a fulfilled promise
 
@@ -15,26 +15,26 @@ class Test231: XCTestCase {
         let promise2 = promise1.then { promise1 }
 
         promise2.error { err in
-            XCTAssertEqual(err, PromiseKit.Error.ReturnedSelf)
+            XCTAssertEqual(err, PromiseKit.Error.returnedSelf)
             ex.fulfill()
         }
 
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func test2() {
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
 
         // specify: via return from a rejected promise
 
-        let promise1 = Promise<Void>(error: Error.Dummy)
+        let promise1 = Promise<Void>(error: Error.dummy)
         let promise2 = promise1.recover { _ in promise1 }
 
         promise2.error { err in
-            XCTAssertEqual(err, PromiseKit.Error.ReturnedSelf)
+            XCTAssertEqual(err, PromiseKit.Error.returnedSelf)
             ex.fulfill()
         }
 
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 }

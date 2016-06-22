@@ -19,9 +19,9 @@ extension UIViewController {
         let proxy = PMKMailComposeViewControllerDelegate()
         proxy.retainCycle = proxy
         vc.mailComposeDelegate = proxy
-        presentViewController(vc, animated: animated, completion: completion)
+        present(vc, animated: animated, completion: completion)
         proxy.promise.always {
-            self.dismissViewControllerAnimated(animated, completion: nil)
+            self.dismiss(animated: animated, completion: nil)
         }
         return proxy.promise
     }
@@ -50,13 +50,13 @@ private class PMKMailComposeViewControllerDelegate: NSObject, MFMailComposeViewC
         if let error = error {
             reject(error)
         } else {
-            switch result.rawValue {
-            case MFMailComposeResultFailed.rawValue:
+            switch result {
+            case .failed:
                 var info = [NSObject: AnyObject]()
                 info[NSLocalizedDescriptionKey] = "The attempt to save or send the message was unsuccessful."
-                info[NSUnderlyingErrorKey] = NSNumber(unsignedInt: result.rawValue)
+                info[NSUnderlyingErrorKey] = NSNumber(value: result.rawValue)
                 reject(NSError(domain: PMKErrorDomain, code: PMKOperationFailed, userInfo: info))
-            case MFMailComposeResultCancelled.rawValue:
+            case .cancelled:
                 reject(MFMailComposeViewController.Error.Cancelled)
             default:
                 fulfill(result)

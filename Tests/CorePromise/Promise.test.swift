@@ -8,19 +8,19 @@ class PromiseTestCase: XCTestCase {
 
     // can return AnyPromise (that fulfills) in then handler
     func test1() {
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
         Promise(1).then { _ -> AnyPromise in
             return AnyPromise(bound: after(0).then{ 1 })
         }.then { x -> Void in
             XCTAssertEqual(x as? Int, 1)
             ex.fulfill()
         }
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     // can return AnyPromise (that rejects) in then handler
     func test2() {
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
 
         Promise(1).then { _ -> AnyPromise in
             let promise = after(0.1).then{ throw NSError(domain: "a", code: 1, userInfo: nil) }
@@ -28,43 +28,43 @@ class PromiseTestCase: XCTestCase {
         }.error { err in
             ex.fulfill()
         }
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func testErrorOnQueue1() {
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
 
         Promise(1).then { _ -> AnyPromise in
             let promise = after(0.1).then{ throw NSError(domain: "a", code: 1, userInfo: nil) }
             return AnyPromise(bound: promise)
-            }.errorOnQueue { err in
-                XCTAssertEqual(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL), dispatch_queue_get_label(PMKDefaultDispatchQueue()))
-
-                ex.fulfill()
+        }.errorOnQueue { err in
+            let currentQueueLabel = String(cString: __dispatch_queue_get_label(nil))
+            XCTAssertEqual(currentQueueLabel, PMKDefaultDispatchQueue().label)
+            ex.fulfill()
         }
 
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func testErrorOnQueue2() {
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
 
-        let queue = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0)
+        let queue = DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosDefault)
 
         Promise(1).then { _ -> AnyPromise in
             let promise = after(0.1).then{ throw NSError(domain: "a", code: 1, userInfo: nil) }
             return AnyPromise(bound: promise)
-            }.errorOnQueue(on: queue) { err in
-                XCTAssertEqual(dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL), dispatch_queue_get_label(queue))
-                
-                ex.fulfill()
+        }.errorOnQueue(on: queue) { err in
+            let currentQueueLabel = String(cString: __dispatch_queue_get_label(nil))
+            XCTAssertEqual(currentQueueLabel, queue.label)
+            ex.fulfill()
         }
         
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func testThenDataRace() {
-        let e1 = expectationWithDescription("")
+        let e1 = expectation(withDescription: "")
 
         //will crash if then doesn't protect handlers
         stressDataRace(e1, stressFunction: { promise in
@@ -74,11 +74,11 @@ class PromiseTestCase: XCTestCase {
             }
         }, fulfill: { "ok" })
 
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(withTimeout: 10, handler: nil)
     }
 
     func testCancellation() {
-        let ex1 = expectationWithDescription("")
+        let ex1 = expectation(withDescription: "")
 
         PMKUnhandledErrorHandler = { err in
             XCTAssertTrue((err as NSError).cancelled);
@@ -93,12 +93,12 @@ class PromiseTestCase: XCTestCase {
             XCTFail()
         }
 
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func testRecoverWithCancellation() {
-        let ex1 = expectationWithDescription("")
-        let ex2 = expectationWithDescription("")
+        let ex1 = expectation(withDescription: "")
+        let ex2 = expectation(withDescription: "")
 
         PMKUnhandledErrorHandler = { err in
             XCTAssertTrue((err as NSError).cancelled);
@@ -117,24 +117,24 @@ class PromiseTestCase: XCTestCase {
             XCTFail()
         }
 
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func testCatchCancellation() {
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
 
         after(0).then { _ in
             throw NSError(domain: PMKErrorDomain, code: PMKOperationCancelled, userInfo: nil)
-        }.error(policy: .AllErrors) { err -> Void in
+        }.error(policy: .allErrors) { err -> Void in
             ex.fulfill()
         }
 
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func testThensAreSequentialForLongTime() {
         var values = [Int]()
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
         var promise = dispatch_promise { 0 }
         let N = 1000
         for x in 1..<N {
@@ -149,6 +149,6 @@ class PromiseTestCase: XCTestCase {
             XCTAssertEqual(values, (0..<N).map{ $0 })
             ex.fulfill()
         }
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(withTimeout: 10, handler: nil)
     }
 }

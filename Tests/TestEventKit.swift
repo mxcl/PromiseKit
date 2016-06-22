@@ -5,10 +5,10 @@ import XCTest
 
 class Test_EventKit_Swift: XCTestCase {
     func test() {
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
         EKEventStoreRequestAccess().then { _ in
             ex.fulfill()
         }
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 }

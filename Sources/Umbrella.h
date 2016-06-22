@@ -5,7 +5,7 @@
 FOUNDATION_EXPORT double PromiseKitVersionNumber;
 FOUNDATION_EXPORT const unsigned char PromiseKitVersionString[];
 
-extern NSString * const PMKErrorDomain;
+extern NSString * __nonnull const PMKErrorDomain;
 
 #define PMKFailingPromiseIndexKey @"PMKFailingPromiseIndexKey"
 #define PMKURLErrorFailingURLResponseKey @"PMKURLErrorFailingURLResponseKey"
@@ -30,7 +30,7 @@ extern NSString * const PMKErrorDomain;
  
  By default this returns dispatch_get_main_queue()
  */
-FOUNDATION_EXPORT dispatch_queue_t (^PMKDefaultDispatchQueue)();
+FOUNDATION_EXPORT __nonnull dispatch_queue_t (^__nonnull PMKDefaultDispatchQueue)();
 
 #if !(defined(PMKEZBake) && defined(SWIFT_CLASS))
     #if !defined(SWIFT_PASTE)

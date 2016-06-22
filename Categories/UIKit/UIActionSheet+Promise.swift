@@ -19,11 +19,11 @@ import PromiseKit
     import PromiseKit
 */
 extension UIActionSheet {
-    public func promiseInView(view: UIView) -> Promise<Int> {
+    public func promise(in view: UIView) -> Promise<Int> {
         let proxy = PMKActionSheetDelegate()
         delegate = proxy
         proxy.retainCycle = proxy
-        showInView(view)
+        show(in: view)
 
         if numberOfButtons == 1 && cancelButtonIndex == 0 {
             NSLog("PromiseKit: An action sheet is being promised with a single button that is set as the cancelButtonIndex. The promise *will* be cancelled which may result in unexpected behavior. See http://promisekit.org/PromiseKit-2.0-Released/ for cancellation documentation.")

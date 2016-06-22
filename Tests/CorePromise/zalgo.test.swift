@@ -30,28 +30,28 @@ class ZalgoTestCase_Swift: XCTestCase {
 
     // returning a pending promise from its own zalgo’d then handler doesn’t hang
     func test3() {
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
         var p1: Promise<Void>!
         p1 = after(0.1).then(on: zalgo) { _ -> Promise<Void> in
             ex.fulfill()
             return p1
         }
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     // return a sealed promise from its own zalgo’d then handler doesn’t hang
     func test4() {
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
         let p1 = Promise(1)
         p1.then(on: zalgo) { _ -> Promise<Int> in
             ex.fulfill()
             return p1
         }
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func testZalgoDataRace() {
-        let e1 = expectationWithDescription("")
+        let e1 = expectation(withDescription: "")
 
         //will crash if zalgo doesn't protect handlers
         stressDataRace(e1, stressFunction: { promise in
@@ -59,31 +59,33 @@ class ZalgoTestCase_Swift: XCTestCase {
                 XCTAssertEqual("ok", s)
                 return
             }
-        }, fulfill: { "ok" })
+        }, fulfill: {
+            return "ok"
+        })
         
-        waitForExpectationsWithTimeout(10, handler: nil)
+        waitForExpectations(withTimeout: 10, handler: nil)
     }
 
 }
 
 
-func stressDataRace<T: Equatable>(e1: XCTestExpectation, iterations: Int = 1000, stressFactor: Int = 10, stressFunction: (Promise<T>) -> Void, fulfill f: () -> T) {
-    let group = dispatch_group_create()
-    let queue = dispatch_queue_create("the.domain.of.Zalgo", DISPATCH_QUEUE_CONCURRENT)
+func stressDataRace<T: Equatable>(_ e1: XCTestExpectation, iterations: Int = 1000, stressFactor: Int = 10, stressFunction: (Promise<T>) -> Void, fulfill f: () -> T) {
+    let group = DispatchGroup()
+    let queue = DispatchQueue(label: "the.domain.of.Zalgo", attributes: .concurrent)
 
     for _ in 0..<iterations {
         let (promise, fulfill, _) = Promise<T>.pendingPromise()
 
-        dispatch_apply(stressFactor, queue) { n in
+        DispatchQueue.concurrentPerform(iterations: stressFactor) { n in
             stressFunction(promise)
         }
 
-        dispatch_group_async(group, queue) {
+        queue.async(group: group) {
             fulfill(f())
         }
     }
 
-    dispatch_group_notify(group, queue) {
+    group.notify(queue: queue) {
         e1.fulfill()
     }
 }

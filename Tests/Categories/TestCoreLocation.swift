@@ -5,27 +5,27 @@ import XCTest
 class Test_CLLocationManager_Swift: XCTestCase {
     func test_fulfills_with_one_location() {
         swizzle(CLLocationManager.self, #selector(CLLocationManager.startUpdatingLocation)) {
-            let ex = expectationWithDescription("")
+            let ex = expectation(withDescription: "")
 
             CLLocationManager.promise().then { x -> Void in
                 XCTAssertEqual(x, dummy.last!)
                 ex.fulfill()
             }
 
-            waitForExpectationsWithTimeout(1, handler: nil)
+            waitForExpectations(withTimeout: 1, handler: nil)
         }
     }
 
     func test_fulfills_with_multiple_locations() {
         swizzle(CLLocationManager.self, #selector(CLLocationManager.startUpdatingLocation)) {
-            let ex = expectationWithDescription("")
+            let ex = expectation(withDescription: "")
 
             CLLocationManager.promise().allResults().then { x -> Void in
                 XCTAssertEqual(x, dummy)
                 ex.fulfill()
             }
 
-            waitForExpectationsWithTimeout(1, handler: nil)
+            waitForExpectations(withTimeout: 1, handler: nil)
         }
     }
 
@@ -33,14 +33,14 @@ class Test_CLLocationManager_Swift: XCTestCase {
         #if os(iOS)
             swizzle(CLLocationManager.self, #selector(CLLocationManager.requestWhenInUseAuthorization)) {
                 swizzle(CLLocationManager.self, #selector(CLLocationManager.authorizationStatus), isClassMethod: true) {
-                    let ex = expectationWithDescription("")
+                    let ex = expectation(withDescription: "")
 
                     CLLocationManager.requestAuthorization().then { x -> Void in
-                        XCTAssertEqual(x, CLAuthorizationStatus.AuthorizedWhenInUse)
+                        XCTAssertEqual(x, CLAuthorizationStatus.authorizedWhenInUse)
                         ex.fulfill()
                     }
 
-                    waitForExpectationsWithTimeout(1, handler: nil)
+                    waitForExpectations(withTimeout: 1, handler: nil)
                 }
             }
         #endif
@@ -50,53 +50,53 @@ class Test_CLLocationManager_Swift: XCTestCase {
 class Test_CLGeocoder_Swift: XCTestCase {
     func test_reverseGeocodeLocation() {
         class MockGeocoder: CLGeocoder {
-            private override func reverseGeocodeLocation(location: CLLocation, completionHandler: CLGeocodeCompletionHandler) {
+            private override func reverseGeocodeLocation(_ location: CLLocation, completionHandler: CLGeocodeCompletionHandler) {
                 after(0.0).then {
                     completionHandler([dummyPlacemark], nil)
                 }
             }
         }
 
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
         MockGeocoder().reverseGeocodeLocation(CLLocation()).then { x -> Void in
             XCTAssertEqual(x, dummyPlacemark)
             ex.fulfill()
         }
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func test_geocodeAddressDictionary() {
         class MockGeocoder: CLGeocoder {
-            private override func geocodeAddressDictionary(addressDictionary: [NSObject : AnyObject], completionHandler: CLGeocodeCompletionHandler) {
+            private override func geocodeAddressDictionary(_ addressDictionary: [NSObject : AnyObject], completionHandler: CLGeocodeCompletionHandler) {
                 after(0.0).then {
                     completionHandler([dummyPlacemark], nil)
                 }
             }
         }
 
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
         MockGeocoder().geocode([:]).then { x -> Void in
             XCTAssertEqual(x, dummyPlacemark)
             ex.fulfill()
         }
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 
     func test_geocodeAddressString() {
         class MockGeocoder: CLGeocoder {
-            override func geocodeAddressString(addressString: String, completionHandler: CLGeocodeCompletionHandler) {
+            override func geocodeAddressString(_ addressString: String, completionHandler: CLGeocodeCompletionHandler) {
                 after(0.0).then {
                     completionHandler([dummyPlacemark], nil)
                 }
             }
         }
 
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
         MockGeocoder().geocode("").then { x -> Void in
             XCTAssertEqual(x, dummyPlacemark)
             ex.fulfill()
         }
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 }
 
@@ -116,12 +116,12 @@ extension CLLocationManager {
 #if os(iOS)
     @objc func pmk_requestWhenInUseAuthorization() {
         after(0.1).then {
-            self.delegate!.locationManager?(self, didChangeAuthorizationStatus: .AuthorizedWhenInUse)
+            self.delegate!.locationManager?(self, didChangeAuthorization: .authorizedWhenInUse)
         }
     }
 
     class func pmk_authorizationStatus() -> CLAuthorizationStatus {
-        return .NotDetermined
+        return .notDetermined
     }
 #endif
 }

@@ -2,79 +2,79 @@ import Dispatch
 import Foundation.NSError
 import Foundation.NSURLError
 
-public enum Error: ErrorType {
+public enum Error: ErrorProtocol {
     /**
      The ErrorType for a rejected `when`.
      - Parameter 0: The index of the promise that was rejected.
      - Parameter 1: The error from the promise that rejected this `when`.
     */
-    case When(Int, ErrorType)
+    case when(Int, ErrorProtocol)
 
     /**
      The ErrorType for a rejected `join`.
      - Parameter 0: The promises passed to this `join` that did not *all* fulfill.
      - Note: The array is untyped because Swift generics are fussy with enums.
     */
-    case Join([AnyObject])
+    case join([AnyObject])
 
     /**
      The closure with form (T?, ErrorType?) was called with (nil, nil)
      This is invalid as per the calling convention.
     */
-    case DoubleOhSux0r
+    case doubleOhSux0r
 
     /**
      A handler returned its own promise. 99% of the time, this is likely a 
      programming error. It is also invalid per Promises/A+.
     */
-    case ReturnedSelf
+    case returnedSelf
 }
 
-public enum URLError: ErrorType {
+public enum URLError: ErrorProtocol {
     /**
      The URLRequest succeeded but a valid UIImage could not be decoded from
      the data that was received.
     */
-    case InvalidImageData(NSURLRequest, NSData)
+    case invalidImageData(URLRequest, Data)
 
     /**
      An NSError was received from an underlying Cocoa function.
      FIXME sucks?
     */
-    case UnderlyingCocoaError(NSURLRequest, NSData?, NSURLResponse?, NSError)
+    case underlyingCocoaError(URLRequest, Data?, URLResponse?, NSError)
 
     /**
      The HTTP request returned a non-200 status code.
     */
-    case BadResponse(NSURLRequest, NSData?, NSURLResponse?)
+    case badResponse(URLRequest, Data?, URLResponse?)
 
     /**
      The data could not be decoded using the encoding specified by the HTTP
      response headers.
     */
-    case StringEncoding(NSURLRequest, NSData, NSURLResponse)
+    case stringEncoding(URLRequest, Data, URLResponse)
 
     /**
      Usually the `NSURLResponse` is actually an `NSHTTPURLResponse`, if so you
      can access it using this property. Since it is returned as an unwrapped
      optional: be sure.
     */
-    public var NSHTTPURLResponse: Foundation.NSHTTPURLResponse! {
+    public var NSHTTPURLResponse: Foundation.HTTPURLResponse! {
         switch self {
-        case .InvalidImageData:
+        case .invalidImageData:
             return nil
-        case .UnderlyingCocoaError(_, _, let rsp, _):
-            return rsp as! Foundation.NSHTTPURLResponse
-        case .BadResponse(_, _, let rsp):
-            return rsp as! Foundation.NSHTTPURLResponse
-        case .StringEncoding(_, _, let rsp):
-            return rsp as! Foundation.NSHTTPURLResponse
+        case .underlyingCocoaError(_, _, let rsp, _):
+            return rsp as! Foundation.HTTPURLResponse
+        case .badResponse(_, _, let rsp):
+            return rsp as! Foundation.HTTPURLResponse
+        case .stringEncoding(_, _, let rsp):
+            return rsp as! Foundation.HTTPURLResponse
         }
     }
 }
 
-public enum JSONError: ErrorType {
-    case UnexpectedRootNode(AnyObject)
+public enum JSONError: ErrorProtocol {
+    case unexpectedRootNode(AnyObject)
 }
 
 
@@ -103,12 +103,12 @@ extension NSError {
     /**
       - Warning: You may only call this method on the main thread.
      */
-    @objc public class func registerCancelledErrorDomain(domain: String, code: Int) {
+    @objc public class func registerCancelledErrorDomain(_ domain: String, code: Int) {
         cancelledErrorIdentifiers.insert(ErrorPair(domain, code))
     }
 }
 
-public protocol CancellableErrorType: ErrorType {
+public protocol CancellableErrorType: ErrorProtocol {
     var cancelled: Bool { get }
 }
 
@@ -117,7 +117,7 @@ extension NSError: CancellableErrorType {
      - Warning: You may only call this method on the main thread.
     */
     @objc public var cancelled: Bool {
-        if !NSThread.isMainThread() {
+        if !Thread.isMainThread() {
             NSLog("PromiseKit: Warning: `cancelled` called on background thread.")
         }
 
@@ -134,7 +134,7 @@ private var cancelledErrorIdentifiers = Set([
 
 extension NSURLError: CancellableErrorType {
     public var cancelled: Bool {
-        return self == .Cancelled
+        return self == .cancelled
     }
 }
 
@@ -154,8 +154,8 @@ extension NSURLError: CancellableErrorType {
  - Warning: *Important* Don’t use promises in your handler, or you risk an infinite error loop.
  - Returns: The previous unhandled error handler.
 */
-public var PMKUnhandledErrorHandler = { (error: ErrorType) -> Void in
-    dispatch_async(dispatch_get_main_queue()) {
+public var PMKUnhandledErrorHandler = { (error: ErrorProtocol) -> Void in
+    DispatchQueue.main.async {
         let cancelled = (error as? CancellableErrorType)?.cancelled ?? false
                                                        // ^-------^ must be called on main queue
         if !cancelled {
@@ -166,9 +166,9 @@ public var PMKUnhandledErrorHandler = { (error: ErrorType) -> Void in
 
 class ErrorConsumptionToken {
     var consumed = false
-    let error: ErrorType!
+    let error: ErrorProtocol!
 
-    init(_ error: ErrorType) {
+    init(_ error: ErrorProtocol) {
         self.error = error
     }
 
@@ -202,7 +202,7 @@ extension NSError {
     }
 }
 
-func unconsume(error error: NSError, reusingToken t: ErrorConsumptionToken? = nil) {
+func unconsume(error: NSError, reusingToken t: ErrorConsumptionToken? = nil) {
     var token = t
     if token != nil {
         objc_setAssociatedObject(error, &handle, token, .OBJC_ASSOCIATION_RETAIN)

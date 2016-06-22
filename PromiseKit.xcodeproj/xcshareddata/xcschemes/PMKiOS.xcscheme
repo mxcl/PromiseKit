@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0700"
+   LastUpgradeVersion = "0800"
    version = "1.7">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -29,8 +29,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "63EBEAC41B6151AA0097FA42"
-               BuildableName = "PMKiOSUITests.xctest"
-               BlueprintName = "PMKiOSUITests"
+               BuildableName = "PMKUI.xctest"
+               BlueprintName = "PMKTests/UI"
                ReferencedContainer = "container:PromiseKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -47,8 +47,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "638E0ED41AEF16530052E28F"
-               BuildableName = "PMKiOSCategoryTests.xctest"
-               BlueprintName = "PMKiOSCategoryTests"
+               BuildableName = "PMKCategories.iOS.xctest"
+               BlueprintName = "PMKTests/Categories/iOS"
                ReferencedContainer = "container:PromiseKit.xcodeproj">
             </BuildableReference>
             <LocationScenarioReference
@@ -61,8 +61,8 @@
             <BuildableReference
                BuildableIdentifier = "primary"
                BlueprintIdentifier = "63EBEAC41B6151AA0097FA42"
-               BuildableName = "PMKiOSUITests.xctest"
-               BlueprintName = "PMKiOSUITests"
+               BuildableName = "PMKUI.xctest"
+               BlueprintName = "PMKTests/UI"
                ReferencedContainer = "container:PromiseKit.xcodeproj">
             </BuildableReference>
          </TestableReference>

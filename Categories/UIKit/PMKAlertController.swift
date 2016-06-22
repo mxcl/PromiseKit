@@ -34,13 +34,13 @@ public class PMKAlertController {
     public var actions: [UIAlertAction] { return UIAlertController.actions }
     public var textFields: [UITextField]? { return UIAlertController.textFields }
 
-    public required init(title: String?, message: String?  = nil, preferredStyle: UIAlertControllerStyle = .Alert) {
+    public required init(title: String?, message: String?  = nil, preferredStyle: UIAlertControllerStyle = .alert) {
         UIAlertController = UIKit.UIAlertController(title: title, message: message, preferredStyle: preferredStyle)
     }
 
-    public func addActionWithTitle(title: String, style: UIAlertActionStyle = .Default) -> UIAlertAction {
+    public func addActionWithTitle(title: String, style: UIAlertActionStyle = .default) -> UIAlertAction {
         let action = UIAlertAction(title: title, style: style) { action in
-            if style != UIAlertActionStyle.Cancel {
+            if style != .cancel {
                 self.fulfill(action)
             } else {
                 self.reject(Error.Cancelled)
@@ -51,7 +51,7 @@ public class PMKAlertController {
     }
 
     public func addTextFieldWithConfigurationHandler(configurationHandler: ((UITextField) -> Void)?) {
-        UIAlertController.addTextFieldWithConfigurationHandler(configurationHandler)
+        UIAlertController.addTextField(configurationHandler: configurationHandler)
     }
 
     private let UIAlertController: UIKit.UIAlertController
@@ -70,7 +70,7 @@ public class PMKAlertController {
 extension UIViewController {
     public func promiseViewController(vc: PMKAlertController, animated: Bool = true, completion: (() -> Void)? = nil) -> Promise<UIAlertAction> {
         vc.retainCycle = vc
-        presentViewController(vc.UIAlertController, animated: true, completion: nil)
+        present(vc.UIAlertController, animated: true, completion: nil)
         vc.promise.always { _ -> Void in
             vc.retainCycle = nil
         }

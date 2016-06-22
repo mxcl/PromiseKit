@@ -15,11 +15,11 @@ class Test_NSURLConnection_Swift: XCTestCase {
             return OHHTTPStubsResponse(JSONObject: json, statusCode: 200, headers: nil)
         }
 
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
         NSURLConnection.GET("http://example.com").asDictionary().then { rsp -> Void in
             XCTAssertEqual(json, rsp)
             ex.fulfill()
         }
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 }

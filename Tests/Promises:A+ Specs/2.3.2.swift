@@ -11,7 +11,7 @@ class Test2321: XCTestCase {
         testPromiseResolution({
             return Promise.pendingPromise().promise
         }, test: { promise in
-            let ex = self.expectationWithDescription("")
+            let ex = self.expectation(withDescription: "")
             var wasFulfilled = false
             var wasRejected = false
 
@@ -35,14 +35,14 @@ class Test2322: XCTestCase {
     // 2.3.2.2: If/when `x` is fulfilled, fulfill `promise` with the same value.
 
     func test1() {
-        let sentinel = Int(rand())
+        let sentinel = Int(arc4random())
 
         // describe: `x` is already-fulfilled
 
         testPromiseResolution({
             return Promise(sentinel)
         }, test: { promise in
-            let ex = self.expectationWithDescription("")
+            let ex = self.expectation(withDescription: "")
 
             promise.then { value -> Void in
                 XCTAssertEqual(value, sentinel)
@@ -52,14 +52,14 @@ class Test2322: XCTestCase {
     }
 
     func test2() {
-        let sentinel = Int(rand())
+        let sentinel = Int(arc4random())
 
         // `x` is eventually-fulfilled
 
         testPromiseResolution({
             after(0.1).then { sentinel }
         }, test: { promise in
-            let ex = self.expectationWithDescription("")
+            let ex = self.expectation(withDescription: "")
 
             promise.then{ value -> Void in
                 XCTAssertEqual(value, sentinel)
@@ -75,14 +75,14 @@ class Test2323: XCTestCase {
 
     func test1() {
 
-        let sentinel = Error.Dummy
+        let sentinel = Error.dummy
 
         // specify: `x` is already-rejected
 
         testPromiseResolution({
             return Promise(error: sentinel)
         }, test: { promise in
-            let ex = self.expectationWithDescription("")
+            let ex = self.expectation(withDescription: "")
 
             promise.error { error -> Void in
                 XCTAssertEqual(error, sentinel)
@@ -93,14 +93,14 @@ class Test2323: XCTestCase {
 
     func test2() {
 
-        let sentinel = Error.Dummy
+        let sentinel = Error.dummy
 
         // specify: `x` is eventually-rejected
 
         testPromiseResolution({
             after(0.1).then { throw sentinel }
         }, test: { promise in
-            let ex = self.expectationWithDescription("")
+            let ex = self.expectation(withDescription: "")
 
             promise.error { error -> Void in
                 XCTAssertEqual(error, sentinel)
@@ -114,14 +114,14 @@ class Test2323: XCTestCase {
 /////////////////////////////////////////////////////////////////////////
 
 extension XCTestCase {
-    private func testPromiseResolution(factory: () -> Promise<Int>, test: (Promise<Int>) -> Void) {
+    private func testPromiseResolution(_ factory: () -> Promise<Int>, test: (Promise<Int>) -> Void) {
 
         // specify: via return from a fulfilled promise
-        test(Promise(Int(rand())).then { _ in factory() })
-        waitForExpectationsWithTimeout(1, handler: nil)
+        test(Promise(Int(arc4random())).then { _ in factory() })
+        waitForExpectations(withTimeout: 1, handler: nil)
 
         // specify: via return from a rejected promise
-        test(Promise<Int>(error: Error.Dummy).recover { _ in factory() })
-        waitForExpectationsWithTimeout(1, handler: nil)
+        test(Promise<Int>(error: Error.dummy).recover { _ in factory() })
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 }

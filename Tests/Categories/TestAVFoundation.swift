@@ -4,12 +4,12 @@ import XCTest
 
 class Test_AVAudioSession_Swift: XCTestCase {
     func test() {
-        let ex = expectationWithDescription("")
+        let ex = expectation(withDescription: "")
 
         AVAudioSession().requestRecordPermission().then { _ in
             ex.fulfill()
         }
 
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectations(withTimeout: 1, handler: nil)
     }
 }

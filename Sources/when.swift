@@ -1,44 +1,44 @@
 import Foundation.NSProgress
 
-private func _when<T>(promises: [Promise<T>]) -> Promise<Void> {
-    let (rootPromise, fulfill, reject) = Promise<Void>.pendingPromise()
+private func _when<T>(_ promises: [Promise<T>]) -> Promise<Void> {
+    let root = Promise<Void>.pendingPromise()
 #if !PMKDisableProgress
-    let progress = NSProgress(totalUnitCount: Int64(promises.count))
-    progress.cancellable = false
-    progress.pausable = false
+    let progress = Progress(totalUnitCount: Int64(promises.count))
+    progress.isCancellable = false
+    progress.isPausable = false
 #else
     var progress: (completedUnitCount: Int, totalUnitCount: Int) = (0, 0)
 #endif
     var countdown = promises.count
-    if countdown == 0 {
-        fulfill()
-        return rootPromise
+    guard countdown > 0 else {
+        root.fulfill()
+        return root.promise
     }
-    let barrier = dispatch_queue_create("org.promisekit.barrier.when", DISPATCH_QUEUE_CONCURRENT)
+    let barrier = DispatchQueue(label: "org.promisekit.barrier.when", attributes: .concurrent)
 
-    for (index, promise) in promises.enumerate() {
+    for (index, promise) in promises.enumerated() {
         promise.pipe { resolution in
-            dispatch_barrier_sync(barrier) {
+            __dispatch_barrier_sync(barrier) {
                 switch resolution {
-                case .Rejected(let error, let token):
+                case .rejected(let error, let token):
                     token.consumed = true   // all errors are consumed by the parent Error.When
-                    if rootPromise.pending {
+                    if root.promise.pending {
                         progress.completedUnitCount = progress.totalUnitCount
-                        reject(Error.When(index, error))
+                        root.reject(Error.when(index, error))
                     }
-                case .Fulfilled:
-                    guard rootPromise.pending else { return }
+                case .fulfilled:
+                    guard root.promise.pending else { return }
                     progress.completedUnitCount += 1
                     countdown -= 1
                     if countdown == 0 {
-                        fulfill()
+                        root.fulfill()
                     }
                 }
             }
         }
     }
 
-    return rootPromise
+    return root.promise
 }
 
 /**
@@ -63,26 +63,26 @@ private func _when<T>(promises: [Promise<T>]) -> Promise<Void> {
  - Returns: A new promise that resolves when all the provided promises fulfill or one of the provided promises rejects.
  - SeeAlso: `join()`
 */
-public func when<T>(promises: [Promise<T>]) -> Promise<[T]> {
+public func when<T>(_ promises: [Promise<T>]) -> Promise<[T]> {
     return _when(promises).then(on: zalgo) { promises.map{ $0.value! } }
 }
 
-public func when<T>(promises: Promise<T>...) -> Promise<[T]> {
+public func when<T>(_ promises: Promise<T>...) -> Promise<[T]> {
     return when(promises)
 }
 
-public func when(promises: Promise<Void>...) -> Promise<Void> {
+public func when(_ promises: Promise<Void>...) -> Promise<Void> {
     return _when(promises)
 }
 
-public func when(promises: [Promise<Void>]) -> Promise<Void> {
+public func when(_ promises: [Promise<Void>]) -> Promise<Void> {
     return _when(promises)
 }
 
-public func when<U, V>(pu: Promise<U>, _ pv: Promise<V>) -> Promise<(U, V)> {
+public func when<U, V>(_ pu: Promise<U>, _ pv: Promise<V>) -> Promise<(U, V)> {
     return _when([pu.asVoid(), pv.asVoid()]).then(on: zalgo) { (pu.value!, pv.value!) }
 }
 
-public func when<U, V, X>(pu: Promise<U>, _ pv: Promise<V>, _ px: Promise<X>) -> Promise<(U, V, X)> {
+public func when<U, V, X>(_ pu: Promise<U>, _ pv: Promise<V>, _ px: Promise<X>) -> Promise<(U, V, X)> {
     return _when([pu.asVoid(), pv.asVoid(), px.asVoid()]).then(on: zalgo) { (pu.value!, pv.value!, px.value!) }
 }

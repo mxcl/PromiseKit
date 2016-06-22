@@ -26,7 +26,7 @@ extension NSObject {
 
       @see Apple’s KVO documentation.
     */
-    public func observe<T>(keyPath: String) -> Promise<T> {
+    public func observe<T>(_ keyPath: String) -> Promise<T> {
         let (promise, fulfill, reject) = Promise<T>.pendingPromise()
         let proxy = KVOProxy(observee: self, keyPath: keyPath) { obj in
             if let obj = obj as? T {
@@ -48,13 +48,13 @@ private class KVOProxy: NSObject {
     init(observee: NSObject, keyPath: String, resolve: (AnyObject?) -> Void) {
         fulfill = resolve
         super.init()
-        observee.addObserver(self, forKeyPath: keyPath, options: NSKeyValueObservingOptions.New, context: pointer)
+        observee.addObserver(self, forKeyPath: keyPath, options: NSKeyValueObservingOptions.new, context: pointer)
     }
 
-    override func observeValueForKeyPath(keyPath: String?, ofObject object: AnyObject?, change: [String : AnyObject]?, context: UnsafeMutablePointer<Void>) {
+    override func observeValue(forKeyPath keyPath: String?, of object: AnyObject?, change: [NSKeyValueChangeKey : AnyObject]?, context: UnsafeMutablePointer<Void>?) {
         if let change = change where context == pointer {
             defer { retainCycle = nil }
-            fulfill(change[NSKeyValueChangeNewKey])
+            fulfill(change[NSKeyValueChangeKey.newKey])
             if let object = object, keyPath = keyPath {
                 object.removeObserver(self, forKeyPath: keyPath)
             }
@@ -62,6 +62,6 @@ private class KVOProxy: NSObject {
     }
 
     private lazy var pointer: UnsafeMutablePointer<Void> = {
-        return UnsafeMutablePointer<Void>(Unmanaged<KVOProxy>.passUnretained(self).toOpaque())
+        return UnsafeMutablePointer<Void>(OpaquePointer(bitPattern: Unmanaged<KVOProxy>.passUnretained(self)))
     }()
 }
