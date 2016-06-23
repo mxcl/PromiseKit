@@ -1527,8 +1527,6 @@
 					};
 					638CDF021AEE734B0023A543 = {
 						CreatedOnToolsVersion = 6.3;
-						DevelopmentTeam = ZU76A67LGU;
-						DevelopmentTeamName = "Max Howell (Personal Team)";
 						LastSwiftMigration = 0800;
 					};
 					638E0ED41AEF16530052E28F = {
@@ -1541,8 +1539,6 @@
 					};
 					63EBEAC41B6151AA0097FA42 = {
 						CreatedOnToolsVersion = 7.0;
-						DevelopmentTeam = ZU76A67LGU;
-						DevelopmentTeamName = "Max Howell (Personal Team)";
 						LastSwiftMigration = 0800;
 						TestTargetID = 638CDF021AEE734B0023A543;
 					};
