@@ -1,7 +1,7 @@
 import XCTest
 import PromiseKit
 
-class WhenTestCase_Swift: XCTestCase {
+class WhenConcurrentTestCase_Swift: XCTestCase {
 
     func testWhen() {
         let e = expectationWithDescription("")

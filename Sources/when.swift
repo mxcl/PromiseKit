@@ -128,16 +128,6 @@ public func when<T, PromiseGenerator: GeneratorType where PromiseGenerator.Eleme
         var rejected = false
         var counter = 0
 
-        func extendArraySize(size: Int) {
-            if size > values.capacity {
-                values.reserveCapacity(max(values.capacity * 2 + 1, size))
-            }
-
-            while values.count < size {
-                values.append(nil)
-            }
-        }
-
         func dequeue() {
             guard pendingPromises < concurrently else {
                 return
@@ -151,7 +141,11 @@ public func when<T, PromiseGenerator: GeneratorType where PromiseGenerator.Eleme
                 promise
                     .then(on: zalgo) { value -> Void in
                         pendingPromises -= 1
-                        extendArraySize(index + 1)
+
+                        while values.count < index + 1 {
+                            values.append(nil)
+                        }
+
                         values[index] = value
                         dequeue()
                     }
