@@ -22,20 +22,22 @@ You will be prompted for your password.
 First we must first ensure that our Terminal is open at the correct directory. Ensure that your Xcode project is open, and that it is the *only* open Xcode project. Then type this into Terminal and press `enter`:
 
 {% highlight bash %}
-D="$(osascript -e "tell application \"Xcode\" to get path of project 1")/.."; cd $D
+D="$(osascript -e "tell application \"Xcode\" to get path of project 1")/.."; cd "$D"
 {% endhighlight %}
 
 Every project that uses CocoaPods must have a `Podfile`: a text file at your project’s root folder that describes the libraries we want to import. Let’s create it:
 
 {% highlight bash %}
-touch Podfile && open -e Podfile
+pod init && open -e Podfile
 {% endhighlight %}
 
-TextEdit will open, in the empty window type:
+TextEdit will open. Add PromiseKit to the default target. It should look something like this. 
 
 {% highlight ruby %}
-source 'https://github.com/CocoaPods/Specs.git'
-pod 'PromiseKit'
+target 'your-project-name' do
+    use_frameworks!
+    pod "PromiseKit"
+end
 {% endhighlight %}
 
 Save the file.

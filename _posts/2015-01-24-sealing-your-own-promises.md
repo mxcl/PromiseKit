@@ -30,8 +30,8 @@ This unusual syntax (for Objective-C) encourages encapsulation. `resolve` is pri
 Often you may need to do some work in a background queue as part of your new promise; if so, don’t be afraid to start using `thenOn` or `thenInBackground`. `then` and `thenOn`, return new promises, so you can just return that promise instead of the initial promise, and your API is A-OK.
 
 {% highlight objectivec %}
-- (PMKPromise *)kittens {
-    return [PMKPromise promiseWithResolverBlock:^(PMKResolver resolve) {
+- (AnyPromise *)kittens {
+    return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         [KittenPower fetch:^(NSArray kittens){
             resolve(kittens);
         }];
