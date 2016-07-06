@@ -29,6 +29,15 @@
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "43EF78A51C5AA12B00BCD8FB"
+            BuildableName = "PromiseKit.framework"
+            BlueprintName = "PMKtvOS"
+            ReferencedContainer = "container:PromiseKit.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>

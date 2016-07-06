@@ -22,17 +22,17 @@ import PromiseKit
 extension UIViewController {
 
     public enum Error: ErrorProtocol {
-        case NavigationControllerEmpty
-        case NoImageFound
-        case NotPromisable
-        case NotGenericallyPromisable
-        case NilPromisable
+        case navigationControllerEmpty
+        case noImageFound
+        case notPromisable
+        case notGenericallyPromisable
+        case nilPromisable
     }
 
     public func promiseViewController<T>(_ vc: UIViewController, animated: Bool = true, completion: (() -> Void)? = nil) -> Promise<T> {
 
         let p: Promise<T> = promise(vc)
-        if p.pending {
+        if p.isPending {
             present(vc, animated: animated, completion: completion)
             _ = p.always {
                 vc.presentingViewController?.dismiss(animated: animated, completion: nil)
@@ -45,7 +45,7 @@ extension UIViewController {
     public func promiseViewController<T>(_ nc: UINavigationController, animated: Bool = true, completion:(()->Void)? = nil) -> Promise<T> {
         if let vc = nc.viewControllers.first {
             let p: Promise<T> = promise(vc)
-            if p.pending {
+            if p.isPending {
                 present(nc, animated: animated, completion: completion)
                 _ = p.always {
                     vc.presentingViewController?.dismiss(animated: animated, completion: nil)
@@ -53,7 +53,7 @@ extension UIViewController {
             }
             return p
         } else {
-            return Promise(error: Error.NavigationControllerEmpty)
+            return Promise.resolved(error: Error.navigationControllerEmpty)
         }
     }
   
@@ -69,7 +69,7 @@ extension UIViewController {
             if let img = info[UIImagePickerControllerOriginalImage] as? UIImage {
                 return img
             }
-            throw Error.NoImageFound
+            throw Error.noImageFound
         }.always {
             vc.presentingViewController?.dismiss(animated: animated, completion: nil)
         }
@@ -99,20 +99,20 @@ extension UIViewController {
 
 private func promise<T>(_ vc: UIViewController) -> Promise<T> {
     if !(vc is Promisable) {
-        return Promise(error: UIViewController.Error.NotPromisable)
+        return Promise.resolved(error: UIViewController.Error.notPromisable)
     } else if let promise = vc.value(forKeyPath: "promise") as? Promise<T> {
         return promise
     } else if let _: AnyObject = vc.value(forKeyPath: "promise") {
-        return Promise(error: UIViewController.Error.NotGenericallyPromisable)
+        return Promise.resolved(error: UIViewController.Error.notGenericallyPromisable)
     } else {
-        return Promise(error: UIViewController.Error.NilPromisable)
+        return Promise.resolved(error: UIViewController.Error.nilPromisable)
     }
 }
 
 
 // internal scope because used by ALAssetsLibrary extension
 @objc class UIImagePickerControllerProxy: NSObject, UIImagePickerControllerDelegate, UINavigationControllerDelegate {
-    let (promise, fulfill, reject) = Promise<[String : AnyObject]>.pendingPromise()
+    let (promise, fulfill, reject) = Promise<[String : AnyObject]>.pending()
     var retainCycle: AnyObject?
 
     required override init() {
@@ -126,19 +126,19 @@ private func promise<T>(_ vc: UIViewController) -> Promise<T> {
     }
 
     func imagePickerControllerDidCancel(_ picker: UIImagePickerController) {
-        reject(UIImagePickerController.Error.Cancelled)
+        reject(UIImagePickerController.Error.cancelled)
         retainCycle = nil
     }
 }
 
 
 extension UIImagePickerController {
-    public enum Error: CancellableErrorType {
-        case Cancelled
+    public enum Error: CancellableError {
+        case cancelled
 
-        public var cancelled: Bool {
+        public var isCancelled: Bool {
             switch self {
-                case .Cancelled: return true
+                case .cancelled: return true
             }
         }
     }

@@ -20,14 +20,12 @@ import PromiseKit
 */
 extension NSObject {
     /**
-      @return A promise that resolves when the provided keyPath changes.
-
-      @warning *Important* The promise must not outlive the object under observation.
-
-      @see Apple’s KVO documentation.
+      - Returns: A promise that resolves when the provided keyPath changes.
+      - Warning: *Important* The promise must not outlive the object under observation.
+      - SeeAlso: Apple’s KVO documentation.
     */
-    public func observe<T>(_ keyPath: String) -> Promise<T> {
-        let (promise, fulfill, reject) = Promise<T>.pendingPromise()
+    public func observe<T>(keyPath: String) -> Promise<T> {
+        let (promise, fulfill, reject) = Promise<T>.pending()
         let proxy = KVOProxy(observee: self, keyPath: keyPath) { obj in
             if let obj = obj as? T {
                 fulfill(obj)
@@ -62,6 +60,6 @@ private class KVOProxy: NSObject {
     }
 
     private lazy var pointer: UnsafeMutablePointer<Void> = {
-        return UnsafeMutablePointer<Void>(OpaquePointer(bitPattern: Unmanaged<KVOProxy>.passUnretained(self)))
+        return UnsafeMutablePointer<Void>(Unmanaged<KVOProxy>.passUnretained(self).toOpaque())
     }()
 }

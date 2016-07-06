@@ -1,11 +1,10 @@
-#import "AnyPromise.h"
+#import "PromiseKit.h"
 #import "AnyPromise+Private.h"
 @import Foundation.NSDictionary;
 @import Foundation.NSError;
 @import Foundation.NSProgress;
 @import Foundation.NSNull;
 #import <libkern/OSAtomic.h>
-#import "Umbrella.h"
 
 // NSProgress resources:
 //  * https://robots.thoughtbot.com/asynchronous-nsprogress

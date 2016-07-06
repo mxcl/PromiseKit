@@ -74,7 +74,7 @@ extension Task {
 
         launch()
 
-        return dispatch_promise {
+        return DispatchQueue.global().async {
             self.waitUntilExit()
 
             let stdout = self.standardOutput!.fileHandleForReading.readDataToEndOfFile()

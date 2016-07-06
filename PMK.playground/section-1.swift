@@ -1,23 +1,24 @@
-import Foundation
+import PlaygroundSupport
 import PromiseKit
-import XCPlayground
+
+PlaygroundPage.current.needsIndefiniteExecution
+
+// we use this later
+enum Error: ErrorProtocol { case four }
 
 
-Promise(1).then { _ -> Promise<Int> in
-    print("1")
-    return Promise(2).always {
-        print("2")
-    }.then { _ -> Int in
-        print("3")
-        return 1
-    }
-}.then { _ -> Void in
-    print("4")
-}.error() { error in
+firstly {
+    return after(interval: 0.1)
+}.then { zero in
+    return 1
+}.then { one in
+    return 2
+}.then { two in
+    return after(interval: 0.1).then{ 3 }
+}.then { three -> Void in
+    throw Error.four
+}.catch { error in
+    print(error)
 
+    PlaygroundPage.current.finishExecution()
 }
-
-
-XCPSetExecutionShouldContinueIndefinitely()
-
-

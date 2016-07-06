@@ -70,7 +70,7 @@
 
     [self presentViewController:vc2present animated:animated completion:block];
 
-    promise.finally(^{
+    promise.always(^{
         [vc2present.presentingViewController dismissViewControllerAnimated:animated completion:nil];
     });
 

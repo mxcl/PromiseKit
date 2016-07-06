@@ -26,28 +26,21 @@ extension SKRequest {
 
 
 private class SKDelegate: NSObject, SKProductsRequestDelegate {
-    let (promise, fulfill, reject) = Promise<SKProductsResponse>.pendingPromise()
+    let (promise, fulfill, reject) = Promise<SKProductsResponse>.pending()
     var retainCycle: SKDelegate?
 
-#if os(iOS) || os(tvOS)
-    @objc func request(request: SKRequest, didFailWithError error: NSError) {
+    @objc private func request(_ request: SKRequest, didFailWithError error: NSError) {
         reject(error)
         retainCycle = nil
     }
-#else
-    @objc func request(_ request: SKRequest, didFailWithError error: NSError) {
-        reject(error)
-        retainCycle = nil
-    }
-#endif
 
-    @objc func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
+    @objc private func productsRequest(_ request: SKProductsRequest, didReceive response: SKProductsResponse) {
         fulfill(response)
         retainCycle = nil
     }
 
     @objc override class func initialize() {
-        //FIXME Swift can’t see SKError, so can't do CancellableErrorType
+        //FIXME Swift can’t see SKError, so can't do CancellableErrorProtocol
         #if os(iOS) || os(tvOS)
             NSError.registerCancelledErrorDomain(SKErrorDomain, code: SKErrorCode.paymentCancelled.rawValue)
         #else

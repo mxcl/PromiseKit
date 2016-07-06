@@ -46,10 +46,6 @@ public class URLDataPromise: Promise<Data> {
         super.init(resolvers: resolvers)
     }
 
-    public override init(error: ErrorProtocol) {
-        super.init(error: error)
-    }
-
     private var URLRequest: Foundation.URLRequest!
     private var URLResponse: Foundation.URLResponse!
 

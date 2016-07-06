@@ -17,7 +17,7 @@
         XCTAssertEqual([obj integerValue], 1);
         [ex fulfill];
     });
-    PMKAfter(0.5).then(^{
+    PMKAfter(0.1).then(^{
         [alert dismissWithClickedButtonIndex:1 animated: NO];
     });
     [self waitForExpectationsWithTimeout:3 handler: nil];
@@ -32,10 +32,10 @@
     [alert addButtonWithTitle:@"1"];
     alert.cancelButtonIndex = [alert addButtonWithTitle:@"2"];
     [alert promise].catchWithPolicy(PMKCatchPolicyAllErrors, ^(NSError *err){
-        XCTAssertTrue(err.cancelled);
+        XCTAssertTrue(err.isCancelled);
         [ex fulfill];
     });
-    PMKAfter(0.5).then(^{
+    PMKAfter(0.1).then(^{
         [alert dismissWithClickedButtonIndex:2 animated: NO];
     });
     [self waitForExpectationsWithTimeout:3 handler: nil];
@@ -50,7 +50,7 @@
     [alert promise].then(^{
         [ex fulfill];
     });
-    PMKAfter(0.5).then(^{
+    PMKAfter(0.1).then(^{
         [alert dismissWithClickedButtonIndex:0 animated: NO];
     });
     [self waitForExpectationsWithTimeout:3 handler: nil];
@@ -65,7 +65,7 @@
     [alert promise].catchWithPolicy(PMKCatchPolicyAllErrors, ^(NSError *err){
         [ex fulfill];
     });
-    PMKAfter(0.5).then(^{
+    PMKAfter(0.1).then(^{
         [alert dismissWithClickedButtonIndex:0 animated: NO];
     });
     [self waitForExpectationsWithTimeout:3 handler: nil];

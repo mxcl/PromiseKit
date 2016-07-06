@@ -1,0 +1,4 @@
+framework module PromiseKit {
+  umbrella header "PromiseKit.h"
+  exclude header "Pods-PromiseKit-umbrella.h"
+}

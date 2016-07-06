@@ -19,6 +19,6 @@ extension MKMapSnapshotter {
       you do. Which means the promise will never resolve.
      */
     public func promise() -> Promise<MKMapSnapshot> {
-        return Promise { start(completionHandler: $0) }
+        return Promise.wrap(resolver: start)
     }
 }

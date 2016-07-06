@@ -13,10 +13,10 @@ enum Resolution<T> {
 
 // would be a protocol, but you can't have typed variables of “generic”
 // protocols in Swift 2. That is, I couldn’t do var state: State<R> when
-// it was a protocol. There is no work around.
+// it was a protocol. There is no work around. Update: nor Swift 3
 class State<R> {
     func get() -> R? { fatalError("Abstract Base Class") }
-    func get(_ body: (Seal<R>) -> Void) { fatalError("Abstract Base Class") }
+    func get(body: (Seal<R>) -> Void) { fatalError("Abstract Base Class") }
 }
 
 class UnsealedState<R>: State<R> {
@@ -38,7 +38,7 @@ class UnsealedState<R>: State<R> {
         return result
     }
 
-    override func get(_ body: (Seal<R>) -> Void) {
+    override func get(body: (Seal<R>) -> Void) {
         var sealed = false
         barrier.sync {
             switch self.seal {
@@ -100,16 +100,16 @@ class SealedState<R>: State<R> {
         return resolution
     }
 
-    override func get(_ body: (Seal<R>) -> Void) {
+    override func get(body: (Seal<R>) -> Void) {
         body(.resolved(resolution))
     }
 }
 
 
 class Handlers<R>: Sequence {
-    var bodies: [(R)->Void] = []
+    var bodies: [(R) -> Void] = []
 
-    func append(_ body: (R)->Void) {
+    func append(_ body: (R) -> Void) {
         bodies.append(body)
     }
 

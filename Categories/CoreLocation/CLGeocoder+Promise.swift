@@ -39,8 +39,8 @@ extension CLGeocoder {
     }
 }
 
-extension CLError: CancellableErrorType {
-    public var cancelled: Bool {
+extension CLError: CancellableError {
+    public var isCancelled: Bool {
         return self == .geocodeCanceled
     }
 }

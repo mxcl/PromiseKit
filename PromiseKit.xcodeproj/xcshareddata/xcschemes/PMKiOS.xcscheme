@@ -22,15 +22,29 @@
          </BuildActionEntry>
          <BuildActionEntry
             buildForTesting = "YES"
-            buildForRunning = "YES"
+            buildForRunning = "NO"
             buildForProfiling = "YES"
             buildForArchiving = "YES"
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "63EBEAC41B6151AA0097FA42"
+               BlueprintIdentifier = "63D5C5201D2301E2002D7A62"
                BuildableName = "PMKUI.xctest"
                BlueprintName = "PMKTests/UI"
+               ReferencedContainer = "container:PromiseKit.xcodeproj">
+            </BuildableReference>
+         </BuildActionEntry>
+         <BuildActionEntry
+            buildForTesting = "YES"
+            buildForRunning = "NO"
+            buildForProfiling = "NO"
+            buildForArchiving = "NO"
+            buildForAnalyzing = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "638CDF021AEE734B0023A543"
+               BuildableName = "PMKUI.Host.app"
+               BlueprintName = "PMKTests/UI/Host"
                ReferencedContainer = "container:PromiseKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -60,7 +74,7 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "63EBEAC41B6151AA0097FA42"
+               BlueprintIdentifier = "63D5C5201D2301E2002D7A62"
                BuildableName = "PMKUI.xctest"
                BlueprintName = "PMKTests/UI"
                ReferencedContainer = "container:PromiseKit.xcodeproj">

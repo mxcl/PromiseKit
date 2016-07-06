@@ -1,70 +1,26 @@
 import PromiseKit
 import XCTest
 
-
-class Test2121: XCTestCase {
-
-    // describe: When fulfilled, a promise: must not transition to any other state.
-
-    func test1() {
-        testFulfilled { promise, expectations, _ in
-            promise.then { _ in
-                expectations[0].fulfill()
+class Test212: XCTestCase {
+    func test() {
+        describe("2.1.2.1: When fulfilled, a promise: must not transition to any other state.") {
+            testFulfilled { promise, expectation, _ in
+                promise.test(onFulfilled: expectation.fulfill, onRejected: { XCTFail() })
             }
-            promise.error { _ in
-                XCTFail()
+
+            specify("trying to fulfill then immediately reject") { d, expectation in
+                d.promise.test(onFulfilled: expectation.fulfill, onRejected: { XCTFail() })
+                d.fulfill()
+                d.reject(Error.dummy)
             }
-        }
-    }
 
-    func test2() {
-
-        specify("trying to fulfill then immediately reject") { promise, fulfill, reject, expectation in
-            promise.then(expectation.fulfill)
-            promise.error { _ in XCTFail() }
-            fulfill()
-            reject(Error.dummy)
-        }
-    }
-
-    func test3() {
-
-        specify("trying to fulfill then reject, delayed") { promise, fulfill, reject, expectation in
-            promise.then(expectation.fulfill)
-            promise.error { _ in XCTFail() }
-            later {
-                fulfill()
-                reject(Error.dummy)
+            specify("trying to fulfill then reject, delayed") { d, expectation in
+                d.promise.test(onFulfilled: expectation.fulfill, onRejected: { XCTFail() })
+                after(ticks: 1) {
+                    d.fulfill()
+                    d.reject(Error.dummy)
+                }
             }
         }
-    }
-
-    func test4() {
-
-        specify("trying to fulfill immediately then reject delayed") { promise, fulfill, reject, expectation in
-            promise.then(expectation.fulfill)
-            promise.error { _ in XCTFail() }
-            fulfill()
-            later {
-                reject(Error.dummy)
-            }
-        }
-    }
-
-
-/////////////////////////////////////////////////////////////////////////
-
-    private func specify(_ desc: String, body: (Promise<Void>, () -> Void, (ErrorProtocol) -> Void, XCTestExpectation) -> Void) {
-        let ex1 = expectation(withDescription: "")
-        let ex2 = expectation(withDescription: "")
-        let (promise, fulfill, reject) = Promise<Void>.pendingPromise()
-
-        body(promise, fulfill, reject, ex2)
-
-        later(2) {
-            ex1.fulfill()
-        }
-
-        waitForExpectations(withTimeout: 1, handler: nil)
     }
 }

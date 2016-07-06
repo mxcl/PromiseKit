@@ -4,21 +4,21 @@ import PromiseKit
 class ZalgoTestCase_Swift: XCTestCase {
     func test1() {
         var resolved = false
-        Promise(1).then(on: zalgo) { _ in
+        Promise.resolved(value: 1).then(on: zalgo) { _ in
             resolved = true
         }
         XCTAssertTrue(resolved)
     }
 
     func test2() {
-        let p1 = Promise(1).then(on: zalgo) { x in
+        let p1 = Promise.resolved(value: 1).then(on: zalgo) { x in
             return 2
         }
         XCTAssertEqual(p1.value!, 2)
         
         var x = 0
         
-        let (p2, f, _) = Promise<Int>.pendingPromise()
+        let (p2, f, _) = Promise<Int>.pending()
         p2.then(on: zalgo) { _ in
             x = 1
         }
@@ -32,7 +32,7 @@ class ZalgoTestCase_Swift: XCTestCase {
     func test3() {
         let ex = expectation(withDescription: "")
         var p1: Promise<Void>!
-        p1 = after(0.1).then(on: zalgo) { _ -> Promise<Void> in
+        p1 = after(interval: 0.1).then(on: zalgo) { _ -> Promise<Void> in
             ex.fulfill()
             return p1
         }
@@ -42,7 +42,7 @@ class ZalgoTestCase_Swift: XCTestCase {
     // return a sealed promise from its own zalgo’d then handler doesn’t hang
     func test4() {
         let ex = expectation(withDescription: "")
-        let p1 = Promise(1)
+        let p1 = Promise.resolved(value: 1)
         p1.then(on: zalgo) { _ -> Promise<Int> in
             ex.fulfill()
             return p1
@@ -54,7 +54,7 @@ class ZalgoTestCase_Swift: XCTestCase {
         let e1 = expectation(withDescription: "")
 
         //will crash if zalgo doesn't protect handlers
-        stressDataRace(e1, stressFunction: { promise in
+        stressDataRace(expectation: e1, stressFunction: { promise in
             promise.then(on: zalgo) { s -> Void in
                 XCTAssertEqual("ok", s)
                 return
@@ -69,12 +69,12 @@ class ZalgoTestCase_Swift: XCTestCase {
 }
 
 
-func stressDataRace<T: Equatable>(_ e1: XCTestExpectation, iterations: Int = 1000, stressFactor: Int = 10, stressFunction: (Promise<T>) -> Void, fulfill f: () -> T) {
+func stressDataRace<T: Equatable>(expectation e1: XCTestExpectation, iterations: Int = 1000, stressFactor: Int = 10, stressFunction: (Promise<T>) -> Void, fulfill f: () -> T) {
     let group = DispatchGroup()
     let queue = DispatchQueue(label: "the.domain.of.Zalgo", attributes: .concurrent)
 
     for _ in 0..<iterations {
-        let (promise, fulfill, _) = Promise<T>.pendingPromise()
+        let (promise, fulfill, _) = Promise<T>.pending()
 
         DispatchQueue.concurrentPerform(iterations: stressFactor) { n in
             stressFunction(promise)
@@ -85,7 +85,5 @@ func stressDataRace<T: Equatable>(_ e1: XCTestExpectation, iterations: Int = 100
         }
     }
 
-    group.notify(queue: queue) {
-        e1.fulfill()
-    }
+    group.notify(queue: queue, execute: e1.fulfill)
 }

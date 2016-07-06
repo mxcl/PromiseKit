@@ -25,5 +25,5 @@ private class GrimReaper: NSObject {
     deinit {
         fulfill()
     }
-    let (promise, fulfill, _) = Promise<Void>.pendingPromise()
+    let (promise, fulfill, _) = Promise<Void>.pending()
 }

@@ -15,10 +15,10 @@ class Test_UIActionSheet_Swift: UIKitTestCase {
             XCTAssertEqual(x, 1)
             ex.fulfill()
         }
-        after(0.5).then {
+        after(interval: 0.1).then {
             sheet.dismiss(withClickedButtonIndex: 1, animated: false)
         }
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(withTimeout: 3)
     }
 
     // cancel button presses are cancelled errors
@@ -29,16 +29,16 @@ class Test_UIActionSheet_Swift: UIKitTestCase {
         sheet.addButton(withTitle: "0")
         sheet.addButton(withTitle: "1")
         sheet.cancelButtonIndex = sheet.addButton(withTitle: "2")
-        sheet.promise(in: rootvc.view).error(policy: .allErrors) { err in
+        sheet.promise(in: rootvc.view).catch(policy: .allErrors) { err in
             guard let err = err as? UIActionSheet.Error else { return XCTFail() }
-            XCTAssertTrue(err == UIActionSheet.Error.Cancelled)
-            XCTAssertTrue(err.cancelled)
+            XCTAssertTrue(err == UIActionSheet.Error.cancelled)
+            XCTAssertTrue(err.isCancelled)
             ex.fulfill()
         }
-        after(0.5).then {
+        after(interval: 0.1).then {
             sheet.dismiss(withClickedButtonIndex: 2, animated: false)
         }
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(withTimeout: 3)
     }
 
     // single button UIActionSheets don't get considered cancelled
@@ -50,10 +50,10 @@ class Test_UIActionSheet_Swift: UIKitTestCase {
         sheet.promise(in: rootvc.view).then { _ in
             ex.fulfill()
         }
-        after(0.5).then {
+        after(interval: 0.1).then {
             sheet.dismiss(withClickedButtonIndex: 0, animated: false)
         }
-        waitForExpectations(withTimeout: 3, handler: nil)
+        waitForExpectations(withTimeout: 3)
     }
 
     // single button UIActionSheets don't get considered cancelled unless the cancelIndex is set
@@ -62,12 +62,12 @@ class Test_UIActionSheet_Swift: UIKitTestCase {
 
         let sheet = UIActionSheet()
         sheet.cancelButtonIndex = sheet.addButton(withTitle: "0")
-        sheet.promise(in: rootvc.view).error(policy: .allErrors) { _ in
+        sheet.promise(in: rootvc.view).catch(policy: .allErrors) { _ in
             ex.fulfill()
         }
-        after(0.5).then {
+        after(interval: 0.1).then {
             sheet.dismiss(withClickedButtonIndex: 0, animated: false)
         }
-        waitForExpectations(withTimeout: 3, handler: nil)
+        waitForExpectations(withTimeout: 3)
     }
 }

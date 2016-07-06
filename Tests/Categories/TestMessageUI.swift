@@ -15,19 +15,19 @@ class Test_MessageUI_Swift: UIKitTestCase {
         mailer.setToRecipients(["mxcl@me.com"])
 
         let promise = rootvc.promiseViewController(mailer, animated: false, completion: {
-            after(0.25).then { _ -> Void in
+            after(interval: 0.25).then { _ -> Void in
                 XCTAssertFalse(order)
                 let button = mailer.viewControllers[0].navigationItem.leftBarButtonItem!
                 UIControl().sendAction(button.action, to: button.target, forEvent: nil)
                 ex1.fulfill()
             }
         })
-        promise.error { _ -> Void in
+        promise.catch { _ -> Void in
             XCTFail()
         }
         promise.error(policy: .AllErrors) { _ -> Void in
             // seems necessary to give vc stack a bit of time
-            after(0.5).then(ex2.fulfill)
+            after(interval: 0.5).then(ex2.fulfill)
             order = true
         }
         waitForExpectations(withTimeout: 10, handler: nil)
@@ -43,7 +43,7 @@ class Test_MessageUI_Swift: UIKitTestCase {
         let messager = MFMessageComposeViewController()
 
         let promise = rootvc.promiseViewController(messager, animated: false, completion: {
-            after(0.25).then { _ -> Void in
+            after(interval: 0.25).then { _ -> Void in
                 XCTAssertFalse(order)
 
                 let button = messager.viewControllers[0].navigationItem.leftBarButtonItem!
@@ -52,12 +52,12 @@ class Test_MessageUI_Swift: UIKitTestCase {
             }
         })
 
-        promise.error { _ -> Void in
+        promise.catch { _ -> Void in
             XCTFail()
         }
         promise.error(policy: .AllErrors) { _ -> Void in
             // seems necessary to give vc stack a bit of time
-            after(0.5).then(ex2.fulfill)
+            after(interval: 0.5).then(ex2.fulfill)
             order = true
         }
         waitForExpectations(withTimeout: 10, handler: nil)

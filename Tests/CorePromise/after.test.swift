@@ -1,27 +1,34 @@
 import PromiseKit
 import XCTest
 
-class AfterTestCase_Swift: XCTestCase {
-    func __test(_ duration: TimeInterval) {
-        let ex = expectation(withDescription: "")
-        var foo = false
-        after(duration).then { _ -> Void in
-            ex.fulfill()
-            foo = true
-        }
-        XCTAssertFalse(foo)
+class AfterTestCase: XCTestCase {
+    func testZero() {
+        let ex1 = expectation(withDescription: "")
+        after(interval: 0).then(execute: ex1.fulfill)
+        waitForExpectations(withTimeout: 2, handler: nil)
+
+        let ex2 = expectation(withDescription: "")
+        __PMKAfter(0).then{ _ in ex2.fulfill() }
         waitForExpectations(withTimeout: 2, handler: nil)
     }
 
-    func testZero() {
-        __test(0)
-    }
-
     func testNegative() {
-        __test(-1)
+        let ex1 = expectation(withDescription: "")
+        after(interval: -1).then(execute: ex1.fulfill)
+        waitForExpectations(withTimeout: 2, handler: nil)
+
+        let ex2 = expectation(withDescription: "")
+        __PMKAfter(-1).then{ _ in ex2.fulfill() }
+        waitForExpectations(withTimeout: 2, handler: nil)
     }
 
     func testPositive() {
-        __test(1)
+        let ex1 = expectation(withDescription: "")
+        after(interval: 1).then(execute: ex1.fulfill)
+        waitForExpectations(withTimeout: 2, handler: nil)
+
+        let ex2 = expectation(withDescription: "")
+        __PMKAfter(1).then{ _ in ex2.fulfill() }
+        waitForExpectations(withTimeout: 2, handler: nil)
     }
 }

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0700"
+   LastUpgradeVersion = "0800"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -32,16 +32,6 @@
             skipped = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "6388E1A11AD315F90074D85B"
-               BuildableName = "PMKCore.xctest"
-               BlueprintName = "PMKTests/Core"
-               ReferencedContainer = "container:PromiseKit.xcodeproj">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
                BlueprintIdentifier = "63533B321AE57A9300C10972"
                BuildableName = "PMKA+.xctest"
                BlueprintName = "PMKTests/A+"
@@ -55,6 +45,16 @@
                BlueprintIdentifier = "63CA14481AE9FBD000223904"
                BuildableName = "PMKCategories.macOS.xctest"
                BlueprintName = "PMKTests/Categories/macOS"
+               ReferencedContainer = "container:PromiseKit.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "6388E1A11AD315F90074D85B"
+               BuildableName = "PMKCore.xctest"
+               BlueprintName = "PMKTests/Core"
                ReferencedContainer = "container:PromiseKit.xcodeproj">
             </BuildableReference>
          </TestableReference>

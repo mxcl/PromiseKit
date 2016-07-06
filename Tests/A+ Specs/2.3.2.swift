@@ -1,127 +1,116 @@
 import PromiseKit
 import XCTest
 
-// describe: 2.3.2: If `x` is a promise, adopt its state
+class Test232: XCTestCase {
+    func test() {
+        describe("2.3.2: If `x` is a promise, adopt its state") {
+            describe("2.3.2.1: If `x` is pending, `promise` must remain pending until `x` is fulfilled or rejected.") {
 
-class Test2321: XCTestCase {
+                func xFactory() -> Promise<UInt32> {
+                    return Promise.pending().promise
+                }
 
-    // describe: 2.3.2.1: If `x` is pending, `promise` must remain pending until `x` is fulfilled or rejected.
+                testPromiseResolution(factory: xFactory) { promise, expectation in
+                    var wasFulfilled = false;
+                    var wasRejected = false;
 
-    func test1() {
-        testPromiseResolution({
-            return Promise.pendingPromise().promise
-        }, test: { promise in
-            let ex = self.expectation(withDescription: "")
-            var wasFulfilled = false
-            var wasRejected = false
+                    promise.test(onFulfilled: { wasFulfilled = true }, onRejected: { wasRejected = true })
 
-            promise.then { _ in
-                wasFulfilled = true
+                    after(ticks: 4) {
+                        XCTAssertFalse(wasFulfilled)
+                        XCTAssertFalse(wasRejected)
+                        expectation.fulfill()
+                    }
+                }
             }
-            promise.error { _ in
-                wasRejected = true
+
+            describe("2.3.2.2: If/when `x` is fulfilled, fulfill `promise` with the same value.") {
+                describe("`x` is already-fulfilled") {
+                    let sentinel = arc4random()
+
+                    func xFactory() -> Promise<UInt32> {
+                        return Promise.resolved(value: sentinel)
+                    }
+
+                    testPromiseResolution(factory: xFactory) { promise, expectation in
+                        promise.then { value -> Void in
+                            XCTAssertEqual(value, sentinel)
+                            expectation.fulfill()
+                        }
+                    }
+                }
+                describe("`x` is eventually-fulfilled") {
+                    let sentinel = arc4random()
+
+                    func xFactory() -> Promise<UInt32> {
+                        return Promise { fulfill, _ in
+                            after(ticks: 2) {
+                                fulfill(sentinel)
+                            }
+                        }
+                    }
+
+                    testPromiseResolution(factory: xFactory) { promise, expectation in
+                        promise.then { value -> Void in
+                            XCTAssertEqual(value, sentinel)
+                            expectation.fulfill()
+                        }
+                    }
+                }
             }
-            later(4) {
-                XCTAssertFalse(wasFulfilled)
-                XCTAssertFalse(wasRejected)
-                ex.fulfill()
+
+            describe("2.3.2.3: If/when `x` is rejected, reject `promise` with the same reason.") {
+                describe("`x` is already-rejected") {
+                    let sentinel = arc4random()
+
+                    func xFactory() -> Promise<UInt32> {
+                        return Promise.resolved(error: Error.sentinel(sentinel))
+                    }
+
+                    testPromiseResolution(factory: xFactory) { promise, expectation in
+                        promise.catch { err in
+                            if case Error.sentinel(let value) = err where value == sentinel {
+                                expectation.fulfill()
+                            }
+                        }
+                    }
+                }
+                describe("`x` is eventually-rejected") {
+                    let sentinel = arc4random()
+
+                    func xFactory() -> Promise<UInt32> {
+                        return Promise { _, reject in
+                            after(ticks: 2) {
+                                reject(Error.sentinel(sentinel))
+                            }
+                        }
+                    }
+
+                    testPromiseResolution(factory: xFactory) { promise, expectation in
+                        promise.catch { err in
+                            if case Error.sentinel(let value) = err where value == sentinel {
+                                expectation.fulfill()
+                            }
+                        }
+                    }
+                }
             }
-        })
-    }
-}
-
-
-class Test2322: XCTestCase {
-    // 2.3.2.2: If/when `x` is fulfilled, fulfill `promise` with the same value.
-
-    func test1() {
-        let sentinel = Int(arc4random())
-
-        // describe: `x` is already-fulfilled
-
-        testPromiseResolution({
-            return Promise(sentinel)
-        }, test: { promise in
-            let ex = self.expectation(withDescription: "")
-
-            promise.then { value -> Void in
-                XCTAssertEqual(value, sentinel)
-                ex.fulfill()
-            }
-        })
-    }
-
-    func test2() {
-        let sentinel = Int(arc4random())
-
-        // `x` is eventually-fulfilled
-
-        testPromiseResolution({
-            after(0.1).then { sentinel }
-        }, test: { promise in
-            let ex = self.expectation(withDescription: "")
-
-            promise.then{ value -> Void in
-                XCTAssertEqual(value, sentinel)
-                ex.fulfill()
-            }
-        })
-    }
-}
-
-class Test2323: XCTestCase {
-
-    // describe: 2.3.2.3: If/when `x` is rejected, reject `promise` with the same reason
-
-    func test1() {
-
-        let sentinel = Error.dummy
-
-        // specify: `x` is already-rejected
-
-        testPromiseResolution({
-            return Promise(error: sentinel)
-        }, test: { promise in
-            let ex = self.expectation(withDescription: "")
-
-            promise.error { error -> Void in
-                XCTAssertEqual(error, sentinel)
-                ex.fulfill()
-            }
-        })
-    }
-
-    func test2() {
-
-        let sentinel = Error.dummy
-
-        // specify: `x` is eventually-rejected
-
-        testPromiseResolution({
-            after(0.1).then { throw sentinel }
-        }, test: { promise in
-            let ex = self.expectation(withDescription: "")
-
-            promise.error { error -> Void in
-                XCTAssertEqual(error, sentinel)
-                ex.fulfill()
-            }
-        })
+        }
     }
 }
 
 
 /////////////////////////////////////////////////////////////////////////
 
-extension XCTestCase {
-    private func testPromiseResolution(_ factory: () -> Promise<Int>, test: (Promise<Int>) -> Void) {
-
-        // specify: via return from a fulfilled promise
-        test(Promise(Int(arc4random())).then { _ in factory() })
-        waitForExpectations(withTimeout: 1, handler: nil)
-
-        // specify: via return from a rejected promise
-        test(Promise<Int>(error: Error.dummy).recover { _ in factory() })
-        waitForExpectations(withTimeout: 1, handler: nil)
+extension Test232 {
+    private func testPromiseResolution(factory: () -> Promise<UInt32>, line: UInt = #line, test: (Promise<UInt32>, XCTestExpectation) -> Void) {
+        specify("via return from a fulfilled promise", file: #file, line: line) { d, expectation in
+            let promise = Promise.resolved(value: arc4random()).then { _ in factory() }
+            test(promise, expectation)
+        }
+        specify("via return from a rejected promise", file: #file, line: line) { d, expectation in
+            let promise: Promise<UInt32> = Promise.resolved(error: Error.dummy).recover { _ in factory() }
+            test(promise, expectation)
+        }
     }
 }

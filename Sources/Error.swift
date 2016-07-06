@@ -39,7 +39,6 @@ public enum URLError: ErrorProtocol {
 
     /**
      An NSError was received from an underlying Cocoa function.
-     FIXME sucks?
     */
     case underlyingCocoaError(URLRequest, Data?, URLResponse?, NSError)
 
@@ -108,19 +107,18 @@ extension NSError {
     }
 }
 
-public protocol CancellableErrorType: ErrorProtocol {
-    var cancelled: Bool { get }
+public protocol CancellableError: ErrorProtocol {
+    var isCancelled: Bool { get }
 }
 
-extension NSError: CancellableErrorType {
+extension NSError: CancellableError {
     /**
      - Warning: You may only call this method on the main thread.
     */
-    @objc public var cancelled: Bool {
-        if !Thread.isMainThread() {
-            NSLog("PromiseKit: Warning: `cancelled` called on background thread.")
+    @objc public var isCancelled: Bool {
+        if !Thread.isMainThread {
+            NSLog("PromiseKit: warning: `isCancelled` called on background thread.")
         }
-
         return cancelledErrorIdentifiers.contains(ErrorPair(domain, code))
     }
 }
@@ -132,8 +130,8 @@ private var cancelledErrorIdentifiers = Set([
     ErrorPair(NSURLErrorDomain, NSURLErrorCancelled)
 ])
 
-extension NSURLError: CancellableErrorType {
-    public var cancelled: Bool {
+extension NSURLError: CancellableError {
+    public var isCancelled: Bool {
         return self == .cancelled
     }
 }
@@ -156,8 +154,8 @@ extension NSURLError: CancellableErrorType {
 */
 public var PMKUnhandledErrorHandler = { (error: ErrorProtocol) -> Void in
     DispatchQueue.main.async {
-        let cancelled = (error as? CancellableErrorType)?.cancelled ?? false
-                                                       // ^-------^ must be called on main queue
+        let cancelled = (error as? CancellableError)?.isCancelled ?? false
+                                                   // ^---------^ must be called on main queue
         if !cancelled {
             NSLog("PromiseKit: Unhandled Error: %@", "\(error)")
         }

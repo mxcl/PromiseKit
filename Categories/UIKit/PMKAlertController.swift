@@ -43,7 +43,7 @@ public class PMKAlertController {
             if style != .cancel {
                 self.fulfill(action)
             } else {
-                self.reject(Error.Cancelled)
+                self.reject(Error.cancelled)
             }
         }
         UIAlertController.addAction(action)
@@ -55,14 +55,14 @@ public class PMKAlertController {
     }
 
     private let UIAlertController: UIKit.UIAlertController
-    private let (promise, fulfill, reject) = Promise<UIAlertAction>.pendingPromise()
+    private let (promise, fulfill, reject) = Promise<UIAlertAction>.pending()
     private var retainCycle: PMKAlertController?
 
-    public enum Error: CancellableErrorType {
-        case Cancelled
+    public enum Error: CancellableError {
+        case cancelled
       
-      public var cancelled: Bool {
-          return self == .Cancelled
+      public var isCancelled: Bool {
+          return self == .cancelled
       }
     }
 }

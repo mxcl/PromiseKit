@@ -5,8 +5,6 @@
 
 NSString *const PMKErrorDomain = @"PMKErrorDomain";
 
-dispatch_queue_t (^PMKDefaultDispatchQueue)() = ^{ return dispatch_get_main_queue(); };
-
 @implementation AnyPromise (objc)
 
 - (instancetype)initWithResolver:(PMKResolver __strong *)resolver {
@@ -64,7 +62,7 @@ static inline AnyPromise *__then(AnyPromise *self, dispatch_queue_t queue, id bl
 static inline AnyPromise *__catch(AnyPromise *self, BOOL includeCancellation, id block) {
     return AnyPromiseWhen(self, ^(id obj, PMKResolver resolve) {
         dispatch_async(PMKDefaultDispatchQueue(), ^{
-            if (IsError(obj) && (includeCancellation || ![obj cancelled])) {
+            if (IsError(obj) && (includeCancellation || ![obj isCancelled])) {
                 [obj pmk_consume];
                 resolve(PMKCallVariadicBlock(block, obj));
             } else {
@@ -86,7 +84,7 @@ static inline AnyPromise *__catch(AnyPromise *self, BOOL includeCancellation, id
     };
 }
 
-static inline AnyPromise *__finally(AnyPromise *self, dispatch_queue_t queue, dispatch_block_t block) {
+static inline AnyPromise *__always(AnyPromise *self, dispatch_queue_t queue, dispatch_block_t block) {
     return AnyPromiseWhen(self, ^(id obj, PMKResolver resolve) {
         dispatch_async(queue, ^{
             block();
@@ -95,15 +93,15 @@ static inline AnyPromise *__finally(AnyPromise *self, dispatch_queue_t queue, di
     });
 }
 
-- (AnyPromise *(^)(dispatch_block_t))finally {
+- (AnyPromise *(^)(dispatch_block_t))always {
     return ^(dispatch_block_t block) {
-        return __finally(self, PMKDefaultDispatchQueue(), block);
+        return __always(self, PMKDefaultDispatchQueue(), block);
     };
 }
 
-- (AnyPromise *(^)(dispatch_queue_t, dispatch_block_t))finallyOn {
+- (AnyPromise *(^)(dispatch_queue_t, dispatch_block_t))alwaysOn {
     return ^(dispatch_queue_t queue, dispatch_block_t block) {
-        return __finally(self, queue, block);
+        return __always(self, queue, block);
     };
 }
 

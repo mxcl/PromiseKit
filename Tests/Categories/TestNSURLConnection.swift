@@ -1,5 +1,5 @@
-import Foundation
 import OHHTTPStubs
+import Foundation
 import PromiseKit
 import XCTest
 

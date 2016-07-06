@@ -2,39 +2,30 @@ import PromiseKit
 import XCTest
 
 class Test231: XCTestCase {
-
-    // 2.3.1: If `promise` and `x` refer to the same object, reject
-    // `promise` with a `TypeError' as the reason.
-
-    func test1() {
-        let ex = expectation(withDescription: "")
-
-        // specify: via return from a fulfilled promise
-
-        let promise1 = after(0.1)
-        let promise2 = promise1.then { promise1 }
-
-        promise2.error { err in
-            XCTAssertEqual(err, PromiseKit.Error.returnedSelf)
-            ex.fulfill()
+    func test() {
+        describe("2.3.1: If `promise` and `x` refer to the same object, reject `promise` with a `TypeError' as the reason.") {
+            specify("via return from a fulfilled promise") { d, expectation in
+                var promise: Promise<Void>!
+                promise = Promise.fulfilled().then { () -> Promise<Void> in
+                    return promise
+                }
+                promise.catch { err in
+                    if case PromiseKit.Error.returnedSelf = err {
+                        expectation.fulfill()
+                    }
+                }
+            }
+            specify("via return from a rejected promise") { d, expectation in
+                var promise: Promise<Void>!
+                promise = Promise<Void>.resolved(error: Error.dummy).recover { _ -> Promise<Void> in
+                    return promise
+                }
+                promise.catch { err in
+                    if case PromiseKit.Error.returnedSelf = err {
+                        expectation.fulfill()
+                    }
+                }
+            }
         }
-
-        waitForExpectations(withTimeout: 1, handler: nil)
-    }
-
-    func test2() {
-        let ex = expectation(withDescription: "")
-
-        // specify: via return from a rejected promise
-
-        let promise1 = Promise<Void>(error: Error.dummy)
-        let promise2 = promise1.recover { _ in promise1 }
-
-        promise2.error { err in
-            XCTAssertEqual(err, PromiseKit.Error.returnedSelf)
-            ex.fulfill()
-        }
-
-        waitForExpectations(withTimeout: 1, handler: nil)
     }
 }
