@@ -14,7 +14,7 @@ void PMKSetUnhandledErrorHandler(void (^block)(NSError *)) {
 }
 
 
-@interface ErrorHandlingTests_ObjC: XCTestCase @end @implementation ErrorHandlingTests_ObjC
+@interface ErrorHandlingTests: XCTestCase @end @implementation ErrorHandlingTests
 
 - (void)tearDown {
     PMKSetUnhandledErrorHandler(^(id err){});
@@ -59,12 +59,12 @@ void PMKSetUnhandledErrorHandler(void (^block)(NSError *)) {
 }
 
 - (void)test_70_unhandled_error_handler_not_called {
+    PMKSetUnhandledErrorHandler(^(id err){
+        XCTFail();
+    });
+
     @autoreleasepool {
         XCTestExpectation *ex1 = [self expectationWithDescription:@""];
-
-        PMKSetUnhandledErrorHandler(^(id err){
-            XCTFail();
-        });
 
         [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
             resolve([NSError errorWithDomain:@"a" code:5 userInfo:nil]);
@@ -118,7 +118,7 @@ void PMKSetUnhandledErrorHandler(void (^block)(NSError *)) {
             dispatch_promise(^{
                 @throw @"1";
             }).catch(resolve);
-        }].finally(^{
+        }].always(^{
             [ex1 fulfill];
             ex1Fulfilled = YES;
         });

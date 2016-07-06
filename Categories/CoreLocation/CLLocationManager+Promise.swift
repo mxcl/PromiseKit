@@ -49,16 +49,9 @@ extension CLLocationManager {
 private class LocationManager: CLLocationManager, CLLocationManagerDelegate {
     let (promise, fulfill, reject) = LocationPromise.foo()
 
-#if os(iOS)
-    @objc func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
+    @objc private func locationManager(_ manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         fulfill(locations)
     }
-#else
-    @objc func locationManager(_ manager: CLLocationManager, didUpdateLocations ll: [CLLocation]) {
-        let locations = ll 
-        fulfill(locations)
-    }
-#endif
 
     @objc func locationManager(_ manager: CLLocationManager, didFailWithError error: NSError) {
         reject(error)
@@ -83,7 +76,7 @@ extension CLLocationManager {
 
 @available(iOS 8, *)
 private class AuthorizationCatcher: CLLocationManager, CLLocationManagerDelegate {
-    let (promise, fulfill, _) = Promise<CLAuthorizationStatus>.pendingPromise()
+    let (promise, fulfill, _) = Promise<CLAuthorizationStatus>.pending()
     var retainCycle: AnyObject?
 
     init(auther: (CLLocationManager)->()) {
@@ -98,7 +91,7 @@ private class AuthorizationCatcher: CLLocationManager, CLLocationManagerDelegate
         }
     }
 
-    @objc private func locationManager(manager: CLLocationManager, didChangeAuthorizationStatus status: CLAuthorizationStatus) {
+    @objc private func locationManager(_ manager: CLLocationManager, didChangeAuthorization status: CLAuthorizationStatus) {
         if status != .notDetermined {
             fulfill(status)
             retainCycle = nil
@@ -111,7 +104,7 @@ private func auther(_ requestAuthorizationType: CLLocationManager.RequestAuthori
     //PMKiOS7 guard #available(iOS 8, *) else { return }
     return { manager in
     func hasInfoPlistKey(_ key: String) -> Bool {
-        let value = Bundle.main().objectForInfoDictionaryKey(key) as? String ?? ""
+        let value = Bundle.main.objectForInfoDictionaryKey(key) as? String ?? ""
         return !value.isEmpty
     }
 
@@ -148,7 +141,7 @@ public class LocationPromise: Promise<CLLocation> {
 
     // convoluted for concurrency guarantees
 
-    private let (parentPromise, fulfill, reject) = Promise<[CLLocation]>.pendingPromise()
+    private let (parentPromise, fulfill, reject) = Promise<[CLLocation]>.pending()
 
     public func allResults() -> Promise<[CLLocation]> {
         return parentPromise
@@ -160,7 +153,7 @@ public class LocationPromise: Promise<CLLocation> {
         let promise = LocationPromise { fulfill = $0; reject = $1 }
 
         promise.parentPromise.then(on: zalgo) { fulfill($0.last!) }
-        promise.parentPromise.error { reject($0) }
+        promise.parentPromise.catch(on: zalgo, execute: reject)
 
         return (promise, promise.fulfill, promise.reject)
     }

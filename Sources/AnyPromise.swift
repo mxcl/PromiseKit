@@ -1,5 +1,10 @@
 import Foundation.NSError
 
+/**
+ More accurately, AnyObjectPromise, since AnyPromise is
+ our Objective-C bridge, thus AnyPromise can only represent
+ objects, not value-types (structs).
+*/
 @objc(AnyPromise) public class AnyPromise: NSObject {
 
     private var state: State
@@ -159,7 +164,7 @@ import Foundation.NSError
     /**
      Continue a Promise<T> chain from an AnyPromise.
     */
-    public func then<T>(on q: DispatchQueue = PMKDefaultDispatchQueue(), body: (AnyObject?) throws -> T) -> Promise<T> {
+    public func then<T>(on q: DispatchQueue = PMKDefaultDispatchQueue(), execute body: (AnyObject?) throws -> T) -> Promise<T> {
         return Promise(sealant: { resolve in
             pipe { object in
                 if let error = object as? NSError {
@@ -176,7 +181,7 @@ import Foundation.NSError
     /**
      Continue a Promise<T> chain from an AnyPromise.
     */
-    public func then(on q: DispatchQueue = PMKDefaultDispatchQueue(), body: (AnyObject?) -> AnyPromise) -> Promise<AnyObject?> {
+    public func then(on q: DispatchQueue = PMKDefaultDispatchQueue(), execute body: (AnyObject?) -> AnyPromise) -> Promise<AnyObject?> {
         return Promise { fulfill, reject in
             pipe { object in
                 if let error = object as? NSError {
@@ -199,7 +204,7 @@ import Foundation.NSError
     /**
      Continue a Promise<T> chain from an AnyPromise.
     */
-    public func then<T>(on q: DispatchQueue = PMKDefaultDispatchQueue(), body: (AnyObject?) -> Promise<T>) -> Promise<T> {
+    public func then<T>(on q: DispatchQueue = PMKDefaultDispatchQueue(), execute body: (AnyObject?) -> Promise<T>) -> Promise<T> {
         return Promise(sealant: { resolve in
             pipe { object in
                 if let error = object as? NSError {

@@ -1,61 +1,91 @@
 import PromiseKit
 import XCTest
 
-// we reject with this when we don't intend to test against it
-enum Error: ErrorProtocol { case dummy }
-
-func later(_ ticks: Int = 1, _ body: () -> Void) {
-    let ticks = Double(NSEC_PER_SEC) / (Double(ticks) * 50.0 * 1000.0)
-    DispatchQueue.main.after(when: DispatchTime.now() + Double(Int64(ticks)) / Double(NSEC_PER_SEC), execute: body)
+enum Error: ErrorProtocol {
+    case dummy  // we reject with this when we don't intend to test against it
+    case sentinel(UInt32)
 }
 
-
+private let timeout: TimeInterval = 1
 
 extension XCTestCase {
+    func describe(_ description: String, file: StaticString = #file, line: UInt = #line, body: @noescape () throws -> Void) {
+        do {
+            try body()
+        } catch {
+            XCTFail(description, file: file, line: line)
+        }
+    }
 
-    func testFulfilled(_ numberOfExpectations: Int  = 1, body: (Promise<Int>, [XCTestExpectation], Int) -> Void) {
+    func specify(_ description: String, file: StaticString = #file, line: UInt = #line, body: @noescape (Promise<Void>.PendingTuple, XCTestExpectation) throws -> Void) {
+        let expectation = self.expectation(withDescription: description)
+        let pending = Promise<Void>.pending()
 
-        let specify = mkspecify(numberOfExpectations, generator: { Int(arc4random()) }, body: body)
+        do {
+            try body(pending, expectation)
+            waitForExpectations(withTimeout: timeout) { err in
+                if let _ = err {
+                    XCTFail("wait failed: \(description)", file: file, line: line)
+                }
+            }
+        } catch {
+            XCTFail(description, file: file, line: line)
+        }
+    }
+
+    func testFulfilled(file: StaticString = #file, line: UInt = #line, body: (Promise<UInt32>, XCTestExpectation, UInt32) -> Void) {
+        testFulfilled(withExpectationCount: 1, file: file, line: line) {
+            body($0, $1.first!, $2)
+        }
+    }
+
+    func testRejected(file: StaticString = #file, line: UInt = #line, body: (Promise<UInt32>, XCTestExpectation, UInt32) -> Void) {
+        testRejected(withExpectationCount: 1, file: file, line: line) {
+            body($0, $1.first!, $2)
+        }
+    }
+
+    func testFulfilled(withExpectationCount: Int, file: StaticString = #file, line: UInt = #line, body: (Promise<UInt32>, [XCTestExpectation], UInt32) -> Void) {
+
+        let specify = mkspecify(withExpectationCount, file: file, line: line, body: body)
 
         specify("already-fulfilled") { value in
-            return (Promise(value), {})
+            return (Promise.resolved(value: value), {})
         }
         specify("immediately-fulfilled") { value in
-            let (promise, fulfill, _) = Promise<Int>.pendingPromise()
+            let (promise, fulfill, _) = Promise<UInt32>.pending()
             return (promise, {
                 fulfill(value)
             })
         }
         specify("eventually-fulfilled") { value in
-            let (promise, fulfill, _) = Promise<Int>.pendingPromise()
+            let (promise, fulfill, _) = Promise<UInt32>.pending()
             return (promise, {
-                later {
+                after(ticks: 5) {
                     fulfill(value)
                 }
             })
         }
     }
 
-    func testRejected(_ numberOfExpectations: Int = 1, body: (Promise<Int>, [XCTestExpectation], ErrorProtocol) -> Void) {
+    func testRejected(withExpectationCount: Int, file: StaticString = #file, line: UInt = #line, body: (Promise<UInt32>, [XCTestExpectation], UInt32) -> Void) {
 
-        let specify = mkspecify(numberOfExpectations, generator: { _ -> ErrorProtocol in
-            return NSError(domain: PMKErrorDomain, code: Int(arc4random()), userInfo: nil)
-        }, body: body)
+        let specify = mkspecify(withExpectationCount, file: file, line: line, body: body)
 
-        specify("already-rejected") { error in
-            return (Promise(error: error), {})
+        specify("already-rejected") { sentinel in
+            return (Promise.resolved(error: Error.sentinel(sentinel)), {})
         }
-        specify("immediately-rejected") { error in
-            let (promise, _, reject) = Promise<Int>.pendingPromise()
+        specify("immediately-rejected") { sentinel in
+            let (promise, _, reject) = Promise<UInt32>.pending()
             return (promise, {
-                reject(error)
+                reject(Error.sentinel(sentinel))
             })
         }
-        specify("eventually-rejected") { error in
-            let (promise, _, reject) = Promise<Int>.pendingPromise()
+        specify("eventually-rejected") { sentinel in
+            let (promise, _, reject) = Promise<UInt32>.pending()
             return (promise, {
-                later {
-                    reject(error)
+                after(ticks: 50) {
+                    reject(Error.sentinel(sentinel))
                 }
             })
         }
@@ -64,26 +94,56 @@ extension XCTestCase {
 
 /////////////////////////////////////////////////////////////////////////
 
-    private func mkspecify<T>(_ numberOfExpectations: Int, generator: () -> T, body: (Promise<Int>, [XCTestExpectation], T) -> Void) -> (String, feed: (T) -> (Promise<Int>, () -> Void)) -> Void {
+    private func mkspecify(_ numberOfExpectations: Int, file: StaticString, line: UInt, body: (Promise<UInt32>, [XCTestExpectation], UInt32) -> Void) -> (String, feed: (UInt32) -> (Promise<UInt32>, () -> Void)) -> Void {
         return { desc, feed in
-            let floater = self.expectation(withDescription: "")
-			later(2, floater.fulfill)
-			
-            let value = generator()
-            let (promise, after) = feed(value)
+            let value = arc4random()
+            let (promise, executeAfter) = feed(value)
             let expectations = (1...numberOfExpectations).map {
                 self.expectation(withDescription: "\(desc) (\($0))")
             }
             body(promise, expectations, value)
             
-            after()
+            executeAfter()
             
-            self.waitForExpectations(withTimeout: 1, handler: nil)
+            self.waitForExpectations(withTimeout: timeout) { err in
+                if let _ = err {
+                    XCTFail("timed out: \(desc)", file: file, line: line)
+                }
+            }
         }
+    }
+
+    func mkex() -> XCTestExpectation {
+        return expectation(withDescription: "")
     }
 }
 
+func after(ticks: Int, execute body: () -> Void) {
+    precondition(ticks > 0)
 
-func XCTAssertEqual(_ e1: ErrorProtocol, _ e2: ErrorProtocol) {
-    XCTAssert(e1 as NSError == e2 as NSError)
+    var ticks = ticks
+    func f() {
+        DispatchQueue.main.async {
+            ticks -= 1
+            if ticks == 0 {
+                body()
+            } else {
+                f()
+            }
+        }
+    }
+    f()
+}
+
+extension Promise {
+    func test(onFulfilled: () -> Void, onRejected: () -> Void) {
+        //TODO use tap
+        self.then { _ in onFulfilled() }
+        self.catch { _ in onRejected() }
+    }
+}
+
+prefix func ++(a: inout Int) -> Int {
+    a += 1
+    return a
 }

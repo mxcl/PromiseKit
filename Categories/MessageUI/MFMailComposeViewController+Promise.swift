@@ -28,12 +28,12 @@ extension UIViewController {
 }
 
 extension MFMailComposeViewController {
-    public enum Error: CancellableErrorType {
-        case Cancelled
+    public enum Error: CancellableError {
+        case cancelled
 
-        public var cancelled: Bool {
+        public var isCancelled: Bool {
             switch self {
-                case .Cancelled: return true
+                case .cancelled: return true
             }
         }
     }
@@ -41,7 +41,7 @@ extension MFMailComposeViewController {
 
 private class PMKMailComposeViewControllerDelegate: NSObject, MFMailComposeViewControllerDelegate, UINavigationControllerDelegate {
 
-    let (promise, fulfill, reject) = Promise<MFMailComposeResult>.pendingPromise()
+    let (promise, fulfill, reject) = Promise<MFMailComposeResult>.pending()
     var retainCycle: NSObject?
 
     @objc func mailComposeController(controller: MFMailComposeViewController, didFinishWithResult result: MFMailComposeResult, error: NSError?) {
@@ -57,7 +57,7 @@ private class PMKMailComposeViewControllerDelegate: NSObject, MFMailComposeViewC
                 info[NSUnderlyingErrorKey] = NSNumber(value: result.rawValue)
                 reject(NSError(domain: PMKErrorDomain, code: PMKOperationFailed, userInfo: info))
             case .cancelled:
-                reject(MFMailComposeViewController.Error.Cancelled)
+                reject(MFMailComposeViewController.Error.cancelled)
             default:
                 fulfill(result)
             }

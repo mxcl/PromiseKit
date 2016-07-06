@@ -12,7 +12,7 @@ class Test_NSTask_Swift: XCTestCase {
             XCTAssertEqual(stdout, "bar\n")
             ex.fulfill()
         }
-        waitForExpectations(withTimeout: 10, handler: nil)
+        waitForExpectations(withTimeout: 10)
     }
 
     func test2() {
@@ -25,7 +25,7 @@ class Test_NSTask_Swift: XCTestCase {
 
         task.promise().then { (stdout: String, stderr: String, exitStatus: Int) -> Void in
             XCTFail()
-        }.error { err in
+        }.catch { err in
             if case NSTask.Error.execution(let info) = err {
                 let expectedStderrData = "ls: \(dir): No such file or directory\n".data(using: .utf8, allowLossyConversion: false)!
 
@@ -36,6 +36,6 @@ class Test_NSTask_Swift: XCTestCase {
                 ex.fulfill()
             }
         }
-        waitForExpectations(withTimeout: 10, handler: nil)
+        waitForExpectations(withTimeout: 10)
     }
 }

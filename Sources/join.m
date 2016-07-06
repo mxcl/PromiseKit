@@ -1,10 +1,9 @@
-#import "AnyPromise.h"
+#import "PromiseKit.h"
 #import "AnyPromise+Private.h"
 @import Foundation.NSDictionary;
 @import Foundation.NSError;
 @import Foundation.NSNull;
 #import <libkern/OSAtomic.h>
-#import <PromiseKit/Umbrella.h>
 
 @implementation AnyPromise (join)
 

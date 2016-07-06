@@ -28,7 +28,7 @@
         XCTAssertEqual([obj integerValue], 1);
         [ex fulfill];
     });
-    PMKAfter(0.5).then(^{
+    PMKAfter(0.1).then(^{
         [sheet dismissWithClickedButtonIndex:1 animated: NO];
     });
     [self waitForExpectationsWithTimeout:10 handler: nil];
@@ -43,10 +43,10 @@
     [sheet addButtonWithTitle:@"1"];
     sheet.cancelButtonIndex = [sheet addButtonWithTitle:@"2"];
     [sheet promiseInView:rootvc.view].catchWithPolicy(PMKCatchPolicyAllErrors, ^(NSError *err){
-        XCTAssertTrue(err.cancelled);
+        XCTAssertTrue(err.isCancelled);
         [ex fulfill];
     });
-    PMKAfter(0.5).then(^{
+    PMKAfter(0.1).then(^{
         [sheet dismissWithClickedButtonIndex:2 animated: NO];
     });
     [self waitForExpectationsWithTimeout:10 handler: nil];
@@ -62,7 +62,7 @@
         XCTAssertEqual([obj integerValue], 0);
         [ex fulfill];
     });
-    PMKAfter(0.5).then(^{
+    PMKAfter(0.1).then(^{
         [sheet dismissWithClickedButtonIndex:0 animated: NO];
     });
     [self waitForExpectationsWithTimeout:10 handler: nil];
@@ -75,10 +75,10 @@
     UIActionSheet *sheet = [UIActionSheet new];
     sheet.cancelButtonIndex = [sheet addButtonWithTitle:@"0"];
     [sheet promiseInView:rootvc.view].catchWithPolicy(PMKCatchPolicyAllErrors, ^(NSError *err){
-        XCTAssertTrue(err.cancelled);
+        XCTAssertTrue(err.isCancelled);
         [ex fulfill];
     });
-    PMKAfter(0.5).then(^{
+    PMKAfter(0.1).then(^{
         [sheet dismissWithClickedButtonIndex:0 animated: NO];
     });
     [self waitForExpectationsWithTimeout:10 handler: nil];

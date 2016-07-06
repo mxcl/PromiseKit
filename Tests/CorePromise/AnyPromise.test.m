@@ -585,7 +585,7 @@ static inline AnyPromise *fulfillLater() {
     
     [AnyPromise promiseWithValue:@1].then(^{
         return @1;
-    }).finally(^{
+    }).always(^{
         [ex1 fulfill];
     });
     
@@ -597,7 +597,7 @@ static inline AnyPromise *fulfillLater() {
 
     [AnyPromise promiseWithValue:@1].then(^{
         return dummy();
-    }).finally(^{
+    }).always(^{
         [ex1 fulfill];
     });
 
@@ -615,7 +615,7 @@ static inline AnyPromise *fulfillLater() {
         XCTAssertEqual(++x, 2);
     }).then(^{
         XCTAssertEqual(++x, 3);
-    }).finally(^{
+    }).always(^{
         XCTAssertEqual(++x, 4);
         [ex1 fulfill];
     });
@@ -692,7 +692,7 @@ static inline AnyPromise *fulfillLater() {
     
     AnyPromise *promise = fulfillLater().then(^{
         return nil;
-    }).finally(^{
+    }).always(^{
         [ex1 fulfill];
     });
     
@@ -700,7 +700,7 @@ static inline AnyPromise *fulfillLater() {
     
     id ex2 = [self expectationWithDescription:@""];
     
-    promise.finally(^{
+    promise.always(^{
         [ex2 fulfill];
     });
     

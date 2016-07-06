@@ -15,7 +15,7 @@ import PromiseKit
 */
 extension ACAccountStore {
     public func renewCredentialsForAccount(_ account: ACAccount) -> Promise<ACAccountCredentialRenewResult> {
-        return Promise { renewCredentials(for: account, completion: $0) }
+        return Promise.wrap { renewCredentials(for: account, completion: $0) }
     }
 
     public func requestAccessToAccountsWithType(_ type: ACAccountType, options: [String: AnyObject]? = nil) -> Promise<Void> {
@@ -33,11 +33,11 @@ extension ACAccountStore {
     }
 
     public func saveAccount(_ account: ACAccount) -> Promise<Void> {
-        return Promise<Bool> { saveAccount(account, withCompletionHandler: $0) }.asVoid()
+        return Promise<Bool>.wrap { saveAccount(account, withCompletionHandler: $0) }.asVoid()
     }
 
     public func removeAccount(_ account: ACAccount) -> Promise<Void> {
-        return Promise<Bool> { removeAccount(account, withCompletionHandler: $0) }.asVoid()
+        return Promise<Bool>.wrap { removeAccount(account, withCompletionHandler: $0) }.asVoid()
     }
 
     public enum Error: ErrorProtocol {

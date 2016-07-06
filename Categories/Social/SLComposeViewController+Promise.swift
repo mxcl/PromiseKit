@@ -15,12 +15,12 @@ import PromiseKit
     import PromiseKit
 */
 extension UIViewController {
-    public func promiseViewController(vc: SLComposeViewController, animated: Bool = true, completion: (() -> Void)? = nil) -> Promise<Void> {
+    public func promiseViewController(_ vc: SLComposeViewController, animated: Bool = true, completion: (() -> Void)? = nil) -> Promise<Void> {
         present(vc, animated: animated, completion: completion)
         return Promise { fulfill, reject in
             vc.completionHandler = { result in
                 if result == .cancelled {
-                    reject(SLComposeViewController.Error.Cancelled)
+                    reject(SLComposeViewController.Error.cancelled)
                 } else {
                     fulfill()
                 }
@@ -30,11 +30,11 @@ extension UIViewController {
 }
 
 extension SLComposeViewController {
-    public enum Error: CancellableErrorType {
-        case Cancelled
+    public enum Error: CancellableError {
+        case cancelled
 
-        public var cancelled: Bool {
-            switch self { case .Cancelled: return true }
+        public var isCancelled: Bool {
+            switch self { case .cancelled: return true }
         }
     }
 }

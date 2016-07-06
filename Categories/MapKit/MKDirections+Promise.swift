@@ -20,10 +20,10 @@ extension MKDirections {
      cancellation.
     */
     public func promise() -> Promise<MKDirectionsResponse> {
-        return Promise { calculate(completionHandler: $0) }
+        return Promise.wrap(resolver: calculate)
     }
 
     public func promise() -> Promise<MKETAResponse> {
-        return Promise { calculateETA(completionHandler: $0) }
+        return Promise.wrap(resolver: calculateETA)
     }
 }

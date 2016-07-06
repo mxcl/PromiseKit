@@ -7,10 +7,10 @@ class Test_NSObject_Swift: XCTestCase {
         let ex = expectation(withDescription: "")
 
         let foo = Foo()
-        foo.observe("bar").then { (newValue: String) -> Void in
+        foo.observe(keyPath: "bar").then { (newValue: String) -> Void in
             XCTAssertEqual(newValue, "moo")
             ex.fulfill()
-        }.error { err in
+        }.catch { _ in
             XCTFail()
         }
         foo.bar = "moo"
@@ -34,7 +34,7 @@ class Test_NSObject_Swift: XCTestCase {
 
             innerScope()
 
-            after(0.2).then {
+            after(interval: 0.2).then {
                 killme = nil
             }
         }
@@ -61,7 +61,7 @@ class Test_NSObject_Swift: XCTestCase {
 
             innerScope()
 
-            after(0.2).then {
+            after(interval: 0.2).then {
                 killme = nil
             }
         }

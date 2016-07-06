@@ -1,25 +1,53 @@
-#import <dispatch/object.h>
-#import <dispatch/queue.h>
-#import <Foundation/NSObject.h>
-#import "Umbrella.h"
+@import Foundation;
+@import Dispatch;
 
-typedef void (^PMKResolver)(id __nullable);
+typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
 
 typedef NS_ENUM(NSInteger, PMKCatchPolicy) {
     PMKCatchPolicyAllErrors,
     PMKCatchPolicyAllErrorsExceptCancellation
-};
+} NS_SWIFT_NAME(CatchPolicy);
 
-/**
- This block lets you override the default dispatch queue for Promises.
- 
- By default this returns dispatch_get_main_queue()
- */
-extern __nonnull dispatch_queue_t (^__nonnull PMKDefaultDispatchQueue)();
+#if defined(__has_attribute) && __has_attribute(objc_runtime_name)
+# define SWIFT_RUNTIME_NAME(X) __attribute__((objc_runtime_name(X)))
+#else
+# define SWIFT_RUNTIME_NAME(X)
+#endif
+#if defined(__has_attribute) && __has_attribute(swift_name)
+# define SWIFT_COMPILE_NAME(X) __attribute__((swift_name(X)))
+#else
+# define SWIFT_COMPILE_NAME(X)
+#endif
+#if !defined(SWIFT_CLASS_EXTRA)
+# define SWIFT_CLASS_EXTRA
+#endif
+#if !defined(SWIFT_PROTOCOL_EXTRA)
+# define SWIFT_PROTOCOL_EXTRA
+#endif
+#if !defined(SWIFT_ENUM_EXTRA)
+# define SWIFT_ENUM_EXTRA
+#endif
+#if !defined(SWIFT_CLASS)
+# if defined(__has_attribute) && __has_attribute(objc_subclassing_restricted)
+#  define SWIFT_CLASS(SWIFT_NAME) SWIFT_RUNTIME_NAME(SWIFT_NAME) __attribute__((objc_subclassing_restricted)) SWIFT_CLASS_EXTRA
+#  define SWIFT_CLASS_NAMED(SWIFT_NAME) __attribute__((objc_subclassing_restricted)) SWIFT_COMPILE_NAME(SWIFT_NAME) SWIFT_CLASS_EXTRA
+# else
+#  define SWIFT_CLASS(SWIFT_NAME) SWIFT_RUNTIME_NAME(SWIFT_NAME) SWIFT_CLASS_EXTRA
+#  define SWIFT_CLASS_NAMED(SWIFT_NAME) SWIFT_COMPILE_NAME(SWIFT_NAME) SWIFT_CLASS_EXTRA
+# endif
+#endif
 
 /**
  @see AnyPromise.swift
 */
+SWIFT_CLASS_NAMED("AnyPromise")
+@interface AnyPromise : NSObject
+@property (nonatomic, readonly) BOOL fulfilled;
+@property (nonatomic, readonly) BOOL rejected;
+@property (nonatomic, readonly) BOOL resolved;
+@property (nonatomic, readonly) BOOL pending;
+@end
+
 @interface AnyPromise (objc)
 
 /**
@@ -50,7 +78,7 @@ extern __nonnull dispatch_queue_t (^__nonnull PMKDefaultDispatchQueue)();
  @see thenOn
  @see thenInBackground
 */
-- (AnyPromise * __nonnull (^ __nonnull)(id __nonnull))then;
+- (AnyPromise * __nonnull (^ __nonnull)(id __nonnull))then NS_REFINED_FOR_SWIFT;
 
 
 /**
@@ -61,7 +89,7 @@ extern __nonnull dispatch_queue_t (^__nonnull PMKDefaultDispatchQueue)();
  @see then
  @see thenOn
 */
-- (AnyPromise * __nonnull(^ __nonnull)(id __nonnull))thenInBackground;
+- (AnyPromise * __nonnull(^ __nonnull)(id __nonnull))thenInBackground NS_REFINED_FOR_SWIFT;
 
 /**
  The provided block is executed on the dispatch queue of your choice when the receiver is fulfilled.
@@ -69,7 +97,7 @@ extern __nonnull dispatch_queue_t (^__nonnull PMKDefaultDispatchQueue)();
  @see then
  @see thenInBackground
 */
-- (AnyPromise * __nonnull(^ __nonnull)(dispatch_queue_t __nonnull, id __nonnull))thenOn;
+- (AnyPromise * __nonnull(^ __nonnull)(dispatch_queue_t __nonnull, id __nonnull))thenOn NS_REFINED_FOR_SWIFT;
 
 #ifndef __cplusplus
 /**
@@ -85,7 +113,7 @@ extern __nonnull dispatch_queue_t (^__nonnull PMKDefaultDispatchQueue)();
 
  @see catchWithPolicy
 */
-- (AnyPromise * __nonnull(^ __nonnull)(id __nonnull))catch;
+- (AnyPromise * __nonnull(^ __nonnull)(id __nonnull))catch NS_REFINED_FOR_SWIFT;
 #endif
 
 /**
@@ -95,7 +123,7 @@ extern __nonnull dispatch_queue_t (^__nonnull PMKDefaultDispatchQueue)();
 
  @see catch
 */
-- (AnyPromise * __nonnull(^ __nonnull)(PMKCatchPolicy, id __nonnull))catchWithPolicy;
+- (AnyPromise * __nonnull(^ __nonnull)(PMKCatchPolicy, id __nonnull))catchWithPolicy NS_REFINED_FOR_SWIFT;
 
 /**
  The provided block is executed when the receiver is resolved.
@@ -104,14 +132,14 @@ extern __nonnull dispatch_queue_t (^__nonnull PMKDefaultDispatchQueue)();
 
  @see finallyOn
 */
-- (AnyPromise * __nonnull(^ __nonnull)(dispatch_block_t __nonnull))finally;
+- (AnyPromise * __nonnull(^ __nonnull)(dispatch_block_t __nonnull))always NS_REFINED_FOR_SWIFT;
 
 /**
  The provided block is executed on the dispatch queue of your choice when the receiver is resolved.
 
  @see finally
  */
-- (AnyPromise * __nonnull(^ __nonnull)(dispatch_queue_t __nonnull, dispatch_block_t __nonnull))finallyOn;
+- (AnyPromise * __nonnull(^ __nonnull)(dispatch_queue_t __nonnull, dispatch_block_t __nonnull))alwaysOn NS_REFINED_FOR_SWIFT;
 
 /**
  The value of the asynchronous task this promise represents.
@@ -127,7 +155,7 @@ extern __nonnull dispatch_queue_t (^__nonnull PMKDefaultDispatchQueue)();
  @return If `resolved`, the object that was used to resolve this promise;
  if `pending`, nil.
 */
-- (id __nullable)value;
+@property (strong, readonly) id __nullable value;
 
 /**
  Creates a resolved promise.
@@ -176,7 +204,7 @@ extern __nonnull dispatch_queue_t (^__nonnull PMKDefaultDispatchQueue)();
 
  Use this method when wrapping asynchronous code that does *not* use
  promises so that this code can be used in promise chains. Generally,
- prefer resolverWithBlock: as the resulting code is more elegant.
+ prefer `promiseWithResolverBlock:` as the resulting code is more elegant.
 
     PMKResolver resolve;
     AnyPromise *promise = [[AnyPromise alloc] initWithResolver:&resolve];
@@ -208,9 +236,9 @@ extern __nonnull dispatch_queue_t (^__nonnull PMKDefaultDispatchQueue)();
 
 
 
-typedef void (^PMKAdapter)(id __nullable, NSError * __nullable);
-typedef void (^PMKIntegerAdapter)(NSInteger, NSError * __nullable);
-typedef void (^PMKBooleanAdapter)(BOOL, NSError * __nullable);
+typedef void (^PMKAdapter)(id __nullable, NSError * __nullable) NS_REFINED_FOR_SWIFT;
+typedef void (^PMKIntegerAdapter)(NSInteger, NSError * __nullable) NS_REFINED_FOR_SWIFT;
+typedef void (^PMKBooleanAdapter)(BOOL, NSError * __nullable) NS_REFINED_FOR_SWIFT;
 
 @interface AnyPromise (Adapters)
 

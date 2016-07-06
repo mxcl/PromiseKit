@@ -36,7 +36,7 @@ extension MFMessageComposeViewController {
 
 private class PMKMessageComposeViewControllerDelegate: NSObject, MFMessageComposeViewControllerDelegate, UINavigationControllerDelegate {
 
-    let (promise, fulfill, reject) = Promise<Void>.pendingPromise()
+    let (promise, fulfill, reject) = Promise<Void>.pending()
     var retainCycle: NSObject?
 
     @objc func messageComposeViewController(_ controller: MFMessageComposeViewController, didFinishWith result: MessageComposeResult) {

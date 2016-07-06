@@ -2,7 +2,6 @@ import Foundation
 import XCTest
 import PromiseKit
 
-
 private enum Error: ErrorProtocol {
     case dummy
 }
@@ -18,10 +17,10 @@ class ErrorHandlingTests_Swift: XCTestCase {
         PMKUnhandledErrorHandler = oldHandler
     }
 
-    private func twice(@noescape _ body: (Promise<Int>, XCTestExpectation) -> Void) {
+    private func twice(body: @noescape (Promise<Int>, XCTestExpectation) -> Void) {
         autoreleasepool {
             let ex = expectation(withDescription: "Sealed")
-            body(Promise<Int>(error: Error.dummy), ex)
+            body(Promise<Int>.resolved(error: Error.dummy), ex)
         }
         waitForExpectations(withTimeout: 1, handler: nil)
 
@@ -52,7 +51,7 @@ class ErrorHandlingTests_Swift: XCTestCase {
             PMKUnhandledErrorHandler = { err in
                 XCTFail()
             }
-            promise.error { error in
+            promise.catch { error in
                 ex.fulfill()
             }
         }
@@ -64,8 +63,8 @@ class ErrorHandlingTests_Swift: XCTestCase {
             PMKUnhandledErrorHandler = { err in
                 XCTFail()
             }
-            promise.recover { error -> Promise<Int> in
-                return Promise(1)
+            _ = promise.recover { error -> Promise<Int> in
+                return Promise.resolved(value: 1)
             }.always {
                 ex.fulfill()
             }
@@ -78,7 +77,7 @@ class ErrorHandlingTests_Swift: XCTestCase {
             PMKUnhandledErrorHandler = { err in
                 ex.fulfill()
             }
-            promise.recover { error -> Int in
+            _ = promise.recover { error -> Int in
                 throw error
             }
         }
@@ -110,21 +109,8 @@ class ErrorHandlingTests_Swift: XCTestCase {
                 XCTFail()
             }.always {
                 ex1.fulfill()
-            }.error { err in
+            }.catch { err in
                 ex2.fulfill()
-            }
-        }
-    }
-
-    // a temporary alias `onError` exists for the `error` function
-    func test7() {
-        twice { promise, ex in
-            PMKUnhandledErrorHandler = { err in
-                XCTFail()
-            }
-
-            promise.onError { error in
-                ex.fulfill()
             }
         }
     }
@@ -138,17 +124,17 @@ class ErrorHandlingTests_Swift: XCTestCase {
             XCTFail()
         }
 
-        let (p, _, r) = Promise<Void>.pendingPromise()
+        let (p, _, r) = Promise<Void>.pending()
 
         let ex1 = expectation(withDescription: "")
         let ex2 = expectation(withDescription: "")
         let ex3 = expectation(withDescription: "")
         let ex4 = expectation(withDescription: "")
 
-        after(0.1).then { _ -> Void in r(Error.test); ex1.fulfill() }
-        after(0.15).then { _ -> Void in r(Error.test); ex2.fulfill() }.always { ex3.fulfill() }
+        after(interval: 0.1).then { _ -> Void in r(Error.test); ex1.fulfill() }
+        after(interval: 0.15).then { _ -> Void in r(Error.test); ex2.fulfill() }.always(execute: ex3.fulfill)
 
-        p.error { error in
+        p.catch { error in
             ex4.fulfill()
         }
 
@@ -166,12 +152,10 @@ class ErrorHandlingTests_Swift: XCTestCase {
             case test
         }
 
-        _ = Promise<Void> { _, reject in
-            after(0.1).then {
+        Promise<Void> { _, reject in
+            after(interval: 0.1).then {
                 throw Error.test
-            }.error { err in
-                reject(err)
-            }
+            }.catch(execute: reject)
         }
 
         waitForExpectations(withTimeout: 1, handler: nil)
@@ -192,11 +176,11 @@ class ErrorHandlingTests_Swift: XCTestCase {
             throw Error.test
         }
 
-        XCTAssertTrue(p.rejected)
+        XCTAssertTrue(p.isRejected)
 
         let anyp = AnyPromise(bound: p)
 
-        p.error { err in
+        p.catch { err in
             ex1.fulfill()
         }
 

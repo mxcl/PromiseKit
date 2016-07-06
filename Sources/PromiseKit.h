@@ -1,15 +1,31 @@
-#if defined(__cplusplus)
-  #import <dispatch/dispatch.h>
-#else
-  #import <dispatch/queue.h>
-#endif
-#import <Foundation/NSDate.h>
-#import <Foundation/NSObject.h>
+#import <Foundation/NSObjCRuntime.h>
 #import <PromiseKit/AnyPromise.h>
-#import <PromiseKit/NSError+Cancellation.h>
-#import <PromiseKit/Umbrella.h>
+#import <Foundation/NSObject.h>
+#import <Foundation/NSDate.h>
+#import <dispatch/dispatch.h>
 
+FOUNDATION_EXPORT double PromiseKitVersionNumber;
+FOUNDATION_EXPORT const unsigned char PromiseKitVersionString[];
 
+extern NSString * __nonnull const PMKErrorDomain;
+
+#define PMKFailingPromiseIndexKey @"PMKFailingPromiseIndexKey"
+#define PMKURLErrorFailingURLResponseKey @"PMKURLErrorFailingURLResponseKey"
+#define PMKURLErrorFailingDataKey @"PMKURLErrorFailingDataKey"
+#define PMKURLErrorFailingStringKey @"PMKURLErrorFailingStringKey"
+#define PMKJSONErrorJSONObjectKey @"PMKJSONErrorJSONObjectKey"
+#define PMKJoinPromisesKey @"PMKJoinPromisesKey"
+
+#define PMKUnexpectedError 1l
+#define PMKUnknownError 2l
+#define PMKInvalidUsageError 3l
+#define PMKAccessDeniedError 4l
+#define PMKOperationCancelled 5l
+#define PMKNotFoundError 6l
+#define PMKJSONError 7l
+#define PMKOperationFailed 8l
+#define PMKTaskError 9l
+#define PMKJoinError 10l
 
 /**
  @return A new promise that resolves after the specified duration.
@@ -22,7 +38,7 @@
         //…
     });
 */
-extern AnyPromise * __nonnull PMKAfter(NSTimeInterval duration);
+extern AnyPromise * __nonnull PMKAfter(NSTimeInterval duration) NS_REFINED_FOR_SWIFT;
 
 
 
@@ -54,7 +70,7 @@ extern AnyPromise * __nonnull PMKAfter(NSTimeInterval duration);
  @see PMKJoin
 
 */
-extern AnyPromise * __nonnull PMKWhen(id __nonnull input);
+extern AnyPromise * __nonnull PMKWhen(id __nonnull input) NS_REFINED_FOR_SWIFT;
 
 
 
@@ -89,7 +105,7 @@ extern AnyPromise * __nonnull PMKWhen(id __nonnull input);
 
  @see when
 */
-AnyPromise *__nonnull PMKJoin(NSArray * __nonnull promises);
+AnyPromise *__nonnull PMKJoin(NSArray * __nonnull promises) NS_REFINED_FOR_SWIFT;
 
 
 
@@ -154,7 +170,7 @@ extern void PMKSetUnhandledExceptionHandler(NSError * __nullable (^__nonnull han
 
  @see dispatch_async
 */
-extern AnyPromise * __nonnull dispatch_promise(id __nonnull block);
+extern AnyPromise * __nonnull dispatch_promise(id __nonnull block) NS_SWIFT_UNAVAILABLE("Use our `DispatchQueue.async` override instead");
 
 
 
@@ -173,7 +189,7 @@ extern AnyPromise * __nonnull dispatch_promise(id __nonnull block);
 
  @see dispatch_promise
 */
-extern AnyPromise * __nonnull dispatch_promise_on(dispatch_queue_t __nonnull queue, id __nonnull block);
+extern AnyPromise * __nonnull dispatch_promise_on(dispatch_queue_t __nonnull queue, id __nonnull block) NS_SWIFT_UNAVAILABLE("Use our `DispatchQueue.async` override instead");
 
 
 
@@ -188,6 +204,20 @@ extern AnyPromise * __nonnull dispatch_promise_on(dispatch_queue_t __nonnull que
 #define PMKHTTPURLResponseIsJSON(rsp) [@[@"application/json", @"text/json", @"text/javascript", @"application/x-javascript", @"application/javascript"] containsObject:[rsp MIMEType]]
 #define PMKHTTPURLResponseIsImage(rsp) [@[@"image/tiff", @"image/jpeg", @"image/gif", @"image/png", @"image/ico", @"image/x-icon", @"image/bmp", @"image/x-bmp", @"image/x-xbitmap", @"image/x-win-bitmap"] containsObject:[rsp MIMEType]]
 #define PMKHTTPURLResponseIsText(rsp) [[rsp MIMEType] hasPrefix:@"text/"]
+
+/**
+ The default queue for all calls to `then`, `catch` etc. is the main queue.
+
+ By default this returns dispatch_get_main_queue()
+ */
+extern __nonnull dispatch_queue_t PMKDefaultDispatchQueue();
+
+/**
+ You may alter the default dispatch queue, but you may only alter it once, and you must alter it before any `then`, etc. calls are made in your app.
+ 
+ The primary motivation for this function is so that your tests can operate off the main thread preventing dead-locking, or with `zalgo` to speed them up.
+*/
+extern void PMKSetDefaultDispatchQueue(__nonnull dispatch_queue_t);
 
 
 
@@ -250,3 +280,23 @@ extern AnyPromise * __nonnull dispatch_promise_on(dispatch_queue_t __nonnull que
     #import <PromiseKit/UIViewController+AnyPromise.h>
   #endif
 #endif
+
+
+#if !defined(SWIFT_PASTE)
+# define SWIFT_PASTE_HELPER(x, y) x##y
+# define SWIFT_PASTE(x, y) SWIFT_PASTE_HELPER(x, y)
+#endif
+
+#if !defined(SWIFT_EXTENSION)
+# define SWIFT_EXTENSION(M) SWIFT_PASTE(M##_Swift_, __LINE__)
+#endif
+
+@interface NSError (SWIFT_EXTENSION(PromiseKit))
++ (NSError * __nonnull)cancelledError;
++ (void)registerCancelledErrorDomain:(NSString * __nonnull)domain code:(NSInteger)code;
+@property (nonatomic, readonly) BOOL isCancelled;
+@end
+
+#undef SWIFT_PASTE_HELPER
+#undef SWIFT_PASTE
+#undef SWIFT_EXTENSION

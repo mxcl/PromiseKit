@@ -35,7 +35,7 @@ class Test_NSURLSession_Swift: XCTestCase {
 
         let ex = expectation(withDescription: "")
 
-        after(0.1).then {
+        after(interval: 0.1).then {
             URLSession.GET("http://example.com")
         }.then { x -> Void in
             XCTAssertEqual(x, dummy)

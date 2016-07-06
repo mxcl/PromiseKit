@@ -1,5 +1,3 @@
-import PromiseKit
-import UIKit
 import XCTest
 
 class UITest_UIImagePickerController_Swift: PMKiOSUITestCase {
@@ -13,14 +11,15 @@ class UITest_UIImagePickerController_Swift: PMKiOSUITestCase {
         XCTAssertTrue(value)
     }
 
-#if false   // XCUITesting doesn’t tap the Choose button :/
+#if false
     func test_fulfills_with_edited_image() {
         let app = XCUIApplication()
-        let tablesQuery = app.tables
-        tablesQuery.staticTexts["2"].tap()
-        tablesQuery.buttons["Moments"].tap()
-        app.collectionViews.childrenMatchingType(.Cell).matchingIdentifier("Photo, Landscape, August 08, 2012, 9:52 AM").elementBoundByIndex(0).tap()
-        app.windows.childrenMatchingType(.Other).element.tap()
+        app.tables.cells.staticTexts["2"].tap()
+        app.tables.children(matching: .cell).element(boundBy: 1).tap()
+        app.collectionViews.children(matching: .cell).element(boundBy: 0).tap()
+
+        // XCUITesting fails to tap this button, hence this test disabled
+        app.children(matching: .window).element(boundBy: 0).buttons["Choose"].forceTap()
 
         XCTAssertTrue(value)
     }
@@ -30,8 +29,8 @@ class UITest_UIImagePickerController_Swift: PMKiOSUITestCase {
         let app = XCUIApplication()
         let tablesQuery = app.tables
         tablesQuery.staticTexts["3"].tap()
-        tablesQuery.children(matching: .cell).element(boundBy: 0).tap()
-        app.collectionViews.children(matching: .cell).matching(Predicate(format: "SELF.label BEGINSWITH %@", argumentArray: ["Photo, Landscape, August 08, 2012"])).element(boundBy: 0).tap()
+        tablesQuery.children(matching: .cell).element(boundBy: 1).tap()
+        app.collectionViews.children(matching: .cell).element(boundBy: 0).tap()
 
         XCTAssertTrue(value)
     }
@@ -40,9 +39,22 @@ class UITest_UIImagePickerController_Swift: PMKiOSUITestCase {
         let app = XCUIApplication()
         let tablesQuery = app.tables
         tablesQuery.staticTexts["4"].tap()
-        tablesQuery.buttons["Moments"].tap()
-        app.collectionViews.children(matching: .cell).matching(Predicate(format: "SELF.label BEGINSWITH %@", argumentArray: ["Photo, Landscape, August 08, 2012"])).element(boundBy: 0).tap()
+        tablesQuery.children(matching: .cell).element(boundBy: 1).tap()
+        app.collectionViews.children(matching: .cell).element(boundBy: 0).tap()
 
         XCTAssertTrue(value)
+    }
+}
+
+
+extension XCUIElement {
+    func forceTap() {
+        if self.isHittable {
+            self.tap()
+        }
+        else {
+            let coordinate: XCUICoordinate = self.coordinate(withNormalizedOffset: CGVector(dx: 0, dy: 0))
+            coordinate.tap()
+        }
     }
 }

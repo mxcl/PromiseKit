@@ -51,7 +51,7 @@ class Test_CLGeocoder_Swift: XCTestCase {
     func test_reverseGeocodeLocation() {
         class MockGeocoder: CLGeocoder {
             private override func reverseGeocodeLocation(_ location: CLLocation, completionHandler: CLGeocodeCompletionHandler) {
-                after(0.0).then {
+                after(interval: 0).then {
                     completionHandler([dummyPlacemark], nil)
                 }
             }
@@ -68,7 +68,7 @@ class Test_CLGeocoder_Swift: XCTestCase {
     func test_geocodeAddressDictionary() {
         class MockGeocoder: CLGeocoder {
             private override func geocodeAddressDictionary(_ addressDictionary: [NSObject : AnyObject], completionHandler: CLGeocodeCompletionHandler) {
-                after(0.0).then {
+                after(interval: 0.0).then {
                     completionHandler([dummyPlacemark], nil)
                 }
             }
@@ -85,7 +85,7 @@ class Test_CLGeocoder_Swift: XCTestCase {
     func test_geocodeAddressString() {
         class MockGeocoder: CLGeocoder {
             override func geocodeAddressString(_ addressString: String, completionHandler: CLGeocodeCompletionHandler) {
-                after(0.0).then {
+                after(interval: 0.0).then {
                     completionHandler([dummyPlacemark], nil)
                 }
             }
@@ -108,14 +108,14 @@ private let dummyPlacemark = CLPlacemark()
 
 extension CLLocationManager {
     @objc func pmk_startUpdatingLocation() {
-        after(0.1).then {
+        after(interval: 0.1).then {
             self.delegate!.locationManager?(self, didUpdateLocations: dummy)
         }
     }
 
 #if os(iOS)
     @objc func pmk_requestWhenInUseAuthorization() {
-        after(0.1).then {
+        after(interval: 0.1).then {
             self.delegate!.locationManager?(self, didChangeAuthorization: .authorizedWhenInUse)
         }
     }

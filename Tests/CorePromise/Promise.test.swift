@@ -1,6 +1,18 @@
 import PromiseKit
 import XCTest
 
+private enum Error: ErrorProtocol, CancellableError {
+    case Dummy
+    case Cancel
+
+    var isCancelled: Bool {
+        switch self {
+            case .Dummy: return false
+            case .Cancel: return true
+        }
+    }
+}
+
 class PromiseTestCase: XCTestCase {
     override func tearDown() {
         PMKUnhandledErrorHandler = { _ in }
@@ -9,8 +21,8 @@ class PromiseTestCase: XCTestCase {
     // can return AnyPromise (that fulfills) in then handler
     func test1() {
         let ex = expectation(withDescription: "")
-        Promise(1).then { _ -> AnyPromise in
-            return AnyPromise(bound: after(0).then{ 1 })
+        Promise.resolved(value: 1).then { _ -> AnyPromise in
+            return AnyPromise(bound: after(interval: 0).then{ 1 })
         }.then { x -> Void in
             XCTAssertEqual(x as? Int, 1)
             ex.fulfill()
@@ -22,39 +34,24 @@ class PromiseTestCase: XCTestCase {
     func test2() {
         let ex = expectation(withDescription: "")
 
-        Promise(1).then { _ -> AnyPromise in
-            let promise = after(0.1).then{ throw NSError(domain: "a", code: 1, userInfo: nil) }
+        Promise.resolved(value: 1).then { _ -> AnyPromise in
+            let promise = after(interval: 0.1).then{ throw Error.Dummy }
             return AnyPromise(bound: promise)
-        }.error { err in
+        }.catch { err in
             ex.fulfill()
         }
         waitForExpectations(withTimeout: 1, handler: nil)
     }
 
-    func testErrorOnQueue1() {
+    func testCatchOnQueue() {
         let ex = expectation(withDescription: "")
 
-        Promise(1).then { _ -> AnyPromise in
-            let promise = after(0.1).then{ throw NSError(domain: "a", code: 1, userInfo: nil) }
+        let queue = DispatchQueue.global()
+
+        Promise.resolved(value: 1).then { _ -> AnyPromise in
+            let promise = after(interval: 0.1).then{ throw Error.Dummy }
             return AnyPromise(bound: promise)
-        }.errorOnQueue { err in
-            let currentQueueLabel = String(cString: __dispatch_queue_get_label(nil))
-            XCTAssertEqual(currentQueueLabel, PMKDefaultDispatchQueue().label)
-            ex.fulfill()
-        }
-
-        waitForExpectations(withTimeout: 1, handler: nil)
-    }
-
-    func testErrorOnQueue2() {
-        let ex = expectation(withDescription: "")
-
-        let queue = DispatchQueue.global(attributes: DispatchQueue.GlobalAttributes.qosDefault)
-
-        Promise(1).then { _ -> AnyPromise in
-            let promise = after(0.1).then{ throw NSError(domain: "a", code: 1, userInfo: nil) }
-            return AnyPromise(bound: promise)
-        }.errorOnQueue(on: queue) { err in
+        }.catch(on: queue) { err in
             let currentQueueLabel = String(cString: __dispatch_queue_get_label(nil))
             XCTAssertEqual(currentQueueLabel, queue.label)
             ex.fulfill()
@@ -67,7 +64,7 @@ class PromiseTestCase: XCTestCase {
         let e1 = expectation(withDescription: "")
 
         //will crash if then doesn't protect handlers
-        stressDataRace(e1, stressFunction: { promise in
+        stressDataRace(expectation: e1, stressFunction: { promise in
             promise.then { s -> Void in
                 XCTAssertEqual("ok", s)
                 return
@@ -81,15 +78,15 @@ class PromiseTestCase: XCTestCase {
         let ex1 = expectation(withDescription: "")
 
         PMKUnhandledErrorHandler = { err in
-            XCTAssertTrue((err as NSError).cancelled);
+            XCTAssertTrue((err as? CancellableError)?.isCancelled ?? false);
             ex1.fulfill()
         }
 
-        after(0).then { _ in
-            throw NSError(domain: PMKErrorDomain, code: PMKOperationCancelled, userInfo: nil)
-        }.then { _ -> Void in
+        after(interval: 0).then { _ in
+            throw Error.Cancel
+        }.then {
             XCTFail()
-        }.error { _ -> Void in
+        }.catch { _ in
             XCTFail()
         }
 
@@ -101,19 +98,19 @@ class PromiseTestCase: XCTestCase {
         let ex2 = expectation(withDescription: "")
 
         PMKUnhandledErrorHandler = { err in
-            XCTAssertTrue((err as NSError).cancelled);
+            XCTAssertTrue((err as NSError).isCancelled);
             ex2.fulfill()
         }
 
-        after(0).then { _ in
+        after(interval: 0).then { _ in
             throw NSError(domain: PMKErrorDomain, code: PMKOperationCancelled, userInfo: nil)
         }.recover { err -> Void in
             ex1.fulfill()
-            XCTAssertTrue((err as NSError).cancelled)
+            XCTAssertTrue((err as NSError).isCancelled)
             throw err
-        }.then { _ -> Void in
+        }.then {
             XCTFail()
-        }.error { _ -> Void in
+        }.catch { _ in
             XCTFail()
         }
 
@@ -123,9 +120,9 @@ class PromiseTestCase: XCTestCase {
     func testCatchCancellation() {
         let ex = expectation(withDescription: "")
 
-        after(0).then { _ in
+        after(interval: 0).then { _ in
             throw NSError(domain: PMKErrorDomain, code: PMKOperationCancelled, userInfo: nil)
-        }.error(policy: .allErrors) { err -> Void in
+        }.catch(policy: .allErrors) { err in
             ex.fulfill()
         }
 
@@ -135,13 +132,13 @@ class PromiseTestCase: XCTestCase {
     func testThensAreSequentialForLongTime() {
         var values = [Int]()
         let ex = expectation(withDescription: "")
-        var promise = dispatch_promise { 0 }
+        var promise = DispatchQueue.global().async{ 0 }
         let N = 1000
         for x in 1..<N {
             promise = promise.then { y -> Promise<Int> in
                 values.append(y)
                 XCTAssertEqual(x - 1, y)
-                return dispatch_promise { x }
+                return DispatchQueue.global().async { x }
             }
         }
         promise.then { x -> Void in
@@ -150,5 +147,28 @@ class PromiseTestCase: XCTestCase {
             ex.fulfill()
         }
         waitForExpectations(withTimeout: 10, handler: nil)
+    }
+
+    func testReturningPreviousPromiseWorks() {
+
+        // regression test because we were doing this wrong
+        // in our A+ tests implementation for spec: 2.3.1
+
+        do {
+            let promise1 = Promise.fulfilled()
+            let promise2 = promise1.then(on: zalgo) { promise1 }
+            promise2.catch(on: zalgo) { _ in XCTFail() }
+        }
+        do {
+            enum Error: ErrorProtocol { case dummy }
+
+            let promise1 = Promise<Void>.resolved(error: Error.dummy)
+            let promise2 = promise1.recover(on: zalgo) { _ in promise1 }
+            promise2.catch(on: zalgo) { err in
+                if case PromiseKit.Error.returnedSelf = err {
+                    XCTFail()
+                }
+            }
+        }
     }
 }

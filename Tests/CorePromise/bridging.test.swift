@@ -5,53 +5,53 @@ import XCTest
 class BridgingTestCase_Swift: XCTestCase {
     func testCanBridgeAnyObject() {
         let sentinel = NSURLRequest()
-        let p = Promise(sentinel)
+        let p = Promise.resolved(value: sentinel)
         let ap = AnyPromise(bound: p)
 
-        XCTAssertEqual(ap.value(forKey: "value") as? URLRequest, sentinel)
+        XCTAssertEqual(ap.value(forKey: "value") as? NSURLRequest, sentinel)
     }
 
     func testCanBridgeOptional() {
         let sentinel: NSURLRequest? = NSURLRequest()
-        let p = Promise(sentinel)
+        let p = Promise.resolved(value: sentinel)
         let ap = AnyPromise(bound: p)
 
-        XCTAssertEqual(ap.value(forKey: "value") as? URLRequest, sentinel!)
+        XCTAssertEqual(ap.value(forKey: "value") as? NSURLRequest, sentinel!)
     }
 
     func testCanBridgeSwiftArray() {
-        let sentinel = [NSString(),NSString(),NSString()]
-        let p = Promise(sentinel)
+        let sentinel = [NSString(), NSString(), NSString()]
+        let p = Promise.resolved(value: sentinel)
         let ap = AnyPromise(bound: p)
 
         XCTAssertEqual(ap.value(forKey: "value") as! [NSString], sentinel)
     }
 
     func testCanBridgeSwiftDictionary() {
-        let sentinel = [NSString():NSString()]
-        let p = Promise(sentinel)
+        let sentinel = [NSString(): NSString()]
+        let p = Promise.resolved(value: sentinel)
         let ap = AnyPromise(bound: p)
 
-        XCTAssertEqual(ap.value(forKey: "value") as! [NSString:NSString], sentinel)
+        XCTAssertEqual(ap.value(forKey: "value") as! [NSString: NSString], sentinel)
     }
 
     func testCanBridgeInt() {
         let sentinel = 3
-        let p = Promise(sentinel)
+        let p = Promise.resolved(value: sentinel)
         let ap = AnyPromise(bound: p)
         XCTAssertEqual(ap.value(forKey: "value") as? Int, sentinel)
     }
 
     func testCanBridgeString() {
         let sentinel = "a"
-        let p = Promise(sentinel)
+        let p = Promise.resolved(value: sentinel)
         let ap = AnyPromise(bound: p)
         XCTAssertEqual(ap.value(forKey: "value") as? String, sentinel)
     }
 
     func testCanBridgeBool() {
         let sentinel = true
-        let p = Promise(sentinel)
+        let p = Promise.resolved(value: sentinel)
         let ap = AnyPromise(bound: p)
         XCTAssertEqual(ap.value(forKey: "value") as? Bool, sentinel)
     }
@@ -60,7 +60,7 @@ class BridgingTestCase_Swift: XCTestCase {
         let ex = expectation(withDescription: "")
 
         firstly {
-            Promise(1)
+            Promise.resolved(value: 1)
         }.then { _ -> AnyPromise in
             return PromiseBridgeHelper().value(forKey: "bridge2") as! AnyPromise
         }.then { value -> Void in
@@ -105,7 +105,7 @@ class BridgingTestCase_Swift: XCTestCase {
 // for bridging.test.m
 @objc(PMKPromiseBridgeHelper) class PromiseBridgeHelper: NSObject {
     @objc func bridge1() -> AnyPromise {
-        let p = after(0.01)
+        let p = after(interval: 0.01)
         return AnyPromise(bound: p)
     }
 }

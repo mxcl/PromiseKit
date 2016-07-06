@@ -15,7 +15,7 @@ class Test_UIAlertView_Swift: UIKitTestCase {
             XCTAssertEqual(x, 1)
             ex.fulfill()
         }
-        after(0.5).then {
+        after(interval: 0.1).then {
             alert.dismiss(withClickedButtonIndex: 1, animated: false)
         }
         waitForExpectations(withTimeout: 3, handler: nil)
@@ -29,13 +29,13 @@ class Test_UIAlertView_Swift: UIKitTestCase {
         alert.addButton(withTitle: "0")
         alert.addButton(withTitle: "1")
         alert.cancelButtonIndex = alert.addButton(withTitle: "2")
-        alert.promise().error(policy: .allErrors) { err in
+        alert.promise().catch(policy: .allErrors) { err in
             guard let err = err as? UIAlertView.Error else { return XCTFail() }
-            XCTAssertTrue(err == .Cancelled)
-            XCTAssertTrue(err.cancelled)
+            XCTAssertTrue(err == .cancelled)
+            XCTAssertTrue(err.isCancelled)
             ex.fulfill()
         }
-        after(0.5).then {
+        after(interval: 0.1).then {
             alert.dismiss(withClickedButtonIndex: 2, animated: false)
         }
         waitForExpectations(withTimeout: 3, handler: nil)
@@ -50,7 +50,7 @@ class Test_UIAlertView_Swift: UIKitTestCase {
         alert.promise().then { _ in
             ex.fulfill()
         }
-        after(0.5).then {
+        after(interval: 0.1).then {
             alert.dismiss(withClickedButtonIndex: 0, animated: false)
         }
         waitForExpectations(withTimeout: 3, handler: nil)
@@ -62,10 +62,10 @@ class Test_UIAlertView_Swift: UIKitTestCase {
 
         let alert = UIAlertView()
         alert.cancelButtonIndex = alert.addButton(withTitle: "0")
-        alert.promise().error(policy: .allErrors) { _ in
+        alert.promise().catch(policy: .allErrors) { _ in
             ex.fulfill()
         }
-        after(0.5).then {
+        after(interval: 0.1).then {
             alert.dismiss(withClickedButtonIndex: 0, animated: false)
         }
         waitForExpectations(withTimeout: 3, handler: nil)

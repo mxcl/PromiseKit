@@ -21,7 +21,7 @@ __attribute__((objc_subclassing_restricted))
     promise.then(^{
         [ex fulfill];
     });
-    [self waitForExpectationsWithTimeout:10 handler:nil];
+    [self waitForExpectationsWithTimeout:600 handler:nil];
 }
 
 @end

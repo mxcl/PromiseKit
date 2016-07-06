@@ -9,7 +9,7 @@ class Test_UIImagePickerController_Swift: XCTestCase {
 
             override func present(_ vc: UIViewController, animated flag: Bool, completion: (() -> Void)?) {
                 let ipc = vc as! UIImagePickerController
-                after(0.05).always {
+                after(interval: 0.05).always {
                     ipc.delegate?.imagePickerController?(ipc, didFinishPickingMediaWithInfo: self.info)
                 }
             }
@@ -34,7 +34,7 @@ class Test_UIImagePickerController_Swift: XCTestCase {
 
             override func present(_ vc: UIViewController, animated flag: Bool, completion: (() -> Void)?) {
                 let ipc = vc as! UIImagePickerController
-                after(0.05).always {
+                after(interval: 0.05).always {
                     ipc.delegate?.imagePickerController?(ipc, didFinishPickingMediaWithInfo: self.info)
                 }
             }

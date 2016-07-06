@@ -32,28 +32,28 @@ extension UIActionSheet {
         return proxy.promise
     }
 
-    public enum Error: CancellableErrorType {
-        case Cancelled
+    public enum Error: CancellableError {
+        case cancelled
 
-        public var cancelled: Bool {
+        public var isCancelled: Bool {
             switch self {
-                case .Cancelled: return true
+                case .cancelled: return true
             }
         }
     }
 }
 
 private class PMKActionSheetDelegate: NSObject, UIActionSheetDelegate {
-    let (promise, fulfill, reject) = Promise<Int>.pendingPromise()
+    let (promise, fulfill, reject) = Promise<Int>.pending()
     var retainCycle: NSObject?
 
-    @objc func actionSheet(actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {
+    @objc func actionSheet(_ actionSheet: UIActionSheet, didDismissWithButtonIndex buttonIndex: Int) {
         defer { retainCycle = nil }
 
         if buttonIndex != actionSheet.cancelButtonIndex {
             fulfill(buttonIndex)
         } else {
-            reject(UIActionSheet.Error.Cancelled)
+            reject(UIActionSheet.Error.cancelled)
         }
     }
 }

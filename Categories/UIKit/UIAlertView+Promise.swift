@@ -33,26 +33,26 @@ extension UIAlertView {
         return proxy.promise
     }
 
-    public enum Error: CancellableErrorType {
-        case Cancelled
+    public enum Error: CancellableError {
+        case cancelled
 
-        public var cancelled: Bool {
+        public var isCancelled: Bool {
             switch self {
-                case .Cancelled: return true
+                case .cancelled: return true
             }
         }
     }
 }
 
 private class PMKAlertViewDelegate: NSObject, UIAlertViewDelegate {
-    let (promise, fulfill, reject) = Promise<Int>.pendingPromise()
+    let (promise, fulfill, reject) = Promise<Int>.pending()
     var retainCycle: NSObject?
 
-    @objc func alertView(alertView: UIAlertView, didDismissWithButtonIndex buttonIndex: Int) {
+    @objc func alertView(_ alertView: UIAlertView, didDismissWithButtonIndex buttonIndex: Int) {
         if buttonIndex != alertView.cancelButtonIndex {
             fulfill(buttonIndex)
         } else {
-            reject(UIAlertView.Error.Cancelled)
+            reject(UIAlertView.Error.cancelled)
         }
     }
 }

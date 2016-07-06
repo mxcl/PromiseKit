@@ -12,6 +12,9 @@ class App: UITableViewController, UIApplicationDelegate {
         window!.rootViewController = self
         window!.backgroundColor = UIColor.purple()
         window!.makeKeyAndVisible()
+
+        UIView.setAnimationsEnabled(false)
+
         return true
     }
 
@@ -33,11 +36,11 @@ class App: UITableViewController, UIApplicationDelegate {
         switch Row(indexPath)! {
         case .ImagePickerCancel:
             let p: Promise<UIImage> = promiseViewController(UIImagePickerController())
-            p.error(policy: .allErrors) { error in
-                guard (error as! CancellableErrorType).cancelled else { abort() }
+            p.catch(policy: .allErrors) { error in
+                guard (error as! CancellableError).isCancelled else { abort() }
                 self.testSuceededSwitch.isOn = true
             }
-            p.error { error in
+            p.catch { error in
                 abort()
             }
         case .ImagePickerEditImage:
@@ -56,10 +59,14 @@ class App: UITableViewController, UIApplicationDelegate {
             }
         case .SocialComposeCancel:
             let composer = SLComposeViewController(forServiceType: SLServiceTypeFacebook)!
-            let p: Promise<Int> = promiseViewController(composer)
-            p.error(policy: .allErrors) { error in
-                guard (error as! CancellableErrorType).cancelled else { abort() }
-                self.testSuceededSwitch.isOn = true
+            let p = promiseViewController(composer)
+            print(p)
+            p.catch(policy: .allErrors) { error in
+                if (error as? CancellableError)?.isCancelled == true {
+                    self.testSuceededSwitch.isOn = true
+                } else {
+                    print(error)
+                }
             }
         }
     }
