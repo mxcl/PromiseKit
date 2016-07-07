@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = '10.9'
   s.watchos.deployment_target = '2.0'
   s.tvos.deployment_target = '9.0'
-  s.module_map = 'Sources/PMK.modulemap'
+  s.module_map = 'PromiseKit.modulemap'
   s.xcconfig = { 'SWIFT_INSTALL_OBJC_HEADER' => 'NO' }
 
   s.subspec 'Accounts' do |ss|
