@@ -970,7 +970,7 @@
 				63BCB8C61AD3279C000AF3D0 /* 2.3.4.swift */,
 			);
 			name = "Promises/A+ Specs";
-			path = "Promises:A+ Specs";
+			path = "A+ Specs";
 			sourceTree = "<group>";
 		};
 		63CA14C41AEA9E0C00223904 /* OS X */ = {
