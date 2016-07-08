@@ -58,9 +58,9 @@ public class URLDataPromise: Promise<Data> {
 
                 if let error = error {
                     reject(URLError.underlyingCocoaError(request, data, rsp, error))
-                } else if let data = data, rsp = rsp as? HTTPURLResponse where rsp.statusCode >= 200 && rsp.statusCode < 300 {
+                } else if let data = data, let rsp = rsp as? HTTPURLResponse, rsp.statusCode >= 200, rsp.statusCode < 300 {
                     fulfill(data)
-                } else if let data = data where !(rsp is HTTPURLResponse) {
+                } else if let data = data, !(rsp is HTTPURLResponse) {
                     fulfill(data)
                 } else {
                     reject(URLError.badResponse(request, data, rsp))
@@ -77,7 +77,7 @@ public class URLDataPromise: Promise<Data> {
     extension URLDataPromise {
         public func asImage() -> Promise<UIImage> {
             return then(on: waldo) { data -> UIImage in
-                guard let img = UIImage(data: data), cgimg = img.cgImage else {
+                guard let img = UIImage(data: data), let cgimg = img.cgImage else {
                     throw URLError.invalidImageData(self.URLRequest, data)
                 }
                 return UIImage(cgImage: cgimg, scale: img.scale, orientation: img.imageOrientation)

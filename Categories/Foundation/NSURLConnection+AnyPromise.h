@@ -16,7 +16,7 @@
  
  And then in your sources:
 
-    #import <PromiseKit/PromiseKit.h>
+    @import PromiseKit;
 
  PromiseKit automatically deserializes the raw HTTP data response into the
  appropriate rich data type based on the mime type the server provides.

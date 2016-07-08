@@ -51,7 +51,7 @@ AnyPromise *PMKWhen(id promises) {
             if (![promise isKindOfClass:[AnyPromise class]])
                 promise = [AnyPromise promiseWithValue:promise];
 
-            [promise pipe:^(id value){
+            [promise __pipe:^(id value){
                 if (progress.fractionCompleted >= 1)
                     return;
 

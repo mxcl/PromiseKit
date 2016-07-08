@@ -5,7 +5,7 @@ import XCTest
 class Test_UIActionSheet_Swift: UIKitTestCase {
     // fulfills with buttonIndex
     func test1() {
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
 
         let sheet = UIActionSheet()
         sheet.addButton(withTitle: "0")
@@ -18,12 +18,12 @@ class Test_UIActionSheet_Swift: UIKitTestCase {
         after(interval: 0.1).then {
             sheet.dismiss(withClickedButtonIndex: 1, animated: false)
         }
-        waitForExpectations(withTimeout: 3)
+        waitForExpectations(timeout: 3)
     }
 
     // cancel button presses are cancelled errors
     func test2() {
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
 
         let sheet = UIActionSheet()
         sheet.addButton(withTitle: "0")
@@ -38,12 +38,12 @@ class Test_UIActionSheet_Swift: UIKitTestCase {
         after(interval: 0.1).then {
             sheet.dismiss(withClickedButtonIndex: 2, animated: false)
         }
-        waitForExpectations(withTimeout: 3)
+        waitForExpectations(timeout: 3)
     }
 
     // single button UIActionSheets don't get considered cancelled
     func test3() {
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
 
         let sheet = UIActionSheet()
         sheet.addButton(withTitle: "0")
@@ -53,12 +53,12 @@ class Test_UIActionSheet_Swift: UIKitTestCase {
         after(interval: 0.1).then {
             sheet.dismiss(withClickedButtonIndex: 0, animated: false)
         }
-        waitForExpectations(withTimeout: 3)
+        waitForExpectations(timeout: 3)
     }
 
     // single button UIActionSheets don't get considered cancelled unless the cancelIndex is set
     func test4() {
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
 
         let sheet = UIActionSheet()
         sheet.cancelButtonIndex = sheet.addButton(withTitle: "0")
@@ -68,6 +68,6 @@ class Test_UIActionSheet_Swift: UIKitTestCase {
         after(interval: 0.1).then {
             sheet.dismiss(withClickedButtonIndex: 0, animated: false)
         }
-        waitForExpectations(withTimeout: 3)
+        waitForExpectations(timeout: 3)
     }
 }

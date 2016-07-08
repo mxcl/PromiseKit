@@ -41,7 +41,7 @@ public class NotificationPromise: Promise<[String: Any]> {
         return (promise, promise.pending.fulfill)
     }
 
-    private override init(@noescape resolvers: (fulfill: ([String: Any]) -> Void, reject: (ErrorProtocol) -> Void) throws -> Void) {
+    private override init(resolvers: @noescape (fulfill: ([String: Any]) -> Void, reject: (ErrorProtocol) -> Void) throws -> Void) {
         super.init(resolvers: resolvers)
     }
 }

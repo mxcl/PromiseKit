@@ -48,7 +48,7 @@ extension Task {
     */
     public func promise(_ encoding: String.Encoding = String.Encoding.utf8) -> Promise<(String, String, Int)> {
         return promise().then(on: waldo) { (stdout: Data, stderr: Data, terminationStatus: Int) -> (String, String, Int) in
-            guard let out = String(bytes: stdout, encoding: encoding), err = String(bytes: stderr, encoding: encoding) else {
+            guard let out = String(bytes: stdout, encoding: encoding), let err = String(bytes: stderr, encoding: encoding) else {
                 throw Error.encoding(stdout: stdout, stderr: stderr)
             }
 
@@ -74,7 +74,7 @@ extension Task {
 
         launch()
 
-        return DispatchQueue.global().async {
+        return DispatchQueue.global().promise {
             self.waitUntilExit()
 
             let stdout = self.standardOutput!.fileHandleForReading.readDataToEndOfFile()

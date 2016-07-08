@@ -4,7 +4,7 @@ import XCTest
 
 class Test_NSObject_Swift: XCTestCase {
     func testKVO() {
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
 
         let foo = Foo()
         foo.observe(keyPath: "bar").then { (newValue: String) -> Void in
@@ -15,11 +15,11 @@ class Test_NSObject_Swift: XCTestCase {
         }
         foo.bar = "moo"
 
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
     }
 
     func testAfterlife() {
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
         var killme: NSObject!
 
         autoreleasepool {
@@ -39,12 +39,12 @@ class Test_NSObject_Swift: XCTestCase {
             }
         }
 
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
     }
 
     func testMultiObserveAfterlife() {
-        let ex1 = expectation(withDescription: "")
-        let ex2 = expectation(withDescription: "")
+        let ex1 = expectation(description: "")
+        let ex2 = expectation(description: "")
         var killme: NSObject!
 
         autoreleasepool {
@@ -66,7 +66,7 @@ class Test_NSObject_Swift: XCTestCase {
             }
         }
 
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
     }
 }
 

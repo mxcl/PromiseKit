@@ -13,12 +13,12 @@ class Test_SLRequest_Swift: XCTestCase {
             let params = ["foo": "bar"]
             let rq = SLRequest(forServiceType: SLServiceTypeTwitter, requestMethod: .GET, url: url, parameters: params)!
 
-            let ex = expectation(withDescription: "")
+            let ex = expectation(description: "")
             rq.promise().then { x -> Void in
                 XCTAssertEqual(x, NSData())
                 ex.fulfill()
             }
-            waitForExpectations(withTimeout: 1, handler: nil)
+            waitForExpectations(timeout: 1, handler: nil)
         }
     }
 }

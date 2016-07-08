@@ -150,7 +150,24 @@ extern id __nullable PMKHang(AnyPromise * __nonnull promise);
 */
 extern void PMKSetUnhandledExceptionHandler(NSError * __nullable (^__nonnull handler)(id __nullable));
 
+/**
+ If an error cascades through a promise chain and is not handled by any
+ `catch`, the unhandled error handler is called. The default logs all
+ non-cancelled errors.
 
+ This handler can only be set once, and must be set before any promises
+ are rejected in your application.
+
+     PMKSetUnhandledErrorHandler({ error in
+        mylogf("Unhandled error: \(error)")
+     })
+
+ - Warning: *Important* The handler is executed on an undefined queue.
+ - Warning: *Important* Don’t use promises in your handler, or you risk an infinite error loop.
+*/
+extern void PMKSetUnhandledErrorHandler(void (^__nonnull handler)(NSError * __nonnull));
+
+extern void PMKUnhandledErrorHandler(NSError * __nonnull error);
 
 /**
  Executes the provided block on a background queue.

@@ -106,7 +106,7 @@ private class AuthorizationCatcher: CLLocationManager, CLLocationManagerDelegate
     }
 }
 
-private func auther(_ requestAuthorizationType: CLLocationManager.RequestAuthorizationType) -> (CLLocationManager -> Void) {
+private func auther(_ requestAuthorizationType: CLLocationManager.RequestAuthorizationType) -> ((CLLocationManager) -> Void) {
 
     //PMKiOS7 guard #available(iOS 8, *) else { return }
     return { manager in
@@ -164,7 +164,7 @@ public class LocationPromise: Promise<CLLocation> {
         return (promise, promise.fulfill, promise.reject)
     }
 
-    private override init(@noescape resolvers: (fulfill: (CLLocation) -> Void, reject: (ErrorProtocol) -> Void) throws -> Void) {
+    private override init(resolvers: @noescape (fulfill: (CLLocation) -> Void, reject: (ErrorProtocol) -> Void) throws -> Void) {
         super.init(resolvers: resolvers)
     }
 }

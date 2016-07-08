@@ -53,7 +53,7 @@ public class PlacemarkPromise: Promise<CLPlacemark> {
 
     private var placemarks: [CLPlacemark]!
 
-    private class func go(@noescape _ body: (([CLPlacemark]?, NSError?) -> Void) -> Void) -> PlacemarkPromise {
+    private class func go(_ body: @noescape (([CLPlacemark]?, NSError?) -> Void) -> Void) -> PlacemarkPromise {
         var promise: PlacemarkPromise!
         promise = PlacemarkPromise { fulfill, reject in
             body { placemarks, error in
@@ -68,7 +68,7 @@ public class PlacemarkPromise: Promise<CLPlacemark> {
         return promise
     }
 
-    private override init(@noescape resolvers: (fulfill: (CLPlacemark) -> Void, reject: (ErrorProtocol) -> Void) throws -> Void) {
+    private override init(resolvers: @noescape (fulfill: (CLPlacemark) -> Void, reject: (ErrorProtocol) -> Void) throws -> Void) {
         super.init(resolvers: resolvers)
     }
 }

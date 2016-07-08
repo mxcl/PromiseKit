@@ -1,7 +1,7 @@
-#import <PromiseKit/PromiseKit.h>
 #import "UIAlertView+AnyPromise.h"
-@import UIKit;
+@import PromiseKit;
 @import XCTest;
+@import UIKit;
 
 @implementation Test_UIAlertView_ObjC: XCTestCase
 

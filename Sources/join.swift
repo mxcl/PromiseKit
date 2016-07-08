@@ -17,11 +17,11 @@ import Dispatch
  - Returns: A new promise that resolves once all the provided promises resolve.
  - SeeAlso: `PromiseKit.Error.join`
 */
-public func join<T>(_ promises: Promise<T>...) -> Promise<[T]> {
-    return join(promises)
+public func when<T>(resolved promises: Promise<T>...) -> Promise<[T]> {
+    return when(resolved: promises)
 }
 
-public func join<T>(_ promises: [Promise<T>]) -> Promise<[T]> {
+public func when<T>(resolved promises: [Promise<T>]) -> Promise<[T]> {
     guard !promises.isEmpty else { return Promise.resolved(value: []) }
   
     var countdown = promises.count
@@ -30,7 +30,7 @@ public func join<T>(_ promises: [Promise<T>]) -> Promise<[T]> {
 
     return Promise { fulfill, reject in
         for promise in promises {
-            promise.pipe { resolution in
+            promise.state.pipe { resolution in
                 __dispatch_barrier_sync(barrier) {
                     if case .rejected(_, let token) = resolution {
                         token.consumed = true  // the parent Error.Join consumes all
@@ -48,4 +48,14 @@ public func join<T>(_ promises: [Promise<T>]) -> Promise<[T]> {
             }
         }
     }
+}
+
+@available(*, deprecated, renamed: "when(resolved:)")
+public func join<T>(_ promises: Promise<T>...) -> Promise<[T]> {
+    return when(resolved: promises)
+}
+
+@available(*, deprecated, renamed: "when(resolved:)")
+public func join<T>(promises: [Promise<T>]) -> Promise<[T]> {
+    return when(resolved: promises)
 }

@@ -19,7 +19,7 @@ private func _when<T>(_ promises: [Promise<T>]) -> Promise<Void> {
     let barrier = DispatchQueue(label: "org.promisekit.barrier.when", attributes: .concurrent)
 
     for (index, promise) in promises.enumerated() {
-        promise.pipe { resolution in
+        promise.state.pipe { resolution in
             __dispatch_barrier_sync(barrier) {
                 switch resolution {
                 case .rejected(let error, let token):
@@ -60,10 +60,10 @@ private func _when<T>(_ promises: [Promise<T>]) -> Promise<Void> {
      }
 
  - Note: If *any* of the provided promises reject, the returned promise is immediately rejected with `Error.when` which wraps the failing promises's error.
- - Warning: In the event of rejection the other promises will continue to resolve and, as per any other promise, will either fulfill or reject. This is the right pattern for `getter` style asynchronous tasks, but often for `setter` tasks (eg. storing data on a server), you most likely will need to wait on all tasks and then act based on which have succeeded and which have failed, in such situations use `join`.
+ - Warning: In the event of rejection the other promises will continue to resolve and, as per any other promise, will either fulfill or reject. This is the right pattern for `getter` style asynchronous tasks, but often for `setter` tasks (eg. storing data on a server), you most likely will need to wait on all tasks and then act based on which have succeeded and which have failed, in such situations use `when(resolved:)`.
  - Parameter promises: The promises upon which to wait before the returned promise resolves.
  - Returns: A new promise that resolves when all the provided promises fulfill or one of the provided promises rejects.
- - SeeAlso: `join()`
+ - SeeAlso: `when(resolved:)`
  - SeeAlso: `PromiseKit.Error.when`
 */
 public func when<T>(fulfilled promises: [Promise<T>]) -> Promise<[T]> {
@@ -71,12 +71,12 @@ public func when<T>(fulfilled promises: [Promise<T>]) -> Promise<[T]> {
 }
 
 /// - See: `when`
-public func when<T>(_ promises: Promise<T>...) -> Promise<[T]> {
+public func when<T>(fulfilled promises: Promise<T>...) -> Promise<[T]> {
     return when(fulfilled: promises)
 }
 
 /// - See: `when`
-public func when(_ promises: Promise<Void>...) -> Promise<Void> {
+public func when(fulfilled promises: Promise<Void>...) -> Promise<Void> {
     return _when(promises)
 }
 
@@ -86,11 +86,14 @@ public func when(fulfilled promises: [Promise<Void>]) -> Promise<Void> {
 }
 
 /// - See: `when`
-public func when<U, V>(_ pu: Promise<U>, _ pv: Promise<V>) -> Promise<(U, V)> {
+public func when<U, V>(fulfilled pu: Promise<U>, _ pv: Promise<V>) -> Promise<(U, V)> {
     return _when([pu.asVoid(), pv.asVoid()]).then(on: zalgo) { (pu.value!, pv.value!) }
 }
 
 /// - See: `when`
-public func when<U, V, X>(_ pu: Promise<U>, _ pv: Promise<V>, _ px: Promise<X>) -> Promise<(U, V, X)> {
+public func when<U, V, X>(fulfilled pu: Promise<U>, _ pv: Promise<V>, _ px: Promise<X>) -> Promise<(U, V, X)> {
     return _when([pu.asVoid(), pv.asVoid(), px.asVoid()]).then(on: zalgo) { (pu.value!, pv.value!, px.value!) }
 }
+
+@available(*, unavailable, renamed: "when(fulfilled:)")
+public func when<T>(_ promises: AnyObject...) -> Promise<T> { abort() }

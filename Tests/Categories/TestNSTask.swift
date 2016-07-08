@@ -4,7 +4,7 @@ import XCTest
 
 class Test_NSTask_Swift: XCTestCase {
     func test1() {
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
         let task = Task()
         task.launchPath = "/usr/bin/basename"
         task.arguments = ["/foo/doe/bar"]
@@ -12,11 +12,11 @@ class Test_NSTask_Swift: XCTestCase {
             XCTAssertEqual(stdout, "bar\n")
             ex.fulfill()
         }
-        waitForExpectations(withTimeout: 10)
+        waitForExpectations(timeout: 10)
     }
 
     func test2() {
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
         let dir = "PMKAbsentDirectory"
 
         let task = Task()
@@ -36,6 +36,6 @@ class Test_NSTask_Swift: XCTestCase {
                 ex.fulfill()
             }
         }
-        waitForExpectations(withTimeout: 10)
+        waitForExpectations(timeout: 10)
     }
 }

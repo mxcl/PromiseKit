@@ -8,29 +8,29 @@ private let dummy = 1_234_765
 class Test_UIViewController_Swift: UIKitTestCase {
 
     func test_rejects_if_vc_has_no_promise_property() {
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
         let p: Promise<Int> = rootvc.promiseViewController(UIViewController(), animated: false)
         p.catch { error in
             if case UIViewController.Error.notPromisable = error {
                 ex.fulfill()
             }
         }
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
     }
 
     func test_rejects_if_promise_property_returns_nil() {
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
         let p: Promise<Int> = rootvc.promiseViewController(MockViewController(), animated: false)
         p.catch { error in
             if case UIViewController.Error.nilPromisable = error {
                 ex.fulfill()
             }
         }
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
     }
 
     func test_rejects_if_promise_property_casts_wrongly() {
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
         let my = MockViewController()
         my.promise = Promise.resolved(value: true)
         let p: Promise<Int> = rootvc.promiseViewController(my, animated: false)
@@ -39,11 +39,11 @@ class Test_UIViewController_Swift: UIKitTestCase {
                 ex.fulfill()
             }
         }
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
     }
 
     func test_resolved_promise_property_means_vc_does_not_appear() {
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
         let my = MockViewController()
         my.promise = Promise.resolved(value: dummy)
         rootvc.promiseViewController(my, animated: false).then { (x: Int) -> Void in
@@ -51,11 +51,11 @@ class Test_UIViewController_Swift: UIKitTestCase {
             XCTAssertEqual(x, dummy)
             ex.fulfill()
         }
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
     }
 
     func test_vc_dismisses_once_promise_is_resolved() {
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
         let my = MockViewController()
         let (promise, resolve, _) = Promise<Int>.pending()
         my.promise = promise
@@ -67,11 +67,11 @@ class Test_UIViewController_Swift: UIKitTestCase {
         after(interval: 0).then {
             resolve(dummy)
         }
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
     }
 
     func test_nav_controllers_use_their_root_vc_promise_property() {
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
         let nc = UINavigationController()
         let my = MockViewController()
         my.promise = after(interval: 0.1).then{ dummy }
@@ -81,7 +81,7 @@ class Test_UIViewController_Swift: UIKitTestCase {
             XCTAssertEqual(x, dummy)
             ex.fulfill()
         }
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
     }
 }
 

@@ -12,11 +12,11 @@ class Test_SKProductsRequest_Swift: XCTestCase {
             }
         }
 
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
         MockProductsRequest().promise().then { _ in
             ex.fulfill()
         }
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
     }
 
     func testCancellation() {
@@ -29,11 +29,11 @@ class Test_SKProductsRequest_Swift: XCTestCase {
             }
         }
 
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
         MockProductsRequest().promise().catch(policy: .allErrors) { err in
             XCTAssert((err as NSError).isCancelled)
             ex.fulfill()
         }
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
     }
 }

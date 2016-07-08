@@ -1,7 +1,7 @@
-#import <Foundation/Foundation.h>
-@import OHHTTPStubs;
-#import <PromiseKit/PromiseKit.h>
 #import "NSURLConnection+AnyPromise.h"
+@import OHHTTPStubs;
+@import Foundation;
+@import PromiseKit;
 @import XCTest;
 
 

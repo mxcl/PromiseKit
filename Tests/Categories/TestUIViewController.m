@@ -1,7 +1,7 @@
-@import UIKit;
-@import XCTest;
-#import <PromiseKit/PromiseKit.h>
 #import "UIViewController+AnyPromise.h"
+@import PromiseKit;
+@import XCTest;
+@import UIKit;
 
 
 @interface MyViewController: UIViewController

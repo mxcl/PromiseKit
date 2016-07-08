@@ -11,7 +11,7 @@ import PromiseKit
  
  And then in your sources:
 
-    #import <PromiseKit/PromiseKit.h>
+    @import PromiseKit;
 */
 extension CKDatabase {
     public func fetchRecordWithID(_ recordID: CKRecordID) -> Promise<CKRecord> {
@@ -27,11 +27,11 @@ extension CKDatabase {
     }
 
     public func fetchAllRecordZones() -> Promise<[CKRecordZone]> {
-        return Promise.wrap(resolver: fetchAll)
+        return Promise.wrap { fetchAllRecordZones(completionHandler: $0) }
     }
 
     public func fetchAllSubscriptions() -> Promise<[CKSubscription]> {
-        return Promise.wrap(resolver: fetchAll)
+        return Promise.wrap { fetchAllSubscriptions(completionHandler: $0) }
     }
 
     public func save(_ record: CKRecord) -> Promise<CKRecord> {

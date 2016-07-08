@@ -1,11 +1,10 @@
-#import "PromiseKit.h"
-#import "AnyPromise+Private.h"
 @import Foundation.NSDictionary;
+#import "AnyPromise+Private.h"
+#import <libkern/OSAtomic.h>
 @import Foundation.NSError;
 @import Foundation.NSNull;
-#import <libkern/OSAtomic.h>
-
-@implementation AnyPromise (join)
+#import "PromiseKit.h"
+#import <stdatomic.h>
 
 AnyPromise *PMKJoin(NSArray *promises) {
     if (promises == nil)
@@ -16,20 +15,22 @@ AnyPromise *PMKJoin(NSArray *promises) {
 
     return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         NSPointerArray *results = NSPointerArrayMake(promises.count);
-        __block int32_t countdown = (int32_t)promises.count;
+        __block atomic_int countdown = promises.count;
         __block BOOL rejected = NO;
 
         [promises enumerateObjectsUsingBlock:^(AnyPromise *promise, NSUInteger ii, BOOL *stop) {
-            [promise pipe:^(id value) {
+            [promise __pipe:^(id value) {
 
                 if (IsError(value)) {
-                    [value pmk_consume];
                     rejected = YES;
                 }
 
+                //FIXME surely this isn't thread safe on multiple cores?
                 [results replacePointerAtIndex:ii withPointer:(__bridge void *)(value ?: [NSNull null])];
 
-                if (OSAtomicDecrement32(&countdown) == 0) {
+                atomic_fetch_sub_explicit(&countdown, 1, memory_order_relaxed);
+
+                if (countdown == 0) {
                     if (!rejected) {
                         resolve(results.allObjects);
                     } else {
@@ -42,5 +43,3 @@ AnyPromise *PMKJoin(NSArray *promises) {
         }];
     }];
 }
-
-@end

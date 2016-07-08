@@ -1,9 +1,9 @@
 @import Foundation;
-#import <PromiseKit/PromiseKit.h>
+@import PromiseKit;
 @import XCTest;
 
 
-@interface JoinTestCase_ObjC: XCTestCase @end @implementation JoinTestCase_ObjC
+@interface JoinTests: XCTestCase @end @implementation JoinTests
 
 - (void)test_73_join {
     XCTestExpectation *ex1 = [self expectationWithDescription:@""];
@@ -25,7 +25,7 @@
         int cume = 0, cumv = 0;
 
         for (AnyPromise *promise in promises) {
-            if (promise.rejected) {
+            if ([promise.value isKindOfClass:[NSError class]]) {
                 cume |= [promise.value code];
             } else {
                 cumv |= [promise.value unsignedIntValue];

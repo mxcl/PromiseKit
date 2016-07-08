@@ -1,9 +1,9 @@
 @import Foundation;
-#import <PromiseKit/PromiseKit.h>
+@import PromiseKit;
 @import XCTest;
 
 
-@interface WhenTestCase_ObjC: XCTestCase @end @implementation WhenTestCase_ObjC
+@interface WhenTests: XCTestCase @end @implementation WhenTests
 
 - (void)testProgress {
 

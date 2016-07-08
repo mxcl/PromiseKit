@@ -1,6 +1,4 @@
-import Dispatch
-import Foundation.NSError
-import Foundation.NSURLError
+import Foundation
 
 public enum Error: ErrorProtocol {
     /**
@@ -21,7 +19,7 @@ public enum Error: ErrorProtocol {
      The closure with form (T?, ErrorType?) was called with (nil, nil)
      This is invalid as per the calling convention.
     */
-    case doubleOhSux0r
+    case invalidCompletionHandlerCallingConvention
 
     /**
      A handler returned its own promise. 99% of the time, this is likely a 
@@ -100,10 +98,15 @@ extension NSError {
     }
 
     /**
-      - Warning: You may only call this method on the main thread.
+      - Warning: You must call this method before any promises in your application are rejected. Failure to ensure this may lead to concurrency crashes.
+      - Warning: You must call this method on the main thread. Failure to do this may lead to concurrency crashes.
      */
     @objc public class func registerCancelledErrorDomain(_ domain: String, code: Int) {
         cancelledErrorIdentifiers.insert(ErrorPair(domain, code))
+    }
+
+    @objc public var isCancelled: Bool {
+        return (self as ErrorProtocol).isCancelledError
     }
 }
 
@@ -111,15 +114,14 @@ public protocol CancellableError: ErrorProtocol {
     var isCancelled: Bool { get }
 }
 
-extension NSError: CancellableError {
-    /**
-     - Warning: You may only call this method on the main thread.
-    */
-    @objc public var isCancelled: Bool {
-        if !Thread.isMainThread {
-            NSLog("PromiseKit: warning: `isCancelled` called on background thread.")
+extension ErrorProtocol {
+    public var isCancelledError: Bool {
+        if let ce = self as? CancellableError {
+            return ce.isCancelled
+        } else {
+            let ne = self as NSError
+            return cancelledErrorIdentifiers.contains(ErrorPair(ne.domain, ne.code))
         }
-        return cancelledErrorIdentifiers.contains(ErrorPair(domain, code))
     }
 }
 
@@ -127,89 +129,22 @@ extension NSError: CancellableError {
 ////////////////////////////////////////// Predefined Cancellation Errors
 private var cancelledErrorIdentifiers = Set([
     ErrorPair(PMKErrorDomain, PMKOperationCancelled),
-    ErrorPair(NSURLErrorDomain, NSURLErrorCancelled)
+    ErrorPair(NSURLErrorDomain, NSURLErrorCancelled),
 ])
-
-extension NSURLError: CancellableError {
-    public var isCancelled: Bool {
-        return self == .cancelled
-    }
-}
 
 
 //////////////////////////////////////////////////////// Unhandled Errors
-/**
- The unhandled error handler.
-
- If a promise is rejected and no catch handler is called in its chain,
- the provided handler is called. The default handler logs the error.
-
-     PMKUnhandledErrorHandler = { error in
-         mylogf("Unhandled error: \(error)")
-     }
-
- - Warning: *Important* The handler is executed on an undefined queue.
- - Warning: *Important* Don’t use promises in your handler, or you risk an infinite error loop.
- - Returns: The previous unhandled error handler.
-*/
-public var PMKUnhandledErrorHandler = { (error: ErrorProtocol) -> Void in
-    DispatchQueue.main.async {
-        let cancelled = (error as? CancellableError)?.isCancelled ?? false
-                                                   // ^---------^ must be called on main queue
-        if !cancelled {
-            NSLog("PromiseKit: Unhandled Error: %@", "\(error)")
-        }
-    }
-}
-
 class ErrorConsumptionToken {
     var consumed = false
-    let error: ErrorProtocol!
+    let error: ErrorProtocol
 
     init(_ error: ErrorProtocol) {
         self.error = error
     }
 
-    init(_ error: NSError) {
-        self.error = error.copy() as! NSError
-    }
-
     deinit {
         if !consumed {
-            PMKUnhandledErrorHandler(error)
+            PMKUnhandledErrorHandler(error as NSError)
         }
     }
-}
-
-private var handle: UInt8 = 0
-
-extension NSError {
-    @objc func pmk_consume() {
-        // The association could be nil if the objc_setAssociatedObject
-        // has taken a *really* long time. Or perhaps the user has
-        // overused `zalgo`. Thus we ignore it. This is an unlikely edge
-        // case and the unhandled-error feature is not mission-critical.
-
-        if let token = objc_getAssociatedObject(self, &handle) as? ErrorConsumptionToken {
-            token.consumed = true
-        }
-    }
-
-    var token: ErrorConsumptionToken! {
-        return objc_getAssociatedObject(self, &handle) as? ErrorConsumptionToken
-    }
-}
-
-func unconsume(error: NSError, reusingToken t: ErrorConsumptionToken? = nil) {
-    var token = t
-    if token != nil {
-        objc_setAssociatedObject(error, &handle, token, .OBJC_ASSOCIATION_RETAIN)
-    } else {
-        token = objc_getAssociatedObject(error, &handle) as? ErrorConsumptionToken
-        if token == nil {
-            token = ErrorConsumptionToken(error)
-            objc_setAssociatedObject(error, &handle, token, .OBJC_ASSOCIATION_RETAIN)
-        }
-    }
-    token!.consumed = false
 }

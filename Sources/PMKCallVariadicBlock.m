@@ -1,10 +1,9 @@
-
-#import <dispatch/once.h>
-#import <Foundation/NSDictionary.h>
-#import <Foundation/NSError.h>
-#import <Foundation/NSException.h>
 #import "NSMethodSignatureForBlock.m"
-#import <PromiseKit/PromiseKit.h>
+#import <Foundation/NSDictionary.h>
+#import <Foundation/NSException.h>
+#import "AnyPromise+Private.h"
+#import <Foundation/NSError.h>
+#import <dispatch/once.h>
 #import <string.h>
 
 #ifndef PMKLog

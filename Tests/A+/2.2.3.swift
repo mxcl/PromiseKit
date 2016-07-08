@@ -65,7 +65,7 @@ class Test223: XCTestCase {
                     }
                 }
                 specify("when multiple `then` calls are made, spaced apart in time") { d, expectation in
-                    let mk = { self.expectation(withDescription: "") }
+                    let mk = { self.expectation(description: "") }
                     var ex = (expectation, mk(), mk(), mk())
 
                     do {
@@ -83,7 +83,7 @@ class Test223: XCTestCase {
                     }
                 }
                 specify("when `then` is interleaved with rejection") { d, expectation in
-                    var ex = (expectation, self.expectation(withDescription: ""))
+                    var ex = (expectation, self.expectation(description: ""))
                     d.promise.catch{ _ in ex.0.fulfill() }
                     d.reject(Error.dummy)
                     d.promise.catch{ _ in ex.1.fulfill() }

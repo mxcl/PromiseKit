@@ -5,7 +5,7 @@ import XCTest
 class Test_UIAlertView_Swift: UIKitTestCase {
     // fulfills with buttonIndex
     func test1() {
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
 
         let alert = UIAlertView()
         alert.addButton(withTitle: "0")
@@ -18,12 +18,12 @@ class Test_UIAlertView_Swift: UIKitTestCase {
         after(interval: 0.1).then {
             alert.dismiss(withClickedButtonIndex: 1, animated: false)
         }
-        waitForExpectations(withTimeout: 3, handler: nil)
+        waitForExpectations(timeout: 3, handler: nil)
     }
 
     // cancel button presses are cancelled errors
     func test2() {
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
 
         let alert = UIAlertView()
         alert.addButton(withTitle: "0")
@@ -38,12 +38,12 @@ class Test_UIAlertView_Swift: UIKitTestCase {
         after(interval: 0.1).then {
             alert.dismiss(withClickedButtonIndex: 2, animated: false)
         }
-        waitForExpectations(withTimeout: 3, handler: nil)
+        waitForExpectations(timeout: 3, handler: nil)
     }
 
     // single button UIAlertViews don't get considered cancelled
     func test3() {
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
 
         let alert = UIAlertView()
         alert.addButton(withTitle: "0")
@@ -53,12 +53,12 @@ class Test_UIAlertView_Swift: UIKitTestCase {
         after(interval: 0.1).then {
             alert.dismiss(withClickedButtonIndex: 0, animated: false)
         }
-        waitForExpectations(withTimeout: 3, handler: nil)
+        waitForExpectations(timeout: 3, handler: nil)
     }
 
     // single button UIAlertViews don't get considered cancelled unless the cancelIndex is set
     func test4() {
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
 
         let alert = UIAlertView()
         alert.cancelButtonIndex = alert.addButton(withTitle: "0")
@@ -68,6 +68,6 @@ class Test_UIAlertView_Swift: UIKitTestCase {
         after(interval: 0.1).then {
             alert.dismiss(withClickedButtonIndex: 0, animated: false)
         }
-        waitForExpectations(withTimeout: 3, handler: nil)
+        waitForExpectations(timeout: 3, handler: nil)
     }
 }

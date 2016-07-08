@@ -63,7 +63,7 @@ class Test222: XCTestCase {
                     after(ticks: 10, execute: ex.1.fulfill)
                 }
                 specify("when multiple `then` calls are made, spaced apart in time") { d, expectation in
-                    var ex = (expectation, self.expectation(withDescription: ""), self.expectation(withDescription: ""), self.expectation(withDescription: ""))
+                    var ex = (expectation, self.expectation(description: ""), self.expectation(description: ""), self.expectation(description: ""))
 
                     do {
                         d.promise.then(execute: ex.0.fulfill)
@@ -80,7 +80,7 @@ class Test222: XCTestCase {
                     }
                 }
                 specify("when `then` is interleaved with fulfillment") { d, expectation in
-                    var ex = (expectation, self.expectation(withDescription: ""), self)
+                    var ex = (expectation, self.expectation(description: ""), self)
 
                     d.promise.then(execute: ex.0.fulfill)
                     d.fulfill()

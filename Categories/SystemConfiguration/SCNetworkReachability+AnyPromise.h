@@ -11,7 +11,7 @@
 
  And then in your sources:
 
-    #import <PromiseKit/PromiseKit.h>
+    @import PromiseKit;
 
  @return A void promise that fulfills when the Internet becomes accessible.
 */

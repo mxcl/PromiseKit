@@ -1,8 +1,6 @@
-#import <PromiseKit/AnyPromise.h>
+@import PromiseKit;
 @import XCTest;
-
-#define PMKTestErrorDomain @"PMKTestErrorDomain"
-AnyPromise *dispatch_promise(id block);
+#import "Infrastructure.h"
 
 static inline NSError *dummyWithCode(NSInteger code) {
     return [NSError errorWithDomain:PMKTestErrorDomain code:rand() userInfo:@{NSLocalizedDescriptionKey: @(code).stringValue}];
@@ -594,6 +592,12 @@ static inline AnyPromise *fulfillLater() {
 
 - (void)test_48_finally_negative {
     id ex1 = [self expectationWithDescription:@""];
+    id ex2 = [self expectationWithDescription:@""];
+
+    Injected.errorUnhandler = ^(NSError *err) {
+        XCTAssertEqualObjects(err.domain, PMKTestErrorDomain);
+        [ex2 fulfill];
+    };
 
     [AnyPromise promiseWithValue:@1].then(^{
         return dummy();
@@ -649,7 +653,7 @@ static inline AnyPromise *fulfillLater() {
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
-- (void)test_52_fulfill_with_rejected_promise {
+- (void)test_52_fulfill_with_rejected_promise {  //NEEDEDanypr
     id ex1 = [self expectationWithDescription:@""];
     fulfillLater().then(^{
         return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
@@ -707,35 +711,36 @@ static inline AnyPromise *fulfillLater() {
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
-- (void)test_59_typedef {
-    id ex1 = [self expectationWithDescription:@""];
-    
-    AnyPromise *p1 = [AnyPromise promiseWithValue:@1];
-    XCTAssertEqualObjects(p1.value, @1);
-    
-    p1.then(^(id o){
-        XCTAssertEqualObjects(o, @1);
-        [ex1 fulfill];
-    });
-    
-    [self waitForExpectationsWithTimeout:1 handler:nil];
-}
-
 - (void)test_properties {
+    Injected.errorUnhandler = ^(NSError *err){
+        XCTAssertEqualObjects(err.localizedDescription, @"2");
+    };
+
     XCTAssertEqualObjects([AnyPromise promiseWithValue:@1].value, @1);
     XCTAssertEqualObjects([[AnyPromise promiseWithValue:dummyWithCode(2)].value localizedDescription], @"2");
+    XCTAssertNil([AnyPromise promiseWithResolverBlock:^(id a){}].value);
     XCTAssertTrue([AnyPromise promiseWithResolverBlock:^(id a){}].pending);
     XCTAssertFalse([AnyPromise promiseWithResolverBlock:^(id a){}].resolved);
     XCTAssertFalse([AnyPromise promiseWithValue:@1].pending);
     XCTAssertTrue([AnyPromise promiseWithValue:@1].resolved);
 }
 
+- (void)test_promiseWithValue {
+    Injected.errorUnhandler = ^(NSError *err){
+        XCTAssertEqualObjects(err.localizedDescription, @"2");
+    };
+
+    XCTAssertEqual([AnyPromise promiseWithValue:@1].value, @1);
+    XCTAssertEqualObjects([[AnyPromise promiseWithValue:dummyWithCode(2)].value localizedDescription], @"2");
+    XCTAssertEqual([AnyPromise promiseWithValue:[AnyPromise promiseWithValue:@1]].value, @1);
+}
+
+//- (void)test_nil_block {
+//    [AnyPromise promiseWithValue:@1].then(nil);
+//    [AnyPromise promiseWithValue:@1].thenOn(nil, nil);
+//    [AnyPromise promiseWithValue:@1].catch(nil);
+//    [AnyPromise promiseWithValue:@1].always(nil);
+//    [AnyPromise promiseWithValue:@1].alwaysOn(nil, nil);
+//}
+
 @end
-
-AnyPromise *PMKDummyAnyPromise_YES() {
-    return [AnyPromise promiseWithValue:@YES];
-}
-
-AnyPromise *PMKDummyAnyPromise_Manifold() {
-    return [AnyPromise promiseWithValue:PMKManifold(@YES, @NO, @NO)];
-}

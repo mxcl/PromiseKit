@@ -20,12 +20,12 @@ class Test_UIImagePickerController_Swift: XCTestCase {
         let mockvc = Mock()
         mockvc.info = [UIImagePickerControllerOriginalImage: originalImage, UIImagePickerControllerEditedImage: editedImage]
 
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
         mockvc.promiseViewController(UIImagePickerController(), animated: false).then { (x: UIImage) -> Void in
             XCTAssert(x == editedImage)
             ex.fulfill()
         }
-        waitForExpectations(withTimeout: 10, handler: nil)
+        waitForExpectations(timeout: 10, handler: nil)
     }
 
     func test_fulfills_with_original_image_if_no_edited_image() {
@@ -45,12 +45,12 @@ class Test_UIImagePickerController_Swift: XCTestCase {
         let mockvc = Mock()
         mockvc.info = [UIImagePickerControllerOriginalImage: originalImage]
 
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
         mockvc.promiseViewController(UIImagePickerController(), animated: false).then { (x: UIImage) -> Void in
             XCTAssert(x == originalImage)
             XCTAssert(x != editedImage)
             ex.fulfill()
         }
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
     }
 }

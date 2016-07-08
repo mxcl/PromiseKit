@@ -1,5 +1,5 @@
 #import "SKRequest+AnyPromise.h"
-#import <PromiseKit/PromiseKit.h>
+@import PromiseKit;
 @import StoreKit;
 @import XCTest;
 

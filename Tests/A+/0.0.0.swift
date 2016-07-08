@@ -18,12 +18,12 @@ extension XCTestCase {
     }
 
     func specify(_ description: String, file: StaticString = #file, line: UInt = #line, body: @noescape (Promise<Void>.PendingTuple, XCTestExpectation) throws -> Void) {
-        let expectation = self.expectation(withDescription: description)
+        let expectation = self.expectation(description: description)
         let pending = Promise<Void>.pending()
 
         do {
             try body(pending, expectation)
-            waitForExpectations(withTimeout: timeout) { err in
+            waitForExpectations(timeout: timeout) { err in
                 if let _ = err {
                     XCTFail("wait failed: \(description)", file: file, line: line)
                 }
@@ -99,13 +99,13 @@ extension XCTestCase {
             let value = arc4random()
             let (promise, executeAfter) = feed(value)
             let expectations = (1...numberOfExpectations).map {
-                self.expectation(withDescription: "\(desc) (\($0))")
+                self.expectation(description: "\(desc) (\($0))")
             }
             body(promise, expectations, value)
             
             executeAfter()
             
-            self.waitForExpectations(withTimeout: timeout) { err in
+            self.waitForExpectations(timeout: timeout) { err in
                 if let _ = err {
                     XCTFail("timed out: \(desc)", file: file, line: line)
                 }
@@ -114,7 +114,7 @@ extension XCTestCase {
     }
 
     func mkex() -> XCTestExpectation {
-        return expectation(withDescription: "")
+        return expectation(description: "")
     }
 }
 
@@ -137,9 +137,14 @@ func after(ticks: Int, execute body: () -> Void) {
 
 extension Promise {
     func test(onFulfilled: () -> Void, onRejected: () -> Void) {
-        //TODO use tap
-        self.then { _ in onFulfilled() }
-        self.catch { _ in onRejected() }
+        tap { result in
+            switch result {
+            case .fulfilled:
+                onFulfilled()
+            case .rejected:
+                onRejected()
+            }
+        }
     }
 }
 

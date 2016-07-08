@@ -5,27 +5,27 @@ import XCTest
 class Test_CLLocationManager_Swift: XCTestCase {
     func test_fulfills_with_one_location() {
         swizzle(CLLocationManager.self, #selector(CLLocationManager.startUpdatingLocation)) {
-            let ex = expectation(withDescription: "")
+            let ex = expectation(description: "")
 
             CLLocationManager.promise().then { x -> Void in
                 XCTAssertEqual(x, dummy.last!)
                 ex.fulfill()
             }
 
-            waitForExpectations(withTimeout: 1, handler: nil)
+            waitForExpectations(timeout: 1, handler: nil)
         }
     }
 
     func test_fulfills_with_multiple_locations() {
         swizzle(CLLocationManager.self, #selector(CLLocationManager.startUpdatingLocation)) {
-            let ex = expectation(withDescription: "")
+            let ex = expectation(description: "")
 
             CLLocationManager.promise().allResults().then { x -> Void in
                 XCTAssertEqual(x, dummy)
                 ex.fulfill()
             }
 
-            waitForExpectations(withTimeout: 1, handler: nil)
+            waitForExpectations(timeout: 1, handler: nil)
         }
     }
 
@@ -33,14 +33,14 @@ class Test_CLLocationManager_Swift: XCTestCase {
         #if os(iOS)
             swizzle(CLLocationManager.self, #selector(CLLocationManager.requestWhenInUseAuthorization)) {
                 swizzle(CLLocationManager.self, #selector(CLLocationManager.authorizationStatus), isClassMethod: true) {
-                    let ex = expectation(withDescription: "")
+                    let ex = expectation(description: "")
 
                     CLLocationManager.requestAuthorization().then { x -> Void in
                         XCTAssertEqual(x, CLAuthorizationStatus.authorizedWhenInUse)
                         ex.fulfill()
                     }
 
-                    waitForExpectations(withTimeout: 1, handler: nil)
+                    waitForExpectations(timeout: 1, handler: nil)
                 }
             }
         #endif
@@ -57,12 +57,12 @@ class Test_CLGeocoder_Swift: XCTestCase {
             }
         }
 
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
         MockGeocoder().reverseGeocodeLocation(CLLocation()).then { x -> Void in
             XCTAssertEqual(x, dummyPlacemark)
             ex.fulfill()
         }
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
     }
 
     func test_geocodeAddressDictionary() {
@@ -74,12 +74,12 @@ class Test_CLGeocoder_Swift: XCTestCase {
             }
         }
 
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
         MockGeocoder().geocode([:]).then { x -> Void in
             XCTAssertEqual(x, dummyPlacemark)
             ex.fulfill()
         }
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
     }
 
     func test_geocodeAddressString() {
@@ -91,12 +91,12 @@ class Test_CLGeocoder_Swift: XCTestCase {
             }
         }
 
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
         MockGeocoder().geocode("").then { x -> Void in
             XCTAssertEqual(x, dummyPlacemark)
             ex.fulfill()
         }
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
     }
 }
 

@@ -4,7 +4,7 @@ import XCTest
 
 class Test_NSNotificationCenter_Swift: XCTestCase {
     func test() {
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
         let userInfo: [NSObject: AnyObject] = ["a": 1]
 
         NotificationCenter.default.once(forName: PMKTestNotification).then { value -> Void in
@@ -15,7 +15,7 @@ class Test_NSNotificationCenter_Swift: XCTestCase {
 
         NotificationCenter.default.post(name: Notification.Name(rawValue: PMKTestNotification), object: nil, userInfo: userInfo)
 
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
     }
 }
 

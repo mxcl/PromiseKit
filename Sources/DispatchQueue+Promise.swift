@@ -2,7 +2,7 @@ import Dispatch
 
 /**
  ```
- DispatchQueue.global().async {
+ DispatchQueue.global().promise {
      try md5(input)
  }.then { md5 in
      //…
@@ -13,10 +13,15 @@ import Dispatch
  - Returns: A new promise resolved by the provided closure.
 */
 extension DispatchQueue {
-    public func async<T>(execute body: () throws -> T) -> Promise<T> {
+    public func promise<T>(group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], execute body: () throws -> T) -> Promise<T> {
+
         return Promise(sealant: { resolve in
-            contain_zalgo(self, rejecter: resolve) {
-                resolve(.fulfilled(try body()))
+            async(group: group, qos: qos, flags: flags) {
+                do {
+                    resolve(.fulfilled(try body()))
+                } catch {
+                    resolve(Resolution(error))
+                }
             }
         })
     }

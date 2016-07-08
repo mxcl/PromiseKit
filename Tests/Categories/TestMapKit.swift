@@ -4,7 +4,7 @@ import XCTest
 
 class Test_MKDirections_Swift: XCTestCase {
     func test_directions_response() {
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
 
         class MockDirections: MKDirections {
             private override func calculate(completionHandler: MKDirectionsHandler) {
@@ -17,12 +17,12 @@ class Test_MKDirections_Swift: XCTestCase {
             ex.fulfill()
         }
 
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
     }
 
 
     func test_ETA_response() {
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
 
         class MockDirections: MKDirections {
             private override func calculateETA(completionHandler: MKETAHandler) {
@@ -35,14 +35,14 @@ class Test_MKDirections_Swift: XCTestCase {
             ex.fulfill()
         }
 
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
     }
 
 }
 
 class Test_MKSnapshotter_Swift: XCTestCase {
     func test() {
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
 
         class MockSnapshotter: MKMapSnapshotter {
             private override func start(completionHandler: MKMapSnapshotCompletionHandler) {
@@ -54,6 +54,6 @@ class Test_MKSnapshotter_Swift: XCTestCase {
             ex.fulfill()
         }
 
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
     }
 }

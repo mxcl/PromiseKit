@@ -17,7 +17,7 @@
  
  And then in your sources:
 
-    #import <PromiseKit/PromiseKit.h>
+    @import PromiseKit;
 */
 @interface UIView (PromiseKit)
 

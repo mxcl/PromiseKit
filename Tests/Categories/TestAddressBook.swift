@@ -5,10 +5,10 @@ import XCTest
 
 class Test_AddressBook_Swift: XCTestCase {
     func test() {
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
         ABAddressBookRequestAccess().then { (auth: ABAuthorizationStatus) in
             XCTAssertEqual(auth, ABAuthorizationStatus.authorized)
         }.then(execute: ex.fulfill)
-        waitForExpectations(withTimeout: 1)
+        waitForExpectations(timeout: 1)
     }
 }

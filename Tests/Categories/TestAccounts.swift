@@ -6,7 +6,7 @@ class Test_ACAccountStore_Swift: XCTestCase {
     var dummy: ACAccount { return ACAccount() }
 
     func test_renewCredentialsForAccount() {
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
 
         class MockAccountStore: ACAccountStore {
             override func renewCredentials(for account: ACAccount!, completion: ACAccountStoreCredentialRenewalHandler!) {
@@ -19,7 +19,7 @@ class Test_ACAccountStore_Swift: XCTestCase {
             ex.fulfill()
         }
 
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(timeout: 1)
     }
 
     func test_requestAccessToAccountsWithType() {
@@ -29,14 +29,14 @@ class Test_ACAccountStore_Swift: XCTestCase {
             }
         }
 
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
         let store = MockAccountStore()
         let type = store.accountType(withAccountTypeIdentifier: ACAccountTypeIdentifierFacebook)!
         store.requestAccessToAccountsWithType(type).then { _ in
             ex.fulfill()
         }
 
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(timeout: 1)
     }
 
     func test_saveAccount() {
@@ -46,11 +46,12 @@ class Test_ACAccountStore_Swift: XCTestCase {
             }
         }
 
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
         MockAccountStore().saveAccount(dummy).then { _ in
             ex.fulfill()
         }
-        waitForExpectations(withTimeout: 1, handler: nil)
+
+        waitForExpectations(timeout: 1)
     }
 
     func test_removeAccount() {
@@ -60,10 +61,11 @@ class Test_ACAccountStore_Swift: XCTestCase {
             }
         }
 
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
         MockAccountStore().removeAccount(dummy).then { _ in
             ex.fulfill()
         }
-        waitForExpectations(withTimeout: 1, handler: nil)
+
+        waitForExpectations(timeout: 1)
     }
 }

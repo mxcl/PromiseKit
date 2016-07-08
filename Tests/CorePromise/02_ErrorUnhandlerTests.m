@@ -1,34 +1,22 @@
-#import <PromiseKit/PromiseKit.h>
+@import PromiseKit;
 @import XCTest;
-
+#import "Infrastructure.h"
 
 @interface WTFError : NSError @end @implementation WTFError
 @end
 
-@interface NSError (BridgingHack)
-+ (void)pmk_setUnhandledErrorHandler:(void (^)(NSError *))block;
-@end
 
-void PMKSetUnhandledErrorHandler(void (^block)(NSError *)) {
-    [NSError pmk_setUnhandledErrorHandler:block];
-}
-
-
-@interface ErrorHandlingTests: XCTestCase @end @implementation ErrorHandlingTests
-
-- (void)tearDown {
-    PMKSetUnhandledErrorHandler(^(id err){});
-}
+@interface ErrorUnhandlerTests: XCTestCase @end @implementation ErrorUnhandlerTests
 
 - (void)test_68_unhandled_error_handler {
     @autoreleasepool {
         XCTestExpectation *ex = [self expectationWithDescription:@""];
 
-        PMKSetUnhandledErrorHandler(^(NSError *error){
+        Injected.errorUnhandler = ^(NSError *error){
             XCTAssertEqual(error.code, 5);
             XCTAssertEqualObjects(@"a", error.domain);
             [ex fulfill];
-        });
+        };
 
         [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
             resolve([NSError errorWithDomain:@"a" code:5 userInfo:@{@1: @2}]);
@@ -42,10 +30,12 @@ void PMKSetUnhandledErrorHandler(void (^block)(NSError *)) {
     @autoreleasepool {
         XCTestExpectation *ex1 = [self expectationWithDescription:@"unhandler"];
         XCTestExpectation *ex2 = [self expectationWithDescription:@"initial catch"];
-        PMKSetUnhandledErrorHandler(^(NSError *error){
+
+        Injected.errorUnhandler = ^(NSError *error){
             XCTAssertEqual(5, error.code);
             [ex1 fulfill];
-        });
+        };
+
         [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
             resolve([NSError errorWithDomain:@"a" code:5 userInfo:nil]);
         }].catch(^(id e){
@@ -59,9 +49,9 @@ void PMKSetUnhandledErrorHandler(void (^block)(NSError *)) {
 }
 
 - (void)test_70_unhandled_error_handler_not_called {
-    PMKSetUnhandledErrorHandler(^(id err){
+    Injected.errorUnhandler = ^(id err){
         XCTFail();
-    });
+    };
 
     @autoreleasepool {
         XCTestExpectation *ex1 = [self expectationWithDescription:@""];
@@ -86,9 +76,9 @@ void PMKSetUnhandledErrorHandler(void (^block)(NSError *)) {
     @autoreleasepool {
         XCTestExpectation *ex1 = [self expectationWithDescription:@""];
 
-        PMKSetUnhandledErrorHandler(^(id e){
+        Injected.errorUnhandler = ^(id e){
             XCTFail();
-        });
+        };
 
         [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
             dispatch_promise(^{
@@ -109,10 +99,10 @@ void PMKSetUnhandledErrorHandler(void (^block)(NSError *)) {
 
         __block BOOL ex1Fulfilled = NO;
 
-        PMKSetUnhandledErrorHandler(^(id e){
+        Injected.errorUnhandler = ^(id e){
             XCTAssert(ex1Fulfilled);
             [ex2 fulfill];
-        });
+        };
 
         [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
             dispatch_promise(^{

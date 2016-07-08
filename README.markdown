@@ -3,14 +3,14 @@
 Modern development is highly asynchronous: isn’t it about time we had tools that made programming asynchronously powerful, easy and delightful?
 
 ```swift
-UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+UIApplication.shared().networkActivityIndicatorVisible = true
 
 when(fetchImage(), getLocation()).then { image, location in
     self.imageView.image = image;
     self.label.text = "Buy your cat a house in \(location)"
 }.always {
-    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-}.error { error in
+    UIApplication.shared().networkActivityIndicatorVisible = false
+}.catch { error in
     UIAlertView(…).show()
 }
 ```
@@ -24,7 +24,7 @@ PromiseKit is a thoughtful and complete implementation of promises for iOS and O
 
 If you are writing a library, [**use PromiseKit 1.x**](https://github.com/mxcl/PromiseKit/tree/legacy-1.x). This is because PromiseKit > 2 breaks everytime Swift changes. While Swift is in flux it is not feasible to depend on a library that will break every time Xcode updates.
 
-If you are making an app then PromiseKit 3 is the best PromiseKit, you may have to make some fixes when Xcode updates, but probably you will be OK as long as you update PromiseKit when Xcode updates.
+If you are making an app then PromiseKit 4 is the best PromiseKit, you may have to make some fixes when Xcode updates, but probably you will be OK as long as you update PromiseKit when Xcode updates.
 
 PromiseKit 1 and 3 can be installed in parallel if necessary, but CocoaPods will not support this.
 
@@ -32,6 +32,11 @@ Once Swift becomes ABI or API stable we can all just move to the latest PromiseK
 
 Thus we intend to support PromiseKit 1.x for longer than expected.
 
+# PromiseKit 4
+
+In Swift 3.0 you can use keywords as function names again, so `catch` is back.
+
+An important behavioral change is `recover` now has a `CatchPolicy` so by default it ignores Cancellation errors. See the documentation for cancellation for more information.
 
 # PromiseKit 3
 
@@ -65,25 +70,18 @@ The original, nice to use with Objective-C, less nice to use with Swift, hence P
 ```ruby
 use_frameworks!
 
-pod "PromiseKit", "~> 2.0"
+pod "PromiseKit", "~> 4.0"
 ```
-
-### Carthage
-```ruby
-github "mxcl/PromiseKit" ~> 2.0
-```
-
-*Note*: In order to avoid linking nearly all system frameworks with PromiseKit, the convenience categories have not been included with the Carthage framework . You must manually copy the categories you need in from the Carthage checkout.
 
 ### Standalone Distributions
 
 * [iOS 8 & OS X 10.9  Frameworks](https://github.com/mxcl/PromiseKit/releases/download/2.2.2/PromiseKit-2.2.2.zip) (Binaries)
 
-*Please note*, the preferred way to integrate PromiseKit is CocoaPods or Carthage.
+*Please note*, the preferred way to integrate PromiseKit is CocoaPods.
 
 ###  iOS 7 And Below
 
-Neither CocoaPods or Carthage will install PromiseKit 2 for an iOS 7 target. Your options are:
+CocoaPods will not install PromiseKit 2 for an iOS 7 target. Your options are:
 
  1. `pod "PromiseKit", "~> 1.7"` †‡
  2. Use our [iOS 7 EZ-Bake](https://github.com/PromiseKit/EZiOS7)

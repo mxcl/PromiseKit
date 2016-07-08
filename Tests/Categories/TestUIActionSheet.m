@@ -1,8 +1,7 @@
-#import <PromiseKit/PromiseKit.h>
 #import "UIActionSheet+AnyPromise.h"
-@import UIKit;
+@import PromiseKit;
 @import XCTest;
-
+@import UIKit;
 
 @implementation Test_UIActionSheet_Objc : XCTestCase {
     UIViewController *rootvc;

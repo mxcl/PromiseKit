@@ -14,12 +14,12 @@ class Test_NSURLSession_Swift: XCTestCase {
             return OHHTTPStubsResponse(JSONObject: json, statusCode: 200, headers: nil)
         }
 
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
         URLSession.GET("http://example.com").asDictionary().then { rsp -> Void in
             XCTAssertEqual(json, rsp)
             ex.fulfill()
         }
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
     }
 
     func test2() {
@@ -33,7 +33,7 @@ class Test_NSURLSession_Swift: XCTestCase {
             return OHHTTPStubsResponse(data: dummy, statusCode: 200, headers: [:])
         }
 
-        let ex = expectation(withDescription: "")
+        let ex = expectation(description: "")
 
         after(interval: 0.1).then {
             URLSession.GET("http://example.com")
@@ -41,6 +41,6 @@ class Test_NSURLSession_Swift: XCTestCase {
             XCTAssertEqual(x, dummy)
         }.then(ex.fulfill)
 
-        waitForExpectations(withTimeout: 1, handler: nil)
+        waitForExpectations(timeout: 1, handler: nil)
     }
 }

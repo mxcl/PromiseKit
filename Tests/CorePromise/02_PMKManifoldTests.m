@@ -1,4 +1,4 @@
-#import <PromiseKit/PromiseKit.h>
+@import PromiseKit;
 @import XCTest;
 
 @interface PMKManifoldTests: XCTestCase @end @implementation PMKManifoldTests
