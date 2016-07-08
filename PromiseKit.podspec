@@ -169,7 +169,7 @@ Pod::Spec.new do |s|
 
   s.subspec 'Swift' do |ss|
     #ss.deprecated = true
-    ss.default_subspecs = 'Foundation', 'UIKit'
+    #ss.default_subspecs = 'Foundation', 'UIKit'
 
     ss.subspec 'Promise' do |sss|
       #sss.deprecated = true
