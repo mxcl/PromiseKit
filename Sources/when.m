@@ -34,6 +34,7 @@ AnyPromise *PMKWhen(id promises) {
     struct PMKProgress {
         int completedUnitCount;
         int totalUnitCount;
+        double fractionCompleted;
     };
     __block struct PMKProgress progress;
 #endif
