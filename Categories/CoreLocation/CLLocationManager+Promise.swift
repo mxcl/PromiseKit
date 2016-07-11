@@ -90,7 +90,10 @@ extension CLLocationManager {
 
 @available(iOS 8, *)
 private class AuthorizationCatcher: CLLocationManager, CLLocationManagerDelegate {
-    let (promise, fulfill, _) = Promise<CLAuthorizationStatus>.pendingPromise()
+    /// Hack to fix https://github.com/mxcl/PromiseKit/issues/415
+    private class AuthorizationStatusPromise: Promise<CLAuthorizationStatus> {}
+
+    let (promise, fulfill, _) = AuthorizationStatusPromise.pendingPromise()
     var retainCycle: AnyObject?
 
     init(auther: (CLLocationManager)->()) {
@@ -144,18 +147,21 @@ private func auther(requestAuthorizationType: CLLocationManager.RequestAuthoriza
 }
 
 #else
-    private func auther(requestAuthorizationType: CLLocationManager.RequestAuthorizationType) -> (CLLocationManager -> Void)
-    {
-        return { _ in }
-    }
+
+private func auther(requestAuthorizationType: CLLocationManager.RequestAuthorizationType) -> (CLLocationManager -> Void) {
+    return { _ in }
+}
+
 #endif
 
 
 public class LocationPromise: Promise<CLLocation> {
+    /// Hack to fix https://github.com/mxcl/PromiseKit/issues/415
+    private class LocationsPromise: Promise<[CLLocation]> {}
 
     // convoluted for concurrency guarantees
 
-    private let (parentPromise, fulfill, reject) = Promise<[CLLocation]>.pendingPromise()
+    private let (parentPromise, fulfill, reject) = LocationsPromise.pendingPromise()
 
     public func allResults() -> Promise<[CLLocation]> {
         return parentPromise

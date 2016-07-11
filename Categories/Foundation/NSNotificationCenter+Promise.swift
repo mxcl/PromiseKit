@@ -32,8 +32,10 @@ extension NSNotificationCenter {
 }
 
 public class NotificationPromise: Promise<[NSObject: AnyObject]> {
-    let parentPromise: Promise<NSNotification>
-    var parentFulfill: (NSNotification) -> Void = { _ in }
+    /// Hack to fix https://github.com/mxcl/PromiseKit/issues/415
+    private class NotePromise: Promise<NSNotification> {}
+
+    private let (parentPromise, parentFulfill, _) = NotePromise.pendingPromise()
 
     public func asNotification() -> Promise<NSNotification> {
         return parentPromise
@@ -47,9 +49,6 @@ public class NotificationPromise: Promise<[NSObject: AnyObject]> {
     }
 
     private override init(@noescape resolvers: (fulfill: ([NSObject: AnyObject]) -> Void, reject: (ErrorType) -> Void) throws -> Void) {
-        var tmpf: ((NSNotification) -> Void)!
-        parentPromise = Promise<NSNotification> { f, _ in tmpf = f }
         super.init(resolvers: resolvers)
-        parentFulfill = tmpf
     }
 }
