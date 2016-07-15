@@ -1,15 +1,21 @@
+{% if page.url == '/' %}
+{%   assign title = "PromiseKit" %}
+{% elsif page.title contains 'PromiseKit' %}
+{%  assign title = page.title %}
+{% else %}
+{%  assign title = page.title | append: '&middot;PromiseKit' %}
+{% endif %}
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
-  <title>PromiseKit</title>
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <title>{{ title }}</title>
   <link rel="stylesheet" href="/public/css/main.css">
   <link rel="stylesheet" href="/public/css/misc.css">
   <link rel="stylesheet" href="/public/css/media.css">
   <link rel="stylesheet" href="/public/css/syntax.css">
   <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
-  <link rel="icon" href="favicon.ico" sizes="16x16 32x32">
-  <link rel="icon" href="favicon-32.png" sizes="32x32">
-  <link rel="icon apple-touch-icon-precomposed" href="favicon-152.png" sizes="152x152">
-  <link rel="icon" href="favicon-228.png" sizes="228x228">
+  <link rel="icon" href="/favicon.ico" sizes="16x16">
+  <link rel="icon" href="/favicon-32.png" sizes="32x32">
+  <link rel="icon apple-touch-icon-precomposed" href="/favicon-152.png" sizes="152x152">
+  <link rel="icon" href="/favicon-228.png" sizes="228x228">
 </head>

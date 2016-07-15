@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en-us">
+  {% include head.html %}
+  
+  <body>
+    {% include ad.html %}
+    {% include masthead.html %}
+
+  <div>
+    <nav id="contents">
+      <h3>Getting Started</h3>
+      <ol>
+        <li><a href="/docs/">Fundamentals</a><p>The 90% you need</p></li>
+        <li><a href="/docs/cocoa-promise/">Cocoa+Promise</a><p><code>then</code> for  APIs</p></li>
+        <li><a href="/docs/making-promises/">Making Promises</a><p>Chains must<br>start somewhere</p></li>
+        <li><a href="/docs/objc">Objective-C</a><p>Promises for both<br>ObjC and Swift</p></li>        
+      </ol>
+      <h3>Handbook</h3>
+      <ol>
+        <li><a href="/docs/handbook/Classes/Promise.html"><code>Promise&lt;T&gt;</code></a></li>
+        <li><a href="/docs/handbook/Classes/AnyPromise.html"><code>AnyPromise</code></a></li>
+        <li><a href="/docs/handbook/Functions.html"><code>when()</code></a></li>
+      </ol>
+      <h3>Cookbook</h3>
+      <ol>
+        <li><a href="/docs/cookbook/wrapping-delegation">Delegation</a></li>
+        <li><a href="/docs/cookbook/partial-recovery">Partial Recovery</a></li>
+        <li><a href="/docs/cookbook/cache-n-fetch">Cache ’n’ Fetch</a></li>
+        <li><a href="/docs/cookbook/abstracting-away-asynchronicity">Abstractions</a></li>
+        <li><a href="/docs/cookbook/Web-API-classes">REST</a></li>
+        <li><a href="/docs/cookbook/promises-and-ux">UX</a></li>
+        <li><a href="/docs/cookbook/retry">Retry</a></li>
+      </ol>
+    </nav>
+
+    {{ content }}
+
+  </div>
+
+  </body>
+</html>

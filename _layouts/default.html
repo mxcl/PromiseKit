@@ -3,7 +3,12 @@
   {% include head.html %}
   
   <body>
-    {% include contents.html %}      
+    {% include ad.html %}
+    
+    {% if page.hidebanner %}
+    {% else %}
+      {% include masthead.html %}
+    {% endif %}
     {{ content }}
   </body>
 </html>

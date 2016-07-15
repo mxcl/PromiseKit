@@ -1,167 +1,101 @@
 html, body {
   margin: 0;
-}
-
-html {
   font-family: "PT Serif", Georgia, "Times New Roman", serif;
   -webkit-font-smoothing: antialiased;
   line-height: 1.5;
   color: #515151;
 }
 
-code, pre {
-  font-family: Menlo, Monaco, "Courier New", monospace;
-}
-code {
-  padding: .25em .5em;
-  color: #bf616a;
-}
-code, pre {
-  background-color: #f5f5f5;
-}
-pre, aside {
-  margin-top: 0;
-  margin-bottom: 1rem;
-}
-pre, code {
-  font-size: 0.8rem;
-}
-pre code {
-  padding: 0;
-  color: inherit;
-  background-color: transparent;
-}
-.highlight {
-  margin-bottom: 1rem;
-  border-radius: 4px;
-}
-.highlight pre {
-  margin-bottom: 0;
-}
-
-aside {
-  background: #f9f9f9;
-  border: 10px solid rgba(0,0,0,0.2);
-  border-width: 0 1rem;
-  color: rgba(0,0,0,0.66);;
-  font-size: 0.9rem;
-  padding: 1rem;
-  display: block;
-  text-align: justify;
-  text-justify: inter-word;
-}
-aside:before {
-  content: "Oh! BTW…";
-  color: rgba(0,0,0,0.66);;
-  display: block;
-  font-weight: bold;
-}
-
-.post:not(:last-child) {
-  border-bottom: 3px dashed lightgray;
-}
-
-nav {
-  position: absolute;
-  top: 0;
-  right: 0;
-  left: 0;
-  padding: 0 1rem;
-  text-align: center;
-}
-nav a {
-  display: inline-block;
-  padding: 1rem;
-  text-decoration: none;
-  font-family: "PT Sans", Helvetica, Arial, sans-serif;
-}
-nav a:hover {
-  text-decoration: underline;
-}
-
-#elephants {
-  width: 100%;
+#masthead * {
   margin: 0;
-  padding: 0;
+  vertical-align: middle;
 }
 
-.big {
-  font-size: 2rem;
-  font-style: normal;
-  padding: 1em;
-  margin: 2rem 0;
-  background: rgba(0,0,0,0.07);
-  border-style: solid;
-  border-color: rgba(0,0,0,0.2);
-  border-width: 1px;
-  font-family: "PT Sans", Helvetica, Arial, sans-serif;
-}
-
-a.pagination:after {
-	content: "\f054";
-	font-family: FontAwesome;
-  font-weight: 300;
-  margin-left: 0.2em;
-  font-size: 0.86em;
-}
-
-a.pagination {
-  font-size: 2rem;
+#masthead nav {
   text-transform: uppercase;
-  background: HSL(212, 100%, 35%);
-  font-family: "PT Sans", Helvetica, Arial, sans-serif;
-  padding: 1rem;
   font-weight: bold;
-  color: white;  
-  display: block;
-  text-align: center;
-  margin-top: 3rem;
-  margin-bottom: -2.5rem;
-}
-a.pagination:hover {
-  text-decoration: none;
-  background: HSL(212, 90%, 45%);
 }
 
-.pagination abbr {
-  color: white;
-  border-bottom: 1px dotted white;
-  font-size: 1em;
+#masthead a.active {
+  background-color: rgba(38, 139, 210, 0.15);
+  color: rgba(38, 139, 210, 1);
+  border-radius: 0.23rem;
+  line-height: 1em;
 }
 
-
-.big code {
-    background: transparent;
-    font-size: inherit;
-    padding: 0;
-}
-code .external-link {
-  color: #515151;
-}
-.external-link:after {
-  content: "\f08e";
-  font-family: FontAwesome;
-  margin-left: 0.2em;
-  font-size: smaller;
-  color: #888;
+#masthead nav a {
+  display: inline-block;
 }
 
-.contents {
-  margin: 1rem;
+ins {
   margin-top: -1.5rem;
+}
+#masthead {
+  margin-top: 1rem;
+}
+
+#contents {
+    float: right;
+    padding: 1rem;
+    top: 160px;
+    font-size: 0.7rem;
+    text-align: right;
+}
+
+#contents ol, #contents p {
+  margin: 0;
+}
+
+#contents ol {
+  margin-bottom: 1.5rem;
+}
+
+#contents, #contents h3, #contents code {
+  font-size: 0.7rem;
+  margin: 0;
+}
+
+#contents h3 {
+  font-size: 0.75rem;
+}
+
+#contents code {
+  padding: 1px;
+  font-size: 0.6rem;
+}
+
+#contents ol, #contents ol li {
+  margin-left: 0;
+  padding-left: 0;
+  list-style-type: none;
+}
+
+#contents p {
+  color: gray;
+  line-height: 1.2;
+  margin-top: -2px;
+  margin-bottom: 2px;
+  font-size: 0.55rem;
+}
+
+#tagline {
+    font-size: 1.4rem;
+    margin-top: 1rem;
+    text-align: justify;
+}
+#pitch div {
+    display: inline-block;
+    width: 30%;
+    margin-bottom: 2rem;
+    box-sizing: border-box;
+    vertical-align: top;
+    margin-right: 2%;
+}
+
+#bottomline {
+  font-size: 1.2rem;
+  padding: 1.5rem;
+  background: rgba(0,0,0,0.04);
+  border-radius: 1rem;
   box-sizing: border-box;
-  width: auto;
 }
-
-.contents ol, .contents ol li {
-  margin-left:0; padding-left:0; list-style-position:inside;
-}
-
-.contents ol {
-  margin: 0.1rem;
-}
-
-.contents li {
-    font-size: 0.85em;
-}
-

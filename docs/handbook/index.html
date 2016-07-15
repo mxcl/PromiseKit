@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>PromiseKit  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+
+
+    <a title="PromiseKit  Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="index.html">
+          PromiseKit Docs
+        </a>
+        
+      </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/mxcl/PromiseKit">
+            <img class="header-icon" src="img/gh.png"/>
+            View on GitHub
+          </a>
+        </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="dash-feed://http%3A%2F%2Fpromisekit%2Eorg%2Fdocs%2Fhandbook%2Fdocsets%2FPromiseKit%2Exml">
+            <img class="header-icon" src="img/dash.png"/>
+            Install in Dash
+          </a>
+        </p>
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="index.html">PromiseKit Reference</a>
+      <img class="carat" src="img/carat.png" />
+      PromiseKit  Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Promise.html">Promise</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/AnyPromise.html">AnyPromise</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:F10PromiseKit4whenurFT9fulfilledGSaGCS_7Promisex___GS0_GSax__">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:F10PromiseKit4whenurFt8resolvedGSaGCS_7Promisex___GS0_GSax__">when(resolved:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:F10PromiseKit7firstlyurFT7executeFzT_GCS_7Promisex__GS0_x_">firstly(execute:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:F10PromiseKit4raceurFT8promisesGSaGCS_7Promisex___GS0_x_">race(promises:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:F10PromiseKit5afterFT8intervalSd_GCS_7PromiseT__">after(interval:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Other Enums.html">Other Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other Enums.html#/s:O10PromiseKit6Result">Result</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content">
+            
+            <p><img src="http://promisekit.org/public/img/logo-500.png" alt="PromiseKit"></p>
+
+<p>Modern development is highly asynchronous: isn’t it about time we had tools that made programming asynchronously powerful, easy and delightful?</p>
+<pre class="highlight swift"><code><span class="n">firstly</span> <span class="p">{</span>
+    <span class="kt">UIApplication</span><span class="o">.</span><span class="nf">shared</span><span class="p">()</span><span class="o">.</span><span class="n">networkActivityIndicatorVisible</span> <span class="o">=</span> <span class="kc">true</span>
+<span class="p">}</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span>
+    <span class="nf">when</span><span class="p">(</span><span class="nf">fetchImage</span><span class="p">(),</span> <span class="nf">getLocation</span><span class="p">())</span>
+<span class="p">}</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">image</span><span class="p">,</span> <span class="n">location</span> <span class="k">in</span>
+    <span class="k">self</span><span class="o">.</span><span class="n">imageView</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">image</span><span class="p">;</span>
+    <span class="k">self</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">"Buy your cat a house in </span><span class="se">\(</span><span class="n">location</span><span class="se">)</span><span class="s">"</span>
+<span class="p">}</span><span class="o">.</span><span class="n">always</span> <span class="p">{</span>
+    <span class="kt">UIApplication</span><span class="o">.</span><span class="nf">shared</span><span class="p">()</span><span class="o">.</span><span class="n">networkActivityIndicatorVisible</span> <span class="o">=</span> <span class="kc">false</span>
+<span class="p">}</span><span class="o">.</span><span class="k">catch</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+    <span class="kt">UIAlertView</span><span class="p">(</span><span class="cm">/*…*/</span><span class="p">)</span><span class="o">.</span><span class="nf">show</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>PromiseKit is a thoughtful and complete implementation of promises for iOS and macOS with first-class support for <strong>both</strong> Objective-C <em>and</em> Swift.</p>
+
+<p><img src="https://img.shields.io/cocoapods/v/PromiseKit.svg?label=Current%20Release" alt="">  <a href="https://github.com/Carthage/Carthage"><img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg" alt="Carthage compatible"></a>
+<a href="https://codebeat.co/projects/github-com-mxcl-promisekit"><img src="https://codebeat.co/badges/6a2fc7b4-cc8f-4865-a81d-644edd38c662" alt="codebeat"></a>
+<a href="https://gitter.im/mxcl/PromiseKit?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/Join%20Chat.svg" alt="Join the chat at https://gitter.im/mxcl/PromiseKit"></a></p>
+<a href='#getting-setup' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h1 id='getting-setup'>Getting Setup</h1>
+<pre class="highlight ruby"><code><span class="c1"># CocoaPods</span>
+
+<span class="n">pod</span> <span class="s2">"PromiseKit"</span><span class="p">,</span> <span class="s2">"~&gt; 4.0"</span>
+</code></pre>
+
+<p>Or, clone the project and drag and drop its <code>xcodeproj</code> into your Xcode project.</p>
+<a href='#learning-the-ropes' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h1 id='learning-the-ropes'>Learning The Ropes</h1>
+
+<ul>
+<li>Check out our complete, comprehensive <a href="http://promisekit.org/docs/">PromiseKit documentation</a>.</li>
+</ul>
+<a href='#promisekit-vs-xcode' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h1 id='promisekit-vs-xcode'>PromiseKit vs. Xcode</h1>
+
+<p>PromiseKit contains Swift, so we engage in an un-ending battle with Xcode. We have a PromiseKit for every major release:</p>
+
+<ul>
+<li>Xcode 8 = PromiseKit 4</li>
+<li>Xcode 7 = PromiseKit 3</li>
+<li>Xcode 6 = PromiseKit 2</li>
+</ul>
+
+<p>PromiseKit 1 is pure Objective-C and we still maintain it.</p>
+<a href='#support' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h1 id='support'>Support</h1>
+
+<p>PromiseKit is lucky enough to have a large community behind it which is reflected in our <a href="https://gitter.im/mxcl/PromiseKit">Gitter chat</a>. If you&rsquo;re new to PromiseKit and are stumped or otherwise have a question that doesn&rsquo;t feel like an issue (and isn&rsquo;t answered in our <a href="http://promisekit.org/introduction">documentation</a>) then our Gitter is a great place to go for help. Of course if you&rsquo;re onto something that you believe is broken or could be improved then opening a new issue is still the way to go 👍.</p>
+<a href='#donations' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h1 id='donations'>Donations</h1>
+
+<p>PromiseKit is hundreds of hours of work almost completely by just me: <a href="https://twitter.com/mxcl">Max Howell</a>. I thoroughly enjoyed making PromiseKit, but nevertheless if you have found it useful then your bitcoin will give me a warm fuzzy feeling from my head right down to my toes: 1JDbV5zuym3jFw4kBCc5Z758maUD8e4dKR.</p>
+<a href='#license' class='anchor' aria-hidden=true><span class="header-anchor"></span></a><h1 id='license'>License</h1>
+
+<p>Copyright 2015, Max Howell; <a href="mailto:mxcl@me.com">mxcl@me.com</a></p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the <q>Software</q>), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED <q>AS IS</q>, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.</p>
+
+          </div>
+        </section>
+
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2016 <a class="link" href="http://mcl.github.io" target="_blank" rel="external">Max Howell</a>. All rights reserved. (Last updated: 2016-07-22)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>AnyPromise Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Class/AnyPromise" class="dashAnchor"></a>
+
+    <a title="AnyPromise Class Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="../index.html">
+          PromiseKit Docs
+        </a>
+        
+      </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/mxcl/PromiseKit">
+            <img class="header-icon" src="../img/gh.png"/>
+            View on GitHub
+          </a>
+        </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="dash-feed://http%3A%2F%2Fpromisekit%2Eorg%2Fdocs%2Fhandbook%2Fdocsets%2FPromiseKit%2Exml">
+            <img class="header-icon" src="../img/dash.png"/>
+            Install in Dash
+          </a>
+        </p>
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="../index.html">PromiseKit Reference</a>
+      <img class="carat" src="../img/carat.png" />
+      AnyPromise Class Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Promise.html">Promise</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/AnyPromise.html">AnyPromise</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:F10PromiseKit4whenurFT9fulfilledGSaGCS_7Promisex___GS0_GSax__">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:F10PromiseKit4whenurFt8resolvedGSaGCS_7Promisex___GS0_GSax__">when(resolved:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:F10PromiseKit7firstlyurFT7executeFzT_GCS_7Promisex__GS0_x_">firstly(execute:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:F10PromiseKit4raceurFT8promisesGSaGCS_7Promisex___GS0_x_">race(promises:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Functions.html#/s:F10PromiseKit5afterFT8intervalSd_GCS_7PromiseT__">after(interval:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Other Enums.html">Other Enums</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other Enums.html#/s:O10PromiseKit6Result">Result</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content">
+            <h1>AnyPromise</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight"><code><span class="kd">@objc(AnyPromise)</span> <span class="kd">public</span> <span class="kd">class</span> <span class="kt">AnyPromise</span><span class="p">:</span> <span class="kt">NSObject</span></code></pre>
+
+                </div>
+              </div>
+            <p>More accurately, AnyObjectPromise, since AnyPromise is
+our Objective-C bridge, thus AnyPromise can only represent
+objects, not value-types (structs).</p>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC10PromiseKit10AnyPromisecFGCS_7PromiseGSqPs9AnyObject___S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC10PromiseKit10AnyPromisecFGCS_7PromiseGSqPs9AnyObject___S0_">init(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-returns">
+    <p class="aside-title">Returns</p>
+    A new <code>AnyPromise</code> bound to a <code><a href="../Classes/Promise.html">Promise&lt;AnyObject?&gt;</a></code>.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">required</span> <span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">bridge</span><span class="p">:</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">AnyObject</span><span class="p">?</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new <code>AnyPromise</code> bound to a <code><a href="../Classes/Promise.html">Promise&lt;AnyObject?&gt;</a></code>.</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC10PromiseKit10AnyPromisecuRxs9AnyObjectrFGCS_7PromiseGSqx__S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC10PromiseKit10AnyPromisecuRxs9AnyObjectrFGCS_7PromiseGSqx__S0_">init(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-returns">
+    <p class="aside-title">Returns</p>
+    A new <code>AnyPromise</code> bound to a <code><a href="../Classes/Promise.html">Promise&lt;T&gt;</a></code>.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="n">convenience</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">:</span> <span class="kt">AnyObject</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">bridge</span><span class="p">:</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="p">?</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new <code>AnyPromise</code> bound to a <code><a href="../Classes/Promise.html">Promise&lt;T&gt;</a></code>.</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC10PromiseKit10AnyPromisecuRxs9AnyObjectrFGCS_7Promisex_S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC10PromiseKit10AnyPromisecuRxs9AnyObjectrFGCS_7Promisex_S0_">init(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-returns">
+    <p class="aside-title">Returns</p>
+    A new <code>AnyPromise</code> bound to a <code><a href="../Classes/Promise.html">Promise&lt;T&gt;</a></code>.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">convenience</span> <span class="kd">public</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">:</span> <span class="kt">AnyObject</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">bridge</span><span class="p">:</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new <code>AnyPromise</code> bound to a <code><a href="../Classes/Promise.html">Promise&lt;T&gt;</a></code>.</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC10PromiseKit10AnyPromisecuRxs9AnyObjectrFGCS_7PromiseGSax__S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC10PromiseKit10AnyPromisecuRxs9AnyObjectrFGCS_7PromiseGSax__S0_">init(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-returns">
+    <p class="aside-title">Returns</p>
+    A new <code>AnyPromise</code> bound to a <code><a href="../Classes/Promise.html">Promise&lt;[T]&gt;</a></code>.
+
+</div>
+
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    The array is converted to an <code>NSArray</code>.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">convenience</span> <span class="kd">public</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">:</span> <span class="kt">AnyObject</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">bridge</span><span class="p">:</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">T</span><span class="p">]</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new <code>AnyPromise</code> bound to a <code><a href="../Classes/Promise.html">Promise&lt;[T]&gt;</a></code>.</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC10PromiseKit10AnyPromisecu0_Rxs9AnyObjectxs8Hashable_S1_rFGCS_7PromiseGVs10Dictionaryxq___S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC10PromiseKit10AnyPromisecu0_Rxs9AnyObjectxs8Hashable_S1_rFGCS_7PromiseGVs10Dictionaryxq___S0_">init(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-returns">
+    <p class="aside-title">Returns</p>
+    A new <code>AnyPromise</code> bound to a <code><a href="../Classes/Promise.html">Promise&lt;[T:U]&gt;</a></code>.
+
+</div>
+
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    The dictionary value is converted to an <code>NSDictionary</code>.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">convenience</span> <span class="kd">public</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt">T</span><span class="p">:</span> <span class="kt">AnyObject</span><span class="p">,</span> <span class="kt">U</span><span class="p">:</span> <span class="kt">AnyObject</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">bridge</span><span class="p">:</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">T</span><span class="p">:</span><span class="kt">U</span><span class="p">]</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new <code>AnyPromise</code> bound to a <code><a href="../Classes/Promise.html">Promise&lt;[T:U]&gt;</a></code>.</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC10PromiseKit10AnyPromisecFGCS_7PromiseSS_S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC10PromiseKit10AnyPromisecFGCS_7PromiseSS_S0_">init(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-returns">
+    <p class="aside-title">Returns</p>
+    A new <code>AnyPromise</code> bound to a <code><a href="../Classes/Promise.html">Promise&lt;String&gt;</a></code>.
+
+</div>
+
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    The <code>String</code> is converted to an <code>NSString</code>.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">convenience</span> <span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">bridge</span><span class="p">:</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new <code>AnyPromise</code> bound to a <code><a href="../Classes/Promise.html">Promise&lt;String&gt;</a></code>.</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC10PromiseKit10AnyPromisecFGCS_7PromiseSi_S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC10PromiseKit10AnyPromisecFGCS_7PromiseSi_S0_">init(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-returns">
+    <p class="aside-title">Returns</p>
+    A new <code>AnyPromise</code> bound to a <code><a href="../Classes/Promise.html">Promise&lt;Int&gt;</a></code>.
+
+</div>
+
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    The integer value is converted to an <code>NSNumber</code>.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">convenience</span> <span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">bridge</span><span class="p">:</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">Int</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new <code>AnyPromise</code> bound to a <code><a href="../Classes/Promise.html">Promise&lt;Int&gt;</a></code>.</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC10PromiseKit10AnyPromisecFGCS_7PromiseSb_S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC10PromiseKit10AnyPromisecFGCS_7PromiseSb_S0_">init(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-returns">
+    <p class="aside-title">Returns</p>
+    A new <code>AnyPromise</code> bound to a <code><a href="../Classes/Promise.html">Promise&lt;Bool&gt;</a></code>.
+
+</div>
+
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    The boolean value is converted to an <code>NSNumber</code>.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">convenience</span> <span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">bridge</span><span class="p">:</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">Bool</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new <code>AnyPromise</code> bound to a <code><a href="../Classes/Promise.html">Promise&lt;Bool&gt;</a></code>.</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC10PromiseKit10AnyPromisecFGCS_7PromiseT__S0_"></a>
+                    <a name="//apple_ref/swift/Method/init(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC10PromiseKit10AnyPromisecFGCS_7PromiseT__S0_">init(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-returns">
+    <p class="aside-title">Returns</p>
+    A new <code>AnyPromise</code> bound to a <code><a href="../Classes/Promise.html">Promise&lt;Void&gt;</a></code>.
+
+</div>
+
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    A “void” <code>AnyPromise</code> has a value of <code>nil</code>.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="n">convenience</span> <span class="kd">public</span> <span class="nf">init</span><span class="p">(</span><span class="n">_</span> <span class="nv">bridge</span><span class="p">:</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new <code>AnyPromise</code> bound to a <code><a href="../Classes/Promise.html">Promise&lt;Void&gt;</a></code>.</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC10PromiseKit10AnyPromise9asPromiseFT_GCS_7PromiseGSqPs9AnyObject___"></a>
+                    <a name="//apple_ref/swift/Method/asPromise()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC10PromiseKit10AnyPromise9asPromiseFT_GCS_7PromiseGSqPs9AnyObject___">asPromise()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Bridge an AnyPromise to a Promise<AnyObject?>
+- Note: AnyPromises fulfilled with <code>PMKManifold</code> lose all but the first fulfillment object.
+- Remark: Could not make this an initializer of <code><a href="../Classes/Promise.html">Promise</a></code> due to generics issues.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">asPromise</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">AnyObject</span><span class="p">?</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC10PromiseKit10AnyPromise4thenurFT2onCSo13DispatchQueue7executeFzGSqPs9AnyObject__x_GCS_7Promisex_"></a>
+                    <a name="//apple_ref/swift/Method/then(on:execute:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC10PromiseKit10AnyPromise4thenurFT2onCSo13DispatchQueue7executeFzGSqPs9AnyObject__x_GCS_7Promisex_">then(on:execute:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <code>Promise.then()</code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">then</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">on</span> <span class="nv">q</span><span class="p">:</span> <span class="kt">DispatchQueue</span> <span class="o">=</span> <span class="kt">PMKDefaultDispatchQueue</span><span class="p">(),</span> <span class="n">execute</span> <span class="nv">body</span><span class="p">:</span> <span class="p">(</span><span class="kt">AnyObject</span><span class="p">?)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC10PromiseKit10AnyPromise4thenFT2onCSo13DispatchQueue7executeFzGSqPs9AnyObject__S0__GCS_7PromiseGSqPS2____"></a>
+                    <a name="//apple_ref/swift/Method/then(on:execute:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC10PromiseKit10AnyPromise4thenFT2onCSo13DispatchQueue7executeFzGSqPs9AnyObject__S0__GCS_7PromiseGSqPS2____">then(on:execute:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <code>Promise.then()</code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">then</span><span class="p">(</span><span class="n">on</span> <span class="nv">q</span><span class="p">:</span> <span class="kt">DispatchQueue</span> <span class="o">=</span> <span class="kt">PMKDefaultDispatchQueue</span><span class="p">(),</span> <span class="n">execute</span> <span class="nv">body</span><span class="p">:</span> <span class="p">(</span><span class="kt">AnyObject</span><span class="p">?)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">AnyPromise</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">AnyObject</span><span class="p">?</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC10PromiseKit10AnyPromise4thenurFT2onCSo13DispatchQueue7executeFzGSqPs9AnyObject__GCS_7Promisex__GS3_x_"></a>
+                    <a name="//apple_ref/swift/Method/then(on:execute:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC10PromiseKit10AnyPromise4thenurFT2onCSo13DispatchQueue7executeFzGSqPs9AnyObject__GCS_7Promisex__GS3_x_">then(on:execute:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <code>Promise.then()</code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">then</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">on</span> <span class="nv">q</span><span class="p">:</span> <span class="kt">DispatchQueue</span> <span class="o">=</span> <span class="kt">PMKDefaultDispatchQueue</span><span class="p">(),</span> <span class="n">execute</span> <span class="nv">body</span><span class="p">:</span> <span class="p">(</span><span class="kt">AnyObject</span><span class="p">?)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC10PromiseKit10AnyPromise6alwaysFT2onCSo13DispatchQueue7executeFT_T__GCS_7PromiseGSqPs9AnyObject___"></a>
+                    <a name="//apple_ref/swift/Method/always(on:execute:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC10PromiseKit10AnyPromise6alwaysFT2onCSo13DispatchQueue7executeFT_T__GCS_7PromiseGSqPs9AnyObject___">always(on:execute:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <code>Promise.always()</code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">always</span><span class="p">(</span><span class="n">on</span> <span class="nv">q</span><span class="p">:</span> <span class="kt">DispatchQueue</span> <span class="o">=</span> <span class="kt">PMKDefaultDispatchQueue</span><span class="p">(),</span> <span class="n">execute</span> <span class="nv">body</span><span class="p">:</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">AnyObject</span><span class="p">?</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC10PromiseKit10AnyPromise3tapFT2onCSo13DispatchQueue7executeFGOS_6ResultGSqPs9AnyObject___T__GCS_7PromiseGSqPS3____"></a>
+                    <a name="//apple_ref/swift/Method/tap(on:execute:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC10PromiseKit10AnyPromise3tapFT2onCSo13DispatchQueue7executeFGOS_6ResultGSqPs9AnyObject___T__GCS_7PromiseGSqPS3____">tap(on:execute:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <code>Promise.tap()</code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">tap</span><span class="p">(</span><span class="n">on</span> <span class="nv">q</span><span class="p">:</span> <span class="kt">DispatchQueue</span> <span class="o">=</span> <span class="kt">PMKDefaultDispatchQueue</span><span class="p">(),</span> <span class="n">execute</span> <span class="nv">body</span><span class="p">:</span> <span class="p">(</span><span class="kt"><a href="../Other Enums.html#/s:O10PromiseKit6Result">Result</a></span><span class="o">&lt;</span><span class="kt">AnyObject</span><span class="p">?</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">AnyObject</span><span class="p">?</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC10PromiseKit10AnyPromise7recoverFT2onCSo13DispatchQueue6policyOSC11CatchPolicy7executeFzPs13ErrorProtocol_GCS_7PromiseGSqPs9AnyObject____GS4_GSqPS5____"></a>
+                    <a name="//apple_ref/swift/Method/recover(on:policy:execute:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC10PromiseKit10AnyPromise7recoverFT2onCSo13DispatchQueue6policyOSC11CatchPolicy7executeFzPs13ErrorProtocol_GCS_7PromiseGSqPs9AnyObject____GS4_GSqPS5____">recover(on:policy:execute:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <code>Promise.recover()</code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">recover</span><span class="p">(</span><span class="n">on</span> <span class="nv">q</span><span class="p">:</span> <span class="kt">DispatchQueue</span> <span class="o">=</span> <span class="kt">PMKDefaultDispatchQueue</span><span class="p">(),</span> <span class="nv">policy</span><span class="p">:</span> <span class="kt">CatchPolicy</span> <span class="o">=</span> <span class="o">.</span><span class="n">allErrorsExceptCancellation</span><span class="p">,</span> <span class="n">execute</span> <span class="nv">body</span><span class="p">:</span> <span class="p">(</span><span class="kt">ErrorProtocol</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">AnyObject</span><span class="p">?</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">AnyObject</span><span class="p">?</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC10PromiseKit10AnyPromise7recoverFT2onCSo13DispatchQueue6policyOSC11CatchPolicy7executeFzPs13ErrorProtocol_GSqPs9AnyObject___GCS_7PromiseGSqPS4____"></a>
+                    <a name="//apple_ref/swift/Method/recover(on:policy:execute:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC10PromiseKit10AnyPromise7recoverFT2onCSo13DispatchQueue6policyOSC11CatchPolicy7executeFzPs13ErrorProtocol_GSqPs9AnyObject___GCS_7PromiseGSqPS4____">recover(on:policy:execute:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <code>Promise.recover()</code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">recover</span><span class="p">(</span><span class="n">on</span> <span class="nv">q</span><span class="p">:</span> <span class="kt">DispatchQueue</span> <span class="o">=</span> <span class="kt">PMKDefaultDispatchQueue</span><span class="p">(),</span> <span class="nv">policy</span><span class="p">:</span> <span class="kt">CatchPolicy</span> <span class="o">=</span> <span class="o">.</span><span class="n">allErrorsExceptCancellation</span><span class="p">,</span> <span class="n">execute</span> <span class="nv">body</span><span class="p">:</span> <span class="p">(</span><span class="kt">ErrorProtocol</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">AnyObject</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">AnyObject</span><span class="p">?</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:FC10PromiseKit10AnyPromise5catchFT2onCSo13DispatchQueue6policyOSC11CatchPolicy7executeFPs13ErrorProtocol_T__T_"></a>
+                    <a name="//apple_ref/swift/Method/catch(on:policy:execute:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:FC10PromiseKit10AnyPromise5catchFT2onCSo13DispatchQueue6policyOSC11CatchPolicy7executeFPs13ErrorProtocol_T__T_">catch(on:policy:execute:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <code>Promise.catch()</code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">func</span> <span class="err">`</span><span class="k">catch</span><span class="err">`</span><span class="p">(</span><span class="n">on</span> <span class="nv">q</span><span class="p">:</span> <span class="kt">DispatchQueue</span> <span class="o">=</span> <span class="kt">PMKDefaultDispatchQueue</span><span class="p">(),</span> <span class="nv">policy</span><span class="p">:</span> <span class="kt">CatchPolicy</span> <span class="o">=</span> <span class="o">.</span><span class="n">allErrorsExceptCancellation</span><span class="p">,</span> <span class="n">execute</span> <span class="nv">body</span><span class="p">:</span> <span class="p">(</span><span class="kt">ErrorProtocol</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/ObjC%20methods"></a>
+                <a name="//apple_ref/swift/Section/ObjC methods" class="dashAnchor"></a>
+                <a href="#/ObjC%20methods">
+                  <h3 class="section-name">ObjC methods</h3>
+                </a>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC10PromiseKit10AnyPromise7pendingSb"></a>
+                    <a name="//apple_ref/swift/Property/pending" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC10PromiseKit10AnyPromise7pendingSb">pending</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A promise starts pending and eventually resolves.
+- Returns: <code>true</code> if the promise has not yet resolved.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">@objc</span> <span class="kd">public</span> <span class="k">var</span> <span class="nv">pending</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><code>true</code> if the promise has not yet resolved.</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC10PromiseKit10AnyPromise8resolvedSb"></a>
+                    <a name="//apple_ref/swift/Property/resolved" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC10PromiseKit10AnyPromise8resolvedSb">resolved</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>A promise starts pending and eventually resolves.
+- Returns: <code>true</code> if the promise has resolved.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">@objc</span> <span class="kd">public</span> <span class="k">var</span> <span class="nv">resolved</span><span class="p">:</span> <span class="kt">Bool</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><code>true</code> if the promise has resolved.</p>
+
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:vC10PromiseKit10AnyPromise5valueGSqPs9AnyObject__"></a>
+                    <a name="//apple_ref/swift/Property/value" class="dashAnchor"></a>
+                    <a class="token" href="#/s:vC10PromiseKit10AnyPromise5valueGSqPs9AnyObject__">value</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The value of the asynchronous task this promise represents.</p>
+
+<p>A promise has <code>nil</code> value if the asynchronous task it represents has not finished. If the value is <code>nil</code> the promise is still <code><a href="../Classes/AnyPromise.html#/s:vC10PromiseKit10AnyPromise7pendingSb">pending</a></code>.</p>
+
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    <p><em>Note</em> Our Swift variant’s value property returns nil if the promise is rejected where AnyPromise will return the error object. This fits with the pattern where AnyPromise is not strictly typed and is more dynamic, but you should be aware of the distinction.</p>
+
+</div>
+
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <p>If the AnyPromise was fulfilled with a <code>PMKManifold</code>, returns only the first fulfillment object.</p>
+
+</div>
+
+<div class="aside aside-returns">
+    <p class="aside-title">Returns</p>
+    <p>Returns If <code><a href="../Classes/AnyPromise.html#/s:vC10PromiseKit10AnyPromise8resolvedSb">resolved</a></code>, the object that was used to resolve this promise; if <code><a href="../Classes/AnyPromise.html#/s:vC10PromiseKit10AnyPromise7pendingSb">pending</a></code>, nil.</p>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight"><code><span class="kd">@objc</span> <span class="kd">public</span> <span class="k">var</span> <span class="nv">value</span><span class="p">:</span> <span class="kt">AnyObject</span><span class="p">?</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2016 <a class="link" href="http://mcl.github.io" target="_blank" rel="external">Max Howell</a>. All rights reserved. (Last updated: 2016-07-22)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.7.0</a>, a <a class="link" href="http://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

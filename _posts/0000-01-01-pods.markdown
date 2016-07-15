@@ -1,3 +1,0 @@
-<meta http-equiv="refresh" content="0; url=http://promisekit.org/cocoapods/" />
-
-[This content has moved](/cocoapods/).
