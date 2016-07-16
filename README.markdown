@@ -65,12 +65,12 @@ The original, nice to use with Objective-C, less nice to use with Swift, hence P
 ```ruby
 use_frameworks!
 
-pod "PromiseKit", "~> 2.0"
+pod "PromiseKit", "~> 3.2"
 ```
 
 ### Carthage
 ```ruby
-github "mxcl/PromiseKit" ~> 2.0
+github "mxcl/PromiseKit" ~> 3.2
 ```
 
 *Note*: In order to avoid linking nearly all system frameworks with PromiseKit, the convenience categories have not been included with the Carthage framework . You must manually copy the categories you need in from the Carthage checkout.
