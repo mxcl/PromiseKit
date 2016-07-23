@@ -28,6 +28,9 @@ public enum Error: ErrorType {
      programming error. It is also invalid per Promises/A+.
     */
     case ReturnedSelf
+
+    /** `when()` was called with a concurrency of <= 0 */
+    case WhenConcurrentlyZero
 }
 
 public enum URLError: ErrorType {

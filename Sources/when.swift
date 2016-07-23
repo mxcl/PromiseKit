@@ -118,6 +118,11 @@ public func when<U, V, X>(pu: Promise<U>, _ pv: Promise<V>, _ px: Promise<X>) ->
  */
 
 public func when<T, PromiseGenerator: GeneratorType where PromiseGenerator.Element == Promise<T> >(promiseGenerator: PromiseGenerator, concurrently: Int = 1) -> Promise<[T]> {
+
+    guard concurrently > 0 else {
+        return Promise(error: Error.WhenConcurrentlyZero)
+    }
+
     var generator = promiseGenerator
     var root = Promise<[T]>.pendingPromise()
     var pendingPromises = 0

@@ -130,4 +130,15 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
         waitForExpectationsWithTimeout(3, handler: nil)
     }
 
+    func testWhenConcurrencyLessThanZero() {
+        let generator = AnyGenerator<Promise<Int>> { XCTFail(); return nil }
+
+        let p1 = when(generator, concurrently: 0)
+        let p2 = when(generator, concurrently: -1)
+
+        guard let e1 = p1.error else { return XCTFail() }
+        guard let e2 = p2.error else { return XCTFail() }
+        guard case Error.WhenConcurrentlyZero = e1 else { return XCTFail() }
+        guard case Error.WhenConcurrentlyZero = e2 else { return XCTFail() }
+    }
 }
