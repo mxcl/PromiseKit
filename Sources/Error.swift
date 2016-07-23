@@ -28,6 +28,11 @@ public enum Error: ErrorType {
      programming error. It is also invalid per Promises/A+.
     */
     case ReturnedSelf
+
+    /**
+     Exceeded limit of the number of queued promises in `PromiseQueue`.
+    */
+    case QueueIsFull
 }
 
 public enum URLError: ErrorType {
