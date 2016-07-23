@@ -10,6 +10,9 @@
 #import <PromiseKit/Umbrella.h>
 
 
+#if __cplusplus
+extern "C" {
+#endif
 
 /**
  @return A new promise that resolves after the specified duration.
@@ -175,6 +178,10 @@ extern AnyPromise * __nonnull dispatch_promise(id __nonnull block);
 */
 extern AnyPromise * __nonnull dispatch_promise_on(dispatch_queue_t __nonnull queue, id __nonnull block);
 
+
+#if __cplusplus
+}   // Extern C
+#endif
 
 
 #define PMKJSONDeserializationOptions ((NSJSONReadingOptions)(NSJSONReadingAllowFragments | NSJSONReadingMutableContainers))
