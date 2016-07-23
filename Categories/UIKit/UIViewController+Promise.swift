@@ -85,7 +85,7 @@ extension UIViewController {
     }
 }
 
-@objc public protocol Promisable {
+@objc(Promisable) public protocol Promisable {
     /**
     Provide a promise for promiseViewController here.
 

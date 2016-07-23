@@ -59,6 +59,14 @@ FOUNDATION_EXPORT dispatch_queue_t (^PMKDefaultDispatchQueue)();
     # endif
     #endif
 
+    #if !defined(SWIFT_PROTOCOL_EXTRA)
+    # define SWIFT_PROTOCOL_EXTRA
+    #endif
+    #if !defined(SWIFT_PROTOCOL)
+    # define SWIFT_PROTOCOL(SWIFT_NAME) SWIFT_RUNTIME_NAME(SWIFT_NAME) SWIFT_PROTOCOL_EXTRA
+    # define SWIFT_PROTOCOL_NAMED(SWIFT_NAME) SWIFT_COMPILE_NAME(SWIFT_NAME) SWIFT_PROTOCOL_EXTRA
+    #endif
+
     SWIFT_CLASS("AnyPromise")
     @interface AnyPromise : NSObject
     @property (nonatomic, readonly) BOOL pending;
@@ -66,4 +74,10 @@ FOUNDATION_EXPORT dispatch_queue_t (^PMKDefaultDispatchQueue)();
     @property (nonatomic, readonly) BOOL fulfilled;
     @property (nonatomic, readonly) BOOL rejected;
     @end
+
+    SWIFT_PROTOCOL("Promisable")
+    @protocol Promisable
+    @property (nonatomic, readonly, strong) id promise;
+    @end
+
 #endif
