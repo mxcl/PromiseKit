@@ -12,6 +12,7 @@ class App: UITableViewController, UIApplicationDelegate {
         window!.rootViewController = self
         window!.backgroundColor = UIColor.purpleColor()
         window!.makeKeyAndVisible()
+        UIView.setAnimationsEnabled(false)
         return true
     }
 

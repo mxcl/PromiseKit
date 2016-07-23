@@ -8,7 +8,7 @@ class UITest_UIImagePickerController_Swift: PMKiOSUITestCase {
         let table = app.tables
         table.cells.staticTexts["1"].tap()
         table.cells.elementBoundByIndex(0).tap()
-        app.navigationBars["Moments"].buttons["Cancel"].tap()
+        app.navigationBars.buttons["Cancel"].tap()
 
         XCTAssertTrue(value)
     }
