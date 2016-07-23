@@ -33,6 +33,11 @@ Once Swift becomes ABI or API stable we can all just move to the latest PromiseK
 Thus we intend to support PromiseKit 1.x for longer than expected.
 
 
+# PromiseKit 4 Beta
+
+Updated for Swift 3.0 and Xcode 8 beta.
+
+
 # PromiseKit 3
 
 In Swift 2.0 `catch` and `defer` became reserved keywords mandating we rename our functions with these names. This forced a major semantic version change on PromiseKit and thus we took the opportunity to make other minor (source compatability breaking) improvements.
