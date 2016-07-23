@@ -67,8 +67,14 @@ private class LocationManager: CLLocationManager, CLLocationManagerDelegate {
 #endif
 
     @objc func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
-        reject(error)
-        CLLocationManager.promiseDoneForLocationManager(manager)
+        switch error {
+        case let error as CLError where error == .LocationUnknown:
+            // Apple docs say you should just ignore this error
+            break
+        default:
+            reject(error)
+            CLLocationManager.promiseDoneForLocationManager(manager)
+        }
     }
 }
 

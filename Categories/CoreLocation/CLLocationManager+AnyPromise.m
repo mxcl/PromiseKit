@@ -1,4 +1,5 @@
 #import <CoreLocation/CLLocationManagerDelegate.h>
+#import <CoreLocation/CLError.h>
 #import "CLLocationManager+AnyPromise.h"
 
 @interface PMKLocationManager : CLLocationManager <CLLocationManagerDelegate>
@@ -28,8 +29,11 @@
 }
 
 - (void)locationManager:(CLLocationManager *)manager didFailWithError:(NSError *)error {
-    resolve(error);
-    PMKLocationManagerCleanup();
+    // Apple docs say to ignore this error
+    if (error.code != kCLErrorLocationUnknown) {
+        resolve(error);
+        PMKLocationManagerCleanup();
+    }
 }
 
 - (void)locationManager:(CLLocationManager *)manager didChangeAuthorizationStatus:(CLAuthorizationStatus)status {
