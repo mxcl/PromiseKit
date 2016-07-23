@@ -72,6 +72,13 @@
     return [self promise:rq];
 }
 
++ (AnyPromise *)PATCH:(NSString *)url JSON:(NSDictionary *)params {
+    id err;
+    id rq = [OMGHTTPURLRQ PATCH:url JSON:params error:&err];
+    if (err) [AnyPromise promiseWithValue:err];
+    return [self promise:rq];
+}
+
 + (AnyPromise *)promise:(NSURLRequest *)rq {
     static id q = nil;
     static dispatch_once_t onceToken;

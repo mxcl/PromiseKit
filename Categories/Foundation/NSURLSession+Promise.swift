@@ -39,12 +39,16 @@ extension NSURLSession {
         return start(try OMGHTTPURLRQ.POST(URL, multipartFormData))
     }
 
-    public class func PUT(URL: String) -> URLDataPromise {
-        return start(try OMGHTTPURLRQ.PUT(URL, nil))
+    public class func PUT(URL: String, JSON: NSDictionary? = nil) -> URLDataPromise {
+        return start(try OMGHTTPURLRQ.PUT(URL, JSON: JSON))
     }
 
     public class func DELETE(URL: String) -> URLDataPromise {
         return start(try OMGHTTPURLRQ.DELETE(URL, nil))
+    }
+
+    public class func PATCH(URL: String, JSON: NSDictionary) -> URLDataPromise {
+        return start(try OMGHTTPURLRQ.PATCH(URL, JSON: JSON))
     }
 
     public func promise(request: NSURLRequest) -> URLDataPromise {

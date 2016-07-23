@@ -49,6 +49,10 @@ extension NSURLConnection {
         return go(try OMGHTTPURLRQ.DELETE(URL, nil))
     }
 
+    public class func PATCH(URL: String, JSON: NSDictionary) -> URLDataPromise {
+        return go(try OMGHTTPURLRQ.PATCH(URL, JSON: JSON))
+    }
+
     public class func promise(request: NSURLRequest) -> URLDataPromise {
         return go(request)
     }
