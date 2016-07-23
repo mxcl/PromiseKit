@@ -77,6 +77,10 @@ public enum JSONError: ErrorType {
     case UnexpectedRootNode(AnyObject)
 }
 
+public enum CastingError: ErrorType {
+    case CastingAnyPromiseFailed(Any.Type)
+}
+
 
 //////////////////////////////////////////////////////////// Cancellation
 private struct ErrorPair: Hashable {
