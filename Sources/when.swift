@@ -121,47 +121,40 @@ public func when<U, V, X>(pu: Promise<U>, _ pv: Promise<V>, _ px: Promise<X>) ->
 
 public func when<T, PromiseGenerator: GeneratorType where PromiseGenerator.Element == Promise<T> >(promiseGenerator: PromiseGenerator, concurrently: Int = 1) -> Promise<[T]> {
     var generator = promiseGenerator
+    var root = Promise<[T]>.pendingPromise()
+    var pendingPromises = 0
+    var promises: [Promise<T>] = []
 
-    return Promise { fulfill, reject in
-        var pendingPromises = 0
-        var values: [T?] = []
-        var rejected = false
-        var counter = 0
-
-        func dequeue() {
-            guard pendingPromises < concurrently else {
-                return
-            }
-
-            if let promise = generator.next() {
-                let index = counter
-                counter += 1
-                pendingPromises += 1
-
-                promise
-                    .then(on: zalgo) { value -> Void in
-                        pendingPromises -= 1
-
-                        while values.count < index + 1 {
-                            values.append(nil)
-                        }
-
-                        values[index] = value
-                        dequeue()
-                    }
-                    .error { error in
-                        pendingPromises -= 1
-                        reject(Error.When(index, error))
-                    }
-
-                dequeue()
-            }
-
-            if pendingPromises == 0 {
-                fulfill(values.map { $0! })
-            }
+    func dequeue() {
+        guard pendingPromises < concurrently else {
+            return
         }
-        
-        dequeue()
+
+        if let promise = generator.next() {
+            let index = promises.count
+            pendingPromises += 1
+            promises.append(promise)
+
+            promise.pipe { resolution in
+                pendingPromises -= 1
+                switch resolution {
+                case .Fulfilled:
+                    dequeue()
+                case .Rejected(let error, let token):
+                    token.consumed = true
+                    root.reject(Error.When(index, error))
+                }
+            }
+
+            dequeue()
+        }
+
+        if pendingPromises == 0 && !root.promise.resolved {
+            root.fulfill(promises.flatMap{ $0.value })
+        }
     }
+        
+    dequeue()
+
+    return root.promise
 }
