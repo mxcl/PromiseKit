@@ -88,33 +88,31 @@ public func when<U, V, X>(pu: Promise<U>, _ pv: Promise<V>, _ px: Promise<X>) ->
 }
 
 /**
- Wait for all promises in a set to resolve.
+ Generate promises at a limited rate and wait for all to resolve.
 
  For example:
  
- func downloadFile(url: NSURL) -> Promise<NSData> {
-    // ...
- }
+     func downloadFile(url: NSURL) -> Promise<NSData> {
+         // ...
+     }
  
- let urls: [NSURL] = ...
- let urlGenerator = urls.generate()
- 
- let generator = AnyGenerator<Promise<NSData>> {
-    guard url = urlGenerator.next() else {
-        return nil
-    }
+     let urls: [NSURL] = /*…*/
+     let urlGenerator = urls.generate()
 
-    return downloadFile(url)
- }
+     let generator = AnyGenerator<Promise<NSData>> {
+         guard url = urlGenerator.next() else {
+             return nil
+         }
 
- when(generator, concurrently: 3)
-    .then { datum: [NSData] -> Void in
-        // ...
-    }
+         return downloadFile(url)
+     }
 
- - Warning: If *any* of the provided promises reject, the returned promise is immediately rejected with that promise’s rejection. The error’s `userInfo` object is supplemented with `PMKFailingPromiseIndexKey`.
- - Warning: In the event of rejection the other promises will continue to resolve and, as per any other promise, will either fulfill or reject. This is the right pattern for `getter` style asynchronous tasks, but often for `setter` tasks (eg. storing data on a server), you most likely will need to wait on all tasks and then act based on which have succeeded and which have failed, in such situations use `join`.
- - Parameter promises: Generator of promises.
+     when(generator, concurrently: 3).then { datum: [NSData] -> Void in
+         // ...
+     }
+
+ - Warning: Refer to the warnings on `when(fulfilled:)`
+ - Parameter promiseGenerator: Generator of promises.
  - Returns: A new promise that resolves when all the provided promises fulfill or one of the provided promises rejects.
  - SeeAlso: `join()`
  */
