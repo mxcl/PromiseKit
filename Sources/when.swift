@@ -123,33 +123,56 @@ public func when<T, PromiseGenerator: GeneratorType where PromiseGenerator.Eleme
     var pendingPromises = 0
     var promises: [Promise<T>] = []
 
+    let barrier = dispatch_queue_create("org.promisekit.barrier.when", DISPATCH_QUEUE_CONCURRENT)
+
     func dequeue() {
-        guard pendingPromises < concurrently else {
-            return
+        var shouldDequeue = false
+        dispatch_sync(barrier) {
+            shouldDequeue = pendingPromises < concurrently
+        }
+        guard shouldDequeue else { return }
+
+        var index: Int!
+        var promise: Promise<T>!
+
+        dispatch_barrier_sync(barrier) {
+            guard let next = generator.next() else { return }
+
+            promise = next
+            index = promises.count
+
+            pendingPromises += 1
+            promises.append(next)
         }
 
-        if let promise = generator.next() {
-            let index = promises.count
-            pendingPromises += 1
-            promises.append(promise)
-
-            promise.pipe { resolution in
-                pendingPromises -= 1
-                switch resolution {
-                case .Fulfilled:
-                    dequeue()
-                case .Rejected(let error, let token):
-                    token.consumed = true
-                    root.reject(Error.When(index, error))
+        func testDone() {
+            dispatch_sync(barrier) {
+                if pendingPromises == 0 {
+                    root.fulfill(promises.flatMap{ $0.value })
                 }
             }
-
-            dequeue()
         }
 
-        if pendingPromises == 0 && !root.promise.resolved {
-            root.fulfill(promises.flatMap{ $0.value })
+        guard promise != nil else {
+            return testDone()
         }
+
+        promise.pipe { resolution in
+            dispatch_barrier_sync(barrier) {
+                pendingPromises -= 1
+            }
+
+            switch resolution {
+            case .Fulfilled:
+                dequeue()
+                testDone()
+            case .Rejected(let error, let token):
+                token.consumed = true
+                root.reject(Error.When(index, error))
+            }
+        }
+
+        dequeue()
     }
         
     dequeue()
