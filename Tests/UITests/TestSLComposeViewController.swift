@@ -7,7 +7,7 @@ class UITest_SLComposeViewController_Swift: PMKiOSUITestCase {
 
         sleep(5) // takes longer than usual
 
-        app.alerts["No Facebook Account"].collectionViews.buttons["Cancel"].tap()
+         app.alerts.buttons["Cancel"].tap()
 
         sleep(3)  // takes longer than usual (this may only pass when you look at it)
 
