@@ -624,20 +624,20 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		2F764A4A1CF6D34E00F6F7AD /* WatchConnectivity */ = {
-			isa = PBXGroup;
-			children = (
-				2F764A4B1CF6D3BE00F6F7AD /* WCSession+Promise.swift */,
-			);
-			path = WatchConnectivity;
-			sourceTree = "<group>";
-		};
 		1912DEE81C728B4200BB3C37 /* CoreBluetooth */ = {
 			isa = PBXGroup;
 			children = (
 				1912DEE91C728B6800BB3C37 /* CBCentralManager+Promise.swift */,
 			);
 			name = CoreBluetooth;
+			sourceTree = "<group>";
+		};
+		2F764A4A1CF6D34E00F6F7AD /* WatchConnectivity */ = {
+			isa = PBXGroup;
+			children = (
+				2F764A4B1CF6D3BE00F6F7AD /* WCSession+Promise.swift */,
+			);
+			path = WatchConnectivity;
 			sourceTree = "<group>";
 		};
 		43EA5FF21C5AC38C000BAEA7 /* tvOS */ = {
@@ -1070,7 +1070,6 @@
 				2F0BAE0B1C901E9300A4DCA1 /* TestEventKit.swift */,
 				63DF17031AEAC46E00BE97DD /* TestMessageUI.m */,
 				638AF9661B62B7DE0045C3E8 /* TestMessageUI.swift */,
-				2F764A4E1CF6D61E00F6F7AD /* TestWatchConnectivity.swift */,
 				6391FD2C1B62ED7D00671798 /* TestFoundation */,
 				63DF16FF1AEAC46E00BE97DD /* TestMapKit.swift */,
 				63DF17001AEAC46E00BE97DD /* TestQuartzCore.m */,
@@ -1079,6 +1078,7 @@
 				63DF17011AEAC46E00BE97DD /* TestStoreKit.m */,
 				63DF17021AEAC46E00BE97DD /* TestStoreKit.swift */,
 				6391FD2B1B62ED5700671798 /* TestUIKit */,
+				2F764A4E1CF6D61E00F6F7AD /* TestWatchConnectivity.swift */,
 				636A44EF1AEC304300639777 /* bridge.h */,
 				63DF16F81AEAC46E00BE97DD /* utils.m */,
 				638AF9681B62B8370045C3E8 /* utils.swift */,
