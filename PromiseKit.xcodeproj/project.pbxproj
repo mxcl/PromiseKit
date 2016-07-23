@@ -371,7 +371,7 @@
 		17470C5A1CBF8A9D004FBBB8 /* PMKDefaultDispatchQueueTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PMKDefaultDispatchQueueTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		17470C5C1CBF8B17004FBBB8 /* PMKDefaultDispatchQueueTest.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PMKDefaultDispatchQueueTest.swift; path = CorePromise/PMKDefaultDispatchQueueTest.swift; sourceTree = "<group>"; };
 		17470C5E1CBF912E004FBBB8 /* PMKDefaultDispatchQueueTest.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PMKDefaultDispatchQueueTest.m; path = CorePromise/PMKDefaultDispatchQueueTest.m; sourceTree = "<group>"; };
-		1912DEE91C728B6800BB3C37 /* CBCentralManager+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CBCentralManager+Promise.swift"; sourceTree = "<group>"; };
+		1912DEE91C728B6800BB3C37 /* CBCentralManager+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CBCentralManager+Promise.swift"; path = "CoreBluetooth/CBCentralManager+Promise.swift"; sourceTree = "<group>"; };
 		2F0BAE0B1C901E9300A4DCA1 /* TestEventKit.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TestEventKit.swift; sourceTree = "<group>"; };
 		2F764A4B1CF6D3BE00F6F7AD /* WCSession+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "WCSession+Promise.swift"; sourceTree = "<group>"; };
 		2F764A4E1CF6D61E00F6F7AD /* TestWatchConnectivity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = TestWatchConnectivity.swift; path = Categories/TestWatchConnectivity.swift; sourceTree = "<group>"; };
@@ -2256,9 +2256,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 3.2.1;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3.3.0;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
@@ -2311,9 +2309,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 3.2.1;
-				DYLIB_COMPATIBILITY_VERSION = 1;
-				DYLIB_CURRENT_VERSION = 1;
+				CURRENT_PROJECT_VERSION = 3.3.0;
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;

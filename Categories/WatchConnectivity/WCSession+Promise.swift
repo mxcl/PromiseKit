@@ -1,6 +1,8 @@
 import Foundation
 import WatchConnectivity
+#if !COCOAPODS
 import PromiseKit
+#endif
 
 @available(iOS 9.0, *)
 @available(iOSApplicationExtension 9.0, *)

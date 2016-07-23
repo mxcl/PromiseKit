@@ -65,7 +65,7 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'CoreBluetooth' do |ss|
-    ss.source_files = 'Categories/CoreBluetooth/*'
+    ss.ios.source_files = ss.osx.source_files = 'Categories/CoreBluetooth/*'
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'CoreBluetooth'
   end
@@ -168,5 +168,4 @@ Pod::Spec.new do |s|
     ss.ios.deployment_target = '8.0' # Watch Connectivity only works in iOS 9 but apps with a deployment target of 8.0 can still include it because of the availability check
     ss.watchos.deployment_target = '2.0'
   end
-
 end
