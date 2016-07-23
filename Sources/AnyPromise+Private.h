@@ -32,14 +32,6 @@
 
 extern NSError * __nullable PMKProcessUnhandledException(id __nonnull thrown);
 
-#define NSErrorSupplement(_err, supplements) ({ \
-    NSError *err = _err; \
-    NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:err.userInfo ?: @{}]; \
-    [userInfo addEntriesFromDictionary:supplements]; \
-    [userInfo setObject:err forKey:NSUnderlyingErrorKey]; \
-    [[NSError alloc] initWithDomain:err.domain code:err.code userInfo:userInfo]; \
-})
-
 @interface NSError (PMKUnhandledErrorHandler)
 - (void)pmk_consume;
 @end

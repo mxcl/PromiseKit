@@ -58,7 +58,12 @@ AnyPromise *PMKWhen(id promises) {
 
                 if (IsError(value)) {
                     progress.completedUnitCount = progress.totalUnitCount;
-                    resolve(NSErrorSupplement(value, @{PMKFailingPromiseIndexKey: key}));
+
+                    NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:[value userInfo] ?: @{}];
+                    userInfo[PMKFailingPromiseIndexKey] = key;
+                    [userInfo setObject:value forKey:NSUnderlyingErrorKey];
+                    id err = [[NSError alloc] initWithDomain:[value domain] code:[value code] userInfo:userInfo];
+                    resolve(err);
                 }
                 else if (OSAtomicDecrement32(&countdown) == 0) {
                     progress.completedUnitCount = progress.totalUnitCount;
