@@ -29,14 +29,6 @@
 
     [progress resignCurrent];
 
-    __block float cum = 0;
-    for (AnyPromise *p in @[p1, p2, p3, p4]) {
-        p.then(^{
-            cum += 0.25;
-            XCTAssertEqual(cum, progress.fractionCompleted);
-        });
-    }
-
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 

@@ -73,7 +73,7 @@ extension NSTask {
                     let a = Int(self.terminationStatus)
                     fulfill(stdout, stderr, a)
                 } else {
-                    let cmd = " ".join([self.launchPath!] + (self.arguments ?? []))
+                    let cmd = ([self.launchPath!] + (self.arguments ?? [])).joinWithSeparator(" ")
                     reject(generateError("Failed executing: `\(cmd)`.", stdout, stderr, self))
                 }
             }

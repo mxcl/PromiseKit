@@ -26,8 +26,9 @@ private func when<T>(promises: [Promise<T>]) -> Promise<Void> {
                     progress.completedUnitCount = progress.totalUnitCount
                     reject(error)
                 case .Fulfilled:
-                    progress.completedUnitCount++
-                    if --countdown == 0 {
+                    progress.completedUnitCount += 1
+                    countdown -= 1
+                    if countdown == 0 {
                         fulfill()
                     }
                 }
