@@ -1,54 +1,56 @@
 import Foundation.NSProgress
 
-private func _when<T>(promises: [Promise<T>]) -> Promise<Void> {
-    let (rootPromise, fulfill, reject) = Promise<Void>.pendingPromise()
+private func _when<T>(_ promises: [Promise<T>]) -> Promise<Void> {
+    let root = Promise<Void>.pending()
+    var countdown = promises.count
+    guard countdown > 0 else {
+        root.fulfill()
+        return root.promise
+    }
+
 #if !PMKDisableProgress
-    let progress = NSProgress(totalUnitCount: Int64(promises.count))
-    progress.cancellable = false
-    progress.pausable = false
+    let progress = Progress(totalUnitCount: Int64(promises.count))
+    progress.isCancellable = false
+    progress.isPausable = false
 #else
     var progress: (completedUnitCount: Int, totalUnitCount: Int) = (0, 0)
 #endif
-    var countdown = promises.count
-    if countdown == 0 {
-        fulfill()
-        return rootPromise
-    }
-    let barrier = dispatch_queue_create("org.promisekit.barrier.when", DISPATCH_QUEUE_CONCURRENT)
+    
+    let barrier = DispatchQueue(label: "org.promisekit.barrier.when", attributes: .concurrent)
 
-    for (index, promise) in promises.enumerate() {
-        promise.pipe { resolution in
-            dispatch_barrier_sync(barrier) {
+    for (index, promise) in promises.enumerated() {
+        promise.state.pipe { resolution in
+            __dispatch_barrier_sync(barrier) {
                 switch resolution {
-                case .Rejected(let error, let token):
+                case .rejected(let error, let token):
                     token.consumed = true   // all errors are consumed by the parent Error.When
-                    if rootPromise.pending {
+                    if root.promise.isPending {
                         progress.completedUnitCount = progress.totalUnitCount
-                        reject(Error.When(index, error))
+                        root.reject(PMKError.when(index, error))
                     }
-                case .Fulfilled:
-                    guard rootPromise.pending else { return }
+                case .fulfilled:
+                    guard root.promise.isPending else { return }
                     progress.completedUnitCount += 1
                     countdown -= 1
                     if countdown == 0 {
-                        fulfill()
+                        root.fulfill()
                     }
                 }
             }
         }
     }
 
-    return rootPromise
+    return root.promise
 }
 
 /**
- Wait for all promises in a set to resolve.
+ Wait for all promises in a set to fulfill.
 
  For example:
 
      when(promise1, promise2).then { results in
          //…
-     }.error { error in
+     }.catch { error in
          switch error {
          case Error.When(let index, NSURLError.NoConnection):
              //…
@@ -62,44 +64,51 @@ private func _when<T>(promises: [Promise<T>]) -> Promise<Void> {
  - Parameter promises: The promises upon which to wait before the returned promise resolves.
  - Returns: A new promise that resolves when all the provided promises fulfill or one of the provided promises rejects.
  - SeeAlso: `join()`
+ - Note: `when` provides `NSProgress`.
+ - SeeAlso: `when(resolved:)`
 */
-public func when<T>(promises: [Promise<T>]) -> Promise<[T]> {
+public func when<T>(_ promises: [Promise<T>]) -> Promise<[T]> {
     return _when(promises).then(on: zalgo) { promises.map{ $0.value! } }
 }
 
-public func when<T>(promises: Promise<T>...) -> Promise<[T]> {
+/// Wait for all promises in a set to fulfill.
+public func when<T>(_ promises: Promise<T>...) -> Promise<[T]> {
     return when(promises)
 }
 
-public func when(promises: Promise<Void>...) -> Promise<Void> {
+/// Wait for all promises in a set to fulfill.
+public func when(_ promises: Promise<Void>...) -> Promise<Void> {
     return _when(promises)
 }
 
-public func when(promises: [Promise<Void>]) -> Promise<Void> {
+/// Wait for all promises in a set to fulfill.
+public func when(_ promises: [Promise<Void>]) -> Promise<Void> {
     return _when(promises)
 }
 
-public func when<U, V>(pu: Promise<U>, _ pv: Promise<V>) -> Promise<(U, V)> {
+/// Wait for all promises in a set to fulfill.
+public func when<U, V>(_ pu: Promise<U>, _ pv: Promise<V>) -> Promise<(U, V)> {
     return _when([pu.asVoid(), pv.asVoid()]).then(on: zalgo) { (pu.value!, pv.value!) }
 }
 
-public func when<U, V, X>(pu: Promise<U>, _ pv: Promise<V>, _ px: Promise<X>) -> Promise<(U, V, X)> {
+/// Wait for all promises in a set to fulfill.
+public func when<U, V, X>(_ pu: Promise<U>, _ pv: Promise<V>, _ px: Promise<X>) -> Promise<(U, V, X)> {
     return _when([pu.asVoid(), pv.asVoid(), px.asVoid()]).then(on: zalgo) { (pu.value!, pv.value!, px.value!) }
 }
 
 /**
- Generate promises at a limited rate and wait for all to resolve.
+ Generate promises at a limited rate and wait for all to fulfill.
 
  For example:
  
-     func downloadFile(url: NSURL) -> Promise<NSData> {
+     func downloadFile(url: URL) -> Promise<Data> {
          // ...
      }
  
-     let urls: [NSURL] = /*…*/
-     let urlGenerator = urls.generate()
+     let urls: [URL] = /*…*/
+     let urlGenerator = urls.makeIterator()
 
-     let generator = AnyGenerator<Promise<NSData>> {
+     let generator = AnyIterator<Promise<Data>> {
          guard url = urlGenerator.next() else {
              return nil
          }
@@ -107,7 +116,7 @@ public func when<U, V, X>(pu: Promise<U>, _ pv: Promise<V>, _ px: Promise<X>) ->
          return downloadFile(url)
      }
 
-     when(generator, concurrently: 3).then { datum: [NSData] -> Void in
+     when(generator, concurrently: 3).then { datum: [Data] -> Void in
          // ...
      }
 
@@ -117,22 +126,24 @@ public func when<U, V, X>(pu: Promise<U>, _ pv: Promise<V>, _ px: Promise<X>) ->
  - SeeAlso: `join()`
  */
 
-public func when<T, PromiseGenerator: GeneratorType where PromiseGenerator.Element == Promise<T> >(promiseGenerator: PromiseGenerator, concurrently: Int = 1) -> Promise<[T]> {
+public func when<T, PromiseIterator: IteratorProtocol>(_ promiseIterator: PromiseIterator, concurrently: Int) -> Promise<[T]> where PromiseIterator.Element == Promise<T> {
 
     guard concurrently > 0 else {
-        return Promise(error: Error.WhenConcurrentlyZero)
+        return Promise(error: PMKError.whenConcurrentlyZero)
     }
 
-    var generator = promiseGenerator
-    var root = Promise<[T]>.pendingPromise()
+    var generator = promiseIterator
+    var root = Promise<[T]>.pending()
     var pendingPromises = 0
     var promises: [Promise<T>] = []
 
-    let barrier = dispatch_queue_create("org.promisekit.barrier.when", DISPATCH_QUEUE_CONCURRENT)
+    let barrier = DispatchQueue(label: "org.promisekit.barrier.when", attributes: [.concurrent])
 
     func dequeue() {
+        guard root.promise.isPending else { return }  // don’t continue dequeueing if root has been rejected
+
         var shouldDequeue = false
-        dispatch_sync(barrier) {
+        barrier.sync {
             shouldDequeue = pendingPromises < concurrently
         }
         guard shouldDequeue else { return }
@@ -140,7 +151,7 @@ public func when<T, PromiseGenerator: GeneratorType where PromiseGenerator.Eleme
         var index: Int!
         var promise: Promise<T>!
 
-        dispatch_barrier_sync(barrier) {
+        __dispatch_barrier_sync(barrier) {
             guard let next = generator.next() else { return }
 
             promise = next
@@ -151,7 +162,7 @@ public func when<T, PromiseGenerator: GeneratorType where PromiseGenerator.Eleme
         }
 
         func testDone() {
-            dispatch_sync(barrier) {
+            barrier.sync {
                 if pendingPromises == 0 {
                     root.fulfill(promises.flatMap{ $0.value })
                 }
@@ -162,18 +173,18 @@ public func when<T, PromiseGenerator: GeneratorType where PromiseGenerator.Eleme
             return testDone()
         }
 
-        promise.pipe { resolution in
-            dispatch_barrier_sync(barrier) {
+        promise.state.pipe { resolution in
+            __dispatch_barrier_sync(barrier) {
                 pendingPromises -= 1
             }
 
             switch resolution {
-            case .Fulfilled:
+            case .fulfilled:
                 dequeue()
                 testDone()
-            case .Rejected(let error, let token):
+            case .rejected(let error, let token):
                 token.consumed = true
-                root.reject(Error.When(index, error))
+                root.reject(PMKError.when(index, error))
             }
         }
 
