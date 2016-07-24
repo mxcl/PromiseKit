@@ -1,6 +1,6 @@
 module: PromiseKit
 author: Max Howell
-author_url: http://mcl.github.io
+author_url: http://mxcl.github.io
 github_url: https://github.com/mxcl/PromiseKit
 exclude:
   - README.markdown
