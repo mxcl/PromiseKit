@@ -82,13 +82,11 @@ github "mxcl/PromiseKit" ~> 3.2
 
 ###  iOS 7 And Below
 
-Neither CocoaPods or Carthage will install PromiseKit 2 for an iOS 7 target. Your options are:
+Neither CocoaPods or Carthage will install PromiseKit 2, 3 or 4 for an iOS 7 target. You need PromiseKit 1.7:
 
- 1. `pod "PromiseKit", "~> 1.7"` †‡
- 2. Use our [iOS 7 EZ-Bake](https://github.com/PromiseKit/EZiOS7)
- 3. Download our pre-built static framework (coming soon!)
+    pod "PromiseKit", "~> 1.7"
 
-† There is no Swift support with PromiseKit 1.x installed via CocoaPods.<br>‡ PromiseKit 1.x will work as far back as iOS 5 if required.
+PromiseKit 1.7 has only limited Swift support.
 
 
 # Support
