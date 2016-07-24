@@ -1,29 +1,12 @@
 language: objective-c
-xcode_project: PromiseKit.xcodeproj
-xcode_scheme: [PMKiOS, PMKOSX]
-xcode_sdk: [iphonesimulator9.3, macosx10.11]
-osx_image: xcode7.3
+osx_image: xcode8
 
-install:
-  - "gem install travis-xcodebuild"
-  - "carthage bootstrap --platform Mac,iOS"
+env:
+  - iOS= DST='platform=iOS Simulator,name=iPhone 6S' UUID='64DF30D4-4118-480F-9ADD-DCC32194B63D' ACTION=test
+  - tvOS= DST='platform=tvOS Simulator,name=Apple TV 1080p' UUID='273D776F-196E-4F2A-AEF2-E1E3EAE99B47' ACTION=test
+  - macOS= DST='platform=OS X' ACTION=test
+  - watchOS= DST='platform=watchOS Simulator,name=Apple Watch - 38mm' ACTION=build
 
 script:
-  - travis-xcodebuild
-
-matrix:
-  exclude:
-    - xcode_scheme: PMKOSX
-      xcode_sdk: iphonesimulator9.3
-    - xcode_scheme: PMKiOS
-      xcode_sdk: macosx10.11
-
-branches:
-  only:
-    - master
-    - swift-2.2-minimal-changes
-    - swift-2.0-minimal-changes
-    - legacy-1.x
-
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - if [ -n "$UUID" ]; then xcrun instruments -w "$UUID" || true; sleep 15; fi
+  - set -o pipefail && xcodebuild -scheme PromiseKit -destination "$DST" $ACTION | xcpretty

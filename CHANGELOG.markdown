@@ -1,6 +1,6 @@
 # [4.0.0](https://github.com/mxcl/PromiseKit/releases/tag/4.0.0)
 
-* Unreleased support for Swift 3.0
+* [PromiseKit 4 announcement post](http://promisekit.org/news/2016/09/PromiseKit-4.0-Released/).
 
 # [3.4.3](https://github.com/mxcl/PromiseKit/releases/tag/3.4.3) Aug 7th, 2016
 
