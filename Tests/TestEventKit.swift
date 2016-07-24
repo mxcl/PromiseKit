@@ -9,6 +9,6 @@ class Test_EventKit_Swift: XCTestCase {
         EKEventStoreRequestAccess().then { _ in
             ex.fulfill()
         }
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectationsWithTimeout(30, handler: nil)
     }
 }

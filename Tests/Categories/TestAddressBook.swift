@@ -9,6 +9,6 @@ class Test_AddressBook_Swift: XCTestCase {
         ABAddressBookRequestAccess().then { (auth: ABAuthorizationStatus) in
             XCTAssertEqual(auth, ABAuthorizationStatus.Authorized)
         }.then(ex.fulfill)
-        waitForExpectationsWithTimeout(1, handler: nil)
+        waitForExpectationsWithTimeout(30, handler: nil)
     }
 }
