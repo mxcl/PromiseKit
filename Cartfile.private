@@ -1,4 +1,0 @@
-github "AliSoftware/OHHTTPStubs" == 5.1.0
-github "robb/Stubbilino" == 0.2.1
-github "BoltsFramework/Bolts-iOS" == 1.8.4
-github "mxcl/OMGHTTPURLRQ" ~> 3.2.0

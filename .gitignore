@@ -1,4 +1,4 @@
+*.xcodeproj/**/xcuserdata/
+*.xcscmblueprint
 /Carthage
 /Cartfile.resolved
-/Build
-*.xcodeproj/xcuserdata/

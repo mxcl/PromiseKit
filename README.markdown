@@ -6,16 +6,16 @@ Modern development is highly asynchronous: isn’t it about time we had tools th
 made programming asynchronously powerful, easy and delightful?
 
 ```swift
-UIApplication.sharedApplication().networkActivityIndicatorVisible = true
+UIApplication.shared.networkActivityIndicatorVisible = true
 
 firstly {
     when(NSURLSession.GET(url).asImage(), CLLocationManager.promise())
 }.then { image, location -> Void in
-    self.imageView.image = image
+    self.imageView.image = image;
     self.label.text = "\(location)"
 }.always {
-    UIApplication.sharedApplication().networkActivityIndicatorVisible = false
-}.error { error in
+    UIApplication.shared.networkActivityIndicatorVisible = false
+}.catch { error in
     UIAlertView(/*…*/).show()
 }
 ```
@@ -28,10 +28,10 @@ platform with a `swiftc`, it has *excellent* Objective-C bridging and
 
 ```ruby
 # CocoaPods
-pod "PromiseKit", "~> 3.4"
+pod "PromiseKit", "~> 4.0"
 
 # Carthage
-github "mxcl/PromiseKit" ~> 3.4
+github "mxcl/PromiseKit" ~> 4.0
 
 # SwiftPM
 let package = Package(
@@ -125,7 +125,7 @@ also your only choice if you need to support iOS 7 or below.
 
 ---
 
-We maintain some branches to aid migrating between Swift versions:
+We also maintain some branches to aid migrating between Swift versions:
 
 | Xcode | Swift | PromiseKit | Branch                      | CI Status |
 | ----- | ----- | -----------| --------------------------- | --------- |
@@ -135,12 +135,32 @@ We maintain some branches to aid migrating between Swift versions:
 |  7.1  |  2.1  | 2          | [swift-2.0-minimal-changes] | ![ci-20]  |
 |  7.0  |  2.0  | 2          | [swift-2.0-minimal-changes] | ![ci-20]  |
 
-We do **not** backport fixes (mostly) to these migration-branches, but pull-requests are welcome.
+We do **not** usually backport fixes to these branches, but pull-requests are welcome.
+
+# Extensions
+
+Promises are only as useful as the asynchronous tasks they represent, thus we 
+have converted (almost) all of Apple’s APIs to Promises. The default CocoaPod
+comes with promises UIKit and Foundation, the rest are accessed by specifying
+additional subspecs in your `Podfile`, eg:
+
+```ruby
+pod "PromiseKit/MapKit"        # MKDirections().promise().then { /*…*/ }
+pod "PromiseKit/CoreLocation"  # CLLocationManager.promise().then { /*…*/ }
+```
+
+All our extensions are separate repositories at the [PromiseKit org ](https://github.com/PromiseKit).
+
+For Carthage specify the additional repositories in your `Cartfile`:
+
+```ruby
+github "PromiseKit/MapKit" ~> 1.0
+```
 
 # Support
 
-* Ask questions of the developers and the community at our [Gitter chat channel](https://gitter.im/mxcl/PromiseKit).
-* Ask your question by [opening a ticket](issues/new).
+Ask your question on [Gitter chat](https://gitter.im/mxcl/PromiseKit) or
+[our bug tracker](https://github.com/mxcl/PromiseKit/issues/new).
 
 
 [travis]: https://travis-ci.org/mxcl/PromiseKit
