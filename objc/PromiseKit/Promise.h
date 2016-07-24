@@ -233,6 +233,15 @@
 */
 + (instancetype)promiseWithBooleanAdapter:(void (^)(PMKBooleanAdapter adapter))block;
 
+
+/**
+ This function is provided so Swift can use AnyPromise.
+ 
+ It is presented as a typical JS-style “thennable”, you can pass `nil`
+ to either parameter and that parameter will be ignored.
+*/
+- (instancetype)then:(id (^)(id))onFulfilled :(id (^)(id))onRejected;
+
 @end
 
 

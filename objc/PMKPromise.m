@@ -394,6 +394,10 @@ typedef PMKPromise *(^PMKResolveOnQueueBlock)(dispatch_queue_t, id block);
     }];
 }
 
+- (instancetype)then:(id (^)(id))onFulfilled :(id (^)(id))onRejected {
+    return self.then(onFulfilled).catch(onRejected);
+}
+
 + (PMKPromise *)promiseWithValue:(id)value {
     PMKPromise *p = [PMKPromise alloc];
     p->_promiseQueue = PMKCreatePromiseQueue();
