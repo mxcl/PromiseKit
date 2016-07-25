@@ -1,4 +1,4 @@
 github "AliSoftware/OHHTTPStubs"
-github "mxcl/Stubbilino"
+github "robb/Stubbilino"
 github "BoltsFramework/Bolts-iOS"
-github "mxcl/OMGHTTPURLRQ" ~> 3.1.2
+github "mxcl/OMGHTTPURLRQ" ~> 3.2.0

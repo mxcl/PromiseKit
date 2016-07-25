@@ -9,7 +9,7 @@ class Test_UIViewController_Swift: UIKitTestCase {
 
     func test_rejects_if_vc_has_no_promise_property() {
         let ex = expectationWithDescription("")
-        let p: Promise<Int> = rootvc.promiseViewController(UIViewController(), animated: false)
+        let p: Promise<Int> = rootvc.promiseViewController(UIViewController(), animate: [])
         p.error { error in
             if case UIViewController.Error.NotPromisable = error {
                 ex.fulfill()
@@ -20,7 +20,7 @@ class Test_UIViewController_Swift: UIKitTestCase {
 
     func test_rejects_if_promise_property_returns_nil() {
         let ex = expectationWithDescription("")
-        let p: Promise<Int> = rootvc.promiseViewController(MockViewController(), animated: false)
+        let p: Promise<Int> = rootvc.promiseViewController(MockViewController(), animate: [])
         p.error { error in
             if case UIViewController.Error.NilPromisable = error {
                 ex.fulfill()
@@ -33,7 +33,7 @@ class Test_UIViewController_Swift: UIKitTestCase {
         let ex = expectationWithDescription("")
         let my = MockViewController()
         my.promise = Promise(true)
-        let p: Promise<Int> = rootvc.promiseViewController(my, animated: false)
+        let p: Promise<Int> = rootvc.promiseViewController(my, animate: [])
         p.error { err in
             if case UIViewController.Error.NotGenericallyPromisable = err {
                 ex.fulfill()
@@ -46,7 +46,7 @@ class Test_UIViewController_Swift: UIKitTestCase {
         let ex = expectationWithDescription("")
         let my = MockViewController()
         my.promise = Promise(dummy)
-        rootvc.promiseViewController(my, animated: false).then { (x: Int) -> Void in
+        rootvc.promiseViewController(my, animate: []).then { (x: Int) -> Void in
             XCTAssertFalse(my.appeared)
             XCTAssertEqual(x, dummy)
             ex.fulfill()
@@ -59,7 +59,7 @@ class Test_UIViewController_Swift: UIKitTestCase {
         let my = MockViewController()
         let (promise, resolve, _) = Promise<Int>.pendingPromise()
         my.promise = promise
-        rootvc.promiseViewController(my, animated: false).then { (x: Int) -> Void in
+        rootvc.promiseViewController(my, animate: []).then { (x: Int) -> Void in
             XCTAssertTrue(my.appeared)
             XCTAssertEqual(x, dummy)
             ex.fulfill()
@@ -76,7 +76,7 @@ class Test_UIViewController_Swift: UIKitTestCase {
         let my = MockViewController()
         my.promise = after(0.1).then{ dummy }
         nc.viewControllers = [my]
-        rootvc.promiseViewController(nc, animated: false).then { (x: Int) -> Void in
+        rootvc.promiseViewController(nc, animate: []).then { (x: Int) -> Void in
             XCTAssertTrue(my.appeared)
             XCTAssertEqual(x, dummy)
             ex.fulfill()

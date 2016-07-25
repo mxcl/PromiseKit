@@ -29,34 +29,61 @@ extension UIViewController {
         case NilPromisable
     }
 
+    public enum FulfillmentType {
+        case OnceDisappeared
+        case BeforeDismissal
+    }
+
+    public struct AnimationOptions: OptionSetType {
+        public init(rawValue: Int) {
+            self.rawValue = rawValue
+        }
+        public let rawValue: Int
+
+        static let None      = AnimationOptions(rawValue: 0)
+        static let Appear    = AnimationOptions(rawValue: 1 << 0)
+        static let Disappear = AnimationOptions(rawValue: 1 << 1)
+    }
+
+    @available(*, deprecated=3.4, renamed="promiseViewController(_:animate:fulfills:completion:)")
     public func promiseViewController<T>(vc: UIViewController, animated: Bool = true, completion: (() -> Void)? = nil) -> Promise<T> {
+        return promiseViewController(vc, animate: [.Appear, .Disappear], completion: completion)
+    }
 
-        let p: Promise<T> = promise(vc)
-        if p.pending {
-            presentViewController(vc, animated: animated, completion: completion)
-            p.always {
-                vc.presentingViewController?.dismissViewControllerAnimated(animated, completion: nil)
-            }
+    public func promiseViewController<T>(vc: UIViewController, animate animationOptions: AnimationOptions = [.Appear, .Disappear], fulfills: FulfillmentType = .OnceDisappeared, completion: (() -> Void)? = nil) -> Promise<T> {
+
+        let pvc: UIViewController
+
+        switch vc {
+        case let nc as UINavigationController:
+            guard let vc = nc.viewControllers.first else { return Promise(error: Error.NavigationControllerEmpty) }
+            pvc = vc
+        default:
+            pvc = vc
         }
 
-        return p
-    }
-    
-    public func promiseViewController<T>(nc: UINavigationController, animated: Bool = true, completion:(()->Void)? = nil) -> Promise<T> {
-        if let vc = nc.viewControllers.first {
-            let p: Promise<T> = promise(vc)
-            if p.pending {
-                presentViewController(nc, animated: animated, completion: completion)
-                p.always {
-                    vc.presentingViewController?.dismissViewControllerAnimated(animated, completion: nil)
-                }
-            }
-            return p
+        let promise: Promise<T>
+
+        if !pvc.conformsToProtocol(Promisable) {
+            promise = Promise(error: UIViewController.Error.NotPromisable)
+        } else if let p = pvc.valueForKeyPath("promise") as? Promise<T> {
+            promise = p
+        } else if let _: AnyObject = pvc.valueForKeyPath("promise") {
+            promise = Promise(error: UIViewController.Error.NotGenericallyPromisable)
         } else {
-            return Promise(error: Error.NavigationControllerEmpty)
+            promise = Promise(error: UIViewController.Error.NilPromisable)
         }
+
+        if promise.pending {
+            presentViewController(vc, animated: animationOptions.contains(.Appear), completion: completion)
+            promise.always {
+                vc.presentingViewController?.dismissViewControllerAnimated(animationOptions.contains(.Disappear), completion: nil)
+            }
+        }
+
+        return promise
     }
-  
+
     public func promiseViewController(vc: UIImagePickerController, animated: Bool = true, completion: (() -> Void)? = nil) -> Promise<UIImage> {
         let proxy = UIImagePickerControllerProxy()
         vc.delegate = proxy
@@ -87,26 +114,14 @@ extension UIViewController {
 
 @objc(Promisable) public protocol Promisable {
     /**
-    Provide a promise for promiseViewController here.
+     Provide a promise for promiseViewController here.
 
-    The resulting property must be annotated with @objc.
+     The resulting property must be annotated with @objc.
 
-    Obviously return a Promise<T>. There is an issue with generics and Swift and
-    protocols currently so we couldn't specify that.
+     Obviously return a Promise<T>. There is an issue with generics and Swift and
+     protocols currently so we couldn't specify that.
     */
     var promise: AnyObject! { get }
-}
-
-private func promise<T>(vc: UIViewController) -> Promise<T> {
-    if !vc.conformsToProtocol(Promisable) {
-        return Promise(error: UIViewController.Error.NotPromisable)
-    } else if let promise = vc.valueForKeyPath("promise") as? Promise<T> {
-        return promise
-    } else if let _: AnyObject = vc.valueForKeyPath("promise") {
-        return Promise(error: UIViewController.Error.NotGenericallyPromisable)
-    } else {
-        return Promise(error: UIViewController.Error.NilPromisable)
-    }
 }
 
 
