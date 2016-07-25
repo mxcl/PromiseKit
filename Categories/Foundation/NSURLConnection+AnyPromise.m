@@ -14,10 +14,13 @@
 #import <OMGHTTPURLRQ/OMGHTTPURLRQ.h>
 #import <OMGHTTPURLRQ/OMGUserAgent.h>
 
+typedef void (^PMKURLDataCompletionHandler)(NSData *, NSURLResponse *, NSError *);
+PMKURLDataCompletionHandler PMKMakeURLDataHandler(NSURLRequest *, PMKResolver);
+
 
 @implementation NSURLConnection (PromiseKit)
 
-+ (AnyPromise *)GET:(id)urlFormat, ... {
+id PMKURLRequestFromURLFormat(NSError **err, id urlFormat, ...) {
     if ([urlFormat isKindOfClass:[NSString class]]) {
         va_list arguments;
         va_start(arguments, urlFormat);
@@ -26,14 +29,21 @@
     } else if ([urlFormat isKindOfClass:[NSURL class]]) {
         NSMutableURLRequest *rq = [[NSMutableURLRequest alloc] initWithURL:urlFormat];
         [rq setValue:OMGUserAgent() forHTTPHeaderField:@"User-Agent"];
-        return [self promise:rq];
+        return rq;
     } else {
         urlFormat = [urlFormat description];
     }
+    return [OMGHTTPURLRQ GET:urlFormat:nil error:err];
+}
+
++ (AnyPromise *)GET:(id)urlFormat, ... {
     id err;
-    id rq = [OMGHTTPURLRQ GET:urlFormat:nil error:&err];
-    if (err) return [AnyPromise promiseWithValue:err];
-    return [self promise:rq];
+    id rq = PMKURLRequestFromURLFormat(&err, urlFormat);
+    if (err) {
+        return [AnyPromise promiseWithValue:err];
+    } else {
+        return [self promise:rq];
+    }
 }
 
 + (AnyPromise *)GET:(NSString *)url query:(NSDictionary *)params {
@@ -87,7 +97,14 @@
     });
 
     return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
-        [NSURLConnection sendAsynchronousRequest:rq queue:q completionHandler:^(id rsp, id data, id urlError) {
+        [NSURLConnection sendAsynchronousRequest:rq queue:q completionHandler:^(NSURLResponse *response, NSData *data, NSError *connectionError) {
+            PMKMakeURLDataHandler(rq, resolve)(data, response, connectionError);
+        }];
+    }];
+}
+
+PMKURLDataCompletionHandler PMKMakeURLDataHandler(NSURLRequest *rq, PMKResolver resolve) {
+    return ^(NSData *data, id rsp, NSError *urlError){
             assert(![NSThread isMainThread]);
 
             PMKResolver fulfiller = ^(id responseObject){
@@ -175,10 +192,10 @@
                     id err = [NSError errorWithDomain:NSURLErrorDomain code:NSURLErrorCannotDecodeContentData userInfo:info];
                     rejecter(err);
                 }
-            } else
+            } else {
                 fulfiller(data);
-        }];
-    }];
+            }
+    };
 
     #undef fulfiller
 }
