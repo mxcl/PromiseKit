@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "63F803A21AB87A8200E4DEE1"
+               BlueprintIdentifier = "632665131D482D010018F06F"
                BuildableName = "PromiseKit.framework"
                BlueprintName = "PMKiOS"
                ReferencedContainer = "container:PromiseKit.xcodeproj">
@@ -52,7 +52,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "63F803A21AB87A8200E4DEE1"
+            BlueprintIdentifier = "632665131D482D010018F06F"
             BuildableName = "PromiseKit.framework"
             BlueprintName = "PMKiOS"
             ReferencedContainer = "container:PromiseKit.xcodeproj">
@@ -74,7 +74,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "63F803A21AB87A8200E4DEE1"
+            BlueprintIdentifier = "632665131D482D010018F06F"
             BuildableName = "PromiseKit.framework"
             BlueprintName = "PMKiOS"
             ReferencedContainer = "container:PromiseKit.xcodeproj">
@@ -92,7 +92,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "63F803A21AB87A8200E4DEE1"
+            BlueprintIdentifier = "632665131D482D010018F06F"
             BuildableName = "PromiseKit.framework"
             BlueprintName = "PMKiOS"
             ReferencedContainer = "container:PromiseKit.xcodeproj">

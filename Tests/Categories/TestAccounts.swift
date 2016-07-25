@@ -22,22 +22,22 @@ class TestACAccountStore: XCTestCase {
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
-    func testRequestAccessToAccountsWithType() {
-        class MockAccountStore: ACAccountStore {
-            override func requestAccessToAccountsWithType(accountType: ACAccountType!, options: [NSObject : AnyObject]!, completion: ACAccountStoreRequestAccessCompletionHandler!) {
-                completion(true, nil)
-            }
-        }
-
-        let ex = expectationWithDescription("")
-        let store = MockAccountStore()
-        let type = store.accountTypeWithAccountTypeIdentifier(ACAccountTypeIdentifierFacebook)
-        store.requestAccessToAccountsWithType(type).then { _ in
-            ex.fulfill()
-        }
-
-        waitForExpectationsWithTimeout(1, handler: nil)
-    }
+//    func testRequestAccessToAccountsWithType() {
+//        class MockAccountStore: ACAccountStore {
+//            override func requestAccessToAccountsWithType(accountType: ACAccountType!, options: [NSObject : AnyObject]!, completion: ACAccountStoreRequestAccessCompletionHandler!) {
+//                completion(true, nil)
+//            }
+//        }
+//
+//        let ex = expectationWithDescription("")
+//        let store = MockAccountStore()
+//        let type = store.accountTypeWithAccountTypeIdentifier(ACAccountTypeIdentifierFacebook)
+//        store.requestAccessToAccountsWithType(type).then { _ in
+//            ex.fulfill()
+//        }
+//
+//        waitForExpectationsWithTimeout(1, handler: nil)
+//    }
 
     func testSaveAccount() {
         class MockAccountStore: ACAccountStore {

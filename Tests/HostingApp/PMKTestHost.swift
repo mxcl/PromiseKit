@@ -10,6 +10,7 @@ class App: UIResponder, UIApplicationDelegate {
         window!.rootViewController = UIViewController()
         window!.backgroundColor = UIColor.grayColor()
         window!.makeKeyAndVisible()
+        UIView.setAnimationsEnabled(false)
         return true
     }
 }

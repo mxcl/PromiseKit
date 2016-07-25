@@ -34,7 +34,7 @@ class TestCLLocationManager: XCTestCase {
         let ex = expectationWithDescription("")
 
         CLLocationManager.requestAuthorization().then { x -> Void in
-            XCTAssertEqual(x, .Restricted)
+            XCTAssertEqual(x, CLAuthorizationStatus.Restricted)
             ex.fulfill()
         }
 
@@ -47,7 +47,7 @@ class TestCLLocationManager: XCTestCase {
                 let ex = expectationWithDescription("")
 
                 CLLocationManager.requestAuthorization().then { x -> Void in
-                    XCTAssertEqual(x, .AuthorizedWhenInUse)
+                    XCTAssertEqual(x, CLAuthorizationStatus.AuthorizedWhenInUse)
                     ex.fulfill()
                 }
 

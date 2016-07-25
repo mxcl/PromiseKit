@@ -1,20 +1,24 @@
 language: objective-c
 xcode_project: PromiseKit.xcodeproj
-before_install:
-  - brew update
-  - brew install carthage
-install: carthage bootstrap --verbose
-xcode_scheme: [PMKiOS, PMKOSX]
-xcode_sdk: [iphonesimulator8.3, macosx10.10]
-osx_image: beta-xcode6.3
+xcode_scheme: PMKOSX
+xcode_sdk: macosx10.11
+osx_image: xcode7.2
+
+install:
+  - gem install travis-xcodebuild
+  - carthage bootstrap --platform Mac
+
+script:
+  - travis-xcodebuild
 
 matrix:
   exclude:
     - xcode_scheme: PMKOSX
-      xcode_sdk: iphonesimulator8.3
-    - xcode_scheme: PMKiOS
-      xcode_sdk: macosx10.10
+      xcode_sdk: iphonesimulator9.2
 
 branches:
   only:
     - master
+    - swift-2.2-minimal-changes
+    - swift-2.0-minimal-changes
+    - legacy-1.x

@@ -5,7 +5,7 @@
 
 @interface TestAVAudioSession: XCTestCase @end @implementation TestAVAudioSession
 
-- (void)test {
+- (void)testM {
     id ex = [self expectationWithDescription:@""];
 
     [[AVAudioSession new] requestRecordPermission].then(^{
