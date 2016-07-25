@@ -1,6 +1,9 @@
 #import <PromiseKit/Promise.h>
 
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdocumentation"
+
 @interface PMKPromise (Until)
 /**
 Loops until one or more promises have resolved.
@@ -16,3 +19,5 @@ An example usage is an app starting up that must get data from the Internet befo
 + (PMKPromise *)until:(id(^)(void))blockReturningPromiseOrArrayOfPromises catch:(id)catchHandler;
 
 @end
+
+#pragma clang diagnostic pop

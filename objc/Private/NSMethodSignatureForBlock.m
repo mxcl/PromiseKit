@@ -1,3 +1,6 @@
+#import <stdlib.h>
+#import <string.h>
+
 struct PMKBlockLiteral {
     void *isa; // initialized to &_NSConcreteStackBlock or &_NSConcreteGlobalBlock
     int flags;

@@ -3,6 +3,9 @@
 #import <Foundation/NSURLRequest.h>
 #import <PromiseKit/fwd.h>
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdocumentation"
+
 extern NSString const*const PMKURLErrorFailingURLResponse PMK_DEPRECATED("Use PMKURLErrorFailingURLResponseKey");
 extern NSString const*const PMKURLErrorFailingData PMK_DEPRECATED("Use PMKURLErrorFailingDataKey");
 
@@ -141,3 +144,5 @@ extern NSString const*const PMKURLErrorFailingData PMK_DEPRECATED("Use PMKURLErr
 + (PMKPromise *)promise:(NSURLRequest *)request;
 
 @end
+
+#pragma clang diagnostic pop

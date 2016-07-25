@@ -30,7 +30,7 @@
 
  @see requestAccessToAccountsWithType:options:completion:
 */
-- (PMKPromise *)requestAccessToAccountsWithType:(ACAccountType *)type options:(NSDictionary *)options;
+- (PMKPromise *)requestAccessToAccountsWithType:(ACAccountType *)accountType options:(NSDictionary *)options;
 
 /**
  Renews account credentials when the credentials are no longer valid.

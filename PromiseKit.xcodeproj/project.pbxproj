@@ -7,24 +7,41 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		63A8E52F1ABD016A00BEBB1A /* PMKPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334B1AAF65050078F9B6 /* PMKPromise.m */; };
-		63A8E5301ABD016A00BEBB1A /* PMKPromise+Hang.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334C1AAF65050078F9B6 /* PMKPromise+Hang.m */; };
-		63A8E5311ABD016A00BEBB1A /* PMKPromise+Join.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334D1AAF65050078F9B6 /* PMKPromise+Join.m */; };
-		63A8E5321ABD016A00BEBB1A /* PMKPromise+Pause.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334E1AAF65050078F9B6 /* PMKPromise+Pause.m */; };
-		63A8E5331ABD016A00BEBB1A /* PMKPromise+Until.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334F1AAF65050078F9B6 /* PMKPromise+Until.m */; };
-		63A8E5341ABD016A00BEBB1A /* PMKPromise+When.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933501AAF65050078F9B6 /* PMKPromise+When.m */; };
-		63A8E5351ABD016A00BEBB1A /* PMKPromise+Zalgo.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933511AAF65050078F9B6 /* PMKPromise+Zalgo.m */; };
-		63A8E5361ABD016A00BEBB1A /* initializers.spec.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933DA1AAFC3B40078F9B6 /* initializers.spec.m */; };
-		63A8E5371ABD016A00BEBB1A /* PMKPromise.test.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933DB1AAFC3B40078F9B6 /* PMKPromise.test.m */; };
+		63B8C54E1D46B4BF00F45B3D /* OMGHTTPURLRQ.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B8C54D1D46B4BF00F45B3D /* OMGHTTPURLRQ.framework */; };
+		63B8C5501D46BA4400F45B3D /* OMGHTTPURLRQ.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63B8C54D1D46B4BF00F45B3D /* OMGHTTPURLRQ.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		63CB7F731D46B25A00F4D755 /* ACAccountStore+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933321AAF65050078F9B6 /* ACAccountStore+PromiseKit.m */; };
+		63CB7F751D46B25A00F4D755 /* CALayer+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933361AAF65050078F9B6 /* CALayer+PromiseKit.m */; };
+		63CB7F761D46B25A00F4D755 /* CKContainer+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933381AAF65050078F9B6 /* CKContainer+PromiseKit.m */; };
+		63CB7F771D46B25A00F4D755 /* CKDatabase+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389333A1AAF65050078F9B6 /* CKDatabase+PromiseKit.m */; };
+		63CB7F781D46B25A00F4D755 /* CLGeocoder+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389333C1AAF65050078F9B6 /* CLGeocoder+PromiseKit.m */; };
+		63CB7F791D46B25A00F4D755 /* CLLocationManager+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389333E1AAF65050078F9B6 /* CLLocationManager+PromiseKit.m */; };
+		63CB7F7A1D46B25A00F4D755 /* MKDirections+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933401AAF65050078F9B6 /* MKDirections+PromiseKit.m */; };
+		63CB7F7B1D46B25A00F4D755 /* MKMapSnapshotter+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933421AAF65050078F9B6 /* MKMapSnapshotter+PromiseKit.m */; };
+		63CB7F7C1D46B25A00F4D755 /* NSFileManager+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933441AAF65050078F9B6 /* NSFileManager+PromiseKit.m */; };
+		63CB7F7D1D46B25A00F4D755 /* NSNotificationCenter+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933461AAF65050078F9B6 /* NSNotificationCenter+PromiseKit.m */; };
+		63CB7F7E1D46B25A00F4D755 /* NSTask+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933481AAF65050078F9B6 /* NSTask+PromiseKit.m */; };
+		63CB7F7F1D46B25A00F4D755 /* NSURLConnection+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334A1AAF65050078F9B6 /* NSURLConnection+PromiseKit.m */; };
+		63CB7F801D46B25A00F4D755 /* SKRequest+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933601AAF65050078F9B6 /* SKRequest+PromiseKit.m */; };
+		63CB7F811D46B25A00F4D755 /* SLRequest+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933621AAF65050078F9B6 /* SLRequest+PromiseKit.m */; };
+		63CB7F821D46B25A00F4D755 /* PMKPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334B1AAF65050078F9B6 /* PMKPromise.m */; };
+		63CB7F831D46B25A00F4D755 /* PMKPromise+Hang.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334C1AAF65050078F9B6 /* PMKPromise+Hang.m */; };
+		63CB7F841D46B25A00F4D755 /* PMKPromise+Join.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334D1AAF65050078F9B6 /* PMKPromise+Join.m */; };
+		63CB7F851D46B25A00F4D755 /* PMKPromise+Pause.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334E1AAF65050078F9B6 /* PMKPromise+Pause.m */; };
+		63CB7F861D46B25A00F4D755 /* PMKPromise+Until.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334F1AAF65050078F9B6 /* PMKPromise+Until.m */; };
+		63CB7F871D46B25A00F4D755 /* PMKPromise+When.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933501AAF65050078F9B6 /* PMKPromise+When.m */; };
+		63CB7F881D46B25A00F4D755 /* PMKPromise+Zalgo.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933511AAF65050078F9B6 /* PMKPromise+Zalgo.m */; };
+		63CB7F891D46B25A00F4D755 /* initializers.spec.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933DA1AAFC3B40078F9B6 /* initializers.spec.m */; };
+		63CB7F8A1D46B25A00F4D755 /* PMKPromise.test.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933DB1AAFC3B40078F9B6 /* PMKPromise.test.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
-		639339B41ABCF63F00B7AAA9 /* CopyFiles */ = {
+		63B8C54F1D46BA3900F45B3D /* CopyFiles */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
+				63B8C5501D46BA4400F45B3D /* OMGHTTPURLRQ.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -89,16 +106,17 @@
 		6389336A1AAF65050078F9B6 /* UIViewController+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+PromiseKit.m"; path = "objc/UIViewController+PromiseKit.m"; sourceTree = "<group>"; };
 		638933DA1AAFC3B40078F9B6 /* initializers.spec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = initializers.spec.m; path = "Specs/Objective C Specs/initializers.spec.m"; sourceTree = SOURCE_ROOT; };
 		638933DB1AAFC3B40078F9B6 /* PMKPromise.test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PMKPromise.test.m; path = "Specs/Objective C Specs/PMKPromise.test.m"; sourceTree = SOURCE_ROOT; };
-		639339771ABCF32B00B7AAA9 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = SOURCE_ROOT; };
-		6393397E1ABCF32B00B7AAA9 /* PMKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PMKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		639339841ABCF32B00B7AAA9 /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Tests-Info.plist"; path = "Specs/Tests-Info.plist"; sourceTree = "<group>"; };
+		63B8C54D1D46B4BF00F45B3D /* OMGHTTPURLRQ.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OMGHTTPURLRQ.framework; path = Carthage/Build/Mac/OMGHTTPURLRQ.framework; sourceTree = "<group>"; };
+		63CB7F6B1D46B20600F4D755 /* PMKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PMKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		6393397B1ABCF32B00B7AAA9 /* Frameworks */ = {
+		63CB7F681D46B20600F4D755 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63B8C54E1D46B4BF00F45B3D /* OMGHTTPURLRQ.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -108,10 +126,12 @@
 		63519900193FCD4C002CF47D = {
 			isa = PBXGroup;
 			children = (
+				639339841ABCF32B00B7AAA9 /* Tests-Info.plist */,
 				6384FD1019EECD2400613CBF /* PMK.playground */,
 				6359EEF11A9666F300E4E1B8 /* Sources */,
 				63519919193FCD4C002CF47D /* Specs */,
-				63DDE17E1947B946005D34A3 /* … */,
+				63DDE17E1947B946005D34A3 /* Products */,
+				63CB7F561D46B18D00F4D755 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -132,20 +152,6 @@
 				638933301AAF64E60078F9B6 /* Core */,
 			);
 			name = Sources;
-			sourceTree = "<group>";
-		};
-		636337131ABD03FA006D9F67 /* iOS */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = iOS;
-			sourceTree = "<group>";
-		};
-		636337141ABD0404006D9F67 /* OS X */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = "OS X";
 			sourceTree = "<group>";
 		};
 		638933301AAF64E60078F9B6 /* Core */ = {
@@ -217,37 +223,41 @@
 			name = Categories;
 			sourceTree = "<group>";
 		};
-		63DDE17E1947B946005D34A3 /* … */ = {
+		63CB7F561D46B18D00F4D755 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				636337141ABD0404006D9F67 /* OS X */,
-				636337131ABD03FA006D9F67 /* iOS */,
-				639339771ABCF32B00B7AAA9 /* Info.plist */,
-				639339841ABCF32B00B7AAA9 /* Tests-Info.plist */,
-				6393397E1ABCF32B00B7AAA9 /* PMKTests.xctest */,
+				63B8C54D1D46B4BF00F45B3D /* OMGHTTPURLRQ.framework */,
 			);
-			name = "…";
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		63DDE17E1947B946005D34A3 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				63CB7F6B1D46B20600F4D755 /* PMKTests.xctest */,
+			);
+			name = Products;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
-		6393397D1ABCF32B00B7AAA9 /* PMKTests */ = {
+		63CB7F6A1D46B20600F4D755 /* PMKTests */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = 6393398A1ABCF32B00B7AAA9 /* Build configuration list for PBXNativeTarget "PMKTests" */;
+			buildConfigurationList = 63CB7F701D46B20600F4D755 /* Build configuration list for PBXNativeTarget "PMKTests" */;
 			buildPhases = (
-				6393397A1ABCF32B00B7AAA9 /* Sources */,
-				6393397B1ABCF32B00B7AAA9 /* Frameworks */,
-				6393397C1ABCF32B00B7AAA9 /* Resources */,
-				639339B41ABCF63F00B7AAA9 /* CopyFiles */,
+				63CB7F671D46B20600F4D755 /* Sources */,
+				63CB7F681D46B20600F4D755 /* Frameworks */,
+				63CB7F691D46B20600F4D755 /* Resources */,
+				63B8C54F1D46BA3900F45B3D /* CopyFiles */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
 			name = PMKTests;
-			productName = PromiseKitTests;
-			productReference = 6393397E1ABCF32B00B7AAA9 /* PMKTests.xctest */;
+			productName = PMKTests;
+			productReference = 63CB7F6B1D46B20600F4D755 /* PMKTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
 		};
 /* End PBXNativeTarget section */
@@ -260,8 +270,11 @@
 				LastUpgradeCheck = 0730;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
-					6393397D1ABCF32B00B7AAA9 = {
-						CreatedOnToolsVersion = 6.2;
+					63CB7F6A1D46B20600F4D755 = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = ZU76A67LGU;
+						DevelopmentTeamName = "Max Howell (Personal Team)";
+						ProvisioningStyle = Automatic;
 					};
 				};
 			};
@@ -277,13 +290,13 @@
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				6393397D1ABCF32B00B7AAA9 /* PMKTests */,
+				63CB7F6A1D46B20600F4D755 /* PMKTests */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
-		6393397C1ABCF32B00B7AAA9 /* Resources */ = {
+		63CB7F691D46B20600F4D755 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
@@ -293,19 +306,33 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
-		6393397A1ABCF32B00B7AAA9 /* Sources */ = {
+		63CB7F671D46B20600F4D755 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63A8E52F1ABD016A00BEBB1A /* PMKPromise.m in Sources */,
-				63A8E5301ABD016A00BEBB1A /* PMKPromise+Hang.m in Sources */,
-				63A8E5311ABD016A00BEBB1A /* PMKPromise+Join.m in Sources */,
-				63A8E5321ABD016A00BEBB1A /* PMKPromise+Pause.m in Sources */,
-				63A8E5331ABD016A00BEBB1A /* PMKPromise+Until.m in Sources */,
-				63A8E5341ABD016A00BEBB1A /* PMKPromise+When.m in Sources */,
-				63A8E5351ABD016A00BEBB1A /* PMKPromise+Zalgo.m in Sources */,
-				63A8E5361ABD016A00BEBB1A /* initializers.spec.m in Sources */,
-				63A8E5371ABD016A00BEBB1A /* PMKPromise.test.m in Sources */,
+				63CB7F731D46B25A00F4D755 /* ACAccountStore+PromiseKit.m in Sources */,
+				63CB7F751D46B25A00F4D755 /* CALayer+PromiseKit.m in Sources */,
+				63CB7F761D46B25A00F4D755 /* CKContainer+PromiseKit.m in Sources */,
+				63CB7F771D46B25A00F4D755 /* CKDatabase+PromiseKit.m in Sources */,
+				63CB7F781D46B25A00F4D755 /* CLGeocoder+PromiseKit.m in Sources */,
+				63CB7F791D46B25A00F4D755 /* CLLocationManager+PromiseKit.m in Sources */,
+				63CB7F7A1D46B25A00F4D755 /* MKDirections+PromiseKit.m in Sources */,
+				63CB7F7B1D46B25A00F4D755 /* MKMapSnapshotter+PromiseKit.m in Sources */,
+				63CB7F7C1D46B25A00F4D755 /* NSFileManager+PromiseKit.m in Sources */,
+				63CB7F7D1D46B25A00F4D755 /* NSNotificationCenter+PromiseKit.m in Sources */,
+				63CB7F7E1D46B25A00F4D755 /* NSTask+PromiseKit.m in Sources */,
+				63CB7F7F1D46B25A00F4D755 /* NSURLConnection+PromiseKit.m in Sources */,
+				63CB7F801D46B25A00F4D755 /* SKRequest+PromiseKit.m in Sources */,
+				63CB7F811D46B25A00F4D755 /* SLRequest+PromiseKit.m in Sources */,
+				63CB7F821D46B25A00F4D755 /* PMKPromise.m in Sources */,
+				63CB7F831D46B25A00F4D755 /* PMKPromise+Hang.m in Sources */,
+				63CB7F841D46B25A00F4D755 /* PMKPromise+Join.m in Sources */,
+				63CB7F851D46B25A00F4D755 /* PMKPromise+Pause.m in Sources */,
+				63CB7F861D46B25A00F4D755 /* PMKPromise+Until.m in Sources */,
+				63CB7F871D46B25A00F4D755 /* PMKPromise+When.m in Sources */,
+				63CB7F881D46B25A00F4D755 /* PMKPromise+Zalgo.m in Sources */,
+				63CB7F891D46B25A00F4D755 /* initializers.spec.m in Sources */,
+				63CB7F8A1D46B25A00F4D755 /* PMKPromise.test.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -416,52 +443,60 @@
 			};
 			name = Release;
 		};
-		6393398B1ABCF32B00B7AAA9 /* Debug */ = {
+		63CB7F711D46B20600F4D755 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				DEBUG_INFORMATION_FORMAT = dwarf;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
-				GCC_PREPROCESSOR_DEFINITIONS = (
-					"DEBUG=1",
-					"$(inherited)",
-				);
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"$(PROJECT_DIR)/objc",
-				);
+				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "Specs/Tests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				MTL_ENABLE_DEBUG_INFO = YES;
-				PRODUCT_BUNDLE_IDENTIFIER = org.promisekit.Tests;
+				OTHER_CFLAGS = (
+					"-isystem",
+					"$(SRCROOT)/objc",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.promisekit.PMKTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 			};
 			name = Debug;
 		};
-		6393398C1ABCF32B00B7AAA9 /* Release */ = {
+		63CB7F721D46B20600F4D755 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
 				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
-					"$(PROJECT_DIR)/Carthage/Build/iOS",
+					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
-				HEADER_SEARCH_PATHS = (
-					"$(inherited)",
-					/Applications/Xcode.app/Contents/Developer/Toolchains/XcodeDefault.xctoolchain/usr/include,
-					"$(PROJECT_DIR)/objc",
-				);
+				GCC_NO_COMMON_BLOCKS = YES;
 				INFOPLIST_FILE = "Specs/Tests-Info.plist";
-				IPHONEOS_DEPLOYMENT_TARGET = 8.2;
-				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				MTL_ENABLE_DEBUG_INFO = NO;
-				PRODUCT_BUNDLE_IDENTIFIER = org.promisekit.Tests;
+				OTHER_CFLAGS = (
+					"-isystem",
+					"$(SRCROOT)/objc",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = org.promisekit.PMKTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = macosx;
 			};
 			name = Release;
 		};
@@ -477,11 +512,11 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		6393398A1ABCF32B00B7AAA9 /* Build configuration list for PBXNativeTarget "PMKTests" */ = {
+		63CB7F701D46B20600F4D755 /* Build configuration list for PBXNativeTarget "PMKTests" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				6393398B1ABCF32B00B7AAA9 /* Debug */,
-				6393398C1ABCF32B00B7AAA9 /* Release */,
+				63CB7F711D46B20600F4D755 /* Debug */,
+				63CB7F721D46B20600F4D755 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

@@ -1,3 +1,4 @@
+#import <Foundation/Foundation.h>
 #import "PromiseKit/Promise.h"
 #import "NSTask+PromiseKit.h"
 

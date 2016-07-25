@@ -2,25 +2,14 @@
 
 Modern development is highly asynchronous: isn’t it about time iOS developers had tools that made programming asynchronously powerful, easy and delightful?
 
-# How To Get Started
-
-* Read PromiseKit’s [comprehensive learning guide](http://promisekit.org/introduction).
-* Read the [API documentation](http://cocoadocs.org/docsets/PromiseKit/).
-* [Integrate](http://promisekit.org/getting-started) promises into your existing projects.
-
-## How To Get Started… Quickly
+# Getting Started
 
 ```ruby
 # CocoaPods
-pod "PromiseKit"                # Objective-C PromiseKit
-pod "PromiseKit/Promise"        # Just PMKPromise, none of the categories
-
-pod "PromiseKit/Swift"          # Swift PromiseKit
-pod "PromiseKit/Swift/Promise"  # Just Promise, none of the categories
-
-# Carthage
-github "mxcl/PromiseKit"        # Swift PromiseKit
+pod "PromiseKit ~> 1.7"
 ```
+
+* Read PromiseKit’s [comprehensive learning guide](http://promisekit.org/introduction).
 
 # Donations
 

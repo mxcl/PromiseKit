@@ -14,23 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "639339BE1ABCF6AB00B7AAA9"
-               BuildableName = "PromiseKit.framework"
-               BlueprintName = "PMKOSX"
-               ReferencedContainer = "container:PromiseKit.xcodeproj">
-            </BuildableReference>
-         </BuildActionEntry>
-         <BuildActionEntry
-            buildForTesting = "YES"
-            buildForRunning = "YES"
-            buildForProfiling = "NO"
-            buildForArchiving = "NO"
-            buildForAnalyzing = "YES">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "639339C81ABCF6AB00B7AAA9"
-               BuildableName = "PromiseKitTests.xctest"
-               BlueprintName = "PromiseKitTests"
+               BlueprintIdentifier = "63CB7F6A1D46B20600F4D755"
+               BuildableName = "PMKTests.xctest"
+               BlueprintName = "PMKTests"
                ReferencedContainer = "container:PromiseKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -42,16 +28,17 @@
       selectedLauncherIdentifier = "Xcode.DebuggerFoundation.Launcher.LLDB"
       shouldUseLaunchSchemeArgsEnv = "YES">
       <Testables>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "63CB7F6A1D46B20600F4D755"
+               BuildableName = "PMKTests.xctest"
+               BlueprintName = "PMKTests"
+               ReferencedContainer = "container:PromiseKit.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
-      <MacroExpansion>
-         <BuildableReference
-            BuildableIdentifier = "primary"
-            BlueprintIdentifier = "639339BE1ABCF6AB00B7AAA9"
-            BuildableName = "PromiseKit.framework"
-            BlueprintName = "PMKOSX"
-            ReferencedContainer = "container:PromiseKit.xcodeproj">
-         </BuildableReference>
-      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -68,9 +55,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "639339BE1ABCF6AB00B7AAA9"
-            BuildableName = "PromiseKit.framework"
-            BlueprintName = "PMKOSX"
+            BlueprintIdentifier = "63CB7F6A1D46B20600F4D755"
+            BuildableName = "PMKTests.xctest"
+            BlueprintName = "PMKTests"
             ReferencedContainer = "container:PromiseKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -86,9 +73,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "639339BE1ABCF6AB00B7AAA9"
-            BuildableName = "PromiseKit.framework"
-            BlueprintName = "PMKOSX"
+            BlueprintIdentifier = "63CB7F6A1D46B20600F4D755"
+            BuildableName = "PMKTests.xctest"
+            BlueprintName = "PMKTests"
             ReferencedContainer = "container:PromiseKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

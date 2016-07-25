@@ -3,6 +3,9 @@
 #import <Foundation/NSArray.h>
 #import <PromiseKit/fwd.h>
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdocumentation"
+
 /**
  A promise represents the future value of a task.
 
@@ -293,3 +296,5 @@ PMKPromise *dispatch_promise_on(dispatch_queue_t q, id block);
  a safe queue before doing anything else in your handler.
 */
 extern void (^PMKUnhandledErrorHandler)(NSError *);
+
+#pragma clang diagnostic pop

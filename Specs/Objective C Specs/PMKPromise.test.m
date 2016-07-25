@@ -792,19 +792,17 @@ PMKPromise *gcdreject() {
     dispatch_queue_t q1 = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0);
     dispatch_queue_t q2 = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
 
-#pragma clang diagnostic push
-#pragma clang diagnostic ignored "-Wdeprecated-declarations"
     [PMKPromise promiseWithValue:@1].thenOn(q1, ^{
         XCTAssertFalse([NSThread isMainThread]);
-        return dispatch_get_current_queue();
+        return (__bridge id) dispatch_get_current_queue();
     }).thenOn(q2, ^(id q){
         XCTAssertFalse([NSThread isMainThread]);
-        XCTAssertNotEqualObjects(q, dispatch_get_current_queue());
+        id q2 = (__bridge id) dispatch_get_current_queue();
+        XCTAssert(q != q2);
         [ex1 fulfill];
     });
-#pragma clang diagnostic pop
 
-    [self waitForExpectationsWithTimeout:2 handler:nil];
+    [self waitForExpectationsWithTimeout:10 handler:nil];
 }
 
 - (void)test_47_finally_plus {
