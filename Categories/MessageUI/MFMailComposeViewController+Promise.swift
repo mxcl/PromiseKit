@@ -50,6 +50,19 @@ private class PMKMailComposeViewControllerDelegate: NSObject, MFMailComposeViewC
         if let error = error {
             reject(error)
         } else {
+        #if swift(>=2.3)
+            switch result {
+            case .Failed:
+                var info = [NSObject: AnyObject]()
+                info[NSLocalizedDescriptionKey] = "The attempt to save or send the message was unsuccessful."
+                info[NSUnderlyingErrorKey] = NSNumber(integer: result.rawValue)
+                reject(NSError(domain: PMKErrorDomain, code: PMKOperationFailed, userInfo: info))
+            case .Cancelled:
+                reject(MFMailComposeViewController.Error.Cancelled)
+            default:
+                fulfill(result)
+            }
+        #else
             switch result.rawValue {
             case MFMailComposeResultFailed.rawValue:
                 var info = [NSObject: AnyObject]()
@@ -61,6 +74,7 @@ private class PMKMailComposeViewControllerDelegate: NSObject, MFMailComposeViewC
             default:
                 fulfill(result)
             }
+        #endif
         }
     }
 }

@@ -10,7 +10,7 @@ private class CentralManager: CBCentralManager, CBCentralManagerDelegate {
   let (promise, fulfill, reject) = CentralManagerPromise.deferred()
   
   @objc private func centralManagerDidUpdateState(central: CBCentralManager) {
-    if central.state != CBCentralManagerState.Unknown {
+    if central.state != .Unknown {
       fulfill(central)
     }
   }

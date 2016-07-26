@@ -15,7 +15,7 @@ extension XCTestCase {
 
     func testFulfilled(numberOfExpectations: Int  = 1, body: (Promise<Int>, [XCTestExpectation], Int) -> Void) {
 
-        let specify = mkspecify(numberOfExpectations, generator: { Int(rand()) }, body: body)
+        let specify = mkspecify(numberOfExpectations, generator: { Int(arc4random()) }, body: body)
 
         specify("already-fulfilled") { value in
             return (Promise(value), {})
@@ -39,7 +39,7 @@ extension XCTestCase {
     func testRejected(numberOfExpectations: Int = 1, body: (Promise<Int>, [XCTestExpectation], ErrorType) -> Void) {
 
         let specify = mkspecify(numberOfExpectations, generator: { _ -> ErrorType in
-            return NSError(domain: PMKErrorDomain, code: Int(rand()), userInfo: nil)
+            return NSError(domain: PMKErrorDomain, code: Int(arc4random()), userInfo: nil)
         }, body: body)
 
         specify("already-rejected") { error in

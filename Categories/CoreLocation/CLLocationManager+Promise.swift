@@ -53,7 +53,7 @@ extension CLLocationManager {
 private class LocationManager: CLLocationManager, CLLocationManagerDelegate {
     let (promise, fulfill, reject) = LocationPromise.foo()
 
-#if os(iOS)
+#if os(iOS) || swift(>=2.3)
     @objc func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         fulfill(locations)
         CLLocationManager.promiseDoneForLocationManager(manager)

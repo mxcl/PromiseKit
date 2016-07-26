@@ -35,7 +35,7 @@ class Test2322: XCTestCase {
     // 2.3.2.2: If/when `x` is fulfilled, fulfill `promise` with the same value.
 
     func test1() {
-        let sentinel = Int(rand())
+        let sentinel = Int(arc4random())
 
         // describe: `x` is already-fulfilled
 
@@ -52,7 +52,7 @@ class Test2322: XCTestCase {
     }
 
     func test2() {
-        let sentinel = Int(rand())
+        let sentinel = Int(arc4random())
 
         // `x` is eventually-fulfilled
 
@@ -117,7 +117,7 @@ extension XCTestCase {
     private func testPromiseResolution(factory: () -> Promise<Int>, test: (Promise<Int>) -> Void) {
 
         // specify: via return from a fulfilled promise
-        test(Promise(Int(rand())).then { _ in factory() })
+        test(Promise(Int(arc4random())).then { _ in factory() })
         waitForExpectationsWithTimeout(1, handler: nil)
 
         // specify: via return from a rejected promise
