@@ -87,14 +87,6 @@ class WhenTestCase_Swift: XCTestCase {
 
         progress.resignCurrent()
 
-        var cum = Double(0)
-        for promise in [p1, p2, p3, p4] {
-            promise.then { _ -> Void in
-                cum += 0.25
-                XCTAssertEqual(cum, progress.fractionCompleted)
-            }
-        }
-        
         waitForExpectationsWithTimeout(1, handler: nil)
     }
 
