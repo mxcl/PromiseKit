@@ -25,10 +25,10 @@ PromiseKit is a thoughtful and complete implementation of promises for iOS and O
 
 ```ruby
 #CocoaPods
-pod "PromiseKit", "~> 3.3"
+pod "PromiseKit", "~> 3.4"
 
 #Carthage
-github "mxcl/PromiseKit" ~> 3.3
+github "mxcl/PromiseKit" ~> 3.4
 ```
 
 Alternatively, clone PromiseKit and drag and drop its `xcodeproj` into your Xcode project.
