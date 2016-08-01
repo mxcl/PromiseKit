@@ -1,4 +1,4 @@
-![PromiseKit](http://methylblue.com/junk/PMKBanner.png)
+![PromiseKit](http://promisekit.org/public/img/logo-tight.png)
 
 Modern development is highly asynchronous: isn’t it about time we had tools that made programming asynchronously powerful, easy and delightful?
 
@@ -35,7 +35,7 @@ Alternatively, clone PromiseKit and drag and drop its `xcodeproj` into your Xcod
 
 ## Documentation
 
-* We have a gentle but thorough introduction to PromiseKit at [promisekit.org](http://promisekit.org/introduction/).
+* We have a gentle but thorough introduction at [promisekit.org](http://promisekit.org/introduction/).
 
 # PromiseKit vs. Xcode
 
