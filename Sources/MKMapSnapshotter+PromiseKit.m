@@ -1,5 +1,5 @@
 #import "MKMapSnapshotter+PromiseKit.h"
-#import "PromiseKit/Promise.h"
+#import <PromiseKit/Promise.h>
 
 @implementation MKMapSnapshotter (PromiseKit)
 

@@ -9,7 +9,7 @@
 #import <Foundation/NSPointerArray.h>
 #import <objc/runtime.h>
 #import "Private/NSMethodSignatureForBlock.m"
-#import "PromiseKit/Promise.h"
+#import <PromiseKit/Promise.h>
 #import <string.h>
 
 #define IsPromise(o) ([o isKindOfClass:[PMKPromise class]])

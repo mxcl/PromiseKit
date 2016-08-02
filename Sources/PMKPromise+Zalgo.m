@@ -1,5 +1,5 @@
 #import <Foundation/NSThread.h>
-#import "PromiseKit/Promise.h"
+#import <PromiseKit/Promise.h>
 #import "PromiseKit/Promise+Zalgo.h"
 extern id pmk_safely_call_block(id block, id result);
 

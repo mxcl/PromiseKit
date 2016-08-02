@@ -1,5 +1,5 @@
 #import "CKDatabase+PromiseKit.h"
-#import "PromiseKit/Promise.h"
+#import <PromiseKit/Promise.h>
 
 @implementation CKDatabase (PromiseKit)
 

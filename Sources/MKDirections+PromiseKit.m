@@ -1,5 +1,5 @@
 #import "MKDirections+PromiseKit.h"
-#import "PromiseKit/Promise.h"
+#import <PromiseKit/Promise.h>
 
 
 @implementation MKDirections (PromiseKit)

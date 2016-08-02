@@ -1,7 +1,7 @@
 #import <CoreLocation/CLLocationManagerDelegate.h>
 #import "CLLocationManager+PromiseKit.h"
 #import <objc/runtime.h>
-#import "PromiseKit/Promise.h"
+#import <PromiseKit/Promise.h>
 
 @interface PMKLocationManager : CLLocationManager <CLLocationManagerDelegate>
 @end

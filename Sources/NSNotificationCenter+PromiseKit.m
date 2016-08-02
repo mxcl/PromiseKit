@@ -1,7 +1,7 @@
 #import <assert.h>
 #import <Foundation/NSThread.h>
 #import "NSNotificationCenter+PromiseKit.h"
-#import "PromiseKit/Promise.h"
+#import <PromiseKit/Promise.h>
 
 
 @implementation NSNotificationCenter (PromiseKit)

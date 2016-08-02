@@ -5,7 +5,7 @@
 //  Created by Josejulio Martínez on 16/05/14.
 //
 
-#import "PromiseKit/Promise.h"
+#import <PromiseKit/Promise.h>
 #import <objc/runtime.h>
 #import "SKRequest+PromiseKit.h"
 #import <StoreKit/SKProductsRequest.h>

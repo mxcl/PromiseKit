@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0730"
+   LastUpgradeVersion = "0800"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "63CB7F6A1D46B20600F4D755"
-               BuildableName = "PMKTests.xctest"
-               BlueprintName = "PMKTests"
+               BlueprintIdentifier = "63A2EE261D512252003BED41"
+               BuildableName = "PromiseKit.framework"
+               BlueprintName = "PMKmacOS"
                ReferencedContainer = "container:PromiseKit.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -39,6 +39,15 @@
             </BuildableReference>
          </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "63A2EE261D512252003BED41"
+            BuildableName = "PromiseKit.framework"
+            BlueprintName = "PMKmacOS"
+            ReferencedContainer = "container:PromiseKit.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>
@@ -55,9 +64,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "63CB7F6A1D46B20600F4D755"
-            BuildableName = "PMKTests.xctest"
-            BlueprintName = "PMKTests"
+            BlueprintIdentifier = "63A2EE261D512252003BED41"
+            BuildableName = "PromiseKit.framework"
+            BlueprintName = "PMKmacOS"
             ReferencedContainer = "container:PromiseKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
@@ -73,9 +82,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "63CB7F6A1D46B20600F4D755"
-            BuildableName = "PMKTests.xctest"
-            BlueprintName = "PMKTests"
+            BlueprintIdentifier = "63A2EE261D512252003BED41"
+            BuildableName = "PromiseKit.framework"
+            BlueprintName = "PMKmacOS"
             ReferencedContainer = "container:PromiseKit.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

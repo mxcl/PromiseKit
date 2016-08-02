@@ -1,5 +1,5 @@
 #import <objc/runtime.h>
-#import "PromiseKit/Promise.h"
+#import <PromiseKit/Promise.h>
 #import "UIActionSheet+PromiseKit.h"
 
 

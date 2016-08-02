@@ -1,6 +1,6 @@
 #import <CloudKit/CKRecordID.h>
 #import "CKContainer+PromiseKit.h"
-#import "PromiseKit/Promise.h"
+#import <PromiseKit/Promise.h>
 
 @implementation CKContainer (PromiseKit)
 

@@ -4,7 +4,7 @@
 //
 //
 
-#import "PromiseKit/Promise.h"
+#import <PromiseKit/Promise.h>
 #import "SLRequest+PromiseKit.h"
 
 NSString *const SLRequestPromiseKitErrorDomain = PMKErrorDomain;

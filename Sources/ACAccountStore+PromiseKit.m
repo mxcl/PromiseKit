@@ -1,5 +1,5 @@
 #import "ACAccountStore+PromiseKit.h"
-#import "PromiseKit/Promise.h"
+#import <PromiseKit/Promise.h>
 
 
 @implementation ACAccountStore (PromiseKit)

@@ -5,7 +5,7 @@
 //
 
 #import "AVAudioSession+PromiseKit.h"
-#import "PromiseKit/Promise.h"
+#import <PromiseKit/Promise.h>
 
 @implementation AVAudioSession (PromiseKit)
 

@@ -1,10 +1,4 @@
-#import "PromiseKit/Promise.h"
-#import "PromiseKit/Promise+Pause.h"
-#import "PromiseKit/Promise+When.h"
-#import "PromiseKit/Promise+Join.h"
-#import "PromiseKit/Promise+Until.h"
-#import "PromiseKit/Promise+Hang.h"
-#import "PromiseKit/Promise+Zalgo.h"
+@import PromiseKit;
 #import "NSURLConnection+PromiseKit.h"
 #import <CommonCrypto/CommonCrypto.h>
 

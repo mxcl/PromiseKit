@@ -7,6 +7,40 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		63A2EE2F1D51229F003BED41 /* PMKPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334B1AAF65050078F9B6 /* PMKPromise.m */; };
+		63A2EE301D51229F003BED41 /* PMKPromise+Hang.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334C1AAF65050078F9B6 /* PMKPromise+Hang.m */; };
+		63A2EE311D51229F003BED41 /* PMKPromise+Join.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334D1AAF65050078F9B6 /* PMKPromise+Join.m */; };
+		63A2EE321D51229F003BED41 /* PMKPromise+Pause.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334E1AAF65050078F9B6 /* PMKPromise+Pause.m */; };
+		63A2EE331D51229F003BED41 /* PMKPromise+Until.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334F1AAF65050078F9B6 /* PMKPromise+Until.m */; };
+		63A2EE341D51229F003BED41 /* PMKPromise+When.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933501AAF65050078F9B6 /* PMKPromise+When.m */; };
+		63A2EE351D51229F003BED41 /* PMKPromise+Zalgo.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933511AAF65050078F9B6 /* PMKPromise+Zalgo.m */; };
+		63A2EE361D5122AF003BED41 /* PromiseKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 6389335E1AAF65050078F9B6 /* PromiseKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63A2EE371D5122AF003BED41 /* fwd.h in Headers */ = {isa = PBXBuildFile; fileRef = 638933561AAF65050078F9B6 /* fwd.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63A2EE381D5122AF003BED41 /* Promise.h in Headers */ = {isa = PBXBuildFile; fileRef = 6389335D1AAF65050078F9B6 /* Promise.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63A2EE391D5122AF003BED41 /* Promise+Hang.h in Headers */ = {isa = PBXBuildFile; fileRef = 638933571AAF65050078F9B6 /* Promise+Hang.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63A2EE3A1D5122AF003BED41 /* Promise+Join.h in Headers */ = {isa = PBXBuildFile; fileRef = 638933581AAF65050078F9B6 /* Promise+Join.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63A2EE3B1D5122AF003BED41 /* Promise+Pause.h in Headers */ = {isa = PBXBuildFile; fileRef = 638933591AAF65050078F9B6 /* Promise+Pause.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63A2EE3C1D5122AF003BED41 /* Promise+Until.h in Headers */ = {isa = PBXBuildFile; fileRef = 6389335A1AAF65050078F9B6 /* Promise+Until.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63A2EE3D1D5122AF003BED41 /* Promise+When.h in Headers */ = {isa = PBXBuildFile; fileRef = 6389335B1AAF65050078F9B6 /* Promise+When.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63A2EE3E1D5122AF003BED41 /* Promise+Zalgo.h in Headers */ = {isa = PBXBuildFile; fileRef = 6389335C1AAF65050078F9B6 /* Promise+Zalgo.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63A2EE3F1D512302003BED41 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63A2EE271D512252003BED41 /* PromiseKit.framework */; };
+		63A2EE401D512308003BED41 /* PromiseKit.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63A2EE271D512252003BED41 /* PromiseKit.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
+		63A2EE451D51267E003BED41 /* PMKPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334B1AAF65050078F9B6 /* PMKPromise.m */; };
+		63A2EE461D51267E003BED41 /* PMKPromise+Hang.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334C1AAF65050078F9B6 /* PMKPromise+Hang.m */; };
+		63A2EE471D51267E003BED41 /* PMKPromise+Join.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334D1AAF65050078F9B6 /* PMKPromise+Join.m */; };
+		63A2EE481D51267E003BED41 /* PMKPromise+Pause.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334E1AAF65050078F9B6 /* PMKPromise+Pause.m */; };
+		63A2EE491D51267E003BED41 /* PMKPromise+Until.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334F1AAF65050078F9B6 /* PMKPromise+Until.m */; };
+		63A2EE4A1D51267E003BED41 /* PMKPromise+When.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933501AAF65050078F9B6 /* PMKPromise+When.m */; };
+		63A2EE4B1D51267E003BED41 /* PMKPromise+Zalgo.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933511AAF65050078F9B6 /* PMKPromise+Zalgo.m */; };
+		63A2EE4E1D51267E003BED41 /* PromiseKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 6389335E1AAF65050078F9B6 /* PromiseKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63A2EE4F1D51267E003BED41 /* Promise.h in Headers */ = {isa = PBXBuildFile; fileRef = 6389335D1AAF65050078F9B6 /* Promise.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63A2EE501D51267E003BED41 /* fwd.h in Headers */ = {isa = PBXBuildFile; fileRef = 638933561AAF65050078F9B6 /* fwd.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63A2EE511D51267E003BED41 /* Promise+Hang.h in Headers */ = {isa = PBXBuildFile; fileRef = 638933571AAF65050078F9B6 /* Promise+Hang.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63A2EE521D51267E003BED41 /* Promise+Join.h in Headers */ = {isa = PBXBuildFile; fileRef = 638933581AAF65050078F9B6 /* Promise+Join.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63A2EE531D51267E003BED41 /* Promise+Pause.h in Headers */ = {isa = PBXBuildFile; fileRef = 638933591AAF65050078F9B6 /* Promise+Pause.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63A2EE541D51267E003BED41 /* Promise+Until.h in Headers */ = {isa = PBXBuildFile; fileRef = 6389335A1AAF65050078F9B6 /* Promise+Until.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63A2EE551D51267E003BED41 /* Promise+When.h in Headers */ = {isa = PBXBuildFile; fileRef = 6389335B1AAF65050078F9B6 /* Promise+When.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63A2EE561D51267E003BED41 /* Promise+Zalgo.h in Headers */ = {isa = PBXBuildFile; fileRef = 6389335C1AAF65050078F9B6 /* Promise+Zalgo.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63B8C54E1D46B4BF00F45B3D /* OMGHTTPURLRQ.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B8C54D1D46B4BF00F45B3D /* OMGHTTPURLRQ.framework */; };
 		63B8C5501D46BA4400F45B3D /* OMGHTTPURLRQ.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = 63B8C54D1D46B4BF00F45B3D /* OMGHTTPURLRQ.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		63CB7F731D46B25A00F4D755 /* ACAccountStore+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933321AAF65050078F9B6 /* ACAccountStore+PromiseKit.m */; };
@@ -23,16 +57,19 @@
 		63CB7F7F1D46B25A00F4D755 /* NSURLConnection+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334A1AAF65050078F9B6 /* NSURLConnection+PromiseKit.m */; };
 		63CB7F801D46B25A00F4D755 /* SKRequest+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933601AAF65050078F9B6 /* SKRequest+PromiseKit.m */; };
 		63CB7F811D46B25A00F4D755 /* SLRequest+PromiseKit.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933621AAF65050078F9B6 /* SLRequest+PromiseKit.m */; };
-		63CB7F821D46B25A00F4D755 /* PMKPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334B1AAF65050078F9B6 /* PMKPromise.m */; };
-		63CB7F831D46B25A00F4D755 /* PMKPromise+Hang.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334C1AAF65050078F9B6 /* PMKPromise+Hang.m */; };
-		63CB7F841D46B25A00F4D755 /* PMKPromise+Join.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334D1AAF65050078F9B6 /* PMKPromise+Join.m */; };
-		63CB7F851D46B25A00F4D755 /* PMKPromise+Pause.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334E1AAF65050078F9B6 /* PMKPromise+Pause.m */; };
-		63CB7F861D46B25A00F4D755 /* PMKPromise+Until.m in Sources */ = {isa = PBXBuildFile; fileRef = 6389334F1AAF65050078F9B6 /* PMKPromise+Until.m */; };
-		63CB7F871D46B25A00F4D755 /* PMKPromise+When.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933501AAF65050078F9B6 /* PMKPromise+When.m */; };
-		63CB7F881D46B25A00F4D755 /* PMKPromise+Zalgo.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933511AAF65050078F9B6 /* PMKPromise+Zalgo.m */; };
 		63CB7F891D46B25A00F4D755 /* initializers.spec.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933DA1AAFC3B40078F9B6 /* initializers.spec.m */; };
 		63CB7F8A1D46B25A00F4D755 /* PMKPromise.test.m in Sources */ = {isa = PBXBuildFile; fileRef = 638933DB1AAFC3B40078F9B6 /* PMKPromise.test.m */; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		63A2EE411D512319003BED41 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63519901193FCD4C002CF47D /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 63A2EE261D512252003BED41;
+			remoteInfo = PMKmacOS;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
 		63B8C54F1D46BA3900F45B3D /* CopyFiles */ = {
@@ -42,81 +79,99 @@
 			dstSubfolderSpec = 10;
 			files = (
 				63B8C5501D46BA4400F45B3D /* OMGHTTPURLRQ.framework in CopyFiles */,
+				63A2EE401D512308003BED41 /* PromiseKit.framework in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		6384FD1019EECD2400613CBF /* PMK.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = PMK.playground; sourceTree = "<group>"; };
-		638933311AAF65050078F9B6 /* ACAccountStore+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ACAccountStore+PromiseKit.h"; path = "objc/ACAccountStore+PromiseKit.h"; sourceTree = "<group>"; };
-		638933321AAF65050078F9B6 /* ACAccountStore+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "ACAccountStore+PromiseKit.m"; path = "objc/ACAccountStore+PromiseKit.m"; sourceTree = "<group>"; };
-		638933331AAF65050078F9B6 /* AVAudioSession+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "AVAudioSession+PromiseKit.h"; path = "objc/AVAudioSession+PromiseKit.h"; sourceTree = "<group>"; };
-		638933341AAF65050078F9B6 /* AVAudioSession+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "AVAudioSession+PromiseKit.m"; path = "objc/AVAudioSession+PromiseKit.m"; sourceTree = "<group>"; };
-		638933351AAF65050078F9B6 /* CALayer+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CALayer+PromiseKit.h"; path = "objc/CALayer+PromiseKit.h"; sourceTree = "<group>"; };
-		638933361AAF65050078F9B6 /* CALayer+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CALayer+PromiseKit.m"; path = "objc/CALayer+PromiseKit.m"; sourceTree = "<group>"; };
-		638933371AAF65050078F9B6 /* CKContainer+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKContainer+PromiseKit.h"; path = "objc/CKContainer+PromiseKit.h"; sourceTree = "<group>"; };
-		638933381AAF65050078F9B6 /* CKContainer+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKContainer+PromiseKit.m"; path = "objc/CKContainer+PromiseKit.m"; sourceTree = "<group>"; };
-		638933391AAF65050078F9B6 /* CKDatabase+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKDatabase+PromiseKit.h"; path = "objc/CKDatabase+PromiseKit.h"; sourceTree = "<group>"; };
-		6389333A1AAF65050078F9B6 /* CKDatabase+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKDatabase+PromiseKit.m"; path = "objc/CKDatabase+PromiseKit.m"; sourceTree = "<group>"; };
-		6389333B1AAF65050078F9B6 /* CLGeocoder+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CLGeocoder+PromiseKit.h"; path = "objc/CLGeocoder+PromiseKit.h"; sourceTree = "<group>"; };
-		6389333C1AAF65050078F9B6 /* CLGeocoder+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CLGeocoder+PromiseKit.m"; path = "objc/CLGeocoder+PromiseKit.m"; sourceTree = "<group>"; };
-		6389333D1AAF65050078F9B6 /* CLLocationManager+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CLLocationManager+PromiseKit.h"; path = "objc/CLLocationManager+PromiseKit.h"; sourceTree = "<group>"; };
-		6389333E1AAF65050078F9B6 /* CLLocationManager+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CLLocationManager+PromiseKit.m"; path = "objc/CLLocationManager+PromiseKit.m"; sourceTree = "<group>"; };
-		6389333F1AAF65050078F9B6 /* MKDirections+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MKDirections+PromiseKit.h"; path = "objc/MKDirections+PromiseKit.h"; sourceTree = "<group>"; };
-		638933401AAF65050078F9B6 /* MKDirections+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MKDirections+PromiseKit.m"; path = "objc/MKDirections+PromiseKit.m"; sourceTree = "<group>"; };
-		638933411AAF65050078F9B6 /* MKMapSnapshotter+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MKMapSnapshotter+PromiseKit.h"; path = "objc/MKMapSnapshotter+PromiseKit.h"; sourceTree = "<group>"; };
-		638933421AAF65050078F9B6 /* MKMapSnapshotter+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MKMapSnapshotter+PromiseKit.m"; path = "objc/MKMapSnapshotter+PromiseKit.m"; sourceTree = "<group>"; };
-		638933431AAF65050078F9B6 /* NSFileManager+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+PromiseKit.h"; path = "objc/NSFileManager+PromiseKit.h"; sourceTree = "<group>"; };
-		638933441AAF65050078F9B6 /* NSFileManager+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSFileManager+PromiseKit.m"; path = "objc/NSFileManager+PromiseKit.m"; sourceTree = "<group>"; };
-		638933451AAF65050078F9B6 /* NSNotificationCenter+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNotificationCenter+PromiseKit.h"; path = "objc/NSNotificationCenter+PromiseKit.h"; sourceTree = "<group>"; };
-		638933461AAF65050078F9B6 /* NSNotificationCenter+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNotificationCenter+PromiseKit.m"; path = "objc/NSNotificationCenter+PromiseKit.m"; sourceTree = "<group>"; };
-		638933471AAF65050078F9B6 /* NSTask+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSTask+PromiseKit.h"; path = "objc/NSTask+PromiseKit.h"; sourceTree = "<group>"; };
-		638933481AAF65050078F9B6 /* NSTask+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSTask+PromiseKit.m"; path = "objc/NSTask+PromiseKit.m"; sourceTree = "<group>"; };
-		638933491AAF65050078F9B6 /* NSURLConnection+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURLConnection+PromiseKit.h"; path = "objc/NSURLConnection+PromiseKit.h"; sourceTree = "<group>"; };
-		6389334A1AAF65050078F9B6 /* NSURLConnection+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURLConnection+PromiseKit.m"; path = "objc/NSURLConnection+PromiseKit.m"; sourceTree = "<group>"; };
-		6389334B1AAF65050078F9B6 /* PMKPromise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PMKPromise.m; path = objc/PMKPromise.m; sourceTree = "<group>"; };
-		6389334C1AAF65050078F9B6 /* PMKPromise+Hang.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PMKPromise+Hang.m"; path = "objc/PMKPromise+Hang.m"; sourceTree = "<group>"; };
-		6389334D1AAF65050078F9B6 /* PMKPromise+Join.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PMKPromise+Join.m"; path = "objc/PMKPromise+Join.m"; sourceTree = "<group>"; };
-		6389334E1AAF65050078F9B6 /* PMKPromise+Pause.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PMKPromise+Pause.m"; path = "objc/PMKPromise+Pause.m"; sourceTree = "<group>"; };
-		6389334F1AAF65050078F9B6 /* PMKPromise+Until.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PMKPromise+Until.m"; path = "objc/PMKPromise+Until.m"; sourceTree = "<group>"; };
-		638933501AAF65050078F9B6 /* PMKPromise+When.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PMKPromise+When.m"; path = "objc/PMKPromise+When.m"; sourceTree = "<group>"; };
-		638933511AAF65050078F9B6 /* PMKPromise+Zalgo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PMKPromise+Zalgo.m"; path = "objc/PMKPromise+Zalgo.m"; sourceTree = "<group>"; };
-		638933531AAF65050078F9B6 /* NSMethodSignatureForBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSMethodSignatureForBlock.m; path = objc/Private/NSMethodSignatureForBlock.m; sourceTree = "<group>"; };
-		638933561AAF65050078F9B6 /* fwd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fwd.h; path = objc/PromiseKit/fwd.h; sourceTree = "<group>"; };
-		638933571AAF65050078F9B6 /* Promise+Hang.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Promise+Hang.h"; path = "objc/PromiseKit/Promise+Hang.h"; sourceTree = "<group>"; };
-		638933581AAF65050078F9B6 /* Promise+Join.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Promise+Join.h"; path = "objc/PromiseKit/Promise+Join.h"; sourceTree = "<group>"; };
-		638933591AAF65050078F9B6 /* Promise+Pause.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Promise+Pause.h"; path = "objc/PromiseKit/Promise+Pause.h"; sourceTree = "<group>"; };
-		6389335A1AAF65050078F9B6 /* Promise+Until.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Promise+Until.h"; path = "objc/PromiseKit/Promise+Until.h"; sourceTree = "<group>"; };
-		6389335B1AAF65050078F9B6 /* Promise+When.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Promise+When.h"; path = "objc/PromiseKit/Promise+When.h"; sourceTree = "<group>"; };
-		6389335C1AAF65050078F9B6 /* Promise+Zalgo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Promise+Zalgo.h"; path = "objc/PromiseKit/Promise+Zalgo.h"; sourceTree = "<group>"; };
-		6389335D1AAF65050078F9B6 /* Promise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Promise.h; path = objc/PromiseKit/Promise.h; sourceTree = "<group>"; };
-		6389335E1AAF65050078F9B6 /* PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PromiseKit.h; path = objc/PromiseKit.h; sourceTree = "<group>"; };
-		6389335F1AAF65050078F9B6 /* SKRequest+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SKRequest+PromiseKit.h"; path = "objc/SKRequest+PromiseKit.h"; sourceTree = "<group>"; };
-		638933601AAF65050078F9B6 /* SKRequest+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "SKRequest+PromiseKit.m"; path = "objc/SKRequest+PromiseKit.m"; sourceTree = "<group>"; };
-		638933611AAF65050078F9B6 /* SLRequest+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SLRequest+PromiseKit.h"; path = "objc/SLRequest+PromiseKit.h"; sourceTree = "<group>"; };
-		638933621AAF65050078F9B6 /* SLRequest+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "SLRequest+PromiseKit.m"; path = "objc/SLRequest+PromiseKit.m"; sourceTree = "<group>"; };
-		638933631AAF65050078F9B6 /* UIActionSheet+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIActionSheet+PromiseKit.h"; path = "objc/UIActionSheet+PromiseKit.h"; sourceTree = "<group>"; };
-		638933641AAF65050078F9B6 /* UIActionSheet+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIActionSheet+PromiseKit.m"; path = "objc/UIActionSheet+PromiseKit.m"; sourceTree = "<group>"; };
-		638933651AAF65050078F9B6 /* UIAlertView+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIAlertView+PromiseKit.h"; path = "objc/UIAlertView+PromiseKit.h"; sourceTree = "<group>"; };
-		638933661AAF65050078F9B6 /* UIAlertView+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIAlertView+PromiseKit.m"; path = "objc/UIAlertView+PromiseKit.m"; sourceTree = "<group>"; };
-		638933671AAF65050078F9B6 /* UIView+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+PromiseKit.h"; path = "objc/UIView+PromiseKit.h"; sourceTree = "<group>"; };
-		638933681AAF65050078F9B6 /* UIView+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+PromiseKit.m"; path = "objc/UIView+PromiseKit.m"; sourceTree = "<group>"; };
-		638933691AAF65050078F9B6 /* UIViewController+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+PromiseKit.h"; path = "objc/UIViewController+PromiseKit.h"; sourceTree = "<group>"; };
-		6389336A1AAF65050078F9B6 /* UIViewController+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+PromiseKit.m"; path = "objc/UIViewController+PromiseKit.m"; sourceTree = "<group>"; };
-		638933DA1AAFC3B40078F9B6 /* initializers.spec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = initializers.spec.m; path = "Specs/Objective C Specs/initializers.spec.m"; sourceTree = SOURCE_ROOT; };
-		638933DB1AAFC3B40078F9B6 /* PMKPromise.test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PMKPromise.test.m; path = "Specs/Objective C Specs/PMKPromise.test.m"; sourceTree = SOURCE_ROOT; };
-		639339841ABCF32B00B7AAA9 /* Tests-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "Tests-Info.plist"; path = "Specs/Tests-Info.plist"; sourceTree = "<group>"; };
+		6384FD1019EECD2400613CBF /* PromiseKit.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = PromiseKit.playground; sourceTree = "<group>"; };
+		638933311AAF65050078F9B6 /* ACAccountStore+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "ACAccountStore+PromiseKit.h"; path = "Sources/ACAccountStore+PromiseKit.h"; sourceTree = "<group>"; };
+		638933321AAF65050078F9B6 /* ACAccountStore+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "ACAccountStore+PromiseKit.m"; path = "Sources/ACAccountStore+PromiseKit.m"; sourceTree = "<group>"; };
+		638933331AAF65050078F9B6 /* AVAudioSession+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "AVAudioSession+PromiseKit.h"; path = "Sources/AVAudioSession+PromiseKit.h"; sourceTree = "<group>"; };
+		638933341AAF65050078F9B6 /* AVAudioSession+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "AVAudioSession+PromiseKit.m"; path = "Sources/AVAudioSession+PromiseKit.m"; sourceTree = "<group>"; };
+		638933351AAF65050078F9B6 /* CALayer+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CALayer+PromiseKit.h"; path = "Sources/CALayer+PromiseKit.h"; sourceTree = "<group>"; };
+		638933361AAF65050078F9B6 /* CALayer+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CALayer+PromiseKit.m"; path = "Sources/CALayer+PromiseKit.m"; sourceTree = "<group>"; };
+		638933371AAF65050078F9B6 /* CKContainer+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKContainer+PromiseKit.h"; path = "Sources/CKContainer+PromiseKit.h"; sourceTree = "<group>"; };
+		638933381AAF65050078F9B6 /* CKContainer+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKContainer+PromiseKit.m"; path = "Sources/CKContainer+PromiseKit.m"; sourceTree = "<group>"; };
+		638933391AAF65050078F9B6 /* CKDatabase+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CKDatabase+PromiseKit.h"; path = "Sources/CKDatabase+PromiseKit.h"; sourceTree = "<group>"; };
+		6389333A1AAF65050078F9B6 /* CKDatabase+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CKDatabase+PromiseKit.m"; path = "Sources/CKDatabase+PromiseKit.m"; sourceTree = "<group>"; };
+		6389333B1AAF65050078F9B6 /* CLGeocoder+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CLGeocoder+PromiseKit.h"; path = "Sources/CLGeocoder+PromiseKit.h"; sourceTree = "<group>"; };
+		6389333C1AAF65050078F9B6 /* CLGeocoder+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CLGeocoder+PromiseKit.m"; path = "Sources/CLGeocoder+PromiseKit.m"; sourceTree = "<group>"; };
+		6389333D1AAF65050078F9B6 /* CLLocationManager+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "CLLocationManager+PromiseKit.h"; path = "Sources/CLLocationManager+PromiseKit.h"; sourceTree = "<group>"; };
+		6389333E1AAF65050078F9B6 /* CLLocationManager+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "CLLocationManager+PromiseKit.m"; path = "Sources/CLLocationManager+PromiseKit.m"; sourceTree = "<group>"; };
+		6389333F1AAF65050078F9B6 /* MKDirections+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MKDirections+PromiseKit.h"; path = "Sources/MKDirections+PromiseKit.h"; sourceTree = "<group>"; };
+		638933401AAF65050078F9B6 /* MKDirections+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MKDirections+PromiseKit.m"; path = "Sources/MKDirections+PromiseKit.m"; sourceTree = "<group>"; };
+		638933411AAF65050078F9B6 /* MKMapSnapshotter+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "MKMapSnapshotter+PromiseKit.h"; path = "Sources/MKMapSnapshotter+PromiseKit.h"; sourceTree = "<group>"; };
+		638933421AAF65050078F9B6 /* MKMapSnapshotter+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "MKMapSnapshotter+PromiseKit.m"; path = "Sources/MKMapSnapshotter+PromiseKit.m"; sourceTree = "<group>"; };
+		638933431AAF65050078F9B6 /* NSFileManager+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSFileManager+PromiseKit.h"; path = "Sources/NSFileManager+PromiseKit.h"; sourceTree = "<group>"; };
+		638933441AAF65050078F9B6 /* NSFileManager+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSFileManager+PromiseKit.m"; path = "Sources/NSFileManager+PromiseKit.m"; sourceTree = "<group>"; };
+		638933451AAF65050078F9B6 /* NSNotificationCenter+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSNotificationCenter+PromiseKit.h"; path = "Sources/NSNotificationCenter+PromiseKit.h"; sourceTree = "<group>"; };
+		638933461AAF65050078F9B6 /* NSNotificationCenter+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSNotificationCenter+PromiseKit.m"; path = "Sources/NSNotificationCenter+PromiseKit.m"; sourceTree = "<group>"; };
+		638933471AAF65050078F9B6 /* NSTask+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSTask+PromiseKit.h"; path = "Sources/NSTask+PromiseKit.h"; sourceTree = "<group>"; };
+		638933481AAF65050078F9B6 /* NSTask+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSTask+PromiseKit.m"; path = "Sources/NSTask+PromiseKit.m"; sourceTree = "<group>"; };
+		638933491AAF65050078F9B6 /* NSURLConnection+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "NSURLConnection+PromiseKit.h"; path = "Sources/NSURLConnection+PromiseKit.h"; sourceTree = "<group>"; };
+		6389334A1AAF65050078F9B6 /* NSURLConnection+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "NSURLConnection+PromiseKit.m"; path = "Sources/NSURLConnection+PromiseKit.m"; sourceTree = "<group>"; };
+		6389334B1AAF65050078F9B6 /* PMKPromise.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PMKPromise.m; path = Sources/PMKPromise.m; sourceTree = "<group>"; };
+		6389334C1AAF65050078F9B6 /* PMKPromise+Hang.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PMKPromise+Hang.m"; path = "Sources/PMKPromise+Hang.m"; sourceTree = "<group>"; };
+		6389334D1AAF65050078F9B6 /* PMKPromise+Join.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PMKPromise+Join.m"; path = "Sources/PMKPromise+Join.m"; sourceTree = "<group>"; };
+		6389334E1AAF65050078F9B6 /* PMKPromise+Pause.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PMKPromise+Pause.m"; path = "Sources/PMKPromise+Pause.m"; sourceTree = "<group>"; };
+		6389334F1AAF65050078F9B6 /* PMKPromise+Until.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PMKPromise+Until.m"; path = "Sources/PMKPromise+Until.m"; sourceTree = "<group>"; };
+		638933501AAF65050078F9B6 /* PMKPromise+When.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PMKPromise+When.m"; path = "Sources/PMKPromise+When.m"; sourceTree = "<group>"; };
+		638933511AAF65050078F9B6 /* PMKPromise+Zalgo.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "PMKPromise+Zalgo.m"; path = "Sources/PMKPromise+Zalgo.m"; sourceTree = "<group>"; };
+		638933531AAF65050078F9B6 /* NSMethodSignatureForBlock.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = NSMethodSignatureForBlock.m; path = Sources/Private/NSMethodSignatureForBlock.m; sourceTree = "<group>"; };
+		638933561AAF65050078F9B6 /* fwd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fwd.h; path = Sources/PromiseKit/fwd.h; sourceTree = "<group>"; };
+		638933571AAF65050078F9B6 /* Promise+Hang.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Promise+Hang.h"; path = "Sources/PromiseKit/Promise+Hang.h"; sourceTree = "<group>"; };
+		638933581AAF65050078F9B6 /* Promise+Join.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Promise+Join.h"; path = "Sources/PromiseKit/Promise+Join.h"; sourceTree = "<group>"; };
+		638933591AAF65050078F9B6 /* Promise+Pause.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Promise+Pause.h"; path = "Sources/PromiseKit/Promise+Pause.h"; sourceTree = "<group>"; };
+		6389335A1AAF65050078F9B6 /* Promise+Until.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Promise+Until.h"; path = "Sources/PromiseKit/Promise+Until.h"; sourceTree = "<group>"; };
+		6389335B1AAF65050078F9B6 /* Promise+When.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Promise+When.h"; path = "Sources/PromiseKit/Promise+When.h"; sourceTree = "<group>"; };
+		6389335C1AAF65050078F9B6 /* Promise+Zalgo.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "Promise+Zalgo.h"; path = "Sources/PromiseKit/Promise+Zalgo.h"; sourceTree = "<group>"; };
+		6389335D1AAF65050078F9B6 /* Promise.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = Promise.h; path = Sources/PromiseKit/Promise.h; sourceTree = "<group>"; };
+		6389335E1AAF65050078F9B6 /* PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PromiseKit.h; path = Sources/PromiseKit.h; sourceTree = "<group>"; };
+		6389335F1AAF65050078F9B6 /* SKRequest+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SKRequest+PromiseKit.h"; path = "Sources/SKRequest+PromiseKit.h"; sourceTree = "<group>"; };
+		638933601AAF65050078F9B6 /* SKRequest+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "SKRequest+PromiseKit.m"; path = "Sources/SKRequest+PromiseKit.m"; sourceTree = "<group>"; };
+		638933611AAF65050078F9B6 /* SLRequest+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "SLRequest+PromiseKit.h"; path = "Sources/SLRequest+PromiseKit.h"; sourceTree = "<group>"; };
+		638933621AAF65050078F9B6 /* SLRequest+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "SLRequest+PromiseKit.m"; path = "Sources/SLRequest+PromiseKit.m"; sourceTree = "<group>"; };
+		638933631AAF65050078F9B6 /* UIActionSheet+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIActionSheet+PromiseKit.h"; path = "Sources/UIActionSheet+PromiseKit.h"; sourceTree = "<group>"; };
+		638933641AAF65050078F9B6 /* UIActionSheet+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIActionSheet+PromiseKit.m"; path = "Sources/UIActionSheet+PromiseKit.m"; sourceTree = "<group>"; };
+		638933651AAF65050078F9B6 /* UIAlertView+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIAlertView+PromiseKit.h"; path = "Sources/UIAlertView+PromiseKit.h"; sourceTree = "<group>"; };
+		638933661AAF65050078F9B6 /* UIAlertView+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIAlertView+PromiseKit.m"; path = "Sources/UIAlertView+PromiseKit.m"; sourceTree = "<group>"; };
+		638933671AAF65050078F9B6 /* UIView+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIView+PromiseKit.h"; path = "Sources/UIView+PromiseKit.h"; sourceTree = "<group>"; };
+		638933681AAF65050078F9B6 /* UIView+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIView+PromiseKit.m"; path = "Sources/UIView+PromiseKit.m"; sourceTree = "<group>"; };
+		638933691AAF65050078F9B6 /* UIViewController+PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = "UIViewController+PromiseKit.h"; path = "Sources/UIViewController+PromiseKit.h"; sourceTree = "<group>"; };
+		6389336A1AAF65050078F9B6 /* UIViewController+PromiseKit.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = "UIViewController+PromiseKit.m"; path = "Sources/UIViewController+PromiseKit.m"; sourceTree = "<group>"; };
+		638933DA1AAFC3B40078F9B6 /* initializers.spec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = initializers.spec.m; path = Tests/initializers.spec.m; sourceTree = SOURCE_ROOT; };
+		638933DB1AAFC3B40078F9B6 /* PMKPromise.test.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = PMKPromise.test.m; path = Tests/PMKPromise.test.m; sourceTree = SOURCE_ROOT; };
+		63A2EE271D512252003BED41 /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		63A2EE2A1D512252003BED41 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		63A2EE5B1D51267E003BED41 /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		63B8C54D1D46B4BF00F45B3D /* OMGHTTPURLRQ.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OMGHTTPURLRQ.framework; path = Carthage/Build/Mac/OMGHTTPURLRQ.framework; sourceTree = "<group>"; };
 		63CB7F6B1D46B20600F4D755 /* PMKTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PMKTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		63A2EE231D512252003BED41 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63A2EE4C1D51267E003BED41 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		63CB7F681D46B20600F4D755 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				63B8C54E1D46B4BF00F45B3D /* OMGHTTPURLRQ.framework in Frameworks */,
+				63A2EE3F1D512302003BED41 /* PromiseKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -126,30 +181,29 @@
 		63519900193FCD4C002CF47D = {
 			isa = PBXGroup;
 			children = (
-				639339841ABCF32B00B7AAA9 /* Tests-Info.plist */,
-				6384FD1019EECD2400613CBF /* PMK.playground */,
+				6384FD1019EECD2400613CBF /* PromiseKit.playground */,
 				6359EEF11A9666F300E4E1B8 /* Sources */,
-				63519919193FCD4C002CF47D /* Specs */,
-				63DDE17E1947B946005D34A3 /* Products */,
+				63519919193FCD4C002CF47D /* Tests */,
 				63CB7F561D46B18D00F4D755 /* Frameworks */,
+				63DDE17E1947B946005D34A3 /* Products */,
 			);
 			sourceTree = "<group>";
 		};
-		63519919193FCD4C002CF47D /* Specs */ = {
+		63519919193FCD4C002CF47D /* Tests */ = {
 			isa = PBXGroup;
 			children = (
 				638933DA1AAFC3B40078F9B6 /* initializers.spec.m */,
 				638933DB1AAFC3B40078F9B6 /* PMKPromise.test.m */,
 			);
-			name = Specs;
 			path = Tests;
 			sourceTree = "<group>";
 		};
 		6359EEF11A9666F300E4E1B8 /* Sources */ = {
 			isa = PBXGroup;
 			children = (
-				638933A31AAF651E0078F9B6 /* Categories */,
+				63A2EE2A1D512252003BED41 /* Info.plist */,
 				638933301AAF64E60078F9B6 /* Core */,
+				638933A31AAF651E0078F9B6 /* Categories */,
 			);
 			name = Sources;
 			sourceTree = "<group>";
@@ -234,6 +288,8 @@
 		63DDE17E1947B946005D34A3 /* Products */ = {
 			isa = PBXGroup;
 			children = (
+				63A2EE271D512252003BED41 /* PromiseKit.framework */,
+				63A2EE5B1D51267E003BED41 /* PromiseKit.framework */,
 				63CB7F6B1D46B20600F4D755 /* PMKTests.xctest */,
 			);
 			name = Products;
@@ -241,7 +297,78 @@
 		};
 /* End PBXGroup section */
 
+/* Begin PBXHeadersBuildPhase section */
+		63A2EE241D512252003BED41 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				63A2EE361D5122AF003BED41 /* PromiseKit.h in Headers */,
+				63A2EE381D5122AF003BED41 /* Promise.h in Headers */,
+				63A2EE371D5122AF003BED41 /* fwd.h in Headers */,
+				63A2EE391D5122AF003BED41 /* Promise+Hang.h in Headers */,
+				63A2EE3A1D5122AF003BED41 /* Promise+Join.h in Headers */,
+				63A2EE3B1D5122AF003BED41 /* Promise+Pause.h in Headers */,
+				63A2EE3C1D5122AF003BED41 /* Promise+Until.h in Headers */,
+				63A2EE3D1D5122AF003BED41 /* Promise+When.h in Headers */,
+				63A2EE3E1D5122AF003BED41 /* Promise+Zalgo.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63A2EE4D1D51267E003BED41 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				63A2EE4E1D51267E003BED41 /* PromiseKit.h in Headers */,
+				63A2EE4F1D51267E003BED41 /* Promise.h in Headers */,
+				63A2EE501D51267E003BED41 /* fwd.h in Headers */,
+				63A2EE511D51267E003BED41 /* Promise+Hang.h in Headers */,
+				63A2EE521D51267E003BED41 /* Promise+Join.h in Headers */,
+				63A2EE531D51267E003BED41 /* Promise+Pause.h in Headers */,
+				63A2EE541D51267E003BED41 /* Promise+Until.h in Headers */,
+				63A2EE551D51267E003BED41 /* Promise+When.h in Headers */,
+				63A2EE561D51267E003BED41 /* Promise+Zalgo.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXHeadersBuildPhase section */
+
 /* Begin PBXNativeTarget section */
+		63A2EE261D512252003BED41 /* PMKmacOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 63A2EE2E1D512252003BED41 /* Build configuration list for PBXNativeTarget "PMKmacOS" */;
+			buildPhases = (
+				63A2EE221D512252003BED41 /* Sources */,
+				63A2EE231D512252003BED41 /* Frameworks */,
+				63A2EE241D512252003BED41 /* Headers */,
+				63A2EE251D512252003BED41 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PMKmacOS;
+			productName = PMKmacOS;
+			productReference = 63A2EE271D512252003BED41 /* PromiseKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		63A2EE431D51267E003BED41 /* PMKiOS */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 63A2EE581D51267E003BED41 /* Build configuration list for PBXNativeTarget "PMKiOS" */;
+			buildPhases = (
+				63A2EE441D51267E003BED41 /* Sources */,
+				63A2EE4C1D51267E003BED41 /* Frameworks */,
+				63A2EE4D1D51267E003BED41 /* Headers */,
+				63A2EE571D51267E003BED41 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = PMKiOS;
+			productName = PMKmacOS;
+			productReference = 63A2EE5B1D51267E003BED41 /* PromiseKit.framework */;
+			productType = "com.apple.product-type.framework";
+		};
 		63CB7F6A1D46B20600F4D755 /* PMKTests */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = 63CB7F701D46B20600F4D755 /* Build configuration list for PBXNativeTarget "PMKTests" */;
@@ -254,6 +381,7 @@
 			buildRules = (
 			);
 			dependencies = (
+				63A2EE421D512319003BED41 /* PBXTargetDependency */,
 			);
 			name = PMKTests;
 			productName = PMKTests;
@@ -267,9 +395,17 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0730;
+				LastUpgradeCheck = 0800;
 				ORGANIZATIONNAME = "";
 				TargetAttributes = {
+					63A2EE261D512252003BED41 = {
+						CreatedOnToolsVersion = 8.0;
+						DevelopmentTeam = ZU76A67LGU;
+						ProvisioningStyle = Automatic;
+					};
+					63A2EE431D51267E003BED41 = {
+						DevelopmentTeam = ZU76A67LGU;
+					};
 					63CB7F6A1D46B20600F4D755 = {
 						CreatedOnToolsVersion = 8.0;
 						DevelopmentTeam = ZU76A67LGU;
@@ -291,11 +427,27 @@
 			projectRoot = "";
 			targets = (
 				63CB7F6A1D46B20600F4D755 /* PMKTests */,
+				63A2EE261D512252003BED41 /* PMKmacOS */,
+				63A2EE431D51267E003BED41 /* PMKiOS */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		63A2EE251D512252003BED41 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63A2EE571D51267E003BED41 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		63CB7F691D46B20600F4D755 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -306,6 +458,34 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		63A2EE221D512252003BED41 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				63A2EE2F1D51229F003BED41 /* PMKPromise.m in Sources */,
+				63A2EE301D51229F003BED41 /* PMKPromise+Hang.m in Sources */,
+				63A2EE311D51229F003BED41 /* PMKPromise+Join.m in Sources */,
+				63A2EE321D51229F003BED41 /* PMKPromise+Pause.m in Sources */,
+				63A2EE331D51229F003BED41 /* PMKPromise+Until.m in Sources */,
+				63A2EE341D51229F003BED41 /* PMKPromise+When.m in Sources */,
+				63A2EE351D51229F003BED41 /* PMKPromise+Zalgo.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		63A2EE441D51267E003BED41 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				63A2EE451D51267E003BED41 /* PMKPromise.m in Sources */,
+				63A2EE461D51267E003BED41 /* PMKPromise+Hang.m in Sources */,
+				63A2EE471D51267E003BED41 /* PMKPromise+Join.m in Sources */,
+				63A2EE481D51267E003BED41 /* PMKPromise+Pause.m in Sources */,
+				63A2EE491D51267E003BED41 /* PMKPromise+Until.m in Sources */,
+				63A2EE4A1D51267E003BED41 /* PMKPromise+When.m in Sources */,
+				63A2EE4B1D51267E003BED41 /* PMKPromise+Zalgo.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		63CB7F671D46B20600F4D755 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -324,13 +504,6 @@
 				63CB7F7F1D46B25A00F4D755 /* NSURLConnection+PromiseKit.m in Sources */,
 				63CB7F801D46B25A00F4D755 /* SKRequest+PromiseKit.m in Sources */,
 				63CB7F811D46B25A00F4D755 /* SLRequest+PromiseKit.m in Sources */,
-				63CB7F821D46B25A00F4D755 /* PMKPromise.m in Sources */,
-				63CB7F831D46B25A00F4D755 /* PMKPromise+Hang.m in Sources */,
-				63CB7F841D46B25A00F4D755 /* PMKPromise+Join.m in Sources */,
-				63CB7F851D46B25A00F4D755 /* PMKPromise+Pause.m in Sources */,
-				63CB7F861D46B25A00F4D755 /* PMKPromise+Until.m in Sources */,
-				63CB7F871D46B25A00F4D755 /* PMKPromise+When.m in Sources */,
-				63CB7F881D46B25A00F4D755 /* PMKPromise+Zalgo.m in Sources */,
 				63CB7F891D46B25A00F4D755 /* initializers.spec.m in Sources */,
 				63CB7F8A1D46B25A00F4D755 /* PMKPromise.test.m in Sources */,
 			);
@@ -338,12 +511,21 @@
 		};
 /* End PBXSourcesBuildPhase section */
 
+/* Begin PBXTargetDependency section */
+		63A2EE421D512319003BED41 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 63A2EE261D512252003BED41 /* PMKmacOS */;
+			targetProxy = 63A2EE411D512319003BED41 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
 /* Begin XCBuildConfiguration section */
 		6351991E193FCD4C002CF47D /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CFBundlePackageType = FMWK;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -353,13 +535,15 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = NO;
-				CURRENT_PROJECT_VERSION = 1.7.2;
+				CURRENT_PROJECT_VERSION = 1.7.3;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = "$(CURRENT_PROJECT_VERSION)";
@@ -368,6 +552,7 @@
 				ENABLE_TESTABILITY = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_OPTIMIZATION_LEVEL = 0;
 				GCC_PREPROCESSOR_DEFINITIONS = (
 					"DEBUG=1",
@@ -380,7 +565,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/PromiseKit.xcodeproj/framework-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
@@ -400,6 +585,7 @@
 			buildSettings = {
 				ALWAYS_SEARCH_USER_PATHS = NO;
 				APPLICATION_EXTENSION_API_ONLY = YES;
+				CFBundlePackageType = FMWK;
 				CLANG_CXX_LANGUAGE_STANDARD = "gnu++0x";
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
@@ -409,13 +595,15 @@
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				COPY_PHASE_STRIP = YES;
-				CURRENT_PROJECT_VERSION = 1.7.2;
+				CURRENT_PROJECT_VERSION = 1.7.3;
 				DEFINES_MODULE = YES;
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = "$(CURRENT_PROJECT_VERSION)";
@@ -423,13 +611,14 @@
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
+				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
 				GCC_WARN_UNDECLARED_SELECTOR = YES;
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				INFOPLIST_FILE = "$(SRCROOT)/PromiseKit.xcodeproj/framework-Info.plist";
+				INFOPLIST_FILE = "$(SRCROOT)/Info.plist";
 				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.10;
@@ -443,10 +632,131 @@
 			};
 			name = Release;
 		};
+		63A2EE2C1D512252003BED41 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = ZU76A67LGU;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.promisekit;
+				PRODUCT_NAME = PromiseKit;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		63A2EE2D1D512252003BED41 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = ZU76A67LGU;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 10.7;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = org.promisekit;
+				PRODUCT_NAME = PromiseKit;
+				SDKROOT = macosx;
+				SKIP_INSTALL = YES;
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		63A2EE591D51267E003BED41 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = ZU76A67LGU;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.promisekit;
+				PRODUCT_NAME = PromiseKit;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		63A2EE5A1D51267E003BED41 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_SUSPICIOUS_MOVES = YES;
+				CODE_SIGN_IDENTITY = "-";
+				COMBINE_HIDPI_IMAGES = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = 1;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = ZU76A67LGU;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				FRAMEWORK_VERSION = A;
+				GCC_NO_COMMON_BLOCKS = YES;
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/Frameworks";
+				MTL_ENABLE_DEBUG_INFO = NO;
+				PRODUCT_BUNDLE_IDENTIFIER = org.promisekit;
+				PRODUCT_NAME = PromiseKit;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
 		63CB7F711D46B20600F4D755 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = NO;
+				CFBundlePackageType = BNDL;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CODE_SIGN_IDENTITY = "-";
@@ -457,13 +767,12 @@
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "Specs/Tests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				MTL_ENABLE_DEBUG_INFO = YES;
 				OTHER_CFLAGS = (
 					"-isystem",
-					"$(SRCROOT)/objc",
+					"$(SRCROOT)/Sources",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.promisekit.PMKTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -475,6 +784,7 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				APPLICATION_EXTENSION_API_ONLY = NO;
+				CFBundlePackageType = BNDL;
 				CLANG_ANALYZER_NONNULL = YES;
 				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
 				CODE_SIGN_IDENTITY = "-";
@@ -486,13 +796,12 @@
 					"$(PROJECT_DIR)/Carthage/Build/Mac",
 				);
 				GCC_NO_COMMON_BLOCKS = YES;
-				INFOPLIST_FILE = "Specs/Tests-Info.plist";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.6;
 				MTL_ENABLE_DEBUG_INFO = NO;
 				OTHER_CFLAGS = (
 					"-isystem",
-					"$(SRCROOT)/objc",
+					"$(SRCROOT)/Sources",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = org.promisekit.PMKTests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -508,6 +817,24 @@
 			buildConfigurations = (
 				6351991E193FCD4C002CF47D /* Debug */,
 				6351991F193FCD4C002CF47D /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		63A2EE2E1D512252003BED41 /* Build configuration list for PBXNativeTarget "PMKmacOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				63A2EE2C1D512252003BED41 /* Debug */,
+				63A2EE2D1D512252003BED41 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		63A2EE581D51267E003BED41 /* Build configuration list for PBXNativeTarget "PMKiOS" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				63A2EE591D51267E003BED41 /* Debug */,
+				63A2EE5A1D51267E003BED41 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

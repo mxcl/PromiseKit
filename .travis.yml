@@ -1,8 +1,5 @@
 language: objective-c
 xcode_project: PromiseKit.xcodeproj
-xcode_scheme: PMKOSX
+xcode_scheme: PMKmacOS
 osx_image: xcode7.3
-install:
-  - brew update
-  - brew install carthage
-  - carthage bootstrap --platform Mac
+install: carthage bootstrap --platform Mac

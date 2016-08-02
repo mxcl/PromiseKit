@@ -1,4 +1,4 @@
-#import "PromiseKit/Promise.h"
+#import <PromiseKit/Promise.h>
 #import "PromiseKit/Promise+When.h"
 
 

@@ -13,12 +13,12 @@
 	<key>CFBundleName</key>
 	<string>$(PRODUCT_NAME)</string>
 	<key>CFBundlePackageType</key>
-	<string>BNDL</string>
+	<string>$(CFBundlePackageType)</string>
 	<key>CFBundleShortVersionString</key>
-	<string>$(CURRENT_PROJECT_VERSION)</string>
-	<key>CFBundleSignature</key>
-	<string>????</string>
+	<string>1.0</string>
 	<key>CFBundleVersion</key>
-	<string>1</string>
+	<string>$(CURRENT_PROJECT_VERSION)</string>
+	<key>NSPrincipalClass</key>
+	<string></string>
 </dict>
 </plist>

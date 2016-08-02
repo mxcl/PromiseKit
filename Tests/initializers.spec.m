@@ -1,5 +1,5 @@
 @import XCTest;
-#import "PromiseKit/Promise.h"
+#import <PromiseKit/Promise.h>
 
 enum InitializersTestCaseEnum {
     PMKPromiseWrapTestCaseEnum1,

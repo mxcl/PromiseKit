@@ -1,17 +1,24 @@
 #import <PromiseKit/Promise.h>
 
-#ifdef PMK_WHEN
+#if __has_include(<PromiseKit/Promise+When.h>)
 #import <PromiseKit/Promise+When.h>
 #endif
-#ifdef PMK_UNTIL
+#if __has_include(<PromiseKit/Promise+Until.h>)
 #import <PromiseKit/Promise+Until.h>
 #endif
-#ifdef PMK_PAUSE
+#if __has_include(<PromiseKit/Promise+Pause.h>)
 #import <PromiseKit/Promise+Pause.h>
 #endif
-#ifdef PMK_JOIN
+#if __has_include(<PromiseKit/Promise+Join.h>)
 #import <PromiseKit/Promise+Join.h>
 #endif
+#if __has_include(<PromiseKit/Promise+Hang.h>)
+#import <PromiseKit/Promise+Hang.h>
+#endif
+#if __has_include(<PromiseKit/Promise+Zalgo.h>)
+#import <PromiseKit/Promise+Zalgo.h>
+#endif
+
 
 #ifdef PMK_ACACCOUNTSTORE
 #import <PromiseKit/ACAccountStore+PromiseKit.h>

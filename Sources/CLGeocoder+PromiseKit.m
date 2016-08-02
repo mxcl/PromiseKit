@@ -1,5 +1,5 @@
 #import "CLGeocoder+PromiseKit.h"
-#import "PromiseKit/Promise.h"
+#import <PromiseKit/Promise.h>
 
 
 @implementation CLGeocoder (PromiseKit)

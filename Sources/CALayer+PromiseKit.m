@@ -31,7 +31,7 @@
 -(PMKPromise*) promiseAnimation:(CAAnimation*) animation forKey:(NSString*) key {
     PMKCAAnimationDelegate* d = [[PMKCAAnimationDelegate alloc] init];
     PMKRetain(d);
-    animation.delegate = d;
+    animation.delegate = (id) d;
     [self addAnimation:animation forKey:key];
     return [PMKPromise new:^(PMKPromiseFulfiller fulfill, PMKPromiseRejecter reject) {
         d->fullfiller = fulfill;
