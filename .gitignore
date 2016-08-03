@@ -2,3 +2,4 @@
 *.xcscmblueprint
 /Carthage
 /Cartfile.resolved
+/.build
