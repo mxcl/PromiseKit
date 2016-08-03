@@ -35,7 +35,7 @@ Alternatively, clone PromiseKit and drag and drop its `xcodeproj` into your Xcod
 
 ## Documentation
 
-* We have a gentle but thorough introduction at [promisekit.org](http://promisekit.org/introduction/).
+* We have a gentle but thorough introduction at [promisekit.org](http://promisekit.org/docs/).
 
 # PromiseKit vs. Xcode
 
@@ -67,7 +67,7 @@ We do **not** backport fixes (mostly) to these migration-branches.
 
 # Support
 
-PromiseKit is lucky enough to have a large community behind it which is reflected in our [Gitter chat](https://gitter.im/mxcl/PromiseKit). If you're new to PromiseKit and are stumped or otherwise have a question that doesn't feel like an issue (and isn't answered in our [documentation](http://promisekit.org/introduction)) then our Gitter is a great place to go for help. Of course if you're onto something that you believe is broken or could be improved then opening a new issue is still the way to go 👍.
+PromiseKit is lucky enough to have a large community behind it which is reflected in our [Gitter chat](https://gitter.im/mxcl/PromiseKit). If you're new to PromiseKit and are stumped or otherwise have a question that doesn't feel like an issue (and isn't answered in our [documentation](http://promisekit.org/docs/)) then our Gitter is a great place to go for help. Of course if you're onto something that you believe is broken or could be improved then opening a new issue is still the way to go 👍.
 
 
 # Donations
