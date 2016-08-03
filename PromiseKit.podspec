@@ -70,8 +70,12 @@ Pod::Spec.new do |s|
 
   s.subspec 'CorePromise' do |ss|
     hh = Dir['Sources/*.h'] - Dir['Sources/*+Private.h']
+
+    cc = Dir['Sources/*.swift'] - ['Sources/SwiftPM.swift']
+    cc << 'Sources/{after,AnyPromise,GlobalState,dispatch_promise,hang,join,PMKPromise,when}.m'
+    cc += hh
     
-    ss.source_files = 'Sources/*.{swift}', 'Sources/{after,AnyPromise,GlobalState,dispatch_promise,hang,join,PMKPromise,when}.m', *hh
+    ss.source_files = cc
     ss.public_header_files = hh
     ss.preserve_paths = 'Sources/AnyPromise+Private.h', 'Sources/PMKCallVariadicBlock.m', 'Sources/NSMethodSignatureForBlock.m'
     ss.frameworks = 'Foundation'

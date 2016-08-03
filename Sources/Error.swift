@@ -70,6 +70,12 @@ public enum JSONError: Error {
 
 //////////////////////////////////////////////////////////// Cancellation
 
+public protocol CancellableError: Error {
+    var isCancelled: Bool { get }
+}
+
+#if !SWIFT_PACKAGE
+
 private struct ErrorPair: Hashable {
     let domain: String
     let code: Int
@@ -105,27 +111,28 @@ extension NSError {
     }
 }
 
-public protocol CancellableError: Error {
-    var isCancelled: Bool { get }
-}
+private var cancelledErrorIdentifiers = Set([
+    ErrorPair(PMKErrorDomain, PMKOperationCancelled),
+    ErrorPair(NSURLErrorDomain, NSURLErrorCancelled),
+])
+
+#endif
+
 
 extension Error {
     public var isCancelledError: Bool {
         if let ce = self as? CancellableError {
             return ce.isCancelled
         } else {
+          #if SWIFT_PACKAGE
+            return false
+          #else
             let ne = self as NSError
             return cancelledErrorIdentifiers.contains(ErrorPair(ne.domain, ne.code))
+          #endif
         }
     }
 }
-
-
-////////////////////////////////////////// Predefined Cancellation Errors
-private var cancelledErrorIdentifiers = Set([
-    ErrorPair(PMKErrorDomain, PMKOperationCancelled),
-    ErrorPair(NSURLErrorDomain, NSURLErrorCancelled),
-])
 
 
 //////////////////////////////////////////////////////// Unhandled Errors
