@@ -6,7 +6,7 @@ Pod::Spec.new do |s|
   s.version = $1
 
   s.source = { :git => "https://github.com/mxcl/#{s.name}.git", :tag => s.version }
-  s.license = { :type => 'MIT', :text => 'https://github.com/mxcl/PromiseKit/blob/master/README.markdown' }
+  s.license = 'MIT'
   s.summary = 'A delightful Promises implementation for iOS and OS X.'
   s.homepage = 'http://promisekit.org'
   s.description = 'UIActionSheet UIAlertView CLLocationManager MFMailComposeViewController ACAccountStore StoreKit SKRequest SKProductRequest blocks'
