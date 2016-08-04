@@ -19,7 +19,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             }
         }
 
-        when(generator, concurrently: 5)
+        when(fulfilled: generator, concurrently: 5)
             .then { numbers -> Void in
                 if numbers == squareNumbers {
                     e.fulfill()
@@ -36,7 +36,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             return nil
         }
 
-        when(generator, concurrently: 5)
+        when(fulfilled: generator, concurrently: 5)
             .then { numbers -> Void in
                 if numbers.count == 0 {
                     e.fulfill()
@@ -73,24 +73,14 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             }
         }
 
-        when(generator, concurrently: 3)
+        when(fulfilled: generator, concurrently: 3)
             .catch { error in
-                guard let error = error as? Error else {
+                guard let error = error as? LocalError else {
                     return
                 }
-
-                guard case PMKError.when(let errorIndex, let internalError) = error else {
+                guard case .DivisionByZero = error else {
                     return
                 }
-
-                guard let localInternalError = internalError as? LocalError else {
-                    return
-                }
-
-                guard errorIndex == expectedErrorIndex && localInternalError == expectedError else {
-                    return
-                }
-
                 e.fulfill()
             }
 
@@ -120,7 +110,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             }
         }
 
-        when(generator, concurrently: expectedConcurrently)
+        when(fulfilled: generator, concurrently: expectedConcurrently)
             .then { numbers -> Void in
                 if expectedConcurrently == maxConcurrently {
                     e.fulfill()
@@ -137,8 +127,8 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
 
         let generator = AnyIterator<Promise<Int>> { XCTFail(); return nil }
 
-        let p1 = when(generator, concurrently: 0)
-        let p2 = when(generator, concurrently: -1)
+        let p1 = when(fulfilled: generator, concurrently: 0)
+        let p2 = when(fulfilled: generator, concurrently: -1)
 
         guard let e1 = p1.error else { return XCTFail() }
         guard let e2 = p2.error else { return XCTFail() }
@@ -161,12 +151,12 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             case 2:
                 return Promise(error: Error.dummy)
             case _:
-                XCTFail("\(x)")
+                XCTFail()
                 return nil
             }
         }
 
-        when(generator, concurrently: 1).then {
+        when(fulfilled: generator, concurrently: 1).then {
             XCTFail("\($0)")
         }.catch { error in
             ex.fulfill()
