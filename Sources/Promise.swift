@@ -404,7 +404,7 @@ public func dispatch_promise<T>(_ on: DispatchQueue, _ body: @escaping () throws
 
 
 /**
- Used by `tap()`
+ The underlying resolved state of a promise.
  - remark: Same as `Resolution<T>` but without the associated `ErrorConsumptionToken`.
 */
 public enum Result<T> {
@@ -413,7 +413,7 @@ public enum Result<T> {
     /// Rejection
     case rejected(Error)
 
-    private init(_ resolution: Resolution<T>) {
+    init(_ resolution: Resolution<T>) {
         switch resolution {
         case .fulfilled(let value):
             self = .fulfilled(value)

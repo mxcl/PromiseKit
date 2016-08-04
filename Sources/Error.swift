@@ -2,13 +2,6 @@ import Foundation
 
 public enum PMKError: Error {
     /**
-     The ErrorType for a rejected `when`.
-     - Parameter 0: The index of the promise that was rejected.
-     - Parameter 1: The error from the promise that rejected this `when`.
-    */
-    case when(Int, Error)
-
-    /**
      The ErrorType for a rejected `join`.
      - Parameter 0: The promises passed to this `join` that did not *all* fulfill.
      - Note: The array is untyped because Swift generics are fussy with enums.

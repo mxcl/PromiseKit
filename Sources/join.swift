@@ -17,16 +17,19 @@ import Dispatch
  - Returns: A new promise that resolves once all the provided promises resolve.
  - SeeAlso: `PromiseKit.Error.join`
 */
+@available(*, deprecated: 4.0, message: "Use when(resolved:)")
 public func join<T>(_ promises: Promise<T>...) -> Promise<[T]> {
     return join(promises)
 }
 
 /// Waits on all provided promises.
+@available(*, deprecated: 4.0, message: "Use when(resolved:)")
 public func join(_ promises: [Promise<Void>]) -> Promise<Void> {
     return join(promises).then(on: zalgo) { (_: [Void]) in return Promise(value: ()) }
 }
 
 /// Waits on all provided promises.
+@available(*, deprecated: 4.0, message: "Use when(resolved:)")
 public func join<T>(_ promises: [Promise<T>]) -> Promise<[T]> {
     guard !promises.isEmpty else { return Promise(value: []) }
   
