@@ -1,0 +1,29 @@
+module: PromiseKit
+author: Max Howell
+author_url: http://mcl.github.io
+github_url: https://github.com/mxcl/PromiseKit
+exclude:
+  - README.markdown
+  - Sources/dispatch_promise.m
+  - Sources/DispatchQueue+Promise.swift
+  - Sources/URLDataPromise.swift
+  - Sources/Zalgo.swift
+  - Sources/Error.swift
+root_url: http://promisekit.org/docs/handbook/
+theme: fullwidth
+hide_documentation_coverage: true
+skip_undocumented: true
+
+custom_categories:
+  - name: Classes
+    children:
+    - Promise
+    - AnyPromise
+
+  - name: Functions
+    children:
+    - when(fulfilled:)
+    - when(resolved:)
+    - firstly(execute:)
+    - race(promises:)
+    - after(interval:)
