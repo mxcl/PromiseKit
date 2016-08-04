@@ -101,13 +101,13 @@ Alternatively, clone PromiseKit and drag and drop its `xcodeproj` into your Xcod
 
 PromiseKit contains Swift, so we engage in an unending battle with Xcode:
 
-| Xcode | Swift | PromiseKit |
-| ----- | ----- | ---------- |
-|   8   |  3.0  |      4     |
-|   8   |  2.3  |      3     |
-|   7   |  2.2  |      3     |
-|   6   |  1.2  |      2     |
-|  any  |  N/A  |      1     |
+| Xcode | Swift | PromiseKit | Release Notes |
+| ----- | ----- | ---------- | ------------- |
+|   8   |  3.0  |      4     | [Pending](http://promisekit.org/news/) |
+|   8   |  2.3  |      3     |   |
+|   7   |  2.2  |      3     |   |
+|   6   |  1.2  |      2     | [2015/05](http://localhost:4000/news/2015/05/PromiseKit-2.0-Released/) |
+|   *   |  N/A  |      1     |   |
 
 PromiseKit 1 is pure Objective-C and thus works with all Xcodes, it is also your only choice if you need to support iOS 7 or below.
 
