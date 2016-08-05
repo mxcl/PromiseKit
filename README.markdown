@@ -19,11 +19,11 @@ PromiseKit is a thoughtful and complete implementation of promises for iOS and O
 
 [![Join the chat at https://gitter.im/mxcl/PromiseKit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mxcl/PromiseKit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) ![](https://img.shields.io/cocoapods/v/PromiseKit.svg?label=Current%20Release)  [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg)](https://github.com/Carthage/Carthage)
 [![codebeat](https://codebeat.co/badges/6a2fc7b4-cc8f-4865-a81d-644edd38c662)](https://codebeat.co/projects/github-com-mxcl-promisekit)
-[![Build Status](https://travis-ci.org/mxcl/PromiseKit.svg?branch=master)](https://travis-ci.org/mxcl/PromiseKit)
+[![ci-master]][travis]
 
 # Documentation
 
-For a gentle but thorough introduction, [see promisekit.org](http://promisekit.org/docs/).
+We have thorough and complete documentation at [promisekit.org].
 
 ## Overview
 
@@ -81,9 +81,9 @@ func avatar() -> Promise<UIImage> {
 }
 ```
 
-## Learn More
+## Continue Learning…
 
-> [promisekit.org](http://promisekit.org/docs/)
+Complete and progressive learning guide at [promisekit.org].
 
 # Getting Set Up
 
@@ -101,13 +101,13 @@ Alternatively, clone PromiseKit and drag and drop its `xcodeproj` into your Xcod
 
 PromiseKit contains Swift, so we engage in an unending battle with Xcode:
 
-| Xcode | Swift | PromiseKit | Release Notes |
-| ----- | ----- | ---------- | ------------- |
-|   8   |  3.0  |      4     | [Pending](http://promisekit.org/news/) |
-|   8   |  2.3  |      3     |   |
-|   7   |  2.2  |      3     |   |
-|   6   |  1.2  |      2     | [2015/05](http://localhost:4000/news/2015/05/PromiseKit-2.0-Released/) |
-|   *   |  N/A  |      1     |   |
+| Xcode | Swift | PromiseKit |   CI Status  |   Release Notes   |
+| ----- | ----- | ---------- | ------------ | ----------------- |
+|   8   |  3.0  |      4     |  –           | [Pending][news-4] |
+|   8   |  2.3  |      3     | ![ci-master] |                   |
+|   7   |  2.2  |      3     | ![ci-master] |                   |
+|   6   |  1.2  |      2     |  –           | [2015/05][news-2] |
+|   *   | *N/A* |      1     | ![ci-legacy] |                   |
 
 PromiseKit 1 is pure Objective-C and thus works with all Xcodes, it is also your only choice if you need to support iOS 7 or below.
 
@@ -117,10 +117,10 @@ We maintain some branches to aid migrating between Swift versions:
 
 | Xcode | Swift | PromiseKit | Branch |
 | ----- | ----- | -----------| ---------------- |
-|  7.3  |  2.2  | 2 | swift-2.2-minimal-changes |
-|  7.2  |  2.2  | 2 | swift-2.2-minimal-changes |
-|  7.1  |  2.1  | 2 | swift-2.0-minimal-changes |
-|  7.0  |  2.0  | 2 | swift-2.0-minimal-changes |
+|  7.3  |  2.2  | 2 | [swift-2.2-minimal-changes] ![ci-22] |
+|  7.2  |  2.2  | 2 | [swift-2.2-minimal-changes] ![ci-22] |
+|  7.1  |  2.1  | 2 | [swift-2.0-minimal-changes] ![ci-20] |
+|  7.0  |  2.0  | 2 | [swift-2.0-minimal-changes] ![ci-20] |
 
 We do **not** backport fixes (mostly) to these migration-branches, but pull-requests are welcome.
 
@@ -128,3 +128,15 @@ We do **not** backport fixes (mostly) to these migration-branches, but pull-requ
 
 * Ask questions of the developers and the community at our [Gitter chat channel](https://gitter.im/mxcl/PromiseKit).
 * Ask your question by [opening a ticket](issues/new).
+
+
+[travis]: https://travis-ci.org/mxcl/PromiseKit
+[ci-master]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=master
+[ci-legacy]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=legacy-1.x
+[ci-22]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-2.2-minimal-changes
+[ci-20]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-2.0-minimal-changes
+[news-2]: http://promisekit.org/news/2015/05/PromiseKit-2.0-Released/
+[news-4]: http://promisekit.org/news/
+[swift-2.2-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.2-minimal-changes
+[swift-2.0-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.0-minimal-changes
+[promisekit.org]: http://promisekit.org/docs/
