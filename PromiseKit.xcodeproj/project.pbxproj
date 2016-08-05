@@ -551,7 +551,7 @@
 		63F803A71AB87A8200E4DEE1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = Info.plist; path = Sources/Info.plist; sourceTree = "<group>"; };
 		63F803A81AB87A8200E4DEE1 /* Umbrella.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = Umbrella.h; path = Sources/Umbrella.h; sourceTree = SOURCE_ROOT; };
 		63F803BF1AB87A9500E4DEE1 /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Promise.swift; path = Sources/Promise.swift; sourceTree = "<group>"; };
-		63F803C11AB8876B00E4DEE1 /* PMK.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = PMK.playground; sourceTree = "<group>"; };
+		63F803C11AB8876B00E4DEE1 /* PromiseKit.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = PromiseKit.playground; sourceTree = "<group>"; };
 		63F803CC1AB89A0F00E4DEE1 /* PromiseKit.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = PromiseKit.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7FB6D8EB1CA1B84D007CF0AF /* BFTask+Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "BFTask+Promise.swift"; path = "Categories/Bolts/BFTask+Promise.swift"; sourceTree = SOURCE_ROOT; };
 		D9693C111C9D17A6004A00CE /* join.test.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = join.test.swift; sourceTree = "<group>"; };
@@ -1098,7 +1098,7 @@
 		63F803991AB87A8200E4DEE1 = {
 			isa = PBXGroup;
 			children = (
-				63F803C11AB8876B00E4DEE1 /* PMK.playground */,
+				63F803C11AB8876B00E4DEE1 /* PromiseKit.playground */,
 				638E0F2D1AEF19B90052E28F /* Sources */,
 				63D953C11AED8121004981FF /* Headers */,
 				63075EC31AD1045D002C46A0 /* Features */,
