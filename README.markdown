@@ -1,13 +1,18 @@
 ![PromiseKit](http://promisekit.org/public/img/logo-tight.png)
 
-Modern development is highly asynchronous: isn’t it about time we had tools that made programming asynchronously powerful, easy and delightful?
+![badge-pod] ![badge-platforms] ![badge-languages] ![badge-mit] ![badge-pms]
+
+Modern development is highly asynchronous: isn’t it about time we had tools that
+made programming asynchronously powerful, easy and delightful?
 
 ```swift
 UIApplication.sharedApplication().networkActivityIndicatorVisible = true
 
-when(fetchImage(), getLocation()).then { image, location in
-    self.imageView.image = image;
-    self.label.text = "Buy your cat a house in \(location)"
+firstly {
+    when(NSURLSession.GET(url).asImage(), CLLocationManager.promise())
+}.then { image, location -> Void in
+    self.imageView.image = image
+    self.label.text = "\(location)"
 }.always {
     UIApplication.sharedApplication().networkActivityIndicatorVisible = false
 }.error { error in
@@ -15,11 +20,29 @@ when(fetchImage(), getLocation()).then { image, location in
 }
 ```
 
-PromiseKit is a thoughtful and complete implementation of promises for iOS and OS X with first-class support for **both** Objective-C *and* Swift.
+PromiseKit is a thoughtful and complete implementation of promises for any
+platform with a `swiftc`, it has *excellent* Objective-C bridging and
+*delightful* specializations for iOS, macOS, tvOS and watchOS.
 
-[![Join the chat at https://gitter.im/mxcl/PromiseKit](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/mxcl/PromiseKit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) ![](https://img.shields.io/cocoapods/v/PromiseKit.svg?label=Current%20Release)  [![Carthage compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg)](https://github.com/Carthage/Carthage)
-[![codebeat](https://codebeat.co/badges/6a2fc7b4-cc8f-4865-a81d-644edd38c662)](https://codebeat.co/projects/github-com-mxcl-promisekit)
-[![ci-master]][travis]
+# Quick Start
+
+```ruby
+# CocoaPods
+pod "PromiseKit", "~> 3.4"
+
+# Carthage
+github "mxcl/PromiseKit" ~> 3.4
+
+# SwiftPM
+let package = Package(
+    dependencies: [
+        .Package(url: "https://github.com/mxcl/PromiseKit", majorVersion: 4)
+    ]
+)
+```
+
+Alternatively, drop `PromiseKit.xcodeproj` into your project and add
+`PromiseKit.framework` to your app’s embedded frameworks.
 
 # Documentation
 
@@ -85,18 +108,6 @@ func avatar() -> Promise<UIImage> {
 
 Complete and progressive learning guide at [promisekit.org].
 
-# Getting Set Up
-
-```ruby
-#CocoaPods
-pod "PromiseKit", "~> 3.4"
-
-#Carthage
-github "mxcl/PromiseKit" ~> 3.4
-```
-
-Alternatively, clone PromiseKit and drag and drop its `xcodeproj` into your Xcode project.
-
 ## PromiseKit vs. Xcode
 
 PromiseKit contains Swift, so we engage in an unending battle with Xcode:
@@ -107,20 +118,21 @@ PromiseKit contains Swift, so we engage in an unending battle with Xcode:
 |   8   |  2.3  |      3     | ![ci-master] |                   |
 |   7   |  2.2  |      3     | ![ci-master] |                   |
 |   6   |  1.2  |      2     |  –           | [2015/05][news-2] |
-|   *   | *N/A* |      1     | ![ci-legacy] |                   |
+|   *   | *N/A* |      1†    | ![ci-legacy] |                   |
 
-PromiseKit 1 is pure Objective-C and thus works with all Xcodes, it is also your only choice if you need to support iOS 7 or below.
+† PromiseKit 1 is pure Objective-C and thus can be used with any Xcode, it is
+also your only choice if you need to support iOS 7 or below.
 
 ---
 
 We maintain some branches to aid migrating between Swift versions:
 
-| Xcode | Swift | PromiseKit | Branch |
-| ----- | ----- | -----------| ---------------- |
-|  7.3  |  2.2  | 2 | [swift-2.2-minimal-changes] ![ci-22] |
-|  7.2  |  2.2  | 2 | [swift-2.2-minimal-changes] ![ci-22] |
-|  7.1  |  2.1  | 2 | [swift-2.0-minimal-changes] ![ci-20] |
-|  7.0  |  2.0  | 2 | [swift-2.0-minimal-changes] ![ci-20] |
+| Xcode | Swift | PromiseKit | Branch                      | CI Status |
+| ----- | ----- | -----------| --------------------------- | --------- |
+|  7.3  |  2.2  | 2          | [swift-2.2-minimal-changes] | ![ci-22]  |
+|  7.2  |  2.2  | 2          | [swift-2.2-minimal-changes] | ![ci-22]  |
+|  7.1  |  2.1  | 2          | [swift-2.0-minimal-changes] | ![ci-20]  |
+|  7.0  |  2.0  | 2          | [swift-2.0-minimal-changes] | ![ci-20]  |
 
 We do **not** backport fixes (mostly) to these migration-branches, but pull-requests are welcome.
 
@@ -140,3 +152,8 @@ We do **not** backport fixes (mostly) to these migration-branches, but pull-requ
 [swift-2.2-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.2-minimal-changes
 [swift-2.0-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.0-minimal-changes
 [promisekit.org]: http://promisekit.org/docs/
+[badge-pod]: https://img.shields.io/cocoapods/v/PromiseKit.svg?label=version
+[badge-platforms]: https://img.shields.io/badge/platforms-iOS%20%7C%20macOS%20%7C%20watchOS%20%7C%20tvOS-lightgrey.svg
+[badge-languages]: https://img.shields.io/badge/languages-Swift%20%7C%20ObjC-orange.svg
+[badge-mit]: https://img.shields.io/badge/license-MIT-blue.svg
+[badge-pms]: https://img.shields.io/badge/supports-CocoaPods%20%7C%20Carthage%20%7C%20SwiftPM-green.svg
