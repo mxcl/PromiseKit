@@ -40,9 +40,9 @@ extension UIViewController {
         }
         public let rawValue: Int
 
-        static let None      = AnimationOptions(rawValue: 0)
-        static let Appear    = AnimationOptions(rawValue: 1 << 0)
-        static let Disappear = AnimationOptions(rawValue: 1 << 1)
+        public static let None      = AnimationOptions(rawValue: 0)
+        public static let Appear    = AnimationOptions(rawValue: 1 << 0)
+        public static let Disappear = AnimationOptions(rawValue: 1 << 1)
     }
 
     @available(*, deprecated=3.4, renamed="promiseViewController(_:animate:fulfills:completion:)")
