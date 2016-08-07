@@ -31,7 +31,8 @@ class PMKDefaultDispatchQueueTest_Swift: XCTestCase {
             XCTAssertTrue(fulfilled)
         }
     }
-    
+
+    #if false
     func testThenWithDifferentQueue() {
         PMKDefaultDispatchQueue = { () -> dispatch_queue_t in
             dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0)
@@ -52,6 +53,7 @@ class PMKDefaultDispatchQueueTest_Swift: XCTestCase {
             XCTAssertTrue(fulfilled)
         }
     }
+    #endif
     
     func testThenWithZalgo() {
         PMKDefaultDispatchQueue = { () -> dispatch_queue_t in zalgo }
@@ -80,7 +82,8 @@ class PMKDefaultDispatchQueueTest_Swift: XCTestCase {
             XCTAssertTrue(rejected)
         }
     }
-    
+
+    #if false
     func testErrorWithDifferentQueue() {
         PMKDefaultDispatchQueue = { () -> dispatch_queue_t in
             dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0)
@@ -91,11 +94,11 @@ class PMKDefaultDispatchQueueTest_Swift: XCTestCase {
         let testExpectation = expectationWithDescription("resolving")
         Promise(error: err).then {
             XCTFail()
-            }.error { _ in
-                XCTAssertFalse(NSThread.isMainThread());
-                
-                rejected = true
-                testExpectation.fulfill()
+        }.error { _ in
+            XCTAssertFalse(NSThread.isMainThread());
+            
+            rejected = true
+            testExpectation.fulfill()
         }
         
         XCTAssertFalse(rejected)
@@ -104,6 +107,7 @@ class PMKDefaultDispatchQueueTest_Swift: XCTestCase {
             XCTAssertTrue(rejected)
         }
     }
+    #endif
     
     func testErrorWithZalgo() {
         PMKDefaultDispatchQueue = { () -> dispatch_queue_t in zalgo }
@@ -131,7 +135,8 @@ class PMKDefaultDispatchQueueTest_Swift: XCTestCase {
             XCTAssertTrue(fulfilled)
         }
     }
-    
+
+    #if false
     func testAlwaysWithDifferentQueue() {
         PMKDefaultDispatchQueue = { () -> dispatch_queue_t in
             dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0)
@@ -151,6 +156,7 @@ class PMKDefaultDispatchQueueTest_Swift: XCTestCase {
             XCTAssertTrue(fulfilled)
         }
     }
+    #endif
     
     func testAlwaysWithZalgo() {
         PMKDefaultDispatchQueue = { () -> dispatch_queue_t in zalgo }
