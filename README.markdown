@@ -1,6 +1,6 @@
 ![PromiseKit](http://promisekit.org/public/img/logo-tight.png)
 
-![badge-pod] ![badge-platforms] ![badge-languages] ![badge-mit] ![badge-pms]
+![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] ![badge-mit]
 
 Modern development is highly asynchronous: isn’t it about time we had tools that
 made programming asynchronously powerful, easy and delightful?
@@ -114,7 +114,7 @@ PromiseKit contains Swift, so we engage in an unending battle with Xcode:
 
 | Xcode | Swift | PromiseKit |   CI Status  |   Release Notes   |
 | ----- | ----- | ---------- | ------------ | ----------------- |
-|   8   |  3.0  |      4     |  –           | [Pending][news-4] |
+|   8   |  3.0  |      4     | ![ci-swift3] | [Pending][news-4] |
 |   8   |  2.3  |      3     | ![ci-master] |                   |
 |   7   |  2.2  |      3     | ![ci-master] |                   |
 |   6   |  1.2  |      2     |  –           | [2015/05][news-2] |
@@ -145,6 +145,7 @@ We do **not** backport fixes (mostly) to these migration-branches, but pull-requ
 [travis]: https://travis-ci.org/mxcl/PromiseKit
 [ci-master]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=master
 [ci-legacy]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=legacy-1.x
+[ci-swift3]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-3.0
 [ci-22]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-2.2-minimal-changes
 [ci-20]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-2.0-minimal-changes
 [news-2]: http://promisekit.org/news/2015/05/PromiseKit-2.0-Released/
@@ -153,7 +154,7 @@ We do **not** backport fixes (mostly) to these migration-branches, but pull-requ
 [swift-2.0-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.0-minimal-changes
 [promisekit.org]: http://promisekit.org/docs/
 [badge-pod]: https://img.shields.io/cocoapods/v/PromiseKit.svg?label=version
-[badge-platforms]: https://img.shields.io/badge/platforms-iOS%20%7C%20macOS%20%7C%20watchOS%20%7C%20tvOS-lightgrey.svg
+[badge-platforms]: https://img.shields.io/badge/platforms-macOS%20%7C%20iOS%20%7C%20watchOS%20%7C%20tvOS-lightgrey.svg
 [badge-languages]: https://img.shields.io/badge/languages-Swift%20%7C%20ObjC-orange.svg
 [badge-mit]: https://img.shields.io/badge/license-MIT-blue.svg
 [badge-pms]: https://img.shields.io/badge/supports-CocoaPods%20%7C%20Carthage%20%7C%20SwiftPM-green.svg
