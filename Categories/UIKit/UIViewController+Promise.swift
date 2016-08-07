@@ -34,23 +34,12 @@ extension UIViewController {
         case BeforeDismissal
     }
 
-    public struct AnimationOptions: OptionSetType {
-        public init(rawValue: Int) {
-            self.rawValue = rawValue
-        }
-        public let rawValue: Int
-
-        public static let None      = AnimationOptions(rawValue: 0)
-        public static let Appear    = AnimationOptions(rawValue: 1 << 0)
-        public static let Disappear = AnimationOptions(rawValue: 1 << 1)
-    }
-
     @available(*, deprecated=3.4, renamed="promiseViewController(_:animate:fulfills:completion:)")
     public func promiseViewController<T>(vc: UIViewController, animated: Bool = true, completion: (() -> Void)? = nil) -> Promise<T> {
         return promiseViewController(vc, animate: [.Appear, .Disappear], completion: completion)
     }
 
-    public func promiseViewController<T>(vc: UIViewController, animate animationOptions: AnimationOptions = [.Appear, .Disappear], fulfills: FulfillmentType = .OnceDisappeared, completion: (() -> Void)? = nil) -> Promise<T> {
+    public func promiseViewController<T>(vc: UIViewController, animate animationOptions: PMKAnimationOptions = [.Appear, .Disappear], fulfills: FulfillmentType = .OnceDisappeared, completion: (() -> Void)? = nil) -> Promise<T> {
 
         let pvc: UIViewController
 
