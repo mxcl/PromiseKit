@@ -115,8 +115,8 @@ PromiseKit contains Swift, so we engage in an unending battle with Xcode:
 | Xcode | Swift | PromiseKit |   CI Status  |   Release Notes   |
 | ----- | ----- | ---------- | ------------ | ----------------- |
 |   8   |  3.0  |      4     | ![ci-swift3] | [Pending][news-4] |
-|   8   |  2.3  |      3     | ![ci-master] |                   |
-|   7   |  2.2  |      3     | ![ci-master] |                   |
+|   8   |  2.3  |      3     | ![ci-master] | [2015/10][news-3] |
+|   7   |  2.2  |      3     | ![ci-master] | [2015/10][news-3] |
 |   6   |  1.2  |      2     |  –           | [2015/05][news-2] |
 |   *   | *N/A* |      1†    | ![ci-legacy] |                   |
 
@@ -149,6 +149,7 @@ We do **not** backport fixes (mostly) to these migration-branches, but pull-requ
 [ci-22]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-2.2-minimal-changes
 [ci-20]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-2.0-minimal-changes
 [news-2]: http://promisekit.org/news/2015/05/PromiseKit-2.0-Released/
+[news-3]: https://github.com/mxcl/PromiseKit/blob/master/CHANGELOG.markdown#300-oct-1st-2015
 [news-4]: http://promisekit.org/news/
 [swift-2.2-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.2-minimal-changes
 [swift-2.0-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.0-minimal-changes
