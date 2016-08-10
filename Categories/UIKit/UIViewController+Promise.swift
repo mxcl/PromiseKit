@@ -39,7 +39,7 @@ extension UIViewController {
         return promiseViewController(vc, animate: [.Appear, .Disappear], completion: completion)
     }
 
-    public func promiseViewController<T>(vc: UIViewController, animate animationOptions: PMKAnimationOptions = [.Appear, .Disappear], fulfillmentType: FulfillmentType = .OnceDisappeared, completion: (() -> Void)? = nil) -> Promise<T> {
+    public func promiseViewController<T>(vc: UIViewController, animate animationOptions: PMKAnimationOptions = [.Appear, .Disappear], fulfills fulfillmentType: FulfillmentType = .OnceDisappeared, completion: (() -> Void)? = nil) -> Promise<T> {
 
         let pvc: UIViewController
 
