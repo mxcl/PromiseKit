@@ -39,7 +39,7 @@ extension UIViewController {
         return promiseViewController(vc, animate: [.Appear, .Disappear], completion: completion)
     }
 
-    public func promiseViewController<T>(vc: UIViewController, animate animationOptions: PMKAnimationOptions = [.Appear, .Disappear], fulfills: FulfillmentType = .OnceDisappeared, completion: (() -> Void)? = nil) -> Promise<T> {
+    public func promiseViewController<T>(vc: UIViewController, animate animationOptions: PMKAnimationOptions = [.Appear, .Disappear], fulfillmentType: FulfillmentType = .OnceDisappeared, completion: (() -> Void)? = nil) -> Promise<T> {
 
         let pvc: UIViewController
 
@@ -63,14 +63,34 @@ extension UIViewController {
             promise = Promise(error: UIViewController.Error.NilPromisable)
         }
 
-        if promise.pending {
-            presentViewController(vc, animated: animationOptions.contains(.Appear), completion: completion)
-            promise.always {
+        if !promise.pending {
+            return promise
+        }
+
+        presentViewController(vc, animated: animationOptions.contains(.Appear), completion: completion)
+
+        let (wrappingPromise, fulfill, reject) = Promise<T>.pendingPromise()
+
+        switch fulfillmentType {
+        case .OnceDisappeared:
+            promise.then { result in
+                vc.presentingViewController?.dismissViewControllerAnimated(animationOptions.contains(.Disappear), completion: { fulfill(result) })
+            }
+            .error(policy: .AllErrors) { error in
+                vc.presentingViewController?.dismissViewControllerAnimated(animationOptions.contains(.Disappear), completion: { reject(error) })
+            }
+        case .BeforeDismissal:
+            promise.then { result -> Void in
+                fulfill(result)
+                vc.presentingViewController?.dismissViewControllerAnimated(animationOptions.contains(.Disappear), completion: nil)
+            }
+            .error(policy: .AllErrors) { error in
+                reject(error)
                 vc.presentingViewController?.dismissViewControllerAnimated(animationOptions.contains(.Disappear), completion: nil)
             }
         }
 
-        return promise
+        return wrappingPromise
     }
 
     public func promiseViewController(vc: UIImagePickerController, animated: Bool = true, completion: (() -> Void)? = nil) -> Promise<UIImage> {
