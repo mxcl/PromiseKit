@@ -129,6 +129,7 @@ We maintain some branches to aid migrating between Swift versions:
 
 | Xcode | Swift | PromiseKit | Branch                      | CI Status |
 | ----- | ----- | -----------| --------------------------- | --------- |
+|  8.0  |  2.3  | 2          | [swift-2.3-minimal-changes] | ![ci-23]  |
 |  7.3  |  2.2  | 2          | [swift-2.2-minimal-changes] | ![ci-22]  |
 |  7.2  |  2.2  | 2          | [swift-2.2-minimal-changes] | ![ci-22]  |
 |  7.1  |  2.1  | 2          | [swift-2.0-minimal-changes] | ![ci-20]  |
@@ -146,11 +147,13 @@ We do **not** backport fixes (mostly) to these migration-branches, but pull-requ
 [ci-master]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=master
 [ci-legacy]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=legacy-1.x
 [ci-swift3]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-3.0
+[ci-23]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-2.3-minimal-changes
 [ci-22]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-2.2-minimal-changes
 [ci-20]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-2.0-minimal-changes
 [news-2]: http://promisekit.org/news/2015/05/PromiseKit-2.0-Released/
 [news-3]: https://github.com/mxcl/PromiseKit/blob/master/CHANGELOG.markdown#300-oct-1st-2015
 [news-4]: http://promisekit.org/news/
+[swift-2.3-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.3-minimal-changes
 [swift-2.2-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.2-minimal-changes
 [swift-2.0-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.0-minimal-changes
 [promisekit.org]: http://promisekit.org/docs/
