@@ -4,11 +4,11 @@
 #define PMKTestErrorDomain @"PMKTestErrorDomain"
 
 static inline NSError *dummyWithCode(NSInteger code) {
-    return [NSError errorWithDomain:PMKTestErrorDomain code:rand() userInfo:@{NSLocalizedDescriptionKey: @(code).stringValue}];
+    return [NSError errorWithDomain:PMKTestErrorDomain code:arc4random() userInfo:@{NSLocalizedDescriptionKey: @(code).stringValue}];
 }
 
 static inline NSError *dummy() {
-    return dummyWithCode(rand());
+    return dummyWithCode(arc4random());
 }
 
 static inline AnyPromise *rejectLater() {

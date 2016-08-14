@@ -4,7 +4,7 @@ import XCTest
 
 class TestCLLocationManager: XCTestCase {
     func testLocation() {
-        swizzle(CLLocationManager.self, "startUpdatingLocation") {
+        swizzle(CLLocationManager.self, #selector(CLLocationManager.startUpdatingLocation)) {
             let ex = expectationWithDescription("")
 
             CLLocationManager.promise().then { (x: CLLocation) -> Void in
@@ -17,7 +17,7 @@ class TestCLLocationManager: XCTestCase {
     }
 
     func testLocations() {
-        swizzle(CLLocationManager.self, "startUpdatingLocation") {
+        swizzle(CLLocationManager.self, #selector(CLLocationManager.startUpdatingLocation)) {
             let ex = expectationWithDescription("")
 
             CLLocationManager.promise().then { (x: [CLLocation]) -> Void in
@@ -42,8 +42,8 @@ class TestCLLocationManager: XCTestCase {
     }
 
     func testRequestAuthorization2() {
-        swizzle(CLLocationManager.self, "requestWhenInUseAuthorization") {
-            swizzle(CLLocationManager.self, "authorizationStatus", isClassMethod: true) {
+        swizzle(CLLocationManager.self, #selector(CLLocationManager.requestWhenInUseAuthorization)) {
+            swizzle(CLLocationManager.self, #selector(CLLocationManager.authorizationStatus), isClassMethod: true) {
                 let ex = expectationWithDescription("")
 
                 CLLocationManager.requestAuthorization().then { x -> Void in

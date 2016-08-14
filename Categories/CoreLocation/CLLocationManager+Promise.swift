@@ -77,15 +77,9 @@ extension CLLocationManager {
 private class LocationManager: CLLocationManager, CLLocationManagerDelegate {
     let (promise, fulfill, reject) = Promise<[CLLocation]>.defer_()
 
-#if os(iOS)
     @objc func locationManager(manager: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         fulfill(locations)
     }
-#else
-    @objc func locationManager(manager: CLLocationManager, didUpdateLocations locations: [AnyObject]) {
-        fulfill(locations as! [CLLocation])
-    }
-#endif
 
     @objc func locationManager(manager: CLLocationManager, didFailWithError error: NSError) {
         reject(error)
@@ -118,10 +112,11 @@ private class AuthorizationCatcher: CLLocationManager, CLLocationManagerDelegate
 }
 #endif
 
-private func auther(requestAuthorizationType: CLLocationManager.RequestAuthorizationType)(manager: CLLocationManager)
+private func auther(requestAuthorizationType: CLLocationManager.RequestAuthorizationType) -> (manager: CLLocationManager) -> Void
 {
   #if os(iOS)
-    if !manager.respondsToSelector("requestWhenInUseAuthorization") { return }
+  return { manager in
+    if !manager.respondsToSelector(#selector(CLLocationManager.requestWhenInUseAuthorization)) { return }
 
     func hasInfoPListKey(key: String) -> Bool {
         let value = NSBundle.mainBundle().objectForInfoDictionaryKey(key) as? String ?? ""
@@ -146,6 +141,9 @@ private func auther(requestAuthorizationType: CLLocationManager.RequestAuthoriza
         break
 
     }
+  }
+  #else
+    return { _ in }
   #endif
 }
 

@@ -20,7 +20,7 @@ static inline NSError *dummyWithCode(NSInteger code) {
 }
 
 static inline NSError *dummyError() {
-    return dummyWithCode(rand());
+    return dummyWithCode(arc4random());
 }
 
 @interface PMKPromise (BackCompat2)

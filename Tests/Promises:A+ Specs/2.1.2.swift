@@ -105,20 +105,20 @@ extension XCTestCase {
             return [Int](1...numberOfExpectations).map{ self.expectationWithDescription("\(desc) (\($0))") }
         }
         
-        let v1 = Int(rand())
+        let v1 = Int(arc4random())
         let e1 = e("already-fulfilled")
         test(Promise(v1), e1, v1)
         waitForExpectationsWithTimeout(1, handler: nil)
         
         let (p2, f2, _) = Promise<Int>.defer_()
-        let v2 = Int(rand())
+        let v2 = Int(arc4random())
         let e2 = e("immediately-fulfilled")
         test(p2, e2, v2)
         f2(v2)
         waitForExpectationsWithTimeout(1, handler: nil)
         
         let (p3, f3, _) = Promise<Int>.defer_()
-        let v3 = Int(rand())
+        let v3 = Int(arc4random())
         let e3 = e("eventually-fulfilled")
         later {
             test(p3, e3, v3)
@@ -133,7 +133,7 @@ extension XCTestCase {
             return [Int](1...numberOfExpectations).map{ self.expectationWithDescription("\(desc) (\($0))") }
         }
         
-        let v1 = NSError(domain:PMKErrorDomain, code:Int(rand()), userInfo:nil)
+        let v1 = NSError(domain:PMKErrorDomain, code:Int(arc4random()), userInfo:nil)
         let e1 = e("already-fulfilled")
         
         test(Promise(v1), e1, v1)
@@ -141,14 +141,14 @@ extension XCTestCase {
         
         let e2 = e("immediately-rejected")
         let (p2, _, r2) = Promise<Int>.defer_()
-        let v2 = NSError(domain:PMKErrorDomain, code:Int(rand()), userInfo:nil)
+        let v2 = NSError(domain:PMKErrorDomain, code:Int(arc4random()), userInfo:nil)
         test(p2, e2, v2)
         r2(v2)
         waitForExpectationsWithTimeout(1, handler: nil)
         
         let e3 = e("eventually-rejected")
         let (p3, _, r3) = Promise<Int>.defer_()
-        let v3 = NSError(domain:PMKErrorDomain, code:Int(rand()), userInfo:nil)
+        let v3 = NSError(domain:PMKErrorDomain, code:Int(arc4random()), userInfo:nil)
         later {
             test(p3, e3, v3)
             r3(v3)

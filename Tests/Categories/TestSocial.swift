@@ -8,7 +8,7 @@ class TestSLRequest: XCTestCase {
         // then use the long initializer, and an exception is thrown inside
         // init()
 
-        swizzle(SLRequest.self, "performRequestWithHandler:") {
+        swizzle(SLRequest.self, #selector(SLRequest.performRequestWithHandler(_:))) {
             let url = NSURL(string: "https://api.twitter.com/1.1/statuses/user_timeline.json")
             let params = ["foo": "bar"]
             let rq = SLRequest(forServiceType: SLServiceTypeTwitter, requestMethod: SLRequestMethod.GET, URL: url, parameters: params)

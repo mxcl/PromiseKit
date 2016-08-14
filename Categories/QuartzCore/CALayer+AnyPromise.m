@@ -9,7 +9,7 @@
 #import "CALayer+AnyPromise.h"
 
 
-@interface PMKCAAnimationDelegate : NSObject {
+@interface PMKCAAnimationDelegate : NSObject <CAAnimationDelegate> {
 @public
     PMKResolver resolve;
     CAAnimation *animation;

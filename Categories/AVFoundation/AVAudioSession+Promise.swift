@@ -1,4 +1,4 @@
-import AVFoundation.AVAudioSession
+import AVFoundation
 import Foundation
 #if !COCOAPODS
 import PromiseKit
