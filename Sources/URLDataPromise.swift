@@ -54,7 +54,7 @@ public class URLDataPromise: Promise<Data> {
     private var URLResponse: Foundation.URLResponse!
 
     /// Internal
-    public class func go(_ request: URLRequest, body: @noescape ((Data?, URLResponse?, Error?) -> Void) -> Void) -> URLDataPromise {
+    public class func go(_ request: URLRequest, body: ((Data?, URLResponse?, Error?) -> Void) -> Void) -> URLDataPromise {
         var fulfill: ((Data) -> Void)!
         var reject: ((Error) -> Void)!
 
@@ -65,13 +65,13 @@ public class URLDataPromise: Promise<Data> {
             promise.URLResponse = rsp
 
             if let error = error {
-                reject(URLError.underlyingCocoaError(request, data, rsp, error))
+                reject!(URLError.underlyingCocoaError(request, data, rsp, error as NSError))
             } else if let data = data, let rsp = rsp as? HTTPURLResponse, rsp.statusCode >= 200, rsp.statusCode < 300 {
-                fulfill(data)
+                fulfill!(data)
             } else if let data = data, !(rsp is HTTPURLResponse) {
-                fulfill(data)
+                fulfill!(data)
             } else {
-                reject(URLError.badResponse(request, data, rsp))
+                reject!(URLError.badResponse(request, data, rsp))
             }
         }
         
@@ -97,16 +97,16 @@ public class URLDataPromise: Promise<Data> {
 #endif
 
 extension URLResponse {
-    private var stringEncoding: String.Encoding? {
+    fileprivate var stringEncoding: String.Encoding? {
         guard let encodingName = textEncodingName else { return nil }
-        let encoding = CFStringConvertIANACharSetNameToEncoding(encodingName)
+        let encoding = CFStringConvertIANACharSetNameToEncoding(encodingName as CFString)
         guard encoding != kCFStringEncodingInvalidId else { return nil }
         return String.Encoding(rawValue: CFStringConvertEncodingToNSStringEncoding(encoding))
     }
 }
 
 extension Data {
-    private var b0rkedEmptyRailsResponse: Bool {
+    fileprivate var b0rkedEmptyRailsResponse: Bool {
         return count == 1 && withUnsafeBytes{ $0[0] == " " }
     }
 }

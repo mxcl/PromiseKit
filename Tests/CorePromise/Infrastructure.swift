@@ -4,7 +4,7 @@ import XCTest
 var InjectedErrorUnhandler: (Error) -> Void = { _ in XCTFail() }
 
 @objc(PMKInjected) class Injected: NSObject {
-    @objc class func setErrorUnhandler(_ newErrorUnhandler: (NSError) -> Void) {
+    @objc class func setErrorUnhandler(_ newErrorUnhandler: @escaping (NSError) -> Void) {
         InjectedErrorUnhandler = { newErrorUnhandler($0 as NSError) }
     }
 

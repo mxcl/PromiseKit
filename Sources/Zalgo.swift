@@ -65,7 +65,7 @@ public let zalgo = DispatchQueue(label: "Zalgo")
 public let waldo = DispatchQueue(label: "Waldo")
 
 
-@inline(__always) func contain_zalgo(_ q: DispatchQueue, body: () -> Void) {
+@inline(__always) func contain_zalgo(_ q: DispatchQueue, body: @escaping () -> Void) {
     if q === zalgo || q === waldo && !Thread.isMainThread {
         body()
     } else {
@@ -73,7 +73,7 @@ public let waldo = DispatchQueue(label: "Waldo")
     }
 }
 
-@inline(__always) func contain_zalgo<T>(_ q: DispatchQueue, rejecter reject: (Resolution<T>) -> Void, block: () throws -> Void) {
+@inline(__always) func contain_zalgo<T>(_ q: DispatchQueue, rejecter reject: @escaping (Resolution<T>) -> Void, block: @escaping () throws -> Void) {
     contain_zalgo(q) {
         do { try block() } catch { reject(Resolution(error)) }
     }

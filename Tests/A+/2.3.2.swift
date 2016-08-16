@@ -69,7 +69,7 @@ class Test232: XCTestCase {
 
                     testPromiseResolution(factory: xFactory) { promise, expectation in
                         promise.catch { err in
-                            if case Error.sentinel(let value) = err where value == sentinel {
+                            if case Error.sentinel(let value) = err, value == sentinel {
                                 expectation.fulfill()
                             }
                         }
@@ -88,7 +88,7 @@ class Test232: XCTestCase {
 
                     testPromiseResolution(factory: xFactory) { promise, expectation in
                         promise.catch { err in
-                            if case Error.sentinel(let value) = err where value == sentinel {
+                            if case Error.sentinel(let value) = err, value == sentinel {
                                 expectation.fulfill()
                             }
                         }
@@ -103,7 +103,7 @@ class Test232: XCTestCase {
 /////////////////////////////////////////////////////////////////////////
 
 extension Test232 {
-    private func testPromiseResolution(factory: () -> Promise<UInt32>, line: UInt = #line, test: (Promise<UInt32>, XCTestExpectation) -> Void) {
+    fileprivate func testPromiseResolution(factory: @escaping () -> Promise<UInt32>, line: UInt = #line, test: (Promise<UInt32>, XCTestExpectation) -> Void) {
         specify("via return from a fulfilled promise", file: #file, line: line) { d, expectation in
             let promise = Promise(value: arc4random()).then { _ in factory() }
             test(promise, expectation)

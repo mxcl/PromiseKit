@@ -11,7 +11,7 @@ class Test227: XCTestCase {
                     let promise2 = promise1.then { _ in throw Error.sentinel(sentinel) }
 
                     promise2.catch {
-                        if case Error.sentinel(let x) = $0 where x == sentinel {
+                        if case Error.sentinel(let x) = $0, x == sentinel {
                             expectation.fulfill()
                         }
                     }
@@ -22,7 +22,7 @@ class Test227: XCTestCase {
                     let promise2 = promise1.recover { _ -> UInt32 in throw Error.sentinel(sentinel) }
 
                     promise2.catch { error in
-                        if case Error.sentinel(let x) = error where x == sentinel {
+                        if case Error.sentinel(let x) = error, x == sentinel {
                             expectation.fulfill()
                         }
                     }

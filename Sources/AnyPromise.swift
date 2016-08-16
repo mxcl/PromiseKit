@@ -6,31 +6,31 @@ import Foundation
  objects, not value-types (structs).
 */
 @objc(AnyPromise) public class AnyPromise: NSObject {
-    let state: State<AnyObject?>
+    let state: State<Any?>
 
     /**
      - Returns: A new `AnyPromise` bound to a `Promise<AnyObject?>`.
     */
-    required public init(_ bridge: Promise<AnyObject?>) {
+    required public init(_ bridge: Promise<Any?>) {
         state = bridge.state
     }
 
     /// hack so Swift picks the right initializer for each of the below
-    private init(force: Promise<AnyObject?>) {
+    private init(force: Promise<Any?>) {
         state = force.state
     }
 
     /**
      - Returns: A new `AnyPromise` bound to a `Promise<T>`.
     */
-    public convenience init<T: AnyObject>(_ bridge: Promise<T?>) {
+    public convenience init<T: Any>(_ bridge: Promise<T?>) {
         self.init(force: bridge.then(on: zalgo) { $0 })
     }
 
     /**
      - Returns: A new `AnyPromise` bound to a `Promise<T>`.
     */
-    convenience public init<T: AnyObject>(_ bridge: Promise<T>) {
+    convenience public init<T: Any>(_ bridge: Promise<T>) {
         self.init(force: bridge.then(on: zalgo, execute: Optional.init))
     }
 
@@ -38,7 +38,7 @@ import Foundation
      - Returns: A new `AnyPromise` bound to a `Promise<[T]>`.
      - Note: The array is converted to an `NSArray`.
     */
-    convenience public init<T: AnyObject>(_ bridge: Promise<[T]>) {
+    convenience public init<T: Any>(_ bridge: Promise<[T]>) {
         self.init(force: bridge.then(on: zalgo) { NSArray(array: $0) })
     }
 
@@ -46,7 +46,7 @@ import Foundation
      - Returns: A new `AnyPromise` bound to a `Promise<[T:U]>`.
      - Note: The dictionary value is converted to an `NSDictionary`.
     */
-    convenience public init<T: AnyObject, U: AnyObject>(_ bridge: Promise<[T:U]>) {
+    convenience public init<T: Any, U: Any>(_ bridge: Promise<[T:U]>) {
         self.init(force: bridge.then(on: zalgo) { NSDictionary(dictionary: $0) })
     }
 
@@ -88,56 +88,56 @@ import Foundation
      - Note: AnyPromises fulfilled with `PMKManifold` lose all but the first fulfillment object.
      - Remark: Could not make this an initializer of `Promise` due to generics issues.
      */
-    public func asPromise() -> Promise<AnyObject?> {
+    public func asPromise() -> Promise<Any?> {
         return Promise(sealant: { resolve in
             state.pipe { resolution in
                 switch resolution {
                 case .rejected:
                     resolve(resolution)
                 case .fulfilled(let obj):
-                    resolve(.fulfilled(unwrapManifold(obj)))
+                    resolve(.fulfilled(unwrapManifold(obj as AnyObject?)))
                 }
             }
         })
     }
 
     /// - See: `Promise.then()`
-    public func then<T>(on q: DispatchQueue = PMKDefaultDispatchQueue(), execute body: (AnyObject?) throws -> T) -> Promise<T> {
+    public func then<T>(on q: DispatchQueue = PMKDefaultDispatchQueue(), execute body: @escaping (Any?) throws -> T) -> Promise<T> {
         return asPromise().then(on: q, execute: body)
     }
 
     /// - See: `Promise.then()`
-    public func then(on q: DispatchQueue = PMKDefaultDispatchQueue(), execute body: (AnyObject?) throws -> AnyPromise) -> Promise<AnyObject?> {
+    public func then(on q: DispatchQueue = PMKDefaultDispatchQueue(), execute body: @escaping (Any?) throws -> AnyPromise) -> Promise<AnyObject?> {
         return asPromise().then(on: q, execute: body)
     }
 
     /// - See: `Promise.then()`
-    public func then<T>(on q: DispatchQueue = PMKDefaultDispatchQueue(), execute body: (AnyObject?) throws -> Promise<T>) -> Promise<T> {
+    public func then<T>(on q: DispatchQueue = PMKDefaultDispatchQueue(), execute body: @escaping (Any?) throws -> Promise<T>) -> Promise<T> {
         return asPromise().then(on: q, execute: body)
     }
 
     /// - See: `Promise.always()`
-    public func always(on q: DispatchQueue = PMKDefaultDispatchQueue(), execute body: () -> Void) -> Promise<AnyObject?> {
+    public func always(on q: DispatchQueue = PMKDefaultDispatchQueue(), execute body: @escaping () -> Void) -> Promise<Any?> {
         return asPromise().always(execute: body)
     }
 
     /// - See: `Promise.tap()`
-    public func tap(on q: DispatchQueue = PMKDefaultDispatchQueue(), execute body: (Result<AnyObject?>) -> Void) -> Promise<AnyObject?> {
+    public func tap(on q: DispatchQueue = PMKDefaultDispatchQueue(), execute body: @escaping (Result<Any?>) -> Void) -> Promise<Any?> {
         return asPromise().tap(execute: body)
     }
 
     /// - See: `Promise.recover()`
-    public func recover(on q: DispatchQueue = PMKDefaultDispatchQueue(), policy: CatchPolicy = .allErrorsExceptCancellation, execute body: (Error) throws -> Promise<AnyObject?>) -> Promise<AnyObject?> {
+    public func recover(on q: DispatchQueue = PMKDefaultDispatchQueue(), policy: CatchPolicy = .allErrorsExceptCancellation, execute body: @escaping (Error) throws -> Promise<Any?>) -> Promise<Any?> {
         return asPromise().recover(on: q, policy: policy, execute: body)
     }
 
     /// - See: `Promise.recover()`
-    public func recover(on q: DispatchQueue = PMKDefaultDispatchQueue(), policy: CatchPolicy = .allErrorsExceptCancellation, execute body: (Error) throws -> AnyObject?) -> Promise<AnyObject?> {
+    public func recover(on q: DispatchQueue = PMKDefaultDispatchQueue(), policy: CatchPolicy = .allErrorsExceptCancellation, execute body: @escaping (Error) throws -> Any?) -> Promise<Any?> {
         return asPromise().recover(on: q, policy: policy, execute: body)
     }
 
     /// - See: `Promise.catch()`
-    public func `catch`(on q: DispatchQueue = PMKDefaultDispatchQueue(), policy: CatchPolicy = .allErrorsExceptCancellation, execute body: (Error) -> Void) {
+    public func `catch`(on q: DispatchQueue = PMKDefaultDispatchQueue(), policy: CatchPolicy = .allErrorsExceptCancellation, execute body: @escaping (Error) -> Void) {
         state.catch(on: q, policy: policy, else: { _ in }, execute: body)
     }
 
@@ -170,14 +170,14 @@ import Foundation
 
      - Returns If `resolved`, the object that was used to resolve this promise; if `pending`, nil.
      */
-    @objc public var value: AnyObject? {
+    @objc public var value: Any? {
         switch state.get() {
         case nil:
             return nil
         case .rejected(let error, _)?:
             return error as NSError
         case .fulfilled(let obj)?:
-            return unwrapManifold(obj)
+            return unwrapManifold(obj as AnyObject?)
         }
     }
 
@@ -190,8 +190,8 @@ import Foundation
 
      - Returns: A resolved promise.
      */
-    @objc class func promiseWithValue(_ value: AnyObject?) -> AnyPromise {
-        let state: State<AnyObject?>
+    @objc class func promiseWithValue(_ value: Any?) -> AnyPromise {
+        let state: State<Any?>
         switch value {
         case let promise as AnyPromise:
             state = promise.state
@@ -203,7 +203,7 @@ import Foundation
         return AnyPromise(state: state)
     }
 
-    private init(state: State<AnyObject?>) {
+    private init(state: State<Any?>) {
         self.state = state
     }
 
@@ -227,7 +227,7 @@ import Foundation
      - SeeAlso: http://promisekit.org/sealing-your-own-promises/
      - SeeAlso: http://promisekit.org/wrapping-delegation/
      */
-    @objc class func promiseWithResolverBlock(_ body: ((AnyObject?) -> Void) -> Void) -> AnyPromise {
+    @objc class func promiseWithResolverBlock(_ body: @escaping ((Any?) -> Void) -> Void) -> AnyPromise {
         return AnyPromise(sealant: { resolve in
             body { obj in
                 makeHandler({ _ in obj }, resolve)(obj)
@@ -235,19 +235,19 @@ import Foundation
         })
     }
 
-    private init(sealant: @noescape ((Resolution<AnyObject?>) -> Void) -> Void) {
-        var resolve: ((Resolution<AnyObject?>) -> Void)!
+    private init(sealant:  (@escaping (Resolution<Any?>) -> Void) -> Void) {
+        var resolve: ((Resolution<Any?>) -> Void)!
         state = UnsealedState(resolver: &resolve)
         sealant(resolve)
     }
 
-    @objc func __thenOn(_ q: DispatchQueue, execute body: (AnyObject?) -> AnyObject?) -> AnyPromise {
+    @objc func __thenOn(_ q: DispatchQueue, execute body: @escaping (Any?) -> Any?) -> AnyPromise {
         return AnyPromise(sealant: { resolve in
             state.then(on: q, else: resolve, execute: makeHandler(body, resolve))
         })
     }
 
-    @objc func __catchWithPolicy(_ policy: CatchPolicy, execute body: (AnyObject?) -> AnyObject?) -> AnyPromise {
+    @objc func __catchWithPolicy(_ policy: CatchPolicy, execute body: @escaping (Any?) -> Any?) -> AnyPromise {
         return AnyPromise(sealant: { resolve in
             state.catch(on: PMKDefaultDispatchQueue(), policy: policy, else: resolve) { err in
                 makeHandler(body, resolve)(err as NSError)
@@ -255,7 +255,7 @@ import Foundation
         })
     }
 
-    @objc func __alwaysOn(_ q: DispatchQueue, execute body: () -> Void) -> AnyPromise {
+    @objc func __alwaysOn(_ q: DispatchQueue, execute body: @escaping () -> Void) -> AnyPromise {
         return AnyPromise(sealant: { resolve in
             state.always(on: q) { resolution in
                 body()
@@ -270,7 +270,7 @@ import Foundation
      Usage: `anyPromise.toPromise(T).then { (t: T) -> U in ... }`
     */
     public func toPromise<T>(type: T.Type) -> Promise<T> {
-        return self.then { (value: AnyObject?) -> T in
+        return self.then { (value: Any?) -> T in
             if let value = value as? T {
                 return value
             }
@@ -279,7 +279,7 @@ import Foundation
     }
 
     /// used by PMKWhen and PMKJoin
-    @objc func __pipe(_ body: (AnyObject?) -> Void) {
+    @objc func __pipe(_ body: @escaping (Any?) -> Void) {
         state.pipe { resolution in
             switch resolution {
             case .rejected(let error, let token):
@@ -299,7 +299,7 @@ extension AnyPromise {
     }
 }
 
-private func unwrapManifold(_ obj: AnyObject?) -> AnyObject? {
+private func unwrapManifold(_ obj: AnyObject?) -> Any? {
     if let obj = obj, let kind = NSClassFromString("PMKArray"), obj.isKind(of: kind) {
         // - SeeAlso: PMKManifold
         return obj[0]
@@ -308,7 +308,7 @@ private func unwrapManifold(_ obj: AnyObject?) -> AnyObject? {
     }
 }
 
-private func makeHandler(_ body: (AnyObject?) -> AnyObject?, _ resolve: (Resolution<AnyObject?>) -> Void) -> (AnyObject?) -> Void {
+private func makeHandler(_ body: @escaping (Any?) -> Any?, _ resolve: @escaping (Resolution<Any?>) -> Void) -> (Any?) -> Void {
     return { obj in
         let obj = body(obj)
         switch obj {
