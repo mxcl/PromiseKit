@@ -71,7 +71,7 @@ public enum URLError: Error {
 
 public enum JSONError: Error {
     /// The JSON response was different to that requested
-    case unexpectedRootNode(AnyObject)
+    case unexpectedRootNode(Any)
 }
 
 
@@ -100,7 +100,7 @@ private func ==(lhs: ErrorPair, rhs: ErrorPair) -> Bool {
 
 extension NSError {
     @objc public class func cancelledError() -> NSError {
-        let info: [NSObject: AnyObject] = [NSLocalizedDescriptionKey: "The operation was cancelled"]
+        let info: [AnyHashable: Any] = [NSLocalizedDescriptionKey: "The operation was cancelled"]
         return NSError(domain: PMKErrorDomain, code: PMKOperationCancelled, userInfo: info)
     }
 

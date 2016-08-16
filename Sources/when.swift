@@ -125,7 +125,7 @@ public func when<U, V, X>(fulfilled pu: Promise<U>, _ pv: Promise<V>, _ px: Prom
  - SeeAlso: `when(resolved:)`
  */
 
-public func when<T, PromiseIterator: IteratorProtocol where PromiseIterator.Element == Promise<T> >(fulfilled promiseIterator: PromiseIterator, concurrently: Int) -> Promise<[T]> {
+public func when<T, PromiseIterator: IteratorProtocol>(fulfilled promiseIterator: PromiseIterator, concurrently: Int) -> Promise<[T]> where PromiseIterator.Element == Promise<T>  {
 
     guard concurrently > 0 else {
         return Promise(error: PMKError.whenConcurrentlyZero)

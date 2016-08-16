@@ -47,11 +47,11 @@ public class Promise<T> {
      - SeeAlso: http://promisekit.org/docs/cookbook/wrapping-delegation/
      - SeeAlso: pending()
      */
-    required public init(resolvers: @noescape (fulfill: (T) -> Void, reject: (Error) -> Void) throws -> Void) {
+    required public init(resolvers: (_ fulfill: @escaping (T) -> Void, _ reject: @escaping (Error) -> Void) throws -> Void) {
         var resolve: ((Resolution<T>) -> Void)!
         do {
             state = UnsealedState(resolver: &resolve)
-            try resolvers(fulfill: { resolve(.fulfilled($0)) }, reject: { error in
+            try resolvers({ resolve(.fulfilled($0)) }, { error in
                 #if !PMKDisableWarnings
                     if self.isPending {
                         resolve(Resolution(error))
@@ -86,7 +86,7 @@ public class Promise<T> {
      or you will end up with spurious unhandled-errors due to possible double
      rejections and thus immediately deallocated ErrorConsumptionTokens.
      */
-    init(sealant: @noescape ((Resolution<T>) -> Void) -> Void) {
+    init(sealant: (@escaping (Resolution<T>) -> Void) -> Void) {
         var resolve: ((Resolution<T>) -> Void)!
         state = UnsealedState(resolver: &resolve)
         sealant(resolve)
@@ -144,7 +144,7 @@ public class Promise<T> {
                //…
            }
      */
-    public func then<U>(on q: DispatchQueue = PMKDefaultDispatchQueue(), execute body: (T) throws -> U) -> Promise<U> {
+    public func then<U>(on q: DispatchQueue = PMKDefaultDispatchQueue(), execute body: @escaping (T) throws -> U) -> Promise<U> {
         return Promise<U> { resolve in
             state.then(on: q, else: resolve) { value in
                 resolve(.fulfilled(try body(value)))
@@ -167,7 +167,7 @@ public class Promise<T> {
                //…
            }
      */
-    public func then<U>(on q: DispatchQueue = PMKDefaultDispatchQueue(), execute body: (T) throws -> Promise<U>) -> Promise<U> {
+    public func then<U>(on q: DispatchQueue = PMKDefaultDispatchQueue(), execute body: @escaping (T) throws -> Promise<U>) -> Promise<U> {
         var rv: Promise<U>!
         rv = Promise<U> { resolve in
             state.then(on: q, else: resolve) { value in
@@ -192,7 +192,7 @@ public class Promise<T> {
      - Parameter execute: The handler to execute if this promise is rejected.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    public func `catch`(on q: DispatchQueue = PMKDefaultDispatchQueue(), policy: CatchPolicy = .allErrorsExceptCancellation, execute body: (Error) -> Void) {
+    public func `catch`(on q: DispatchQueue = PMKDefaultDispatchQueue(), policy: CatchPolicy = .allErrorsExceptCancellation, execute body: @escaping (Error) -> Void) {
         state.catch(on: q, policy: policy, else: { _ in }, execute: body)
     }
 
@@ -211,7 +211,7 @@ public class Promise<T> {
      - Parameter execute: The handler to execute if this promise is rejected.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    public func recover(on q: DispatchQueue = PMKDefaultDispatchQueue(), policy: CatchPolicy = .allErrorsExceptCancellation, execute body: (Error) throws -> Promise) -> Promise {
+    public func recover(on q: DispatchQueue = PMKDefaultDispatchQueue(), policy: CatchPolicy = .allErrorsExceptCancellation, execute body: @escaping (Error) throws -> Promise) -> Promise {
         var rv: Promise!
         rv = Promise { resolve in
             state.catch(on: q, policy: policy, else: resolve) { error in
@@ -238,7 +238,7 @@ public class Promise<T> {
      - Parameter execute: The handler to execute if this promise is rejected.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    public func recover(on q: DispatchQueue = PMKDefaultDispatchQueue(), policy: CatchPolicy = .allErrorsExceptCancellation, execute body: (Error) throws -> T) -> Promise {
+    public func recover(on q: DispatchQueue = PMKDefaultDispatchQueue(), policy: CatchPolicy = .allErrorsExceptCancellation, execute body: @escaping (Error) throws -> T) -> Promise {
         return Promise { resolve in
             state.catch(on: q, policy: policy, else: resolve) { error in
                 resolve(.fulfilled(try body(error)))
@@ -263,7 +263,7 @@ public class Promise<T> {
      - Parameter execute: The closure that executes when this promise resolves.
      - Returns: A new promise, resolved with this promise’s resolution.
      */
-    public func always(on q: DispatchQueue = PMKDefaultDispatchQueue(), execute body: () -> Void) -> Promise {
+    public func always(on q: DispatchQueue = PMKDefaultDispatchQueue(), execute body: @escaping () -> Void) -> Promise {
         state.always(on: q) { resolution in
             body()
         }
@@ -283,7 +283,7 @@ public class Promise<T> {
      - Parameter execute: The closure that executes when this promise resolves.
      - Returns: A new promise, resolved with this promise’s resolution.
      */
-    public func tap(on q: DispatchQueue = PMKDefaultDispatchQueue(), execute body: (Result<T>) -> Void) -> Promise {
+    public func tap(on q: DispatchQueue = PMKDefaultDispatchQueue(), execute body: @escaping (Result<T>) -> Void) -> Promise {
         state.always(on: q) { resolution in
             body(Result(resolution))
         }
@@ -330,17 +330,13 @@ public class Promise<T> {
 //MARK: disallow `Promise<Error>`
 
     @available(*, unavailable, message: "cannot instantiate Promise<Error>")
-    public init<T: Error>(resolvers: @noescape (fulfill: (T) -> Void, reject: (Error) -> Void) throws -> Void) { fatalError() }
-
-
-    @available(*, unavailable, message: "cannot instantiate Promise<Error>")
-    public convenience init<T: Error>(resolvers: @noescape ((T) -> Void, (Error) -> Void) throws -> Void) { fatalError() }
+    public init<T: Error>(resolvers: (_ fulfill: (T) -> Void, _ reject: (Error) -> Void) throws -> Void) { fatalError() }
 
     @available(*, unavailable, message: "cannot instantiate Promise<Error>")
-    public class func wrap(resolver: @noescape ((T?, NSError?) -> Void) throws -> Void) -> Promise<Error> { fatalError() }
+    public class func wrap(resolver: ((T?, NSError?) -> Void) throws -> Void) -> Promise<Error> { fatalError() }
 
     @available(*, unavailable, message: "cannot instantiate Promise<Error>")
-    public class func wrap(resolver: @noescape ((T, NSError?) -> Void) throws -> Void) -> Promise<Error> { fatalError() }
+    public class func wrap(resolver: ((T, NSError?) -> Void) throws -> Void) -> Promise<Error> { fatalError() }
 
     @available(*, unavailable, message: "cannot instantiate Promise<Error>")
     public class func pending<T: Error>() -> (promise: Promise, fulfill: (T) -> Void, reject: (Error) -> Void) { fatalError() }
@@ -389,7 +385,7 @@ extension Promise: CustomStringConvertible {
          NSURLSession.GET(url3)
      }
  */
-public func firstly<T>(execute body: @noescape () throws -> Promise<T>) -> Promise<T> {
+public func firstly<T>(execute body: () throws -> Promise<T>) -> Promise<T> {
     do {
         return try body()
     } catch {
@@ -398,13 +394,13 @@ public func firstly<T>(execute body: @noescape () throws -> Promise<T>) -> Promi
 }
 
 @available(*, unavailable, message: "instead of returning the error; throw")
-public func firstly<T: Error>(execute body: @noescape () throws -> T) -> Promise<T> { fatalError() }
+public func firstly<T: Error>(execute body: () throws -> T) -> Promise<T> { fatalError() }
 
 @available(*, unavailable, message: "use DispatchQueue.promise")
-public func firstly<T>(on: DispatchQueue, execute body: @noescape () throws -> Promise<T>) -> Promise<T> { fatalError() }
+public func firstly<T>(on: DispatchQueue, execute body: () throws -> Promise<T>) -> Promise<T> { fatalError() }
 
 @available(*, deprecated: 4.0, renamed: "DispatchQueue.promise")
-public func dispatch_promise<T>(_ on: DispatchQueue, _ body: () throws -> T) -> Promise<T> {
+public func dispatch_promise<T>(_ on: DispatchQueue, _ body: @escaping () throws -> T) -> Promise<T> {
     return Promise(value: ()).then(on: on, execute: body)
 }
 

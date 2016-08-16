@@ -15,9 +15,9 @@ extension Promise {
                //…
            }
      */
-    public func then(on q: DispatchQueue = PMKDefaultDispatchQueue(), execute body: (T) throws -> AnyPromise) -> Promise<AnyObject?> {
-        return Promise<AnyObject?> { resolve in
-            state.then(on: q, else: resolve) { value in
+    public func then(on q: DispatchQueue = PMKDefaultDispatchQueue(), execute body: @escaping (T) throws -> AnyPromise) -> Promise<Any?> {
+        return Promise<Any?> { resolve in
+            self.state.then(on: q, else: resolve) { value in
                 try body(value).state.pipe(resolve)
             }
         }
@@ -30,7 +30,7 @@ extension Promise {
 /**
  `firstly` can make chains more readable.
 */
-public func firstly(execute body: @noescape () throws -> AnyPromise) -> Promise<AnyObject?> {
+public func firstly(execute body: () throws -> AnyPromise) -> Promise<Any?> {
     return Promise(sealant: { resolve in
         do {
             try body().state.pipe(resolve)

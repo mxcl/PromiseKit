@@ -9,7 +9,7 @@ enum Error: Swift.Error {
 private let timeout: TimeInterval = 1
 
 extension XCTestCase {
-    func describe(_ description: String, file: StaticString = #file, line: UInt = #line, body: @noescape () throws -> Void) {
+    func describe(_ description: String, file: StaticString = #file, line: UInt = #line, body: () throws -> Void) {
         do {
             try body()
         } catch {
@@ -17,7 +17,7 @@ extension XCTestCase {
         }
     }
 
-    func specify(_ description: String, file: StaticString = #file, line: UInt = #line, body: @noescape (Promise<Void>.PendingTuple, XCTestExpectation) throws -> Void) {
+    func specify(_ description: String, file: StaticString = #file, line: UInt = #line, body: (Promise<Void>.PendingTuple, XCTestExpectation) throws -> Void) {
         let expectation = self.expectation(description: description)
         let pending = Promise<Void>.pending()
 
@@ -33,19 +33,19 @@ extension XCTestCase {
         }
     }
 
-    func testFulfilled(file: StaticString = #file, line: UInt = #line, body: (Promise<UInt32>, XCTestExpectation, UInt32) -> Void) {
+    func testFulfilled(file: StaticString = #file, line: UInt = #line, body: @escaping (Promise<UInt32>, XCTestExpectation, UInt32) -> Void) {
         testFulfilled(withExpectationCount: 1, file: file, line: line) {
             body($0, $1.first!, $2)
         }
     }
 
-    func testRejected(file: StaticString = #file, line: UInt = #line, body: (Promise<UInt32>, XCTestExpectation, UInt32) -> Void) {
+    func testRejected(file: StaticString = #file, line: UInt = #line, body: @escaping (Promise<UInt32>, XCTestExpectation, UInt32) -> Void) {
         testRejected(withExpectationCount: 1, file: file, line: line) {
             body($0, $1.first!, $2)
         }
     }
 
-    func testFulfilled(withExpectationCount: Int, file: StaticString = #file, line: UInt = #line, body: (Promise<UInt32>, [XCTestExpectation], UInt32) -> Void) {
+    func testFulfilled(withExpectationCount: Int, file: StaticString = #file, line: UInt = #line, body: @escaping (Promise<UInt32>, [XCTestExpectation], UInt32) -> Void) {
 
         let specify = mkspecify(withExpectationCount, file: file, line: line, body: body)
 
@@ -68,7 +68,7 @@ extension XCTestCase {
         }
     }
 
-    func testRejected(withExpectationCount: Int, file: StaticString = #file, line: UInt = #line, body: (Promise<UInt32>, [XCTestExpectation], UInt32) -> Void) {
+    func testRejected(withExpectationCount: Int, file: StaticString = #file, line: UInt = #line, body: @escaping (Promise<UInt32>, [XCTestExpectation], UInt32) -> Void) {
 
         let specify = mkspecify(withExpectationCount, file: file, line: line, body: body)
 
@@ -94,7 +94,7 @@ extension XCTestCase {
 
 /////////////////////////////////////////////////////////////////////////
 
-    private func mkspecify(_ numberOfExpectations: Int, file: StaticString, line: UInt, body: (Promise<UInt32>, [XCTestExpectation], UInt32) -> Void) -> (String, feed: (UInt32) -> (Promise<UInt32>, () -> Void)) -> Void {
+    private func mkspecify(_ numberOfExpectations: Int, file: StaticString, line: UInt, body: @escaping (Promise<UInt32>, [XCTestExpectation], UInt32) -> Void) -> (String, _ feed: (UInt32) -> (Promise<UInt32>, () -> Void)) -> Void {
         return { desc, feed in
             let value = arc4random()
             let (promise, executeAfter) = feed(value)
@@ -118,7 +118,7 @@ extension XCTestCase {
     }
 }
 
-func after(ticks: Int, execute body: () -> Void) {
+func after(ticks: Int, execute body: @escaping () -> Void) {
     precondition(ticks > 0)
 
     var ticks = ticks
@@ -136,7 +136,7 @@ func after(ticks: Int, execute body: () -> Void) {
 }
 
 extension Promise {
-    func test(onFulfilled: () -> Void, onRejected: () -> Void) {
+    func test(onFulfilled: @escaping () -> Void, onRejected: @escaping () -> Void) {
         tap { result in
             switch result {
             case .fulfilled:

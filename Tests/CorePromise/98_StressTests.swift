@@ -57,7 +57,7 @@ private enum Error: Swift.Error {
     case Dummy
 }
 
-private func stressDataRace<T: Equatable>(expectation e1: XCTestExpectation, iterations: Int = 1000, stressFactor: Int = 10, stressFunction: (Promise<T>) -> Void, fulfill f: () -> T) {
+private func stressDataRace<T: Equatable>(expectation e1: XCTestExpectation, iterations: Int = 1000, stressFactor: Int = 10, stressFunction: (Promise<T>) -> Void, fulfill f: @escaping () -> T) {
     let group = DispatchGroup()
     let queue = DispatchQueue(label: "the.domain.of.Zalgo", attributes: .concurrent)
 

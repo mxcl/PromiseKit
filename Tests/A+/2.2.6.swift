@@ -135,25 +135,25 @@ class Test226: XCTestCase {
                         var ticket = 0
 
                         promise.catch { err in
-                            guard case Error.sentinel(let x) = err where x == sentinel else { return XCTFail() }
+                            guard case Error.sentinel(let x) = err, x == sentinel else { return XCTFail() }
                             XCTAssertEqual(++ticket, 1)
                             exes[0].fulfill()
                         }
                         promise.then { _ in XCTFail() }
                         promise.catch { err in
-                            guard case Error.sentinel(let x) = err where x == sentinel else { return XCTFail() }
+                            guard case Error.sentinel(let x) = err, x == sentinel else { return XCTFail() }
                             XCTAssertEqual(++ticket, 2)
                             exes[1].fulfill()
                         }
                         promise.then { _ in XCTFail() }
                         promise.catch { err in
-                            guard case Error.sentinel(let x) = err where x == sentinel else { return XCTFail() }
+                            guard case Error.sentinel(let x) = err, x == sentinel else { return XCTFail() }
                             XCTAssertEqual(++ticket, 3)
                             exes[2].fulfill()
                         }
                         promise.then { _ in XCTFail() }
                         promise.catch { err in
-                            guard case Error.sentinel(let x) = err where x == sentinel else { return XCTFail() }
+                            guard case Error.sentinel(let x) = err, x == sentinel else { return XCTFail() }
                             XCTAssertEqual(++ticket, 4)
                             exes[3].fulfill()
                         }
@@ -164,26 +164,26 @@ class Test226: XCTestCase {
                         var orderValidator = 0
 
                         promise.catch { err in
-                            guard case Error.sentinel(let x) = err where x == sentinel else { return XCTFail() }
+                            guard case Error.sentinel(let x) = err, x == sentinel else { return XCTFail() }
                             XCTAssertEqual(++orderValidator, 1)
                             exes[0].fulfill()
                         }
                         promise.then { _ in XCTFail() }
                         promise.catch { err in
-                            guard case Error.sentinel(let x) = err where x == sentinel else { return XCTFail() }
+                            guard case Error.sentinel(let x) = err, x == sentinel else { return XCTFail() }
                             XCTAssertEqual(++orderValidator, 2)
                             exes[1].fulfill()
                         }
                         promise.then { _ in XCTFail() }
                         promise.recover { err -> UInt32 in
-                            guard case Error.sentinel(let x) = err where x == sentinel else { XCTFail(); return 123 }
+                            guard case Error.sentinel(let x) = err, x == sentinel else { XCTFail(); return 123 }
                             XCTAssertEqual(++orderValidator, 3)
                             exes[2].fulfill()
                             throw Error.dummy
                         }
                         promise.then { _ in XCTFail() }
                         promise.catch { err in
-                            guard case Error.sentinel(let x) = err where x == sentinel else { return XCTFail() }
+                            guard case Error.sentinel(let x) = err, x == sentinel else { return XCTFail() }
                             XCTAssertEqual(++orderValidator, 4)
                             exes[3].fulfill()
                         }
@@ -205,7 +205,7 @@ class Test226: XCTestCase {
                         promise.recover { _ -> UInt32 in
                             throw Error.sentinel(sentinel2)
                             }.catch { err in
-                                if case Error.sentinel(let x) = err where x == sentinel2 {
+                                if case Error.sentinel(let x) = err, x == sentinel2 {
                                     exes[1].fulfill()
                                 }
                         }
