@@ -37,10 +37,6 @@ extension NSTask {
     /**
      Launches the receiver and resolves when it exits.
 
-     If the task fails the promise is rejected with code `PMKTaskError`, and
-     `userInfo` keys `PMKTaskErrorStandardOutputKey`,
-     `PMKTaskErrorStandardErrorKey` and `PMKTaskErrorExitStatusKey`.
-
      @return A promise that fulfills with three parameters:
        1) The stdout interpreted as a UTF8 string.
        2) The stderr interpreted as a UTF8 string.
@@ -58,10 +54,6 @@ extension NSTask {
 
     /**
      Launches the receiver and resolves when it exits.
-
-     If the task fails the promise is rejected with code `PMKTaskError`, and
-     `userInfo` keys `PMKTaskErrorStandardOutputKey`,
-     `PMKTaskErrorStandardErrorKey` and `PMKTaskErrorExitStatusKey`.
 
      @return A promise that fulfills with three parameters:
        1) The stdout as `NSData`.
@@ -90,10 +82,6 @@ extension NSTask {
 
     /**
      Launches the receiver and resolves when it exits.
-
-     If the task fails the promise is rejected with code `PMKTaskError`, and
-     `userInfo` keys `PMKTaskErrorStandardOutputKey`,
-     `PMKTaskErrorStandardErrorKey` and `PMKTaskErrorExitStatusKey`.
 
      @return A promise that fulfills with the stdout as a UTF8 interpreted String.
     */
