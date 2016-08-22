@@ -195,7 +195,7 @@ open class Promise<T> {
      - Important: The promise that is returned is `self`. `catch` cannot affect the chain, in PromiseKit 3 no promise was returned to strongly imply this, however for PromiseKit 4 we started returning a promise so that you can `always` after a catch or return from a function that has an error handler.
      */
     @discardableResult
-    public func `catch`(on q: DispatchQueue = .default, policy: CatchPolicy = .allErrorsExceptCancellation, execute body: @escaping (Error) -> Void) -> Promise {
+    public func `catch`(on q: DispatchQueue = .main, policy: CatchPolicy = .allErrorsExceptCancellation, execute body: @escaping (Error) -> Void) -> Promise {
         state.catch(on: q, policy: policy, else: { _ in }, execute: body)
         return self
     }

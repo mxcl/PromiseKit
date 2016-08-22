@@ -95,7 +95,7 @@ import Foundation
     }
 
     /// - See: `Promise.catch()`
-    public func `catch`(on q: DispatchQueue = .default, policy: CatchPolicy = .allErrorsExceptCancellation, execute body: @escaping (Error) -> Void) {
+    public func `catch`(on q: DispatchQueue = .main, policy: CatchPolicy = .allErrorsExceptCancellation, execute body: @escaping (Error) -> Void) {
         state.catch(on: q, policy: policy, else: { _ in }, execute: body)
     }
 
@@ -207,7 +207,7 @@ import Foundation
 
     @objc func __catchWithPolicy(_ policy: CatchPolicy, execute body: @escaping (Any?) -> Any?) -> AnyPromise {
         return AnyPromise(sealant: { resolve in
-            state.catch(on: .default, policy: policy, else: resolve) { err in
+            state.catch(on: .main, policy: policy, else: resolve) { err in
                 makeHandler(body, resolve)(err as NSError)
             }
         })

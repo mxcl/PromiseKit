@@ -219,9 +219,12 @@ extern AnyPromise * __nonnull dispatch_promise_on(dispatch_queue_t __nonnull que
 #define PMKHTTPURLResponseIsText(rsp) [[rsp MIMEType] hasPrefix:@"text/"]
 
 /**
- The default queue for all calls to `then`, `catch` etc. is the main queue.
+ The default queue for all calls to `then`, `always`, `recover`.
 
  By default this returns dispatch_get_main_queue()
+ 
+ *Important* This does not configure `catch`. The default queue for `catch` is always the main queue for safety.
+ However you can configure the queue that `catch` uses on a per-call basis.
  */
 extern __nonnull dispatch_queue_t PMKDefaultDispatchQueue() NS_REFINED_FOR_SWIFT;
 
