@@ -74,7 +74,7 @@ extern id PMKURLRequestFromURLFormat(NSError **err, id urlFormat, ...);
 
 + (AnyPromise *)promise:(NSURLRequest *)rq {
     return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
-        [[NSURLSession sharedSession] dataTaskWithRequest:rq completionHandler:PMKMakeURLDataHandler(rq, resolve)];
+        [[[NSURLSession sharedSession] dataTaskWithRequest:rq completionHandler:PMKMakeURLDataHandler(rq, resolve)] resume];
     }];
 }
 
