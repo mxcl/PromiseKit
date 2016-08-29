@@ -71,11 +71,6 @@ public func when<T>(fulfilled promises: [Promise<T>]) -> Promise<[T]> {
 }
 
 /// Wait for all promises in a set to fulfill.
-public func when<T>(fulfilled promises: Promise<T>...) -> Promise<[T]> {
-    return when(fulfilled: promises)
-}
-
-/// Wait for all promises in a set to fulfill.
 public func when(fulfilled promises: Promise<Void>...) -> Promise<Void> {
     return _when(promises)
 }

@@ -19,7 +19,7 @@ class WhenTests: XCTestCase {
         let p3 = Promise(value: 3)
         let p4 = Promise(value: 4)
 
-        when(fulfilled: p1, p2, p3, p4).then { (x: [Int])->() in
+        when(fulfilled: [p1, p2, p3, p4]).then { (x: [Int])->() in
             XCTAssertEqual(x[0], 1)
             XCTAssertEqual(x[1], 2)
             XCTAssertEqual(x[2], 3)
