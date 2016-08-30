@@ -28,10 +28,10 @@ platform with a `swiftc`, it has *excellent* Objective-C bridging and
 
 ```ruby
 # CocoaPods
-pod "PromiseKit", "~> 3.4"
+pod "PromiseKit", "~> 3.5"
 
 # Carthage
-github "mxcl/PromiseKit" ~> 3.4
+github "mxcl/PromiseKit" ~> 3.5
 
 # SwiftPM
 let package = Package(
