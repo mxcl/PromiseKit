@@ -122,6 +122,7 @@ Pod::Spec.new do |s|
   s.subspec 'OMGHTTPURLRQ' do |ss|
     ss.source_files = 'Extensions/OMGHTTPURLRQ/Sources/*'
     ss.dependency 'PromiseKit/CorePromise'
+    ss.dependency 'PromiseKit/Foundation'
     ss.dependency 'OMGHTTPURLRQ', '~> 3.2'
     ss.frameworks = 'Foundation'
   end
