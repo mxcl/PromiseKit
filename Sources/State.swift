@@ -169,7 +169,7 @@ class Handlers<T>: Sequence {
         bodies.append(body)
     }
 
-    func makeIterator() -> IndexingIterator<[@escaping (Resolution<T>) -> Void]> {
+    func makeIterator() -> IndexingIterator<[(Resolution<T>) -> Void]> {
         return bodies.makeIterator()
     }
 
