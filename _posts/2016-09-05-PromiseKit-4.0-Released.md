@@ -5,40 +5,44 @@ title: PromiseKit 4.0 Released
 
 # PromiseKit 4.0 Released!
 
-Swift 3 comes with breaking API changes, so PromiseKit also had to have breaking major semantic version changes. Hence we are releasing version 4.
-
-As has become tradition now, we also took the opportunity to improve the library.
-
-As a result we also provide a `swift-2.3-minimal-changes` branch, which is PromiseKit 2 but ported to Swift 2.3, whih is also provided by Xcode 8.
+Swift 3 break its API, so to support Swift 3 it was mandatory to bump PromiseKit to version 4. Consequently we took the opportunity to improve the library — though we provide a `swift-2.3-minimal-changes` branch, which is PromiseKit 2 but ported to Swift 2.3 (also part of Xcode 8) to aid migrations.
 
 ## Notable Changes
 
 ### Minimum Deployment Target
 
-* PromiseKit now requires a deployment target >= macOS 10.10, the deployment targets for iOS, watchOS and tvOS are unchanged.
+PromiseKit now requires a deployment target >= macOS 10.10, the deployment targets for iOS, watchOS and tvOS are unchanged (8.0, 2.0 and 9.0 respectfully).
 
-### `catch` Returns
+### `catch` is back
 
 * Swift 3 now allows keywords to be used as member functions, so thankfully we have restored `catch`.
+* `catch` also returns `self` so that you can chain off of `catch`, this is not the same behavior as `AnyPromise`’s `catch` which behaves like `Promise<T>`’s recover.
 
-### Initializer Changes
+### `PromiseKit.wrap`
 
-* We have moved all initializers except `Promise { fulfill, reject in }` to class methods to prevent ambiguity in usage and make the compiler happy for the 90% use case.
+To remove initializer ambiguity, improve error messages and to allow generic specializations we have moved our convenience initializers that wrap traditional Cocoa asynchronous patterns to a free-standing function: `wrap`:
+
+```swift
+func foo() -> Promise<Foo> {
+    return PromiseKit.wrap(FooKit.start)
+}
+```
 
 ### `recover` Behavior Change
-* `recover` now takes a `CatchPolicy` which means it **by default** no longer “catches” cancellation errors, you should vet any use of `recover`. Probably this is actually what you wanted all along.
+
+`recover` now takes a `CatchPolicy` which means it **by default** no longer “catches” cancellation errors, you should vet any use of `recover`. Probably this is actually what you wanted all along.
 
 ### `@import PromiseKit;` works
 
-* You can now `@import PromiseKit;`, before this wouldn’t import the whole library in an effort to prevent Swift and ObjC seeing the parts of PromiseKit designed for the other. We now properly use `NS_REFINED_FOR_SWIFT` et al. and thus the build-system manages symbol visibility for us.
+You can now `@import PromiseKit;`, before this wouldn’t import the whole library in an effort to prevent Swift and ObjC seeing the parts of PromiseKit designed for the other. We now properly use `NS_REFINED_FOR_SWIFT` et al. and thus the build-system manages symbol visibility for us.
 
 ### `Error.when` Removed
 
-https://github.com/mxcl/PromiseKit/issues/341
+See: https://github.com/mxcl/PromiseKit/issues/341
 
 ### `join()` Behavior Change
 
-Your old joins won't compile, so you’ll notice this change for sure.
+`join` has been deprecated and replaced with `when(resolved:)` (standard `when` is now `when(fulfilled:)`). This promise never rejects and instead always fulfills with an array of `Result<T>`.
 
 ### Unused Return Value Warning
 
@@ -54,7 +58,7 @@ _ = foo.then{ /*…*/ }
 
 ### `AnyPromise -finally`
 
-Renamed always so as to be consistent with `Promise<T>`, and because `finally` was not a good metaphor for promises relative to the `try`, `catch`, `finally` objc exception pattern we were originally partially emulating with PMK1.
+Renamed `always` so as to be consistent with `Promise<T>`, and because `finally` was not a good metaphor for promises relative to the `try`, `catch`, `finally` objc exception pattern we were originally partially emulating with PMK1.
 
 ### OMGHTTPURLRQ / Alamofire
 
@@ -80,7 +84,6 @@ The default podspec *no longer* imports `OMGHTTPURLRQ`.
 
 * `PMKSetDefaultDispatchHandler`, you can set the default queue that all promises execute upon.
 * `when(generator:concurrently)`, you can wait on all promises from a generator, promises are only created as required.
-
 
 ## Deprecated API Removed
 
