@@ -5,7 +5,7 @@ title: PromiseKit 4.0 Released
 
 # PromiseKit 4.0 Released!
 
-Swift 3 break its API, so to support Swift 3 it was mandatory to bump PromiseKit to version 4. Consequently we took the opportunity to improve the library — though we provide a `swift-2.3-minimal-changes` branch, which is PromiseKit 2 but ported to Swift 2.3 (also part of Xcode 8) to aid migrations.
+Swift 3 breaks its API, so to support Swift 3 it was mandatory to bump PromiseKit to version 4. Consequently we took the opportunity to improve the library — though we provide a `swift-2.3-minimal-changes` branch, which is PromiseKit 2 but ported to Swift 2.3 (also part of Xcode 8) to aid migrations.
 
 ## Notable Changes
 
@@ -15,8 +15,8 @@ PromiseKit now requires a deployment target >= macOS 10.10, the deployment targe
 
 ### `catch` is back
 
-* Swift 3 now allows keywords to be used as member functions, so thankfully we have restored `catch`.
-* `catch` also returns `self` so that you can chain off of `catch`, this is not the same behavior as `AnyPromise`’s `catch` which behaves like `Promise<T>`’s recover.
+* Swift 3 allows keywords to be used as member functions, so thankfully we have restored `catch`.
+* `catch` also returns `self` so that you can chain off of `catch`, this is not the same behavior as `AnyPromise`’s `catch` which behaves like `Promise<T>`’s `recover`.
 
 ### `PromiseKit.wrap`
 
@@ -24,7 +24,8 @@ To remove initializer ambiguity, improve error messages and to allow generic spe
 
 ```swift
 func foo() -> Promise<Foo> {
-    return PromiseKit.wrap(FooKit.start)
+    let bar = Bar(conf: \*…*\)
+    return PromiseKit.wrap(bar.start)
 }
 ```
 
@@ -38,7 +39,7 @@ You can now `@import PromiseKit;`, before this wouldn’t import the whole libra
 
 ### `Error.when` Removed
 
-See: https://github.com/mxcl/PromiseKit/issues/341
+See: [https://github.com/mxcl/PromiseKit/issues/341](https://github.com/mxcl/PromiseKit/issues/341).
 
 ### `join()` Behavior Change
 
@@ -62,9 +63,9 @@ Renamed `always` so as to be consistent with `Promise<T>`, and because `finally`
 
 ### OMGHTTPURLRQ / Alamofire
 
-OMGHTTPURLRQ is no longer a dependency of the `Foundation` extensions, instead it is now its own subspec: https://github.com/PromiseKit/OMGHTTPURLRQ
+OMGHTTPURLRQ is no longer a dependency of the `Foundation` extensions, instead it is now its own subspec: [https://github.com/PromiseKit/OMGHTTPURLRQ](https://github.com/PromiseKit/OMGHTTPURLRQ)
 
-An Alamofire extension was added: https://github.com/PromiseKit/Alamofire
+An Alamofire extension was added: [https://github.com/PromiseKit/Alamofire](https://github.com/PromiseKit/Alamofire).
 
 So from now on you should choose one of the two to handle the parts of HTTP networking that Apple left out:
 
@@ -89,6 +90,6 @@ The default podspec *no longer* imports `OMGHTTPURLRQ`.
 
 PromiseKit no longer comes with `NSURLConnection`, `UIAlertView`, etc. extensions.
 
-## PromiseKit Organization
+## The PromiseKit Organization
 
-PromiseKit extensions are now grouped at the PromiseKit GitHub organization to facilitate better testing, easier contribution and more sensible responsibility divisions.
+PromiseKit extensions are now grouped at the [PromiseKit GitHub organization](https://github.com/PromiseKit) to facilitate better testing, easier contribution and more sensible responsibility divisions.
