@@ -24,7 +24,7 @@ To remove initializer ambiguity, improve error messages and to allow generic spe
 
 ```swift
 func foo() -> Promise<Foo> {
-    let bar = Bar(conf: \*…*\)
+    let bar = Bar(conf: /*…*/)
     return PromiseKit.wrap(bar.start)
 }
 ```
