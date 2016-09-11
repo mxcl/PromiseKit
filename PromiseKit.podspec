@@ -32,15 +32,15 @@ Pod::Spec.new do |s|
     ss.dependency 'PromiseKit/CorePromise'
   end
 
-  # s.subspec 'Alamofire' do |ss|
-  #   ss.source_files = 'Extensions/Alamofire/Sources/*'
-  #   ss.dependency 'Alamofire', '~> 4.0'
-  #   ss.dependency 'PromiseKit/CorePromise'
-  #   ss.ios.deployment_target = '9.0'
-  #   ss.osx.deployment_target = '10.11'
-  #   ss.tvos.deployment_target = '9.0'
-  #   ss.watchos.deployment_target = '2.0'
-  # end
+  s.subspec 'Alamofire' do |ss|
+    ss.source_files = 'Extensions/Alamofire/Sources/*'
+    ss.dependency 'Alamofire', '~> 4.0'
+    ss.dependency 'PromiseKit/CorePromise'
+    ss.ios.deployment_target = '9.0'
+    ss.osx.deployment_target = '10.11'
+    ss.watchos.deployment_target = '2.0'
+    ss.tvos.deployment_target = '9.0'
+  end
 
   s.subspec 'AddressBook' do |ss|
     ss.ios.source_files = 'Extensions/AddressBook/Sources/*'
