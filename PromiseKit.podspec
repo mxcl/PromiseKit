@@ -120,6 +120,13 @@ Pod::Spec.new do |s|
     ss.ios.frameworks = ss.osx.frameworks = ss.tvos.frameworks = 'MapKit'
     ss.tvos.deployment_target = '9.2'
     ss.dependency 'PromiseKit/CorePromise'
+
+    # respecify due to CocoaPods bug where specifying any
+    # deployment_target on a subspec causes all other platforms
+    # to not inherit deployment targets from their parent spec
+    ss.ios.deployment_target = '8.0'
+    ss.osx.deployment_target = '10.10'
+    ss.watchos.deployment_target = '2.0'
   end
 
   s.subspec 'MessageUI' do |ss|
@@ -139,6 +146,13 @@ Pod::Spec.new do |s|
     ss.ios.frameworks = ss.tvos.frameworks = 'Photos'
     ss.tvos.deployment_target = '10.0'
     ss.dependency 'PromiseKit/CorePromise'
+    
+    # respecify due to CocoaPods bug where specifying any
+    # deployment_target on a subspec causes all other platforms
+    # to not inherit deployment targets from their parent spec
+    ss.ios.deployment_target = '8.0'
+    ss.osx.deployment_target = '10.10'
+    ss.watchos.deployment_target = '2.0'
   end
 
   s.subspec 'QuartzCore' do |ss|
