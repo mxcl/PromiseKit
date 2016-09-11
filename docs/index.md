@@ -67,6 +67,8 @@ PHPhotoLibrary.requestAuthorization().then { authorized -> Promise in
 }
 ```
 
+<aside>In PromiseKit 3 `catch` was named `error` due to Swift keyword compiler issues.</aside>
+
 Promises standardize the interfaces of asynchronicity; the take home is things that are tedious and flakey with completion-handlers are delightful with promises:
 
 ```swift
