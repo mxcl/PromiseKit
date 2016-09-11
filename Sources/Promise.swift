@@ -423,3 +423,20 @@ public enum Result<T> {
         }
     }
 }
+
+
+public class PMKJoint<T> {
+    fileprivate var resolve: ((Resolution<T>) -> Void)!
+}
+
+extension Promise {
+    public final class func joint() -> (Promise<T>, (PMKJoint<T>)) {
+        let pipe = PMKJoint<T>()
+        let promise = Promise(sealant: { pipe.resolve = $0 })
+        return (promise, pipe)
+    }
+
+    public func join(_ joint: PMKJoint<T>) {
+        state.pipe(joint.resolve)
+    }
+}
