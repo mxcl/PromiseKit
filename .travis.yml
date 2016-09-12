@@ -2,14 +2,28 @@ language: objective-c
 osx_image: xcode8
 
 env:
-  - iOS= DST='platform=iOS Simulator,name=iPhone 6S' UUID='7FC06F6D-AF72-4B38-9A96-1F934EA2E27F' ACTION=test COV=YES
-  - tvOS= DST='platform=tvOS Simulator,name=Apple TV 1080p' UUID='0DF1B136-A3A7-4C51-AE6E-CFEFDF52DA24' ACTION=test COV=YES
-  - macOS= DST='platform=OS X' ACTION=test COV=YES
-  - watchOS= DST='platform=watchOS Simulator,name=Apple Watch - 38mm' ACTION=build COV=NO
+  - PLATFORM=Mac
+  - PLATFORM=iOS NAME='iPhone SE'
+  - PLATFORM=tvOS NAME='Apple TV 1080p'
+  - PLATFORM=watchOS
+
+before_install:
+  - if [ -n "$NAME" ]; then
+      export UUID=$(instruments -s | ruby -e "ARGF.each_line{ |ln| ln =~ /$NAME .* \[(.*)\]/; if \$1; puts(\$1); exit; end }");
+    fi
 
 script:
-  - if [ -n "$UUID" ]; then xcrun instruments -w "$UUID" || true; sleep 15; fi
-  - set -o pipefail && xcodebuild -scheme PromiseKit -destination "$DST" $ACTION -enableCodeCoverage $COV | xcpretty
+  - set -o pipefail;
+    case $PLATFORM in
+    Mac)
+      xcodebuild -scheme PromiseKit -enableCodeCoverage YES test | xcpretty;;
+    iOS|tvOS)
+      xcrun instruments -w "$UUID" || true;
+      sleep 15;
+      xcodebuild -scheme PromiseKit -destination "id=$UUID" -enableCodeCoverage YES test | xcpretty;;
+    watchOS)
+      xcodebuild -scheme PromiseKit -destination "name=Apple Watch - 38mm" | xcpretty;;
+    esac
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
