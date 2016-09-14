@@ -180,10 +180,27 @@ Pod::Spec.new do |s|
     ss.dependency 'PromiseKit/CorePromise'
   end
 
+  picker_cc = 'Extensions/UIKit/Sources/UIImagePickerController+Promise.swift'
+  
   s.subspec 'UIKit' do |ss|
-    ss.ios.source_files = ss.tvos.source_files = 'Extensions/UIKit/Sources/*'
+    ss.ios.source_files = ss.tvos.source_files = Dir['Extensions/UIKit/Sources/*'] - [picker_cc]
     ss.tvos.frameworks = ss.ios.frameworks = 'UIKit'
     ss.dependency 'PromiseKit/CorePromise'
+  end
+
+  s.subspec 'UIImagePickerController' do |ss|
+    # Since iOS 10, App Store submissions that contain references to
+    # UIImagePickerController (even if unused in 3rd party libraries)
+    # are rejected unless an Info.plist key is specified, thus we
+    # moved this code to a sub-subspec.
+    #
+    # This *was* a subspec of UIKit, but bizarrely CocoaPods would
+    # include this when specifying *just* UIKit…!
+
+    ss.ios.source_files = picker_cc
+    ss.ios.frameworks = 'UIKit'
+    ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => '$(inherited) PMKImagePickerController=1' }
+    ss.dependency 'PromiseKit/UIKit'
   end
 
   s.subspec 'WatchConnectivity' do |ss|
