@@ -138,7 +138,7 @@ PromiseKit contains Swift, so we engage in an unending battle with Xcode:
 |   1   |   7   |      3     |       –      | [2015/10][news-3] |
 | *N/A* |   *   |      1†    | ![ci-legacy] |         –         |
 
-† PromiseKit 1 is pure Objective-C and thus can be used with any Xcode, it is
+† PromiseKit 1 is pure Objective-C and thus can be used with any Xcode. It is
 also your only choice if you need to support iOS 7 or below.
 
 ---
@@ -153,21 +153,21 @@ We also maintain some branches to aid migrating between Swift versions:
 |  7.1  |  2.1  | 2          | [swift-2.0-minimal-changes] | ![ci-20]  |
 |  7.0  |  2.0  | 2          | [swift-2.0-minimal-changes] | ![ci-20]  |
 
-We do **not** usually backport fixes to these branches, but pull-requests are welcome.
+We do **not** usually backport fixes to these branches, but pull requests are welcome.
 
 # Extensions
 
 Promises are only as useful as the asynchronous tasks they represent, thus we 
 have converted (almost) all of Apple’s APIs to Promises. The default CocoaPod
-comes with promises UIKit and Foundation, the rest are accessed by specifying
-additional subspecs in your `Podfile`, eg:
+comes with promises UIKit and Foundation; the rest are accessed by specifying
+additional subspecs in your `Podfile`, e.g.:
 
 ```ruby
 pod "PromiseKit/MapKit"        # MKDirections().promise().then { /*…*/ }
 pod "PromiseKit/CoreLocation"  # CLLocationManager.promise().then { /*…*/ }
 ```
 
-All our extensions are separate repositories at the [PromiseKit org ](https://github.com/PromiseKit).
+All our extensions are in separate repositories at the [PromiseKit org](https://github.com/PromiseKit).
 
 For Carthage specify the additional repositories in your `Cartfile`:
 
