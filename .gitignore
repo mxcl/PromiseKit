@@ -3,3 +3,4 @@
 /Carthage
 /Cartfile.resolved
 /.build
+.DS_Store
