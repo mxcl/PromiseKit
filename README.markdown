@@ -31,16 +31,9 @@ We recommend [CocoaPods] or [Carthage], however you can just drop `PromiseKit.xc
 ## Xcode 8 / Swift 3
 
 ```ruby
-# CocoaPods
+# CocoaPods >= 1.1.0-rc.2
+swift_version = "3.0"
 pod "PromiseKit", "~> 4.0"
-
-post_install do |installer|
-  installer.pods_project.targets.each do |target|
-    target.build_configurations.each do |config|
-      config.build_settings['SWIFT_VERSION'] = '3.0'
-    end
-  end
-end
 
 # Carthage
 github "mxcl/PromiseKit" ~> 4.0
@@ -57,6 +50,7 @@ let package = Package(
 
 ```ruby
 # CocoaPods
+swift_version = "2.3"
 pod "PromiseKit", "~> 3.5"
 
 # Carthage
