@@ -459,7 +459,7 @@ extension Promise where T: Collection {
      - Parameter transform: The closure that executes when this promise resolves.
      - Returns: A new promise, resolved with this promise’s resolution.
      */
-    public func map<U>(on: DispatchQueue = .default, _ transform: @escaping (T.Iterator.Element) throws -> Promise<U>) -> Promise<[U]> {
+    public func map<U>(on: DispatchQueue = .default, transform: @escaping (T.Iterator.Element) throws -> Promise<U>) -> Promise<[U]> {
         return Promise<[U]> { resolve in
             return state.then(on: zalgo, else: resolve) { tt in
                 when(fulfilled: try tt.map(transform)).state.pipe(resolve)
