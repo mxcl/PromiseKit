@@ -332,6 +332,9 @@ open class Promise<T> {
     @available(*, unavailable, renamed: "catch")
     public func report(policy: CatchPolicy = .allErrors, execute body: (Error) -> Void) { fatalError() }
 
+    @available(*, unavailable, renamed: "init(value:)")
+    public init(_ value: T) { fatalError() }
+
 //MARK: disallow `Promise<Error>`
 
     @available(*, unavailable, message: "cannot instantiate Promise<Error>")
