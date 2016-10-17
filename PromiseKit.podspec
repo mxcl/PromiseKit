@@ -199,7 +199,7 @@ Pod::Spec.new do |s|
 
     ss.ios.source_files = picker_cc
     ss.ios.frameworks = 'UIKit'
-    ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => '$(inherited) PMKImagePickerController=1' }
+    ss.ios.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => '$(inherited) PMKImagePickerController=1' }
     ss.dependency 'PromiseKit/UIKit'
   end
 
