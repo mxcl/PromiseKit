@@ -425,6 +425,15 @@ public enum Result<T> {
             self = .rejected(error)
         }
     }
+
+    public var boolValue: Bool {
+        switch self {
+        case .fulfilled:
+            return true
+        case .rejected:
+            return false
+        }
+    }
 }
 
 
