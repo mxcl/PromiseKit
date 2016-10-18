@@ -27,7 +27,7 @@ public enum PMKError: Error {
     case castError(Any.Type)
 }
 
-public enum URLError: Error {
+public enum PMKURLError: Error {
     /**
      The URLRequest succeeded but a valid UIImage could not be decoded from
      the data that was received.
