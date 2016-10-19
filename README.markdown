@@ -6,7 +6,7 @@ Modern development is highly asynchronous: isn’t it about time we had tools th
 made programming asynchronously powerful, easy and delightful?
 
 ```swift
-UIApplication.shared.networkActivityIndicatorVisible = true
+UIApplication.shared.isNetworkActivityIndicatorVisible = true
 
 firstly {
     when(URLSession.dataTask(with: url).asImage(), CLLocationManager.promise())
@@ -14,7 +14,7 @@ firstly {
     self.imageView.image = image;
     self.label.text = "\(location)"
 }.always {
-    UIApplication.shared.networkActivityIndicatorVisible = false
+    UIApplication.shared.isNetworkActivityIndicatorVisible = false
 }.catch { error in
     UIAlertView(/*…*/).show()
 }
