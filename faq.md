@@ -13,42 +13,14 @@ redirect_from:
  - "/glossary/"
 ---
 
-## Where can I get help?
-
-* Visit our [Gitter](https://gitter.im/mxcl/PromiseKit?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge) channel.
-* [Ask on GitHub](https://github.com/mxcl/PromiseKit/issues/new).
-
-## How do I install and make use of PromiseKit?
-
-The easiest option is to use the [CocoaPods app](https://cocoapods.org/app) and then add this to your `Podfile`:
-
-```ruby
-pod "PromiseKit", "~> 3.5"  #Xcode 7
-pod "PromiseKit", branch: "swift-3.0"  # Xcode 8
-```
-
-For other options, see our comprehensive [README](https://github.com/mxcl/PromiseKit/blob/master/README.markdown).
-
-## Can I use PromiseKit with Objective-C as well as Swift?
-
-PromiseKit has two promise classes:
-
-* `Promise<T>` (Swift)
-* `AnyPromise` (Objective-C)
-
-Each is designed to be an approproate promise implementation for the strong points of its language:
-
-* `Promise<T>` is strict, defined and precise.
-* `AnyPromise` is loose, flexible and dynamic.
-
-Unlike most libraries we have extensive bridging support, you can use PromiseKit in mixed projects with mixed language targets and mixed language libraries.
-
 ## Why won’t my `then` compile?
 
 You’re seeing errors like:
 
 > Cannot convert return expression of type `…` to return type `AnyPromise`
->
+
+Or:
+
 > Missing return in a closure expected to return `AnyPromise`
 
 In Swift simple closures are inferred, so this works fine:
@@ -83,9 +55,39 @@ authPromise().then { authResult -> Promise<CLLocation> in
 }
 ```
 
-Swift will claim you should return `AnyPromise` but this is just the first
-option it sees for `Promise.then`, almost always you don’t want to return
-`AnyPromise`.
+Swift will claim you should return `AnyPromise` but this is a compiler error bug, it should
+say “*Unable to infer return type `T' for closure*”, the bug is because the Promise is a generic
+class and the generic type is part of the signature for all `then` functions.
+
+We attempted many hours to improve this situation since it is by far the most common issue
+people run into, Swift usually does not require you to specify the return type for closures
+that have a non-generic return type. Unfortunately this situation could not be improved by
+any modification to the `then` signature we could think up.
+
+## How do I install and make use of PromiseKit?
+
+The easiest option is to use the [CocoaPods app](https://cocoapods.org/app) and then add this to your `Podfile`:
+
+```ruby
+pod "PromiseKit", "~> 3.5"  #Xcode 7
+pod "PromiseKit", branch: "swift-3.0"  # Xcode 8
+```
+
+For other options, see our comprehensive [README](https://github.com/mxcl/PromiseKit/blob/master/README.markdown).
+
+## Can I use PromiseKit with Objective-C as well as Swift?
+
+PromiseKit has two promise classes:
+
+* `Promise<T>` (Swift)
+* `AnyPromise` (Objective-C)
+
+Each is designed to be an approproate promise implementation for the strong points of its language:
+
+* `Promise<T>` is strict, defined and precise.
+* `AnyPromise` is loose, flexible and dynamic.
+
+Unlike most libraries we have extensive bridging support, you can use PromiseKit in mixed projects with mixed language targets and mixed language libraries.
 
 ## Which PromiseKit Should I Use?
 
