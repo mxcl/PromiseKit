@@ -20,7 +20,7 @@ private func _when<T>(_ promises: [Promise<T>]) -> Promise<Void> {
 
     for promise in promises {
         promise.state.pipe { resolution in
-            __dispatch_barrier_sync(barrier) {
+            barrier.sync(flags: .barrier) {
                 switch resolution {
                 case .rejected(let error, let token):
                     token.consumed = true
@@ -145,7 +145,7 @@ public func when<T, PromiseIterator: IteratorProtocol>(fulfilled promiseIterator
         var index: Int!
         var promise: Promise<T>!
 
-        __dispatch_barrier_sync(barrier) {
+        barrier.sync(flags: .barrier) {
             guard let next = generator.next() else { return }
 
             promise = next
@@ -168,7 +168,7 @@ public func when<T, PromiseIterator: IteratorProtocol>(fulfilled promiseIterator
         }
 
         promise.state.pipe { resolution in
-            __dispatch_barrier_sync(barrier) {
+            barrier.sync(flags: .barrier) {
                 pendingPromises -= 1
             }
 
@@ -225,7 +225,7 @@ public func when<T>(resolved promises: [Promise<T>]) -> Promise<[Result<T>]> {
                     token.consumed = true  // all errors are implicitly consumed
                 }
                 var done = false
-                __dispatch_barrier_sync(barrier) {
+                barrier.sync(flags: .barrier) {
                     countdown -= 1
                     done = countdown == 0
                 }
