@@ -17,7 +17,7 @@ import func Foundation.NSLog
 
  - SeeAlso: [PromiseKit `then` Guide](http://promisekit.org/docs/)
  */
-open class Promise<T> {
+public class Promise<T> {
     let state: State<T>
 
     /**
