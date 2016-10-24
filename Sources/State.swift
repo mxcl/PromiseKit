@@ -39,7 +39,7 @@ class State<T> {
         pipe { resolution in
             switch resolution {
             case .fulfilled(let value):
-                contain_zalgo(q, rejecter: rejecter) {
+                q.containZalgo(rejecter: rejecter) {
                     try body(value)
                 }
             case .rejected(let error, let token):
@@ -50,7 +50,7 @@ class State<T> {
 
     final func always(on q: DispatchQueue, body: @escaping (Resolution<T>) -> Void) {
         pipe { resolution in
-            contain_zalgo(q) {
+            q.containZalgo {
                 body(resolution)
             }
         }
@@ -64,7 +64,7 @@ class State<T> {
             case (.rejected(let error, _), .allErrorsExceptCancellation) where error.isCancelledError:
                 resolve(resolution)
             case (let .rejected(error, token), _):
-                contain_zalgo(q, rejecter: resolve) {
+                q.containZalgo(rejecter: resolve) {
                     token.consumed = true
                     try body(error)
                 }

@@ -35,8 +35,8 @@ open class Promise<T> {
          }
 
      - Parameter resolvers: The provided closure is called immediately on the active thread; commence your asynchronous task, calling either fulfill or reject when it completes.
-      - Parameter fulfill: Fulfills this promise with the provided value.
-      - Parameter reject: Rejects this promise with the provided error.
+     - Parameter fulfill: Fulfills this promise with the provided value.
+     - Parameter reject: Rejects this promise with the provided error.
 
      - Returns: A new promise.
 
