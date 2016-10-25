@@ -39,7 +39,7 @@ public func wrap<T>(_ body: (@escaping (T, Error?) -> Void) throws -> Void) -> P
     }
 }
 
-/// Some APIs unwiesly invert the Cocoa standard for completion-handlers.
+/// Some APIs unwisely invert the Cocoa standard for completion-handlers.
 public func wrap<T>(_ body: (@escaping (Error?, T?) -> Void) throws -> Void) -> Promise<T> {
     return Promise { fulfill, reject in
         try body { err, obj in

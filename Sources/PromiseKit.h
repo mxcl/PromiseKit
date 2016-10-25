@@ -54,7 +54,7 @@ extern AnyPromise * __nonnull PMKAfter(NSTimeInterval duration) NS_REFINED_FOR_S
         //…
     });
 
- @warning *Important* In the event of rejection the other promises will continue to resolve and as per any other promise will eithe fulfill or reject. This is the right pattern for `getter` style asynchronous tasks, but often for `setter` tasks (eg. storing data on a server), you most likely will need to wait on all tasks and then act based on which have succeeded and which have failed. In such situations use `PMKJoin`.
+ @warning *Important* In the event of rejection the other promises will continue to resolve and as per any other promise will either fulfill or reject. This is the right pattern for `getter` style asynchronous tasks, but often for `setter` tasks (eg. storing data on a server), you most likely will need to wait on all tasks and then act based on which have succeeded and which have failed. In such situations use `PMKJoin`.
 
  @param input The input upon which to wait before resolving this promise.
 
