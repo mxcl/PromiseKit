@@ -35,8 +35,8 @@ open class Promise<T> {
          }
 
      - Parameter resolvers: The provided closure is called immediately on the active thread; commence your asynchronous task, calling either fulfill or reject when it completes.
-      - Parameter fulfill: Fulfills this promise with the provided value.
-      - Parameter reject: Rejects this promise with the provided error.
+     - Parameter fulfill: Fulfills this promise with the provided value.
+     - Parameter reject: Rejects this promise with the provided error.
 
      - Returns: A new promise.
 
@@ -275,7 +275,7 @@ open class Promise<T> {
     }
 
     /**
-     `tap` allows you to “tap” into a promise chain and inspect its result.
+     Allows you to “tap” into a promise chain and inspect its result.
      
      The function you provide cannot mutate the chain.
  
@@ -401,6 +401,9 @@ public func firstly<T: Error>(execute body: () throws -> T) -> Promise<T> { fata
 @available(*, unavailable, message: "use DispatchQueue.promise")
 public func firstly<T>(on: DispatchQueue, execute body: () throws -> Promise<T>) -> Promise<T> { fatalError() }
 
+/**
+ - SeeAlso: `DispatchQueue.promise(group:qos:flags:execute:)`
+ */
 @available(*, deprecated: 4.0, renamed: "DispatchQueue.promise")
 public func dispatch_promise<T>(_ on: DispatchQueue, _ body: @escaping () throws -> T) -> Promise<T> {
     return Promise(value: ()).then(on: on, execute: body)
@@ -409,7 +412,7 @@ public func dispatch_promise<T>(_ on: DispatchQueue, _ body: @escaping () throws
 
 /**
  The underlying resolved state of a promise.
- - remark: Same as `Resolution<T>` but without the associated `ErrorConsumptionToken`.
+ - Remark: Same as `Resolution<T>` but without the associated `ErrorConsumptionToken`.
 */
 public enum Result<T> {
     /// Fulfillment
@@ -426,6 +429,9 @@ public enum Result<T> {
         }
     }
 
+    /**
+     - Returns: `true` if the result is `fulfilled` or `false` if it is `rejected`.
+     */
     public var boolValue: Bool {
         switch self {
         case .fulfilled:
@@ -436,18 +442,62 @@ public enum Result<T> {
     }
 }
 
+/**
+ An object produced by `Promise.joint()`, along with a promise to which it is bound.
 
+ Joining with a promise via `Promise.join(_:)` will pipe the resolution of that promise to
+ the joint's bound promise.
+
+ - SeeAlso: `Promise.joint()`
+ - SeeAlso: `Promise.join(_:)`
+ */
 public class PMKJoint<T> {
     fileprivate var resolve: ((Resolution<T>) -> Void)!
 }
 
 extension Promise {
-    public final class func joint() -> (Promise<T>, (PMKJoint<T>)) {
+    /**
+     Provides a safe way to instantiate a `Promise` and resolve it later via its joint and another
+     promise.
+
+         class Engine {
+            static func make() -> Promise<Engine> {
+                let (enginePromise, joint) = Promise<Engine>.joint()
+                let cylinder: Cylinder = Cylinder(explodeAction: {
+
+                    // We *could* use an IUO, but there are no guarantees about when
+                    // this callback will be called. Having an actual promise is safe.
+
+                    enginePromise.then { engine in
+                        engine.checkOilPressure()
+                    }
+                })
+
+                firstly {
+                    Ignition.default.start()
+                }.then { plugs in
+                    Engine(cylinders: [cylinder], sparkPlugs: plugs)
+                }.join(joint)
+
+                return enginePromise
+            }
+         }
+
+     - Returns: A new promise and its joint.
+     - SeeAlso: `Promise.join(_:)`
+     */
+    public final class func joint() -> (Promise<T>, PMKJoint<T>) {
         let pipe = PMKJoint<T>()
         let promise = Promise(sealant: { pipe.resolve = $0 })
         return (promise, pipe)
     }
 
+    /**
+     Pipes the value of this promise to the promise created with the joint.
+
+     - Parameter joint: The joint on which to join.
+     - SeeAlso: `Promise.joint()`
+     */
     public func join(_ joint: PMKJoint<T>) {
         state.pipe(joint.resolve)
     }
@@ -456,7 +506,7 @@ extension Promise {
 
 extension Promise where T: Collection {
     /**
-     `map` transforms a `Promise` where `T` is a `Collection`, eg. an `Array` returning a `Promise<[U]>`
+     Transforms a `Promise` where `T` is a `Collection` into a `Promise<[U]>`
 
          URLSession.shared.dataTask(url: /*…*/).asArray().map { result in
              return download(result)
