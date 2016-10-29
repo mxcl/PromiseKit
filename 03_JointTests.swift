@@ -2,7 +2,7 @@ import PromiseKit
 import XCTest
 
 class JointTests: XCTestCase {
-    func testJointPiping() {
+    func testPiping() {
         let (promise, joint) = Promise<Int>.joint()
 
         XCTAssert(promise.isPending)
@@ -13,7 +13,7 @@ class JointTests: XCTestCase {
         XCTAssertEqual(3, promise.value)
     }
 
-    func testJointPipingPending() {
+    func testPipingPending() {
         let (promise, joint) = Promise<Int>.joint()
 
         XCTAssert(promise.isPending)
@@ -26,7 +26,7 @@ class JointTests: XCTestCase {
         XCTAssertEqual(3, promise.value)
     }
 
-    func testJointCallback() {
+    func testCallback() {
         let ex = expectation(description: "")
 
         let (promise, joint) = Promise<Void>.joint()
@@ -37,7 +37,7 @@ class JointTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
-    func testJointCallbackPending() {
+    func testCallbackPending() {
         let ex = expectation(description: "")
 
         let (promise, joint) = Promise<Void>.joint()

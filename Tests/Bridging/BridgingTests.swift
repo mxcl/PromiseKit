@@ -121,6 +121,26 @@ class BridgingTests: XCTestCase {
         XCTAssertEqual(PMKDummyAnyPromise_YES().asPromise().value as? NSNumber, NSNumber(value: true))
     }
 
+    func testFirstlyReturningAnyPromiseSuccess() {
+        let ex = expectation(description: "")
+        firstly {
+            PMKDummyAnyPromise_Error()
+        }.catch { error in
+            ex.fulfill()
+        }
+        waitForExpectations(timeout: 1)
+    }
+
+    func testFirstlyReturningAnyPromiseError() {
+        let ex = expectation(description: "")
+        firstly {
+            PMKDummyAnyPromise_YES()
+        }.then { _ in
+            ex.fulfill()
+        }
+        waitForExpectations(timeout: 1)
+    }
+
     func test1() {
         let ex = expectation(description: "")
 
