@@ -7,8 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		49A5583D1DC33BD000E4D01B /* 03_JointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A5583B1DC33BC800E4D01B /* 03_JointTests.swift */; };
 		49A5584D1DC5185900E4D01B /* 03_WrapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A5584B1DC5172F00E4D01B /* 03_WrapTests.swift */; };
+		49A5583D1DC33BD000E4D01B /* 03_PendingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A5583B1DC33BC800E4D01B /* 03_PendingTests.swift */; };
 		6314112B1D5978D700E24B9E /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B0AC571D595E1B00FA21D9 /* PromiseKit.framework */; };
 		631411311D5978EB00E24B9E /* PMKDefaultDispatchQueueTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D641B1D59635300BC0AF5 /* PMKDefaultDispatchQueueTest.swift */; };
 		631411381D59795700E24B9E /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B0AC571D595E1B00FA21D9 /* PromiseKit.framework */; };
@@ -106,8 +106,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		49A5583B1DC33BC800E4D01B /* 03_JointTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = 03_JointTests.swift; sourceTree = "<group>"; };
 		49A5584B1DC5172F00E4D01B /* 03_WrapTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = 03_WrapTests.swift; sourceTree = "<group>"; };
+		49A5583B1DC33BC800E4D01B /* 03_PendingTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = 03_PendingTests.swift; sourceTree = "<group>"; };
 		630019221D596292003B4E30 /* PMKCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PMKCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6314112F1D5978D700E24B9E /* PMKDispatchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PMKDispatchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6314113C1D59795700E24B9E /* PMKBridgeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PMKBridgeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -257,7 +257,7 @@
 				635D640F1D59635300BC0AF5 /* 03_HangTests.m */,
 				635D64101D59635300BC0AF5 /* 03_JoinTests.m */,
 				635D64111D59635300BC0AF5 /* 03_JoinTests.swift */,
-				49A5583B1DC33BC800E4D01B /* 03_JointTests.swift */,
+				49A5583B1DC33BC800E4D01B /* 03_PendingTests.swift */,
 				635D64121D59635300BC0AF5 /* 03_RaceTests.swift */,
 				635D64131D59635300BC0AF5 /* 03_WhenConcurrentTests.swift */,
 				635D64141D59635300BC0AF5 /* 03_WhenTests.m */,
@@ -544,7 +544,7 @@
 			files = (
 				635D641E1D59635300BC0AF5 /* 02_CancellationTests.swift in Sources */,
 				635D64201D59635300BC0AF5 /* 02_ErrorUnhandlerTests.swift in Sources */,
-				49A5583D1DC33BD000E4D01B /* 03_JointTests.swift in Sources */,
+				49A5583D1DC33BD000E4D01B /* 03_PendingTests.swift in Sources */,
 				635D64221D59635300BC0AF5 /* 02_ZalgoTests.swift in Sources */,
 				635D64211D59635300BC0AF5 /* 02_PMKManifoldTests.m in Sources */,
 				635D64251D59635300BC0AF5 /* 03_JoinTests.m in Sources */,
