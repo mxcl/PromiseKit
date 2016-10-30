@@ -131,6 +131,44 @@ open class Promise<T> {
     }
 
     /**
+     Provides a safe way to instantiate a `Promise` and resolve it later via the provided pipe and
+     another promise.
+
+         class Engine {
+            static func make() -> Promise<Engine> {
+                let (enginePromise, pipe) = Promise<Engine>.pending()
+                let cylinder: Cylinder = Cylinder(explodeAction: {
+
+                    // We *could* use an IUO, but there are no guarantees about when
+                    // this callback will be called. Having an actual promise is safe.
+
+                    enginePromise.then { engine in
+                        engine.checkOilPressure()
+                    }
+                })
+
+                pipe(
+                    firstly {
+                        Ignition.default.start()
+                    }.then { plugs in
+                        Engine(cylinders: [cylinder], sparkPlugs: plugs)
+                    }
+                )
+
+                return enginePromise
+            }
+         }
+
+     - Returns: A pending promise and its pipe.
+     */
+    public final class func pendingWithPipe() -> (Promise<T>, (Promise<T>) -> Void) {
+        var resolve: ((Resolution<T>) -> Void)!
+        let pipe: (Promise<T>) -> Void = { $0.state.pipe(resolve) }
+        let promise = Promise(sealant: { resolve = $0 })
+        return (promise, pipe)
+    }
+
+    /**
      The provided closure is executed when this promise is resolved.
 
      - Parameter on: The queue to which the provided closure dispatches.
@@ -439,67 +477,6 @@ public enum Result<T> {
         case .rejected:
             return false
         }
-    }
-}
-
-/**
- An object produced by `Promise.joint()`, along with a promise to which it is bound.
-
- Joining with a promise via `Promise.join(_:)` will pipe the resolution of that promise to
- the joint's bound promise.
-
- - SeeAlso: `Promise.joint()`
- - SeeAlso: `Promise.join(_:)`
- */
-public class PMKJoint<T> {
-    fileprivate var resolve: ((Resolution<T>) -> Void)!
-}
-
-extension Promise {
-    /**
-     Provides a safe way to instantiate a `Promise` and resolve it later via its joint and another
-     promise.
-
-         class Engine {
-            static func make() -> Promise<Engine> {
-                let (enginePromise, joint) = Promise<Engine>.joint()
-                let cylinder: Cylinder = Cylinder(explodeAction: {
-
-                    // We *could* use an IUO, but there are no guarantees about when
-                    // this callback will be called. Having an actual promise is safe.
-
-                    enginePromise.then { engine in
-                        engine.checkOilPressure()
-                    }
-                })
-
-                firstly {
-                    Ignition.default.start()
-                }.then { plugs in
-                    Engine(cylinders: [cylinder], sparkPlugs: plugs)
-                }.join(joint)
-
-                return enginePromise
-            }
-         }
-
-     - Returns: A new promise and its joint.
-     - SeeAlso: `Promise.join(_:)`
-     */
-    public final class func joint() -> (Promise<T>, PMKJoint<T>) {
-        let pipe = PMKJoint<T>()
-        let promise = Promise(sealant: { pipe.resolve = $0 })
-        return (promise, pipe)
-    }
-
-    /**
-     Pipes the value of this promise to the promise created with the joint.
-
-     - Parameter joint: The joint on which to join.
-     - SeeAlso: `Promise.joint()`
-     */
-    public func join(_ joint: PMKJoint<T>) {
-        state.pipe(joint.resolve)
     }
 }
 
