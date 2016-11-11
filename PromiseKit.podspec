@@ -140,7 +140,7 @@ Pod::Spec.new do |s|
     ss.ios.source_files = 'Categories/Social/*'
     ss.osx.source_files = Dir['Categories/Social/*'] - ['Categories/Social/SLComposeViewController+Promise.swift']
     ss.dependency 'PromiseKit/CorePromise'
-    ss.frameworks = 'Social'
+    ss.ios.frameworks = ss.osx.frameworks = 'Social'
   end
 
   s.subspec 'StoreKit' do |ss|
