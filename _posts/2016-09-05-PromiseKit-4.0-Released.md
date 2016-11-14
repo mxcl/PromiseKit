@@ -93,3 +93,11 @@ PromiseKit no longer comes with `NSURLConnection`, `UIAlertView`, etc. extension
 ## The PromiseKit Organization
 
 PromiseKit extensions are now grouped at the [PromiseKit GitHub organization](https://github.com/PromiseKit) to facilitate better testing, easier contribution and more sensible responsibility divisions.
+
+
+# Gotchas
+
+* `after()` becomes `after(interval: )` (mimicking Swift 3 API changes)
+* `recover`, `then`, etc. no longer take a variable closure with no argument, that is `then(foo)` will now be: `then(execute: foo)`
+* `thenInBackground` is deprecated, instead do `then(on: .global())`
+* `error` is again `catch`
