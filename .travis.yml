@@ -18,8 +18,7 @@ script:
     Mac)
       xcodebuild -scheme PromiseKit -enableCodeCoverage YES test | xcpretty;;
     iOS|tvOS)
-      xcrun instruments -w "$UUID" || true;
-      sleep 15;
+      open -a "simulator" --args -CurrentDeviceUDID "$UUID"
       xcodebuild -scheme PromiseKit -destination "id=$UUID" -enableCodeCoverage YES test | xcpretty;;
     watchOS)
       xcodebuild -scheme PromiseKit -destination "name=Apple Watch - 38mm" | xcpretty;;
