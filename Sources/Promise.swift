@@ -222,7 +222,9 @@ open class Promise<T> {
         return Promise<U> { resolve in
             state.then(on: q, else: resolve) { value in
                 let promise = try body(value)
-                when(promise).state.pipe(resolve)
+
+                // since when(promise) switches to `zalgo`, we have to pipe back to `q`
+                when(promise).state.pipe(on: q, to: resolve)
             }
         }
     }
