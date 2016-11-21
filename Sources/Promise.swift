@@ -199,46 +199,32 @@ open class Promise<T> {
            }
      */
     public func then<U, V>(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> (Promise<U>, Promise<V>)) -> Promise<(U, V)> {
-        var rv: Promise<(U, V)>!
-        rv = Promise<(U, V)> { resolve in
-            state.then(on: q, else: resolve) { value in
-                let (promiseU, promiseV) = try body(value)
-                guard promiseU !== rv && promiseV !== rv else { throw PMKError.returnedSelf }
-                when(fulfilled: promiseU, promiseV).state.pipe(resolve)
-            }
-        }
-        return rv
+        return then(on: q, execute: body) { when(fulfilled: $0.0, $0.1) }
     }
 
-    /**
-     The provided closure executes when this promise resolves.
-
-     This variant of `then` allows returning a tuple of promises within provided closure. All of the returned
-     promises needs be fulfilled for this promise to be marked as resolved.
-
-     - Note: At maximum 3 promises may be returned in a tuple
-     - Note: If *any* of the tuple-provided promises reject, the returned promise is immediately rejected with that error.
-     - Warning: In the event of rejection the other promises will continue to resolve and, as per any other promise, will either fulfill or reject.
-     - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter execute: The closure that executes when this promise fulfills.
-     - Returns: A new promise that resolves when all promises returned from the provided closure resolve. For example:
-
-           loginPromise.then { _ -> (Promise<Data>, Promise<Data>, Promise<UIImage>)
-               return (URLSession.GET(userUrl), URLSession.GET(sessionUrl), URLSession.dataTask(with: avatarUrl).asImage())
-           }.then { userData, sessionData, avatarImage in
-               //…
-           }
-     */
+    /// This variant of `then` allows returning a tuple of promises within provided closure.
     public func then<U, V, X>(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> (Promise<U>, Promise<V>, Promise<X>)) -> Promise<(U, V, X)> {
-        var rv: Promise<(U, V, X)>!
-        rv = Promise<(U, V, X)> { resolve in
+        return then(on: q, execute: body) { when(fulfilled: $0.0, $0.1, $0.2) }
+    }
+
+    /// This variant of `then` allows returning a tuple of promises within provided closure.
+    public func then<U, V, X, Y>(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> (Promise<U>, Promise<V>, Promise<X>, Promise<Y>)) -> Promise<(U, V, X, Y)> {
+        return then(on: q, execute: body) { when(fulfilled: $0.0, $0.1, $0.2, $0.3) }
+    }
+
+    /// This variant of `then` allows returning a tuple of promises within provided closure.
+    public func then<U, V, X, Y, Z>(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> (Promise<U>, Promise<V>, Promise<X>, Promise<Y>, Promise<Z>)) -> Promise<(U, V, X, Y, Z)> {
+        return then(on: q, execute: body) { when(fulfilled: $0.0, $0.1, $0.2, $0.3, $0.4) }
+    }
+
+    ///
+    private func then<U, V>(on q: DispatchQueue, execute body: @escaping (T) throws -> V, when: @escaping (V) -> Promise<U>) -> Promise<U> {
+        return Promise<U> { resolve in
             state.then(on: q, else: resolve) { value in
-                let (promiseU, promiseV, promiseX) = try body(value)
-                guard promiseU !== rv && promiseV !== rv && promiseX !== rv else { throw PMKError.returnedSelf }
-                when(fulfilled: promiseU, promiseV, promiseX).state.pipe(resolve)
+                let promise = try body(value)
+                when(promise).state.pipe(resolve)
             }
         }
-        return rv
     }
 
     /**
