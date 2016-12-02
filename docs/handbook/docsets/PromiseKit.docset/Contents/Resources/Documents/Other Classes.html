@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Other Enums  Reference</title>
+    <title>Other Classes  Reference</title>
     <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="css/highlight.css" />
     <meta charset="utf-8">
@@ -12,7 +12,7 @@
   <body>
 
 
-    <a title="Other Enums  Reference"></a>
+    <a title="Other Classes  Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -40,7 +40,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="index.html">PromiseKit Reference</a>
       <img class="carat" src="img/carat.png" />
-      Other Enums  Reference
+      Other Classes  Reference
     </p>
 
     <div class="content-wrapper">
@@ -155,8 +155,8 @@
 
         <section class="section">
           <div class="section-content">
-            <h1>Other Enums</h1>
-            <p>The following enums are available globally.</p>
+            <h1>Other Classes</h1>
+            <p>The following classes are available globally.</p>
 
           </div>
         </section>
@@ -168,9 +168,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:O10PromiseKit6Result"></a>
-                    <a name="//apple_ref/swift/Enum/Result" class="dashAnchor"></a>
-                    <a class="token" href="#/s:O10PromiseKit6Result">Result</a>
+                    <a name="/s:C10PromiseKit8PMKJoint"></a>
+                    <a name="//apple_ref/swift/Class/PMKJoint" class="dashAnchor"></a>
+                    <a class="token" href="#/s:C10PromiseKit8PMKJoint">PMKJoint</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -178,16 +178,29 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The underlying resolved state of a promise.
-- Remark: Same as <code>Resolution&lt;T&gt;</code> but without the associated <code>ErrorConsumptionToken</code>.</p>
+                        <p>An object produced by <code><a href="Classes/Promise.html#/s:ZFC10PromiseKit7Promise5jointFT_TGS0_x_GCS_8PMKJointx__">Promise.joint()</a></code>, along with a promise to which it is bound.</p>
 
-                        <a href="Enums/Result.html" class="slightly-smaller">See more</a>
+<p>Joining with a promise via <code><a href="Classes/Promise.html#/s:FC10PromiseKit7Promise4joinFGCS_8PMKJointx_T_">Promise.join(_:)</a></code> will pipe the resolution of that promise to
+the joint&rsquo;s bound promise.</p>
+
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <code><a href="Classes/Promise.html#/s:ZFC10PromiseKit7Promise5jointFT_TGS0_x_GCS_8PMKJointx__">Promise.joint()</a></code>
+
+</div>
+
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <code><a href="Classes/Promise.html#/s:FC10PromiseKit7Promise4joinFGCS_8PMKJointx_T_">Promise.join(_:)</a></code>
+
+</div>
+
                       </div>
                       <div class="declaration">
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Result</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">PMKJoint</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
