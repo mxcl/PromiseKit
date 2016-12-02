@@ -117,6 +117,20 @@ func avatar() -> Promise<UIImage> {
 }
 ```
 
+You can easily create a new, pending promise.
+```
+func fetchAvatar(user: String) -> Promise<UIImage> {
+    return Promise { fulfill, reject in
+        MyWebHelper.GET("\(user)/avatar") { data, err in
+            guard let data = data else { return reject(err) }
+            guard let img = UIImage(data: data) else { return reject(MyError.InvalidImage) }
+            guard let img.size.width > 0 else { return reject(MyError.ImageTooSmall) }
+            fulfill(img)
+        }
+    }
+}
+```
+
 ## Continue Learning…
 
 Complete and progressive learning guide at [promisekit.org].
