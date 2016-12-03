@@ -69,6 +69,8 @@ open class Promise<T> {
 
     /**
      Create an already fulfilled promise.
+    
+     To create a resolved `Void` promise, do: `Promise(value: ())`
      */
     required public init(value: T) {
         state = SealedState(resolution: .fulfilled(value))
