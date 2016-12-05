@@ -118,7 +118,7 @@ func avatar() -> Promise<UIImage> {
 ```
 
 You can easily create a new, pending promise.
-```
+```swift
 func fetchAvatar(user: String) -> Promise<UIImage> {
     return Promise { fulfill, reject in
         MyWebHelper.GET("\(user)/avatar") { data, err in
