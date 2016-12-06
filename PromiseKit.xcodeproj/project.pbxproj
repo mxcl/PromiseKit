@@ -9,6 +9,7 @@
 /* Begin PBXBuildFile section */
 		49A5583D1DC33BD000E4D01B /* 03_JointTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A5583B1DC33BC800E4D01B /* 03_JointTests.swift */; };
 		49A5584D1DC5185900E4D01B /* 03_WrapTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A5584B1DC5172F00E4D01B /* 03_WrapTests.swift */; };
+		5CEBAEDBCFC8EEA3C9059EAC /* 05_PromiseTupleTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5CEBA3A1969A7992F3379177 /* 05_PromiseTupleTests.swift */; };
 		6314112B1D5978D700E24B9E /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B0AC571D595E1B00FA21D9 /* PromiseKit.framework */; };
 		631411311D5978EB00E24B9E /* PMKDefaultDispatchQueueTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D641B1D59635300BC0AF5 /* PMKDefaultDispatchQueueTest.swift */; };
 		631411381D59795700E24B9E /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B0AC571D595E1B00FA21D9 /* PromiseKit.framework */; };
@@ -108,6 +109,7 @@
 /* Begin PBXFileReference section */
 		49A5583B1DC33BC800E4D01B /* 03_JointTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = 03_JointTests.swift; path = Tests/CorePromise/03_JointTests.swift; sourceTree = "<group>"; };
 		49A5584B1DC5172F00E4D01B /* 03_WrapTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = 03_WrapTests.swift; path = Tests/CorePromise/03_WrapTests.swift; sourceTree = "<group>"; };
+		5CEBA3A1969A7992F3379177 /* 05_PromiseTupleTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = 05_PromiseTupleTests.swift; path = Tests/CorePromise/05_PromiseTupleTests.swift; sourceTree = "<group>"; };
 		630019221D596292003B4E30 /* PMKCoreTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PMKCoreTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6314112F1D5978D700E24B9E /* PMKDispatchTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PMKDispatchTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		6314113C1D59795700E24B9E /* PMKBridgeTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = PMKBridgeTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -269,6 +271,7 @@
 				635D64181D59635300BC0AF5 /* Infrastructure.h */,
 				635D64191D59635300BC0AF5 /* Infrastructure.m */,
 				635D641A1D59635300BC0AF5 /* Infrastructure.swift */,
+				5CEBA3A1969A7992F3379177 /* 05_PromiseTupleTests.swift */,
 			);
 			name = Core;
 			sourceTree = "<group>";
@@ -564,6 +567,7 @@
 				635D642C1D59635300BC0AF5 /* 99_RegressionTests.swift in Sources */,
 				635D641C1D59635300BC0AF5 /* 01_AnyPromiseTests.m in Sources */,
 				635D642E1D59635300BC0AF5 /* Infrastructure.swift in Sources */,
+				5CEBAEDBCFC8EEA3C9059EAC /* 05_PromiseTupleTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

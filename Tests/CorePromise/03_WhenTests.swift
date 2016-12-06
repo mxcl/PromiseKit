@@ -30,13 +30,61 @@ class WhenTests: XCTestCase {
         waitForExpectations(timeout: 1, handler: nil)
     }
 
-    func testTuple() {
+    func testDoubleTuple() {
         let e1 = expectation(description: "")
         let p1 = Promise(value: 1)
         let p2 = Promise(value: "abc")
-        when(fulfilled: p1, p2).then{ (x: Int, y: String) -> Void in
+        when(fulfilled: p1, p2).then{ x, y -> Void in
             XCTAssertEqual(x, 1)
             XCTAssertEqual(y, "abc")
+            e1.fulfill()
+        }
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+
+    func testTripleTuple() {
+        let e1 = expectation(description: "")
+        let p1 = Promise(value: 1)
+        let p2 = Promise(value: "abc")
+        let p3 = Promise(value: 1.0)
+        when(fulfilled: p1, p2, p3).then { u, v, w -> Void in
+            XCTAssertEqual(1, u)
+            XCTAssertEqual("abc", v)
+            XCTAssertEqual(1.0, w)
+            e1.fulfill()
+        }
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+
+    func testQuadrupleTuple() {
+        let e1 = expectation(description: "")
+        let p1 = Promise(value: 1)
+        let p2 = Promise(value: "abc")
+        let p3 = Promise(value: 1.0)
+        let p4 = Promise(value: true)
+        when(fulfilled: p1, p2, p3, p4).then { u, v, w, x -> Void in
+            XCTAssertEqual(1, u)
+            XCTAssertEqual("abc", v)
+            XCTAssertEqual(1.0, w)
+            XCTAssertEqual(true, x)
+            e1.fulfill()
+        }
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+
+    func testQuintupleTuple() {
+        let e1 = expectation(description: "")
+        let p1 = Promise(value: 1)
+        let p2 = Promise(value: "abc")
+        let p3 = Promise(value: 1.0)
+        let p4 = Promise(value: true)
+        let p5 = Promise(value: "a" as Character)
+        when(fulfilled: p1, p2, p3, p4, p5).then { u, v, w, x, y -> Void in
+            XCTAssertEqual(1, u)
+            XCTAssertEqual("abc", v)
+            XCTAssertEqual(1.0, w)
+            XCTAssertEqual(true, x)
+            XCTAssertEqual("a" as Character, y)
             e1.fulfill()
         }
         waitForExpectations(timeout: 1, handler: nil)

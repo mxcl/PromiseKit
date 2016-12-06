@@ -182,6 +182,56 @@ open class Promise<T> {
     }
 
     /**
+     The provided closure executes when this promise resolves.
+
+     This variant of `then` allows returning a tuple of promises within provided closure. All of the returned
+     promises needs be fulfilled for this promise to be marked as resolved.
+
+     - Note: At maximum 5 promises may be returned in a tuple
+     - Note: If *any* of the tuple-provided promises reject, the returned promise is immediately rejected with that error.
+     - Warning: In the event of rejection the other promises will continue to resolve and, as per any other promise, will either fulfill or reject.
+     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter execute: The closure that executes when this promise fulfills.
+     - Returns: A new promise that resolves when all promises returned from the provided closure resolve. For example:
+
+           loginPromise.then { _ -> (Promise<Data>, Promise<UIImage>)
+               return (URLSession.GET(userUrl), URLSession.dataTask(with: avatarUrl).asImage())
+           }.then { userData, avatarImage in
+               //…
+           }
+     */
+    public func then<U, V>(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> (Promise<U>, Promise<V>)) -> Promise<(U, V)> {
+        return then(on: q, execute: body) { when(fulfilled: $0.0, $0.1) }
+    }
+
+    /// This variant of `then` allows returning a tuple of promises within provided closure.
+    public func then<U, V, X>(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> (Promise<U>, Promise<V>, Promise<X>)) -> Promise<(U, V, X)> {
+        return then(on: q, execute: body) { when(fulfilled: $0.0, $0.1, $0.2) }
+    }
+
+    /// This variant of `then` allows returning a tuple of promises within provided closure.
+    public func then<U, V, X, Y>(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> (Promise<U>, Promise<V>, Promise<X>, Promise<Y>)) -> Promise<(U, V, X, Y)> {
+        return then(on: q, execute: body) { when(fulfilled: $0.0, $0.1, $0.2, $0.3) }
+    }
+
+    /// This variant of `then` allows returning a tuple of promises within provided closure.
+    public func then<U, V, X, Y, Z>(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> (Promise<U>, Promise<V>, Promise<X>, Promise<Y>, Promise<Z>)) -> Promise<(U, V, X, Y, Z)> {
+        return then(on: q, execute: body) { when(fulfilled: $0.0, $0.1, $0.2, $0.3, $0.4) }
+    }
+
+    /// utility function to serve `then` implementations with `body` returning tuple of promises
+    private func then<U, V>(on q: DispatchQueue, execute body: @escaping (T) throws -> V, when: @escaping (V) -> Promise<U>) -> Promise<U> {
+        return Promise<U> { resolve in
+            state.then(on: q, else: resolve) { value in
+                let promise = try body(value)
+
+                // since when(promise) switches to `zalgo`, we have to pipe back to `q`
+                when(promise).state.pipe(on: q, to: resolve)
+            }
+        }
+    }
+
+    /**
      The provided closure executes when this promise rejects.
 
      Rejecting a promise cascades: rejecting all subsequent promises (unless
@@ -390,8 +440,57 @@ extension Promise: CustomStringConvertible {
      }
  */
 public func firstly<T>(execute body: () throws -> Promise<T>) -> Promise<T> {
+    return firstly(execute: body) { $0 }
+}
+
+/**
+ Judicious use of `firstly` *may* make chains more readable.
+ Firstly allows to return tuple of promises
+
+ Compare:
+
+     when(fulfilled: NSURLSession.GET(url1), NSURLSession.GET(url2)).then {
+         NSURLSession.GET(url3)
+     }.then {
+         NSURLSession.GET(url4)
+     }
+
+ With:
+
+     firstly {
+         (NSURLSession.GET(url1), NSURLSession.GET(url2))
+     }.then { _, _ in
+         NSURLSession.GET(url2)
+     }.then {
+         NSURLSession.GET(url3)
+     }
+
+ - Note: At maximum 5 promises may be returned in a tuple
+ - Note: If *any* of the tuple-provided promises reject, the returned promise is immediately rejected with that error.
+ */
+public func firstly<T, U>(execute body: () throws -> (Promise<T>, Promise<U>)) -> Promise<(T, U)> {
+    return firstly(execute: body) { when(fulfilled: $0.0, $0.1) }
+}
+
+/// Firstly allows to return tuple of promises
+public func firstly<T, U, V>(execute body: () throws -> (Promise<T>, Promise<U>, Promise<V>)) -> Promise<(T, U, V)> {
+    return firstly(execute: body) { when(fulfilled: $0.0, $0.1, $0.2) }
+}
+
+/// Firstly allows to return tuple of promises
+public func firstly<T, U, V, W>(execute body: () throws -> (Promise<T>, Promise<U>, Promise<V>, Promise<W>)) -> Promise<(T, U, V, W)> {
+    return firstly(execute: body) { when(fulfilled: $0.0, $0.1, $0.2, $0.3) }
+}
+
+/// Firstly allows to return tuple of promises
+public func firstly<T, U, V, W, X>(execute body: () throws -> (Promise<T>, Promise<U>, Promise<V>, Promise<W>, Promise<X>)) -> Promise<(T, U, V, W, X)> {
+    return firstly(execute: body) { when(fulfilled: $0.0, $0.1, $0.2, $0.3, $0.4) }
+}
+
+/// utility function to serve `firstly` implementations with `body` returning tuple of promises
+fileprivate func firstly<U, V>(execute body: () throws -> V, when: (V) -> Promise<U>) -> Promise<U> {
     do {
-        return try body()
+        return when(try body())
     } catch {
         return Promise(error: error)
     }

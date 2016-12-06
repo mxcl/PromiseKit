@@ -35,6 +35,14 @@ class State<T> {
         }
     }
 
+    final func pipe(on q: DispatchQueue, to body: @escaping (Resolution<T>) -> Void) {
+        pipe { resolution in
+            contain_zalgo(q) {
+                body(resolution)
+            }
+        }
+    }
+
     final func then<U>(on q: DispatchQueue, else rejecter: @escaping (Resolution<U>) -> Void, execute body: @escaping (T) throws -> Void) {
         pipe { resolution in
             switch resolution {
