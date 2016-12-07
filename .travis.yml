@@ -6,7 +6,7 @@ osx_image: xcode8
 
 install:
   - "gem install travis-xcodebuild"
-  - "carthage bootstrap --platform Mac,iOS"
+  - "TOOLCHAINS=com.apple.dt.toolchain.Swift_2_3 carthage bootstrap --platform Mac,iOS --no-use-binaries"
 
 script:
   - travis-xcodebuild
