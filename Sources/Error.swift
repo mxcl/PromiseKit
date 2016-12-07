@@ -146,7 +146,11 @@ class ErrorConsumptionToken {
 
     deinit {
         if !consumed {
+#if os(Linux)
+            PMKUnhandledErrorHandler(error)
+#else
             PMKUnhandledErrorHandler(error as NSError)
+#endif
         }
     }
 }
