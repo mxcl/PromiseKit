@@ -21,7 +21,7 @@ import PromiseKit
 */
 extension UIViewController {
 
-    public enum Error: ErrorType {
+    public enum PMKError: ErrorType {
         case NavigationControllerEmpty
         case NoImageFound
         case NotPromisable
@@ -45,7 +45,7 @@ extension UIViewController {
 
         switch vc {
         case let nc as UINavigationController:
-            guard let vc = nc.viewControllers.first else { return Promise(error: Error.NavigationControllerEmpty) }
+            guard let vc = nc.viewControllers.first else { return Promise(error: PMKError.NavigationControllerEmpty) }
             pvc = vc
         default:
             pvc = vc
@@ -54,13 +54,13 @@ extension UIViewController {
         let promise: Promise<T>
 
         if !pvc.conformsToProtocol(Promisable) {
-            promise = Promise(error: UIViewController.Error.NotPromisable)
+            promise = Promise(error: PMKError.NotPromisable)
         } else if let p = pvc.valueForKeyPath("promise") as? Promise<T> {
             promise = p
         } else if let _: AnyObject = pvc.valueForKeyPath("promise") {
-            promise = Promise(error: UIViewController.Error.NotGenericallyPromisable)
+            promise = Promise(error: PMKError.NotGenericallyPromisable)
         } else {
-            promise = Promise(error: UIViewController.Error.NilPromisable)
+            promise = Promise(error: PMKError.NilPromisable)
         }
 
         if !promise.pending {
@@ -105,7 +105,7 @@ extension UIViewController {
             if let img = info[UIImagePickerControllerOriginalImage] as? UIImage {
                 return img
             }
-            throw Error.NoImageFound
+            throw PMKError.NoImageFound
         }.always {
             vc.presentingViewController?.dismissViewControllerAnimated(animated, completion: nil)
         }
