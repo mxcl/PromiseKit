@@ -62,6 +62,21 @@ public enum PMKURLError: Error {
     }
 }
 
+extension PMKURLError: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case let .badResponse(rq, data, rsp):
+            if let data = data, let str = String(data: data, encoding: .utf8) {
+                return "PromiseKit: badResponse: \(rq): \(rsp)\n\(str)"
+            } else {
+                fallthrough
+            }
+        default:
+            return "\(self)"
+        }
+    }
+}
+
 public enum JSONError: Error {
     /// The JSON response was different to that requested
     case unexpectedRootNode(Any)
