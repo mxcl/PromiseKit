@@ -12,7 +12,7 @@ func fetch() -> Promise<Data, Promise<Data>> {
     return Promise { fulfill, reject in
         let fresh = URLSession.GET(url)
         let cache = Data(contentsOfFile: cachePath)
-        fulfill((cache, fetch))
+        fulfill((cache, fresh))
     }
 }
 
