@@ -1,5 +1,27 @@
 ![PromiseKit](http://promisekit.org/public/img/logo-tight.png)
 
+# Experimental 5.x Goals:  
+
+* Better error messages
+* Less ambiguity in use
+* Readable backtraces
+* UnfailablePromises
+* Leading the user to wrap their own promises by pushing documentation towards `wrap` variants and removing the trivial extensions we currently provide but instead providing docs for that demonstrate them, rationale: often it is *just* as simple to wrap them youself and it is more instructive.
+
+NOTE if using new test set the error goes from:
+
+   Missing return in function expecting AnyPromise
+   
+to:
+
+   Unexpected non-void return value in void function
+   
+
+Result!!
+   
+
+
+
 ![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] ![badge-mit]
 
 Modern development is highly asynchronous: isn’t it about time we had tools that

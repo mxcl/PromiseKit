@@ -6,7 +6,7 @@ class Test222: XCTestCase {
         describe("2.2.2: If `onFulfilled` is a function,") {
             describe("2.2.2.1: it must be called after `promise` is fulfilled, with `promise`’s fulfillment value as its first argument.") {
                 testFulfilled { promise, expectation, sentinel in
-                    promise.then { value -> Void in
+                    promise.then { value in
                         XCTAssertEqual(sentinel, value)
                         expectation.fulfill()
                     }
@@ -16,7 +16,7 @@ class Test222: XCTestCase {
             describe("2.2.2.2: it must not be called before `promise` is fulfilled") {
                 specify("fulfilled after a delay") { d, expectation in
                     var called = false
-                    d.promise.then { _ -> Void in
+                    d.promise.then {
                         called = true
                         expectation.fulfill()
                     }
@@ -34,9 +34,7 @@ class Test222: XCTestCase {
             describe("2.2.2.3: it must not be called more than once.") {
                 specify("already-fulfilled") { _, expectation in
                     let ex = (expectation, mkex())
-                    Promise(value: ()).then {
-                        ex.0.fulfill()
-                    }
+                    Promise().then(execute: ex.0.fulfill)
                     after(ticks: 1000) {
                         ex.1.fulfill()
                     }

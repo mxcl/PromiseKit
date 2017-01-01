@@ -8,7 +8,7 @@ class Test234: XCTestCase {
             testFulfilled { promise, exception, _ in
                 promise.then { value -> UInt32 in
                     return 1
-                }.then { value -> Void in
+                }.then { value in
                     XCTAssertEqual(value, 1)
                     exception.fulfill()
                 }
@@ -16,7 +16,7 @@ class Test234: XCTestCase {
             testRejected { promise, expectation, _ in
                 promise.recover { _ -> UInt32 in
                     return 1
-                }.then { value -> Void in
+                }.then { value in
                     XCTAssertEqual(value, 1)
                     expectation.fulfill()
                 }

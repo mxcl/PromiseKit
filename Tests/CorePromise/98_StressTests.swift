@@ -7,7 +7,7 @@ class StressTests: XCTestCase {
 
         //will crash if then doesn't protect handlers
         stressDataRace(expectation: e1, stressFunction: { promise in
-            promise.then { s -> Void in
+            promise.then { s in
                 XCTAssertEqual("ok", s)
                 return
             }
@@ -28,7 +28,7 @@ class StressTests: XCTestCase {
                 return DispatchQueue.global().promise { x }
             }
         }
-        promise.then { x -> Void in
+        promise.then { x in
             values.append(x)
             XCTAssertEqual(values, (0..<N).map{ $0 })
             ex.fulfill()
@@ -41,7 +41,7 @@ class StressTests: XCTestCase {
 
         //will crash if zalgo doesn't protect handlers
         stressDataRace(expectation: e1, stressFunction: { promise in
-            promise.then(on: zalgo) { s -> Void in
+            promise.then(on: nil) { s in
                 XCTAssertEqual("ok", s)
                 return
             }
@@ -62,14 +62,14 @@ private func stressDataRace<T: Equatable>(expectation e1: XCTestExpectation, ite
     let queue = DispatchQueue(label: "the.domain.of.Zalgo", attributes: .concurrent)
 
     for _ in 0..<iterations {
-        let (promise, fulfill, _) = Promise<T>.pending()
+        let (promise, pipe) = Promise<T>.pending()
 
         DispatchQueue.concurrentPerform(iterations: stressFactor) { n in
             stressFunction(promise)
         }
 
         queue.async(group: group) {
-            fulfill(f())
+            pipe.fulfill(f())
         }
     }
 

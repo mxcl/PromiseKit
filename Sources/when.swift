@@ -2,16 +2,16 @@
 import Foundation
 import Dispatch
 #else
-import Foundation.NSProgress
+import class Foundation.Progress
 #endif
 
 private func _when<T>(_ promises: [Promise<T>]) -> Promise<Void> {
-    let root = Promise<Void>.pending()
-    var countdown = promises.count
-    guard countdown > 0 else {
-        root.fulfill()
-        return root.promise
+    guard !promises.isEmpty else {
+        return Promise()
     }
+
+    var countdown = promises.count
+    let root = Promise<Void>._pending()
 
 #if !PMKDisableProgress
 #if os(Linux)
@@ -30,21 +30,20 @@ private func _when<T>(_ promises: [Promise<T>]) -> Promise<Void> {
     let barrier = DispatchQueue(label: "org.promisekit.barrier.when", attributes: .concurrent)
 
     for promise in promises {
-        promise.state.pipe { resolution in
+        promise.state.pipe { result in
             barrier.sync(flags: .barrier) {
-                switch resolution {
-                case .rejected(let error, let token):
-                    token.consumed = true
+                switch result {
+                case .rejected(let error):
                     if root.promise.isPending {
                         progress.completedUnitCount = progress.totalUnitCount
-                        root.reject(error)
+                        root.resolve(.rejected(error))
                     }
                 case .fulfilled:
                     guard root.promise.isPending else { return }
                     progress.completedUnitCount += 1
                     countdown -= 1
                     if countdown == 0 {
-                        root.fulfill()
+                        root.resolve(.fulfilled())
                     }
                 }
             }
@@ -78,37 +77,37 @@ private func _when<T>(_ promises: [Promise<T>]) -> Promise<Void> {
  - SeeAlso: `when(resolved:)`
 */
 public func when<T>(fulfilled promises: [Promise<T>]) -> Promise<[T]> {
-    return _when(promises).then(on: zalgo) { promises.map{ $0.value! } }
+    return _when(promises).then(on: nil) { Promise(promises.map{ $0.value! }) }
 }
 
-/// Wait for all promises in a set to fulfill.
+/// - SeeAlso: `when(fulfilled:)`
 public func when(fulfilled promises: Promise<Void>...) -> Promise<Void> {
     return _when(promises)
 }
 
-/// Wait for all promises in a set to fulfill.
+/// - SeeAlso: `when(fulfilled:)`
 public func when(fulfilled promises: [Promise<Void>]) -> Promise<Void> {
     return _when(promises)
 }
 
-/// Wait for all promises in a set to fulfill.
+/// - SeeAlso: `when(fulfilled:)`
 public func when<U, V>(fulfilled pu: Promise<U>, _ pv: Promise<V>) -> Promise<(U, V)> {
-    return _when([pu.asVoid(), pv.asVoid()]).then(on: zalgo) { (pu.value!, pv.value!) }
+    return _when([pu.asVoid(), pv.asVoid()]).then(on: nil) { Promise(pu.value!, pv.value!) }
 }
 
-/// Wait for all promises in a set to fulfill.
+/// - SeeAlso: `when(fulfilled:)`
 public func when<U, V, W>(fulfilled pu: Promise<U>, _ pv: Promise<V>, _ pw: Promise<W>) -> Promise<(U, V, W)> {
-    return _when([pu.asVoid(), pv.asVoid(), pw.asVoid()]).then(on: zalgo) { (pu.value!, pv.value!, pw.value!) }
+    return _when([pu.asVoid(), pv.asVoid(), pw.asVoid()]).then(on: nil) { Promise(pu.value!, pv.value!, pw.value!) }
 }
 
-/// Wait for all promises in a set to fulfill.
+/// - SeeAlso: `when(fulfilled:)`
 public func when<U, V, W, X>(fulfilled pu: Promise<U>, _ pv: Promise<V>, _ pw: Promise<W>, _ px: Promise<X>) -> Promise<(U, V, W, X)> {
-    return _when([pu.asVoid(), pv.asVoid(), pw.asVoid(), px.asVoid()]).then(on: zalgo) { (pu.value!, pv.value!, pw.value!, px.value!) }
+    return _when([pu.asVoid(), pv.asVoid(), pw.asVoid(), px.asVoid()]).then(on: nil) { Promise(pu.value!, pv.value!, pw.value!, px.value!) }
 }
 
-/// Wait for all promises in a set to fulfill.
+/// - SeeAlso: `when(fulfilled:)`
 public func when<U, V, W, X, Y>(fulfilled pu: Promise<U>, _ pv: Promise<V>, _ pw: Promise<W>, _ px: Promise<X>, _ py: Promise<Y>) -> Promise<(U, V, W, X, Y)> {
-    return _when([pu.asVoid(), pv.asVoid(), pw.asVoid(), px.asVoid(), py.asVoid()]).then(on: zalgo) { (pu.value!, pv.value!, pw.value!, px.value!, py.value!) }
+    return _when([pu.asVoid(), pv.asVoid(), pw.asVoid(), px.asVoid(), py.asVoid()]).then(on: nil) { Promise(pu.value!, pv.value!, pw.value!, px.value!, py.value!) }
 }
 
 /**
@@ -144,11 +143,11 @@ public func when<U, V, W, X, Y>(fulfilled pu: Promise<U>, _ pv: Promise<V>, _ pw
 public func when<T, PromiseIterator: IteratorProtocol>(fulfilled promiseIterator: PromiseIterator, concurrently: Int) -> Promise<[T]> where PromiseIterator.Element == Promise<T> {
 
     guard concurrently > 0 else {
-        return Promise(error: PMKError.whenConcurrentlyZero)
+        return Promise(error: PMKError.badInput)
     }
 
     var generator = promiseIterator
-    var root = Promise<[T]>.pending()
+    var root = Promise<[T]>._pending()
     var pendingPromises = 0
     var promises: [Promise<T>] = []
 
@@ -179,7 +178,7 @@ public func when<T, PromiseIterator: IteratorProtocol>(fulfilled promiseIterator
         func testDone() {
             barrier.sync {
                 if pendingPromises == 0 {
-                    root.fulfill(promises.flatMap{ $0.value })
+                    root.resolve(.fulfilled(promises.flatMap{ $0.value }))
                 }
             }
         }
@@ -197,9 +196,8 @@ public func when<T, PromiseIterator: IteratorProtocol>(fulfilled promiseIterator
             case .fulfilled:
                 dequeue()
                 testDone()
-            case .rejected(let error, let token):
-                token.consumed = true
-                root.reject(error)
+            case .rejected(let error):
+                root.resolve(.rejected(error))
             }
         }
 
@@ -232,28 +230,28 @@ public func when<T>(resolved promises: Promise<T>...) -> Promise<[Result<T>]> {
     return when(resolved: promises)
 }
 
-/// Waits on all provided promises.
+/// - SeeAlso: when(resolved:)
 public func when<T>(resolved promises: [Promise<T>]) -> Promise<[Result<T>]> {
-    guard !promises.isEmpty else { return Promise(value: []) }
+    guard !promises.isEmpty else {
+        return Promise([])
+    }
 
     var countdown = promises.count
     let barrier = DispatchQueue(label: "org.promisekit.barrier.join", attributes: .concurrent)
 
-    return Promise { fulfill, reject in
-        for promise in promises {
-            promise.state.pipe { resolution in
-                if case .rejected(_, let token) = resolution {
-                    token.consumed = true  // all errors are implicitly consumed
-                }
-                var done = false
-                barrier.sync(flags: .barrier) {
-                    countdown -= 1
-                    done = countdown == 0
-                }
-                if done {
-                    fulfill(promises.map { Result($0.state.get()!) })
-                }
+    let (promise, resolve) = Promise<[Result<T>]>._pending()
+    for promise in promises {
+        promise.state.pipe { result in
+            var done = false
+            barrier.sync(flags: .barrier) {
+                countdown -= 1
+                done = countdown == 0
+            }
+            if done {
+                let results = promises.map{ $0.state.get()! }
+                resolve(.fulfilled(results))
             }
         }
     }
+    return promise
 }

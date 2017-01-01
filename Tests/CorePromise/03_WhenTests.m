@@ -176,8 +176,10 @@
     id b = PMKAfter(0.03);
     PMKWhen(@[a, b]).then(^(NSArray *objs){
         [ex1 fulfill];
+    }).catch(^{
+        XCTFail();
     });
-    [self waitForExpectationsWithTimeout:1 handler:nil];
+    [self waitForExpectationsWithTimeout:10 handler:nil];
 }
 
 - (void)test_35_when_nil {

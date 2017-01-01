@@ -1,14 +1,28 @@
 import PlaygroundSupport
 import PromiseKit
 
-firstly {
-    Promise(value: 1)
-}.then { _ in
-    2
-}.then { _ in
-    3
-}.catch { error in
-    // never happens!
+PlaygroundPage.current.needsIndefiniteExecution = true
+
+after(interval: 0.1).then{ true }
+after(interval: 0.1).then{ }
+
+after(interval: 0.1).then{ 1 }.then {
+    print($0)
+    print("foo")
+    print("bar")
 }
 
-PlaygroundPage.current.needsIndefiniteExecution = true
+//after(interval: 0.1).then {
+//    print("foo")
+//    print("bar")
+//    return 1  // bah! error FIXME
+//}
+
+//
+//extension Promise where Value: Data {
+//
+//}
+
+extension Promise where Value: Data {
+
+}

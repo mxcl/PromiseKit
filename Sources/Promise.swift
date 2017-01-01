@@ -1,350 +1,154 @@
-import class Dispatch.DispatchQueue
-import class Foundation.NSError
-import func Foundation.NSLog
-
-
 /**
- A *promise* represents the future value of a (usually) asynchronous task.
+ A *promise* represents the future Wrapped of a (usually) asynchronous task.
 
- To obtain the value of a promise we call `then`.
+ To obtain the Wrapped of a promise we call `then`.
 
  Promises are chainable: `then` returns a promise, you can call `then` on
  that promise, which returns a promise, you can call `then` on that
  promise, et cetera.
 
- Promises start in a pending state and *resolve* with a value to become
+ Promises start in a pending state and *resolve* with a Wrapped to become
  *fulfilled* or an `Error` to become rejected.
 
- - SeeAlso: [PromiseKit `then` Guide](http://promisekit.org/docs/)
+ - SeeAlso: [PromiseKit 101](http://promisekit.org/docs/)
  */
-open class Promise<T> {
-    let state: State<T>
+public final class Promise<Wrapped>: PromiseMixin {
+    let state: State<Wrapped>
+
+    init(state: State<Wrapped>) {
+        self.state = state
+    }
+
+    /**
+     Create an already resolved promise.
+     
+     - Note: Usually promises start pending, but sometimes you need a promise that has already transitioned to the “rejected” state.
+     */
+    public convenience init(_ result: Result<Wrapped>) {
+        self.init(state: SealedState(result: result))
+    }
+
+    /**
+     Create an already fulfilled promise.
+     
+     - Note: Usually promises start pending, but sometimes you need a promise that has already transitioned to the “fulfilled” state.
+     */
+    public convenience init(_ Wrapped: Wrapped) {
+        self.init(state: SealedState(result: .fulfilled(Wrapped)))
+    }
+
+    /**
+     Create an already rejected promise.
+     
+     - Note: Usually promises start pending, but sometimes you need a promise that has already transitioned to the “rejected” state.
+     */
+    public convenience init(error: Error) {
+        self.init(state: SealedState(result: .rejected(error)))
+    }
 
     /**
      Create a new, pending promise.
 
          func fetchAvatar(user: String) -> Promise<UIImage> {
-             return Promise { fulfill, reject in
+             return Promise { pipe in
                  MyWebHelper.GET("\(user)/avatar") { data, err in
-                     guard let data = data else { return reject(err) }
-                     guard let img = UIImage(data: data) else { return reject(MyError.InvalidImage) }
-                     guard let img.size.width > 0 else { return reject(MyError.ImageTooSmall) }
-                     fulfill(img)
+                     guard let data = data else { return pipe.reject(err) }
+                     guard let img = UIImage(data: data) else { return pipe.reject(MyError.InvalidImage) }
+                     guard let img.size.width > 0 else { return pipe.reject(MyError.ImageTooSmall) }
+                     pipe.fulfill(img)
                  }
              }
          }
 
-     - Parameter resolvers: The provided closure is called immediately on the active thread; commence your asynchronous task, calling either fulfill or reject when it completes.
-     - Parameter fulfill: Fulfills this promise with the provided value.
-     - Parameter reject: Rejects this promise with the provided error.
-
+     - Parameter pipe: The provided closure is called immediately on the current queue; commence your asynchronous task, calling either `pipe.fulfill` or `pipe.reject` when it completes.
      - Returns: A new promise.
-
-     - Note: If you are wrapping a delegate-based system, we recommend
-     to use instead: `Promise.pending()`
-
+     - Note: It is usually easier to use `PromiseKit.wrap`.
+     - Note: If you are wrapping a delegate-based system, we recommend to use instead: `Promise.pending()`
      - SeeAlso: http://promisekit.org/docs/sealing-promises/
      - SeeAlso: http://promisekit.org/docs/cookbook/wrapping-delegation/
      - SeeAlso: pending()
      */
-    required public init(resolvers: (_ fulfill: @escaping (T) -> Void, _ reject: @escaping (Error) -> Void) throws -> Void) {
-        var resolve: ((Resolution<T>) -> Void)!
+    public convenience init(pipe callback: (Pipe<Wrapped>) throws -> Void) {
+        let pipe = Pipe<Wrapped>()
         do {
-            state = UnsealedState(resolver: &resolve)
-            try resolvers({ resolve(.fulfilled($0)) }, { error in
-                #if !PMKDisableWarnings
-                    if self.isPending {
-                        resolve(Resolution(error))
-                    } else {
-                        NSLog("PromiseKit: warning: reject called on already rejected Promise: \(error)")
-                    }
-                #else
-                    resolve(Resolution(error))
-                #endif
-            })
+            self.init(state: UnsealedState(resolver: &pipe._resolve))
+            try callback(pipe)
         } catch {
-            resolve(Resolution(error))
+            pipe.reject(error)
         }
     }
 
     /**
-     Create an already fulfilled promise.
-    
-     To create a resolved `Void` promise, do: `Promise(value: ())`
-     */
-    required public init(value: T) {
-        state = SealedState(resolution: .fulfilled(value))
-    }
-
-    /**
-     Create an already rejected promise.
-     */
-    required public init(error: Error) {
-        state = SealedState(resolution: Resolution(error))
-    }
-
-    /**
-     Careful with this, it is imperative that sealant can only be called once
-     or you will end up with spurious unhandled-errors due to possible double
-     rejections and thus immediately deallocated ErrorConsumptionTokens.
-     */
-    init(sealant: (@escaping (Resolution<T>) -> Void) -> Void) {
-        var resolve: ((Resolution<T>) -> Void)!
-        state = UnsealedState(resolver: &resolve)
-        sealant(resolve)
-    }
-
-    /**
-     A `typealias` for the return values of `pending()`. Simplifies declaration of properties that reference the values' containing tuple when this is necessary. For example, when working with multiple `pendingPromise(value: ())`s within the same scope, or when the promise initialization must occur outside of the caller's initialization.
-
-         class Foo: BarDelegate {
-            var task: Promise<Int>.PendingTuple?
+     Returns a promise that assumes the state of another promise.
+ 
+     Convenient for catching errors for any preamble in creating initial promises, or for various other patterns that would otherwise be ugly or unclear in the resulting code. For example:
+ 
+         return Promise {
+             guard let url = /**/ else { throw Error.badUrl }
+             return URLSession.shared.dataTask(url: url)
          }
+     
+     Which otherwise would require a `firstly` (which would read poorly since here there is no subsequent `then`) or for all to be surrounding in a `do`, `catch` and then a rejected promise generated and returned in the catch.
+     
+     - Remark: `return` was chosen rather than passing in a `pipe` function since you cannot forget to `return`.
 
-     - SeeAlso: pending()
      */
-    public typealias PendingTuple = (promise: Promise, fulfill: (T) -> Void, reject: (Error) -> Void)
+    public convenience init<Promise: Chainable>(bind body: () throws -> Promise) where Promise.Wrapped == Wrapped {
+        do {
+            self.init(state: try body().state)
+        } catch {
+            self.init(error: error)
+        }
+    }
+
+    //TODO we want `Self` and *not* `Promise`
+    public typealias Pending = (promise: Promise, pipe: Pipe<Wrapped>)
 
     /**
      Making promises that wrap asynchronous delegation systems or other larger asynchronous systems without a simple completion handler is easier with pending.
 
          class Foo: BarDelegate {
-             let (promise, fulfill, reject) = Promise<Int>.pending()
+             let (promise, pipe) = Promise<Int>.pending()
     
              func barDidFinishWithResult(result: Int) {
-                 fulfill(result)
+                 pipe.resolve(result)
              }
     
              func barDidError(error: NSError) {
-                 reject(error)
+                 pipe.resolve(error)
              }
          }
 
-     - Returns: A tuple consisting of: 
-       1) A promise
-       2) A function that fulfills that promise
-       3) A function that rejects that promise
+     - Returns: A promise and a pipe that can resolve it.
      */
-    public final class func pending() -> PendingTuple {
-        var fulfill: ((T) -> Void)!
-        var reject: ((Error) -> Void)!
-        let promise = self.init { fulfill = $0; reject = $1 }
-        return (promise, fulfill, reject)
+    public static func pending() -> Pending {
+        let pipe = Pipe<Wrapped>()
+        let state = UnsealedState(resolver: &pipe._resolve)
+        let promise = Promise(state: state)
+        return (promise, pipe)
+    }
+
+
+    /**
+     Our `Pipe` is less efficient due to Promises/A+, so we use this internally.
+     */
+    static func _pending() -> (promise: Promise, resolve: (Result<Wrapped>) -> Void) {
+        var resolve: ((Result<Wrapped>) -> Void)!
+        let state = UnsealedState<Wrapped>(resolver: &resolve)
+        let promise = Promise(state: state)
+        return (promise, resolve)
     }
 
     /**
-     The provided closure is executed when this promise is resolved.
+     Pipes the Wrapped of this promise to the provided function.
 
-     - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter body: The closure that is executed when this Promise is fulfilled.
-     - Returns: A new promise that is resolved with the value returned from the provided closure. For example:
-
-           NSURLSession.GET(url).then { data -> Int in
-               //…
-               return data.length
-           }.then { length in
-               //…
-           }
+     - Parameter to: The pipe of another promise that we will “pipe” our state to.
+     - SeeAlso: `pending() -> (Promise, Joint)`
+     - Remark: Wrapped in a pipe rather than allowing any `(Result) -> Void` because we do this on the current queue and need exactly defined behavior for what the function this calls does. `tap` is basically the same function, but it has a defined queue so it takes a `Result` closure.
+     - Todo: We should probably immediately reject if the pipe will pipe to `self`
      */
-    public func then<U>(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> U) -> Promise<U> {
-        return Promise<U> { resolve in
-            state.then(on: q, else: resolve) { value in
-                resolve(.fulfilled(try body(value)))
-            }
-        }
-    }
-
-    /**
-     The provided closure executes when this promise resolves.
-     
-     This variant of `then` allows chaining promises, the promise returned by the provided closure is resolved before the promise returned by this closure resolves.
-
-     - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter execute: The closure that executes when this promise fulfills.
-     - Returns: A new promise that resolves when the promise returned from the provided closure resolves. For example:
-
-           URLSession.GET(url1).then { data in
-               return CLLocationManager.promise()
-           }.then { location in
-               //…
-           }
-     */
-    public func then<U>(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> Promise<U>) -> Promise<U> {
-        var rv: Promise<U>!
-        rv = Promise<U> { resolve in
-            state.then(on: q, else: resolve) { value in
-                let promise = try body(value)
-                guard promise !== rv else { throw PMKError.returnedSelf }
-                promise.state.pipe(resolve)
-            }
-        }
-        return rv
-    }
-
-    /**
-     The provided closure executes when this promise resolves.
-
-     This variant of `then` allows returning a tuple of promises within provided closure. All of the returned
-     promises needs be fulfilled for this promise to be marked as resolved.
-
-     - Note: At maximum 5 promises may be returned in a tuple
-     - Note: If *any* of the tuple-provided promises reject, the returned promise is immediately rejected with that error.
-     - Warning: In the event of rejection the other promises will continue to resolve and, as per any other promise, will either fulfill or reject.
-     - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter execute: The closure that executes when this promise fulfills.
-     - Returns: A new promise that resolves when all promises returned from the provided closure resolve. For example:
-
-           loginPromise.then { _ -> (Promise<Data>, Promise<UIImage>)
-               return (URLSession.GET(userUrl), URLSession.dataTask(with: avatarUrl).asImage())
-           }.then { userData, avatarImage in
-               //…
-           }
-     */
-    public func then<U, V>(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> (Promise<U>, Promise<V>)) -> Promise<(U, V)> {
-        return then(on: q, execute: body) { when(fulfilled: $0.0, $0.1) }
-    }
-
-    /// This variant of `then` allows returning a tuple of promises within provided closure.
-    public func then<U, V, X>(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> (Promise<U>, Promise<V>, Promise<X>)) -> Promise<(U, V, X)> {
-        return then(on: q, execute: body) { when(fulfilled: $0.0, $0.1, $0.2) }
-    }
-
-    /// This variant of `then` allows returning a tuple of promises within provided closure.
-    public func then<U, V, X, Y>(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> (Promise<U>, Promise<V>, Promise<X>, Promise<Y>)) -> Promise<(U, V, X, Y)> {
-        return then(on: q, execute: body) { when(fulfilled: $0.0, $0.1, $0.2, $0.3) }
-    }
-
-    /// This variant of `then` allows returning a tuple of promises within provided closure.
-    public func then<U, V, X, Y, Z>(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> (Promise<U>, Promise<V>, Promise<X>, Promise<Y>, Promise<Z>)) -> Promise<(U, V, X, Y, Z)> {
-        return then(on: q, execute: body) { when(fulfilled: $0.0, $0.1, $0.2, $0.3, $0.4) }
-    }
-
-    /// utility function to serve `then` implementations with `body` returning tuple of promises
-    private func then<U, V>(on q: DispatchQueue, execute body: @escaping (T) throws -> V, when: @escaping (V) -> Promise<U>) -> Promise<U> {
-        return Promise<U> { resolve in
-            state.then(on: q, else: resolve) { value in
-                let promise = try body(value)
-
-                // since when(promise) switches to `zalgo`, we have to pipe back to `q`
-                when(promise).state.pipe(on: q, to: resolve)
-            }
-        }
-    }
-
-    /**
-     The provided closure executes when this promise rejects.
-
-     Rejecting a promise cascades: rejecting all subsequent promises (unless
-     recover is invoked) thus you will typically place your catch at the end
-     of a chain. Often utility promises will not have a catch, instead
-     delegating the error handling to the caller.
-
-     - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter policy: The default policy does not execute your handler for cancellation errors.
-     - Parameter execute: The handler to execute if this promise is rejected.
-     - Returns: `self`
-     - SeeAlso: [Cancellation](http://promisekit.org/docs/)
-     - Important: The promise that is returned is `self`. `catch` cannot affect the chain, in PromiseKit 3 no promise was returned to strongly imply this, however for PromiseKit 4 we started returning a promise so that you can `always` after a catch or return from a function that has an error handler.
-     */
-    @discardableResult
-    public func `catch`(on q: DispatchQueue = .default, policy: CatchPolicy = .allErrorsExceptCancellation, execute body: @escaping (Error) -> Void) -> Promise {
-        state.catch(on: q, policy: policy, else: { _ in }, execute: body)
-        return self
-    }
-
-    /**
-     The provided closure executes when this promise rejects.
-     
-     Unlike `catch`, `recover` continues the chain provided the closure does not throw. Use `recover` in circumstances where recovering the chain from certain errors is a possibility. For example:
-     
-         CLLocationManager.promise().recover { error in
-             guard error == CLError.unknownLocation else { throw error }
-             return CLLocation.Chicago
-         }
-
-     - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter policy: The default policy does not execute your handler for cancellation errors.
-     - Parameter execute: The handler to execute if this promise is rejected.
-     - SeeAlso: [Cancellation](http://promisekit.org/docs/)
-     */
-    public func recover(on q: DispatchQueue = .default, policy: CatchPolicy = .allErrorsExceptCancellation, execute body: @escaping (Error) throws -> Promise) -> Promise {
-        var rv: Promise!
-        rv = Promise { resolve in
-            state.catch(on: q, policy: policy, else: resolve) { error in
-                let promise = try body(error)
-                guard promise !== rv else { throw PMKError.returnedSelf }
-                promise.state.pipe(resolve)
-            }
-        }
-        return rv
-    }
-
-    /**
-     The provided closure executes when this promise rejects.
-
-     Unlike `catch`, `recover` continues the chain provided the closure does not throw. Use `recover` in circumstances where recovering the chain from certain errors is a possibility. For example:
-
-         CLLocationManager.promise().recover { error in
-             guard error == CLError.unknownLocation else { throw error }
-             return CLLocation.Chicago
-         }
-
-     - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter policy: The default policy does not execute your handler for cancellation errors.
-     - Parameter execute: The handler to execute if this promise is rejected.
-     - SeeAlso: [Cancellation](http://promisekit.org/docs/)
-     */
-    public func recover(on q: DispatchQueue = .default, policy: CatchPolicy = .allErrorsExceptCancellation, execute body: @escaping (Error) throws -> T) -> Promise {
-        return Promise { resolve in
-            state.catch(on: q, policy: policy, else: resolve) { error in
-                resolve(.fulfilled(try body(error)))
-            }
-        }
-    }
-
-    /**
-     The provided closure executes when this promise resolves.
-
-         firstly {
-             UIApplication.shared.networkActivityIndicatorVisible = true
-         }.then {
-             //…
-         }.always {
-             UIApplication.shared.networkActivityIndicatorVisible = false
-         }.catch {
-             //…
-         }
-
-     - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter execute: The closure that executes when this promise resolves.
-     - Returns: A new promise, resolved with this promise’s resolution.
-     */
-    public func always(on q: DispatchQueue = .default, execute body: @escaping () -> Void) -> Promise {
-        state.always(on: q) { resolution in
-            body()
-        }
-        return self
-    }
-
-    /**
-     Allows you to “tap” into a promise chain and inspect its result.
-     
-     The function you provide cannot mutate the chain.
- 
-         NSURLSession.GET(/*…*/).tap { result in
-             print(result)
-         }
-
-     - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter execute: The closure that executes when this promise resolves.
-     - Returns: A new promise, resolved with this promise’s resolution.
-     */
-    @discardableResult
-    public func tap(on q: DispatchQueue = .default, execute body: @escaping (Result<T>) -> Void) -> Promise {
-        state.always(on: q) { resolution in
-            body(Result(resolution))
-        }
-        return self
+    public func pipe(to pipe: Pipe<Wrapped>) {
+        state.pipe(pipe.resolve)
     }
 
     /**
@@ -352,278 +156,251 @@ open class Promise<T> {
      - SeeAlso: when.swift contains enlightening examples of using `Promise<Void>` to simplify your code.
      */
     public func asVoid() -> Promise<Void> {
-        return then(on: zalgo) { _ in return }
-    }
-
-//MARK: deprecations
-
-    @available(*, unavailable, renamed: "always()")
-    public func finally(on: DispatchQueue = DispatchQueue.main, execute body: () -> Void) -> Promise { fatalError() }
-
-    @available(*, unavailable, renamed: "always()")
-    public func ensure(on: DispatchQueue = DispatchQueue.main, execute body: () -> Void) -> Promise { fatalError() }
-
-    @available(*, unavailable, renamed: "pending()")
-    public class func `defer`() -> PendingTuple { fatalError() }
-
-    @available(*, unavailable, renamed: "pending()")
-    public class func `pendingPromise`() -> PendingTuple { fatalError() }
-
-    @available(*, unavailable, message: "deprecated: use then(on: .global())")
-    public func thenInBackground<U>(execute body: (T) throws -> U) -> Promise<U> { fatalError() }
-
-    @available(*, unavailable, renamed: "catch")
-    public func onError(policy: CatchPolicy = .allErrors, execute body: (Error) -> Void) { fatalError() }
-
-    @available(*, unavailable, renamed: "catch")
-    public func errorOnQueue(_ on: DispatchQueue, policy: CatchPolicy = .allErrors, execute body: (Error) -> Void) { fatalError() }
-
-    @available(*, unavailable, renamed: "catch")
-    public func error(policy: CatchPolicy, execute body: (Error) -> Void) { fatalError() }
-
-    @available(*, unavailable, renamed: "catch")
-    public func report(policy: CatchPolicy = .allErrors, execute body: (Error) -> Void) { fatalError() }
-
-    @available(*, unavailable, renamed: "init(value:)")
-    public init(_ value: T) { fatalError() }
-
-//MARK: disallow `Promise<Error>`
-
-    @available(*, unavailable, message: "cannot instantiate Promise<Error>")
-    public init<T: Error>(resolvers: (_ fulfill: (T) -> Void, _ reject: (Error) -> Void) throws -> Void) { fatalError() }
-
-    @available(*, unavailable, message: "cannot instantiate Promise<Error>")
-    public class func pending<T: Error>() -> (promise: Promise, fulfill: (T) -> Void, reject: (Error) -> Void) { fatalError() }
-
-//MARK: disallow returning `Error`
-
-    @available (*, unavailable, message: "instead of returning the error; throw")
-    public func then<U: Error>(on: DispatchQueue = .default, execute body: (T) throws -> U) -> Promise<U> { fatalError() }
-
-    @available (*, unavailable, message: "instead of returning the error; throw")
-    public func recover<T: Error>(on: DispatchQueue = .default, execute body: (Error) throws -> T) -> Promise { fatalError() }
-
-//MARK: disallow returning `Promise?`
-
-    @available(*, unavailable, message: "unwrap the promise")
-    public func then<U>(on: DispatchQueue = .default, execute body: (T) throws -> Promise<U>?) -> Promise<U> { fatalError() }
-
-    @available(*, unavailable, message: "unwrap the promise")
-    public func recover(on: DispatchQueue = .default, execute body: (Error) throws -> Promise?) -> Promise { fatalError() }
-}
-
-extension Promise: CustomStringConvertible {
-    public var description: String {
-        return "Promise: \(state)"
-    }
-}
-
-/**
- Judicious use of `firstly` *may* make chains more readable.
-
- Compare:
-
-     NSURLSession.GET(url1).then {
-         NSURLSession.GET(url2)
-     }.then {
-         NSURLSession.GET(url3)
-     }
-
- With:
-
-     firstly {
-         NSURLSession.GET(url1)
-     }.then {
-         NSURLSession.GET(url2)
-     }.then {
-         NSURLSession.GET(url3)
-     }
- */
-public func firstly<T>(execute body: () throws -> Promise<T>) -> Promise<T> {
-    return firstly(execute: body) { $0 }
-}
-
-/**
- Judicious use of `firstly` *may* make chains more readable.
- Firstly allows to return tuple of promises
-
- Compare:
-
-     when(fulfilled: NSURLSession.GET(url1), NSURLSession.GET(url2)).then {
-         NSURLSession.GET(url3)
-     }.then {
-         NSURLSession.GET(url4)
-     }
-
- With:
-
-     firstly {
-         (NSURLSession.GET(url1), NSURLSession.GET(url2))
-     }.then { _, _ in
-         NSURLSession.GET(url2)
-     }.then {
-         NSURLSession.GET(url3)
-     }
-
- - Note: At maximum 5 promises may be returned in a tuple
- - Note: If *any* of the tuple-provided promises reject, the returned promise is immediately rejected with that error.
- */
-public func firstly<T, U>(execute body: () throws -> (Promise<T>, Promise<U>)) -> Promise<(T, U)> {
-    return firstly(execute: body) { when(fulfilled: $0.0, $0.1) }
-}
-
-/// Firstly allows to return tuple of promises
-public func firstly<T, U, V>(execute body: () throws -> (Promise<T>, Promise<U>, Promise<V>)) -> Promise<(T, U, V)> {
-    return firstly(execute: body) { when(fulfilled: $0.0, $0.1, $0.2) }
-}
-
-/// Firstly allows to return tuple of promises
-public func firstly<T, U, V, W>(execute body: () throws -> (Promise<T>, Promise<U>, Promise<V>, Promise<W>)) -> Promise<(T, U, V, W)> {
-    return firstly(execute: body) { when(fulfilled: $0.0, $0.1, $0.2, $0.3) }
-}
-
-/// Firstly allows to return tuple of promises
-public func firstly<T, U, V, W, X>(execute body: () throws -> (Promise<T>, Promise<U>, Promise<V>, Promise<W>, Promise<X>)) -> Promise<(T, U, V, W, X)> {
-    return firstly(execute: body) { when(fulfilled: $0.0, $0.1, $0.2, $0.3, $0.4) }
-}
-
-/// utility function to serve `firstly` implementations with `body` returning tuple of promises
-fileprivate func firstly<U, V>(execute body: () throws -> V, when: (V) -> Promise<U>) -> Promise<U> {
-    do {
-        return when(try body())
-    } catch {
-        return Promise(error: error)
-    }
-}
-
-@available(*, unavailable, message: "instead of returning the error; throw")
-public func firstly<T: Error>(execute body: () throws -> T) -> Promise<T> { fatalError() }
-
-@available(*, unavailable, message: "use DispatchQueue.promise")
-public func firstly<T>(on: DispatchQueue, execute body: () throws -> Promise<T>) -> Promise<T> { fatalError() }
-
-/**
- - SeeAlso: `DispatchQueue.promise(group:qos:flags:execute:)`
- */
-@available(*, deprecated: 4.0, renamed: "DispatchQueue.promise")
-public func dispatch_promise<T>(_ on: DispatchQueue, _ body: @escaping () throws -> T) -> Promise<T> {
-    return Promise(value: ()).then(on: on, execute: body)
-}
-
-
-/**
- The underlying resolved state of a promise.
- - Remark: Same as `Resolution<T>` but without the associated `ErrorConsumptionToken`.
-*/
-public enum Result<T> {
-    /// Fulfillment
-    case fulfilled(T)
-    /// Rejection
-    case rejected(Error)
-
-    init(_ resolution: Resolution<T>) {
-        switch resolution {
-        case .fulfilled(let value):
-            self = .fulfilled(value)
-        case .rejected(let error, _):
-            self = .rejected(error)
-        }
-    }
-
-    /**
-     - Returns: `true` if the result is `fulfilled` or `false` if it is `rejected`.
-     */
-    public var boolValue: Bool {
-        switch self {
-        case .fulfilled:
-            return true
-        case .rejected:
-            return false
-        }
-    }
-}
-
-/**
- An object produced by `Promise.joint()`, along with a promise to which it is bound.
-
- Joining with a promise via `Promise.join(_:)` will pipe the resolution of that promise to
- the joint's bound promise.
-
- - SeeAlso: `Promise.joint()`
- - SeeAlso: `Promise.join(_:)`
- */
-public class PMKJoint<T> {
-    fileprivate var resolve: ((Resolution<T>) -> Void)!
-}
-
-extension Promise {
-    /**
-     Provides a safe way to instantiate a `Promise` and resolve it later via its joint and another
-     promise.
-
-         class Engine {
-            static func make() -> Promise<Engine> {
-                let (enginePromise, joint) = Promise<Engine>.joint()
-                let cylinder: Cylinder = Cylinder(explodeAction: {
-
-                    // We *could* use an IUO, but there are no guarantees about when
-                    // this callback will be called. Having an actual promise is safe.
-
-                    enginePromise.then { engine in
-                        engine.checkOilPressure()
-                    }
-                })
-
-                firstly {
-                    Ignition.default.start()
-                }.then { plugs in
-                    Engine(cylinders: [cylinder], sparkPlugs: plugs)
-                }.join(joint)
-
-                return enginePromise
+        let (promise, resolve) = Promise<Void>._pending()
+        state.pipe{ result in
+            switch result {
+            case .fulfilled:
+                resolve(.fulfilled())
+            case .rejected(let error):
+                resolve(.rejected(error))
             }
-         }
-
-     - Returns: A new promise and its joint.
-     - SeeAlso: `Promise.join(_:)`
-     */
-    public final class func joint() -> (Promise<T>, PMKJoint<T>) {
-        let pipe = PMKJoint<T>()
-        let promise = Promise(sealant: { pipe.resolve = $0 })
-        return (promise, pipe)
-    }
-
-    /**
-     Pipes the value of this promise to the promise created with the joint.
-
-     - Parameter joint: The joint on which to join.
-     - SeeAlso: `Promise.joint()`
-     */
-    public func join(_ joint: PMKJoint<T>) {
-        state.pipe(joint.resolve)
+        }
+        return promise
     }
 }
 
-
-extension Promise where T: Collection {
+extension Promise where Wrapped: Collection {
     /**
      Transforms a `Promise` where `T` is a `Collection` into a `Promise<[U]>`
-
-         URLSession.shared.dataTask(url: /*…*/).asArray().map { result in
-             return download(result)
-         }.then { images in
-             // images is `[UIImage]`
+     
+         func download(urls: [String]) -> Promise<UIImage> {
+             //…
          }
+
+         return URLSession.shared.dataTask(url: url).asArray().map(download)
+
+     Equivalent to:
+
+         func download(urls: [String]) -> Promise<UIImage> {
+             //…
+         }
+
+         return URLSession.shared.dataTask(url: url).then { urls in
+             return when(fulfilled: urls.map(download))
+         }
+
 
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter transform: The closure that executes when this promise resolves.
      - Returns: A new promise, resolved with this promise’s resolution.
      */
-    public func map<U>(on: DispatchQueue = .default, transform: @escaping (T.Iterator.Element) throws -> Promise<U>) -> Promise<[U]> {
-        return Promise<[U]> { resolve in
-            return state.then(on: zalgo, else: resolve) { tt in
-                when(fulfilled: try tt.map(transform)).state.pipe(resolve)
+    public final func map<U>(on q: DispatchQueue? = .default, transform: @escaping (Wrapped.Iterator.Element) throws -> Promise<U>) -> Promise<[U]>
+    {
+        return then(on: q) { when(fulfilled: try $0.map(transform)) }
+    }
+}
+
+/**
+ Judicious use of `firstly` *may* make chains more readable.
+
+ Compare:
+
+     NSURLSession.dataTask(url: url1).then {
+         URLSession.shared.dataTask(url: url2)
+     }.then {
+         URLSession.shared.dataTask(url: url3)
+     }
+
+ With:
+
+     firstly {
+         URLSession.shared.dataTask(url: url1)
+     }.then {
+         URLSession.shared.dataTask(url: url2)
+     }.then {
+         URLSession.shared.dataTask(url: url3)
+     }
+ */
+public func firstly<ReturnType: Chainable>(execute body: () throws -> ReturnType) -> Promise<ReturnType.Wrapped> {
+    do {
+        return try body().promise
+    } catch {
+        return Promise(error: error)
+    }
+}
+
+public class Pipe<Wrapped> {
+
+#if !PMKDisableWarnings
+    var called = false
+
+    deinit {
+        if !called {
+            NSLog("PromiseKit: warning: `Promise(pipe:)` not resolved, this is usually a bug.")
+        }
+    }
+#endif
+
+    fileprivate var _resolve: ((Result<Wrapped>) -> Void)!
+
+    public func resolve(_ result: Result<Wrapped>) {
+    #if !PMKDisableWarnings
+        if called {
+            NSLog("PromiseKit: information: resolve is being called an already resolved promise.")
+        } else {
+            called = true   //TODO thread safety!
+        }
+    #endif
+
+        //FIXME THIS SUCKS
+        // there should be a more optimal way to do this
+        //
+        // var foo = 1
+        // after(1) {
+        //     fulfill()
+        //     foo += 1
+        // }
+        // promise.then {
+        //     foo += 1
+        // }
+        //
+        // Above is reason for the exeCtx, foo should be incremented DETERMINISTICALLY
+        //
+        // one way would be to return something since nothing can happen after the return?
+        Thread.current.afterExecutionContext {
+            self._resolve(result)
+        }
+    }
+
+    public func reject(_ error: Error) {
+        resolve(.rejected(error))
+    }
+    public func reject<U>(_ result: Result<U>) {
+        resolve(.rejected(result.value as! Error))
+    }
+    public func fulfill(_ Wrapped: Wrapped) {
+        resolve(.fulfilled(Wrapped))
+    }
+    
+    /**
+     This variant of resolve is convenient when wrapping asynchronous systems that
+     use common patterns. For example:
+
+         func fetchImage() -> Promise<UIImage> {
+             return Promise { API.fetchImage(withCompletion: $0.resolve) }
+         }
+
+     Where:
+
+         struct API {
+             func fetchImage(withCompletion: (UIImage?, Error?) -> Void) {
+                 // you or a third party provided this implementation
+             }
+         }
+     */
+    public func resolve(_ body: @escaping (Wrapped?, Error?) -> Void) {
+        try body { obj, err in
+            if let err = err {
+                reject(err)
+            } else if let obj = obj {
+                fulfill(obj)
+            } else {
+                reject(PMKError.invalidCallingConvention)
             }
         }
     }
+    
+    /**
+     This variant of resolve is convenient when wrapping asynchronous systems that
+     use common patterns. For example:
+
+         func fetch() -> Promise<FetchResult> {
+             return Promise { API.fetch(withCompletion: $0.resolve) }
+         }
+
+     Where:
+
+         enum FetchResult { /*…*/ }
+
+         struct API {
+             func fetchImage(withCompletion: (FetchResult, Error?) -> Void) {
+                 // you or a third party provided this implementation
+             }
+         }
+    
+     - Note: This implies the `FetchResult` enum has an error `case`, which you
+       thus lose. If you need to access this value you should handle the completion
+       handler yourself.
+     */
+    public func resolve(_ body: (@escaping (Wrapped, Error?) -> Void) throws -> Void) {
+        try body { obj, err in
+            if let err = err {
+                reject(err)
+            } else {
+                fulfill(obj)
+            }
+        }
+    }
+    
+    /**
+     This variant of resolve is provided so our initializer works, *even* if 
+     the API you are wrapping got the calling convention for completion handlers
+     inverted.
+    
+         func fetchImage() -> Promise<UIImage> {
+             return Promise { API.fetchImage(withCompletion: $0.resolve) }
+         }
+    
+     Where:
+    
+         func fetchImage(withCompletion: (Error?, UIImage?) -> Void) {
+             // you or a third party provided this implementation
+         }
+    
+     */
+    public func resolve(_ body: (@escaping (Error?, Wrapped?) -> Void) throws -> Void) {
+        try body { err, obj in
+            if let err = err {
+                reject(err)
+            } else if let obj = obj {
+                fulfill(obj)
+            } else {
+                reject(PMKError.invalidCallingConvention)
+            }
+        }
+    }
+
+    /**
+     This variant of resolve is provided for APIs that can error, but provide
+     no meaningful result if they succeed. It really only makes sense for
+     `Wrapped: Void`.
+    
+         func validate() -> Promise<Void> {
+             return Promise { validate(withCompletion: $0.resolve) }
+         }
+    
+     Where:
+    
+         func validate(withCompletion: (Error?) -> Void) {
+             // you or a third party provided this implementation
+         }
+    
+     */
+    public func resolve(defaultValue: Wrapped = Wrapped(), body: (@escaping (Error?) -> Void) throws -> Void) {
+        try body { error in
+            if let error = error {
+                reject(error)
+            } else {
+                fulfill()
+            }
+        }
+    }
+    
+    /// For completions that cannot error. TODO should use unfailable promise
+    public func wrap<T>(_ body: (@escaping (T) -> Void) throws -> Void) -> Promise<T> {
+        return Promise { pipe in
+            try body{ pipe.fulfill($0) }
+        }
+    }
+    
 }

@@ -106,7 +106,7 @@ Pod::Spec.new do |s|
   
   s.subspec 'Foundation' do |ss|
     base_files = Dir['Extensions/Foundation/Sources/*']
-    nstask_files = Dir['Extensions/Foundation/Sources/*NSTask*']
+    nstask_files = Dir['Extensions/Foundation/Sources/*NSTask*{swift,m}']
     base_files -= nstask_files
 
     ss.source_files = base_files

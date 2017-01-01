@@ -12,33 +12,27 @@ extension DispatchQueue {
 
      - Parameter body: The closure that resolves this promise.
      - Returns: A new promise resolved by the result of the provided closure.
-
      - SeeAlso: `DispatchQueue.async(group:qos:flags:execute:)`
-     - SeeAlso: `dispatch_promise()`
-     - SeeAlso: `dispatch_promise_on()`
      */
-    public final func promise<T>(group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], execute body: @escaping () throws -> T) -> Promise<T> {
+    public final func promise<ReturnType: Chainable>(group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], execute body: @escaping () throws -> ReturnType) -> Promise<ReturnType.Wrapped> {
 
-        return Promise(sealant: { resolve in
+        return Promise { pipe in
             async(group: group, qos: qos, flags: flags) {
                 do {
-                    resolve(.fulfilled(try body()))
+                    try body().pipe(to: pipe)
                 } catch {
-                    resolve(Resolution(error))
+                    pipe.reject(error)
                 }
             }
-        })
+        }
     }
-
-    /// Unavailable due to Swift compiler issues
-    @available(*, unavailable)
-    public final func promise<T>(group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], execute body: () throws -> Promise<T>) -> Promise<T> { fatalError() }
 
     /**
      The default queue for all handlers.
 
      Defaults to `DispatchQueue.main`.
 
+     - Important: Must be set before *any* other PromiseKit function.
      - SeeAlso: `PMKDefaultDispatchQueue()`
      - SeeAlso: `PMKSetDefaultDispatchQueue()`
      */
@@ -48,6 +42,25 @@ extension DispatchQueue {
         }
         set {
             __PMKSetDefaultDispatchQueue(newValue)
+        }
+    }
+}
+
+
+extension DispatchQueue {
+
+    /// prevent unecessary dipatching between thens that want the same queue
+    @inline(__always)  // make backtraces somewhat more readable
+    func maybe(async body: @escaping () -> Void) {
+        let currentQueueLabel = String(cString: __dispatch_queue_get_label(nil))
+
+        // strictly different queues can have the same label, but if
+        // so whoever did so must intend for them to be used identically
+        // otherwise they are violating the GCD contracts.
+        if label == currentQueueLabel {
+            body()
+        } else {
+            async(execute: body)
         }
     }
 }

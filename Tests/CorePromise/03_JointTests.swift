@@ -3,36 +3,48 @@ import XCTest
 
 class JointTests: XCTestCase {
     func testPiping() {
-        let (promise, joint) = Promise<Int>.joint()
+        let (promise, pipe) = Promise<Int>.pending()
 
         XCTAssert(promise.isPending)
 
-        let foo = Promise(value: 3)
-        foo.join(joint)
+        let foo = Promise(3)
+        foo.pipe(to: pipe)
 
-        XCTAssertEqual(3, promise.value)
+        let ex = expectation(description: "")
+
+        DispatchQueue.main.async {
+            XCTAssertEqual(3, promise.value)
+            ex.fulfill()
+        }
+
+        waitForExpectations(timeout: 1)
     }
 
     func testPipingPending() {
-        let (promise, joint) = Promise<Int>.joint()
+        let (promise1, pipe1) = Promise<Int>.pending()
 
-        XCTAssert(promise.isPending)
+        XCTAssert(promise1.isPending)
 
-        let (foo, fulfillFoo, _) = Promise<Int>.pending()
-        foo.join(joint)
+        let (promise2, pipe2) = Promise<Int>.pending()
+        promise2.pipe(to: pipe1)
 
-        fulfillFoo(3)
+        pipe2.fulfill(3)
 
-        XCTAssertEqual(3, promise.value)
+        let ex = expectation(description: "")
+        promise1.ensure(that: ex.fulfill)
+
+        waitForExpectations(timeout: 1)
+
+        XCTAssertEqual(3, promise1.value)
     }
 
     func testCallback() {
         let ex = expectation(description: "")
 
-        let (promise, joint) = Promise<Void>.joint()
+        let (promise, pipe) = Promise<Void>.pending()
         promise.then { ex.fulfill() }
 
-        Promise(value: ()).join(joint)
+        Promise().pipe(to: pipe)
 
         waitForExpectations(timeout: 1)
     }
@@ -40,13 +52,13 @@ class JointTests: XCTestCase {
     func testCallbackPending() {
         let ex = expectation(description: "")
 
-        let (promise, joint) = Promise<Void>.joint()
+        let (promise, joint) = Promise<Void>.pending()
         promise.then { ex.fulfill() }
 
-        let (foo, fulfillFoo, _) = Promise<Void>.pending()
-        foo.join(joint)
+        let (foo, pipe) = Promise<Void>.pending()
+        foo.pipe(to: joint)
 
-        fulfillFoo()
+        pipe.fulfill()
 
         waitForExpectations(timeout: 1)
     }

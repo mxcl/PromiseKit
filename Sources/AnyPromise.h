@@ -28,8 +28,6 @@ typedef NS_ENUM(NSInteger, PMKCatchPolicy) {
 
     __attribute__((objc_subclassing_restricted)) __attribute__((objc_runtime_name("AnyPromise")))
     @interface AnyPromise : NSObject
-    @property (nonatomic, readonly) BOOL resolved;
-    @property (nonatomic, readonly) BOOL pending;
     @property (nonatomic, readonly) __nullable id value;
     + (instancetype __nonnull)promiseWithResolverBlock:(void (^ __nonnull)(__nonnull PMKResolver))resolveBlock;
     + (instancetype __nonnull)promiseWithValue:(__nullable id)value;
@@ -39,7 +37,14 @@ typedef NS_ENUM(NSInteger, PMKCatchPolicy) {
 
 @interface AnyPromise (obj)
 
+/// The value or error of this promise or nil if not yet resolved.
 @property (nonatomic, readonly) __nullable id value;
+
+/// `YES` if the promise is resolved
+@property (nonatomic, readonly) BOOL resolved NS_REFINED_FOR_SWIFT;
+
+/// `YES` if the promise is not yet resolved
+@property (nonatomic, readonly) BOOL pending NS_REFINED_FOR_SWIFT;
 
 /**
  The provided block is executed when its receiver is resolved.
@@ -119,21 +124,16 @@ typedef NS_ENUM(NSInteger, PMKCatchPolicy) {
 
  The provided block always runs on the main queue.
 
- @see alwaysOn
+ @see ensureOn
 */
-- (AnyPromise * __nonnull(^ __nonnull)(dispatch_block_t __nonnull))always NS_REFINED_FOR_SWIFT;
+- (AnyPromise * __nonnull(^ __nonnull)(dispatch_block_t __nonnull))ensure NS_REFINED_FOR_SWIFT;
 
 /**
  The provided block is executed on the dispatch queue of your choice when the receiver is resolved.
 
- @see always
+ @see ensure
  */
-- (AnyPromise * __nonnull(^ __nonnull)(dispatch_queue_t __nonnull, dispatch_block_t __nonnull))alwaysOn NS_REFINED_FOR_SWIFT;
-
-/// @see always
-- (AnyPromise * __nonnull(^ __nonnull)(dispatch_block_t __nonnull))finally __attribute__((deprecated("Use always")));
-/// @see alwaysOn
-- (AnyPromise * __nonnull(^ __nonnull)(dispatch_block_t __nonnull, dispatch_block_t __nonnull))finallyOn __attribute__((deprecated("Use always")));
+- (AnyPromise * __nonnull(^ __nonnull)(dispatch_queue_t __nonnull, dispatch_block_t __nonnull))ensureOn NS_REFINED_FOR_SWIFT;
 
 /**
  Create a new promise with an associated resolver.
@@ -237,18 +237,3 @@ typedef void (^PMKBooleanAdapter)(BOOL, NSError * __nullable) NS_REFINED_FOR_SWI
 #define PMKManifold(...) __PMKManifold(__VA_ARGS__, 3, 2, 1)
 #define __PMKManifold(_1, _2, _3, N, ...) __PMKArrayWithCount(N, _1, _2, _3)
 extern id __nonnull __PMKArrayWithCount(NSUInteger, ...);
-
-
-
-@interface AnyPromise (Deprecations)
-
-+ (instancetype __nonnull)new:(__nullable id)resolvers __attribute__((unavailable("See +promiseWithResolverBlock:")));
-+ (instancetype __nonnull)when:(__nullable id)promises __attribute__((unavailable("See PMKWhen()")));
-+ (instancetype __nonnull)join:(__nullable id)promises __attribute__((unavailable("See PMKJoin()")));
-
-@end
-
-
-__attribute__((unavailable("See AnyPromise")))
-@interface PMKPromise
-@end

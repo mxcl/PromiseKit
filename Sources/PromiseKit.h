@@ -120,52 +120,6 @@ AnyPromise *__nonnull PMKJoin(NSArray * __nonnull promises) NS_REFINED_FOR_SWIFT
 extern id __nullable PMKHang(AnyPromise * __nonnull promise);
 
 
-
-/**
- Sets the unhandled exception handler.
-
- If an exception is thrown inside an AnyPromise handler it is caught and
- this handler is executed to determine if the promise is rejected.
- 
- The default handler rejects the promise if an NSError or an NSString is
- thrown.
- 
- The default handler in PromiseKit 1.x would reject whatever object was
- thrown (including nil).
-
- @warning *Important* This handler is provided to allow you to customize
- which exceptions cause rejection and which abort. You should either
- return a fully-formed NSError object or nil. Returning nil causes the
- exception to be re-thrown.
-
- @warning *Important* The handler is executed on an undefined queue.
-
- @warning *Important* This function is thread-safe, but to facilitate this
- it can only be called once per application lifetime and it must be called
- before any promise in the app throws an exception. Subsequent calls will
- silently fail.
-*/
-extern void PMKSetUnhandledExceptionHandler(NSError * __nullable (^__nonnull handler)(id __nullable));
-
-/**
- If an error cascades through a promise chain and is not handled by any
- `catch`, the unhandled error handler is called. The default logs all
- non-cancelled errors.
-
- This handler can only be set once, and must be set before any promises
- are rejected in your application.
-
-     PMKSetUnhandledErrorHandler({ error in
-        mylogf("Unhandled error: \(error)")
-     })
-
- - Warning: *Important* The handler is executed on an undefined queue.
- - Warning: *Important* Don’t use promises in your handler, or you risk an infinite error loop.
-*/
-extern void PMKSetUnhandledErrorHandler(void (^__nonnull handler)(NSError * __nonnull));
-
-extern void PMKUnhandledErrorHandler(NSError * __nonnull error);
-
 /**
  Executes the provided block on a background queue.
 

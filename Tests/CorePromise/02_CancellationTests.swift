@@ -6,19 +6,19 @@ class CancellationTests: XCTestCase {
     func testCancellation() {
         autoreleasepool {
             let ex1 = expectation(description: "")
-
-            InjectedErrorUnhandler = { err in
-                XCTAssertTrue(err.isCancelledError);
-                XCTAssertTrue((err as? CancellableError)?.isCancelled ?? false);
-                ex1.fulfill()
-            }
-
-            after(interval: 0).then { _ in
+            let p1 = after(interval: 0).then {
                 throw Error.cancel
             }.then {
                 XCTFail()
-            }.catch { _ in
+            }
+
+            p1.catch { _ in
                 XCTFail()
+            }
+            p1.catch(policy: .allErrors) { error in
+                XCTAssertTrue(error.isCancelledError);
+                XCTAssertTrue((error as? CancellableError)?.isCancelled ?? false)
+                ex1.fulfill()
             }
         }
 
@@ -40,26 +40,25 @@ class CancellationTests: XCTestCase {
     }
 
     func testRecoverWithCancellation() {
-        autoreleasepool {
-            let ex1 = expectation(description: "")
-            let ex2 = expectation(description: "")
+        let ex1 = expectation(description: "")
+        let ex2 = expectation(description: "")
 
-            InjectedErrorUnhandler = { err in
-                XCTAssertTrue(err.isCancelledError);
-                ex2.fulfill()
-            }
+        let p1 = after(interval: 0).then {
+            throw NSError(domain: PMKErrorDomain, code: PMKOperationCancelled, userInfo: nil)
+        }.recover(policy: .allErrors) { err -> Promise<Void> in
+            ex1.fulfill()
+            XCTAssertTrue(err.isCancelledError)
+            throw err
+        }.then {
+            XCTFail()
+        }
 
-            after(interval: 0).then { _ in
-                throw NSError(domain: PMKErrorDomain, code: PMKOperationCancelled, userInfo: nil)
-            }.recover(policy: .allErrors) { err -> Void in
-                ex1.fulfill()
-                XCTAssertTrue(err.isCancelledError)
-                throw err
-            }.then {
-                XCTFail()
-            }.catch { _ in
-                XCTFail()
-            }
+        p1.catch { _ in
+            XCTFail()
+        }
+        p1.catch(policy: .allErrors) { err in
+            XCTAssertTrue(err.isCancelledError)
+            ex2.fulfill()
         }
 
         waitForExpectations(timeout: 1)
@@ -68,7 +67,7 @@ class CancellationTests: XCTestCase {
     func testCatchCancellation() {
         let ex = expectation(description: "")
 
-        after(interval: 0).then { _ in
+        after(interval: 0).then {
             throw NSError(domain: PMKErrorDomain, code: PMKOperationCancelled, userInfo: nil)
         }.catch(policy: .allErrors) { err in
             ex.fulfill()
@@ -79,52 +78,46 @@ class CancellationTests: XCTestCase {
 
     func testFoundationBridging1() {
         let ex = expectation(description: "")
-
-        InjectedErrorUnhandler = { err in
-            XCTAssertTrue(err.isCancelledError);
-            ex.fulfill()
-        }
-
-        Promise(value: ()).then {
+        let p1 = Promise().then {
             throw NSError(domain: NSURLErrorDomain, code: URLError.cancelled.rawValue)
-        }.catch { _ in
+        }
+        p1.catch { _ in
             XCTFail()
         }
-
+        p1.catch(policy: .allErrors) { error in
+            XCTAssertTrue(error.isCancelledError);
+            ex.fulfill()
+        }
         waitForExpectations(timeout: 1)
     }
 
     func testFoundationBridging2() {
         let ex = expectation(description: "")
-
-        InjectedErrorUnhandler = { err in
+        let p1 = Promise().then {
+            throw NSError(domain: NSURLErrorDomain, code: NSURLErrorCancelled, userInfo: [:])
+        }
+        p1.catch { _ in
+            XCTFail()
+        }
+        p1.catch(policy: .allErrors) { err in
             XCTAssertTrue(err.isCancelledError);
             ex.fulfill()
         }
-
-        Promise(value: ()).then {
-            throw NSError(domain: NSURLErrorDomain, code: NSURLErrorCancelled, userInfo: [:])
-        }.catch { _ in
-            XCTFail()
-        }
-
         waitForExpectations(timeout: 1)
     }
 
     func testBridging() {
         let ex = expectation(description: "")
-
-        InjectedErrorUnhandler = { err in
+        let p1 = Promise().then {
+            throw Error.cancel as NSError
+        }
+        p1.catch { _ in
+            XCTFail()
+        }
+        p1.catch(policy: .allErrors) { err in
             XCTAssertTrue(err.isCancelledError);
             ex.fulfill()
         }
-
-        Promise(value: ()).then {
-            throw Error.cancel as NSError
-        }.catch { _ in
-            XCTFail()
-        }
-
         waitForExpectations(timeout: 1)
 
         // here we verify that Swift’s NSError bridging works as advertised

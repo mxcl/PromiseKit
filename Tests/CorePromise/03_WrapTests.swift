@@ -21,10 +21,17 @@ class WrapTests: XCTestCase {
     }
 
     func testSuccess() {
+        let ex = expectation(description: "")
+
         let kittenFetcher = KittenFetcher(value: 2, error: nil)
         let promise = PromiseKit.wrap { resolve in
             kittenFetcher.fetchWithCompletionBlock(block: resolve)
+        }.then { rv -> Int in
+            ex.fulfill()
+            return rv
         }
+
+        waitForExpectations(timeout: 1)
 
         XCTAssertTrue(promise.isFulfilled)
         XCTAssertEqual(2, promise.value)

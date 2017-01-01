@@ -5,10 +5,8 @@ class Test231: XCTestCase {
     func test() {
         describe("2.3.1: If `promise` and `x` refer to the same object, reject `promise` with a `TypeError' as the reason.") {
             specify("via return from a fulfilled promise") { d, expectation in
-                var promise: Promise<Void>!
-                promise = Promise(value: ()).then { () -> Promise<Void> in
-                    return promise
-                }
+                var promise: Promise<Int>!
+                promise = Promise().then { promise }
                 promise.catch { err in
                     if case PMKError.returnedSelf = err {
                         expectation.fulfill()
@@ -17,7 +15,7 @@ class Test231: XCTestCase {
             }
             specify("via return from a rejected promise") { d, expectation in
                 var promise: Promise<Void>!
-                promise = Promise<Void>(error: Error.dummy).recover { _ -> Promise<Void> in
+                promise = Promise(error: Error.dummy).recover { _ in
                     return promise
                 }
                 promise.catch { err in

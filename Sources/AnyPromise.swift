@@ -1,122 +1,33 @@
-import Foundation
-
 /**
- AnyPromise is an Objective-C compatible promise.
+ AnyPromise is a promise designed for Objective-C.
 */
-@objc(AnyPromise) public class AnyPromise: NSObject {
+@objc(AnyPromise) public final class AnyPromise: NSObject, PromiseMixin {
+
     let state: State<Any?>
 
-    /**
-     - Returns: A new `AnyPromise` bound to a `Promise<Any>`.
-    */
-    required public init(_ bridge: Promise<Any?>) {
-        state = bridge.state
+    /// - Returns: A new `AnyPromise` bound to a `Promise`.
+    public init<T>(_ bridge: Promise<T>) {
+        switch bridge.state.get() {
+        case .fulfilled(let value)?:
+            state = SealedState(result: .fulfilled(value))
+        case .rejected(let error)?:
+            state = SealedState(result: .rejected(error))
+        case nil:
+            state = bridge.then(on: nil, execute: Optional<Any>.init).state
+        }
     }
 
-    /// hack to ensure Swift picks the right initializer for each of the below
-    private init(force: Promise<Any?>) {
-        state = force.state
+    init(state: State<Any?>) {
+        self.state = state
     }
 
-    /**
-     - Returns: A new `AnyPromise` bound to a `Promise<T>`.
-    */
-    public convenience init<T>(_ bridge: Promise<T?>) {
-        self.init(force: bridge.then(on: zalgo) { $0 })
-    }
-
-    /**
-     - Returns: A new `AnyPromise` bound to a `Promise<T>`.
-    */
-    convenience public init<T>(_ bridge: Promise<T>) {
-        self.init(force: bridge.then(on: zalgo) { $0 })
-    }
-
-    /**
-     - Returns: A new `AnyPromise` bound to a `Promise<Void>`.
-     - Note: A “void” `AnyPromise` has a value of `nil`.
-    */
-    convenience public init(_ bridge: Promise<Void>) {
-        self.init(force: bridge.then(on: zalgo) { nil })
-    }
-
-    /**
-     Bridges an `AnyPromise` to a `Promise<Any?>`.
-
-     - Note: AnyPromises fulfilled with `PMKManifold` lose all but the first fulfillment object.
-     - Remark: Could not make this an initializer of `Promise` due to generics issues.
-     */
-    public func asPromise() -> Promise<Any?> {
-        return Promise(sealant: { resolve in
-            state.pipe { resolution in
-                switch resolution {
-                case .rejected:
-                    resolve(resolution)
-                case .fulfilled:
-                    let obj = (self as AnyObject).value(forKey: "value")
-                    resolve(.fulfilled(obj))
-                }
-            }
-        })
-    }
-
-    /// - See: `Promise.then()`
-    public func then<T>(on q: DispatchQueue = .default, execute body: @escaping (Any?) throws -> T) -> Promise<T> {
-        return asPromise().then(on: q, execute: body)
-    }
-
-    /// - See: `Promise.then()`
-    public func then(on q: DispatchQueue = .default, execute body: @escaping (Any?) throws -> AnyPromise) -> Promise<Any?> {
-        return asPromise().then(on: q, execute: body)
-    }
-
-    /// - See: `Promise.then()`
-    public func then<T>(on q: DispatchQueue = .default, execute body: @escaping (Any?) throws -> Promise<T>) -> Promise<T> {
-        return asPromise().then(on: q, execute: body)
-    }
-
-    /// - See: `Promise.always()`
-    public func always(on q: DispatchQueue = .default, execute body: @escaping () -> Void) -> Promise<Any?> {
-        return asPromise().always(execute: body)
-    }
-
-    /// - See: `Promise.tap()`
-    public func tap(on q: DispatchQueue = .default, execute body: @escaping (Result<Any?>) -> Void) -> Promise<Any?> {
-        return asPromise().tap(execute: body)
-    }
-
-    /// - See: `Promise.recover()`
-    public func recover(on q: DispatchQueue = .default, policy: CatchPolicy = .allErrorsExceptCancellation, execute body: @escaping (Error) throws -> Promise<Any?>) -> Promise<Any?> {
-        return asPromise().recover(on: q, policy: policy, execute: body)
-    }
-
-    /// - See: `Promise.recover()`
-    public func recover(on q: DispatchQueue = .default, policy: CatchPolicy = .allErrorsExceptCancellation, execute body: @escaping (Error) throws -> Any?) -> Promise<Any?> {
-        return asPromise().recover(on: q, policy: policy, execute: body)
-    }
-
-    /// - See: `Promise.catch()`
-    public func `catch`(on q: DispatchQueue = .default, policy: CatchPolicy = .allErrorsExceptCancellation, execute body: @escaping (Error) -> Void) {
-        state.catch(on: q, policy: policy, else: { _ in }, execute: body)
+    private init(sealant: (@escaping (Result<Any?>) -> Void) -> Void) {
+        var resolve: ((Result<Any?>) -> Void)!
+        state = UnsealedState(resolver: &resolve)
+        sealant(resolve)
     }
 
 //MARK: ObjC methods
-
-    /**
-     A promise starts pending and eventually resolves.
-     - Returns: `true` if the promise has not yet resolved.
-     */
-    @objc public var pending: Bool {
-        return state.get() == nil
-    }
-
-    /**
-     A promise starts pending and eventually resolves.
-     - Returns: `true` if the promise has resolved.
-     */
-    @objc public var resolved: Bool {
-        return !pending
-    }
 
     /**
      The value of the asynchronous task this promise represents.
@@ -133,7 +44,7 @@ import Foundation
         switch state.get() {
         case nil:
             return nil
-        case .rejected(let error, _)?:
+        case .rejected(let error)?:
             return error
         case .fulfilled(let obj)?:
             return obj
@@ -155,15 +66,11 @@ import Foundation
         case let promise as AnyPromise:
             state = promise.state
         case let err as Error:
-            state = SealedState(resolution: Resolution(err))
+            state = SealedState(result: .rejected(err))
         default:
-            state = SealedState(resolution: .fulfilled(value))
+            state = SealedState(result: .fulfilled(value))
         }
         return AnyPromise(state: state)
-    }
-
-    private init(state: State<Any?>) {
-        self.state = state
     }
 
     /**
@@ -187,89 +94,58 @@ import Foundation
      - SeeAlso: http://promisekit.org/wrapping-delegation/
      */
     @objc public class func promiseWithResolverBlock(_ body: (@escaping (Any?) -> Void) -> Void) -> AnyPromise {
-        return AnyPromise(sealant: { resolve in
+        return AnyPromise { resolve in
             body { obj in
                 makeHandler({ _ in obj }, resolve)(obj)
             }
-        })
-    }
-
-    private init(sealant: (@escaping (Resolution<Any?>) -> Void) -> Void) {
-        var resolve: ((Resolution<Any?>) -> Void)!
-        state = UnsealedState(resolver: &resolve)
-        sealant(resolve)
-    }
-
-    @objc func __thenOn(_ q: DispatchQueue, execute body: @escaping (Any?) -> Any?) -> AnyPromise {
-        return AnyPromise(sealant: { resolve in
-            state.then(on: q, else: resolve, execute: makeHandler(body, resolve))
-        })
-    }
-
-    @objc func __catchWithPolicy(_ policy: CatchPolicy, execute body: @escaping (Any?) -> Any?) -> AnyPromise {
-        return AnyPromise(sealant: { resolve in
-            state.catch(on: .default, policy: policy, else: resolve) { err in
-                makeHandler(body, resolve)(err as NSError)
-            }
-        })
-    }
-
-    @objc func __alwaysOn(_ q: DispatchQueue, execute body: @escaping () -> Void) -> AnyPromise {
-        return AnyPromise(sealant: { resolve in
-            state.always(on: q) { resolution in
-                body()
-                resolve(resolution)
-            }
-        })
-    }
-
-    /**
-     Convert an `AnyPromise` to `Promise<T>`.
-
-         anyPromise.toPromise(T).then { (t: T) -> U in ... }
-     
-     - Returns: A `Promise<T>` with the requested type.
-     - Throws: `CastingError.CastingAnyPromiseFailed(T)` if self's value cannot be downcasted to the given type.
-     */
-    public func asPromise<T>(type: T.Type) -> Promise<T> {
-        return self.then(on: zalgo) { (value: Any?) -> T in
-            if let value = value as? T {
-                return value
-            }
-            throw PMKError.castError(type)
         }
+    }
+
+    @objc func __then(on q: DispatchQueue, execute body: @escaping (Any?) -> Any?) -> AnyPromise {
+        return AnyPromise { resolve in
+            state.pipe { result in
+                guard case .fulfilled(let value) = result else { return resolve(result) }
+                let handler = makeHandler(body, resolve)
+                q.async{ handler(value) }
+            }
+        }
+    }
+
+    @objc func __catch(withPolicy policy: CatchPolicy, execute body: @escaping (Any?) -> Any?) -> AnyPromise {
+        return AnyPromise { resolve in
+            state.pipe { result in
+                switch (result, policy) {
+                case (.rejected(let error), .allErrorsExceptCancellation) where error.isCancelledError:
+                    fallthrough
+                case (.fulfilled, _):
+                    resolve(result)
+                case (.rejected(let error), _):
+                    let handler = makeHandler(body, resolve)
+                    DispatchQueue.main.async{ handler(error) }
+                }
+            }
+        }
+    }
+
+    @objc func __ensure(on q: DispatchQueue, execute body: @escaping () -> Void) -> AnyPromise {
+        state.pipe { _ in
+            q.async(execute: body)
+        }
+        return self
     }
 
     /// used by PMKWhen and PMKJoin
     @objc func __pipe(_ body: @escaping (Any?) -> Void) {
-        state.pipe { resolution in
-            switch resolution {
-            case .rejected(let error, let token):
-                token.consumed = true  // when and join will create a new parent error that is unconsumed
-                body(error as Error)
-            case .fulfilled(let value):
-                body(value)
-            }
-        }
+        state.pipe{ body($0.value) }
     }
 }
 
-
-extension AnyPromise {
-    /**
-     - Returns: A description of the state of this promise.
-     */
-    override public var description: String {
-        return "AnyPromise: \(state)"
-    }
-}
-
-private func makeHandler(_ body: @escaping (Any?) -> Any?, _ resolve: @escaping (Resolution<Any?>) -> Void) -> (Any?) -> Void {
+private func makeHandler(_ body: @escaping (Any?) -> Any?, _ resolve: @escaping (Result<Any?>) -> Void) -> (Any?) -> Void {
     return { obj in
         let obj = body(obj)
         switch obj {
         case let err as Error:
-            resolve(Resolution(err))
+            resolve(.rejected(err))
         case let promise as AnyPromise:
             promise.state.pipe(resolve)
         default:

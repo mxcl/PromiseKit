@@ -17,12 +17,12 @@ extension XCTestCase {
         }
     }
 
-    func specify(_ description: String, file: StaticString = #file, line: UInt = #line, body: (Promise<Void>.PendingTuple, XCTestExpectation) throws -> Void) {
-        let expectation = self.expectation(description: description)
-        let pending = Promise<Void>.pending()
-
+    func specify(_ description: String, file: StaticString = #file, line: UInt = #line, body: ((promise: Promise<Void>, fulfill: () -> Void, reject: (Error) -> Void), XCTestExpectation) throws -> Void) {
         do {
-            try body(pending, expectation)
+            let expectation = self.expectation(description: description)
+            let pending: Promise<Void>.Pending = Promise<Void>.pending()
+            try body((pending.promise, pending.pipe.fulfill, pending.pipe.reject), expectation)
+
             waitForExpectations(timeout: timeout) { err in
                 if let _ = err {
                     XCTFail("wait failed: \(description)", file: file, line: line)
@@ -50,19 +50,19 @@ extension XCTestCase {
         let specify = mkspecify(withExpectationCount, file: file, line: line, body: body)
 
         specify("already-fulfilled") { value in
-            return (Promise(value: value), {})
+            return (Promise(value), {})
         }
         specify("immediately-fulfilled") { value in
-            let (promise, fulfill, _) = Promise<UInt32>.pending()
+            let (promise, pipe) = Promise<UInt32>.pending()
             return (promise, {
-                fulfill(value)
+                pipe.fulfill(value)
             })
         }
         specify("eventually-fulfilled") { value in
-            let (promise, fulfill, _) = Promise<UInt32>.pending()
+            let (promise, pipe) = Promise<UInt32>.pending()
             return (promise, {
                 after(ticks: 5) {
-                    fulfill(value)
+                    pipe.fulfill(value)
                 }
             })
         }
@@ -76,16 +76,16 @@ extension XCTestCase {
             return (Promise(error: Error.sentinel(sentinel)), {})
         }
         specify("immediately-rejected") { sentinel in
-            let (promise, _, reject) = Promise<UInt32>.pending()
+            let (promise, pipe) = Promise<UInt32>.pending()
             return (promise, {
-                reject(Error.sentinel(sentinel))
+                pipe.reject(Error.sentinel(sentinel))
             })
         }
         specify("eventually-rejected") { sentinel in
-            let (promise, _, reject) = Promise<UInt32>.pending()
+            let (promise, pipe) = Promise<UInt32>.pending()
             return (promise, {
                 after(ticks: 50) {
-                    reject(Error.sentinel(sentinel))
+                    pipe.reject(Error.sentinel(sentinel))
                 }
             })
         }
@@ -101,10 +101,11 @@ extension XCTestCase {
             let expectations = (1...numberOfExpectations).map {
                 self.expectation(description: "\(desc) (\($0))")
             }
+
             body(promise, expectations, value)
             
             executeAfter()
-            
+
             self.waitForExpectations(timeout: timeout) { err in
                 if let _ = err {
                     XCTFail("timed out: \(desc)", file: file, line: line)
@@ -137,7 +138,7 @@ func after(ticks: Int, execute body: @escaping () -> Void) {
 
 extension Promise {
     func test(onFulfilled: @escaping () -> Void, onRejected: @escaping () -> Void) {
-        tap { result in
+        _=tap { result in
             switch result {
             case .fulfilled:
                 onFulfilled()

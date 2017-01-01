@@ -1,6 +1,8 @@
 #import "PMKCallVariadicBlock.m"
 #import "AnyPromise+Private.h"
 
+#warning restore ErrorUnhandler functionality
+
 extern dispatch_queue_t PMKDefaultDispatchQueue();
 
 NSString *const PMKErrorDomain = @"PMKErrorDomain";
@@ -54,16 +56,34 @@ NSString *const PMKErrorDomain = @"PMKErrorDomain";
     };
 }
 
-- (AnyPromise *(^)(dispatch_block_t))always {
+- (AnyPromise *(^)(dispatch_block_t))ensure {
     return ^(dispatch_block_t block) {
-        return [self __alwaysOn:PMKDefaultDispatchQueue() execute:block];
+        return [self __ensureOn:PMKDefaultDispatchQueue() execute:block];
     };
 }
 
-- (AnyPromise *(^)(dispatch_queue_t, dispatch_block_t))alwaysOn {
+- (AnyPromise *(^)(dispatch_queue_t, dispatch_block_t))ensureOn {
     return ^(dispatch_queue_t queue, dispatch_block_t block) {
-        return [self __alwaysOn:queue execute:block];
+        return [self __ensureOn:queue execute:block];
     };
+}
+
+- (BOOL)pending {
+    return [self valueForKey:@"__value"] == nil;
+}
+
+- (BOOL)resolved {
+    return !self.pending;
+}
+
+- (id)value {
+    id obj = [self valueForKey:@"__value"];
+
+    if ([obj isKindOfClass:[PMKArray class]]) {
+        return obj[0];
+    } else {
+        return obj;
+    }
 }
 
 @end
@@ -102,16 +122,6 @@ NSString *const PMKErrorDomain = @"PMKErrorDomain";
             }
         });
     }];
-}
-
-- (id)value {
-    id obj = [self valueForKey:@"__value"];
-
-    if ([obj isKindOfClass:[PMKArray class]]) {
-        return obj[0];
-    } else {
-        return obj;
-    }
 }
 
 @end

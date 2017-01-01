@@ -4,13 +4,14 @@
 #import "AnyPromise+Private.h"
 #import <Foundation/NSError.h>
 #import <dispatch/once.h>
+#import "PromiseKit.h"  // for PMK constants
 #import <string.h>
 
 #ifndef PMKLog
 #define PMKLog NSLog
 #endif
 
-@interface PMKArray : NSObject {
+@interface PMKArray : NSArray {
 @public
     id objs[3];
     NSUInteger count;
@@ -24,6 +25,14 @@
         return nil;
     }
     return objs[idx];
+}
+
+- (NSUInteger)count {
+    return count;
+}
+
+- (id)objectAtIndex:(NSUInteger)index {
+    return objs[index];
 }
 
 @end
@@ -108,7 +117,11 @@ static inline id _PMKCallVariadicBlock(id frock, id result) {
 static id PMKCallVariadicBlock(id frock, id result) {
     @try {
         return _PMKCallVariadicBlock(frock, result);
-    } @catch (id thrown) {
-        return PMKProcessUnhandledException(thrown);
+    } @catch (id reason) {
+        if ([reason isKindOfClass:[NSError class]])
+            return reason;
+        if ([reason isKindOfClass:[NSString class]])
+            return [NSError errorWithDomain:PMKErrorDomain code:PMKUnexpectedError userInfo:@{NSLocalizedDescriptionKey: reason}];
+        @throw reason;
     }
 }

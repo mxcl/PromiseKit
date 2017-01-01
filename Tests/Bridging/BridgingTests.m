@@ -16,7 +16,7 @@
     promise.then(^{
         [ex fulfill];
     });
-    [self waitForExpectationsWithTimeout:20 handler:nil];
+    [self waitForExpectationsWithTimeout:10 handler:nil];
 }
 
 @end

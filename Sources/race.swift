@@ -11,7 +11,7 @@
 */
 public func race<T>(promises: [Promise<T>]) -> Promise<T> {
     guard promises.count > 0 else {
-        fatalError("Cannot race with an empty array of promises")
+        return Promise(error: PMKError.badInput)
     }
     return _race(promises: promises)
 }
@@ -32,9 +32,9 @@ public func race<T>(_ promises: Promise<T>...) -> Promise<T> {
 }
 
 private func _race<T>(promises: [Promise<T>]) -> Promise<T> {
-    return Promise(sealant: { resolve in
+    return Promise { pipe in
         for promise in promises {
-            promise.state.pipe(resolve)
+            promise.pipe(to: pipe)
         }
-    })
+    }
 }
