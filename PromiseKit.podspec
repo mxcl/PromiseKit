@@ -105,12 +105,7 @@ Pod::Spec.new do |s|
   end
   
   s.subspec 'Foundation' do |ss|
-    base_files = Dir['Extensions/Foundation/Sources/*']
-    nstask_files = Dir['Extensions/Foundation/Sources/*NSTask*']
-    base_files -= nstask_files
-
-    ss.source_files = base_files
-    ss.osx.source_files = base_files + nstask_files
+    ss.source_files = Dir['Extensions/Foundation/Sources/*']
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'Foundation'
   end
