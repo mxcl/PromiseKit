@@ -319,6 +319,7 @@ open class Promise<T> {
      - Parameter execute: The closure that executes when this promise resolves.
      - Returns: A new promise, resolved with this promise’s resolution.
      */
+	@discardableResult
     public func always(on q: DispatchQueue = .default, execute body: @escaping () -> Void) -> Promise {
         state.always(on: q) { resolution in
             body()
