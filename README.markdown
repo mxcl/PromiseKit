@@ -209,6 +209,12 @@ URLSession.GET("http://example.com").asDictionary().then { json in
 
 For [AFNetworking] we recommend [csotiriou/AFNetworking].
 
+
+# Need to convert your codebase to Promises?
+
+[Hire me](mailto:mxcl@me.com), I have years of experience with Promises in iOS codebases and 10 years of professional experience developing mobile apps.
+
+
 # Support
 
 Ask your question at our [Gitter chat channel](https://gitter.im/mxcl/PromiseKit) or on
