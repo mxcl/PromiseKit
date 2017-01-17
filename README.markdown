@@ -2,6 +2,10 @@
 
 ![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] ![badge-mit]
 
+[简体中文](README.zh_CN.md)
+
+=====
+
 Modern development is highly asynchronous: isn’t it about time we had tools that
 made programming asynchronously powerful, easy and delightful?
 
