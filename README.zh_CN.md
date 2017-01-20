@@ -6,7 +6,7 @@
 
 ---
 
-至今现代编程方式都很好的支持了异步编程，因此在 swift 编程中，拥有功能强大轻量级异的步编程工具的需求变得很强烈。
+现代编程语言都很好的支持了异步编程，因此在 swift 编程中，拥有功能强大且轻量级的异步编程工具的需求变得很强烈。
 
 ```swift
 UIApplication.shared.isNetworkActivityIndicatorVisible = true
