@@ -2,12 +2,11 @@
 
 ![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] ![badge-mit]
 
-[简体中文](README.zh_CN.md)
+[English](README.markdown)
 
 ---
 
-Modern development is highly asynchronous: isn’t it about time we had tools that
-made programming asynchronously powerful, easy and delightful?
+现代编程语言都很好的支持了异步编程，因此在 swift 编程中，拥有功能强大且轻量级的异步编程工具的需求变得很强烈。
 
 ```swift
 UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -23,14 +22,11 @@ firstly {
     UIAlertView(/*…*/).show()
 }
 ```
+PromiseKit 是一款 swift 编写的支持 iOS，macOS，tvOS，watchOS 等多平台的轻量级异步编程库，同时 PromiseKit 完美的支持了 Objective-C 桥接。
 
-PromiseKit is a thoughtful and complete implementation of promises for any
-platform with a `swiftc`, it has *excellent* Objective-C bridging and
-*delightful* specializations for iOS, macOS, tvOS and watchOS.
+# 快速预览
 
-# Quick Start
-
-We recommend [CocoaPods] or [Carthage], however you can just drop `PromiseKit.xcodeproj` into your project and add `PromiseKit.framework` to your app’s embedded frameworks.
+我们推荐您使用 [CocoaPods] 或者 [Carthage] 来集成 ProkiseKit，您也可以通过把 `PromiseKit.xcodeproj` 拖拽到项目中并导入 `PromiseKit.framework` 来手动集成。
 
 ## Xcode 8 / Swift 3
 
@@ -61,13 +57,13 @@ pod "PromiseKit", "~> 3.5"
 github "mxcl/PromiseKit" ~> 3.5
 ```
 
-# Documentation
+# 文档
 
-We have thorough and complete documentation at [promisekit.org].
+您可以通过 [promisekit.org] 站点来查看全部文档
 
-## Overview
+## 概览
 
-Promises are defined by the function `then`:
+在 `then` 方法中定义异步任务：
 
 ```swift
 login().then { json in
@@ -75,7 +71,7 @@ login().then { json in
 }
 ```
 
-They are chainable:
+链式调用：
 
 ```swift
 login().then { json -> Promise<UIImage> in
@@ -85,7 +81,7 @@ login().then { json -> Promise<UIImage> in
 }
 ```
 
-Errors cascade through chains:
+`catch` 链式调用进行错误处理：
 
 ```swift
 login().then {
@@ -97,7 +93,7 @@ login().then {
 }
 ```
 
-They are composable:
+组合调用：
 
 ```swift
 let username = login().then{ $0["username"] }
@@ -109,7 +105,7 @@ when(username, CLLocationManager.promise()).then { user, location in
 }
 ```
 
-They are trivial to refactor:
+简单重构：
 
 ```swift
 func avatar() -> Promise<UIImage> {
@@ -121,7 +117,8 @@ func avatar() -> Promise<UIImage> {
 }
 ```
 
-You can easily create a new, pending promise.
+您也可以创建一个新的异步任务：
+
 ```swift
 func fetchAvatar(user: String) -> Promise<UIImage> {
     return Promise { fulfill, reject in
@@ -135,13 +132,13 @@ func fetchAvatar(user: String) -> Promise<UIImage> {
 }
 ```
 
-## Continue Learning…
+## 更多用法
 
-Complete and progressive learning guide at [promisekit.org].
+您可以通过 [promisekit.org] 站点获得更多用法。
 
 ## PromiseKit vs. Xcode
 
-PromiseKit contains Swift, so we engage in an unending battle with Xcode:
+由于 Xcode 支持不同版本的 swift，下面是 PromiseKit 与 Xcode 的对应关系：
 
 | Swift | Xcode | PromiseKit |   CI Status  |   Release Notes   |
 | ----- | ----- | ---------- | ------------ | ----------------- |
@@ -150,12 +147,12 @@ PromiseKit contains Swift, so we engage in an unending battle with Xcode:
 |   1   |   7   |      3     |       –      | [2015/10][news-3] |
 | *N/A* |   *   |      1†    | ![ci-legacy] |         –         |
 
-† PromiseKit 1 is pure Objective-C and thus can be used with any Xcode, it is
-also your only choice if you need to support iOS 7 or below.
+† PromiseKit 1 是纯 Objective-C 开发的，因此您可以在 Xcode 的任何版本中使用，当需要支持 iOS 7 或更低版本时只能选择 PromiseKit 1。
 
 ---
 
-We also maintain some branches to aid migrating between Swift versions:
+我们同时维护了一些分支来帮助您做 Swift 版本间的移植：
+
 
 | Xcode | Swift | PromiseKit | Branch                      | CI Status |
 | ----- | ----- | -----------| --------------------------- | --------- |
@@ -165,31 +162,28 @@ We also maintain some branches to aid migrating between Swift versions:
 |  7.1  |  2.1  | 2          | [swift-2.0-minimal-changes] | ![ci-20]  |
 |  7.0  |  2.0  | 2          | [swift-2.0-minimal-changes] | ![ci-20]  |
 
-We do **not** usually backport fixes to these branches, but pull-requests are welcome.
+我们通常不会再对这些分支做维护，但同样欢迎提交 PR。
 
-# Extensions
+# 扩展
 
-Promises are only as useful as the asynchronous tasks they represent, thus we 
-have converted (almost) all of Apple’s APIs to Promises. The default CocoaPod
-comes with promises UIKit and Foundation, the rest are accessed by specifying
-additional subspecs in your `Podfile`, eg:
+Promises 仅在执行异步任务时非常有用，因此我们把苹果绝大部分接口都转换成了异步任务。当导入 Promises 时已经默认包含了 UIKit 和 Foundation。其他框架需要在 `Podfile` 中单独声明：
 
 ```ruby
 pod "PromiseKit/MapKit"        # MKDirections().promise().then { /*…*/ }
 pod "PromiseKit/CoreLocation"  # CLLocationManager.promise().then { /*…*/ }
 ```
 
-All our extensions are separate repositories at the [PromiseKit org ](https://github.com/PromiseKit).
+扩展的所有 repo 请访问 [PromiseKit org ](https://github.com/PromiseKit)。
 
-For Carthage specify the additional repositories in your `Cartfile`:
+在 `Cartfile` 中声明：
 
 ```ruby
 github "PromiseKit/MapKit" ~> 1.0
 ```
 
-## Choose Your Networking Library
+## 选择网络库
 
-`NSURLSession` is typically inadequate; choose from [Alamofire] or [OMGHTTPURLRQ]:
+直接使用 `NSURLSession` 通常是不可取的，您可以选择使用 [Alamofire] or [OMGHTTPURLRQ]:
 
 ```swift
 // pod 'PromiseKit/Alamofire'  
@@ -206,19 +200,15 @@ URLSession.GET("http://example.com").asDictionary().then { json in
     //…
 }
 ```
+[AFNetworking] 我们推荐使用 [csotiriou/AFNetworking]。
 
-For [AFNetworking] we recommend [csotiriou/AFNetworking].
+# 需要将您的代码转换到 Promises?
 
+[有偿帮助](mailto:mxcl@me.com)，我有几年 Promises 编码经验并在移动开发领域已有 10 年的开发经验。
 
-# Need to convert your codebase to Promises?
+# 支持 
 
-[Hire me](mailto:mxcl@me.com), I have years of experience with Promises in iOS codebases and 10 years of professional experience developing mobile apps.
-
-
-# Support
-
-Ask your question at our [Gitter chat channel](https://gitter.im/mxcl/PromiseKit) or on
-[our bug tracker](https://github.com/mxcl/PromiseKit/issues/new).
+如果您有任何问题可以访问 [Gitter chat channel](https://gitter.im/mxcl/PromiseKit)，也可以进行 [bug 追踪](https://github.com/mxcl/PromiseKit/issues/new)
 
 
 [travis]: https://travis-ci.org/mxcl/PromiseKit
