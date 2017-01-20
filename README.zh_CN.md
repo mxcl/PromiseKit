@@ -2,7 +2,7 @@
 
 ![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] ![badge-mit]
 
-[English](README..markdown)
+[English](README.markdown)
 
 ---
 
