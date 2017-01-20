@@ -63,7 +63,7 @@ github "mxcl/PromiseKit" ~> 3.5
 
 ## 概览
 
-Promises 在 `then` 方法中定义：
+在 `then` 方法中定义异步任务：
 
 ```swift
 login().then { json in
@@ -117,7 +117,7 @@ func avatar() -> Promise<UIImage> {
 }
 ```
 
-您也可以创建一个新的 promise：
+您也可以创建一个新的异步任务：
 
 ```swift
 func fetchAvatar(user: String) -> Promise<UIImage> {
@@ -166,7 +166,7 @@ func fetchAvatar(user: String) -> Promise<UIImage> {
 
 # 扩展
 
-Promises 仅在执行异步任务时非常有用，因此我们把苹果绝大部分接口都转换成了 Promises。当导入 Promises 时已经默认包含了 UIKit 和 Foundation。其他框架需要在 `Podfile` 中单独声明：
+Promises 仅在执行异步任务时非常有用，因此我们把苹果绝大部分接口都转换成了异步任务。当导入 Promises 时已经默认包含了 UIKit 和 Foundation。其他框架需要在 `Podfile` 中单独声明：
 
 ```ruby
 pod "PromiseKit/MapKit"        # MKDirections().promise().then { /*…*/ }
