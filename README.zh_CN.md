@@ -139,6 +139,7 @@ func fetchAvatar(user: String) -> Promise<UIImage> {
 ## PromiseKit vs. Xcode
 
 由于 Xcode 支持不同版本的 swift，下面是 PromiseKit 与 Xcode 的对应关系：
+
 | Swift | Xcode | PromiseKit |   CI Status  |   Release Notes   |
 | ----- | ----- | ---------- | ------------ | ----------------- |
 |   3   |   8   |      4     | ![ci-master] | [2016/09][news-4] |
