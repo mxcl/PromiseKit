@@ -170,13 +170,12 @@ open class Promise<T> {
            }
      */
     public func then<U>(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> Promise<U>) -> Promise<U> {
-        var rv: Promise<U>!
-        rv = Promise<U> { resolve in
-            state.then(on: q, else: resolve) { value in
-                let promise = try body(value)
-                guard promise !== rv else { throw PMKError.returnedSelf }
-                promise.state.pipe(resolve)
-            }
+        var resolve: ((Resolution<U>) -> Void)!
+        let rv = Promise<U>{ resolve = $0 }
+        state.then(on: q, else: resolve) { value in
+            let promise = try body(value)
+            guard promise !== rv else { throw PMKError.returnedSelf }
+            promise.state.pipe(resolve)
         }
         return rv
     }
@@ -268,13 +267,12 @@ open class Promise<T> {
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
     public func recover(on q: DispatchQueue = .default, policy: CatchPolicy = .allErrorsExceptCancellation, execute body: @escaping (Error) throws -> Promise) -> Promise {
-        var rv: Promise!
-        rv = Promise { resolve in
-            state.catch(on: q, policy: policy, else: resolve) { error in
-                let promise = try body(error)
-                guard promise !== rv else { throw PMKError.returnedSelf }
-                promise.state.pipe(resolve)
-            }
+        var resolve: ((Resolution<T>) -> Void)!
+        let rv = Promise{ resolve = $0 }
+        state.catch(on: q, policy: policy, else: resolve) { error in
+            let promise = try body(error)
+            guard promise !== rv else { throw PMKError.returnedSelf }
+            promise.state.pipe(resolve)
         }
         return rv
     }
