@@ -591,20 +591,22 @@ static inline AnyPromise *fulfillLater() {
 }
 
 - (void)test_48_finally_negative {
-    id ex1 = [self expectationWithDescription:@""];
-    id ex2 = [self expectationWithDescription:@""];
+    @autoreleasepool {
+        id ex1 = [self expectationWithDescription:@"always"];
+        id ex2 = [self expectationWithDescription:@"errorUnhandler"];
 
-    Injected.errorUnhandler = ^(NSError *err) {
-        XCTAssertEqualObjects(err.domain, PMKTestErrorDomain);
-        [ex2 fulfill];
-    };
+        Injected.errorUnhandler = ^(NSError *err) {
+            XCTAssertEqualObjects(err.domain, PMKTestErrorDomain);
+            [ex2 fulfill];
+        };
 
-    [AnyPromise promiseWithValue:@1].then(^{
-        return dummy();
-    }).always(^{
-        [ex1 fulfill];
-    });
-
+        [AnyPromise promiseWithValue:@1].then(^{
+            return dummy();
+        }).always(^{
+            [ex1 fulfill];
+        });
+    }
+    
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
