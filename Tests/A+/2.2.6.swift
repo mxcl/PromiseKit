@@ -65,7 +65,7 @@ class Test226: XCTestCase {
                 describe("results in multiple branching chains with their own fulfillment values") {
                     testFulfilled(withExpectationCount: 3) { promise, exes, memo in
                         let sentinel1 = 671
-                        let sentinel2 = 672
+                        let sentinel2: UInt32 = 672
                         let sentinel3 = 673
 
                         promise.then { _ in sentinel1 }.then { value in
@@ -74,9 +74,10 @@ class Test226: XCTestCase {
                         }
 
                         promise.then { _ -> Int in
-                            throw NSError(domain: PMKErrorDomain, code: sentinel2, userInfo: nil)
+                            throw Error.sentinel(sentinel2)
                         }.catch { err in
-                            XCTAssertEqual((err as NSError).code, sentinel2)
+                            guard case Error.sentinel(let code) = err else { return XCTFail() }
+                            XCTAssertEqual(code, sentinel2)
                             exes[1].fulfill()
                         }
 

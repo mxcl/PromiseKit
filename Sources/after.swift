@@ -2,11 +2,10 @@ import struct Foundation.TimeInterval
 import Dispatch
 
 /**
- - Returns: A new promise that fulfills after the specified duration.
+ - Returns: A `Guarantee` that resolves after the specified duration.
 */
-public func after(interval: TimeInterval) -> Promise<Void> {
-    return Promise { pipe in
-        let when = DispatchTime.now() + interval
-        DispatchQueue.global().asyncAfter(deadline: when, execute: pipe.fulfill)
-    }
+public func after(interval: TimeInterval) -> Guarantee<Void> {
+    let (guarantee, seal) = Guarantee<Void>.pending()
+    DispatchQueue.global().asyncAfter(deadline: .now() + interval, execute: seal)
+    return guarantee
 }

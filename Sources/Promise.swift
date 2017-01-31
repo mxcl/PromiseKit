@@ -1,3 +1,110 @@
+import Foundation
+
+
+// Caveats (specify fixes alongside)
+// * Promise { throw E.dummy } is interpreted as `Promise<() throws -> Void>` of all things
+// * Promise(E.dummy) is interpreted as `Promise<E>`
+
+
+// Remarks:
+// * We typically use `.pending()` to reduce nested insanities in your backtraces
+
+
+public protocol Thenable: class {
+    associatedtype T
+    func pipe(to: @escaping (Result<T>) -> Void)
+    var result: Result<T>? { get }
+}
+
+public protocol Catchable: Thenable
+{}
+
+private enum Schrödinger<R> {
+    case pending(Handlers<R>)
+    case resolved(R)
+}
+
+public enum Result<T> {
+    case rejected(Error)
+    case fulfilled(T)
+}
+
+private class Handlers<R> {
+    var bodies: [(R) -> Void] = []
+}
+
+public enum UnambiguousInitializer {
+    case start
+}
+
+private protocol Mixin: class {
+    associatedtype R
+    var barrier: DispatchQueue { get }
+    var _schrödinger: Schrödinger<R> { get set }
+    var schrödinger: Schrödinger<R> { get set }
+}
+
+extension Mixin {
+    var schrödinger: Schrödinger<R> {
+        get {
+            var result: Schrödinger<R>!
+            barrier.sync {
+                result = _schrödinger
+            }
+            return result
+        }
+        set {
+            guard case .resolved(let result) = newValue else {
+                fatalError()
+            }
+            var bodies: [(R) -> Void]!
+            barrier.sync(flags: .barrier) {
+                guard case .pending(let handlers) = self._schrödinger else {
+                    return  // already fulfilled!
+                }
+                bodies = handlers.bodies
+                self._schrödinger = newValue
+            }
+            //FIXME if pipe is called now there's a reasonable chance
+            // in a multi-threaded environment that “thens are called in order”
+            // would be violated.
+            //NOTE we do this outside the barrier because otherwise one of the
+            // handlers *could* cause deadlock
+            if let bodies = bodies {
+                for body in bodies {
+                    body(result)
+                }
+            }
+        }
+    }
+    public func pipe(to body: @escaping (R) -> Void) {
+        var result: R?
+        barrier.sync {
+            switch _schrödinger {
+            case .pending:
+                break
+            case .resolved(let resolute):
+                result = resolute
+            }
+        }
+        if result == nil {
+            barrier.sync(flags: .barrier) {
+                switch _schrödinger {
+                case .pending(let handlers):
+                    handlers.bodies.append(body)
+                case .resolved(let resolute):
+                    result = resolute
+                }
+            }
+        }
+        if let result = result {
+            body(result)
+        }
+    }
+}
+
+
+
 /**
  A *promise* represents the future Wrapped of a (usually) asynchronous task.
 
@@ -12,164 +119,519 @@
 
  - SeeAlso: [PromiseKit 101](http://promisekit.org/docs/)
  */
-public final class Promise<Wrapped>: PromiseMixin {
-    let state: State<Wrapped>
+public final class Promise<T>: Thenable, Catchable, Mixin {
 
-    init(state: State<Wrapped>) {
-        self.state = state
+    fileprivate init(schrödinger cat: Schrödinger<Result<T>> = .pending(Handlers())) {
+        barrier = DispatchQueue(label: "org.promisekit.barrier", attributes: .concurrent)
+        _schrödinger = cat
     }
 
-    /**
-     Create an already resolved promise.
-     
-     - Note: Usually promises start pending, but sometimes you need a promise that has already transitioned to the “rejected” state.
-     */
-    public convenience init(_ result: Result<Wrapped>) {
-        self.init(state: SealedState(result: result))
+    public convenience init(seal body: (Sealant<T>) throws -> Void) {
+        do {
+            self.init()
+            try body(Sealant{ self.schrödinger = .resolved($0) })
+        } catch {
+            _schrödinger = .resolved(.rejected(error))
+        }
     }
 
-    /**
-     Create an already fulfilled promise.
-     
-     - Note: Usually promises start pending, but sometimes you need a promise that has already transitioned to the “fulfilled” state.
-     */
-    public convenience init(_ Wrapped: Wrapped) {
-        self.init(state: SealedState(result: .fulfilled(Wrapped)))
+    public init(_: UnambiguousInitializer, assimilate body: () throws -> Promise) {
+        do {
+            let host = try body()
+            barrier = host.barrier             //FIXME not thread-safe
+            _schrödinger = host._schrödinger   //FIXME not thread-safe
+        } catch {
+            barrier = DispatchQueue(label: "org.promisekit.barrier", attributes: .concurrent)
+            _schrödinger = .resolved(.rejected(error))
+        }
     }
 
-    /**
-     Create an already rejected promise.
-     
-     - Note: Usually promises start pending, but sometimes you need a promise that has already transitioned to the “rejected” state.
-     */
+    /// - Note: `Promise()` thus creates a *fulfilled* `Void` promise.
+    /// - TODO: Ideally this would not exist, since it is better to make a `Guarantee`.
+    /// - Remark: It is possible to create a `Promise<Error>` with this method. Generally this isn’t what you really want and trying to use it will quickly reveal that and then you'll realize your mistake.
+    public convenience init(_ value: T) {
+        self.init(schrödinger: .resolved(.fulfilled(value)))
+    }
+
     public convenience init(error: Error) {
-        self.init(state: SealedState(result: .rejected(error)))
+        self.init(schrödinger: .resolved(.rejected(error)))
     }
 
-    /**
-     Create a new, pending promise.
+    //TODO don't need this if instantiated sealed
+    fileprivate let barrier: DispatchQueue
+    fileprivate var _schrödinger: Schrödinger<Result<T>>
 
-         func fetchAvatar(user: String) -> Promise<UIImage> {
-             return Promise { pipe in
-                 MyWebHelper.GET("\(user)/avatar") { data, err in
-                     guard let data = data else { return pipe.reject(err) }
-                     guard let img = UIImage(data: data) else { return pipe.reject(MyError.InvalidImage) }
-                     guard let img.size.width > 0 else { return pipe.reject(MyError.ImageTooSmall) }
-                     pipe.fulfill(img)
-                 }
-             }
-         }
-
-     - Parameter pipe: The provided closure is called immediately on the current queue; commence your asynchronous task, calling either `pipe.fulfill` or `pipe.reject` when it completes.
-     - Returns: A new promise.
-     - Note: It is usually easier to use `PromiseKit.wrap`.
-     - Note: If you are wrapping a delegate-based system, we recommend to use instead: `Promise.pending()`
-     - SeeAlso: http://promisekit.org/docs/sealing-promises/
-     - SeeAlso: http://promisekit.org/docs/cookbook/wrapping-delegation/
-     - SeeAlso: pending()
-     */
-    public convenience init(pipe callback: (Pipe<Wrapped>) throws -> Void) {
-        let pipe = Pipe<Wrapped>()
-        do {
-            self.init(state: UnsealedState(resolver: &pipe._resolve))
-            try callback(pipe)
-        } catch {
-            pipe.reject(error)
+    public var result: Result<T>? {
+        switch schrödinger {
+        case .pending:
+            return nil
+        case .resolved(let result):
+            return result
         }
     }
 
-    /**
-     Returns a promise that assumes the state of another promise.
- 
-     Convenient for catching errors for any preamble in creating initial promises, or for various other patterns that would otherwise be ugly or unclear in the resulting code. For example:
- 
-         return Promise {
-             guard let url = /**/ else { throw Error.badUrl }
-             return URLSession.shared.dataTask(url: url)
-         }
-     
-     Which otherwise would require a `firstly` (which would read poorly since here there is no subsequent `then`) or for all to be surrounding in a `do`, `catch` and then a rejected promise generated and returned in the catch.
-     
-     - Remark: `return` was chosen rather than passing in a `pipe` function since you cannot forget to `return`.
-
-     */
-    public convenience init<Promise: Chainable>(bind body: () throws -> Promise) where Promise.Wrapped == Wrapped {
-        do {
-            self.init(state: try body().state)
-        } catch {
-            self.init(error: error)
-        }
+    public static func pending() -> (promise: Promise, seal: Sealant<T>) {
+        let promise = Promise()
+        let sealant = Sealant{ promise.schrödinger = .resolved($0) }
+        return (promise, sealant)
     }
 
-    //TODO we want `Self` and *not* `Promise`
-    public typealias Pending = (promise: Promise, pipe: Pipe<Wrapped>)
-
-    /**
-     Making promises that wrap asynchronous delegation systems or other larger asynchronous systems without a simple completion handler is easier with pending.
-
-         class Foo: BarDelegate {
-             let (promise, pipe) = Promise<Int>.pending()
-    
-             func barDidFinishWithResult(result: Int) {
-                 pipe.resolve(result)
-             }
-    
-             func barDidError(error: NSError) {
-                 pipe.resolve(error)
-             }
-         }
-
-     - Returns: A promise and a pipe that can resolve it.
-     */
-    public static func pending() -> Pending {
-        let pipe = Pipe<Wrapped>()
-        let state = UnsealedState(resolver: &pipe._resolve)
-        let promise = Promise(state: state)
-        return (promise, pipe)
-    }
-
-
-    /**
-     Our `Pipe` is less efficient due to Promises/A+, so we use this internally.
-     */
-    static func _pending() -> (promise: Promise, resolve: (Result<Wrapped>) -> Void) {
-        var resolve: ((Result<Wrapped>) -> Void)!
-        let state = UnsealedState<Wrapped>(resolver: &resolve)
-        let promise = Promise(state: state)
-        return (promise, resolve)
-    }
-
-    /**
-     Pipes the Wrapped of this promise to the provided function.
-
-     - Parameter to: The pipe of another promise that we will “pipe” our state to.
-     - SeeAlso: `pending() -> (Promise, Joint)`
-     - Remark: Wrapped in a pipe rather than allowing any `(Result) -> Void` because we do this on the current queue and need exactly defined behavior for what the function this calls does. `tap` is basically the same function, but it has a defined queue so it takes a `Result` closure.
-     - Todo: We should probably immediately reject if the pipe will pipe to `self`
-     */
-    public func pipe(to pipe: Pipe<Wrapped>) {
-        state.pipe(pipe.resolve)
-    }
-
-    /**
-     Void promises are less prone to generics-of-doom scenarios.
-     - SeeAlso: when.swift contains enlightening examples of using `Promise<Void>` to simplify your code.
-     */
     public func asVoid() -> Promise<Void> {
-        let (promise, resolve) = Promise<Void>._pending()
-        state.pipe{ result in
+        return then{ _ in }
+    }
+}
+
+
+extension Thenable {
+    public func then<U: Thenable>(on: ExecutionContext = NextMainRunloop(), execute body: @escaping (T) throws -> U) -> Promise<U.T> {
+        let promise = Promise<U.T>()
+        pipe { result in
             switch result {
-            case .fulfilled:
-                resolve(.fulfilled())
+            case .fulfilled(let value):
+                on.pmkAsync {
+                    do {
+                        let intermediary = try body(value)
+                        guard intermediary !== promise else { throw PMKError.returnedSelf }
+                        intermediary.pipe{ promise.schrödinger = .resolved($0) }
+                    } catch {
+                        promise.schrödinger = .resolved(.rejected(error))
+                    }
+                }
             case .rejected(let error):
-                resolve(.rejected(error))
+                promise.schrödinger = .resolved(.rejected(error))
+            }
+        }
+        return promise
+    }
+
+    public func then<U>(on: ExecutionContext = NextMainRunloop(), execute body: @escaping (T) throws -> U) -> Promise<U> {
+        let promise = Promise<U>()
+        pipe { result in
+            switch result {
+            case .fulfilled(let value):
+                on.pmkAsync {
+                    do {
+                        let value = try body(value)
+                        promise.schrödinger = .resolved(.fulfilled(value))
+                    } catch {
+                        promise.schrödinger = .resolved(.rejected(error))
+                    }
+                }
+            case .rejected(let error):
+                promise.schrödinger = .resolved(.rejected(error))
             }
         }
         return promise
     }
 }
 
-extension Promise where Wrapped: Collection {
+extension Catchable {
+    public func ensure(on: ExecutionContext = NextMainRunloop(), that body: @escaping () -> Void) -> Self {
+        pipe { _ in
+            on.pmkAsync(execute: body)
+        }
+        return self
+    }
+
+    @discardableResult
+    public func `catch`(on: ExecutionContext = NextMainRunloop(), handler body: @escaping (Error) -> Void) -> Finally {
+        let finally = Finally()
+        pipe { result in
+            switch result {
+            case .fulfilled:
+                break
+            case .rejected(let error):
+                on.pmkAsync {
+                    body(error)
+                }
+            }
+            finally.schrödinger = .resolved()
+        }
+        return finally
+    }
+
+    public var error: Error? {
+        switch result {
+        case .rejected(let error)?:
+            return error
+        case .fulfilled?, nil:
+            return nil
+        }
+    }
+
+    public func recover(on: ExecutionContext = NextMainRunloop(), transform body: @escaping (Error) throws -> T) -> Promise<T> {
+        let promise = Promise<T>()
+        pipe { result in
+            switch result {
+            case .rejected(let error):
+                on.pmkAsync {
+                    do {
+                        promise.schrödinger = .resolved(.fulfilled(try body(error)))
+                    } catch {
+                        promise.schrödinger = .resolved(.rejected(error))
+                    }
+                }
+            case .fulfilled:
+                promise.schrödinger = .resolved(result)
+            }
+        }
+        return promise
+    }
+
+/**
+      - Remark: Swift infers the other form for one-liners:
+
+          foo().recover{ Promise() }  // => Promise<Promise<Void>>
+        
+        We don’t know how to stop it.
+     */
+    public func recover<U: Thenable>(on: ExecutionContext = NextMainRunloop(), transform body: @escaping (Error) throws -> U) -> Promise<T> where U.T == T {
+        let promise = Promise<T>()
+        pipe { result in
+            switch result {
+            case .rejected(let error):
+                on.pmkAsync {
+                    let intermediary = try! body(error)
+                    if intermediary !== promise {
+                        intermediary.pipe{ promise.schrödinger = .resolved($0) }
+                    } else {
+                        promise.schrödinger = .resolved(.rejected(PMKError.returnedSelf))
+                    }
+                }
+            case .fulfilled:
+                promise.schrödinger = .resolved(result)
+            }
+        }
+        return promise
+    }
+}
+
+public final class Finally {  //TODO thread-safety!
+    fileprivate var schrödinger: Schrödinger<Void> = .pending(Handlers()) {
+        didSet {
+            guard case .pending(let handlers) = oldValue else { fatalError() }
+            for handler in handlers.bodies {
+                handler()
+            }
+        }
+    }
+
+    @discardableResult
+    public func finally(_ body: @escaping () -> Void) -> Finally {
+        switch schrödinger {
+        case .pending(let handlers):
+            handlers.bodies.append(body)
+        case .resolved:
+            body()
+        }
+        return self
+    }
+}
+
+
+private func unwrap(_ any: Any?) -> Result<Any?> {
+    if let error = any as? Error {
+        return .rejected(error)
+    } else {
+        return .fulfilled(any)
+    }
+}
+
+@objc(AnyPromise)
+public final class AnyPromise: NSObject, Thenable, Catchable, Mixin {
+    public var result: Result<Any?>? {
+        switch schrödinger {
+        case .resolved(let value):
+            return unwrap(value)
+        case .pending:
+            return nil
+        }
+    }
+
+    fileprivate let barrier = DispatchQueue(label: "org.promisekit.barrier", attributes: .concurrent)
+    fileprivate var _schrödinger: Schrödinger<Any?>
+
+    public func pipe(to body: @escaping (Result<Any?>) -> Void) {
+        let body = { body(unwrap($0)) }
+        pipe(to: body)
+    }
+
+    public override init() {
+        _schrödinger = .resolved(nil)
+        super.init()
+    }
+}
+
+
+/** - Remark: much like a real-life guarantee, it is only as reliable as the source; “promises”
+ may never resolve, it is up to the thing providing you the promise to ensure that they do.
+ Generally it is considered bad programming for a promise provider to provide a promise that
+ never resolves. In real life a guarantee may not be met by eg. World War III, so think
+ similarly.
+ */
+public final class Guarantee<T>: Thenable, Mixin {
+
+    fileprivate let barrier = DispatchQueue(label: "org.promisekit.barrier", attributes: .concurrent)
+    fileprivate var _schrödinger: Schrödinger<T>
+
+    /// - Remark: `Guarantee()` thus creates a resolved `Void` Guarantee.
+    public init(_ value: T) {
+        _schrödinger = .resolved(value)
+    }
+
+    public init(sealant body: (@escaping (T) -> Void) -> Void) {
+        _schrödinger = .pending(Handlers())
+        body { self.schrödinger = .resolved($0) }
+    }
+
+    private init(schrödinger: Schrödinger<T>) {
+        _schrödinger = schrödinger
+    }
+
+    public static func pending() -> (Guarantee<T>, (T) -> Void) {
+        let g = Guarantee<T>(schrödinger: .pending(Handlers()))
+        return (g, { g.schrödinger = .resolved($0) })
+    }
+
+    public func pipe(to body: @escaping (Result<T>) -> Void) {
+        pipe(to: { body(.fulfilled($0)) })
+    }
+
+    public var result: Result<T>? {
+        switch schrödinger {
+        case .pending:
+            return nil
+        case .resolved(let value):
+            return .fulfilled(value)
+        }
+    }
+
+    @discardableResult
+    public func then<U>(on: ExecutionContext = NextMainRunloop(), execute body: @escaping (T) -> Guarantee<U>) -> Guarantee<U> {
+        let (guarantee, seal) = Guarantee<U>.pending()
+        pipe { value in
+            on.pmkAsync {
+                body(value).pipe(to: seal)
+            }
+        }
+        return guarantee
+    }
+
+    @discardableResult
+    public func then<U>(on: ExecutionContext = NextMainRunloop(), execute body: @escaping (T) -> U) -> Guarantee<U> {
+        let (guarantee, _) = Guarantee<U>.pending()
+        pipe { value in
+            on.pmkAsync {
+                guarantee.schrödinger = .resolved(body(value))
+            }
+        }
+        return guarantee
+    }
+}
+
+private protocol _DispatchQoS {
+    var the: DispatchQoS { get }
+}
+extension DispatchQoS: _DispatchQoS {
+    var the: DispatchQoS { return self }
+}
+
+extension Optional where Wrapped: _DispatchQoS {
+    @inline(__always)
+    fileprivate func async(execute body: @escaping () -> Void) {
+        switch self {
+        case .none:
+            body()
+        case .some(let qos):
+            DispatchQueue.global().async(group: nil, qos: qos.the, flags: [], execute: body)
+        }
+    }
+}
+
+extension Thenable {
+    public func tap(execute body: @escaping (Result<T>) -> Void) -> Self {
+        pipe(to: body)
+        return self
+    }
+
+    public var value: T? {
+        switch result {
+        case .fulfilled(let value)?:
+            return value
+        case .rejected?, nil:
+            return nil
+        }
+    }
+
+    public var isFulfilled: Bool {
+        switch result {
+        case .fulfilled?:
+            return true
+        case .rejected?, nil:
+            return false
+        }
+    }
+
+    public var isRejected: Bool {
+        switch result {
+        case .rejected?:
+            return true
+        case .fulfilled?, nil:
+            return false
+        }
+    }
+
+    public var isPending: Bool {
+        switch result {
+        case .fulfilled?, .rejected?:
+            return true
+        case nil:
+            return false
+        }
+    }
+}
+
+
+
+@inline(__always)
+public func race<U: Thenable>(_ thenables: U...) -> Promise<U.T> {
+    return race(thenables)
+}
+
+public func race<U: Thenable>(_ thenables: [U]) -> Promise<U.T> {
+    let result = Promise<U.T>()
+    for thenable in thenables {
+        thenable.pipe{ result.schrödinger = .resolved($0) }
+    }
+    return result
+}
+
+@inline(__always)
+public func race<T>(_ guarantees: Guarantee<T>...) -> Guarantee<T> {
+    return race(guarantees)
+}
+
+public func race<T>(_ guarantees: [Guarantee<T>]) -> Guarantee<T> {
+    let (result, seal) = Guarantee<T>.pending()
+    for thenable in guarantees {
+        thenable.pipe(to: seal)
+    }
+    return result
+}
+
+
+
+public func when<U, V>(fulfilled u: Promise<U>, _ v: Promise<V>) -> Promise<(U, V)> {
+    return when(fulfilled: [u.asVoid(), v.asVoid()]).then{ _ in (u.value!, v.value!) }
+}
+
+public func when<U, V, X>(fulfilled u: Promise<U>, _ v: Promise<V>, _ x: Promise<X>) -> Promise<(U, V, X)> {
+    return when(fulfilled: [u.asVoid(), v.asVoid(), x.asVoid()]).then{ _ in (u.value!, v.value!, x.value!) }
+}
+
+public func when<U, V, X, Y>(fulfilled u: Promise<U>, _ v: Promise<V>, _ x: Promise<X>, _ y: Promise<Y>) -> Promise<(U, V, X, Y)> {
+    return when(fulfilled: [u.asVoid(), v.asVoid(), x.asVoid(), y.asVoid()]).then{ _ in (u.value!, v.value!, x.value!, y.value!) }
+}
+
+public func when<U, V, X, Y, Z>(fulfilled u: Promise<U>, _ v: Promise<V>, _ x: Promise<X>, _ y: Promise<Y>, _ z: Promise<Z>) -> Promise<(U, V, X, Y, Z)> {
+    return when(fulfilled: [u.asVoid(), v.asVoid(), x.asVoid(), y.asVoid(), z.asVoid()]).then{ _ in (u.value!, v.value!, x.value!, y.value!, z.value!) }
+}
+
+/// - Remark: There is no `...` variant, because it is then confusing that you put a splat in and don't get a splat out, when compared with the typical usage for our above splatted kinds
+public func when<U: Thenable>(fulfilled thenables: [U]) -> Promise<[U.T]> {
+    let rv = Promise<[U.T]>()
+    var values = Array<U.T!>(repeating: nil, count: thenables.count)
+    var x = thenables.count
+
+    for (index, thenable) in thenables.enumerated() {
+        thenable.pipe { result in
+            switch result {
+            case .rejected(let error):
+                rv.schrödinger = .resolved(.rejected(error))
+            case .fulfilled(let value):
+                values[index] = value
+                x -= 1
+                if x == 0 {
+                    rv.schrödinger = .resolved(.fulfilled(values))
+                }
+            }
+        }
+    }
+
+    return rv
+}
+
+@discardableResult
+public func when<U>(fulfilled guarantees: [Guarantee<U>]) -> Guarantee<[U]> {
+    let (rv, seal) = Guarantee<[U]>.pending()
+    var values = Array<U!>(repeating: nil, count: guarantees.count)
+    var x = guarantees.count
+
+    for (index, guarantee) in guarantees.enumerated() {
+        guarantee.pipe { (value: U) in
+            values[index] = value
+            x -= 1
+            if x == 0 {
+                seal(values)
+            }
+        }
+    }
+
+    return rv
+}
+
+
+extension Promise {
+    func then<U, V>(execute body: @escaping (T) -> (Promise<U>, Promise<V>)) -> Promise<(U,V)> {
+        let promise = Promise<(U, V)>()
+        pipe { result in
+            switch result {
+            case .fulfilled(let value):
+                let (u, v) = body(value)
+                when(fulfilled: u, v).pipe{ promise.schrödinger = .resolved($0) }
+            case .rejected(let error):
+                promise.schrödinger = .resolved(.rejected(error))
+            }
+        }
+        return promise
+    }
+
+    func then<U, V, X>(execute body: @escaping (T) -> (Promise<U>, Promise<V>, Promise<X>)) -> Promise<(U,V,X)> {
+        let promise = Promise<(U, V, X)>()
+        pipe { result in
+            switch result {
+            case .fulfilled(let value):
+                let (u, v, x) = body(value)
+                when(fulfilled: u, v, x).pipe{ promise.schrödinger = .resolved($0) }
+            case .rejected(let error):
+                promise.schrödinger = .resolved(.rejected(error))
+            }
+        }
+        return promise
+    }
+}
+
+
+public func when<U: Thenable>(resolved thenables: U...) -> Guarantee<[Result<U.T>]> {
+    let (rv, seal) = Guarantee<[Result<U.T>]>.pending()
+    var results = [Result<U.T>]()
+    var x = thenables.count
+
+    for (index, thenable) in thenables.enumerated() {
+        thenable.pipe { result in
+            results[index] = result
+            x -= 1
+            if x == 0 {
+                seal(results)
+            }
+        }
+    }
+
+    return rv
+}
+
+
+extension Promise where T: Collection {
     /**
      Transforms a `Promise` where `T` is a `Collection` into a `Promise<[U]>`
      
@@ -194,213 +656,31 @@ extension Promise where Wrapped: Collection {
      - Parameter transform: The closure that executes when this promise resolves.
      - Returns: A new promise, resolved with this promise’s resolution.
      */
-    public final func map<U>(on q: DispatchQueue? = .default, transform: @escaping (Wrapped.Iterator.Element) throws -> Promise<U>) -> Promise<[U]>
+    public final func map<U>(transform: @escaping (T.Iterator.Element) throws -> Promise<U>) -> Promise<[U]>
     {
-        return then(on: q) { when(fulfilled: try $0.map(transform)) }
+        return then{ when(fulfilled: try $0.map(transform)) }
     }
 }
 
-/**
- Judicious use of `firstly` *may* make chains more readable.
 
- Compare:
-
-     NSURLSession.dataTask(url: url1).then {
-         URLSession.shared.dataTask(url: url2)
-     }.then {
-         URLSession.shared.dataTask(url: url3)
-     }
-
- With:
-
-     firstly {
-         URLSession.shared.dataTask(url: url1)
-     }.then {
-         URLSession.shared.dataTask(url: url2)
-     }.then {
-         URLSession.shared.dataTask(url: url3)
-     }
- */
-public func firstly<ReturnType: Chainable>(execute body: () throws -> ReturnType) -> Promise<ReturnType.Wrapped> {
-    do {
-        return try body().promise
-    } catch {
-        return Promise(error: error)
-    }
-}
-
-public class Pipe<Wrapped> {
-
-#if !PMKDisableWarnings
-    var called = false
-
-    deinit {
-        if !called {
-            NSLog("PromiseKit: warning: `Promise(pipe:)` not resolved, this is usually a bug.")
-        }
-    }
-#endif
-
-    fileprivate var _resolve: ((Result<Wrapped>) -> Void)!
-
-    public func resolve(_ result: Result<Wrapped>) {
-    #if !PMKDisableWarnings
-        if called {
-            NSLog("PromiseKit: information: resolve is being called an already resolved promise.")
-        } else {
-            called = true   //TODO thread safety!
-        }
-    #endif
-
-        //FIXME THIS SUCKS
-        // there should be a more optimal way to do this
-        //
-        // var foo = 1
-        // after(1) {
-        //     fulfill()
-        //     foo += 1
-        // }
-        // promise.then {
-        //     foo += 1
-        // }
-        //
-        // Above is reason for the exeCtx, foo should be incremented DETERMINISTICALLY
-        //
-        // one way would be to return something since nothing can happen after the return?
-        Thread.current.afterExecutionContext {
-            self._resolve(result)
-        }
-    }
-
-    public func reject(_ error: Error) {
-        resolve(.rejected(error))
-    }
-    public func reject<U>(_ result: Result<U>) {
-        resolve(.rejected(result.value as! Error))
-    }
-    public func fulfill(_ Wrapped: Wrapped) {
-        resolve(.fulfilled(Wrapped))
-    }
-    
-    /**
-     This variant of resolve is convenient when wrapping asynchronous systems that
-     use common patterns. For example:
-
-         func fetchImage() -> Promise<UIImage> {
-             return Promise { API.fetchImage(withCompletion: $0.resolve) }
-         }
-
-     Where:
-
-         struct API {
-             func fetchImage(withCompletion: (UIImage?, Error?) -> Void) {
-                 // you or a third party provided this implementation
-             }
-         }
-     */
-    public func resolve(_ body: @escaping (Wrapped?, Error?) -> Void) {
-        try body { obj, err in
-            if let err = err {
-                reject(err)
-            } else if let obj = obj {
-                fulfill(obj)
-            } else {
-                reject(PMKError.invalidCallingConvention)
+extension DispatchQueue {
+    public func promise<T>(group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], execute body: @escaping () throws -> T) -> Promise<T> {
+        let promise = Promise<T>()
+        async(group: group, qos: qos, flags: flags) {
+            do {
+                promise.schrödinger = .resolved(.fulfilled(try body()))
+            } catch {
+                promise.schrödinger = .resolved(.rejected(error))
             }
         }
+        return promise
     }
-    
-    /**
-     This variant of resolve is convenient when wrapping asynchronous systems that
-     use common patterns. For example:
 
-         func fetch() -> Promise<FetchResult> {
-             return Promise { API.fetch(withCompletion: $0.resolve) }
-         }
-
-     Where:
-
-         enum FetchResult { /*…*/ }
-
-         struct API {
-             func fetchImage(withCompletion: (FetchResult, Error?) -> Void) {
-                 // you or a third party provided this implementation
-             }
-         }
-    
-     - Note: This implies the `FetchResult` enum has an error `case`, which you
-       thus lose. If you need to access this value you should handle the completion
-       handler yourself.
-     */
-    public func resolve(_ body: (@escaping (Wrapped, Error?) -> Void) throws -> Void) {
-        try body { obj, err in
-            if let err = err {
-                reject(err)
-            } else {
-                fulfill(obj)
-            }
+    public func promise<T>(group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], execute body: @escaping () -> T) -> Guarantee<T> {
+        let (promise, seal) = Guarantee<T>.pending()
+        async(group: group, qos: qos, flags: flags) {
+            seal(body())
         }
+        return promise
     }
-    
-    /**
-     This variant of resolve is provided so our initializer works, *even* if 
-     the API you are wrapping got the calling convention for completion handlers
-     inverted.
-    
-         func fetchImage() -> Promise<UIImage> {
-             return Promise { API.fetchImage(withCompletion: $0.resolve) }
-         }
-    
-     Where:
-    
-         func fetchImage(withCompletion: (Error?, UIImage?) -> Void) {
-             // you or a third party provided this implementation
-         }
-    
-     */
-    public func resolve(_ body: (@escaping (Error?, Wrapped?) -> Void) throws -> Void) {
-        try body { err, obj in
-            if let err = err {
-                reject(err)
-            } else if let obj = obj {
-                fulfill(obj)
-            } else {
-                reject(PMKError.invalidCallingConvention)
-            }
-        }
-    }
-
-    /**
-     This variant of resolve is provided for APIs that can error, but provide
-     no meaningful result if they succeed. It really only makes sense for
-     `Wrapped: Void`.
-    
-         func validate() -> Promise<Void> {
-             return Promise { validate(withCompletion: $0.resolve) }
-         }
-    
-     Where:
-    
-         func validate(withCompletion: (Error?) -> Void) {
-             // you or a third party provided this implementation
-         }
-    
-     */
-    public func resolve(defaultValue: Wrapped = Wrapped(), body: (@escaping (Error?) -> Void) throws -> Void) {
-        try body { error in
-            if let error = error {
-                reject(error)
-            } else {
-                fulfill()
-            }
-        }
-    }
-    
-    /// For completions that cannot error. TODO should use unfailable promise
-    public func wrap<T>(_ body: (@escaping (T) -> Void) throws -> Void) -> Promise<T> {
-        return Promise { pipe in
-            try body{ pipe.fulfill($0) }
-        }
-    }
-    
 }

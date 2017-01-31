@@ -6,30 +6,36 @@ enum Error: Swift.Error {
     case sentinel(UInt32)
 }
 
-private let timeout: TimeInterval = 10
+var indent = ""
+
+func indent(print message: String, file: StaticString = #file, line: UInt = #line, execute body: () throws -> Void) {
+    print(indent + message)
+    let oldIndent = indent
+    indent += "  "
+    do {
+        try body()
+    } catch {
+        XCTFail("\(indent)Failed: \(error)", file: file, line: line)
+    }
+    indent = oldIndent
+}
 
 extension XCTestCase {
     func describe(_ description: String, file: StaticString = #file, line: UInt = #line, body: () throws -> Void) {
-        do {
-            try body()
-        } catch {
-            XCTFail(description, file: file, line: line)
-        }
+        indent(print: description, execute: body)
     }
 
     func specify(_ description: String, file: StaticString = #file, line: UInt = #line, body: ((promise: Promise<Void>, fulfill: () -> Void, reject: (Error) -> Void), XCTestExpectation) throws -> Void) {
-        do {
-            let expectation = self.expectation(description: description)
-            let pending: Promise<Void>.Pending = Promise<Void>.pending()
-            try body((pending.promise, pending.pipe.fulfill, pending.pipe.reject), expectation)
+        indent(print: description) {
+            let ex = expectation(description: description)
+            let pending = Promise<Void>.pending()
+            try body((pending.promise, pending.seal.fulfill, pending.seal.reject), ex)
 
-            waitForExpectations(timeout: timeout) { err in
+            waitForExpectations(timeout: XCTestCase.defaultTimeout) { err in
                 if let _ = err {
                     XCTFail("wait failed: \(description)", file: file, line: line)
                 }
             }
-        } catch {
-            XCTFail(description, file: file, line: line)
         }
     }
 
@@ -102,13 +108,14 @@ extension XCTestCase {
                 self.expectation(description: "\(desc) (\($0))")
             }
 
-            body(promise, expectations, value)
-            
-            executeAfter()
+            indent(print: desc) {
+                body(promise, expectations, value)
+                executeAfter()
 
-            self.waitForExpectations(timeout: timeout) { err in
-                if let _ = err {
-                    XCTFail("timed out: \(desc)", file: file, line: line)
+                self.waitForExpectations(timeout: XCTestCase.defaultTimeout) { err in
+                    if let _ = err {
+                        XCTFail("timed out: \(desc)", file: file, line: line)
+                    }
                 }
             }
         }

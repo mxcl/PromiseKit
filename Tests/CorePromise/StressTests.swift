@@ -13,7 +13,7 @@ class StressTests: XCTestCase {
             }
         }, fulfill: { "ok" })
 
-        waitForExpectations(timeout: 10, handler: nil)
+        waitForExpectations(timeout: 10)
     }
 
     func testThensAreSequentialForLongTime() {
@@ -22,7 +22,7 @@ class StressTests: XCTestCase {
         var promise = DispatchQueue.global().promise{ 0 }
         let N = 1000
         for x in 1..<N {
-            promise = promise.then { y -> Promise<Int> in
+            promise = promise.then { y in
                 values.append(y)
                 XCTAssertEqual(x - 1, y)
                 return DispatchQueue.global().promise { x }
@@ -33,7 +33,7 @@ class StressTests: XCTestCase {
             XCTAssertEqual(values, (0..<N).map{ $0 })
             ex.fulfill()
         }
-        waitForExpectations(timeout: 10, handler: nil)
+        waitForExpectations(timeout: 10)
     }
 
     func testZalgoDataRace() {
@@ -41,7 +41,7 @@ class StressTests: XCTestCase {
 
         //will crash if zalgo doesn't protect handlers
         stressDataRace(expectation: e1, stressFunction: { promise in
-            promise.then(on: nil) { s in
+            promise.then(on: zalgo) { s in
                 XCTAssertEqual("ok", s)
                 return
             }
@@ -49,7 +49,7 @@ class StressTests: XCTestCase {
                 return "ok"
         })
 
-        waitForExpectations(timeout: 10, handler: nil)
+        waitForExpectations(timeout: 10)
     }
 }
 
