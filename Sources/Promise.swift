@@ -103,6 +103,9 @@ extension Mixin {
     }
 }
 
+private enum PendingIntializer {
+    case pending
+}
 
 
 /**
@@ -121,15 +124,20 @@ extension Mixin {
  */
 public final class Promise<T>: Thenable, Catchable, Mixin {
 
-    fileprivate init(schrödinger cat: Schrödinger<Result<T>> = .pending(Handlers())) {
+    fileprivate convenience init(_: PendingIntializer) {
+        self.init(schrödinger: .pending(Handlers()))
+    }
+
+    fileprivate init(schrödinger cat: Schrödinger<Result<T>>) {
         barrier = DispatchQueue(label: "org.promisekit.barrier", attributes: .concurrent)
         _schrödinger = cat
     }
 
-    public convenience init(seal body: (Sealant<T>) throws -> Void) {
+    public convenience init(on: ExecutionContext = NextMainRunloop(), seal body: (Sealant<T>) throws -> Void) {
         do {
-            self.init()
-            try body(Sealant{ self.schrödinger = .resolved($0) })
+            self.init(.pending)
+            let sealant = Sealant{ self.schrödinger = .resolved($0) }
+            try body(sealant)
         } catch {
             _schrödinger = .resolved(.rejected(error))
         }
@@ -171,7 +179,7 @@ public final class Promise<T>: Thenable, Catchable, Mixin {
     }
 
     public static func pending() -> (promise: Promise, seal: Sealant<T>) {
-        let promise = Promise()
+        let promise = Promise(.pending)
         let sealant = Sealant{ promise.schrödinger = .resolved($0) }
         return (promise, sealant)
     }
@@ -184,7 +192,7 @@ public final class Promise<T>: Thenable, Catchable, Mixin {
 
 extension Thenable {
     public func then<U: Thenable>(on: ExecutionContext = NextMainRunloop(), execute body: @escaping (T) throws -> U) -> Promise<U.T> {
-        let promise = Promise<U.T>()
+        let promise = Promise<U.T>(.pending)
         pipe { result in
             switch result {
             case .fulfilled(let value):
@@ -205,7 +213,7 @@ extension Thenable {
     }
 
     public func then<U>(on: ExecutionContext = NextMainRunloop(), execute body: @escaping (T) throws -> U) -> Promise<U> {
-        let promise = Promise<U>()
+        let promise = Promise<U>(.pending)
         pipe { result in
             switch result {
             case .fulfilled(let value):
@@ -260,7 +268,7 @@ extension Catchable {
     }
 
     public func recover(on: ExecutionContext = NextMainRunloop(), transform body: @escaping (Error) throws -> T) -> Promise<T> {
-        let promise = Promise<T>()
+        let promise = Promise<T>(.pending)
         pipe { result in
             switch result {
             case .rejected(let error):
@@ -286,7 +294,7 @@ extension Catchable {
         We don’t know how to stop it.
      */
     public func recover<U: Thenable>(on: ExecutionContext = NextMainRunloop(), transform body: @escaping (Error) throws -> U) -> Promise<T> where U.T == T {
-        let promise = Promise<T>()
+        let promise = Promise<T>(.pending)
         pipe { result in
             switch result {
             case .rejected(let error):
@@ -419,10 +427,10 @@ public final class Guarantee<T>: Thenable, Mixin {
 
     @discardableResult
     public func then<U>(on: ExecutionContext = NextMainRunloop(), execute body: @escaping (T) -> U) -> Guarantee<U> {
-        let (guarantee, _) = Guarantee<U>.pending()
+        let (guarantee, seal) = Guarantee<U>.pending()
         pipe { value in
             on.pmkAsync {
-                guarantee.schrödinger = .resolved(body(value))
+                seal(body(value))
             }
         }
         return guarantee
@@ -499,7 +507,7 @@ public func race<U: Thenable>(_ thenables: U...) -> Promise<U.T> {
 }
 
 public func race<U: Thenable>(_ thenables: [U]) -> Promise<U.T> {
-    let result = Promise<U.T>()
+    let result = Promise<U.T>(.pending)
     for thenable in thenables {
         thenable.pipe{ result.schrödinger = .resolved($0) }
     }
@@ -539,7 +547,7 @@ public func when<U, V, X, Y, Z>(fulfilled u: Promise<U>, _ v: Promise<V>, _ x: P
 
 /// - Remark: There is no `...` variant, because it is then confusing that you put a splat in and don't get a splat out, when compared with the typical usage for our above splatted kinds
 public func when<U: Thenable>(fulfilled thenables: [U]) -> Promise<[U.T]> {
-    let rv = Promise<[U.T]>()
+    let rv = Promise<[U.T]>(.pending)
     var values = Array<U.T!>(repeating: nil, count: thenables.count)
     var x = thenables.count
 
@@ -583,7 +591,7 @@ public func when<U>(fulfilled guarantees: [Guarantee<U>]) -> Guarantee<[U]> {
 
 extension Promise {
     func then<U, V>(execute body: @escaping (T) -> (Promise<U>, Promise<V>)) -> Promise<(U,V)> {
-        let promise = Promise<(U, V)>()
+        let promise = Promise<(U, V)>(.pending)
         pipe { result in
             switch result {
             case .fulfilled(let value):
@@ -597,7 +605,7 @@ extension Promise {
     }
 
     func then<U, V, X>(execute body: @escaping (T) -> (Promise<U>, Promise<V>, Promise<X>)) -> Promise<(U,V,X)> {
-        let promise = Promise<(U, V, X)>()
+        let promise = Promise<(U, V, X)>(.pending)
         pipe { result in
             switch result {
             case .fulfilled(let value):
