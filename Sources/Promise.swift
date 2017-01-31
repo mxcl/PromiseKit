@@ -668,12 +668,43 @@ extension Promise where T: Collection {
     {
         return then{ when(fulfilled: try $0.map(transform)) }
     }
+
+    /// `nil` is an error.
+    public func flatMap<U>(on: ExecutionContext = NextMainRunloop(), _ transform: @escaping (T.Iterator.Element) -> U?) -> Promise<[U]> {
+        return then(on: on) { values in
+            return try values.map { value in
+                guard let result = transform(value) else {
+                    throw PMKError.flatMap(value, U.self)
+                }
+                return result
+            }
+        }
+    }
+}
+
+extension Promise {
+    /**
+     Transforms the value of this promise using the provided function.
+ 
+     If the result is nil, rejects the returned promise with `PMKError.flatMap`.
+
+     - Remark: Essentially, this is a more specific form of `then` which errors for `nil`.
+     - Remark: This function is useful for parsing eg. JSON.
+     */
+    public func flatMap<U>(_ transform: @escaping (T) -> U?) -> Promise<U> {
+        return then(on: zalgo) { value in
+            guard let result = transform(value) else {
+                throw PMKError.flatMap(value, U.self)
+            }
+            return result
+        }
+    }
 }
 
 
 extension DispatchQueue {
     public func promise<T>(group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], execute body: @escaping () throws -> T) -> Promise<T> {
-        let promise = Promise<T>()
+        let promise = Promise<T>(.pending)
         async(group: group, qos: qos, flags: flags) {
             do {
                 promise.schrödinger = .resolved(.fulfilled(try body()))

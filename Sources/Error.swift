@@ -13,4 +13,7 @@ public enum PMKError: Error {
 
     /// Either `when(fulfilled:concurrently)` or `race()` was called with an empty array as input.
     case badInput
+
+    /// `Promise.flatMap(_:)` failed to transform `$0` to `$1`
+    case flatMap(Any, Any.Type)
 }
