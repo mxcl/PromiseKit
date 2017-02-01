@@ -66,7 +66,7 @@ extension PMKURLError: CustomStringConvertible {
     public var description: String {
         switch self {
         case let .badResponse(rq, data, rsp):
-            if let data = data, let str = String(data: data, encoding: .utf8) {
+            if let data = data, let str = String(data: data, encoding: .utf8), let rsp = rsp {
                 return "PromiseKit: badResponse: \(rq): \(rsp)\n\(str)"
             } else {
                 fallthrough
