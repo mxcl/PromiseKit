@@ -2,19 +2,7 @@ public struct Sealant<T> {
     public let resolve: (Result<T>) -> Void
 
     init(resolve body: @escaping (Result<T>) -> Void) {
-        resolve = { result in
-            //     var x = 0
-            //     Promise { seal in
-            //         someAsync {
-            //             x += 1
-            //             fulfill()
-            //             assert(x == 1)
-            //         }
-            //     }.then {
-            //          x += 1
-            //     }
-            NextMainRunloop().pmkAsync{ body(result) }
-        }
+        resolve = body
     }
 
     public func fulfill(_ value: T) {
