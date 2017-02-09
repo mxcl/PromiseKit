@@ -10,7 +10,9 @@ extension XCTestCase {
         switch XCTWaiter().wait(for: [ex], timeout: timeout) {
         case .completed:
             break
-        case .incorrectOrder, .invertedFulfillment, .timedOut:
+        case .incorrectOrder, .invertedFulfillment, .interrupted:
+            fatalError()
+        case .timedOut:
             XCTFail("\(timeout) seconds wait expired", file: file, line: line)
         }
     }
