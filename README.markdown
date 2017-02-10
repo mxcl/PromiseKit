@@ -15,7 +15,7 @@ UIApplication.shared.isNetworkActivityIndicatorVisible = true
 firstly {
     when(URLSession.dataTask(with: url).asImage(), CLLocationManager.promise())
 }.then { image, location -> Void in
-    self.imageView.image = image;
+    self.imageView.image = image
     self.label.text = "\(location)"
 }.always {
     UIApplication.shared.isNetworkActivityIndicatorVisible = false
