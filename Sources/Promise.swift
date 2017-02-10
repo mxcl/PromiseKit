@@ -358,6 +358,8 @@ public final class Finally {  //TODO thread-safety!
 }
 
 
+#if !SWIFT_PACKGE
+
 private func unwrap(_ any: Any?) -> Result<Any?> {
     if let error = any as? Error {
         return .rejected(error)
@@ -394,31 +396,36 @@ public final class AnyPromise: NSObject, Thenable, Catchable, Mixin {
         _schrödinger = schrödinger
     }
 
-    public static func pending() -> (AnyPromise, (Any?) -> Void) {
-        let promise = AnyPromise(schrödinger: .pending(Handlers()))
-        return (promise, { promise.schrödinger = .resolved($0) })
+    @objc static func promiseWithValue(_ value: Any?) -> AnyPromise {
+        return AnyPromise(schrödinger: .resolved(value))
     }
 
     @objc static func promiseWithResolverBlock(_ body: @convention(block) (@escaping (Any?) -> Void) -> Void) -> AnyPromise {
-        let (promise, seal) = AnyPromise.pending()
-        body(seal)
+        let promise = AnyPromise(schrödinger: .pending(Handlers()))
+        body{ promise.schrödinger = .resolved($0) }
         return promise
     }
 
-    @objc func __then(on: DispatchQueue, execute body: @convention(block) @escaping (Any?) -> Any?) -> AnyPromise {
-        let (promise, seal) = AnyPromise.pending()
-        pipe { obj in
-            switch unwrap(obj) {
-            case .fulfilled:
-                seal(body(obj))
-            case .rejected:
-                seal(obj)
-            }
-        }
-        return promise
+    @objc func pipeTo(_ body: @convention(block) @escaping (Any?) -> Void) {
+        pipe(to: body)
     }
+
+    @objc var value: Any? {
+        switch schrödinger {
+        case .resolved(let obj):
+            return obj
+        case .pending:
+            return nil
+        }
+    }
+
+    @objc var pending: Bool { return isPending }
+    @objc var fulfilled: Bool { return isFulfilled }
+    @objc var rejected: Bool { return isRejected }
+    @objc var resolved: Bool { return isResolved }
 }
 
+#endif
 
 /** - Remark: much like a real-life guarantee, it is only as reliable as the source; “promises”
  may never resolve, it is up to the thing providing you the promise to ensure that they do.
@@ -539,6 +546,15 @@ extension Thenable {
     }
 
     public var isPending: Bool {
+        switch result {
+        case .fulfilled?, .rejected?:
+            return false
+        case nil:
+            return true
+        }
+    }
+
+    public var isResolved: Bool {
         switch result {
         case .fulfilled?, .rejected?:
             return true

@@ -218,7 +218,7 @@ static id PMKCallVariadicBlock(id frock, id result) {
 
 
 @interface AnyPromise (Swift)
-- (AnyPromise * __nonnull)__pipeOn:(__nonnull dispatch_queue_t)q execute:(id __nullable (^ __nonnull)(id __nullable))body;
+- (void)pipeTo:(void (^ __nonnull)(__nullable id))block;
 @end
 
 
@@ -227,69 +227,59 @@ static id PMKCallVariadicBlock(id frock, id result) {
 
 @implementation AnyPromise (ObjC)
 
+#define __when(queue, test) \
+    [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) { \
+        return [self pipeTo:^(id obj){ \
+            if (test(obj)) { \
+                dispatch_async(queue, ^{ \
+                    resolve(PMKCallVariadicBlock(block, obj)); \
+                }); \
+            } else { \
+                resolve(obj); \
+            } \
+        }]; \
+    }];
+
 - (AnyPromise *(^)(id))then {
     return ^(id block) {
-        return [self __pipeOn:dispatch_get_main_queue() execute:^(id obj) {
-            if (!IsError(obj)) {
-                return PMKCallVariadicBlock(block, obj);
-            } else {
-                return obj;
-            }
-        }];
+        return __when(dispatch_get_main_queue(), !IsError);
     };
 }
 
 - (AnyPromise *(^)(dispatch_queue_t, id))thenOn {
     return ^(dispatch_queue_t queue, id block) {
-        return [self __pipeOn:queue execute:^(id obj) {
-            if (!IsError(obj)) {
-                return PMKCallVariadicBlock(block, obj);
-            } else {
-                return obj;
-            }
-        }];
+        return __when(queue, !IsError);
     };
 }
 
 - (AnyPromise *(^)(id))thenInBackground {
     return ^(id block) {
-        return [self __pipeOn:dispatch_get_global_queue(0, 0) execute:^(id obj) {
-            if (!IsError(obj)) {
-                return PMKCallVariadicBlock(block, obj);
-            } else {
-                return obj;
-            }
-        }];
+        return __when(dispatch_get_global_queue(0, 0), !IsError);
     };
 }
 
 - (AnyPromise *(^)(dispatch_block_t))ensure {
     return ^(dispatch_block_t block) {
-        return [self __pipeOn:dispatch_get_main_queue() execute:^(id obj){
-            block();
-            return obj;
+        [self pipeTo:^(id __unused obj){
+            dispatch_async(dispatch_get_main_queue(), block);
         }];
+        return self;
+
     };
 }
 
 - (AnyPromise *(^)(dispatch_queue_t, dispatch_block_t))ensureOn {
     return ^(dispatch_queue_t queue, dispatch_block_t block) {
-        return [self __pipeOn:queue execute:^(id obj){
-            block();
-            return obj;
+        [self pipeTo:^(id __unused obj){
+            dispatch_async(queue, block);
         }];
+        return self;
     };
 }
 
 - (AnyPromise *(^)(id))catch {
-    return ^(dispatch_block_t block) {
-        return [self __pipeOn:dispatch_get_main_queue() execute:^(id obj){
-            if (IsError(obj)) {
-                return PMKCallVariadicBlock(block, obj);
-            } else {
-                return obj;
-            }
-        }];
+    return ^(id block) {
+        return __when(dispatch_get_main_queue(), IsError);
     };
 }
 
