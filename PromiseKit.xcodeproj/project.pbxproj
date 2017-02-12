@@ -37,6 +37,7 @@
 		63B0AC871D595E6300FA21D9 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B0AC691D595E6300FA21D9 /* Error.swift */; };
 		63B0AC8F1D595E6300FA21D9 /* Promise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B0AC721D595E6300FA21D9 /* Promise.swift */; };
 		63B0AC931D595E6300FA21D9 /* PromiseKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B0AC761D595E6300FA21D9 /* PromiseKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		63E015311E502F33002290CA /* Ambiguity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E015301E502F33002290CA /* Ambiguity.swift */; };
 		63E79EA51E16F86400D363A8 /* ExecutionContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63E79EA41E16F86400D363A8 /* ExecutionContext.swift */; };
 /* End PBXBuildFile section */
 
@@ -96,6 +97,7 @@
 		63B0AC6C1D595E6300FA21D9 /* Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; name = Info.plist; path = Sources/Info.plist; sourceTree = "<group>"; };
 		63B0AC721D595E6300FA21D9 /* Promise.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Promise.swift; path = Sources/Promise.swift; sourceTree = "<group>"; };
 		63B0AC761D595E6300FA21D9 /* PromiseKit.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = PromiseKit.h; path = Sources/PromiseKit.h; sourceTree = "<group>"; };
+		63E015301E502F33002290CA /* Ambiguity.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Ambiguity.swift; path = Tests/CorePromise/Ambiguity.swift; sourceTree = "<group>"; };
 		63E79EA41E16F86400D363A8 /* ExecutionContext.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ExecutionContext.swift; path = Sources/ExecutionContext.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -129,6 +131,7 @@
 		6317518A1D59765700A9DDDC /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				63E015301E502F33002290CA /* Ambiguity.swift */,
 				6375053D1E4E1C8600DE318B /* Features.swift */,
 				637505401E4E2CA600DE318B /* Fundamentals.m */,
 				632714CD1E4D082D0043BBB2 /* Fundamentals.swift */,
@@ -349,6 +352,7 @@
 				630F21801E3FF68A00F6DB1E /* Infrastructure.swift in Sources */,
 				635D642B1D59635300BC0AF5 /* StressTests.swift in Sources */,
 				49A5584D1DC5185900E4D01B /* WrapTests.swift in Sources */,
+				63E015311E502F33002290CA /* Ambiguity.swift in Sources */,
 				637505411E4E2CA600DE318B /* Fundamentals.m in Sources */,
 				635D642C1D59635300BC0AF5 /* RegressionTests.swift in Sources */,
 			);

@@ -227,6 +227,15 @@ static id PMKCallVariadicBlock(id frock, id result) {
 
 @implementation AnyPromise (ObjC)
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wobjc-designated-initializers"
+- (instancetype)initWithResolver:(PMKResolver __strong *)resolver {
+    return [[self class] promiseWithResolverBlock:^(PMKResolver resolve){
+        *resolver = resolve;
+    }];
+}
+#pragma clang diagnostic pop
+
 #define __when(queue, test) \
     [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) { \
         return [self pipeTo:^(id obj){ \

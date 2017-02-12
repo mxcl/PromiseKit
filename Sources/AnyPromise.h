@@ -33,6 +33,8 @@ typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
 
 @interface AnyPromise (ObjC)
 
+- (instancetype __nonnull)initWithResolver:(PMKResolver __strong __nonnull * __nonnull)resolver NS_REFINED_FOR_SWIFT;
+
 /**
  The provided block is executed when its receiver is resolved.
 

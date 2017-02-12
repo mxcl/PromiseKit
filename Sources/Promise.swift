@@ -193,12 +193,22 @@ public final class Promise<T>: Thenable, Catchable, Mixin {
 
 
 extension Thenable {
-    public func then<U: Thenable>(on: ExecutionContext = NextMainRunloopContext(), execute body: @escaping (T) throws -> U) -> Promise<U.T> {
+    @inline(__always)
+    public func then<U: Thenable>(qos: DispatchQoS, execute body: @escaping (T) throws -> U) -> Promise<U.T> {
+        return then(on: qos, execute: body)
+    }
+
+    @inline(__always)
+    public func then<U>(qos: DispatchQoS, execute body: @escaping (T) throws -> U) -> Promise<U> {
+        return then(on: qos, execute: body)
+    }
+
+    public func then<U: Thenable>(on: ExecutionContext? = NextMainRunloopContext(), execute body: @escaping (T) throws -> U) -> Promise<U.T> {
         let promise = Promise<U.T>(.pending)
         pipe { result in
             switch result {
             case .fulfilled(let value):
-                on.pmkAsync {
+                go(on) {
                     do {
                         let intermediary = try body(value)
                         guard intermediary !== promise else { throw PMKError.returnedSelf }
@@ -214,12 +224,12 @@ extension Thenable {
         return promise
     }
 
-    public func then<U>(on: ExecutionContext = NextMainRunloopContext(), execute body: @escaping (T) throws -> U) -> Promise<U> {
+    public func then<U>(on: ExecutionContext? = NextMainRunloopContext(), execute body: @escaping (T) throws -> U) -> Promise<U> {
         let promise = Promise<U>(.pending)
         pipe { result in
             switch result {
             case .fulfilled(let value):
-                on.pmkAsync {
+                go(on) {
                     let result: Result<U>
                     do {
                         let value = try body(value)
@@ -481,35 +491,16 @@ public final class Guarantee<T>: Thenable, Mixin {
         return guarantee
     }
 
-    @discardableResult
-    public func then<U>(on: ExecutionContext = NextMainRunloopContext(), execute body: @escaping (T) -> U) -> Guarantee<U> {
-        let (guarantee, seal) = Guarantee<U>.pending()
-        pipe { value in
-            on.pmkAsync {
-                seal(body(value))
-            }
-        }
-        return guarantee
-    }
-}
-
-private protocol _DispatchQoS {
-    var the: DispatchQoS { get }
-}
-extension DispatchQoS: _DispatchQoS {
-    var the: DispatchQoS { return self }
-}
-
-extension Optional where Wrapped: _DispatchQoS {
-    @inline(__always)
-    fileprivate func async(execute body: @escaping () -> Void) {
-        switch self {
-        case .none:
-            body()
-        case .some(let qos):
-            DispatchQueue.global().async(group: nil, qos: qos.the, flags: [], execute: body)
-        }
-    }
+//    unavailable because Swift picks this when you return a promise FUCKING SIGH
+//    @discardableResult
+//    public func then<U>(on: ExecutionContext = NextMainRunloopContext(), execute body: @escaping (T) -> U) -> Guarantee<U> {
+//        let (guarantee, seal) = Guarantee<U>.pending()
+//        pipe { value in
+//            on.pmkAsync {
+//                seal(body(value))
+//            }
+//        }
+//        return guarantee
 }
 
 extension Thenable {
@@ -685,21 +676,26 @@ extension Promise {
 }
 
 
-public func when<U: Thenable>(resolved thenables: U...) -> Guarantee<[Result<U.T>]> {
-    let (rv, seal) = Guarantee<[Result<U.T>]>.pending()
-    var results = [Result<U.T>]()
-    var x = thenables.count
+public func when<T, A: Thenable, B: Thenable>(resolved a: A, _ b: B) -> Guarantee<[Result<A.T>]> where A.T == T, B.T == T {
+    let (rv, seal) = Guarantee<[Result<T>]>.pending()
+    var results = [Result<T>!](repeating: nil, count: 2)
+    var x = 2
 
-    for (index, thenable) in thenables.enumerated() {
-        thenable.pipe { result in
-            results[index] = result
-            x -= 1
-            if x == 0 {
-                seal(results)
-            }
+    func thereyet() {
+        x -= 1  //FIXME thread-safety!
+        if x == 0 {
+            seal(results)
         }
     }
 
+    a.pipe {
+        results[0] = $0
+        thereyet()
+    }
+    b.pipe {
+        results[1] = $0
+        thereyet()
+    }
     return rv
 }
 
@@ -757,7 +753,7 @@ extension Thenable {
      - Remark: This function is useful for parsing eg. JSON.
      */
     public func flatMap<U>(_ transform: @escaping (T) -> U?) -> Promise<U> {
-        return then(on: zalgo) { value in
+        return then(on: nil) { value in
             guard let result = transform(value) else {
                 throw PMKError.flatMap(value, U.self)
             }
@@ -786,5 +782,16 @@ extension DispatchQueue {
             seal(body())
         }
         return promise
+    }
+}
+
+
+@inline(__always)
+private func go(_ exectx: ExecutionContext?, _ body: @escaping () -> Void) {
+    switch exectx {
+    case .some(let exectx):
+        exectx.pmkAsync(execute: body)
+    case .none:
+        body()
     }
 }

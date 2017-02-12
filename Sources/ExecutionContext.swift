@@ -57,7 +57,7 @@ private var activeContext: NextMainRunloopContext.Context?
  execution context of your thread ends. This technically violates Promises/A+ but we can’t see a
  good way around it.
  
- This is the defualt `ExecutionContext` for all PromiseKit handlers (eg. `then`).
+ This is the default `ExecutionContext` for all PromiseKit handlers (eg. `then`).
 */
 public class NextMainRunloopContext: ExecutionContext {
 
@@ -101,7 +101,7 @@ public class NextMainRunloopContext: ExecutionContext {
         context = ctx
     }
 
-    public func pmkAsync(execute body: @escaping () -> Void) {  //FIXME needs locks
+    public func pmkAsync(execute body: @escaping () -> Void) {
         var expired: Bool!
         barrier.sync {
             if case .expired = self.context.state { expired = true } else { expired = false }
@@ -123,13 +123,3 @@ public class NextMainRunloopContext: ExecutionContext {
         }
     }
 }
-
-public class Zalgo: ExecutionContext {
-    @inline(__always)
-    public func pmkAsync(execute body: @escaping () -> Void) {
-        body()
-    }
-}
-
-// global variable to ease backwards compatibility
-public let zalgo = Zalgo()

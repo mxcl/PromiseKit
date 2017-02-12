@@ -49,8 +49,8 @@ class FeatureAfterTests: XCTestCase {
 
 class FeatureRaceTests: XCTestCase {
     func testCompilationAmbiguity() {
-        let p1 = after(interval: 0.01).then{ 1 }
-        let p2 = after(interval: 0.01).then{ 1 }
+        let p1 = after(interval: 0.01).then{ Guarantee(1) }
+        let p2 = after(interval: 0.01).then{ Guarantee(1) }
 
         let p3 = race([p1, p2])
         let p4 = race(p1, p2)

@@ -41,7 +41,7 @@ class StressTests: XCTestCase {
 
         //will crash if zalgo doesn't protect handlers
         stressDataRace(expectation: e1, stressFunction: { promise in
-            promise.then(on: zalgo) { s in
+            promise.then(on: nil) { s in
                 XCTAssertEqual("ok", s)
                 return
             }

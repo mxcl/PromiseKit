@@ -20,11 +20,19 @@ extension Promise {
         return ensure(on: on, that: body)
     }
 
+#if false
+    /* Disabled due to causing the following bad diagnostic:
+
+           func foo() {}
+           bar.catch(handler: foo)  // => missing parameter `execute:`
+     */
+
     /// - Remark: last parameter made invalid so Swift ignores this variant but we can still provide a migration text
     @available(*, deprecated: 5.0, renamed: "catch(on:handler:)")
     public func `catch`(on: DispatchQueue = .main, policy: CatchPolicy = .allErrorsExceptCancellation, execute: Never) {
         fatalError()
     }
+#endif
 
     /// - Remark: last parameter made invalid so Swift ignores this variant but we can still provide a migration text
     @available(*, deprecated: 5.0, renamed: "recover(on:transform:)")
