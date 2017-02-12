@@ -107,7 +107,11 @@ public class NextMainRunloopContext: ExecutionContext {
             if case .expired = self.context.state { expired = true } else { expired = false }
         }
         if expired {
-            body()
+            if Thread.isMainThread {
+                body()
+            } else {
+                DispatchQueue.main.async(execute: body)
+            }
         } else {
             barrier.sync(flags: .barrier) {
                 switch self.context.state {
