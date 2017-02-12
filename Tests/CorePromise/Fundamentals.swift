@@ -3,6 +3,10 @@ import XCTest
 
 private enum E: Error { case dummy }
 
+/**
+ A+ tests most of the fundamentals, but these are unique to
+ our platform, language and our special features.
+ */
 class Fundamentals: XCTestCase {
 
     func test1() {
@@ -52,6 +56,28 @@ class Fundamentals: XCTestCase {
             Promise<Void>(error: E.dummy).catch { _ in
                 XCTAssert(Thread.isMainThread)
                 ex.fulfill()
+            }
+        }
+    }
+
+    func test3() {
+        // verifies that subsequent thens all execute in the same ExecutionContext
+        wait { ex in
+            var foo = false
+
+            let p = Promise()
+            p.then {
+                XCTAssertFalse(foo)
+                DispatchQueue.main.async { foo = true }
+            }.then {
+                XCTAssertFalse(foo)
+            }.then {
+                XCTAssertFalse(foo)
+
+                p.then {
+                    XCTAssertTrue(foo)
+                    ex.fulfill()
+                }
             }
         }
     }
