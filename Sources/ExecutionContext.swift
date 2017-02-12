@@ -64,30 +64,14 @@ public class NextMainRunloopContext: ExecutionContext {
     private let context: Context
 
     fileprivate class Context {
-        enum State {
-            case pending([() -> Void])
-            case expired
-        }
-        var state = State.pending([])
+        var expired = false
 
         init() {
             DispatchQueue.main.async {
-                var handlers: Array<() -> Void>!
                 barrier.sync(flags: .barrier) {
-                    assert(activeContext === self)
-
+                    self.expired = true
                     activeContext = nil
-
-                    switch self.state {
-                    case .pending(let hh):
-                        handlers = hh
-                    case .expired:
-                        fatalError()
-                    }
-                    self.state = .expired
-
                 }
-                handlers.forEach{ $0() }
             }
         }
     }
@@ -104,26 +88,14 @@ public class NextMainRunloopContext: ExecutionContext {
     public func pmkAsync(execute body: @escaping () -> Void) {
         var expired: Bool!
         barrier.sync {
-            if case .expired = self.context.state { expired = true } else { expired = false }
+            expired = self.context.expired
         }
-        if expired {
-            if Thread.isMainThread {
-                body()
-            } else {
-                DispatchQueue.main.async(execute: body)
-            }
+        if expired && Thread.isMainThread {
+            body()
         } else {
-            barrier.sync(flags: .barrier) {
-                switch self.context.state {
-                case .pending(let handlers):
-                    self.context.state = .pending(handlers + [body])
-                case .expired:
-                    expired = true
-                }
-            }
-            if expired {
-                body()
-            }
+            // these blocks are added to a pool and executed sequentially
+            // when the next main runloop iteration occurs
+            DispatchQueue.main.async(execute: body)
         }
     }
 }
