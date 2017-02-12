@@ -21,24 +21,34 @@ extension Promise {
     }
 
 #if false
-    /* Disabled due to causing the following bad diagnostic:
+    /**
+      Disabled due to causing the following bad diagnostic:
 
-           func foo() {}
-           bar.catch(handler: foo)  // => missing parameter `execute:`
+          func foo() {}
+          bar.catch(handler: foo)  // => missing parameter `execute:`
+
+     - Remark: last parameter made invalid so Swift ignores this variant but we can still provide a migration text
      */
-
-    /// - Remark: last parameter made invalid so Swift ignores this variant but we can still provide a migration text
     @available(*, deprecated: 5.0, renamed: "catch(on:handler:)")
     public func `catch`(on: DispatchQueue = .main, policy: CatchPolicy = .allErrorsExceptCancellation, execute: Never) {
         fatalError()
     }
-#endif
 
-    /// - Remark: last parameter made invalid so Swift ignores this variant but we can still provide a migration text
+    /**
+     Disabled due to causing the following bad diagnostic:
+
+         Promise().recover {  // => cannot convert value of type `() -> ()` to expected argument `Never`
+             foo()
+             bar()
+         }
+
+     - Remark: last parameter made invalid so Swift ignores this variant but we can still provide a migration text
+     */
     @available(*, deprecated: 5.0, renamed: "recover(on:transform:)")
     public func recover(on: DispatchQueue = .main, policy: CatchPolicy = .allErrorsExceptCancellation, execute: Never) {
         fatalError()
     }
+#endif
 
     /// - Remark: last parameter made invalid so Swift ignores this variant but we can still provide a migration text
     @available(*, deprecated: 4.0, renamed: "catch(on:handler:)")

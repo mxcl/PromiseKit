@@ -109,15 +109,15 @@ private enum PendingIntializer {
 
 
 /**
- A *promise* represents the future Wrapped of a (usually) asynchronous task.
+ A *promise* represents the future value of a (usually) asynchronous task.
 
- To obtain the Wrapped of a promise we call `then`.
+ To obtain the value of a promise we call `then`.
 
  Promises are chainable: `then` returns a promise, you can call `then` on
  that promise, which returns a promise, you can call `then` on that
  promise, et cetera.
 
- Promises start in a pending state and *resolve* with a Wrapped to become
+ Promises start in a pending state and *resolve* with a value to become
  *fulfilled* or an `Error` to become rejected.
 
  - SeeAlso: [PromiseKit 101](http://promisekit.org/docs/)
@@ -256,8 +256,8 @@ extension Catchable {
     }
 
     @discardableResult
-    public func `catch`(on: ExecutionContext = NextMainRunloopContext(), handler body: @escaping (Error) -> Void) -> Finally {
-        let finally = Finally()
+    public func `catch`(on: ExecutionContext = NextMainRunloopContext(), handler body: @escaping (Error) -> Void) -> ChainFinalizer {
+        let finally = ChainFinalizer()
         pipe { result in
             switch result {
             case .fulfilled:
@@ -345,7 +345,7 @@ extension Catchable {
     }
 }
 
-public final class Finally {  //TODO thread-safety!
+public final class ChainFinalizer {  //TODO thread-safety!
     fileprivate var schrödinger: Schrödinger<Void> = .pending(Handlers()) {
         didSet {
             guard case .pending(let handlers) = oldValue else { fatalError() }
@@ -356,7 +356,7 @@ public final class Finally {  //TODO thread-safety!
     }
 
     @discardableResult
-    public func finally(_ body: @escaping () -> Void) -> Finally {
+    public func finally(_ body: @escaping () -> Void) -> ChainFinalizer {
         switch schrödinger {
         case .pending(let handlers):
             handlers.bodies.append(body)
@@ -491,16 +491,26 @@ public final class Guarantee<T>: Thenable, Mixin {
         return guarantee
     }
 
-//    unavailable because Swift picks this when you return a promise FUCKING SIGH
-//    @discardableResult
-//    public func then<U>(on: ExecutionContext = NextMainRunloopContext(), execute body: @escaping (T) -> U) -> Guarantee<U> {
-//        let (guarantee, seal) = Guarantee<U>.pending()
-//        pipe { value in
-//            on.pmkAsync {
-//                seal(body(value))
-//            }
-//        }
-//        return guarantee
+    #if false
+    /**
+     Disabled due to causing the following incorrect choice by the Swift compiler:
+
+     let promise = Promise{ /*…*/ }
+     Guarantee().then{ promise }   // => Guarantee<Promise<T>>
+
+     - Remark: last parameter made invalid so Swift ignores this variant but we can still provide a migration text
+     */
+    @discardableResult
+    public func then<U>(on: ExecutionContext = NextMainRunloopContext(), execute body: @escaping (T) -> U) -> Guarantee<U> {
+        let (guarantee, seal) = Guarantee<U>.pending()
+        pipe { value in
+            on.pmkAsync {
+                seal(body(value))
+            }
+        }
+        return guarantee
+    }
+    #endif
 }
 
 extension Thenable {
