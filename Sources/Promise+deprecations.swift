@@ -22,7 +22,7 @@ extension Promise {
 
 #if false
     /**
-      Disabled due to causing the following bad diagnostic:
+      Disabled; results in the following bad diagnostic:
 
           func foo() {}
           bar.catch(handler: foo)  // => missing parameter `execute:`
@@ -35,7 +35,7 @@ extension Promise {
     }
 
     /**
-     Disabled due to causing the following bad diagnostic:
+     Disabled; results in the following bad diagnostic:
 
          Promise().recover {  // => cannot convert value of type `() -> ()` to expected argument `Never`
              foo()

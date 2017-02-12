@@ -69,6 +69,7 @@ class Fundamentals: XCTestCase {
             p.then {
                 XCTAssertFalse(foo)
                 DispatchQueue.main.async { foo = true }
+                XCTAssertFalse(foo)
             }.then {
                 XCTAssertFalse(foo)
             }.then {
