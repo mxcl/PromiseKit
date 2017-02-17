@@ -27,6 +27,15 @@ private enum Schrödinger<R> {
 public enum Result<T> {
     case rejected(Error)
     case fulfilled(T)
+
+    public    var value: T? {
+        switch self {
+        case .fulfilled(let value):
+            return value
+        case .rejected:
+            return nil
+        }
+    }
 }
 
 private class Handlers<R> {
@@ -145,15 +154,8 @@ public final class Promise<T>: Thenable, Catchable, Mixin {
         }
     }
 
-    public init(_: UnambiguousInitializer, assimilate body: () throws -> Promise) {
-        do {
-            let host = try body()
-            barrier = host.barrier             //FIXME not thread-safe
-            _schrödinger = host._schrödinger   //FIXME not thread-safe
-        } catch {
-            barrier = DispatchQueue(label: "org.promisekit.barrier", attributes: .concurrent)
-            _schrödinger = .resolved(.rejected(error))
-        }
+    public convenience init(_: UnambiguousInitializer, assimilate body: () throws -> Promise) {
+        self.init{ try body().pipe(to: $0.resolve) }
     }
 
     /// - Note: `Promise()` thus creates a *fulfilled* `Void` promise.
@@ -193,16 +195,6 @@ public final class Promise<T>: Thenable, Catchable, Mixin {
 
 
 extension Thenable {
-    @inline(__always)
-    public func then<U: Thenable>(qos: DispatchQoS, execute body: @escaping (T) throws -> U) -> Promise<U.T> {
-        return then(on: qos, execute: body)
-    }
-
-    @inline(__always)
-    public func then<U>(qos: DispatchQoS, execute body: @escaping (T) throws -> U) -> Promise<U> {
-        return then(on: qos, execute: body)
-    }
-
     public func then<U: Thenable>(on: ExecutionContext? = NextMainRunloopContext(), execute body: @escaping (T) throws -> U) -> Promise<U.T> {
         let promise = Promise<U.T>(.pending)
         pipe { result in
@@ -510,11 +502,22 @@ public final class Guarantee<T>: Thenable, Mixin {
         }
         return guarantee
     }
+    #else
+    @discardableResult
+    public func then(on: ExecutionContext = NextMainRunloopContext(), execute body: @escaping (T) -> Void) -> Guarantee<Void> {
+        let (guarantee, seal) = Guarantee<Void>.pending()
+        pipe { value in
+            on.pmkAsync {
+                seal(body(value))
+            }
+        }
+        return guarantee
+    }
     #endif
 }
 
 extension Thenable {
-    public func tap(execute body: @escaping (Result<T>) -> Void) -> Self {
+    public func tap(_ body: @escaping (Result<T>) -> Void = { print("PromiseKit:", $0) }) -> Self {
         pipe(to: body)
         return self
     }
@@ -635,6 +638,30 @@ public func when<U: Thenable>(fulfilled thenables: [U]) -> Promise<[U.T]> {
     return rv
 }
 
+public func when<U: Thenable>(resolved thenables: [U]) -> Guarantee<[Result<U.T>]> {
+    let barrier = DispatchQueue(label: "org.promisekit.when")
+    let (rv, seal) = Guarantee<[Result<U.T>]>.pending()
+    var results = Array<Result<U.T>!>(repeating: nil, count: thenables.count)
+    var x = thenables.count
+
+    for (index, thenable) in thenables.enumerated() {
+        thenable.pipe { result in
+            var done = false
+            barrier.sync(flags: .barrier) {
+                results[index] = result
+                x -= 1
+                done = x == 0
+            }
+            if done {
+                seal(results)
+            }
+        }
+    }
+
+    return rv
+
+}
+
 @discardableResult
 public func when<U>(fulfilled guarantees: [Guarantee<U>]) -> Guarantee<[U]> {
     let (rv, seal) = Guarantee<[U]>.pending()
@@ -710,7 +737,7 @@ public func when<T, A: Thenable, B: Thenable>(resolved a: A, _ b: B) -> Guarante
 }
 
 
-extension Thenable where T: Collection {
+extension Thenable where T: Sequence {
     /**
      Transforms a `Promise` where `T` is a `Collection` into a `Promise<[U]>`
      
@@ -731,16 +758,21 @@ extension Thenable where T: Collection {
          }
 
 
+     - Note:
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter transform: The closure that executes when this promise resolves.
      - Returns: A new promise, resolved with this promise’s resolution.
+     - TODO: allow concurrency
      */
-    public final func map<U>(transform: @escaping (T.Iterator.Element) throws -> Promise<U>) -> Promise<[U]>
-    {
-        return then{ when(fulfilled: try $0.map(transform)) }
+    public final func map<U>(on: ExecutionContext = NextMainRunloopContext(), transform: @escaping (T.Iterator.Element) throws -> Promise<U>) -> Promise<[U]> {
+        return then(on: on){ when(fulfilled: try $0.map(transform)) }
     }
 
-    /// `nil` is an error.
+    public final func map<U>(on: ExecutionContext = NextMainRunloopContext(), transform: @escaping (T.Iterator.Element) throws -> U) -> Promise<[U]> {
+        return then(on: on){ try $0.map(transform) }
+    }
+
+    /// `nil` rejects the resulting promise with `PMKError.flatMap`
     public func flatMap<U>(on: ExecutionContext = NextMainRunloopContext(), _ transform: @escaping (T.Iterator.Element) -> U?) -> Promise<[U]> {
         return then(on: on) { values in
             return try values.map { value in
@@ -805,3 +837,7 @@ private func go(_ exectx: ExecutionContext?, _ body: @escaping () -> Void) {
         body()
     }
 }
+
+
+/// Makes `on` usage more elegant
+public typealias QoS = DispatchQoS
