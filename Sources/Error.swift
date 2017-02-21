@@ -17,3 +17,18 @@ public enum PMKError: Error {
     /// `Promise.flatMap(_:)` failed to transform `$0` to `$1`
     case flatMap(Any, Any.Type)
 }
+
+extension PMKError: CustomStringConvertible {
+    public var description: String {
+        switch self {
+        case .flatMap(let obj, let type):
+            return "Could not `flatMap<\(type)>`: \(obj)"
+        case .invalidCallingConvention:
+            return "A closure was called with an invalid calling convention, probably (nil, nil)"
+        case .returnedSelf:
+            return "A promise handler returned itself"
+        case .badInput:
+            return "Bad input was provided to a PromiseKit function"
+        }
+    }
+}
