@@ -4,11 +4,6 @@ public enum ErrorPolicy {
     case AllErrors
 }
 
-public enum CatchPolicy {
-    case allErrorsExceptCancellation
-    case allErrors
-}
-
 extension Promise {
     @available(*, deprecated: 3.0, renamed: "ensure(on:that:)")
     public func finally(on: DispatchQueue = .main, _ body: @escaping () -> Void) -> Promise {

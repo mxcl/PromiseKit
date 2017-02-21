@@ -1,0 +1,463 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 46;
+	objects = {
+
+/* Begin PBXAggregateTarget section */
+		63291CBA1E5CD89E00C81FDD /* PMKAggregate */ = {
+			isa = PBXAggregateTarget;
+			buildConfigurationList = 63291CBB1E5CD89E00C81FDD /* Build configuration list for PBXAggregateTarget "PMKAggregate" */;
+			buildPhases = (
+			);
+			dependencies = (
+			);
+			name = PMKAggregate;
+			productName = PMKAggregate;
+		};
+/* End PBXAggregateTarget section */
+
+/* Begin PBXContainerItemProxy section */
+		63291CC41E5CD8AF00C81FDD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63291CBE1E5CD8AF00C81FDD /* PMKAlamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 63C7FFA71D5BEE09003BAE60;
+			remoteInfo = PMKAlamofire;
+		};
+		63291CC61E5CD8AF00C81FDD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63291CBE1E5CD8AF00C81FDD /* PMKAlamofire.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 63C7FFF21D5C020D003BAE60;
+			remoteInfo = PMKAFTests;
+		};
+		63291DBB1E5CDE3A00C81FDD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63291DB41E5CDE3A00C81FDD /* PMKUIKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 63C7FFA71D5BEE09003BAE60;
+			remoteInfo = PMKUIKit;
+		};
+		63291DBD1E5CDE3A00C81FDD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63291DB41E5CDE3A00C81FDD /* PMKUIKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 63C7FFF21D5C020D003BAE60;
+			remoteInfo = PMKUITests;
+		};
+		63291DBF1E5CDE3A00C81FDD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63291DB41E5CDE3A00C81FDD /* PMKUIKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 630B2E131D5D0AF500DC10E9;
+			remoteInfo = PMKUIUITests;
+		};
+		63291DC11E5CDE3A00C81FDD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63291DB41E5CDE3A00C81FDD /* PMKUIKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 63C9C4451D5D334700101ECE;
+			remoteInfo = PMKTestsHost;
+		};
+		63291DDD1E5CE0D800C81FDD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63291DD71E5CE0D700C81FDD /* PromiseKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 63B0AC571D595E1B00FA21D9;
+			remoteInfo = PromiseKit;
+		};
+		63291DDF1E5CE0D800C81FDD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63291DD71E5CE0D700C81FDD /* PromiseKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 631751A81D59766500A9DDDC;
+			remoteInfo = "PMKA+Tests";
+		};
+		63291DE11E5CE0D800C81FDD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63291DD71E5CE0D700C81FDD /* PromiseKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 630019221D596292003B4E30;
+			remoteInfo = PMKCoreTests;
+		};
+		63291DFE1E5CED0400C81FDD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63291DF91E5CED0400C81FDD /* PMKCoreLocation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 63C7FFA71D5BEE09003BAE60;
+			remoteInfo = PMKCoreLocation;
+		};
+		63291E001E5CED0400C81FDD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63291DF91E5CED0400C81FDD /* PMKCoreLocation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 63C7FFF21D5C020D003BAE60;
+			remoteInfo = PMKCLTests;
+		};
+		63291E161E5CF5BE00C81FDD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63291E111E5CF5BE00C81FDD /* PMKStoreKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 63C7FFA71D5BEE09003BAE60;
+			remoteInfo = PMKStoreKit;
+		};
+		63291E181E5CF5BE00C81FDD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63291E111E5CF5BE00C81FDD /* PMKStoreKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 63C7FFF21D5C020D003BAE60;
+			remoteInfo = PMKSKTests;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		63291CBE1E5CD8AF00C81FDD /* PMKAlamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PMKAlamofire.xcodeproj; path = Alamofire/PMKAlamofire.xcodeproj; sourceTree = "<group>"; };
+		63291DB41E5CDE3A00C81FDD /* PMKUIKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PMKUIKit.xcodeproj; path = UIKit/PMKUIKit.xcodeproj; sourceTree = "<group>"; };
+		63291DD71E5CE0D700C81FDD /* PromiseKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PromiseKit.xcodeproj; path = Alamofire/../../PromiseKit.xcodeproj; sourceTree = "<group>"; };
+		63291DF91E5CED0400C81FDD /* PMKCoreLocation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PMKCoreLocation.xcodeproj; path = CoreLocation/PMKCoreLocation.xcodeproj; sourceTree = "<group>"; };
+		63291E111E5CF5BE00C81FDD /* PMKStoreKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PMKStoreKit.xcodeproj; path = StoreKit/PMKStoreKit.xcodeproj; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXGroup section */
+		63291CBF1E5CD8AF00C81FDD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				63291CC51E5CD8AF00C81FDD /* PMKAlamofire.framework */,
+				63291CC71E5CD8AF00C81FDD /* PMKAFTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		63291DB51E5CDE3A00C81FDD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				63291DBC1E5CDE3A00C81FDD /* PMKUIKit.framework */,
+				63291DBE1E5CDE3A00C81FDD /* PMKUITests.xctest */,
+				63291DC01E5CDE3A00C81FDD /* PMKUIUITests.xctest */,
+				63291DC21E5CDE3A00C81FDD /* PMKTestsHost.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		63291DD81E5CE0D700C81FDD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				63291DDE1E5CE0D800C81FDD /* PromiseKit.framework */,
+				63291DE01E5CE0D800C81FDD /* PMKA+Tests.xctest */,
+				63291DE21E5CE0D800C81FDD /* PMKCoreTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		63291DFA1E5CED0400C81FDD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				63291DFF1E5CED0400C81FDD /* PMKCoreLocation.framework */,
+				63291E011E5CED0400C81FDD /* PMKCLTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		63291E121E5CF5BE00C81FDD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				63291E171E5CF5BE00C81FDD /* PMKStoreKit.framework */,
+				63291E191E5CF5BE00C81FDD /* PMKSKTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		6399A3711D595D9100D65233 = {
+			isa = PBXGroup;
+			children = (
+				63291DD71E5CE0D700C81FDD /* PromiseKit.xcodeproj */,
+				63291CBE1E5CD8AF00C81FDD /* PMKAlamofire.xcodeproj */,
+				63291DF91E5CED0400C81FDD /* PMKCoreLocation.xcodeproj */,
+				63291E111E5CF5BE00C81FDD /* PMKStoreKit.xcodeproj */,
+				63291DB41E5CDE3A00C81FDD /* PMKUIKit.xcodeproj */,
+			);
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXProject section */
+		6399A3721D595D9100D65233 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastUpgradeCheck = 0810;
+				TargetAttributes = {
+					63291CBA1E5CD89E00C81FDD = {
+						CreatedOnToolsVersion = 8.3;
+						ProvisioningStyle = Automatic;
+					};
+				};
+			};
+			buildConfigurationList = 6399A3751D595D9100D65233 /* Build configuration list for PBXProject "_" */;
+			compatibilityVersion = "Xcode 3.2";
+			developmentRegion = English;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+			);
+			mainGroup = 6399A3711D595D9100D65233;
+			productRefGroup = 6399A3711D595D9100D65233;
+			projectDirPath = "";
+			projectReferences = (
+				{
+					ProductGroup = 63291CBF1E5CD8AF00C81FDD /* Products */;
+					ProjectRef = 63291CBE1E5CD8AF00C81FDD /* PMKAlamofire.xcodeproj */;
+				},
+				{
+					ProductGroup = 63291DFA1E5CED0400C81FDD /* Products */;
+					ProjectRef = 63291DF91E5CED0400C81FDD /* PMKCoreLocation.xcodeproj */;
+				},
+				{
+					ProductGroup = 63291E121E5CF5BE00C81FDD /* Products */;
+					ProjectRef = 63291E111E5CF5BE00C81FDD /* PMKStoreKit.xcodeproj */;
+				},
+				{
+					ProductGroup = 63291DB51E5CDE3A00C81FDD /* Products */;
+					ProjectRef = 63291DB41E5CDE3A00C81FDD /* PMKUIKit.xcodeproj */;
+				},
+				{
+					ProductGroup = 63291DD81E5CE0D700C81FDD /* Products */;
+					ProjectRef = 63291DD71E5CE0D700C81FDD /* PromiseKit.xcodeproj */;
+				},
+			);
+			projectRoot = "";
+			targets = (
+				63291CBA1E5CD89E00C81FDD /* PMKAggregate */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXReferenceProxy section */
+		63291CC51E5CD8AF00C81FDD /* PMKAlamofire.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = PMKAlamofire.framework;
+			remoteRef = 63291CC41E5CD8AF00C81FDD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		63291CC71E5CD8AF00C81FDD /* PMKAFTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = PMKAFTests.xctest;
+			remoteRef = 63291CC61E5CD8AF00C81FDD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		63291DBC1E5CDE3A00C81FDD /* PMKUIKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = PMKUIKit.framework;
+			remoteRef = 63291DBB1E5CDE3A00C81FDD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		63291DBE1E5CDE3A00C81FDD /* PMKUITests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = PMKUITests.xctest;
+			remoteRef = 63291DBD1E5CDE3A00C81FDD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		63291DC01E5CDE3A00C81FDD /* PMKUIUITests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = PMKUIUITests.xctest;
+			remoteRef = 63291DBF1E5CDE3A00C81FDD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		63291DC21E5CDE3A00C81FDD /* PMKTestsHost.app */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.application;
+			path = PMKTestsHost.app;
+			remoteRef = 63291DC11E5CDE3A00C81FDD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		63291DDE1E5CE0D800C81FDD /* PromiseKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = PromiseKit.framework;
+			remoteRef = 63291DDD1E5CE0D800C81FDD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		63291DE01E5CE0D800C81FDD /* PMKA+Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "PMKA+Tests.xctest";
+			remoteRef = 63291DDF1E5CE0D800C81FDD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		63291DE21E5CE0D800C81FDD /* PMKCoreTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = PMKCoreTests.xctest;
+			remoteRef = 63291DE11E5CE0D800C81FDD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		63291DFF1E5CED0400C81FDD /* PMKCoreLocation.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = PMKCoreLocation.framework;
+			remoteRef = 63291DFE1E5CED0400C81FDD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		63291E011E5CED0400C81FDD /* PMKCLTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = PMKCLTests.xctest;
+			remoteRef = 63291E001E5CED0400C81FDD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		63291E171E5CF5BE00C81FDD /* PMKStoreKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = PMKStoreKit.framework;
+			remoteRef = 63291E161E5CF5BE00C81FDD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		63291E191E5CF5BE00C81FDD /* PMKSKTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = PMKSKTests.xctest;
+			remoteRef = 63291E181E5CF5BE00C81FDD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+/* End PBXReferenceProxy section */
+
+/* Begin XCBuildConfiguration section */
+		63291CBC1E5CD89E00C81FDD /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Debug;
+		};
+		63291CBD1E5CD89E00C81FDD /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				PRODUCT_NAME = "$(TARGET_NAME)";
+			};
+			name = Release;
+		};
+		6399A3761D595D9100D65233 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = "5.0.0-alpha5";
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = "DEBUG=1";
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_DYLIB_INSTALL_NAME = "@rpath";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				ONLY_ACTIVE_ARCH = YES;
+				PRODUCT_BUNDLE_IDENTIFIER = org.promisekit;
+				PRODUCT_BUNDLE_PACKAGE_TYPE = BNDL;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "macosx appletvsimulator appletvos watchsimulator iphonesimulator watchos iphoneos";
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		6399A3771D595D9100D65233 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				CURRENT_PROJECT_VERSION = "5.0.0-alpha5";
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				INFOPLIST_FILE = "$(SRCROOT)/Sources/Info.plist";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_DYLIB_INSTALL_NAME = "@rpath";
+				MACOSX_DEPLOYMENT_TARGET = 10.10;
+				PRODUCT_BUNDLE_IDENTIFIER = org.promisekit;
+				PRODUCT_BUNDLE_PACKAGE_TYPE = BNDL;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SUPPORTED_PLATFORMS = "macosx appletvsimulator appletvos watchsimulator iphonesimulator watchos iphoneos";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 3.0;
+				TVOS_DEPLOYMENT_TARGET = 9.0;
+				WATCHOS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		63291CBB1E5CD89E00C81FDD /* Build configuration list for PBXAggregateTarget "PMKAggregate" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				63291CBC1E5CD89E00C81FDD /* Debug */,
+				63291CBD1E5CD89E00C81FDD /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+		};
+		6399A3751D595D9100D65233 /* Build configuration list for PBXProject "_" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				6399A3761D595D9100D65233 /* Debug */,
+				6399A3771D595D9100D65233 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 6399A3721D595D9100D65233 /* Project object */;
+}

@@ -9,7 +9,6 @@ import Foundation
 // Remarks:
 // * We typically use `.pending()` to reduce nested insanities in your backtraces
 
-
 public protocol Thenable: class {
     associatedtype T
     func pipe(to: @escaping (Result<T>) -> Void)
@@ -248,13 +247,17 @@ extension Catchable {
     }
 
     @discardableResult
-    public func `catch`(on: ExecutionContext = NextMainRunloopContext(), handler body: @escaping (Error) -> Void) -> ChainFinalizer {
+    public func `catch`(on: ExecutionContext = NextMainRunloopContext(), policy: CatchPolicy = .allErrorsExceptCancellation, handler body: @escaping (Error) -> Void) -> ChainFinalizer {
         let finally = ChainFinalizer()
         pipe { result in
             switch result {
             case .fulfilled:
                 break
             case .rejected(let error):
+                if policy == .allErrorsExceptCancellation, error.isCancelled {
+                    pmkWarn("PromiseKit: warning: a catch handler did not execute because the error was deemend a cancellation error")
+                    return
+                }
                 on.pmkAsync {
                     body(error)
                 }
@@ -783,6 +786,20 @@ extension Thenable where T: Sequence {
             }
         }
     }
+
+    public var first: Promise<T.Iterator.Element> {
+        //FIXME this seems verbose
+        return flatMap{ (t: T) -> T.Iterator.Element? in t.first(where: { _ in true }) }
+    }
+}
+
+extension Thenable where T: Collection {
+    public var last: Promise<T.Iterator.Element> {
+        return flatMap{ (t: T) -> T.Iterator.Element? in
+            guard !t.isEmpty else { return nil }
+            return t[t.endIndex]
+        }
+    }
 }
 
 extension Thenable {
@@ -841,3 +858,13 @@ private func go(_ exectx: ExecutionContext?, _ body: @escaping () -> Void) {
 
 /// Makes `on` usage more elegant
 public typealias QoS = DispatchQoS
+
+
+/// used to namespace identical functions in extensions
+public enum PMKNamespacer {
+    case promise
+}
+
+
+//TODO make it possible to disable this *and* make it possible to change the output location *and* make the default stderr or if available, NSLog
+let pmkWarn: (String) -> Void = { print($0) }

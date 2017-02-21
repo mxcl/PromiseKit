@@ -78,6 +78,8 @@
 		631751B61D59768200A9DDDC /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		631F44391E381B640044C63C /* Sealant.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Sealant.swift; path = Sources/Sealant.swift; sourceTree = "<group>"; };
 		632714CD1E4D082D0043BBB2 /* Fundamentals.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Fundamentals.swift; path = Tests/CorePromise/Fundamentals.swift; sourceTree = "<group>"; };
+		63291DF71E5CEB3C00C81FDD /* PromiseKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = PromiseKit.podspec; sourceTree = "<group>"; };
+		63291DF81E5CEB6400C81FDD /* CHANGELOG.markdown */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.markdown; sourceTree = "<group>"; };
 		635893921D5BE4E000F14B55 /* PromiseKit.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = PromiseKit.playground; sourceTree = "<group>"; };
 		635893931D5BE4F900F14B55 /* CHANGELOG.markdown */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.markdown; sourceTree = "<group>"; };
 		635893941D5BE4F900F14B55 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
@@ -189,6 +191,8 @@
 			isa = PBXGroup;
 			children = (
 				635893971D5BE4F900F14B55 /* README.markdown */,
+				63291DF81E5CEB6400C81FDD /* CHANGELOG.markdown */,
+				63291DF71E5CEB3C00C81FDD /* PromiseKit.podspec */,
 				635893921D5BE4E000F14B55 /* PromiseKit.playground */,
 				63B0AC601D595E4C00FA21D9 /* Sources */,
 				63B0AC9E1D595E7E00FA21D9 /* Headers */,

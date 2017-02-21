@@ -7,6 +7,8 @@
 * Readable backtraces
 * UnfailablePromises
 * Leading the user to wrap their own promises by pushing documentation towards `wrap` variants and removing the trivial extensions we currently provide but instead providing docs for that demonstrate them, rationale: often it is *just* as simple to wrap them youself and it is more instructive.
+* More composable, we have removed some of our more elaborate extensions and instead added composable, functional continuations like `flatMap` and `first`
+* No longer provide trivial promise wrappers (to teach how to promise, to reduce the need for our extensions and to ensure the base library has everything needed to be *composable*), the READMEs provide the trivial implementations for your usage.
 
 NOTE if using new test set the error goes from:
 
