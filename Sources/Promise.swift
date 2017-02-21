@@ -394,7 +394,7 @@ public final class AnyPromise: NSObject, Thenable, Catchable, Mixin {
         super.init()
     }
 
-    private init(schrödinger: Schrödinger<T>) {
+    private init(schrödinger: Schrödinger<Any?>) {
         _schrödinger = schrödinger
     }
 
