@@ -1,6 +1,6 @@
 *.xcodeproj/**/xcuserdata/
 *.xcscmblueprint
-/Carthage
-/Cartfile.resolved
+Carthage
+Cartfile.resolved
 /.build
 .DS_Store
