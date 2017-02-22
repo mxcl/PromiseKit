@@ -811,9 +811,9 @@ extension Thenable {
      - Remark: Essentially, this is a more specific form of `then` which errors for `nil`.
      - Remark: This function is useful for parsing eg. JSON.
      */
-    public func flatMap<U>(_ transform: @escaping (T) -> U?) -> Promise<U> {
+    public func flatMap<U>(_ transform: @escaping (T) throws -> U?) -> Promise<U> {
         return then(on: nil) { value in
-            guard let result = transform(value) else {
+            guard let result = try transform(value) else {
                 throw PMKError.flatMap(value, U.self)
             }
             return result

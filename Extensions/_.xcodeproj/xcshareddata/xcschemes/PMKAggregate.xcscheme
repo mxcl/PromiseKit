@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0810"
+   LastUpgradeVersion = "0830"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -68,7 +68,26 @@
                ReferencedContainer = "container:StoreKit/PMKStoreKit.xcodeproj">
             </BuildableReference>
          </TestableReference>
+         <TestableReference
+            skipped = "NO">
+            <BuildableReference
+               BuildableIdentifier = "primary"
+               BlueprintIdentifier = "63C7FFF11D5C020D003BAE60"
+               BuildableName = "PMKNSTests.xctest"
+               BlueprintName = "PMKNSTests"
+               ReferencedContainer = "container:Foundation/PMKFoundation.xcodeproj">
+            </BuildableReference>
+         </TestableReference>
       </Testables>
+      <MacroExpansion>
+         <BuildableReference
+            BuildableIdentifier = "primary"
+            BlueprintIdentifier = "63B0AC561D595E1B00FA21D9"
+            BuildableName = "PromiseKit.framework"
+            BlueprintName = "PromiseKit"
+            ReferencedContainer = "container:../PromiseKit.xcodeproj">
+         </BuildableReference>
+      </MacroExpansion>
       <AdditionalOptions>
       </AdditionalOptions>
    </TestAction>

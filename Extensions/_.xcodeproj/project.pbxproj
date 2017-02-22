@@ -13,6 +13,11 @@
 			buildPhases = (
 			);
 			dependencies = (
+				63291E441E5D177300C81FDD /* PBXTargetDependency */,
+				63291E461E5D177300C81FDD /* PBXTargetDependency */,
+				63291E481E5D177300C81FDD /* PBXTargetDependency */,
+				63291E4A1E5D177300C81FDD /* PBXTargetDependency */,
+				63291E4C1E5D177300C81FDD /* PBXTargetDependency */,
 			);
 			name = PMKAggregate;
 			productName = PMKAggregate;
@@ -62,27 +67,6 @@
 			remoteGlobalIDString = 63C9C4451D5D334700101ECE;
 			remoteInfo = PMKTestsHost;
 		};
-		63291DDD1E5CE0D800C81FDD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 63291DD71E5CE0D700C81FDD /* PromiseKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 63B0AC571D595E1B00FA21D9;
-			remoteInfo = PromiseKit;
-		};
-		63291DDF1E5CE0D800C81FDD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 63291DD71E5CE0D700C81FDD /* PromiseKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 631751A81D59766500A9DDDC;
-			remoteInfo = "PMKA+Tests";
-		};
-		63291DE11E5CE0D800C81FDD /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = 63291DD71E5CE0D700C81FDD /* PromiseKit.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = 630019221D596292003B4E30;
-			remoteInfo = PMKCoreTests;
-		};
 		63291DFE1E5CED0400C81FDD /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = 63291DF91E5CED0400C81FDD /* PMKCoreLocation.xcodeproj */;
@@ -111,14 +95,85 @@
 			remoteGlobalIDString = 63C7FFF21D5C020D003BAE60;
 			remoteInfo = PMKSKTests;
 		};
+		63291E311E5CF8E500C81FDD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63291E2C1E5CF8E500C81FDD /* PMKFoundation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 63C7FFA71D5BEE09003BAE60;
+			remoteInfo = PMKFoundation;
+		};
+		63291E331E5CF8E500C81FDD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63291E2C1E5CF8E500C81FDD /* PMKFoundation.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 63C7FFF21D5C020D003BAE60;
+			remoteInfo = PMKNSTests;
+		};
+		63291E431E5D177300C81FDD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63291CBE1E5CD8AF00C81FDD /* PMKAlamofire.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 63C7FFA61D5BEE09003BAE60;
+			remoteInfo = PMKAlamofire;
+		};
+		63291E451E5D177300C81FDD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63291DF91E5CED0400C81FDD /* PMKCoreLocation.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 63C7FFA61D5BEE09003BAE60;
+			remoteInfo = PMKCoreLocation;
+		};
+		63291E471E5D177300C81FDD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63291E2C1E5CF8E500C81FDD /* PMKFoundation.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 63C7FFA61D5BEE09003BAE60;
+			remoteInfo = PMKFoundation;
+		};
+		63291E491E5D177300C81FDD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63291E111E5CF5BE00C81FDD /* PMKStoreKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 63C7FFA61D5BEE09003BAE60;
+			remoteInfo = PMKStoreKit;
+		};
+		63291E4B1E5D177300C81FDD /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63291DB41E5CDE3A00C81FDD /* PMKUIKit.xcodeproj */;
+			proxyType = 1;
+			remoteGlobalIDString = 63C7FFA61D5BEE09003BAE60;
+			remoteInfo = PMKUIKit;
+		};
+		635058091E5D1C5E002B930E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63291DD71E5CE0D700C81FDD /* PromiseKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 63B0AC571D595E1B00FA21D9;
+			remoteInfo = PromiseKit;
+		};
+		6350580B1E5D1C5E002B930E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63291DD71E5CE0D700C81FDD /* PromiseKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 631751A81D59766500A9DDDC;
+			remoteInfo = "PMKA+Tests";
+		};
+		6350580D1E5D1C5E002B930E /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 63291DD71E5CE0D700C81FDD /* PromiseKit.xcodeproj */;
+			proxyType = 2;
+			remoteGlobalIDString = 630019221D596292003B4E30;
+			remoteInfo = PMKCoreTests;
+		};
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		63291CBE1E5CD8AF00C81FDD /* PMKAlamofire.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PMKAlamofire.xcodeproj; path = Alamofire/PMKAlamofire.xcodeproj; sourceTree = "<group>"; };
 		63291DB41E5CDE3A00C81FDD /* PMKUIKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PMKUIKit.xcodeproj; path = UIKit/PMKUIKit.xcodeproj; sourceTree = "<group>"; };
-		63291DD71E5CE0D700C81FDD /* PromiseKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PromiseKit.xcodeproj; path = Alamofire/../../PromiseKit.xcodeproj; sourceTree = "<group>"; };
+		63291DD71E5CE0D700C81FDD /* PromiseKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PromiseKit.xcodeproj; path = ../PromiseKit.xcodeproj; sourceTree = SOURCE_ROOT; };
 		63291DF91E5CED0400C81FDD /* PMKCoreLocation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PMKCoreLocation.xcodeproj; path = CoreLocation/PMKCoreLocation.xcodeproj; sourceTree = "<group>"; };
 		63291E111E5CF5BE00C81FDD /* PMKStoreKit.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PMKStoreKit.xcodeproj; path = StoreKit/PMKStoreKit.xcodeproj; sourceTree = "<group>"; };
+		63291E2C1E5CF8E500C81FDD /* PMKFoundation.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = PMKFoundation.xcodeproj; path = Foundation/PMKFoundation.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXGroup section */
@@ -135,19 +190,9 @@
 			isa = PBXGroup;
 			children = (
 				63291DBC1E5CDE3A00C81FDD /* PMKUIKit.framework */,
-				63291DBE1E5CDE3A00C81FDD /* PMKUITests.xctest */,
-				63291DC01E5CDE3A00C81FDD /* PMKUIUITests.xctest */,
+				63291DBE1E5CDE3A00C81FDD /* PMKUIKitTests.xctest */,
+				63291DC01E5CDE3A00C81FDD /* PMKUITests.xctest */,
 				63291DC21E5CDE3A00C81FDD /* PMKTestsHost.app */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
-		63291DD81E5CE0D700C81FDD /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				63291DDE1E5CE0D800C81FDD /* PromiseKit.framework */,
-				63291DE01E5CE0D800C81FDD /* PMKA+Tests.xctest */,
-				63291DE21E5CE0D800C81FDD /* PMKCoreTests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -170,12 +215,32 @@
 			name = Products;
 			sourceTree = "<group>";
 		};
+		63291E2D1E5CF8E500C81FDD /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				63291E321E5CF8E500C81FDD /* PMKFoundation.framework */,
+				63291E341E5CF8E500C81FDD /* PMKNSTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		635057FB1E5D1C5C002B930E /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				6350580A1E5D1C5E002B930E /* PromiseKit.framework */,
+				6350580C1E5D1C5E002B930E /* PMKA+Tests.xctest */,
+				6350580E1E5D1C5E002B930E /* PMKCoreTests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
 		6399A3711D595D9100D65233 = {
 			isa = PBXGroup;
 			children = (
 				63291DD71E5CE0D700C81FDD /* PromiseKit.xcodeproj */,
 				63291CBE1E5CD8AF00C81FDD /* PMKAlamofire.xcodeproj */,
 				63291DF91E5CED0400C81FDD /* PMKCoreLocation.xcodeproj */,
+				63291E2C1E5CF8E500C81FDD /* PMKFoundation.xcodeproj */,
 				63291E111E5CF5BE00C81FDD /* PMKStoreKit.xcodeproj */,
 				63291DB41E5CDE3A00C81FDD /* PMKUIKit.xcodeproj */,
 			);
@@ -215,6 +280,10 @@
 					ProjectRef = 63291DF91E5CED0400C81FDD /* PMKCoreLocation.xcodeproj */;
 				},
 				{
+					ProductGroup = 63291E2D1E5CF8E500C81FDD /* Products */;
+					ProjectRef = 63291E2C1E5CF8E500C81FDD /* PMKFoundation.xcodeproj */;
+				},
+				{
 					ProductGroup = 63291E121E5CF5BE00C81FDD /* Products */;
 					ProjectRef = 63291E111E5CF5BE00C81FDD /* PMKStoreKit.xcodeproj */;
 				},
@@ -223,7 +292,7 @@
 					ProjectRef = 63291DB41E5CDE3A00C81FDD /* PMKUIKit.xcodeproj */;
 				},
 				{
-					ProductGroup = 63291DD81E5CE0D700C81FDD /* Products */;
+					ProductGroup = 635057FB1E5D1C5C002B930E /* Products */;
 					ProjectRef = 63291DD71E5CE0D700C81FDD /* PromiseKit.xcodeproj */;
 				},
 			);
@@ -256,17 +325,17 @@
 			remoteRef = 63291DBB1E5CDE3A00C81FDD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		63291DBE1E5CDE3A00C81FDD /* PMKUITests.xctest */ = {
+		63291DBE1E5CDE3A00C81FDD /* PMKUIKitTests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = PMKUITests.xctest;
+			path = PMKUIKitTests.xctest;
 			remoteRef = 63291DBD1E5CDE3A00C81FDD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
-		63291DC01E5CDE3A00C81FDD /* PMKUIUITests.xctest */ = {
+		63291DC01E5CDE3A00C81FDD /* PMKUITests.xctest */ = {
 			isa = PBXReferenceProxy;
 			fileType = wrapper.cfbundle;
-			path = PMKUIUITests.xctest;
+			path = PMKUITests.xctest;
 			remoteRef = 63291DBF1E5CDE3A00C81FDD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
@@ -275,27 +344,6 @@
 			fileType = wrapper.application;
 			path = PMKTestsHost.app;
 			remoteRef = 63291DC11E5CDE3A00C81FDD /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		63291DDE1E5CE0D800C81FDD /* PromiseKit.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = PromiseKit.framework;
-			remoteRef = 63291DDD1E5CE0D800C81FDD /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		63291DE01E5CE0D800C81FDD /* PMKA+Tests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = "PMKA+Tests.xctest";
-			remoteRef = 63291DDF1E5CE0D800C81FDD /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		63291DE21E5CE0D800C81FDD /* PMKCoreTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = PMKCoreTests.xctest;
-			remoteRef = 63291DE11E5CE0D800C81FDD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
 		63291DFF1E5CED0400C81FDD /* PMKCoreLocation.framework */ = {
@@ -326,7 +374,70 @@
 			remoteRef = 63291E181E5CF5BE00C81FDD /* PBXContainerItemProxy */;
 			sourceTree = BUILT_PRODUCTS_DIR;
 		};
+		63291E321E5CF8E500C81FDD /* PMKFoundation.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = PMKFoundation.framework;
+			remoteRef = 63291E311E5CF8E500C81FDD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		63291E341E5CF8E500C81FDD /* PMKNSTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = PMKNSTests.xctest;
+			remoteRef = 63291E331E5CF8E500C81FDD /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6350580A1E5D1C5E002B930E /* PromiseKit.framework */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.framework;
+			path = PromiseKit.framework;
+			remoteRef = 635058091E5D1C5E002B930E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6350580C1E5D1C5E002B930E /* PMKA+Tests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = "PMKA+Tests.xctest";
+			remoteRef = 6350580B1E5D1C5E002B930E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
+		6350580E1E5D1C5E002B930E /* PMKCoreTests.xctest */ = {
+			isa = PBXReferenceProxy;
+			fileType = wrapper.cfbundle;
+			path = PMKCoreTests.xctest;
+			remoteRef = 6350580D1E5D1C5E002B930E /* PBXContainerItemProxy */;
+			sourceTree = BUILT_PRODUCTS_DIR;
+		};
 /* End PBXReferenceProxy section */
+
+/* Begin PBXTargetDependency section */
+		63291E441E5D177300C81FDD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PMKAlamofire;
+			targetProxy = 63291E431E5D177300C81FDD /* PBXContainerItemProxy */;
+		};
+		63291E461E5D177300C81FDD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PMKCoreLocation;
+			targetProxy = 63291E451E5D177300C81FDD /* PBXContainerItemProxy */;
+		};
+		63291E481E5D177300C81FDD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PMKFoundation;
+			targetProxy = 63291E471E5D177300C81FDD /* PBXContainerItemProxy */;
+		};
+		63291E4A1E5D177300C81FDD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PMKStoreKit;
+			targetProxy = 63291E491E5D177300C81FDD /* PBXContainerItemProxy */;
+		};
+		63291E4C1E5D177300C81FDD /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = PMKUIKit;
+			targetProxy = 63291E4B1E5D177300C81FDD /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		63291CBC1E5CD89E00C81FDD /* Debug */ = {
@@ -447,6 +558,7 @@
 				63291CBD1E5CD89E00C81FDD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		6399A3751D595D9100D65233 /* Build configuration list for PBXProject "_" */ = {
 			isa = XCConfigurationList;
