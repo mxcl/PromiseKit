@@ -86,13 +86,7 @@ public struct Sealant<T> {
 
      */
     public func resolve(error: Error?, value: T?) {
-        if let error = error {
-            reject(error)
-        } else if let value = value {
-            fulfill(value)
-        } else {
-            reject(PMKError.invalidCallingConvention)
-        }
+        resolve(value: value, error: error)
     }
 }
 

@@ -788,8 +788,7 @@ extension Thenable where T: Sequence {
     }
 
     public var first: Promise<T.Iterator.Element> {
-        //FIXME this seems verbose
-        return flatMap{ (t: T) -> T.Iterator.Element? in t.first(where: { _ in true }) }
+        return flatMap{ $0.first(where: { _ in true }) }
     }
 }
 
