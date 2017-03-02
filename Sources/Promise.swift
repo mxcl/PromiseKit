@@ -2,7 +2,6 @@ import class Dispatch.DispatchQueue
 import class Foundation.NSError
 import func Foundation.NSLog
 
-
 /**
  A *promise* represents the future value of a (usually) asynchronous task.
 
@@ -23,16 +22,16 @@ open class Promise<T> {
     /**
      Create a new, pending promise.
 
-         func fetchAvatar(user: String) -> Promise<UIImage> {
-             return Promise { fulfill, reject in
-                 MyWebHelper.GET("\(user)/avatar") { data, err in
-                     guard let data = data else { return reject(err) }
-                     guard let img = UIImage(data: data) else { return reject(MyError.InvalidImage) }
-                     guard let img.size.width > 0 else { return reject(MyError.ImageTooSmall) }
-                     fulfill(img)
-                 }
-             }
-         }
+     func fetchAvatar(user: String) -> Promise<UIImage> {
+     return Promise { fulfill, reject in
+     MyWebHelper.GET("\(user)/avatar") { data, err in
+     guard let data = data else { return reject(err) }
+     guard let img = UIImage(data: data) else { return reject(MyError.InvalidImage) }
+     guard let img.size.width > 0 else { return reject(MyError.ImageTooSmall) }
+     fulfill(img)
+     }
+     }
+     }
 
      - Parameter resolvers: The provided closure is called immediately on the active thread; commence your asynchronous task, calling either fulfill or reject when it completes.
      - Parameter fulfill: Fulfills this promise with the provided value.
@@ -69,7 +68,7 @@ open class Promise<T> {
 
     /**
      Create an already fulfilled promise.
-    
+
      To create a resolved `Void` promise, do: `Promise(value: ())`
      */
     required public init(value: T) {
@@ -97,9 +96,9 @@ open class Promise<T> {
     /**
      A `typealias` for the return values of `pending()`. Simplifies declaration of properties that reference the values' containing tuple when this is necessary. For example, when working with multiple `pendingPromise(value: ())`s within the same scope, or when the promise initialization must occur outside of the caller's initialization.
 
-         class Foo: BarDelegate {
-            var task: Promise<Int>.PendingTuple?
-         }
+     class Foo: BarDelegate {
+     var task: Promise<Int>.PendingTuple?
+     }
 
      - SeeAlso: pending()
      */
@@ -108,22 +107,22 @@ open class Promise<T> {
     /**
      Making promises that wrap asynchronous delegation systems or other larger asynchronous systems without a simple completion handler is easier with pending.
 
-         class Foo: BarDelegate {
-             let (promise, fulfill, reject) = Promise<Int>.pending()
-    
-             func barDidFinishWithResult(result: Int) {
-                 fulfill(result)
-             }
-    
-             func barDidError(error: NSError) {
-                 reject(error)
-             }
-         }
+     class Foo: BarDelegate {
+     let (promise, fulfill, reject) = Promise<Int>.pending()
 
-     - Returns: A tuple consisting of: 
-       1) A promise
-       2) A function that fulfills that promise
-       3) A function that rejects that promise
+     func barDidFinishWithResult(result: Int) {
+     fulfill(result)
+     }
+
+     func barDidError(error: NSError) {
+     reject(error)
+     }
+     }
+
+     - Returns: A tuple consisting of:
+     1) A promise
+     2) A function that fulfills that promise
+     3) A function that rejects that promise
      */
     public final class func pending() -> PendingTuple {
         var fulfill: ((T) -> Void)!
@@ -139,12 +138,12 @@ open class Promise<T> {
      - Parameter body: The closure that is executed when this Promise is fulfilled.
      - Returns: A new promise that is resolved with the value returned from the provided closure. For example:
 
-           NSURLSession.GET(url).then { data -> Int in
-               //…
-               return data.length
-           }.then { length in
-               //…
-           }
+     NSURLSession.GET(url).then { data -> Int in
+     //…
+     return data.length
+     }.then { length in
+     //…
+     }
      */
     public func then<U>(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> U) -> Promise<U> {
         return Promise<U> { resolve in
@@ -156,18 +155,18 @@ open class Promise<T> {
 
     /**
      The provided closure executes when this promise resolves.
-     
+
      This variant of `then` allows chaining promises, the promise returned by the provided closure is resolved before the promise returned by this closure resolves.
 
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter execute: The closure that executes when this promise fulfills.
      - Returns: A new promise that resolves when the promise returned from the provided closure resolves. For example:
 
-           URLSession.GET(url1).then { data in
-               return CLLocationManager.promise()
-           }.then { location in
-               //…
-           }
+     URLSession.GET(url1).then { data in
+     return CLLocationManager.promise()
+     }.then { location in
+     //…
+     }
      */
     public func then<U>(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> Promise<U>) -> Promise<U> {
         var resolve: ((Resolution<U>) -> Void)!
@@ -193,11 +192,11 @@ open class Promise<T> {
      - Parameter execute: The closure that executes when this promise fulfills.
      - Returns: A new promise that resolves when all promises returned from the provided closure resolve. For example:
 
-           loginPromise.then { _ -> (Promise<Data>, Promise<UIImage>)
-               return (URLSession.GET(userUrl), URLSession.dataTask(with: avatarUrl).asImage())
-           }.then { userData, avatarImage in
-               //…
-           }
+     loginPromise.then { _ -> (Promise<Data>, Promise<UIImage>)
+     return (URLSession.GET(userUrl), URLSession.dataTask(with: avatarUrl).asImage())
+     }.then { userData, avatarImage in
+     //…
+     }
      */
     public func then<U, V>(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> (Promise<U>, Promise<V>)) -> Promise<(U, V)> {
         return then(on: q, execute: body) { when(fulfilled: $0.0, $0.1) }
@@ -253,13 +252,13 @@ open class Promise<T> {
 
     /**
      The provided closure executes when this promise rejects.
-     
+
      Unlike `catch`, `recover` continues the chain provided the closure does not throw. Use `recover` in circumstances where recovering the chain from certain errors is a possibility. For example:
-     
-         CLLocationManager.promise().recover { error in
-             guard error == CLError.unknownLocation else { throw error }
-             return CLLocation.Chicago
-         }
+
+     CLLocationManager.promise().recover { error in
+     guard error == CLError.unknownLocation else { throw error }
+     return CLLocation.Chicago
+     }
 
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter policy: The default policy does not execute your handler for cancellation errors.
@@ -282,10 +281,10 @@ open class Promise<T> {
 
      Unlike `catch`, `recover` continues the chain provided the closure does not throw. Use `recover` in circumstances where recovering the chain from certain errors is a possibility. For example:
 
-         CLLocationManager.promise().recover { error in
-             guard error == CLError.unknownLocation else { throw error }
-             return CLLocation.Chicago
-         }
+     CLLocationManager.promise().recover { error in
+     guard error == CLError.unknownLocation else { throw error }
+     return CLLocation.Chicago
+     }
 
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter policy: The default policy does not execute your handler for cancellation errors.
@@ -303,21 +302,21 @@ open class Promise<T> {
     /**
      The provided closure executes when this promise resolves.
 
-         firstly {
-             UIApplication.shared.networkActivityIndicatorVisible = true
-         }.then {
-             //…
-         }.always {
-             UIApplication.shared.networkActivityIndicatorVisible = false
-         }.catch {
-             //…
-         }
+     firstly {
+     UIApplication.shared.networkActivityIndicatorVisible = true
+     }.then {
+     //…
+     }.always {
+     UIApplication.shared.networkActivityIndicatorVisible = false
+     }.catch {
+     //…
+     }
 
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter execute: The closure that executes when this promise resolves.
      - Returns: A new promise, resolved with this promise’s resolution.
      */
-	@discardableResult
+    @discardableResult
     public func always(on q: DispatchQueue = .default, execute body: @escaping () -> Void) -> Promise {
         state.always(on: q) { resolution in
             body()
@@ -327,12 +326,12 @@ open class Promise<T> {
 
     /**
      Allows you to “tap” into a promise chain and inspect its result.
-     
+
      The function you provide cannot mutate the chain.
- 
-         NSURLSession.GET(/*…*/).tap { result in
-             print(result)
-         }
+
+     NSURLSession.GET(/*…*/).tap { result in
+     print(result)
+     }
 
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter execute: The closure that executes when this promise resolves.
@@ -354,7 +353,7 @@ open class Promise<T> {
         return then(on: zalgo) { _ in return }
     }
 
-//MARK: deprecations
+    //MARK:- Deprecations
 
     @available(*, unavailable, renamed: "always()")
     public func finally(on: DispatchQueue = DispatchQueue.main, execute body: () -> Void) -> Promise { fatalError() }
@@ -386,7 +385,7 @@ open class Promise<T> {
     @available(*, unavailable, renamed: "init(value:)")
     public init(_ value: T) { fatalError() }
 
-//MARK: disallow `Promise<Error>`
+    //MARK: disallow `Promise<Error>`
 
     @available(*, unavailable, message: "cannot instantiate Promise<Error>")
     public init<T: Error>(resolvers: (_ fulfill: (T) -> Void, _ reject: (Error) -> Void) throws -> Void) { fatalError() }
@@ -394,7 +393,7 @@ open class Promise<T> {
     @available(*, unavailable, message: "cannot instantiate Promise<Error>")
     public class func pending<T: Error>() -> (promise: Promise, fulfill: (T) -> Void, reject: (Error) -> Void) { fatalError() }
 
-//MARK: disallow returning `Error`
+    //MARK: disallow returning `Error`
 
     @available (*, unavailable, message: "instead of returning the error; throw")
     public func then<U: Error>(on: DispatchQueue = .default, execute body: (T) throws -> U) -> Promise<U> { fatalError() }
@@ -402,7 +401,7 @@ open class Promise<T> {
     @available (*, unavailable, message: "instead of returning the error; throw")
     public func recover<T: Error>(on: DispatchQueue = .default, execute body: (Error) throws -> T) -> Promise { fatalError() }
 
-//MARK: disallow returning `Promise?`
+    //MARK: disallow returning `Promise?`
 
     @available(*, unavailable, message: "unwrap the promise")
     public func then<U>(on: DispatchQueue = .default, execute body: (T) throws -> Promise<U>?) -> Promise<U> { fatalError() }
@@ -411,10 +410,21 @@ open class Promise<T> {
     public func recover(on: DispatchQueue = .default, execute body: (Error) throws -> Promise?) -> Promise { fatalError() }
 }
 
+// MARK:- Extensions
+
 extension Promise: CustomStringConvertible {
     public var description: String {
         return "Promise: \(state)"
     }
+}
+
+// MARK:- Public functions
+
+/**
+ Simple function for use when the return of a void promise is needed. Purely as it makes more sense from a coding point of view to say 'A void promise' rather than 'A promise with a void value'. Mostly useful when implementing functions that return void promises.
+ */
+public func voidPromise() -> Promise<Void> {
+    return Promise(value:())
 }
 
 /**
@@ -422,21 +432,21 @@ extension Promise: CustomStringConvertible {
 
  Compare:
 
-     NSURLSession.GET(url1).then {
-         NSURLSession.GET(url2)
-     }.then {
-         NSURLSession.GET(url3)
-     }
+ NSURLSession.GET(url1).then {
+ NSURLSession.GET(url2)
+ }.then {
+ NSURLSession.GET(url3)
+ }
 
  With:
 
-     firstly {
-         NSURLSession.GET(url1)
-     }.then {
-         NSURLSession.GET(url2)
-     }.then {
-         NSURLSession.GET(url3)
-     }
+ firstly {
+ NSURLSession.GET(url1)
+ }.then {
+ NSURLSession.GET(url2)
+ }.then {
+ NSURLSession.GET(url3)
+ }
  */
 public func firstly<T>(execute body: () throws -> Promise<T>) -> Promise<T> {
     return firstly(execute: body) { $0 }
@@ -448,21 +458,21 @@ public func firstly<T>(execute body: () throws -> Promise<T>) -> Promise<T> {
 
  Compare:
 
-     when(fulfilled: NSURLSession.GET(url1), NSURLSession.GET(url2)).then {
-         NSURLSession.GET(url3)
-     }.then {
-         NSURLSession.GET(url4)
-     }
+ when(fulfilled: NSURLSession.GET(url1), NSURLSession.GET(url2)).then {
+ NSURLSession.GET(url3)
+ }.then {
+ NSURLSession.GET(url4)
+ }
 
  With:
 
-     firstly {
-         (NSURLSession.GET(url1), NSURLSession.GET(url2))
-     }.then { _, _ in
-         NSURLSession.GET(url2)
-     }.then {
-         NSURLSession.GET(url3)
-     }
+ firstly {
+ (NSURLSession.GET(url1), NSURLSession.GET(url2))
+ }.then { _, _ in
+ NSURLSession.GET(url2)
+ }.then {
+ NSURLSession.GET(url3)
+ }
 
  - Note: At maximum 5 promises may be returned in a tuple
  - Note: If *any* of the tuple-provided promises reject, the returned promise is immediately rejected with that error.
@@ -509,11 +519,12 @@ public func dispatch_promise<T>(_ on: DispatchQueue, _ body: @escaping () throws
     return Promise(value: ()).then(on: on, execute: body)
 }
 
+// MARK:- Enums
 
 /**
  The underlying resolved state of a promise.
  - Remark: Same as `Resolution<T>` but without the associated `ErrorConsumptionToken`.
-*/
+ */
 public enum Result<T> {
     /// Fulfillment
     case fulfilled(T)
@@ -560,28 +571,28 @@ extension Promise {
      Provides a safe way to instantiate a `Promise` and resolve it later via its joint and another
      promise.
 
-         class Engine {
-            static func make() -> Promise<Engine> {
-                let (enginePromise, joint) = Promise<Engine>.joint()
-                let cylinder: Cylinder = Cylinder(explodeAction: {
+     class Engine {
+     static func make() -> Promise<Engine> {
+     let (enginePromise, joint) = Promise<Engine>.joint()
+     let cylinder: Cylinder = Cylinder(explodeAction: {
 
-                    // We *could* use an IUO, but there are no guarantees about when
-                    // this callback will be called. Having an actual promise is safe.
+     // We *could* use an IUO, but there are no guarantees about when
+     // this callback will be called. Having an actual promise is safe.
 
-                    enginePromise.then { engine in
-                        engine.checkOilPressure()
-                    }
-                })
+     enginePromise.then { engine in
+     engine.checkOilPressure()
+     }
+     })
 
-                firstly {
-                    Ignition.default.start()
-                }.then { plugs in
-                    Engine(cylinders: [cylinder], sparkPlugs: plugs)
-                }.join(joint)
+     firstly {
+     Ignition.default.start()
+     }.then { plugs in
+     Engine(cylinders: [cylinder], sparkPlugs: plugs)
+     }.join(joint)
 
-                return enginePromise
-            }
-         }
+     return enginePromise
+     }
+     }
 
      - Returns: A new promise and its joint.
      - SeeAlso: `Promise.join(_:)`
@@ -608,11 +619,11 @@ extension Promise where T: Collection {
     /**
      Transforms a `Promise` where `T` is a `Collection` into a `Promise<[U]>`
 
-         URLSession.shared.dataTask(url: /*…*/).asArray().map { result in
-             return download(result)
-         }.then { images in
-             // images is `[UIImage]`
-         }
+     URLSession.shared.dataTask(url: /*…*/).asArray().map { result in
+     return download(result)
+     }.then { images in
+     // images is `[UIImage]`
+     }
 
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter transform: The closure that executes when this promise resolves.
