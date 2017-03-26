@@ -2,12 +2,11 @@
 
 ![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] ![badge-mit]
 
-[繁體中文](README.zh_Hant.md) [简体中文](README.zh_CN.md)
+[English](README.markdown)
 
 ---
 
-Modern development is highly asynchronous: isn’t it about time we had tools that
-made programming asynchronously powerful, easy and delightful?
+現今的程式開發大量使用非同步存取, 難道不正是時候該開始考慮使用合適的工具讓非同步程式更加的強大, 易用, 並且使用愉快?
 
 ```swift
 UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -15,7 +14,7 @@ UIApplication.shared.isNetworkActivityIndicatorVisible = true
 firstly {
     when(URLSession.dataTask(with: url).asImage(), CLLocationManager.promise())
 }.then { image, location -> Void in
-    self.imageView.image = image
+    self.imageView.image = image;
     self.label.text = "\(location)"
 }.always {
     UIApplication.shared.isNetworkActivityIndicatorVisible = false
@@ -23,14 +22,11 @@ firstly {
     UIAlertView(/*…*/).show()
 }
 ```
+PromiseKit 是一個使用 Swift 語言完整實作 Promise 概念的工具套件. 除了能夠完美的和現有的 Objective-C 程式進行整合之外, 也支援多個不同平台, 如, iOS, macOS, tvOs 以及 watchOS.
 
-PromiseKit is a thoughtful and complete implementation of promises for any
-platform with a `swiftc`, it has *excellent* Objective-C bridging and
-*delightful* specializations for iOS, macOS, tvOS and watchOS.
+# 快速入門
 
-# Quick Start
-
-We recommend [CocoaPods] or [Carthage], however you can just drop `PromiseKit.xcodeproj` into your project and add `PromiseKit.framework` to your app’s embedded frameworks.
+我們推薦使用  [CocoaPods] 或 [Carthage] 等套件管理程式來進行安裝. 如不使用套件管理程式安裝, 也可以手動下載相關程式, 並把 `PromiseKit.xcodeproj` 拖曳加入您的專案中, 並將 `PromiseKit.framework` 加入. 
 
 ## Xcode 8 / Swift 3
 
@@ -61,13 +57,13 @@ pod "PromiseKit", "~> 3.5"
 github "mxcl/PromiseKit" ~> 3.5
 ```
 
-# Documentation
+# 相關文件
 
-We have thorough and complete documentation at [promisekit.org].
+您可以在 [promisekit.org] 查詢完整的相關文件.
 
-## Overview
+## 總覽
 
-Promises are defined by the function `then`:
+使用 `then` 定義非同步的執行任務：
 
 ```swift
 login().then { json in
@@ -75,7 +71,7 @@ login().then { json in
 }
 ```
 
-They are chainable:
+鏈結使用：
 
 ```swift
 login().then { json -> Promise<UIImage> in
@@ -85,7 +81,7 @@ login().then { json -> Promise<UIImage> in
 }
 ```
 
-Errors cascade through chains:
+串連式的錯誤/例外處理：
 
 ```swift
 login().then {
@@ -97,7 +93,7 @@ login().then {
 }
 ```
 
-They are composable:
+組合應用：
 
 ```swift
 let username = login().then{ $0["username"] }
@@ -109,7 +105,7 @@ when(username, CLLocationManager.promise()).then { user, location in
 }
 ```
 
-They are trivial to refactor:
+毫無難度的重構：
 
 ```swift
 func avatar() -> Promise<UIImage> {
@@ -121,7 +117,8 @@ func avatar() -> Promise<UIImage> {
 }
 ```
 
-You can easily create a new, pending promise.
+您可以輕易地建構一個非同步任務：
+
 ```swift
 func fetchAvatar(user: String) -> Promise<UIImage> {
     return Promise { fulfill, reject in
@@ -135,13 +132,13 @@ func fetchAvatar(user: String) -> Promise<UIImage> {
 }
 ```
 
-## Continue Learning…
+## 更多詳細用法
 
-Complete and progressive learning guide at [promisekit.org].
+您可以透過 [promisekit.org] 學習更多完整的用法. 
 
 ## PromiseKit vs. Xcode
 
-PromiseKit contains Swift, so we engage in an unending battle with Xcode:
+PromiseKit 使用 Swift 進行開發, 下表列出 Xcode 以及 Swifit 的相關對應版本：
 
 | Swift | Xcode | PromiseKit |   CI Status  |   Release Notes   |
 | ----- | ----- | ---------- | ------------ | ----------------- |
@@ -150,12 +147,11 @@ PromiseKit contains Swift, so we engage in an unending battle with Xcode:
 |   1   |   7   |      3     |       –      | [2015/10][news-3] |
 | *N/A* |   *   |      1†    | ![ci-legacy] |         –         |
 
-† PromiseKit 1 is pure Objective-C and thus can be used with any Xcode, it is
-also your only choice if you need to support iOS 7 or below.
+† PromiseKit 1 使用純粹的 Objective-C 進行開發，因此可以在任意的 Xcode 版本中使用，若您需要支援 iOS7 或者更低版本時, 只能選擇使用 PromiseKit 1。
 
 ---
 
-We also maintain some branches to aid migrating between Swift versions:
+我們同時維護了一些分支來協助您做不同 Swift 版本間的移植：
 
 | Xcode | Swift | PromiseKit | Branch                      | CI Status |
 | ----- | ----- | -----------| --------------------------- | --------- |
@@ -165,31 +161,27 @@ We also maintain some branches to aid migrating between Swift versions:
 |  7.1  |  2.1  | 2          | [swift-2.0-minimal-changes] | ![ci-20]  |
 |  7.0  |  2.0  | 2          | [swift-2.0-minimal-changes] | ![ci-20]  |
 
-We do **not** usually backport fixes to these branches, but pull-requests are welcome.
+我們通常**不會**再對上述的分支進行維護, 但如果有任何的 PR 我們也歡迎提交.
 
-# Extensions
+# 相關擴充
 
-Promises are only as useful as the asynchronous tasks they represent, thus we 
-have converted (almost) all of Apple’s APIs to Promises. The default CocoaPod
-comes with promises UIKit and Foundation, the rest are accessed by specifying
-additional subspecs in your `Podfile`, eg:
+Promises 僅對執行非同步任務非常有用, 因此我們把 Apple 絕大部份的 API 轉換成 Promises. 透過 CocoaPod 導入套件時即預設帶入 UIKit 和 Foundation, 而其他框架需要在您的 `Podfile` 檔案中進行額外的設定, 例如：
 
 ```ruby
 pod "PromiseKit/MapKit"        # MKDirections().promise().then { /*…*/ }
 pod "PromiseKit/CoreLocation"  # CLLocationManager.promise().then { /*…*/ }
 ```
+我們所有相關的擴充專案可以到  [PromiseKit org ](https://github.com/PromiseKit) 查詢.
 
-All our extensions are separate repositories at the [PromiseKit org ](https://github.com/PromiseKit).
-
-For Carthage specify the additional repositories in your `Cartfile`:
+使用 `Cartfile` 進行設定：
 
 ```ruby
 github "PromiseKit/MapKit" ~> 1.0
 ```
 
-## Choose Your Networking Library
+## 選擇使用網路相關函式庫
 
-`NSURLSession` is typically inadequate; choose from [Alamofire] or [OMGHTTPURLRQ]:
+`NSURLSession` 一般來說很難勝任複雜的網路存取相關任務; 建議使用 [Alamofire] 或者  [OMGHTTPURLRQ]:
 
 ```swift
 // pod 'PromiseKit/Alamofire'  
@@ -206,19 +198,15 @@ URLSession.GET("http://example.com").asDictionary().then { json in
     //…
 }
 ```
+針對使用 [AFNetworking] 的開發者, 我們推薦使用 [csotiriou/AFNetworking].
 
-For [AFNetworking] we recommend [csotiriou/AFNetworking].
+# 有轉換您現有的程式碼到 Promises 的需求嗎?
 
+[與我聯繫](mailto:mxcl@me.com), 我在 iOS 上使用 Promises 進行開發已經有多年的經驗, 同時也有 10 年以上開發行動裝置 App 的經驗.
 
-# Need to convert your codebase to Promises?
+# 支援
 
-[Hire me](mailto:mxcl@me.com), I have years of experience with Promises in iOS codebases and 10 years of professional experience developing mobile apps.
-
-
-# Support
-
-Ask your question at our [Gitter chat channel](https://gitter.im/mxcl/PromiseKit) or on
-[our bug tracker](https://github.com/mxcl/PromiseKit/issues/new).
+可以在 [Gitter chat channel](https://gitter.im/mxcl/PromiseKit) 詢問相關問題, 或者直接追蹤我們的 [bug tracker](https://github.com/mxcl/PromiseKit/issues/new) 
 
 
 [travis]: https://travis-ci.org/mxcl/PromiseKit
