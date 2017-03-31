@@ -26,7 +26,7 @@ PromiseKit 是一款 swift 编写的支持 iOS，macOS，tvOS，watchOS 等多�
 
 # 快速预览
 
-我们推荐您使用 [CocoaPods] 或者 [Carthage] 来集成 ProkiseKit，您也可以通过把 `PromiseKit.xcodeproj` 拖拽到项目中并导入 `PromiseKit.framework` 来手动集成。
+我们推荐您使用 [CocoaPods] 或者 [Carthage] 来集成 PromiseKit，您也可以通过把 `PromiseKit.xcodeproj` 拖拽到项目中并导入 `PromiseKit.framework` 来手动集成。
 
 ## Xcode 8 / Swift 3
 
