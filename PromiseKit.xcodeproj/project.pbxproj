@@ -29,6 +29,7 @@
 		631751BF1D59768200A9DDDC /* 2.3.1.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631751B31D59768200A9DDDC /* 2.3.1.swift */; };
 		631751C01D59768200A9DDDC /* 2.3.2.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631751B41D59768200A9DDDC /* 2.3.2.swift */; };
 		631751C11D59768200A9DDDC /* 2.3.4.swift in Sources */ = {isa = PBXBuildFile; fileRef = 631751B51D59768200A9DDDC /* 2.3.4.swift */; };
+		634AAD2B1EAE517C00B17855 /* fwd.h in Headers */ = {isa = PBXBuildFile; fileRef = 634AAD2A1EAE517C00B17855 /* fwd.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		6352FDE51D69415D00680F48 /* 04_VerifySubclassing.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6352FDE41D69415D00680F48 /* 04_VerifySubclassing.swift */; };
 		635D641C1D59635300BC0AF5 /* 01_AnyPromiseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 635D64071D59635300BC0AF5 /* 01_AnyPromiseTests.m */; };
 		635D641D1D59635300BC0AF5 /* 01_PromiseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D64081D59635300BC0AF5 /* 01_PromiseTests.swift */; };
@@ -131,6 +132,7 @@
 		631751B41D59768200A9DDDC /* 2.3.2.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = 2.3.2.swift; sourceTree = "<group>"; };
 		631751B51D59768200A9DDDC /* 2.3.4.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = 2.3.4.swift; sourceTree = "<group>"; };
 		631751B61D59768200A9DDDC /* README.md */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
+		634AAD2A1EAE517C00B17855 /* fwd.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = fwd.h; path = Sources/fwd.h; sourceTree = "<group>"; };
 		6352FDE41D69415D00680F48 /* 04_VerifySubclassing.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = 04_VerifySubclassing.swift; path = Tests/CorePromise/04_VerifySubclassing.swift; sourceTree = "<group>"; };
 		635893921D5BE4E000F14B55 /* PromiseKit.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = PromiseKit.playground; sourceTree = "<group>"; };
 		635893931D5BE4F900F14B55 /* CHANGELOG.markdown */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = CHANGELOG.markdown; sourceTree = "<group>"; };
@@ -396,6 +398,7 @@
 				63B0AC761D595E6300FA21D9 /* PromiseKit.h */,
 				63B0AC631D595E6300FA21D9 /* AnyPromise.h */,
 				63B0AC661D595E6300FA21D9 /* AnyPromise+Private.h */,
+				634AAD2A1EAE517C00B17855 /* fwd.h */,
 			);
 			name = Headers;
 			sourceTree = "<group>";
@@ -408,6 +411,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				63B0AC931D595E6300FA21D9 /* PromiseKit.h in Headers */,
+				634AAD2B1EAE517C00B17855 /* fwd.h in Headers */,
 				63B0AC811D595E6300FA21D9 /* AnyPromise.h in Headers */,
 				63B0AC841D595E6300FA21D9 /* AnyPromise+Private.h in Headers */,
 			);

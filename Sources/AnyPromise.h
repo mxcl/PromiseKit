@@ -1,5 +1,6 @@
 #import <Foundation/Foundation.h>
 #import <dispatch/dispatch.h>
+#import "fwd.h"
 
 typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
 
@@ -10,12 +11,6 @@ typedef NS_ENUM(NSInteger, PMKCatchPolicy) {
 
 
 #if __has_include("PromiseKit-Swift.h")
-
-    // we define this because PromiseKit-Swift.h imports
-    // PromiseKit.h which then expects this header already
-    // to have been fully imported… !
-    @class AnyPromise;
-
     #pragma clang diagnostic push
     #pragma clang diagnostic ignored"-Wdocumentation"
     #import "PromiseKit-Swift.h"
