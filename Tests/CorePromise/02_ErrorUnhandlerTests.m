@@ -18,7 +18,7 @@
             [ex fulfill];
         };
 
-        [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
+        (void) [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
             resolve([NSError errorWithDomain:@"a" code:5 userInfo:@{@1: @2}]);
         }];
     }
