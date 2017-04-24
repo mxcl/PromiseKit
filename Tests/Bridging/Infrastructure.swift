@@ -7,3 +7,18 @@ import PromiseKit
         return AnyPromise(p)
     }
 }
+
+enum MyError: Error {
+    case PromiseError()
+}
+
+@objc class TestPromise626: NSObject {
+
+    @objc class func promise() -> AnyPromise {
+        let promise: Promise<String> = Promise(resolvers: { _, reject in
+            reject(MyError.PromiseError())
+        })
+
+        return AnyPromise(promise)
+    }
+}

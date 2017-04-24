@@ -246,7 +246,7 @@ import Foundation
             switch resolution {
             case .rejected(let error, let token):
                 token.consumed = true  // when and join will create a new parent error that is unconsumed
-                body(error as Error)
+                body(error as NSError)
             case .fulfilled(let value):
                 body(value)
             }

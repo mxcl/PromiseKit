@@ -10,3 +10,5 @@ __attribute__((objc_subclassing_restricted))
 @interface PromiseBridgeHelper: NSObject
 - (AnyPromise *)bridge1;
 @end
+
+AnyPromise *testCase626();

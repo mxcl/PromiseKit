@@ -25,3 +25,14 @@ AnyPromise *PMKDummyAnyPromise_Error() {
 }
 
 @end
+
+#import "PMKBridgeTests-Swift.h"
+
+AnyPromise *testCase626() {
+    return PMKWhen(@[[TestPromise626 promise], [TestPromise626 promise]]).then(^(id value){
+        NSLog(@"Success: %@", value);
+    }).catch(^(NSError *error) {
+        NSLog(@"Error: %@", error);
+        @throw error;
+    });
+}
