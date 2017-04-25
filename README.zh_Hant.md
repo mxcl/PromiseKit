@@ -181,7 +181,7 @@ github "PromiseKit/MapKit" ~> 1.0
 
 ## 選擇使用網路相關函式庫
 
-`NSURLSession` 一般來說很難勝任複雜的網路存取相關任務; 建議使用 [Alamofire] 或者  [OMGHTTPURLRQ]:
+`URLSession` 一般來說很難勝任複雜的網路存取相關任務; 建議使用 [Alamofire] 或者  [OMGHTTPURLRQ]:
 
 ```swift
 // pod 'PromiseKit/Alamofire'  

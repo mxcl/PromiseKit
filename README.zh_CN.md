@@ -183,7 +183,7 @@ github "PromiseKit/MapKit" ~> 1.0
 
 ## 选择网络库
 
-直接使用 `NSURLSession` 通常是不可取的，您可以选择使用 [Alamofire] or [OMGHTTPURLRQ]:
+直接使用 `URLSession` 通常是不可取的，您可以选择使用 [Alamofire] or [OMGHTTPURLRQ]:
 
 ```swift
 // pod 'PromiseKit/Alamofire'  

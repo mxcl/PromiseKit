@@ -52,9 +52,9 @@ private func _when<T>(_ promises: [Promise<T>]) -> Promise<Void> {
          //…
      }.catch { error in
          switch error {
-         case NSURLError.NoConnection:
+         case URLError.notConnectedToInternet:
              //…
-         case CLError.NotAuthorized:
+         case CLError.denied:
              //…
          }
      }

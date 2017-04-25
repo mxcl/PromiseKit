@@ -41,13 +41,13 @@ typedef NS_ENUM(NSInteger, PMKCatchPolicy) {
 
  If you provide a block that takes a parameter, the value of the receiver will be passed as that parameter.
 
-    [NSURLSession GET:url].then(^(NSData *data){
+    [URLSession GET:url].then(^(NSData *data){
         // do something with data
     });
 
  @return A new promise that is resolved with the value returned from the provided block. For example:
 
-    [NSURLSession GET:url].then(^(NSData *data){
+    [URLSession GET:url].then(^(NSData *data){
         return data.length;
     }).then(^(NSNumber *number){
         //…

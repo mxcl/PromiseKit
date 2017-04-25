@@ -189,7 +189,7 @@ github "PromiseKit/MapKit" ~> 1.0
 
 ## Choose Your Networking Library
 
-`NSURLSession` is typically inadequate; choose from [Alamofire] or [OMGHTTPURLRQ]:
+`URLSession` is typically inadequate; choose from [Alamofire] or [OMGHTTPURLRQ]:
 
 ```swift
 // pod 'PromiseKit/Alamofire'  
