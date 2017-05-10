@@ -212,8 +212,7 @@ For [AFNetworking] we recommend [csotiriou/AFNetworking].
 
 # Need to convert your codebase to Promises?
 
-[Hire me](mailto:mxcl@me.com), I have years of experience with Promises in iOS codebases and 10 years of professional experience developing mobile apps.
-
+From experience it really improves the robustness of your app, feel free to ask us how to go about it.
 
 # Support
 
