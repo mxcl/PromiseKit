@@ -30,6 +30,12 @@ class PromiseTests: XCTestCase {
         XCTAssertFalse(Promise(value: ()).isRejected)
     }
 
+    func testVoidPromise() {
+        let promise = voidPromise()
+        XCTAssertNotNil(promise)
+        XCTAssertTrue(promise.isFulfilled)
+    }
+
     func testDispatchQueueAsyncExtensionReturnsPromise() {
         let ex = expectation(description: "")
 
