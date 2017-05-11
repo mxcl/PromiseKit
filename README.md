@@ -25,7 +25,7 @@ firstly {
 ```
 
 PromiseKit is a thoughtful and complete implementation of promises for any
-platform with a `swiftc`, it has *excellent* Objective-C bridging and
+platform with a `swiftc` (indeed, this includes *Linux*), it has *excellent* Objective-C bridging and
 *delightful* specializations for iOS, macOS, tvOS and watchOS.
 
 # Quick Start
