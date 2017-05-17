@@ -46,7 +46,7 @@ public enum PMKURLError: Error {
     case stringEncoding(URLRequest, Data, URLResponse)
 
     /**
-     Usually the `NSURLResponse` is actually an `NSHTTPURLResponse`, if so you
+     Usually the `URLResponse` is actually an `HTTPURLResponse`, if so you
      can access it using this property. Since it is returned as an unwrapped
      optional: be sure.
      */
