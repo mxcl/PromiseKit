@@ -64,17 +64,18 @@ public let zalgo = DispatchQueue(label: "Zalgo")
  */
 public let waldo = DispatchQueue(label: "Waldo")
 
-
-@inline(__always) func contain_zalgo(_ q: DispatchQueue, body: @escaping () -> Void) {
-    if q === zalgo || q === waldo && !Thread.isMainThread {
-        body()
-    } else {
-        q.async(execute: body)
+extension DispatchQueue {
+    @inline(__always) func containZalgo(body: @escaping () -> Void) {
+        if self === zalgo || (self === waldo && !Thread.isMainThread) {
+            body()
+        } else {
+            async(execute: body)
+        }
     }
-}
 
-@inline(__always) func contain_zalgo<T>(_ q: DispatchQueue, rejecter reject: @escaping (Resolution<T>) -> Void, block: @escaping () throws -> Void) {
-    contain_zalgo(q) {
-        do { try block() } catch { reject(Resolution(error)) }
+    @inline(__always) func containZalgo<T>(rejecter reject: @escaping (Resolution<T>) -> Void, block: @escaping () throws -> Void) {
+        containZalgo() {
+            do { try block() } catch { reject(Resolution(error)) }
+        }
     }
 }
