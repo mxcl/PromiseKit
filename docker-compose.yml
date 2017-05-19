@@ -1,0 +1,5 @@
+PromiseKit:
+  image: swift:3.1
+  volumes:
+    - .:/root/PromiseKit
+  command: bash -c "cd /root/PromiseKit && swift build"
