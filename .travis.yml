@@ -1,28 +1,37 @@
-language: objective-c
-osx_image: xcode8
-
-env:
-  - PLATFORM=Mac
-  - PLATFORM=iOS NAME='iPhone SE'
-  - PLATFORM=tvOS NAME='Apple TV 1080p'
-  - PLATFORM=watchOS
-
-before_install:
-  - if [ -n "$NAME" ]; then
-      export UUID=$(instruments -s | ruby -e "ARGF.each_line{ |ln| ln =~ /$NAME .* \[(.*)\]/; if \$1; puts(\$1); exit; end }");
-    fi
-
-script:
-  - set -o pipefail;
-    case $PLATFORM in
-    Mac)
-      xcodebuild -scheme PromiseKit -enableCodeCoverage YES test | xcpretty;;
-    iOS|tvOS)
-      open -a "simulator" --args -CurrentDeviceUDID "$UUID"
-      xcodebuild -scheme PromiseKit -destination "id=$UUID" -enableCodeCoverage YES test | xcpretty;;
-    watchOS)
-      xcodebuild -scheme PromiseKit -destination "name=Apple Watch - 38mm" | xcpretty;;
-    esac
-
-after_success:
-  - bash <(curl -s https://codecov.io/bash)
+matrix:
+  include:
+    - os: linux
+      dist: trusty
+      sudo: required
+      services: docker
+      env: DOCKER_IMAGE=swift:3.1
+      before_install:
+        - docker pull $DOCKER_IMAGE
+      script: 
+        - set -o pipefail
+        - docker-compose run PromiseKit
+    - os: osx
+      language: objective-c
+      osx_image: xcode8
+      env:
+        - PLATFORM=Mac
+        - PLATFORM=iOS NAME='iPhone SE'
+        - PLATFORM=tvOS NAME='Apple TV 1080p'
+        - PLATFORM=watchOS
+      before_install:
+        - if [ -n "$NAME" ]; then
+            export UUID=$(instruments -s | ruby -e "ARGF.each_line{ |ln| ln =~ /$NAME .* \[(.*)\]/; if \$1; puts(\$1); exit; end }");
+          fi
+      script:
+        - set -o pipefail;
+          case $PLATFORM in
+          Mac)
+            xcodebuild -scheme PromiseKit -enableCodeCoverage YES test | xcpretty;;
+          iOS|tvOS)
+            open -a "simulator" --args -CurrentDeviceUDID "$UUID"
+            xcodebuild -scheme PromiseKit -destination "id=$UUID" -enableCodeCoverage YES test | xcpretty;;
+          watchOS)
+            xcodebuild -scheme PromiseKit -destination "name=Apple Watch - 38mm" | xcpretty;;
+          esac
+      after_success:
+        - bash <(curl -s https://codecov.io/bash)
