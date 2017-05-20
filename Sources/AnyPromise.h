@@ -93,7 +93,7 @@ typedef NS_ENUM(NSInteger, PMKCatchPolicy) {
  
  @warning *Note* Cancellation errors are not caught.
  
- @warning *Note* Since catch is a c++ keyword, this method is not availble in Objective-C++ files. Instead use catchWithPolicy.
+ @warning *Note* Since catch is a c++ keyword, this method is not available in Objective-C++ files. Instead use catchWithPolicy.
 
  @see catchWithPolicy
 */
