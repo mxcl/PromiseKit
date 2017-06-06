@@ -28,6 +28,10 @@ PromiseKit is a thoughtful and complete implementation of promises for any
 platform with a `swiftc` (indeed, this includes *Linux*), it has *excellent* Objective-C bridging and
 *delightful* specializations for iOS, macOS, tvOS and watchOS.
 
+# Swift 4
+
+We maintain a [Swift 4 / Xcode 9 branch](https://github.com/mxcl/PromiseKit/tree/swift4-beta1).
+
 # Quick Start
 
 We recommend [CocoaPods] or [Carthage], however you can just drop `PromiseKit.xcodeproj` into your project and add `PromiseKit.framework` to your app’s embedded frameworks.
