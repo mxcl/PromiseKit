@@ -32,6 +32,13 @@ platform with a `swiftc` (indeed, this includes *Linux*), it has *excellent* Obj
 
 We maintain a [Swift 4 / Xcode 9 branch](https://github.com/mxcl/PromiseKit/tree/swift4-beta1).
 
+Note we have not ported the extensions yet. This is your opportunity to contribute.
+
+1. Clone PromiseKit
+2. Adjust your `.podspec` to use your clone (append `, path: '../path/to/your/clone'`)
+3. Fix the code
+4. Push and PR
+
 # Quick Start
 
 We recommend [CocoaPods] or [Carthage], however you can just drop `PromiseKit.xcodeproj` into your project and add `PromiseKit.framework` to your app’s embedded frameworks.
