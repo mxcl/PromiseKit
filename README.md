@@ -28,20 +28,20 @@ PromiseKit is a thoughtful and complete implementation of promises for any
 platform with a `swiftc` (indeed, this includes *Linux*), it has *excellent* Objective-C bridging and
 *delightful* specializations for iOS, macOS, tvOS and watchOS.
 
-# Swift 4
+# Quick Start
+
+We recommend [CocoaPods] or [Carthage], however you can just drop `PromiseKit.xcodeproj` into your project and add `PromiseKit.framework` to your app’s embedded frameworks.
+
+## Xcode 9 / Swift 4
 
 We maintain a [Swift 4 / Xcode 9 branch](https://github.com/mxcl/PromiseKit/tree/swift4-beta1).
 
 Note we have not ported the extensions yet. This is your opportunity to contribute.
 
-1. Clone PromiseKit
-2. Adjust your `.podspec` to use your clone (append `, path: '../path/to/your/clone'`)
-3. Fix the code
-4. Push and PR
-
-# Quick Start
-
-We recommend [CocoaPods] or [Carthage], however you can just drop `PromiseKit.xcodeproj` into your project and add `PromiseKit.framework` to your app’s embedded frameworks.
+1. `git clone --recursive https://github.com/mxcl/PromiseKit -b swift4-beta1`
+2. Adjust your `.podspec` to use your clone (append `, path: '../PromiseKit'`)
+3. Fix the PromiseKit extensions you use
+4. Fork, push & pull-request
 
 ## Xcode 8 / Swift 3
 
