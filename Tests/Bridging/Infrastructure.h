@@ -1,9 +1,9 @@
 @import Foundation;
 @class AnyPromise;
 
-AnyPromise *PMKDummyAnyPromise_YES();
-AnyPromise *PMKDummyAnyPromise_Manifold();
-AnyPromise *PMKDummyAnyPromise_Error();
+AnyPromise *PMKDummyAnyPromise_YES(void);
+AnyPromise *PMKDummyAnyPromise_Manifold(void);
+AnyPromise *PMKDummyAnyPromise_Error(void);
 
 __attribute__((objc_runtime_name("PMKPromiseBridgeHelper")))
 __attribute__((objc_subclassing_restricted))
@@ -11,4 +11,4 @@ __attribute__((objc_subclassing_restricted))
 - (AnyPromise *)bridge1;
 @end
 
-AnyPromise *testCase626();
+AnyPromise *testCase626(void);

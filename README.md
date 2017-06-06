@@ -34,19 +34,42 @@ We recommend [CocoaPods] or [Carthage], however you can just drop `PromiseKit.xc
 
 ## Xcode 9 / Swift 4
 
-We maintain a [Swift 4 / Xcode 9 branch](https://github.com/mxcl/PromiseKit/tree/swift4-beta1).
+```ruby
+# CocoaPods
+swift_version = "4.0"
+pod "PromiseKit", branch: "swift4-beta1"
 
-Note we have not ported the extensions yet. This is your opportunity to contribute.
+# Carthage
+github "mxcl/PromiseKit" "swift4-beta1"
 
-1. `git clone --recursive https://github.com/mxcl/PromiseKit -b swift4-beta1`
-2. Adjust your `.podspec` to use your clone (append `, path: '../PromiseKit'`)
-3. Fix the PromiseKit extensions you use
-4. Fork, push & pull-request
+# SwiftPM
+package.dependencies.append(
+    .package(url: "https://github.com/mxcl/PromiseKit", .branch("swift4-beta1"))
+)
+```
 
-## Xcode 8 / Swift 3
+### Please Note
+
+We have not ported the extensions yet. This is your opportunity to contribute.
+
+1. Clone:
+
+       cd your-project/..
+       git clone https://github.com/mxcl/PromiseKit PMK-swift4-beta1 --recursive -b swift4-beta1
+
+2. Amend your `Podfile`:
+
+       pod "PromiseKit", path: "../PMK-swift4-beta1"
+
+3. Make your fixes for the PromiseKit extensions you use.
+4. Fork, push & pull-request.
+
+## Xcode 8 / Swift 3 *and* Xcode 9 / Swift 3.2
+
+*Indeed, PromiseKit 4 already supports Swift 3.2 and thus Xcode 9.*
 
 ```ruby
-# CocoaPods >= 1.1.0-rc.2
+# CocoaPods
 swift_version = "3.0"
 pod "PromiseKit", "~> 4.0"
 

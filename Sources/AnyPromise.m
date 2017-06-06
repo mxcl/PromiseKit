@@ -1,7 +1,7 @@
 #import "PMKCallVariadicBlock.m"
 #import "AnyPromise+Private.h"
 
-extern dispatch_queue_t PMKDefaultDispatchQueue();
+extern dispatch_queue_t PMKDefaultDispatchQueue(void);
 
 NSString *const PMKErrorDomain = @"PMKErrorDomain";
 
