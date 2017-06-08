@@ -713,6 +713,41 @@ static inline AnyPromise *fulfillLater() {
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
+- (void)test_59_catch_in_background {
+    id ex1 = [self expectationWithDescription:@""];
+    
+    [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
+        id err = [NSError errorWithDomain:@"a" code:123 userInfo:nil];
+        resolve(err);
+    }].catchInBackground(^(NSError *err){
+        XCTAssertEqual(err.code, 123);
+        XCTAssertFalse([NSThread isMainThread]);
+        [ex1 fulfill];
+    });
+    
+    [self waitForExpectationsWithTimeout:1 handler:nil];
+}
+
+- (void)test_60_catch_on_specific_queue {
+    id ex1 = [self expectationWithDescription:@""];
+    
+    NSString *expectedQueueName = @"specific queue 123";
+    dispatch_queue_t q = dispatch_queue_create(expectedQueueName.UTF8String, DISPATCH_QUEUE_SERIAL);
+    
+    [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
+        id err = [NSError errorWithDomain:@"a" code:123 userInfo:nil];
+        resolve(err);
+    }].catchOn(q, ^(NSError *err){
+        XCTAssertEqual(err.code, 123);
+        XCTAssertFalse([NSThread isMainThread]);
+        NSString *currentQueueName = [NSString stringWithFormat:@"%s", dispatch_queue_get_label(DISPATCH_CURRENT_QUEUE_LABEL)];
+        XCTAssertEqualObjects(expectedQueueName, currentQueueName);
+        [ex1 fulfill];
+    });
+    
+    [self waitForExpectationsWithTimeout:1 handler:nil];
+}
+
 - (void)test_properties {
     Injected.errorUnhandler = ^(NSError *err){
         XCTAssertEqualObjects(err.localizedDescription, @"2");
