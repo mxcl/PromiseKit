@@ -75,6 +75,23 @@ class PromiseTests: XCTestCase {
 
         let bad = Promise(value: ()).then { Error.dummy }
     }
+    
+    func testVoidPromise() {
+        
+        let promise = Promise<Void>.void
+        XCTAssertTrue(promise.isFulfilled)
+        
+        guard let value = promise.value else {
+            return XCTFail("Promise should have a value")
+        }
+        
+        XCTAssertTrue(value is Void)
+        
+        // Sanity check to ensure `.void` can be accessed quickly
+        func doSomething() -> Promise<Void> {
+            return .void
+        }
+    }
 }
 
 private enum Error: Swift.Error {

@@ -626,3 +626,19 @@ extension Promise where T: Collection {
         }
     }
 }
+
+extension Promise {
+    
+    /**
+     Returns a fulfilled Void promise.
+     
+     Usage example:
+ 
+     func doSomething() -> Promise<Void> {
+        return .void
+     }
+    */
+    public static var void: Promise<Void> {
+        return Promise<Void>(value: ())
+    }
+}
