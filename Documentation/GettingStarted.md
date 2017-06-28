@@ -101,7 +101,7 @@ Use of `guard` and a consolidated error handler help, but the promise chain’s
 readability speaks for itself.
 
 
-# `ensure`
+# `always`
 
 We have learned to compose asynchronicity. Next let’s extend our primitives:
 
@@ -113,14 +113,14 @@ firstly {
     fetch(avatar: $0.user)
 }.then {
     self.imageView = $0
-}.ensure {
+}.always {
     UIApplication.shared.isNetworkActivityIndicatorVisible = false
 }.catch {
     //…
 }
 ```
 
-`ensure` “ensures” that something happens. Whatever the outcome in your chain—failure or success—your `ensure`
+Whatever the outcome in your chain—failure or success—your `always`
 handler is called.
 
 For fun let’s compare this pattern with a completion handler equivalent:
