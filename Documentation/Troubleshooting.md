@@ -3,6 +3,8 @@
 Sadly, Swift often gives misleading diagnostic messages for compile errors with
 PromiseKit.
 
+## Compile Errors
+
 ### Cannot convert return expression of type … to return type AnyPromise
 
 Specify the return type for the closure. DON’T return `AnyPromise` (unless you
@@ -17,18 +19,15 @@ wanted to).
 
 Specify the return type for the closure.
 
-### Neither `catch` or `then` are called in my chain
+### Confusing Errors
 
-Check something didn’t throw a `CancellableError`. Easiest way is to amend your
-`catch`:
+The best one I saw lately was *`UIImage` is not convertible to `UIImage?`*…
 
-```swift
-foo.then {
-    //…
-}.catch(policy: .allErrorsIncludingCancellation) {
-    // cancelled errors are handled *as well*
-}
-```
+Swift’s diagnostic reporting will be flat-out misleading and wrong inside
+complicated closures, and with PromiseKit we have a lot of those.
+
+When specifying the `return` types doesn’t help try the advice in the next
+section:
 
 ## Pain Free Swift Promises
 
@@ -56,6 +55,19 @@ func foo() -> Promise<Int>
     }.then {
         step2()
     }
+}
+```
+
+## Neither `catch` or `then` are called in my chain
+
+Check something didn’t throw a `CancellableError`. Easiest way is to amend your
+`catch`:
+
+```swift
+foo.then {
+    //…
+}.catch(policy: .allErrorsIncludingCancellation) {
+    // cancelled errors are handled *as well*
 }
 ```
 
