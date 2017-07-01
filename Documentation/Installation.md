@@ -154,6 +154,52 @@ github "mxcl/PromiseKit" ~> 3.5
 [swift-2.0-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.0-minimal-changes
 
 
+# Using Git Submodules for PromiseKit’s Extensions
+
+> Please note, this is a more advanced technique
+
+If you use CocoaPods and a few PromiseKit extensions then importing PromiseKit
+causes that module to import all the extension frameworks. Thus if you have an
+app and a few app-extensions (eg. iOS app, iOS watch extension, iOS Today
+extension) then all your final products that use PromiseKit will have forced
+dependencies on all the Apple frameworks that PromiseKit provides extensions
+for.
+
+This isn’t that bad, but every framework that loads is overhead and startup
+time.
+
+It’s better and worse with Carthage since we build individual micro-frameworks
+for each PromiseKit-extension, so at least all your final products only link
+against the Apple frameworks that they actually need. However, Apple have
+advised that apps only link against “about 12” frameworks for performance
+reasons, so for Carthage, we are worse off for this metric.
+
+The solution is to instead only import CorePromise:
+
+```ruby
+# CocoaPods
+pod "PromiseKit/CorePromise"
+
+# Carthage
+github "mxcl/PromiseKit"
+# ^^ for Carthage *only* have this
+```
+
+And to use the extensions you need via `git submodules`:
+
+```
+git submodule init
+git submodule add https://github.com/PromiseKit/UIKit Submodules/PMKUIKit
+```
+
+Then in Xcode you can add these sources to your targets on a per-target basis.
+
+Then when you `pod update`, ensure you also update your submodules:
+
+    pod update && git submodule update --recursive --remote
+
+
+
 # Release History
 
 ## [4.0](https://github.com/mxcl/PromiseKit/releases/tag/4.0.0)
