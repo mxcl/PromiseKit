@@ -77,7 +77,8 @@ Promise chains are commonly started with networking, thus we offer multiple
 options: [Alamofire], [OMGHTTPURLRQ] and of course (vanilla) `NSURLSession`:
 
 ```swift
-// pod 'PromiseKit/Alamofire'  
+// pod 'PromiseKit/Alamofire'
+// https://github.com/PromiseKit/Alamofire
 Alamofire.request("http://example.com", withMethod: .POST).responseJSON().then { json in
     //…
 }.catch { error in
@@ -85,17 +86,31 @@ Alamofire.request("http://example.com", withMethod: .POST).responseJSON().then {
 }
 
 // pod 'PromiseKit/OMGHTTPURLRQ'
+// https://github.com/PromiseKit/OMGHTTPURLRQ
 URLSession.POST("http://example.com").asDictionary().then { json in
     //…
 }.catch { error in
     //…
 }
+
+// pod 'PromiseKit/Foundation'
+// https://github.com/PromiseKit/Foundation
+URLSession.shared.dataTask(url).asDictionary().then { json in
+    // …
+}.catch { error in
+    //…
+}
 ```
 
-[OMGHTTPURLRQ] supplements `NSURLSession` (so you can, eg. do POSTs properly).
-However, nowadays, servers often simply prefer JSON so you can opt to use
-`NSURLSession` by itself and if so
-[we wrote the promises you need](https://github.com/PromiseKit/Foundation).
+Nobody ever got fired for using Alamofire, but at the end of the day, it’s
+just a small wrapper around `NSURLSession`. OMGHTTPURLRQ supplements
+`NSURLRequest` to make generating REST style requests easier, and the PromiseKit
+extensions extend `NSURLSession` to make OMG usage more convenient. But since a
+while now most servers accept JSON, so writing a simple API class that uses
+vanilla `NSURLSession` and our promises is not hard, and gives you the most
+control with the fewest black-boxes.
+
+The choice is yours.
 
 # Support
 
