@@ -79,7 +79,7 @@ options: [Alamofire], [OMGHTTPURLRQ] and of course (vanilla) `NSURLSession`:
 ```swift
 // pod 'PromiseKit/Alamofire'
 // https://github.com/PromiseKit/Alamofire
-Alamofire.request("http://example.com", withMethod: .POST).responseJSON().then { json in
+Alamofire.request("http://example.com", method: .post).responseJSON().then { json in
     //…
 }.catch { error in
     //…
