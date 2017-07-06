@@ -14,7 +14,7 @@ func toggleNetworkSpinnerWithPromise<T>(funcToCall: () -> Promise<T>) -> Promise
             fulfill(result)
         }.always {
             setNetworkActivityIndicatorVisible(false)
-        }.error { err in
+        }.catch { err in
             reject(err)
         }
     }
