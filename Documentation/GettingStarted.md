@@ -38,7 +38,8 @@ func login() -> Promise<Creds>
     
 // compared with:
 
-func login(completion: (Creds, Error) -> Void)
+func login(completion: (Creds?, Error?) -> Void)
+                        // ^^ ugh. Optionals. Double optionals.
 ```
 
 The distinction is that with promises your functions returns *promises*. So for each handler in our
@@ -150,8 +151,8 @@ almost won’t need to review the pull-requests.
 
 # `when`
 
-With completion handlers doing reacting to multiple asycnhronous operations is either slow or hard. Slow means doing it
-serially:
+With completion handlers reacting to multiple asycnhronous operations is either
+slow or hard. Slow means doing it serially:
 
 ```swift
 operation1 { result1 in
@@ -161,7 +162,7 @@ operation1 { result1 in
 }
 ```
 
-The fast (*parallel*) path code is complex:
+The fast (*parallel*) path code makes the code less clear:
 
 ```swift
 var result1: …!
@@ -241,34 +242,40 @@ How do we convert this to a promise? Well, it's easy:
 
 ```swift
 func fetch() -> Promise<String> {
-    return PromiseKit.wrap{ fetch(completion: $0) }
+    return PromiseKit.wrap(fetch) }
 }
 ```
 
-For more complicated situations use the root resolver:
+For more complicated situations use the root-resolver:
 
 ```swift
 func fetch() -> Promise<String> {
     return Promise { fulfill, reject in
-        foo { a, b in
-            if a {
-                fulfill(a)
-            } else if b {
-                fulfill(b)
+        foo { result, error in
+            if let result = result {
+                fulfill(result)
+            } else if let error = error {
+                fulfill(error)
             } else {
-                reject(MyError.foo)
+                reject(PMKError.invalidCallingConvention)
+                // ^^ we provide this error so that all paths are handled, even
+                // this path which technically should never happen (but might!)
             }
         }
     }
 }
 ```
 
+Note with the above example `PromiseKit.wrap(foo)` *would* have worked.
+Only use the root-resolver when wrap doesn’t work *or* you need to handle
+non-typical scenarios.
+
 # Supplement
 
 ## `firstly`
 
-Above we kept using `firstly`, what is `firstly`? Well, it is just [syntactic sugar](https://en.wikipedia.org/wiki/Syntactic_sugar),
-you don’t need it, but it helps make your chains more readable *and* it helps with our introduction. Instead of:
+Above we kept using `firstly`, but what is it? Well, it is just [syntactic sugar](https://en.wikipedia.org/wiki/Syntactic_sugar),
+you don’t need it, but it helps make your chains more readable. Instead of:
 
 ```swift
 firstly {
@@ -320,7 +327,8 @@ foo.then { baz -> Promise<String> in
 Our documentation often omits the `return` for clarity.
 
 However this is a blessing and a curse, as the Swift compiler often will fail
-to infer return types. See our Trouble Shooting guide for more help.
+to infer return types. See our [Troubleshooting Guide](Troubleshooting.md) if
+you require further assistance.
 
 
 # Further Reading
