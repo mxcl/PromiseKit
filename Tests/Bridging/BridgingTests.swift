@@ -146,7 +146,7 @@ class BridgingTests: XCTestCase {
 
         // AnyPromise.then { return x }
 
-        let input = after(interval: 0).then{ 1 }
+        let input = after(seconds: 0).then{ 1 }
 
         AnyPromise(input).then { obj -> Int in
             XCTAssertEqual(obj as? Int, 1)
@@ -164,11 +164,11 @@ class BridgingTests: XCTestCase {
 
         // AnyPromise.then { return AnyPromise }
 
-        let input = after(interval: 0).then{ 1 }
+        let input = after(seconds: 0).then{ 1 }
 
         AnyPromise(input).then { obj -> AnyPromise in
             XCTAssertEqual(obj as? Int, 1)
-            return AnyPromise(after(interval: 0).then{ 2 })
+            return AnyPromise(after(seconds: 0).then{ 2 })
         }.then { obj -> Void  in
             XCTAssertEqual(obj as? Int, 2)
             ex.fulfill()
@@ -182,11 +182,11 @@ class BridgingTests: XCTestCase {
 
         // AnyPromise.then { return Promise<Int> }
 
-        let input = after(interval: 0).then{ 1 }
+        let input = after(seconds: 0).then{ 1 }
 
         AnyPromise(input).then { obj -> Promise<Int> in
             XCTAssertEqual(obj as? Int, 1)
-            return after(interval: 0).then{ 2 }
+            return after(seconds: 0).then{ 2 }
         }.then { value -> Void  in
             XCTAssertEqual(value, 2)
             ex.fulfill()
@@ -200,7 +200,7 @@ class BridgingTests: XCTestCase {
     func test4() {
         let ex = expectation(description: "")
         Promise(value: 1).then { _ -> AnyPromise in
-            return AnyPromise(after(interval: 0).then{ 1 })
+            return AnyPromise(after(seconds: 0).then{ 1 })
         }.then { x -> Void in
             XCTAssertEqual(x as? Int, 1)
             ex.fulfill()
@@ -213,7 +213,7 @@ class BridgingTests: XCTestCase {
         let ex = expectation(description: "")
 
         Promise(value: 1).then { _ -> AnyPromise in
-            let promise = after(interval: 0.1).then{ throw Error.dummy }
+            let promise = after(interval: .milliseconds(100)).then{ throw Error.dummy }
             return AnyPromise(promise)
         }.catch { err in
             ex.fulfill()

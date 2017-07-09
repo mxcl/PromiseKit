@@ -39,7 +39,7 @@ class ZalgoTests: XCTestCase {
             }
 
             var p1: Promise<Void>!
-            p1 = after(interval: 0.1).then(on: zalgo) { _ -> Promise<Void> in
+            p1 = after(interval: .milliseconds(100)).then(on: zalgo) { _ -> Promise<Void> in
                 ex.0.fulfill()
                 return p1
             }

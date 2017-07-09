@@ -7,7 +7,7 @@ import PromiseKit
 
 
 func promise3() -> Promise<Int> {
-    return after(interval: 1).then {
+    return after(seconds: 1).then {
         return 3
     }
 }

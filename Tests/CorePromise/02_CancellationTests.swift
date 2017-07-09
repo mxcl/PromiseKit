@@ -13,7 +13,7 @@ class CancellationTests: XCTestCase {
                 ex1.fulfill()
             }
 
-            after(interval: 0).then { _ in
+            after(seconds: 0).then { _ in
                 throw Error.cancel
             }.then {
                 XCTFail()
@@ -28,7 +28,7 @@ class CancellationTests: XCTestCase {
     func testThrowCancellableErrorThatIsNotCancelled() {
         let expct = expectation(description: "")
 
-        after(interval: 0).then {
+        after(seconds: 0).then {
             throw Error.dummy
         }.then {
             XCTFail()
@@ -49,7 +49,7 @@ class CancellationTests: XCTestCase {
                 ex2.fulfill()
             }
 
-            after(interval: 0).then { _ in
+            after(seconds: 0).then { _ in
                 throw NSError(domain: PMKErrorDomain, code: PMKOperationCancelled, userInfo: nil)
             }.recover(policy: .allErrors) { err -> Void in
                 ex1.fulfill()
@@ -68,7 +68,7 @@ class CancellationTests: XCTestCase {
     func testCatchCancellation() {
         let ex = expectation(description: "")
 
-        after(interval: 0).then { _ in
+        after(seconds: 0).then { _ in
             throw NSError(domain: PMKErrorDomain, code: PMKOperationCancelled, userInfo: nil)
         }.catch(policy: .allErrors) { err in
             ex.fulfill()

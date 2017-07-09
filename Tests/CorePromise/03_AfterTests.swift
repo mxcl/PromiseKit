@@ -8,7 +8,15 @@ class AfterTests: XCTestCase {
         waitForExpectations(timeout: 2, handler: nil)
 
         let ex2 = expectation(description: "")
-        __PMKAfter(0).then{ _ in ex2.fulfill() }
+        after(seconds: 0).then(execute: ex2.fulfill)
+        waitForExpectations(timeout: 2, handler: nil)
+
+        let ex3 = expectation(description: "")
+        after(interval: .seconds(0)).then(execute: ex3.fulfill)
+        waitForExpectations(timeout: 2, handler: nil)
+
+        let ex4 = expectation(description: "")
+        __PMKAfter(0).then{ _ in ex4.fulfill() }
         waitForExpectations(timeout: 2, handler: nil)
     }
 
@@ -18,7 +26,15 @@ class AfterTests: XCTestCase {
         waitForExpectations(timeout: 2, handler: nil)
 
         let ex2 = expectation(description: "")
-        __PMKAfter(-1).then{ _ in ex2.fulfill() }
+        after(seconds: -1).then(execute: ex2.fulfill)
+        waitForExpectations(timeout: 2, handler: nil)
+
+        let ex3 = expectation(description: "")
+        after(interval: .seconds(-1)).then(execute: ex3.fulfill)
+        waitForExpectations(timeout: 2, handler: nil)
+
+        let ex4 = expectation(description: "")
+        __PMKAfter(-1).then{ _ in ex4.fulfill() }
         waitForExpectations(timeout: 2, handler: nil)
     }
 
@@ -28,7 +44,15 @@ class AfterTests: XCTestCase {
         waitForExpectations(timeout: 2, handler: nil)
 
         let ex2 = expectation(description: "")
-        __PMKAfter(1).then{ _ in ex2.fulfill() }
+        after(seconds: 1).then(execute: ex2.fulfill)
+        waitForExpectations(timeout: 2, handler: nil)
+
+        let ex3 = expectation(description: "")
+        after(interval: .seconds(1)).then(execute: ex3.fulfill)
+        waitForExpectations(timeout: 2, handler: nil)
+
+        let ex4 = expectation(description: "")
+        __PMKAfter(1).then{ _ in ex4.fulfill() }
         waitForExpectations(timeout: 2, handler: nil)
     }
 }

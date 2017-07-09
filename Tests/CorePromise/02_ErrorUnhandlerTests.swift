@@ -98,8 +98,8 @@ class ErrorUnhandlerTests: XCTestCase {
         let ex3 = expectation(description: "")
         let ex4 = expectation(description: "")
 
-        after(interval: 0.1).then { _ -> Void in r(Error.test); ex1.fulfill() }
-        after(interval: 0.15).then { _ -> Void in r(Error.test); ex2.fulfill() }.always(execute: ex3.fulfill)
+        after(interval: .milliseconds(100)).then { _ -> Void in r(Error.test); ex1.fulfill() }
+        after(interval: .milliseconds(150)).then { _ -> Void in r(Error.test); ex2.fulfill() }.always(execute: ex3.fulfill)
 
         p.catch { error in
             ex4.fulfill()
@@ -120,7 +120,7 @@ class ErrorUnhandlerTests: XCTestCase {
         }
 
         Promise<Void> { _, reject in
-            after(interval: 0.1).then {
+            after(interval: .milliseconds(100)).then {
                 throw Error.test
             }.catch(execute: reject)
         }
