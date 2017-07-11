@@ -39,5 +39,5 @@ extension DispatchQueue {
 
      Defaults to `DispatchQueue.main`.
      */
-    class public final var `default`: DispatchQueue = DispatchQueue.main
+    static public var `default`: DispatchQueue = DispatchQueue.main
 }
