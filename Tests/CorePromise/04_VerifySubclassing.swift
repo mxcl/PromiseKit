@@ -6,12 +6,6 @@ import PromiseKit
 public class SubclassTest: Promise<Int> {
     private let foo: Int
 
-    public init() {
-        foo = 1
-        super.init { fulfill, reject in
-
-        }
-    }
 
     public required init(resolvers: (@escaping (Int) -> Void, @escaping (Error) -> Void) throws -> Void) {
         foo = 2

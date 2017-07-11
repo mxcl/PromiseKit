@@ -75,6 +75,11 @@ class PromiseTests: XCTestCase {
 
         let bad = Promise(value: ()).then { Error.dummy }
     }
+
+    func testCanMakeVoidPromise() {
+        let promise = Promise()
+        XCTAssert(promise.value is Optional<Void>)
+    }
 }
 
 private enum Error: Swift.Error {
