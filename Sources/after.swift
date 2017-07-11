@@ -10,7 +10,10 @@ public func after(interval: TimeInterval) -> Promise<Void> {
 }
 
 /**
- - Returns: A new promise that fulfills after the specified duration.
+     after(.seconds(2)).then {
+     }
+
+- Returns: A new promise that fulfills after the specified duration.
 */
 public func after(seconds: TimeInterval) -> Promise<Void> {
     return Promise { fulfill, _ in
