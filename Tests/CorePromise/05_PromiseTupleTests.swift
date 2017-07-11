@@ -81,7 +81,7 @@ class PromiseTupleTests: XCTestCase {
     func testThenNtuplePromisesFail(generator: (Promise<Void>, Promise<Any>, Promise<Any>) -> Promise<Void>) {
         let ex = expectation(description: "")
 
-        generator(after(interval: 0.1), Promise<Any>(value: 1), Promise<Any>(error: TestError.sthWrong)).then {
+        generator(after(interval: .milliseconds(100)), Promise<Any>(value: 1), Promise<Any>(error: TestError.sthWrong)).then {
             XCTFail("Then called instead of `catch`")
         }.catch { e in
             if case TestError.sthWrong = e {
@@ -219,7 +219,7 @@ class PromiseTupleTests: XCTestCase {
     func testFirstlyNtuplePromisesFail(generator: (Promise<Void>, Promise<Any>, Promise<Any>) -> Promise<Void>) {
         let ex = expectation(description: "")
 
-        generator(after(interval: 0.1), Promise<Any>(value: 1), Promise<Any>(error: TestError.sthWrong)).then {
+        generator(after(interval: .milliseconds(100)), Promise<Any>(value: 1), Promise<Any>(error: TestError.sthWrong)).then {
             XCTFail("Then called instead of `catch`")
         }.catch { e in
             if case TestError.sthWrong = e {
@@ -262,10 +262,10 @@ fileprivate enum TestError: Error {
 }
 
 fileprivate func getPromises(callback: ((Promise<Bool>, Promise<Int>, Promise<String>, Promise<(Int, Int)>, Promise<Double>, Promise<Void>)) -> Void) {
-    let boolean = after(interval: 0.1).then { true }
+    let boolean = after(interval: .milliseconds(100)).then { true }
     let integer = Promise(value: 1)
     let string = Promise(value: "success")
-    let integerTuple = after(interval: 0.1).then { (2, 3) }
+    let integerTuple = after(interval: .milliseconds(100)).then { (2, 3) }
     let double = Promise(value: 0.1)
     let empty = Promise(value: ())
     callback(boolean, integer, string, integerTuple, double, empty)

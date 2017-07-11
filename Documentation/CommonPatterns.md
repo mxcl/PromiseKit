@@ -175,7 +175,7 @@ situations where tasks *must* be done sequentially; animation is a good example.
 
 ```swift
 let fetches: [Promise<T>] = makeFetches()
-let timeout = after(interval: 4)
+let timeout = after(seconds: 4)
 
 race(when(fulfilled: fetches).asVoid(), timeout).then {
     //…
@@ -236,7 +236,7 @@ foo.then {
 ## Retry / Polling
 
 ```swift
-func attempt<T>(interdelay: TimeInterval = 2, maxRepeat: Int = 3, source: () -> Promise<T>) -> Promise<T>
+func attempt<T>(interdelay: DispatchTimeInterval = .seconds(2), maxRepeat: Int = 3, source: () -> Promise<T>) -> Promise<T>
     var attempts = 0
     func attempt() -> Promise<T> {
         attempts += 1

@@ -3,7 +3,7 @@ import PromiseKit
 // for BridgingTests.m
 @objc(PMKPromiseBridgeHelper) class PromiseBridgeHelper: NSObject {
     @objc func bridge1() -> AnyPromise {
-        let p = after(interval: 0.01)
+        let p = after(interval: .milliseconds(10))
         return AnyPromise(p)
     }
 }

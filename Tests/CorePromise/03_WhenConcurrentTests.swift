@@ -14,7 +14,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
                 return nil
             }
 
-            return after(interval: 0.01).then {
+            return after(interval: .milliseconds(10)).then {
                 return number * number
             }
         }
@@ -64,7 +64,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
                 return nil
             }
 
-            return after(interval: 0.01).then {
+            return after(interval: .milliseconds(10)).then {
                 guard number != 0 else {
                     return Promise(error: expectedError)
                 }
@@ -104,7 +104,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
                 return nil
             }
 
-            return after(interval: 0.01).then {
+            return after(interval: .milliseconds(10)).then {
                 currentConcurrently -= 1
                 return Promise(value: number * number)
             }
