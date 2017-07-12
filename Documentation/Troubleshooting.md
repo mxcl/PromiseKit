@@ -58,6 +58,14 @@ func foo() -> Promise<Int>
 }
 ```
 
+Otherwise try to always have your chain return to something that specifies the
+promise type. This is easy when you are writing functions that return promises,
+and in general this is what you should aim for anyway: because it makes your
+promises more composable.
+
+When you return promises from functions that specify the return type Swift can
+infer the types properly and it makes writing chains that much easier.
+
 ## Neither `catch` or `then` are called in my chain
 
 Check something didn’t throw a `CancellableError`. Easiest way is to amend your
