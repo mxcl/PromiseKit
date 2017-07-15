@@ -8,52 +8,88 @@ matrix:
     - os: osx
       language: objective-c
       osx_image: xcode8.3
-      env: PLATFORM=Mac
+      env: PLAT=macOS SWFT=3.1
     - os: osx
       language: objective-c
       osx_image: xcode8.3
-      env: PLATFORM=iOS NAME='iPhone SE'
+      env: PLAT=iOS SWFT=3.1
     - os: osx
       language: objective-c
       osx_image: xcode8.3
-      env: PLATFORM=tvOS NAME='Apple TV 1080p'
+      env: PLAT=tvOS SWFT=3.1
     - os: osx
       language: objective-c
       osx_image: xcode8.3
-      env: PLATFORM=watchOS
+      env: PLAT=watchOS SWFT=3.1
     - os: osx
       language: objective-c
       osx_image: xcode9
-      env: PLATFORM=Mac
+      env: PLAT=macOS SWFT=3.2
     - os: osx
       language: objective-c
       osx_image: xcode9
-      env: PLATFORM=iOS NAME='iPhone SE'
+      env: PLAT=iOS SWFT=3.2
     - os: osx
       language: objective-c
       osx_image: xcode9
-      env: PLATFORM=tvOS NAME='Apple TV 1080p'
+      env: PLAT=tvOS SWFT=3.2
     - os: osx
       language: objective-c
       osx_image: xcode9
-      env: PLATFORM=watchOS
+      env: PLAT=watchOS SWFT=3.2
+    - os: osx
+      language: objective-c
+      osx_image: xcode9
+      env: PLAT=macOS SWFT=4.0
+    - os: osx
+      language: objective-c
+      osx_image: xcode9
+      env: PLAT=iOS SWFT=4.0
+    - os: osx
+      language: objective-c
+      osx_image: xcode9
+      env: PLAT=tvOS SWFT=4.0
+    - os: osx
+      language: objective-c
+      osx_image: xcode9
+      env: PLAT=watchOS SWFT=4.0
+    - os: osx
+      language: objective-c
+      osx_image: xcode8.2
+      env: PLAT=macOS SWFT=3.0
+    - os: osx
+      language: objective-c
+      osx_image: xcode8.1
+      env: PLAT=macOS SWFT=3.0
+    - os: osx
+      language: objective-c
+      osx_image: xcode8
+      env: PLAT=macOS SWFT=3.0
 before_install:
-  - if [ -n "$NAME" ]; then
-      export UUID=$(instruments -s | ruby -e "ARGF.each_line{ |ln| ln =~ /$NAME .* \[(.*)\]/; if \$1; puts(\$1); exit; end }");
-    fi;
-    if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
       docker pull $DOCKER_IMAGE;
+    fi;
+    case $PLAT in
+    iOS)
+      NAME="iPhone SE";;
+    tvOS)
+      NAME="Apple TV 1080p";;
+    watchOS)
+      NAME="Apple Watch - 38mm";;
+    esac;
+    if [ -n "$NAME" ]; then
+      export UUID=$(instruments -s | ruby -e "ARGF.each_line{ |ln| ln =~ /$NAME .* \[(.*)\]/; if \$1; puts(\$1); exit; end }");
     fi
 script:
   - set -o pipefail;
-    case $PLATFORM in
-    Mac)
-      xcodebuild -scheme PromiseKit -enableCodeCoverage YES test | xcpretty;;
+    case $PLAT in
+    macOS)
+      xcodebuild -scheme PromiseKit SWIFT_VERSION=$SWFT -quiet -enableCodeCoverage YES test | xcpretty;;
     iOS|tvOS)
       open -a "simulator" --args -CurrentDeviceUDID "$UUID";
-      xcodebuild -scheme PromiseKit -destination "id=$UUID" -enableCodeCoverage YES test | xcpretty;;
+      xcodebuild -scheme PromiseKit SWIFT_VERSION=$SWFT -destination "id=$UUID" -quiet -enableCodeCoverage YES test | xcpretty;;
     watchOS)
-      xcodebuild -scheme PromiseKit -destination "name=Apple Watch - 38mm" | xcpretty;;
+      xcodebuild -scheme PromiseKit SWIFT_VERSION=$SWFT -destination "id=$UUID" -quiet | xcpretty;;
     *)
       docker-compose run PromiseKit;;
     esac
