@@ -37,22 +37,22 @@ matrix:
       language: objective-c
       osx_image: xcode9
       env: PLAT=watchOS SWFT=3.2
-    - os: osx
-      language: objective-c
-      osx_image: xcode9
-      env: PLAT=macOS SWFT=4.0
-    - os: osx
-      language: objective-c
-      osx_image: xcode9
-      env: PLAT=iOS SWFT=4.0
-    - os: osx
-      language: objective-c
-      osx_image: xcode9
-      env: PLAT=tvOS SWFT=4.0
-    - os: osx
-      language: objective-c
-      osx_image: xcode9
-      env: PLAT=watchOS SWFT=4.0
+    # - os: osx
+    #   language: objective-c
+    #   osx_image: xcode9
+    #   env: PLAT=macOS SWFT=4.0
+    # - os: osx
+    #   language: objective-c
+    #   osx_image: xcode9
+    #   env: PLAT=iOS SWFT=4.0
+    # - os: osx
+    #   language: objective-c
+    #   osx_image: xcode9
+    #   env: PLAT=tvOS SWFT=4.0
+    # - os: osx
+    #   language: objective-c
+    #   osx_image: xcode9
+    #   env: PLAT=watchOS SWFT=4.0
     - os: osx
       language: objective-c
       osx_image: xcode8.2
