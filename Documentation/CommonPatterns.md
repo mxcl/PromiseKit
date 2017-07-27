@@ -233,6 +233,11 @@ foo.then {
 }
 ```
 
+**Important**, canceling the chain is *not* the same as canceling the underlying
+asynchronous task. Promises are a wrapper around asynchronicity but they have no
+control over the underlying tasks. If you need to cancel the underlying task you
+need to cancel the underlying task!
+
 ## Retry / Polling
 
 ```swift
