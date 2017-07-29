@@ -137,7 +137,7 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'Photos' do |ss|
-    ss.ios.source_files = ss.tvos.source_files = ss.osx.source_files 'Extensions/Photos/Sources/*'
+    ss.ios.source_files = ss.tvos.source_files = ss.osx.source_files = 'Extensions/Photos/Sources/*'
     ss.ios.frameworks = ss.tvos.frameworks = ss.osx.frameworks = 'Photos'
     ss.tvos.deployment_target = '10.0'
     ss.osx.deployment_target = '10.13'
