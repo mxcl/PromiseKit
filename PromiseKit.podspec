@@ -140,7 +140,8 @@ Pod::Spec.new do |s|
     ss.ios.source_files = ss.tvos.source_files = ss.osx.source_files = 'Extensions/Photos/Sources/*'
     ss.ios.frameworks = ss.tvos.frameworks = ss.osx.frameworks = 'Photos'
     ss.tvos.deployment_target = '10.0'
-    ss.osx.deployment_target = '10.13'
+    # CocoaPods sucks: can’t enable this until Xcode 9 is released or lint fails
+    #ss.osx.deployment_target = '10.13'
     ss.ios.deployment_target = '8.0'
     ss.dependency 'PromiseKit/CorePromise'
   end
