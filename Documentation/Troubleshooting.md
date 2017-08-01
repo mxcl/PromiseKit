@@ -118,3 +118,7 @@ Promise<String> { fulfill, reject in
     }
 }
 ```
+
+## Slow Compilation / Compiler Cannot Solve in Reasonable Time
+
+Add return types to your closures.
