@@ -241,7 +241,7 @@ need to cancel the underlying task!
 ## Retry / Polling
 
 ```swift
-func attempt<T>(interdelay: TimeInterval = 2.0, maxRepeat: Int = 3, body: @escaping () -> Promise<T>) -> Promise<T> {
+func attempt<T>(interdelay: DispatchTimeInterval = .seconds(2), maxRepeat: Int = 3, body: @escaping () -> Promise<T>) -> Promise<T> {
     var attempts = 0
     func attempt() -> Promise<T> {
         attempts += 1
