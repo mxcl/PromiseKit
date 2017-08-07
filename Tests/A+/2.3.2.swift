@@ -33,8 +33,8 @@ class Test232: XCTestCase {
                     }
 
                     testPromiseResolution(factory: xFactory) { promise, expectation in
-                        promise.then { value -> Void in
-                            XCTAssertEqual(value, sentinel)
+                        promise.done {
+                            XCTAssertEqual($0, sentinel)
                             expectation.fulfill()
                         }
                     }
@@ -43,16 +43,16 @@ class Test232: XCTestCase {
                     let sentinel = arc4random()
 
                     func xFactory() -> Promise<UInt32> {
-                        return Promise { fulfill, _ in
+                        return Promise(.pending) { seal in
                             after(ticks: 2) {
-                                fulfill(sentinel)
+                                seal.fulfill(sentinel)
                             }
                         }
                     }
 
                     testPromiseResolution(factory: xFactory) { promise, expectation in
-                        promise.then { value -> Void in
-                            XCTAssertEqual(value, sentinel)
+                        promise.done {
+                            XCTAssertEqual($0, sentinel)
                             expectation.fulfill()
                         }
                     }
@@ -79,9 +79,9 @@ class Test232: XCTestCase {
                     let sentinel = arc4random()
 
                     func xFactory() -> Promise<UInt32> {
-                        return Promise { _, reject in
+                        return Promise(.pending) { seal in
                             after(ticks: 2) {
-                                reject(Error.sentinel(sentinel))
+                                seal.reject(Error.sentinel(sentinel))
                             }
                         }
                     }

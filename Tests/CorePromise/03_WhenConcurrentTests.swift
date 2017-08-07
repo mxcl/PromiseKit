@@ -9,22 +9,21 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
         var numbers = (0..<42).makeIterator()
         let squareNumbers = numbers.map { $0 * $0 }
 
-        let generator = AnyIterator<Promise<Int>> {
+        let generator = AnyIterator<Guarantee<Int>> {
             guard let number = numbers.next() else {
                 return nil
             }
 
-            return after(interval: .milliseconds(10)).then {
+            return after(.milliseconds(10)).map {
                 return number * number
             }
         }
 
-        when(fulfilled: generator, concurrently: 5)
-            .then { numbers -> Void in
-                if numbers == squareNumbers {
-                    e.fulfill()
-                }
+        when(fulfilled: generator, concurrently: 5).done { numbers in
+            if numbers == squareNumbers {
+                e.fulfill()
             }
+        }
 
         waitForExpectations(timeout: 3, handler: nil)
     }
@@ -37,7 +36,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
         }
 
         when(fulfilled: generator, concurrently: 5)
-            .then { numbers -> Void in
+            .done { numbers in
                 if numbers.count == 0 {
                     e.fulfill()
                 }
@@ -64,12 +63,12 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
                 return nil
             }
 
-            return after(interval: .milliseconds(10)).then {
-                guard number != 0 else {
+            return after(.milliseconds(10)).then { _ -> Promise<Int> in
+                if number != 0 {
                     return Promise(error: expectedError)
+                } else {
+                    return Promise(value: 100500 / number)
                 }
-
-                return Promise(value: 100500 / number)
             }
         }
 
@@ -104,27 +103,21 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
                 return nil
             }
 
-            return after(interval: .milliseconds(10)).then {
+            return after(.milliseconds(10)).then(on: .main) { _ -> Promise<Int> in
                 currentConcurrently -= 1
                 return Promise(value: number * number)
             }
         }
 
-        when(fulfilled: generator, concurrently: expectedConcurrently)
-            .then { numbers -> Void in
-                if expectedConcurrently == maxConcurrently {
-                    e.fulfill()
-                }
+        when(fulfilled: generator, concurrently: expectedConcurrently).done { _ in
+            XCTAssertEqual(expectedConcurrently, maxConcurrently)
+            e.fulfill()
         }
 
         waitForExpectations(timeout: 3)
     }
 
     func testWhenConcurrencyLessThanZero() {
-        InjectedErrorUnhandler = { err in
-            guard case PMKError.whenConcurrentlyZero = err else { return XCTFail() }
-        }
-
         let generator = AnyIterator<Promise<Int>> { XCTFail(); return nil }
 
         let p1 = when(fulfilled: generator, concurrently: 0)
@@ -132,8 +125,8 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
 
         guard let e1 = p1.error else { return XCTFail() }
         guard let e2 = p2.error else { return XCTFail() }
-        guard case PMKError.whenConcurrentlyZero = e1 else { return XCTFail() }
-        guard case PMKError.whenConcurrentlyZero = e2 else { return XCTFail() }
+        guard case PMKError.badInput = e1 else { return XCTFail() }
+        guard case PMKError.badInput = e2 else { return XCTFail() }
     }
 
     func testStopsDequeueingOnceRejected() {
@@ -156,7 +149,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             }
         }
 
-        when(fulfilled: generator, concurrently: 1).then {
+        when(fulfilled: generator, concurrently: 1).done {
             XCTFail("\($0)")
         }.catch { error in
             ex.fulfill()

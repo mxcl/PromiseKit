@@ -3,7 +3,6 @@ Pod::Spec.new do |s|
 
   `xcodebuild -project PromiseKit.xcodeproj -showBuildSettings` =~ /CURRENT_PROJECT_VERSION = ((\d\.)+\d)/
   abort("No version detected") if $1.nil?
-  abort("Not tagged") unless `git tag`.split.include? $1
   s.version = $1
 
   s.source = {
@@ -19,7 +18,7 @@ Pod::Spec.new do |s|
   s.social_media_url = 'https://twitter.com/mxcl'
   s.authors  = { 'Max Howell' => 'mxcl@me.com' }
   s.documentation_url = 'http://promisekit.org/docs/'
-  s.default_subspecs = 'Foundation', 'UIKit', 'QuartzCore'
+  s.default_subspecs = 'CorePromise'
   s.requires_arc = true
 
   # CocoaPods requires us to specify the root deployment targets
@@ -29,6 +28,10 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = '10.11'
   s.watchos.deployment_target = '2.0'
   s.tvos.deployment_target = '9.0'
+  
+  s.pod_target_xcconfig = {
+    'OTHER_SWIFT_FLAGS' => '-DPMKCocoaPods',
+  }
 
   s.subspec 'Accounts' do |ss|
     ss.ios.source_files = ss.osx.source_files = 'Extensions/Accounts/Sources/*'

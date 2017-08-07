@@ -10,6 +10,9 @@ private let timeout: TimeInterval = 10
 
 extension XCTestCase {
     func describe(_ description: String, file: StaticString = #file, line: UInt = #line, body: () throws -> Void) {
+
+        PromiseKit.conf.Q.map = .main
+
         do {
             try body()
         } catch {
@@ -17,12 +20,12 @@ extension XCTestCase {
         }
     }
 
-    func specify(_ description: String, file: StaticString = #file, line: UInt = #line, body: (Promise<Void>.PendingTuple, XCTestExpectation) throws -> Void) {
+    func specify(_ description: String, file: StaticString = #file, line: UInt = #line, body: ((promise: Promise<Void>, fulfill: () -> Void, reject: (Error) -> Void), XCTestExpectation) throws -> Void) {
         let expectation = self.expectation(description: description)
-        let pending = Promise<Void>.pending()
+        let (pending, seal) = Promise<Void>.pending()
 
         do {
-            try body(pending, expectation)
+            try body((pending, seal.fulfill, seal.reject), expectation)
             waitForExpectations(timeout: timeout) { err in
                 if let _ = err {
                     XCTFail("wait failed: \(description)", file: file, line: line)
@@ -53,16 +56,16 @@ extension XCTestCase {
             return (Promise(value: value), {})
         }
         specify("immediately-fulfilled") { value in
-            let (promise, fulfill, _) = Promise<UInt32>.pending()
+            let (promise, seal) = Promise<UInt32>.pending()
             return (promise, {
-                fulfill(value)
+                seal.fulfill(value)
             })
         }
         specify("eventually-fulfilled") { value in
-            let (promise, fulfill, _) = Promise<UInt32>.pending()
+            let (promise, seal) = Promise<UInt32>.pending()
             return (promise, {
                 after(ticks: 5) {
-                    fulfill(value)
+                    seal.fulfill(value)
                 }
             })
         }
@@ -76,16 +79,16 @@ extension XCTestCase {
             return (Promise(error: Error.sentinel(sentinel)), {})
         }
         specify("immediately-rejected") { sentinel in
-            let (promise, _, reject) = Promise<UInt32>.pending()
+            let (promise, seal) = Promise<UInt32>.pending()
             return (promise, {
-                reject(Error.sentinel(sentinel))
+                seal.reject(Error.sentinel(sentinel))
             })
         }
         specify("eventually-rejected") { sentinel in
-            let (promise, _, reject) = Promise<UInt32>.pending()
+            let (promise, seal) = Promise<UInt32>.pending()
             return (promise, {
                 after(ticks: 50) {
-                    reject(Error.sentinel(sentinel))
+                    seal.reject(Error.sentinel(sentinel))
                 }
             })
         }

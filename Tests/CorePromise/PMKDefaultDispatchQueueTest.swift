@@ -20,7 +20,7 @@ class PMKDefaultDispatchQueueTest: XCTestCase {
     override func setUp() {
         // can actually only set the default queue once
         // - See: PMKSetDefaultDispatchQueue
-        DispatchQueue.default = myQueue
+        conf.Q = (myQueue, myQueue)
     }
 
     func testOverrodeDefaultThenQueue() {
@@ -53,7 +53,7 @@ class PMKDefaultDispatchQueueTest: XCTestCase {
     func testOverrodeDefaultAlwaysQueue() {
         let ex = expectation(description: "resolving")
 
-        Promise(value: 1).always {
+        Promise(value: 1).ensure {
             ex.fulfill()
             XCTAssertFalse(Thread.isMainThread)
         }

@@ -7,21 +7,19 @@ import PromiseKit
 
 
 func promise3() -> Promise<Int> {
-    return after(seconds: 1).then {
-        return 3
-    }
+    return after(.seconds(1)).map{ 3 }
 }
 
 firstly {
     Promise(value: 1)
-}.then { _ in
+}.map { _ in
     2
 }.then { _ in
     promise3()
-}.then {
+}.done {
     print($0)  // => 3
-}.always {
-    // always happens
+}.ensure {
+    PlaygroundPage.current.finishExecution()
 }.catch { error in
     // only happens for errors
 }

@@ -1,6 +1,7 @@
 @import PromiseKit;
 @import XCTest;
 #import "Infrastructure.h"
+#define PMKTestErrorDomain @"PMKTestErrorDomain"
 
 static inline NSError *dummyWithCode(NSInteger code) {
     return [NSError errorWithDomain:PMKTestErrorDomain code:rand() userInfo:@{NSLocalizedDescriptionKey: @(code).stringValue}];
@@ -583,7 +584,7 @@ static inline AnyPromise *fulfillLater() {
     
     [AnyPromise promiseWithValue:@1].then(^{
         return @1;
-    }).always(^{
+    }).ensure(^{
         [ex1 fulfill];
     });
     
@@ -595,15 +596,13 @@ static inline AnyPromise *fulfillLater() {
         id ex1 = [self expectationWithDescription:@"always"];
         id ex2 = [self expectationWithDescription:@"errorUnhandler"];
 
-        Injected.errorUnhandler = ^(NSError *err) {
-            XCTAssertEqualObjects(err.domain, PMKTestErrorDomain);
-            [ex2 fulfill];
-        };
-
         [AnyPromise promiseWithValue:@1].then(^{
             return dummy();
-        }).always(^{
+        }).ensure(^{
             [ex1 fulfill];
+        }).catch(^(NSError *err){
+            XCTAssertEqualObjects(err.domain, PMKTestErrorDomain);
+            [ex2 fulfill];
         });
     }
     
@@ -621,7 +620,7 @@ static inline AnyPromise *fulfillLater() {
         XCTAssertEqual(++x, 2);
     }).then(^{
         XCTAssertEqual(++x, 3);
-    }).always(^{
+    }).ensure(^{
         XCTAssertEqual(++x, 4);
         [ex1 fulfill];
     });
@@ -698,7 +697,7 @@ static inline AnyPromise *fulfillLater() {
     
     AnyPromise *promise = fulfillLater().then(^{
         return nil;
-    }).always(^{
+    }).ensure(^{
         [ex1 fulfill];
     });
     
@@ -706,7 +705,7 @@ static inline AnyPromise *fulfillLater() {
     
     id ex2 = [self expectationWithDescription:@""];
     
-    promise.always(^{
+    promise.ensure(^{
         [ex2 fulfill];
     });
     
@@ -749,24 +748,14 @@ static inline AnyPromise *fulfillLater() {
 }
 
 - (void)test_properties {
-    Injected.errorUnhandler = ^(NSError *err){
-        XCTAssertEqualObjects(err.localizedDescription, @"2");
-    };
-
     XCTAssertEqualObjects([AnyPromise promiseWithValue:@1].value, @1);
     XCTAssertEqualObjects([[AnyPromise promiseWithValue:dummyWithCode(2)].value localizedDescription], @"2");
     XCTAssertNil([AnyPromise promiseWithResolverBlock:^(id a){}].value);
     XCTAssertTrue([AnyPromise promiseWithResolverBlock:^(id a){}].pending);
-    XCTAssertFalse([AnyPromise promiseWithResolverBlock:^(id a){}].resolved);
     XCTAssertFalse([AnyPromise promiseWithValue:@1].pending);
-    XCTAssertTrue([AnyPromise promiseWithValue:@1].resolved);
 }
 
 - (void)test_promiseWithValue {
-    Injected.errorUnhandler = ^(NSError *err){
-        XCTAssertEqualObjects(err.localizedDescription, @"2");
-    };
-
     XCTAssertEqual([AnyPromise promiseWithValue:@1].value, @1);
     XCTAssertEqualObjects([[AnyPromise promiseWithValue:dummyWithCode(2)].value localizedDescription], @"2");
     XCTAssertEqual([AnyPromise promiseWithValue:[AnyPromise promiseWithValue:@1]].value, @1);

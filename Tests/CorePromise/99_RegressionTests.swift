@@ -9,15 +9,15 @@ class RegressionTests: XCTestCase {
 
         do {
             let promise1 = Promise(value: ())
-            let promise2 = promise1.then(on: zalgo) { promise1 }
-            promise2.catch(on: zalgo) { _ in XCTFail() }
+            let promise2 = promise1.then(on: nil) { promise1 }
+            promise2.catch(on: nil) { _ in XCTFail() }
         }
         do {
             enum Error: Swift.Error { case dummy }
 
             let promise1 = Promise<Void>(error: Error.dummy)
-            let promise2 = promise1.recover(on: zalgo) { _ in promise1 }
-            promise2.catch(on: zalgo) { err in
+            let promise2 = promise1.recover(on: nil) { _ in promise1 }
+            promise2.catch(on: nil) { err in
                 if case PMKError.returnedSelf = err {
                     XCTFail()
                 }

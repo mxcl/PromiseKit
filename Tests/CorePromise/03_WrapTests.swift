@@ -11,23 +11,24 @@ class WrapTests: XCTestCase {
             self.error = error
         }
 
-        func fetchWithCompletionBlock(block: (Int?, Error?) -> Void) {
-            if value != nil {
-                block(value, nil)
-            } else {
-                block(nil, error)
+        func fetchWithCompletionBlock(block: @escaping(Int?, Error?) -> Void) {
+            after(.milliseconds(20)).done {
+                block(self.value, self.error)
             }
         }
     }
 
     func testSuccess() {
+        let ex = expectation(description: "")
         let kittenFetcher = KittenFetcher(value: 2, error: nil)
-        let promise = PromiseKit.wrap { resolve in
-            kittenFetcher.fetchWithCompletionBlock(block: resolve)
+        let promise = Promise(.pending) { seal in
+            kittenFetcher.fetchWithCompletionBlock(block: seal.resolve)
+        }.done {
+            XCTAssertEqual($0, 2)
+            ex.fulfill()
         }
 
-        XCTAssertTrue(promise.isFulfilled)
-        XCTAssertEqual(2, promise.value)
+        waitForExpectations(timeout: 1)
     }
 
     func testError() {
@@ -38,11 +39,12 @@ class WrapTests: XCTestCase {
         let ex = expectation(description: "")
 
         let kittenFetcher = KittenFetcher(value: nil, error: Error.test)
-        let promise = PromiseKit.wrap { resolve in
-            kittenFetcher.fetchWithCompletionBlock(block: resolve)
+        Promise(.pending) { seal in
+            kittenFetcher.fetchWithCompletionBlock(block: seal.resolve)
         }.catch { error in
-            if case Error.test = error {
-                ex.fulfill()
+            defer { ex.fulfill() }
+            guard case Error.test = error else {
+                return XCTFail()
             }
         }
 
@@ -57,11 +59,12 @@ class WrapTests: XCTestCase {
         let ex = expectation(description: "")
 
         let kittenFetcher = KittenFetcher(value: nil, error: nil)
-        let promise = PromiseKit.wrap { resolve in
-            kittenFetcher.fetchWithCompletionBlock(block: resolve)
+        Promise(.pending) { seal in
+            kittenFetcher.fetchWithCompletionBlock(block: seal.resolve)
         }.catch { error in
-            if case PMKError.invalidCallingConvention = error {
-                ex.fulfill()
+            defer { ex.fulfill() }
+            guard case PMKError.invalidCallingConvention = error else {
+                return XCTFail()
             }
         }
 

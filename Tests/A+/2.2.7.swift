@@ -8,7 +8,7 @@ class Test227: XCTestCase {
 
                 testFulfilled { promise1, expectation, _ in
                     let sentinel = arc4random()
-                    let promise2 = promise1.then { _ in throw Error.sentinel(sentinel) }
+                    let promise2 = promise1.done { _ in throw Error.sentinel(sentinel) }
 
                     promise2.catch {
                         if case Error.sentinel(let x) = $0, x == sentinel {
@@ -19,7 +19,7 @@ class Test227: XCTestCase {
 
                 testRejected { promise1, expectation, _ in
                     let sentinel = arc4random()
-                    let promise2 = promise1.recover { _ -> UInt32 in throw Error.sentinel(sentinel) }
+                    let promise2 = promise1.recover { _ -> Promise<UInt32> in throw Error.sentinel(sentinel) }
 
                     promise2.catch { error in
                         if case Error.sentinel(let x) = error, x == sentinel {

@@ -8,7 +8,7 @@ class Test224: XCTestCase {
             describe("`then` returns before the promise becomes fulfilled or rejected") {
                 testFulfilled { promise, expectation, dummy in
                     var thenHasReturned = false
-                    promise.then { _ -> Void in
+                    promise.done { _ in
                         XCTAssert(thenHasReturned)
                         expectation.fulfill()
                     }
@@ -28,17 +28,17 @@ class Test224: XCTestCase {
             describe("Clean-stack execution ordering tests (fulfillment case)") {
                 specify("when `onFulfilled` is added immediately before the promise is fulfilled") { d, expectation in
                     var onFulfilledCalled = false
-                    d.promise.then { _ -> Void in
+                    d.promise.done {
                         onFulfilledCalled = true
                         expectation.fulfill()
                     }
-                    d.fulfill(())
+                    d.fulfill()
                     XCTAssertFalse(onFulfilledCalled)
                 }
                 specify("when `onFulfilled` is added immediately after the promise is fulfilled") { d, expectation in
                     var onFulfilledCalled = false
-                    d.fulfill(())
-                    d.promise.then { _ -> Void in
+                    d.fulfill()
+                    d.promise.done {
                         onFulfilledCalled = true
                         expectation.fulfill()
                     }
@@ -47,8 +47,8 @@ class Test224: XCTestCase {
                 specify("when one `onFulfilled` is added inside another `onFulfilled`") { _, expectation in
                     var firstOnFulfilledFinished = false
                     let promise = Promise(value: ())
-                    promise.then { _ -> Void in
-                        promise.then { _ -> Void in
+                    promise.done {
+                        promise.done {
                             XCTAssertTrue(firstOnFulfilledFinished)
                             expectation.fulfill()
                         }
@@ -62,7 +62,7 @@ class Test224: XCTestCase {
                     var firstOnRejectedFinished = false
 
                     promise1.catch { _ in
-                        promise2.then { _ -> Void in
+                        promise2.done {
                             XCTAssertTrue(firstOnRejectedFinished)
                             expectation.fulfill()
                         }
@@ -74,11 +74,11 @@ class Test224: XCTestCase {
                     var firstStackFinished = false
 
                     after(ticks: 1) {
-                        d.fulfill(())
+                        d.fulfill()
                         firstStackFinished = true
                     }
 
-                    d.promise.then { _ -> Void in
+                    d.promise.done {
                         XCTAssertTrue(firstStackFinished)
                         expectation.fulfill()
                     }
@@ -109,7 +109,7 @@ class Test224: XCTestCase {
                     var promise2 = Promise<Void>(error: Error.dummy)
                     var firstOnFulfilledFinished = false
 
-                    promise1.then { _ -> Void in
+                    promise1.done { _ in
                         promise2.catch { _ in
                             XCTAssertTrue(firstOnFulfilledFinished)
                             expectation.fulfill()
