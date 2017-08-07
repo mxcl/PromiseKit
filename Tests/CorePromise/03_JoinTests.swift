@@ -43,13 +43,13 @@ class JoinTests: XCTestCase {
         join(promise1, promise2, promise3).then(on: zalgo) { _ in finished = true }
         XCTAssertFalse(finished, "Not all promises have resolved")
         
-        fulfill1()
+        fulfill1(())
         XCTAssertFalse(finished, "Not all promises have resolved")
         
-        fulfill2()
+        fulfill2(())
         XCTAssertFalse(finished, "Not all promises have resolved")
         
-        fulfill3()
+        fulfill3(())
         XCTAssert(finished, "All promises have resolved")
     }
 }

@@ -11,14 +11,14 @@ class Test213: XCTestCase {
             specify("trying to reject then immediately fulfill") { d, expectation in
                 d.promise.test(onFulfilled: { XCTFail() }, onRejected: expectation.fulfill)
                 d.reject(Error.dummy)
-                d.fulfill()
+                d.fulfill(())
             }
 
             specify("trying to reject then fulfill, delayed") { d, expectation in
                 d.promise.test(onFulfilled: { XCTFail() }, onRejected: expectation.fulfill)
                 after(ticks: 1) {
                     d.reject(Error.dummy)
-                    d.fulfill()
+                    d.fulfill(())
                 }
             }
 
@@ -26,7 +26,7 @@ class Test213: XCTestCase {
                 d.promise.test(onFulfilled: { XCTFail() }, onRejected: expectation.fulfill)
                 d.reject(Error.dummy)
                 after(ticks: 1) {
-                    d.fulfill()
+                    d.fulfill(())
                 }
             }
         }

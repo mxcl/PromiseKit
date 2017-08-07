@@ -46,7 +46,7 @@ class JointTests: XCTestCase {
         let (foo, fulfillFoo, _) = Promise<Void>.pending()
         foo.join(joint)
 
-        fulfillFoo()
+        fulfillFoo(())
 
         waitForExpectations(timeout: 1)
     }

@@ -32,12 +32,12 @@ class Test224: XCTestCase {
                         onFulfilledCalled = true
                         expectation.fulfill()
                     }
-                    d.fulfill()
+                    d.fulfill(())
                     XCTAssertFalse(onFulfilledCalled)
                 }
                 specify("when `onFulfilled` is added immediately after the promise is fulfilled") { d, expectation in
                     var onFulfilledCalled = false
-                    d.fulfill()
+                    d.fulfill(())
                     d.promise.then { _ -> Void in
                         onFulfilledCalled = true
                         expectation.fulfill()
@@ -74,7 +74,7 @@ class Test224: XCTestCase {
                     var firstStackFinished = false
 
                     after(ticks: 1) {
-                        d.fulfill()
+                        d.fulfill(())
                         firstStackFinished = true
                     }
 

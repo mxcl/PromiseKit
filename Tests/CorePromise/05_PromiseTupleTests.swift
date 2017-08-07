@@ -268,5 +268,5 @@ fileprivate func getPromises(callback: ((Promise<Bool>, Promise<Int>, Promise<St
     let integerTuple = after(interval: .milliseconds(100)).then { (2, 3) }
     let double = Promise(value: 0.1)
     let empty = Promise(value: ())
-    callback(boolean, integer, string, integerTuple, double, empty)
+    callback((boolean, integer, string, integerTuple, double, empty))
 }

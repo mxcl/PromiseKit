@@ -159,7 +159,7 @@ class ErrorUnhandlerTests: XCTestCase {
 
 //MARK: helpers
 
-    private func twice(body: @noescape (Promise<Int>, XCTestExpectation) -> Void) {
+    private func twice(body: (Promise<Int>, XCTestExpectation) -> Void) {
         autoreleasepool {
             let ex = expectation(description: "Sealed")
             body(Promise<Int>(error: Error.dummy), ex)

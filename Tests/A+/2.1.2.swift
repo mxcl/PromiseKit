@@ -10,14 +10,14 @@ class Test212: XCTestCase {
 
             specify("trying to fulfill then immediately reject") { d, expectation in
                 d.promise.test(onFulfilled: expectation.fulfill, onRejected: { XCTFail() })
-                d.fulfill()
+                d.fulfill(())
                 d.reject(Error.dummy)
             }
 
             specify("trying to fulfill then reject, delayed") { d, expectation in
                 d.promise.test(onFulfilled: expectation.fulfill, onRejected: { XCTFail() })
                 after(ticks: 1) {
-                    d.fulfill()
+                    d.fulfill(())
                     d.reject(Error.dummy)
                 }
             }

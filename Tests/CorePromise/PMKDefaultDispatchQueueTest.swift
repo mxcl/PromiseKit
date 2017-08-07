@@ -53,7 +53,7 @@ class PMKDefaultDispatchQueueTest: XCTestCase {
     func testOverrodeDefaultAlwaysQueue() {
         let ex = expectation(description: "resolving")
 
-        Promise(value: 1).always { _ in
+        Promise(value: 1).always {
             ex.fulfill()
             XCTAssertFalse(Thread.isMainThread)
         }

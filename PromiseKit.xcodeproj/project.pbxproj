@@ -512,11 +512,20 @@
 				LastUpgradeCheck = 0900;
 				TargetAttributes = {
 					630019011D596292003B4E30 = {
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0900;
+					};
+					631411121D5978D700E24B9E = {
+						LastSwiftMigration = 0900;
+					};
+					631411321D59795700E24B9E = {
+						LastSwiftMigration = 0900;
+					};
+					6317518B1D59766500A9DDDC = {
+						LastSwiftMigration = 0900;
 					};
 					63B0AC561D595E1B00FA21D9 = {
 						CreatedOnToolsVersion = 8.0;
-						LastSwiftMigration = 0800;
+						LastSwiftMigration = 0900;
 						ProvisioningStyle = Automatic;
 					};
 				};

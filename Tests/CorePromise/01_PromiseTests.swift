@@ -47,7 +47,7 @@ class PromiseTests: XCTestCase {
     func testDispatchQueueAsyncExtensionCanThrowInBody() {
         let ex = expectation(description: "")
 
-        DispatchQueue.global().promise { _ -> Int in
+        DispatchQueue.global().promise { () -> Int in
             throw Error.dummy
         }.then { _ -> Void in
             XCTFail()
