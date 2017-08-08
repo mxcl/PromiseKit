@@ -44,22 +44,23 @@ You can just drop `PromiseKit.xcodeproj` into your project and then add
 
 # PromiseKit vs. Xcode
 
-PromiseKit contains Swift, so there have been rev-lock issues Xcode:
+PromiseKit contains Swift, so there have been rev-lock issues with Xcode:
 
-| Swift | Xcode | PromiseKit |   CI Status  |   Release Notes   |
-| ----- | ----- | ---------- | ------------ | ----------------- |
-|   4   |   9   |      4     |       –      |         –         |
-|   3   |  8/9  |      4     | ![ci-master] | [2016/09][news-4] |
-|   2   |  7/8  |      3     | ![ci-swift2] | [2015/10][news-3] |
-|   1   |   7   |      3     |       –      | [2015/10][news-3] |
-| *N/A* |   *   |      1†    | ![ci-legacy] |         –         |
+| PromiseKit | Swift    | Xcode    |   CI Status  |   Release Notes   |
+| ---------- | -------- | -------- | ------------ | ----------------- |
+|      5     | 3.x, 4.0 | 8.x, 9.0 | ![ci-master] |      In beta      |
+|      4     | 3.x, 4.0 | 8.x, 9.0 | ![ci-master] | [2016/09][news-4] |
+|      3     | 2.x      | 7.x, 8.0 | ![ci-swift2] | [2015/10][news-3] |
+|      2     | 1.x      | 7.x      | Unsupported  | [2015/10][news-3] |
+|      1†    | *N/A*    | *        | ![ci-legacy] |         –         |
+                                     
 
 † PromiseKit 1 is pure Objective-C and thus can be used with any Xcode, it is
 also your only choice if you need to support iOS 7 or below.
 
 ---
 
-We also maintain some branches to aid migrating between Swift versions:
+We also maintain a series of branches to aid migration for PromiseKit 2:
 
 | Xcode | Swift | PromiseKit | Branch                      | CI Status |
 | ----- | ----- | -----------| --------------------------- | --------- |
