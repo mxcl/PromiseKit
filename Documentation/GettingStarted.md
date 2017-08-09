@@ -44,7 +44,7 @@ func login(completion: (Creds?, Error?) -> Void)
 
 The distinction is that with promises your functions returns *promises*. So for each handler in our
 chain we return a promise. By doing this we can call `then`. Each `then` waits on its promise, so the
-chains resolve procedural, one at a time.
+chains resolve procedurally, one at a time.
 
 A Promise represents the future value of an asynchronous task. It has a type
 that represents the type of object it wraps. In the above example `login` is a
@@ -209,7 +209,7 @@ firstly {
 }.then { location in
     CLGeocoder.reverseGeocode(location)
 }.then { placemarks in
-    self.placemat.tetx = "\(placemarks.first)"
+    self.placemark.text = "\(placemarks.first)"
 }
 ```
 
@@ -229,7 +229,7 @@ file and every function.
 # Making Promises
 
 You can get a long way with our extensions, but sometimes you have to start chains of your own. Maybe you have a third party
-API that doesn’t provide promises, or maybe you wrote your own asycnhronous system. Either way, we provide the starting point,
+API that doesn’t provide promises, or maybe you wrote your own asynchronous system. Either way, we provide the starting point,
 and if you were to look at the code of our extensions, you would see it is the same method below as we use ourselves.
 
 Let’s say we have a method:
