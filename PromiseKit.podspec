@@ -3,6 +3,7 @@ Pod::Spec.new do |s|
 
   `xcodebuild -project PromiseKit.xcodeproj -showBuildSettings` =~ /CURRENT_PROJECT_VERSION = ((\d\.)+\d)/
   abort("No version detected") if $1.nil?
+  abort("Not tagged") unless `git tag`.split.include? $1
   s.version = $1
 
   s.source = {
