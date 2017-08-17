@@ -2,7 +2,7 @@
 
 ![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] ![badge-mit]
 
-[繁體中文](README.zh_Hant.md) [简体中文](README.zh_CN.md)
+[繁體中文](README.zh_Hant.md), [简体中文](README.zh_CN.md)
 
 ---
 
@@ -35,9 +35,11 @@ In your [Podfile]:
 
 ```ruby
 use_frameworks!
-swift_version = "3.0"
-pod "PromiseKit", "~> 4.0"
+swift_version = "3.1"
+pod "PromiseKit", "~> 4.3"
 ```
+
+PromiseKit 4 supports Xcode 8 and 9, Swift 3.0, 3.1, 3.2 and Swift 4.0.
 
 For Carthage, SwiftPM, etc., or for instructions when using older Swifts or
 Xcodes see our [Installation Guide](Documentation/Installation.md).
