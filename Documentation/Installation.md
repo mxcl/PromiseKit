@@ -1,4 +1,4 @@
-# Xcode 8 / Swift 3
+# Xcode 8 or 9 / Swift 3 or 4
 
 We recommend CocoaPods.
 
@@ -6,26 +6,24 @@ We recommend CocoaPods.
 
 ```ruby
 use_frameworks!
-swift_version = "3.0"
-pod "PromiseKit", "~> 4.0"
+pod "PromiseKit", "~> 4.4"
 ```
 
-Since CocoaPods 1.0 you will probably need to add the `pod` line to a `target`,
+Since CocoaPods 1.0 you will (probably) need to add the `pod` line to a `target`,
 eg:
 
 ```ruby
 use_frameworks!
-swift_version = "3.0"
 
 target "MyTarget" do
-  pod "PromiseKit", "~> 4.0"
+  pod "PromiseKit", "~> 4.4"
 end
 ```
 
 ## Carthage
 
 ```ruby
-github "mxcl/PromiseKit" ~> 4.0
+github "mxcl/PromiseKit" ~> 4.4
 ```
 
 ## SwiftPM
@@ -48,8 +46,8 @@ PromiseKit contains Swift, so there have been rev-lock issues with Xcode:
 
 | PromiseKit | Swift    | Xcode    |   CI Status  |   Release Notes   |
 | ---------- | -------- | -------- | ------------ | ----------------- |
-|      5     | 3.x, 4.0 | 8.x, 9.0 | ![ci-master] |      In beta      |
-|      4     | 3.x, 4.0 | 8.x, 9.0 | ![ci-master] | [2016/09][news-4] |
+|      5     | 3.x, 4.x | 8.x, 9.x | ![ci-master] |      In beta      |
+|      4     | 3.x, 4.x | 8.x, 9.x | ![ci-master] | [2016/09][news-4] |
 |      3     | 2.x      | 7.x, 8.0 | ![ci-swift2] | [2015/10][news-3] |
 |      2     | 1.x      | 7.x      | Unsupported  | [2015/10][news-3] |
 |      1†    | *N/A*    | *        | ![ci-legacy] |         –         |
@@ -72,56 +70,6 @@ We also maintain a series of branches to aid migration for PromiseKit 2:
 
 We do **not** usually backport fixes to these branches, but pull-requests are welcome.
 
-
-## Xcode 9 / Swift 4
-
-```ruby
-# CocoaPods
-swift_version = "4.0"
-pod "PromiseKit", branch: "swift4-beta1"
-
-# Carthage
-github "mxcl/PromiseKit" "swift4-beta1"
-
-# SwiftPM
-package.dependencies.append(
-    .package(url: "https://github.com/mxcl/PromiseKit", .branch("swift4-beta1"))
-)
-```
-
-### Please Note
-
-We have not ported the extensions yet. This is your opportunity to contribute.
-
-1. Clone:
-
-       cd your-project/..
-       git clone https://github.com/mxcl/PromiseKit PMK-swift4-beta1 --recursive -b swift4-beta1
-
-2. Amend your `Podfile`:
-
-       pod "PromiseKit", path: "../PMK-swift4-beta1"
-
-3. Make your fixes for the PromiseKit extensions you use.
-4. Fork, push & pull-request.
-
-## Xcode 8 / Swift 3 *and* Xcode 9 / Swift 3.2
-
-```ruby
-# CocoaPods
-swift_version = "3.0"
-pod "PromiseKit", "~> 4.0"
-
-# Carthage
-github "mxcl/PromiseKit" ~> 4.0
-
-# SwiftPM
-let package = Package(
-    dependencies: [
-        .Package(url: "https://github.com/mxcl/PromiseKit", majorVersion: 4)
-    ]
-)
-```
 
 ## Xcode 8 / Swift 2.3 or Xcode 7
 

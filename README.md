@@ -35,8 +35,7 @@ In your [Podfile]:
 
 ```ruby
 use_frameworks!
-swift_version = "3.1"
-pod "PromiseKit", "~> 4.3"
+pod "PromiseKit", "~> 4.4"
 ```
 
 PromiseKit 4 supports Xcode 8 and 9, Swift 3.0, 3.1, 3.2 and Swift 4.0.
