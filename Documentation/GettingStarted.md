@@ -255,7 +255,7 @@ func fetch() -> Promise<String> {
             if let result = result {
                 fulfill(result)
             } else if let error = error {
-                fulfill(error)
+                reject(error)
             } else {
                 reject(PMKError.invalidCallingConvention)
                 // ^^ we provide this error so that all paths are handled, even
