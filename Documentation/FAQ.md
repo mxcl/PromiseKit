@@ -196,7 +196,7 @@ foo.observe(.value) { snapshot in
 
 ## I need my `then` to fire multiple times
 
-Then we’re afraid thgat you cannot use PromiseKit for that event. Promises only resolve `once`, this is the fundamental nature of promises and is considered a feature since it gives you guarantees about the flow of your chains.
+Then we’re afraid that you cannot use PromiseKit for that event. Promises only resolve `once`, this is the fundamental nature of promises and is considered a feature since it gives you guarantees about the flow of your chains.
 
 ## My question was not answered
 
