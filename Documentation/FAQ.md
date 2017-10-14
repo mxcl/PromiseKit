@@ -85,8 +85,10 @@ when(fulfilled: p1, p2).catch { error in
 
 ## Is PromiseKit “heavy”?
 
-No, PromiseKit is hardly any sources in fact, it’s actually pretty light. Any
-weight relative to other promise implementations is 6 years of bug fixes.
+No, PromiseKit is hardly any sources in fact, it is “light-weight”. Any
+“weight” relative to other promise implementations is 6 years of bug fixes or 
+important things like [Zalgo prevention](http://blog.izs.me/post/59142742143/designing-apis-for-asynchrony)
+that hobby-project implementations don’t consider.
 
 ## Why is debugging hard?
 
