@@ -38,7 +38,7 @@ use_frameworks!
 pod "PromiseKit", "~> 4.4"
 ```
 
-PromiseKit 4 supports Xcode 8.1, 8.2, 8.3 and 9.0; Swift 3.0, 3.1, 3.2 and 4.0; iOS, macOS, tvOS, watchOS and Linux; CocoaPods, Carthage and SwiftPM; ([CI Matrix](https://travis-ci.org/mxcl/PromiseKit)).
+PromiseKit 4 supports Xcode 8.1, 8.2, 8.3 and 9.0; Swift 3.0, 3.1, 3.2 and 4.0; iOS, macOS, tvOS, watchOS, Linux and Android; CocoaPods, Carthage and SwiftPM; ([CI Matrix](https://travis-ci.org/mxcl/PromiseKit)).
 
 For Carthage, SwiftPM, etc., or for instructions when using older Swifts or
 Xcodes see our [Installation Guide](Documentation/Installation.md).
