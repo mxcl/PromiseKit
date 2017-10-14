@@ -119,6 +119,8 @@ Promise<String> { fulfill, reject in
 }
 ```
 
+If this seems tedious it shouldn’t. You would have to be this thorough without promises too, the difference is without promises you wouldn’t get a warning in the console letting you know your mistake!
+
 ## Slow Compilation / Compiler Cannot Solve in Reasonable Time
 
 Add return types to your closures.
