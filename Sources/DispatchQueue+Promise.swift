@@ -38,16 +38,8 @@ extension DispatchQueue {
      The default queue for all handlers.
 
      Defaults to `DispatchQueue.main`.
-
      - SeeAlso: `PMKDefaultDispatchQueue()`
      - SeeAlso: `PMKSetDefaultDispatchQueue()`
      */
-    class public final var `default`: DispatchQueue {
-        get {
-            return __PMKDefaultDispatchQueue()
-        }
-        set {
-            __PMKSetDefaultDispatchQueue(newValue)
-        }
-    }
+    static public var `default`: DispatchQueue = DispatchQueue.main
 }
