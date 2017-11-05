@@ -61,36 +61,43 @@ import Foundation
     }
 
     /// - See: `Promise.then()`
+    @discardableResult
     public func then<T>(on q: DispatchQueue = .default, execute body: @escaping (Any?) throws -> T) -> Promise<T> {
         return asPromise().then(on: q, execute: body)
     }
 
     /// - See: `Promise.then()`
+    @discardableResult
     public func then(on q: DispatchQueue = .default, execute body: @escaping (Any?) throws -> AnyPromise) -> Promise<Any?> {
         return asPromise().then(on: q, execute: body)
     }
 
     /// - See: `Promise.then()`
+    @discardableResult
     public func then<T>(on q: DispatchQueue = .default, execute body: @escaping (Any?) throws -> Promise<T>) -> Promise<T> {
         return asPromise().then(on: q, execute: body)
     }
 
     /// - See: `Promise.always()`
+    @discardableResult
     public func always(on q: DispatchQueue = .default, execute body: @escaping () -> Void) -> Promise<Any?> {
         return asPromise().always(execute: body)
     }
 
     /// - See: `Promise.tap()`
+    @discardableResult
     public func tap(on q: DispatchQueue = .default, execute body: @escaping (Result<Any?>) -> Void) -> Promise<Any?> {
         return asPromise().tap(execute: body)
     }
 
     /// - See: `Promise.recover()`
+    @discardableResult
     public func recover(on q: DispatchQueue = .default, policy: CatchPolicy = .allErrorsExceptCancellation, execute body: @escaping (Error) throws -> Promise<Any?>) -> Promise<Any?> {
         return asPromise().recover(on: q, policy: policy, execute: body)
     }
 
     /// - See: `Promise.recover()`
+    @discardableResult
     public func recover(on q: DispatchQueue = .default, policy: CatchPolicy = .allErrorsExceptCancellation, execute body: @escaping (Error) throws -> Any?) -> Promise<Any?> {
         return asPromise().recover(on: q, policy: policy, execute: body)
     }

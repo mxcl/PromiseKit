@@ -146,6 +146,7 @@ open class Promise<T> {
                //…
            }
      */
+    @discardableResult
     public func then<U>(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> U) -> Promise<U> {
         return Promise<U> { resolve in
             state.then(on: q, else: resolve) { value in
@@ -169,6 +170,7 @@ open class Promise<T> {
                //…
            }
      */
+    @discardableResult
     public func then<U>(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> Promise<U>) -> Promise<U> {
         var resolve: ((Resolution<U>) -> Void)!
         let rv = Promise<U>{ resolve = $0 }
@@ -199,26 +201,31 @@ open class Promise<T> {
                //…
            }
      */
+    @discardableResult
     public func then<U, V>(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> (Promise<U>, Promise<V>)) -> Promise<(U, V)> {
         return then(on: q, execute: body) { when(fulfilled: $0.0, $0.1) }
     }
 
     /// This variant of `then` allows returning a tuple of promises within provided closure.
+    @discardableResult
     public func then<U, V, X>(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> (Promise<U>, Promise<V>, Promise<X>)) -> Promise<(U, V, X)> {
         return then(on: q, execute: body) { when(fulfilled: $0.0, $0.1, $0.2) }
     }
 
     /// This variant of `then` allows returning a tuple of promises within provided closure.
+    @discardableResult
     public func then<U, V, X, Y>(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> (Promise<U>, Promise<V>, Promise<X>, Promise<Y>)) -> Promise<(U, V, X, Y)> {
         return then(on: q, execute: body) { when(fulfilled: $0.0, $0.1, $0.2, $0.3) }
     }
 
     /// This variant of `then` allows returning a tuple of promises within provided closure.
+    @discardableResult
     public func then<U, V, X, Y, Z>(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> (Promise<U>, Promise<V>, Promise<X>, Promise<Y>, Promise<Z>)) -> Promise<(U, V, X, Y, Z)> {
         return then(on: q, execute: body) { when(fulfilled: $0.0, $0.1, $0.2, $0.3, $0.4) }
     }
 
     /// utility function to serve `then` implementations with `body` returning tuple of promises
+    @discardableResult
     private func then<U, V>(on q: DispatchQueue, execute body: @escaping (T) throws -> V, when: @escaping (V) -> Promise<U>) -> Promise<U> {
         return Promise<U> { resolve in
             state.then(on: q, else: resolve) { value in
@@ -266,6 +273,7 @@ open class Promise<T> {
      - Parameter execute: The handler to execute if this promise is rejected.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
+    @discardableResult
     public func recover(on q: DispatchQueue = .default, policy: CatchPolicy = .allErrorsExceptCancellation, execute body: @escaping (Error) throws -> Promise) -> Promise {
         var resolve: ((Resolution<T>) -> Void)!
         let rv = Promise{ resolve = $0 }
@@ -292,6 +300,7 @@ open class Promise<T> {
      - Parameter execute: The handler to execute if this promise is rejected.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
+    @discardableResult
     public func recover(on q: DispatchQueue = .default, policy: CatchPolicy = .allErrorsExceptCancellation, execute body: @escaping (Error) throws -> T) -> Promise {
         return Promise { resolve in
             state.catch(on: q, policy: policy, else: resolve) { error in

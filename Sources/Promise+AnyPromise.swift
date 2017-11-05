@@ -15,6 +15,7 @@ extension Promise {
                //…
            }
      */
+    @discardableResult
     public func then(on q: DispatchQueue = .default, execute body: @escaping (T) throws -> AnyPromise) -> Promise<Any?> {
         return Promise<Any?>(sealant: { resolve in
             state.then(on: q, else: resolve) { value in
