@@ -1,6 +1,6 @@
 # Common Patterns
 
-One feature of promises that makes them so useful is that thet are composable;
+One feature of promises that makes them so useful is that that are composable;
 enabling complex, yet safe asynchronous patterns that would otherwise be quite
 intimidating with traditional methods.
 
