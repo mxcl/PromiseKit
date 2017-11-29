@@ -214,7 +214,7 @@ public func when<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrent
          // invalid! Never rejects
      }
 
- - Returns: A new promise that resolves once all the provided promises resolve.
+ - Returns: A new promise that resolves once all the provided promises resolve. The array is ordered the same as the input, ie. the result order is *not* resolution order.
  - Warning: The returned promise can *not* be rejected.
  - Note: Any promises that error are implicitly consumed, your UnhandledErrorHandler will not be called.
  - Remark: Doesn't take Thenable due to protocol associatedtype paradox
