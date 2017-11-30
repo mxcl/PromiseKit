@@ -170,6 +170,8 @@ Note *usually* you want `when()` since `when` executes all the promises in
 parallel and thus is much faster to complete. Use the above pattern in
 situations where tasks *must* be done sequentially; animation is a good example.
 
+We also provide `when(concurrently:)` which allows you to schedule more than
+one promise at a time if required.
 
 ## Timeout
 
