@@ -196,9 +196,50 @@ foo.observe(.value) { snapshot in
 }
 ```
 
+
 ## I need my `then` to fire multiple times
 
 Then we’re afraid that you cannot use PromiseKit for that event. Promises only resolve `once`, this is the fundamental nature of promises and is considered a feature since it gives you guarantees about the flow of your chains.
+
+
+## How do I use PromiseKit server-side?
+
+If your server framework requires the main-queue remain unused (eg. Kitura) then you must use
+PromiseKit 5 and you must tell PromiseKit to not dispatch to the main-queue by default. This
+is easy enough:
+
+```swift
+PromiseKit.conf.Q = (map: DispatchQueue.global(), return: DispatchQueue.global())
+```
+
+Here’s a more full example:
+
+```swift
+import Foundation
+import HeliumLogger
+import Kitura
+import LoggerAPI
+import PromiseKit
+
+HeliumLogger.use(.info)
+
+PromiseKit.conf.Q = (map: DispatchQueue.global(), return: DispatchQueue.global())
+
+let router = Router()
+router.get("/") { _, response, next in
+    Log.info("Request received")
+    after(seconds: 1.0).done {
+        Log.info("Sending response")
+        response.send("OK")
+        next()
+    }
+}
+
+Log.info("Starting server")
+Kitura.addHTTPServer(onPort: 8888, with: router)
+Kitura.run()
+```
+
 
 ## My question was not answered
 
