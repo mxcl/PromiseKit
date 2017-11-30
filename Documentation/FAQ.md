@@ -5,9 +5,17 @@
 Generally no, provided the promise completes then all handlers are released thus
 any references to `self` are also released.
 
-This does mean that if your chain contains side-effects that you would typically
+However, if your chain contains side-effects that you would typically
 not want to happen after, say, a view controller is popped then you should still
 use `weak self` (and check for `self == nil`) to prevent any such side-effects.
+
+*However*, in our experience most things that developers consider side-effects that
+should be protected against are in fact *not* side-effects.
+
+Side-effects include: changes to global application state. They *do not* include
+chaging the view of a viewController. So protect against setting UserDefaults or
+modifying the application database, and don't bother protecting agsinst changing
+the text in a `UILabel`.
 
 [This stackoverflow question](https://stackoverflow.com/questions/39281214/should-i-use-weak-self-in-promisekit-blocks)
 has some good discussion on the topic.
