@@ -15,6 +15,10 @@ wanted to).
 Specify the return type for the closure. DON’T return `AnyPromise` (unless you
 wanted to).
 
+### Generic parameter T could not be inferred
+
+Specify the return type for any closures that don’t have return types, or fully specify any `Promise { fulfill, reject in` instantiations (eg. `Promise<Void> { fulfill, reject in`).
+
 ### Ambiguous *bar*
 
 Specify the return type for the closure.
