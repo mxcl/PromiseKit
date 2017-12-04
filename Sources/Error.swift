@@ -27,6 +27,21 @@ public enum PMKError: Error {
     case castError(Any.Type)
 }
 
+extension PMKError: LocalizedError {
+    public var errorDescription: String? {
+        switch self {
+        case .invalidCallingConvention:
+            return "A closure was called with an invalid calling convention, probably (nil, nil)"
+        case .returnedSelf:
+            return "A promise handler returned itself"
+        case .whenConcurrentlyZero, .join:
+            return "Bad input was provided to a PromiseKit function"
+        case .castError(let type):
+            return "Promise chain sequence failed to cast an object to \(type)."
+        }
+    }
+}
+
 public enum PMKURLError: Error {
     /**
      The URLRequest succeeded but a valid UIImage could not be decoded from
@@ -62,8 +77,8 @@ public enum PMKURLError: Error {
     }
 }
 
-extension PMKURLError: CustomStringConvertible {
-    public var description: String {
+extension PMKURLError: LocalizedError {
+    public var errorDescription: String? {
         switch self {
         case let .badResponse(rq, data, rsp):
             if let data = data, let str = String(data: data, encoding: .utf8), let rsp = rsp {
