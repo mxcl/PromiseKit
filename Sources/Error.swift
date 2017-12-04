@@ -23,8 +23,8 @@ public enum PMKError: Error {
     case flatMap(Any, Any.Type)
 }
 
-extension PMKError: CustomStringConvertible {
-    public var description: String {
+extension PMKError: CustomDebugStringConvertible {
+    public var debugDescription: String {
         switch self {
         case .flatMap(let obj, let type):
             return "Could not `flatMap<\(type)>`: \(obj)"
@@ -35,8 +35,14 @@ extension PMKError: CustomStringConvertible {
         case .badInput:
             return "Bad input was provided to a PromiseKit function"
         case .cancelled:
-            return "The operation was cancelled"
+            return "The asynchronous sequence was cancelled"
         }
+    }
+}
+
+extension PMKError: LocalizedError {
+    public var errorDescription: String? {
+        return debugDescription
     }
 }
 
