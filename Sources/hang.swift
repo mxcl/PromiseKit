@@ -12,17 +12,17 @@ import CoreFoundation
  - SeeAlso: `wait()`
 */
 public func hang<T>(_ promise: Promise<T>) throws -> T {
-#if os(OSX)
+#if os(Linux)
     // isMainThread is not yet implemented on Linux.
+    let runLoopModeRaw = RunLoopMode.defaultRunLoopMode.rawValue._bridgeToObjectiveC()
+    let runLoopMode: CFString = unsafeBitCast(runLoopModeRaw, to: CFString.self)
+#else
     guard Thread.isMainThread else {
         // hang doesn't make sense on threads that aren't the main thread.
         // use `.wait()` on those threads.
         fatalError("Only call hang() on the main thread.")
     }
     let runLoopMode: CFRunLoopMode = CFRunLoopMode.defaultMode
-#else
-    let runLoopModeRaw = RunLoopMode.defaultRunLoopMode.rawValue._bridgeToObjectiveC()
-    let runLoopMode: CFString = unsafeBitCast(runLoopModeRaw, to: CFString.self)
 #endif
 
     if promise.isPending {
