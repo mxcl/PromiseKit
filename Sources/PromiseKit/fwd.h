@@ -5,7 +5,7 @@
 @class NSOperationQueue;
 @class PMKPromise;
 
-extern NSOperationQueue *PMKOperationQueue();
+extern NSOperationQueue *PMKOperationQueue(void);
 
 #define PMK_DEPRECATED(msg) __attribute__((deprecated(msg)))
 
