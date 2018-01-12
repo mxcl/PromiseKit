@@ -47,7 +47,7 @@ Pod::Spec.new do |s|
       end
 
       ss.dependency 'PromiseKit/Promise'
-      ss.preserve_paths = 'objc/PromiseKit'
+      ss.preserve_paths = 'Sources/PromiseKit'
 
       # becuase CocoaPods won't lint if the deployment targets of subspecs
       # are different to the deployment targets of the root spec we have
@@ -84,7 +84,7 @@ Pod::Spec.new do |s|
 		
 	  	if version
 	      os.framework = framework
-	      os.source_files = (ss.source_files rescue []) + ["objc/#{name}+PromiseKit.h", "objc/#{name}+PromiseKit.m"]
+	      os.source_files = (ss.source_files rescue []) + ["Sources/#{name}+PromiseKit.h", "Sources/#{name}+PromiseKit.m"]
 	      os.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_#{name.upcase}=1" }
 		else
 		  os.deployment_target = nil
@@ -95,16 +95,16 @@ Pod::Spec.new do |s|
   end
 
   s.subspec 'Promise' do |ss|
-    ss.source_files = 'objc/PromiseKit.h', 'objc/PMKPromise.m', 'objc/PromiseKit/Promise.h', 'objc/PromiseKit/fwd.h'
-    ss.preserve_paths = 'objc/PromiseKit', 'objc/Private'
+    ss.source_files = 'Sources/PromiseKit.h', 'Sources/PMKPromise.m', 'Sources/PromiseKit/Promise.h', 'Sources/PromiseKit/fwd.h'
+    ss.preserve_paths = 'Sources/PromiseKit', 'Sources/Private'
     ss.frameworks = 'Foundation'
   end
 
   %w{Pause Until When Join Hang Zalgo}.each do |name|
     s.subspec(name) do |ss|
-      ss.source_files = "objc/PMKPromise+#{name}.m", "objc/PromiseKit/Promise+#{name}.h"
+      ss.source_files = "Sources/PMKPromise+#{name}.m", "Sources/PromiseKit/Promise+#{name}.h"
       ss.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => "$(inherited) PMK_#{name.upcase}=1" }
-      ss.preserve_paths = 'objc/PromiseKit'
+      ss.preserve_paths = 'Sources/PromiseKit'
       ss.dependency 'PromiseKit/When' if name == 'Until'
       ss.dependency 'PromiseKit/Until' if name == 'Join'
       ss.dependency 'PromiseKit/Promise'
@@ -129,8 +129,8 @@ Pod::Spec.new do |s|
 	# ss.dependency "OMGHTTPURLRQ", "~> 2.1"
   	# Even though watchos and tvos versions are not specified for this subspec, for some
 	# reason their dependencies are still being set if we're not explicit here - Nathan
-    ss.ios.dependency "OMGHTTPURLRQ", "~> 2.1"
-	ss.osx.dependency "OMGHTTPURLRQ", "~> 2.1"
+    ss.ios.dependency "OMGHTTPURLRQ", "~> 3.2"
+	  ss.osx.dependency "OMGHTTPURLRQ", "~> 3.2"
   end
   s.mksubspec 'SKRequest', ios: '3.0', osx: '10.7', tvos: '9.0'
   s.mksubspec 'SLRequest', ios: '6.0', osx: '10.8'
