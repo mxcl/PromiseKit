@@ -11,7 +11,7 @@
 + (PMKPromise *)until:(id (^)(void))blockReturningPromises catch:(id)failHandler
 {
     return [PMKPromise new:^(PMKPromiseFulfiller fulfill, PMKPromiseRejecter reject){
-        __block void (^block)() = ^{
+        __block void (^block)(void) = ^{
             PMKPromise *next = [self when:blockReturningPromises()];
             next.then(^(id o){
                 fulfill(o);
