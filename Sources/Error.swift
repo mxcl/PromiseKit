@@ -61,17 +61,12 @@ extension Error {
             return true
         } catch let error as CancellableError {
             return error.isCancelled
-        } catch let error as NSError {
-            switch (error.domain, error.code) {
-            case (NSCocoaErrorDomain, CocoaError.userCancelled.rawValue):
-                return true
-            case (NSURLErrorDomain, URLError.cancelled.rawValue):
-                return true
-            default:
-                return false
-            }
+        } catch URLError.cancelled {
+            return true
+        } catch CocoaError.userCancelled {
+            return true
         } catch {
-            return false  // Linux requires this
+            return false
         }
     }
 }
