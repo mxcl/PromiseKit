@@ -199,21 +199,22 @@ special error type that conforms to the `CancellableError` protocol.
 
 ```swift
 func foo() -> (Promise<Void>, cancel: () -> Void) {
+    let task = Task(…)
     var cancelme = false
 
     let promise = Promise<Void> { fulfill, reject in
-        let task = Task(…)
-        let cancel = {
-            cancelme = true
-            task.cancel()
-            reject(NSError.cancelledError)
-        }
         task.completion = { value in
             guard !cancelme else { reject(NSError.cancelledError) }
             fulfill(value)
+        }
         task.start()
     }
-    
+
+    let cancel = {
+        cancelme = true
+        task.cancel()
+    }
+
     return (promise, cancel)
 }
 ```
