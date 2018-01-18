@@ -3,6 +3,10 @@
 Sadly, Swift often gives misleading diagnostic messages for compile errors with
 PromiseKit.
 
+## Fulfilling a `Void` promise with Swift 4
+
+With Swift 4, fulfill a Void promise with `fulfill(())`. Yes this is weird. Yes we’d also like swift-core to fix it. Please open or +1 a bug at https://bugs.swift.org.
+
 ## Compile Errors
 
 ### Cannot convert return expression of type … to return type AnyPromise
