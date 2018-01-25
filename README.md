@@ -80,6 +80,14 @@ pod "PromiseKit/CoreLocation"    # CLLocationManager.requestLocation().then { /*
 
 All our extensions are separate repositories at the [PromiseKit organization].
 
+## I don't want the extensions!
+
+Then don’t have them:
+
+```ruby
+pod "PromiseKit/CorePromise", "~> 4.5"
+```
+
 ## Choose Your Networking Library
 
 Promise chains are commonly started with networking, thus we offer multiple
