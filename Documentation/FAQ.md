@@ -23,7 +23,7 @@ has some good discussion on the topic.
 ## Where should I put my `catch`?
 
 `catch` deliberately terminates the chain, you should place low in your promise
-heirarchy: at as root a point as possible. Typically this would be your view
+hierarchy: at as root a point as possible. Typically this would be your view
 controllers where your `catch` can then display a message to the user.
 
 This means you should be writing one catch for many `then`s and be returning
