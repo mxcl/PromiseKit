@@ -14,10 +14,10 @@ class WhenTests: XCTestCase {
 
     func testInt() {
         let e1 = expectation(description: "")
-        let p1 = Promise(value: 1)
-        let p2 = Promise(value: 2)
-        let p3 = Promise(value: 3)
-        let p4 = Promise(value: 4)
+        let p1 = Promise.value(1)
+        let p2 = Promise.value(2)
+        let p3 = Promise.value(3)
+        let p4 = Promise.value(4)
 
         when(fulfilled: [p1, p2, p3, p4]).done { x in
             XCTAssertEqual(x[0], 1)
@@ -32,8 +32,8 @@ class WhenTests: XCTestCase {
 
     func testDoubleTuple() {
         let e1 = expectation(description: "")
-        let p1 = Promise(value: 1)
-        let p2 = Promise(value: "abc")
+        let p1 = Promise.value(1)
+        let p2 = Promise.value("abc")
         when(fulfilled: p1, p2).done{ x, y in
             XCTAssertEqual(x, 1)
             XCTAssertEqual(y, "abc")
@@ -44,9 +44,9 @@ class WhenTests: XCTestCase {
 
     func testTripleTuple() {
         let e1 = expectation(description: "")
-        let p1 = Promise(value: 1)
-        let p2 = Promise(value: "abc")
-        let p3 = Promise(value: 1.0)
+        let p1 = Promise.value(1)
+        let p2 = Promise.value("abc")
+        let p3 = Promise.value(     1.0)
         when(fulfilled: p1, p2, p3).done { u, v, w in
             XCTAssertEqual(1, u)
             XCTAssertEqual("abc", v)
@@ -58,10 +58,10 @@ class WhenTests: XCTestCase {
 
     func testQuadrupleTuple() {
         let e1 = expectation(description: "")
-        let p1 = Promise(value: 1)
-        let p2 = Promise(value: "abc")
-        let p3 = Promise(value: 1.0)
-        let p4 = Promise(value: true)
+        let p1 = Promise.value(1)
+        let p2 = Promise.value("abc")
+        let p3 = Promise.value(1.0)
+        let p4 = Promise.value(true)
         when(fulfilled: p1, p2, p3, p4).done { u, v, w, x in
             XCTAssertEqual(1, u)
             XCTAssertEqual("abc", v)
@@ -74,11 +74,11 @@ class WhenTests: XCTestCase {
 
     func testQuintupleTuple() {
         let e1 = expectation(description: "")
-        let p1 = Promise(value: 1)
-        let p2 = Promise(value: "abc")
-        let p3 = Promise(value: 1.0)
-        let p4 = Promise(value: true)
-        let p5 = Promise(value: "a" as Character)
+        let p1 = Promise.value(1)
+        let p2 = Promise.value("abc")
+        let p3 = Promise.value(1.0)
+        let p4 = Promise.value(true)
+        let p5 = Promise.value("a" as Character)
         when(fulfilled: p1, p2, p3, p4, p5).done { u, v, w, x, y in
             XCTAssertEqual(1, u)
             XCTAssertEqual("abc", v)
@@ -92,10 +92,10 @@ class WhenTests: XCTestCase {
 
     func testVoid() {
         let e1 = expectation(description: "")
-        let p1 = Promise(value: 1).done { _ in }
-        let p2 = Promise(value: 2).done { _ in }
-        let p3 = Promise(value: 3).done { _ in }
-        let p4 = Promise(value: 4).done { _ in }
+        let p1 = Promise.value(1).done { _ in }
+        let p2 = Promise.value(2).done { _ in }
+        let p3 = Promise.value(3).done { _ in }
+        let p4 = Promise.value(4).done { _ in }
 
         when(fulfilled: p1, p2, p3, p4).done(e1.fulfill)
 
@@ -108,7 +108,7 @@ class WhenTests: XCTestCase {
         let e1 = expectation(description: "")
         let p1 = after(.milliseconds(100)).map{ true }
         let p2: Promise<Bool> = after(.milliseconds(200)).map{ throw Error.dummy }
-        let p3 = Promise(value: false)
+        let p3 = Promise.value(false)
             
         when(fulfilled: p1, p2, p3).catch { _ in
             e1.fulfill()

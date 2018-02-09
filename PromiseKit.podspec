@@ -18,7 +18,7 @@ Pod::Spec.new do |s|
   s.social_media_url = 'https://twitter.com/mxcl'
   s.authors  = { 'Max Howell' => 'mxcl@me.com' }
   s.documentation_url = 'http://promisekit.org/docs/'
-  s.default_subspecs = 'CorePromise'
+  s.default_subspecs = 'CorePromise', 'UIKit', 'Foundation'
   s.requires_arc = true
 
   # CocoaPods requires us to specify the root deployment targets

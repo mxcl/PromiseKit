@@ -85,7 +85,7 @@ class CancellationTests: XCTestCase {
     func testFoundationBridging2() {
         let ex = expectation(description: "")
 
-        let p = Promise(value: ()).done {
+        let p = Promise().done {
             throw NSError(domain: NSURLErrorDomain, code: URLError.cancelled.rawValue)
         }
         p.catch { _ in
@@ -102,7 +102,7 @@ class CancellationTests: XCTestCase {
     func testBridging() {
         let ex = expectation(description: "")
 
-        let p = Promise(value: ()).done {
+        let p = Promise().done {
             throw LocalError.cancel as NSError
         }
         p.catch { _ in

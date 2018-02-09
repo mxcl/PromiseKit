@@ -6,7 +6,7 @@ class BridgingTests: XCTestCase {
 
     func testCanBridgeAnyObject() {
         let sentinel = NSURLRequest()
-        let p = Promise(value: sentinel)
+        let p = Promise.value(sentinel)
         let ap = AnyPromise(p)
 
         XCTAssertEqual(ap.value(forKey: "value") as? NSURLRequest, sentinel)
@@ -14,7 +14,7 @@ class BridgingTests: XCTestCase {
 
     func testCanBridgeOptional() {
         let sentinel: NSURLRequest? = NSURLRequest()
-        let p = Promise(value: sentinel)
+        let p = Promise.value(sentinel)
         let ap = AnyPromise(p)
 
         XCTAssertEqual(ap.value(forKey: "value") as? NSURLRequest, sentinel!)
@@ -22,7 +22,7 @@ class BridgingTests: XCTestCase {
 
     func testCanBridgeSwiftArray() {
         let sentinel = [NSString(), NSString(), NSString()]
-        let p = Promise(value: sentinel)
+        let p = Promise.value(sentinel)
         let ap = AnyPromise(p)
 
         XCTAssertEqual(ap.value(forKey: "value") as! [NSString], sentinel)
@@ -30,7 +30,7 @@ class BridgingTests: XCTestCase {
 
     func testCanBridgeSwiftDictionary() {
         let sentinel = [NSString(): NSString()]
-        let p = Promise(value: sentinel)
+        let p = Promise.value(sentinel)
         let ap = AnyPromise(p)
 
         XCTAssertEqual(ap.value(forKey: "value") as! [NSString: NSString], sentinel)
@@ -38,21 +38,21 @@ class BridgingTests: XCTestCase {
 
     func testCanBridgeInt() {
         let sentinel = 3
-        let p = Promise(value: sentinel)
+        let p = Promise.value(sentinel)
         let ap = AnyPromise(p)
         XCTAssertEqual(ap.value(forKey: "value") as? Int, sentinel)
     }
 
     func testCanBridgeString() {
         let sentinel = "a"
-        let p = Promise(value: sentinel)
+        let p = Promise.value(sentinel)
         let ap = AnyPromise(p)
         XCTAssertEqual(ap.value(forKey: "value") as? String, sentinel)
     }
 
     func testCanBridgeBool() {
         let sentinel = true
-        let p = Promise(value: sentinel)
+        let p = Promise.value(sentinel)
         let ap = AnyPromise(p)
         XCTAssertEqual(ap.value(forKey: "value") as? Bool, sentinel)
     }
@@ -61,7 +61,7 @@ class BridgingTests: XCTestCase {
         let ex = expectation(description: "")
 
         firstly {
-            Promise(value: 1)
+            .value(1)
         }.then { _ -> AnyPromise in
             return PromiseBridgeHelper().value(forKey: "bridge2") as! AnyPromise
         }.done { value in
@@ -80,7 +80,7 @@ class BridgingTests: XCTestCase {
                 XCTAssertEqual(value, NSNumber(value: true))
                 ex.fulfill()
             }
-            return Promise(value: ())
+            return Promise()
         }
 
         waitForExpectations(timeout: 1)
@@ -92,7 +92,7 @@ class BridgingTests: XCTestCase {
         PMKDummyAnyPromise_Manifold().then { obj -> Promise<Void> in
             defer { ex.fulfill() }
             XCTAssertEqual(obj as? NSNumber, NSNumber(value: true), "\(obj) is not @YES")
-            return Promise(value: ())
+            return Promise()
         }
 
         waitForExpectations(timeout: 1)
@@ -103,7 +103,7 @@ class BridgingTests: XCTestCase {
 
         PMKDummyAnyPromise_YES().then { obj -> Promise<Void>  in
             ex.fulfill()
-            return Promise(value: ())
+            return Promise()
         }
 
         waitForExpectations(timeout: 1)
@@ -156,7 +156,7 @@ class BridgingTests: XCTestCase {
 
         AnyPromise(input).then { obj -> Promise<Int> in
             XCTAssertEqual(obj as? Int, 1)
-            return Promise(value: 2)
+            return .value(2)
         }.done { value in
             XCTAssertEqual(value, 2)
             ex.fulfill()
@@ -205,7 +205,7 @@ class BridgingTests: XCTestCase {
     // can return AnyPromise (that fulfills) in then handler
     func test4() {
         let ex = expectation(description: "")
-        Promise(value: 1).then { _ -> AnyPromise in
+        Promise.value(1).then { _ -> AnyPromise in
             return AnyPromise(after(seconds: 0).map{ 1 })
         }.done { x in
             XCTAssertEqual(x as? Int, 1)
@@ -218,13 +218,20 @@ class BridgingTests: XCTestCase {
     func test5() {
         let ex = expectation(description: "")
 
-        Promise(value: 1).then { _ -> AnyPromise in
+        Promise.value(1).then { _ -> AnyPromise in
             let promise = after(.milliseconds(100)).done{ throw Error.dummy }
             return AnyPromise(promise)
         }.catch { err in
             ex.fulfill()
         }
         waitForExpectations(timeout: 1)
+    }
+
+    func testStandardSwiftBridgeIsUnambiguous() {
+        let p = Promise.value(1)
+        let q = Promise(p)
+
+        XCTAssertEqual(p.value, q.value)
     }
 }
 

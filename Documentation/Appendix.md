@@ -6,16 +6,16 @@ Don’t do this:
 
 ```swift
 func toggleNetworkSpinnerWithPromise<T>(funcToCall: () -> Promise<T>) -> Promise<T> {
-    return Promise { fulfill, reject in
+    return Promise { seal in
         firstly {
             setNetworkActivityIndicatorVisible(true)
             return funcToCall()
         }.then { result in
-            fulfill(result)
+            seal.fulfill(result)
         }.always {
             setNetworkActivityIndicatorVisible(false)
         }.catch { err in
-            reject(err)
+            seal.reject(err)
         }
     }
 }
@@ -47,7 +47,7 @@ return firstly {
     getItems()
 }.then { items -> Promise<[Item]?> in
     guard !items.isEmpty else {
-        return Promise(value: nil)
+        return .value(nil)
     }
     return Promise(value: items)
 }
@@ -60,7 +60,7 @@ error type for this condition:
 ```swift
 return firstly {
     getItems()
-}.then { items -> Promise<[Item]> in
+}.map { items -> [Item]> in
     guard !items.isEmpty else {
         throw MyError.emptyItems
     }

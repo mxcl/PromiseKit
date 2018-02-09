@@ -8,7 +8,7 @@ class RegressionTests: XCTestCase {
         // in our A+ tests implementation for spec: 2.3.1
 
         do {
-            let promise1 = Promise(value: ())
+            let promise1 = Promise()
             let promise2 = promise1.then(on: nil) { promise1 }
             promise2.catch(on: nil) { _ in XCTFail() }
         }

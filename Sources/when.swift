@@ -4,7 +4,7 @@ import Dispatch
 private func _when<U: Thenable>(_ thenables: [U]) -> Promise<Void> {
     var countdown = thenables.count
     guard countdown > 0 else {
-        return Promise(value: Void())
+        return .value(Void())
     }
 
     let rp = Promise<Void>(.pending)
@@ -226,7 +226,7 @@ public func when<T>(resolved promises: Promise<T>...) -> Guarantee<[Result<T>]> 
 /// Waits on all provided promises.
 public func when<T>(resolved promises: [Promise<T>]) -> Guarantee<[Result<T>]> {
     guard !promises.isEmpty else {
-        return Guarantee(value: [])
+        return .value([])
     }
 
     var countdown = promises.count

@@ -173,14 +173,26 @@ public extension Thenable where T: Sequence {
         return map(on: on){ try $0.map(transform) }
     }
 
+    func flatMap<U: Sequence>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping(T.Iterator.Element) throws -> U) -> Promise<[U.Iterator.Element]> {
+        return map(on: on){ (foo: T) in
+            try foo.flatMap{ try transform($0) }
+        }
+    }
+
+    func compactMap<U>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping(T.Iterator.Element) throws -> U?) -> Promise<[U]> {
+        return map(on: on) { foo -> [U] in
+          #if swift(>=4.1)
+            return try foo.compactMap(transform) }
+          #else
+            return try foo.flatMap(transform)
+          #endif
+        }
+    }
+
     func thenMap<U: Thenable>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping(T.Iterator.Element) throws -> U) -> Promise<[U.T]> {
         return then(on: on) {
             when(fulfilled: try $0.map(transform))
         }
-    }
-
-    func flatMap<U>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping(T.Iterator.Element) throws -> U?) -> Promise<[U]> {
-        return map(on: on){ try $0.flatMap(transform) }
     }
 
     func thenFlatMap<U: Thenable>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping(T.Iterator.Element) throws -> U) -> Promise<[U.T.Iterator.Element]> where U.T: Sequence {

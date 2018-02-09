@@ -4,11 +4,15 @@ import Dispatch
 public class Guarantee<T>: Thenable {
     let box: Box<T>
 
-    public init(value: T) {
-        box = SealedBox(value: value)
+    fileprivate init(box: SealedBox<T>) {
+        self.box = box
     }
 
-    public init(_: PMKUnambiguousInitializer, resolver body: (@escaping(T) -> Void) -> Void) {
+    public static func value(_ value: T) -> Guarantee<T> {
+        return .init(box: SealedBox(value: value))
+    }
+
+    public init(resolver body: (@escaping(T) -> Void) -> Void) {
         box = EmptyBox()
         body(box.seal)
     }
@@ -115,7 +119,7 @@ public extension Guarantee {
 #if swift(>=3.1)
 public extension Guarantee where T == Void {
     convenience init() {
-        self.init(value: Void())
+        self.init(box: SealedBox(value: Void()))
     }
 }
 #endif

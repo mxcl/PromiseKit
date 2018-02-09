@@ -6,15 +6,15 @@ import XCTest
 
 class JoinTests: XCTestCase {
     func testImmediates() {
-        let successPromise = Promise(value: ())
+        let successPromise = Promise()
 
         var joinFinished = false
         when(resolved: successPromise).done(on: nil) { _ in joinFinished = true }
         XCTAssert(joinFinished, "Join immediately finishes on fulfilled promise")
         
-        let promise2 = Promise(value: 2)
-        let promise3 = Promise(value: 3)
-        let promise4 = Promise(value: 4)
+        let promise2 = Promise.value(2)
+        let promise3 = Promise.value(3)
+        let promise4 = Promise.value(4)
         var join2Finished = false
         when(resolved: promise2, promise3, promise4).done(on: nil) { _ in join2Finished = true }
         XCTAssert(join2Finished, "Join immediately finishes on fulfilled promises")
@@ -26,7 +26,7 @@ class JoinTests: XCTestCase {
         var joinFinished = false
         when(resolved: errorPromise).asVoid().recover(on: nil) { _ in
             joinFinished = true
-            return Promise(value: ())
+            return Promise()
         }
         XCTAssert(joinFinished, "Join immediately finishes on rejected promise")
         
@@ -36,7 +36,7 @@ class JoinTests: XCTestCase {
         var join2Finished = false
         when(resolved: errorPromise2, errorPromise3, errorPromise4).asVoid().recover(on: nil) { _ in
             join2Finished = true
-            return Promise(value: ())
+            return Promise()
         }
         XCTAssert(join2Finished, "Join immediately finishes on rejected promises")
     }

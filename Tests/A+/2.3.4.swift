@@ -15,7 +15,7 @@ class Test234: XCTestCase {
             }
             testRejected { promise, expectation, _ in
                 promise.recover { _ -> Promise<UInt32> in
-                    return Promise(value: UInt32(1))
+                    return .value(UInt32(1))
                 }.done { value in
                     XCTAssertEqual(value, 1)
                     expectation.fulfill()

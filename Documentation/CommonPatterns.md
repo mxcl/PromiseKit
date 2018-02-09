@@ -39,16 +39,20 @@ Promises are composable, return them instead of providing completion blocks:
 ```swift
 class MyRestAPI {
     func user() -> Promise<User> {
-        return URLSession.shared.dataTask(url).asDictionary().then { dict in
-            return User(dict: dict)
+        return firstly {
+            URLSession.shared.dataTask(.promise, with: url)
+        }.flatMap {
+            JSONSerialization.jsonObject(with: $0.data) as? [String: Any]
+        }.then { dict in
+            User(dict: dict)
         }
     }
 
     func avatar() -> Promise<UIImage> {
         return user().then { user in
-            URLSession.shared.dataTask(user.imageUrl)
-        }.then {
-            UIImage(data: $0)
+            URLSession.shared.dataTask(.promise, with: user.imageUrl)
+        }.flatMap {
+            UIImage(data: $0.data)
         }
     }
 }
@@ -65,9 +69,11 @@ class MyRestAPI {
     func avatar() -> Promise<UIImage> {
         let bgq = DispatchQueue.global(qos: .userInitiated)
         
-        return user().then(on: bgq) { user in
-            URLSession.shared.dataTask(user.imageUrl)
-        }.then(on: bgq) {
+        return firstly {
+            user()
+        }.then(on: bgq) { user in
+            URLSession.shared.dataTask(.promise, with: user.imageUrl)
+        }.flatMap(on: bgq) {
             UIImage(data: $0)
         }
     }
@@ -79,16 +85,22 @@ the handler executes upon. The default is always the main queue.
 
 PromiseKit is *entirely* thread safe.
 
+> *Tip* with caution you can have all `flatMap`, `then`, `map`, etc. run on
+a background queue, see `PromiseKit.conf`. Note that we suggest only changing
+the queue for the `map` suite of functions, thus `done` and `catch` will
+continue to run on the main queue which is *usually* what you want.
 
 ## Failing Chains
 
 If an error occurs mid chain, simply throw:
 
 ```swift
-foo().then { baz in
-    return bar(baz)
+firstly {
+    foo()
+}.then { baz in
+    bar(baz)
 }.then { result in
-    if result.isBad { throw MyError.myIssue }
+    guard !result.isBad else { throw MyError.myIssue }
     //…
     return doOtherThing()
 }
@@ -107,6 +119,11 @@ foo().then { baz in
     // if doOtherThing() throws, we end up here
 }
 ```
+
+> *Tip* with Swift you can define inline `enum Error` inside the function you
+are working at. This isn’t *great* coding practice, but it is better than
+avoiding throwing an error because you can’t be bothered to define a good global
+`Error` `enum`.
 
 
 ## Abstracting Away Asychronicity
@@ -166,7 +183,7 @@ fade.then {
 }
 ```
 
-Note *usually* you want `when()` since `when` executes all the promises in
+> Note *usually* you want `when()` since `when` executes all the promises in
 parallel and thus is much faster to complete. Use the above pattern in
 situations where tasks *must* be done sequentially; animation is a good example.
 
@@ -192,6 +209,29 @@ race(when(fulfilled: fetches).asVoid(), timeout).then {
 > Please note if any promise you pass rejects, then `race` will be rejected.
 
 
+# Minimum Duration
+
+Sometimes you need something to take *at least* a certain amount of time (eg.
+you want to show a spinner for something, but if it shows for less than 0.3
+seconds the UI appears broken to the user).
+
+```swift
+let waitAtLeast = after(seconds: 0.3)
+
+firstly {
+    foo()
+}.then {
+    waitAtLeast
+}.done {
+    //…
+}
+```
+
+The above works because we create the delay before we do work in `foo()`, thus
+it will have either already timed-out or we wait whatever amount of the 0.3
+seconds remains before the chain continues.
+
+
 ## Cancellation
 
 Promises don’t have a `cancel` function, but they do support cancellation via a
@@ -202,10 +242,10 @@ func foo() -> (Promise<Void>, cancel: () -> Void) {
     let task = Task(…)
     var cancelme = false
 
-    let promise = Promise<Void> { fulfill, reject in
+    let promise = Promise<Void> { seal in
         task.completion = { value in
             guard !cancelme else { reject(NSError.cancelledError) }
-            fulfill(value)
+            seal.fulfill(value)
         }
         task.start()
     }
@@ -248,11 +288,11 @@ func attempt<T>(interdelay: DispatchTimeInterval = .seconds(2), maxRepeat: Int =
     var attempts = 0
     func attempt() -> Promise<T> {
         attempts += 1
-        return body().recover { error -> Promise<T> in
+        return body().recover { error in
             guard attempts < maxRepeat else { throw error }
 
             return after(interval: interdelay).then {
-                return attempt()
+                attempt()
             }
         }
     }
@@ -289,7 +329,7 @@ extension CLLocationManager {
 }
 
 class PMKCLLocationManagerProxy: NSObject, CLLocationManagerDelegate {
-    private let (promise, fulfill, reject) = Promise<[CLLocation]>.pending()
+    private let (promise, seal) = Promise<[CLLocation]>.pending()
     private var retainCycle: PMKCLLocationManagerProxy?
     private let manager = CLLocationManager()
 
@@ -305,11 +345,11 @@ class PMKCLLocationManagerProxy: NSObject, CLLocationManagerDelegate {
     }
     
     @objc fileprivate func locationManager(_: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
-        fulfill(locations)
+        seal.fulfill(locations)
     }
 
     @objc func locationManager(_: CLLocationManager, didFailWithError error: Error) {
-        reject(error)
+        seal.reject(error)
     }
 }
 
@@ -349,7 +389,7 @@ Be careful not to ignore all errors; recover only those errors that make sense.
 ```swift
 class ViewController: UIViewController {
 
-    private let (promise, seal) = Promise<…>.pending()
+    private let (promise, seal) = Guarantee<…>.pending()  // use Promise if your flow can fail
     
     func show(in: UIViewController) -> Promise<…> {
         in.show(self, sender: in)
@@ -358,13 +398,13 @@ class ViewController: UIViewController {
     
     func done() {
         dismiss(animated: true)
-        seal(…)
+        seal.fulfill(…)
     }
 }
 
 // use:
 
-ViewController().show(in: self).then {
+ViewController().show(in: self).done {
     //…
 }.catch { error in
     //…
@@ -424,9 +464,11 @@ into `Promise<(UIImage, String)>`.
 Use `when(resolved:)`:
 
 ```swift
-when(resolved: a, b).then { (results: [Result<T>]) in
+when(resolved: a, b).done { (results: [Result<T>]) in
     // `Result` is an enum of `.fulfilled` or `.rejected`
 }
+
+// ^^ cannot call `catch` as `when(resolved:)` returns a `Guarantee`
 ```
 
 Generally you don't want this, people ask for it a lot, but usually they

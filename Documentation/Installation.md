@@ -6,7 +6,7 @@ We recommend CocoaPods.
 
 ```ruby
 use_frameworks!
-pod "PromiseKit", "~> 4.4"
+pod "PromiseKit", "~> 6.0"
 ```
 
 Since CocoaPods 1.0 you will (probably) need to add the `pod` line to a `target`,
@@ -16,21 +16,21 @@ eg:
 use_frameworks!
 
 target "MyTarget" do
-  pod "PromiseKit", "~> 4.4"
+  pod "PromiseKit", "~> 6.0"
 end
 ```
 
 ## Carthage
 
 ```ruby
-github "mxcl/PromiseKit" ~> 4.4
+github "mxcl/PromiseKit" ~> 6.0
 ```
 
 ## SwiftPM
 
 ```ruby
 package.dependencies.append(
-    .Package(url: "https://github.com/mxcl/PromiseKit", majorVersion: 4)
+    .Package(url: "https://github.com/mxcl/PromiseKit", majorVersion: 6)
 )
 ```
 
@@ -46,7 +46,8 @@ PromiseKit contains Swift, so there have been rev-lock issues with Xcode:
 
 | PromiseKit | Swift    | Xcode    |   CI Status  |   Release Notes   |
 | ---------- | -------- | -------- | ------------ | ----------------- |
-|      5     | 3.x, 4.x | 8.x, 9.x | ![ci-master] |      In beta      |
+|      6     | 3.x, 4.x | 8.x, 9.x | ![ci-master] |   Coming Soon!    |
+|      5     | 3.x, 4.x | 8.x, 9.x | ![ci-master] |    Deprecated     |
 |      4     | 3.x, 4.x | 8.x, 9.x | ![ci-master] | [2016/09][news-4] |
 |      3     | 2.x      | 7.x, 8.0 | ![ci-swift2] | [2015/10][news-3] |
 |      2     | 1.x      | 7.x      | Unsupported  | [2015/10][news-3] |
@@ -81,11 +82,6 @@ pod "PromiseKit", "~> 3.5"
 # Carthage
 github "mxcl/PromiseKit" ~> 3.5
 ```
-
-
-# PromiseKit 5
-
-[PromiseKit 5 is experimental and under active development](https://github.com/mxcl/PromiseKit/tree/experimental-5.x).
 
 
 [travis]: https://travis-ci.org/mxcl/PromiseKit

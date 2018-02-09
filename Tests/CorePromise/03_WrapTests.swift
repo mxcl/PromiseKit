@@ -21,7 +21,7 @@ class WrapTests: XCTestCase {
     func testSuccess() {
         let ex = expectation(description: "")
         let kittenFetcher = KittenFetcher(value: 2, error: nil)
-        let promise = Promise(.pending) { seal in
+        let promise = Promise { seal in
             kittenFetcher.fetchWithCompletionBlock(block: seal.resolve)
         }.done {
             XCTAssertEqual($0, 2)
@@ -39,7 +39,7 @@ class WrapTests: XCTestCase {
         let ex = expectation(description: "")
 
         let kittenFetcher = KittenFetcher(value: nil, error: Error.test)
-        Promise(.pending) { seal in
+        Promise { seal in
             kittenFetcher.fetchWithCompletionBlock(block: seal.resolve)
         }.catch { error in
             defer { ex.fulfill() }
@@ -59,7 +59,7 @@ class WrapTests: XCTestCase {
         let ex = expectation(description: "")
 
         let kittenFetcher = KittenFetcher(value: nil, error: nil)
-        Promise(.pending) { seal in
+        Promise { seal in
             kittenFetcher.fetchWithCompletionBlock(block: seal.resolve)
         }.catch { error in
             defer { ex.fulfill() }

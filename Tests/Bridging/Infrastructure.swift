@@ -15,7 +15,7 @@ enum MyError: Error {
 @objc class TestPromise626: NSObject {
 
     @objc class func promise() -> AnyPromise {
-        let promise: Promise<String> = Promise(.pending) { seal in
+        let promise: Promise<String> = Promise { seal in
             seal.reject(MyError.PromiseError)
         }
 

@@ -200,7 +200,7 @@ class Test226: XCTestCase {
                         let sentinel3 = arc4random()
 
                         promise.recover { _ in
-                            return Promise(value: sentinel1)
+                            return .value(sentinel1)
                         }.done { value in
                             XCTAssertEqual(sentinel1, value)
                             exes[0].fulfill()
@@ -215,7 +215,7 @@ class Test226: XCTestCase {
                         }
                         
                         promise.recover { _ in
-                            Promise(value: sentinel3)
+                            .value(sentinel3)
                         }.done { value in
                             XCTAssertEqual(value, sentinel3)
                             exes[2].fulfill()

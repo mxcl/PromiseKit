@@ -4,8 +4,36 @@ import Dispatch
 public class Promise<T>: Thenable, CatchMixin {
     let box: Box<Result<T>>
 
-    public init(value: T) {
-        box = SealedBox(value: .fulfilled(value))
+    fileprivate init(box: SealedBox<Result<T>>) {
+        self.box = box
+    }
+
+    /**
+      We do not provide `init(value:)` because Swift is “greedy”
+      and would pick that initializer in cases where it should pick
+      one of the other more specific options leading to Promises with
+      `T` that is eg: `Error` or worse `(T->Void,Error->Void)` for
+      uses of our PMK < 4 pending initializer due to Swift trailing
+      closure syntax (nothing good comes without pain!).
+
+      Though often easy to detect, sometimes these issues would be
+      hidden by other type inference leading to some nasty bugs in
+      production.
+
+      In PMK5 we tried to work around this by making the pending
+      initializer take the form `Promise(.pending)` but this led to
+      bad migration errors for PMK4 users. Hence instead we quickly
+      released PMK6 and now only provide this initializer for making
+      sealed & fulfilled promises.
+
+      Usage is still (usually) good:
+
+          guard foo else {
+              return .value(bar)
+          }
+     */
+    public class func value(_ value: T) -> Promise<T> {
+        return Promise(box: SealedBox(value: .fulfilled(value)))
     }
 
     public init(error: Error) {
@@ -17,7 +45,7 @@ public class Promise<T>: Thenable, CatchMixin {
         bridge.pipe(to: box.seal)
     }
 
-    public init(_: PMKUnambiguousInitializer, resolver body: (Resolver<T>) throws -> Void) {
+    public init(resolver body: (Resolver<T>) throws -> Void) {
         box = EmptyBox()
         do {
             try body(Resolver(box))
@@ -101,7 +129,7 @@ public extension Promise {
 #if swift(>=3.1)
 extension Promise where T == Void {
     public convenience init() {
-        self.init(value: Void())
+        self.init(box: SealedBox(value: .fulfilled(Void())))
     }
 }
 #endif
@@ -140,6 +168,6 @@ public enum PMKNamespacer {
     case promise
 }
 
-public enum PMKUnambiguousInitializer {
+enum PMKUnambiguousInitializer {
     case pending
 }

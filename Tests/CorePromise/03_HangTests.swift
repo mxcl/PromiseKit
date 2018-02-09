@@ -7,7 +7,7 @@ class HangTests: XCTestCase {
         do {
             let value = try hang(after(seconds: 0.02).then { _ -> Promise<Int> in
                 ex.fulfill()
-                return Promise(value: 1)
+                return .value(1)
             })
             XCTAssertEqual(value, 1)
         } catch {
