@@ -379,8 +379,8 @@
 		63B912AB1F1E657400D49110 /* Sources.objc */ = {
 			isa = PBXGroup;
 			children = (
-				63B0AC651D595E6300FA21D9 /* AnyPromise.swift */,
 				63B0AC641D595E6300FA21D9 /* AnyPromise.m */,
+				63B0AC651D595E6300FA21D9 /* AnyPromise.swift */,
 				63B0AC671D595E6300FA21D9 /* dispatch_promise.m */,
 				630B60C01F2F73B000A1AEFE /* Headers */,
 				630B60BF1F2F739E00A1AEFE /* Features */,

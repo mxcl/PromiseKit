@@ -2,28 +2,50 @@
 #import <dispatch/dispatch.h>
 #import "fwd.h"
 
+/// INTERNAL DO NOT USE
+@class __AnyPromise;
+
+/// Provided to simplify some usage sites
 typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
 
-#if __has_include("PromiseKit-Swift.h")
-    #pragma clang diagnostic push
-    #pragma clang diagnostic ignored"-Wdocumentation"
-    #import "PromiseKit-Swift.h"
-    #pragma clang diagnostic pop
-#else
-    // this hack because `AnyPromise` is Swift, but we add
-    // our own methods via the below category. This hack is
-    // only required while building PromiseKit since, once
-    // built, the generated -Swift header exists.
 
-    __attribute__((objc_subclassing_restricted)) __attribute__((objc_runtime_name("AnyPromise")))
-    @interface AnyPromise : NSObject
-    + (instancetype __nonnull)promiseWithResolverBlock:(void (^ __nonnull)(__nonnull PMKResolver))resolveBlock NS_REFINED_FOR_SWIFT;
-    + (instancetype __nonnull)promiseWithValue:(__nullable id)value NS_REFINED_FOR_SWIFT;
-    @end
-#endif
+/// An Objective-C implementation of the promise pattern.
+@interface AnyPromise: NSObject
+
+/**
+ Create a new promise that resolves with the provided block.
+
+ Use this method when wrapping asynchronous code that does *not* use promises so that this code can be used in promise chains.
+
+ If `resolve` is called with an `NSError` object, the promise is rejected, otherwise the promise is fulfilled.
+
+ Don’t use this method if you already have promises! Instead, just return your promise.
+
+ Should you need to fulfill a promise but have no sensical value to use: your promise is a `void` promise: fulfill with `nil`.
+
+ The block you pass is executed immediately on the calling thread.
+
+ - Parameter block: The provided block is immediately executed, inside the block call `resolve` to resolve this promise and cause any attached handlers to execute. If you are wrapping a delegate-based system, we recommend instead to use: initWithResolver:
+ - Returns: A new promise.
+ - Warning: Resolving a promise with `nil` fulfills it.
+ - SeeAlso: http://promisekit.org/sealing-your-own-promises/
+ - SeeAlso: http://promisekit.org/wrapping-delegation/
+ */
++ (instancetype __nonnull)promiseWithResolverBlock:(void (^ __nonnull)(__nonnull PMKResolver))resolveBlock NS_REFINED_FOR_SWIFT;
 
 
-@interface AnyPromise (obj)
+/// INTERNAL DO NOT USE
+- (instancetype __nonnull)initWith__D:(__AnyPromise * __nonnull)d;
+
+/**
+ Creates a resolved promise.
+
+ When developing your own promise systems, it is occasionally useful to be able to return an already resolved promise.
+
+ - Parameter value: The value with which to resolve this promise. Passing an `NSError` will cause the promise to be rejected, passing an AnyPromise will return a new AnyPromise bound to that promise, otherwise the promise will be fulfilled with the value passed.
+ - Returns: A resolved promise.
+ */
++ (instancetype __nonnull)promiseWithValue:(__nullable id)value NS_REFINED_FOR_SWIFT;
 
 /**
  The value of the asynchronous task this promise represents.

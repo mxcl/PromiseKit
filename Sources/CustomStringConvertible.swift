@@ -1,5 +1,6 @@
 
 extension Promise: CustomStringConvertible {
+    /// - Returns: A description of the state of this promise.
     public var description: String {
         switch result {
         case nil:
@@ -13,6 +14,7 @@ extension Promise: CustomStringConvertible {
 }
 
 extension Promise: CustomDebugStringConvertible {
+    /// - Returns: A debug-friendly description of the state of this promise.
     public var debugDescription: String {
         switch box.inspect() {
         case .pending(let handlers):
@@ -24,3 +26,19 @@ extension Promise: CustomDebugStringConvertible {
         }
     }
 }
+
+#if !SWIFT_PACKAGE
+extension AnyPromise {
+    /// - Returns: A description of the state of this promise.
+    override open var description: String {
+        switch box.inspect() {
+        case .pending:
+            return "AnyPromise(…)"
+        case .resolved(let obj?):
+            return "AnyPromise(\(obj))"
+        case .resolved(nil):
+            return "AnyPromise(nil)"
+        }
+    }
+}
+#endif

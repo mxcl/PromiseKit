@@ -17,7 +17,7 @@ class BridgingTests: XCTestCase {
         let p = Promise.value(sentinel)
         let ap = AnyPromise(p)
 
-        XCTAssertEqual(ap.value(forKey: "value") as? NSURLRequest, sentinel!)
+        XCTAssertEqual(ap.value(forKey: "value") as? NSURLRequest, sentinel)
     }
 
     func testCanBridgeSwiftArray() {
@@ -25,7 +25,8 @@ class BridgingTests: XCTestCase {
         let p = Promise.value(sentinel)
         let ap = AnyPromise(p)
 
-        XCTAssertEqual(ap.value(forKey: "value") as! [NSString], sentinel)
+        guard let foo = ap.value(forKey: "value") as? [NSString] else { return XCTFail() }
+        XCTAssertEqual(foo, sentinel)
     }
 
     func testCanBridgeSwiftDictionary() {
@@ -33,7 +34,8 @@ class BridgingTests: XCTestCase {
         let p = Promise.value(sentinel)
         let ap = AnyPromise(p)
 
-        XCTAssertEqual(ap.value(forKey: "value") as! [NSString: NSString], sentinel)
+        guard let foo = ap.value(forKey: "value") as? [NSString: NSString] else { return XCTFail() }
+        XCTAssertEqual(foo, sentinel)
     }
 
     func testCanBridgeInt() {

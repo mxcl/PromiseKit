@@ -14,10 +14,10 @@
     }];
 
     PMKJoin(@[
-              [AnyPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:1 userInfo:nil]],
-              promise,
-              [AnyPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:2 userInfo:nil]]
-              ]).then(^{
+        [AnyPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:1 userInfo:nil]],
+        promise,
+        [AnyPromise promiseWithValue:[NSError errorWithDomain:@"dom" code:2 userInfo:nil]]
+    ]).then(^{
         XCTFail();
     }).catch(^(NSError *error){
         id promises = error.userInfo[PMKJoinPromisesKey];
