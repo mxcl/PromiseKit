@@ -88,7 +88,7 @@ import Foundation
         }
     }
 
-    @objc var __value: Any? {
+    @objc public var __value: Any? {
         switch box.inspect() {
         case .resolved(let obj):
             return obj
@@ -97,7 +97,7 @@ import Foundation
         }
     }
 
-    @objc var __pending: Bool {
+    @objc public var __pending: Bool {
         switch box.inspect() {
         case .pending:
             return true

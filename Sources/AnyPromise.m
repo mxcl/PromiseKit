@@ -10,17 +10,19 @@ NSString *const PMKErrorDomain = @"PMKErrorDomain";
     __AnyPromise *d;
 }
 
-- (instancetype)initWith__D:(__AnyPromise *)d {
+- (instancetype)initWith__D:(__AnyPromise *)dd {
     self = [super init];
-    if (self) self->d = d;
+    if (self) self->d = dd;
     return self;
 }
 
 - (instancetype)initWithResolver:(PMKResolver __strong *)resolver {
-    id d = [[__AnyPromise alloc] initWithResolver:^(void (^resolve)(id)) {
-        *resolver = resolve;
-    }];
-    return [self initWith__D:d];
+    self = [super init];
+    if (self)
+        d = [[__AnyPromise alloc] initWithResolver:^(void (^resolve)(id)) {
+            *resolver = resolve;
+        }];
+    return self;
 }
 
 + (instancetype)promiseWithResolverBlock:(void (^)(PMKResolver _Nonnull))resolveBlock {
@@ -48,7 +50,7 @@ NSString *const PMKErrorDomain = @"PMKErrorDomain";
 
 - (AnyPromise *(^)(id))then {
     return ^(id block) {
-        return [d __thenOn:dispatch_get_main_queue() execute:^(id obj) {
+        return [self->d __thenOn:dispatch_get_main_queue() execute:^(id obj) {
             return PMKCallVariadicBlock(block, obj);
         }];
     };
@@ -56,7 +58,7 @@ NSString *const PMKErrorDomain = @"PMKErrorDomain";
 
 - (AnyPromise *(^)(dispatch_queue_t, id))thenOn {
     return ^(dispatch_queue_t queue, id block) {
-        return [d __thenOn:queue execute:^(id obj) {
+        return [self->d __thenOn:queue execute:^(id obj) {
             return PMKCallVariadicBlock(block, obj);
         }];
     };
@@ -64,7 +66,7 @@ NSString *const PMKErrorDomain = @"PMKErrorDomain";
 
 - (AnyPromise *(^)(id))thenInBackground {
     return ^(id block) {
-        return [d __thenOn:dispatch_get_global_queue(0, 0) execute:^(id obj) {
+        return [self->d __thenOn:dispatch_get_global_queue(0, 0) execute:^(id obj) {
             return PMKCallVariadicBlock(block, obj);
         }];
     };
@@ -72,7 +74,7 @@ NSString *const PMKErrorDomain = @"PMKErrorDomain";
 
 - (AnyPromise *(^)(dispatch_queue_t, id))catchOn {
     return ^(dispatch_queue_t q, id block) {
-        return [d __catchOn:q execute:^(id obj) {
+        return [self->d __catchOn:q execute:^(id obj) {
             return PMKCallVariadicBlock(block, obj);
         }];
     };
@@ -80,7 +82,7 @@ NSString *const PMKErrorDomain = @"PMKErrorDomain";
 
 - (AnyPromise *(^)(id))catch {
     return ^(id block) {
-        return [d __catchOn:dispatch_get_main_queue() execute:^(id obj) {
+        return [self->d __catchOn:dispatch_get_main_queue() execute:^(id obj) {
             return PMKCallVariadicBlock(block, obj);
         }];
     };
@@ -88,7 +90,7 @@ NSString *const PMKErrorDomain = @"PMKErrorDomain";
 
 - (AnyPromise *(^)(id))catchInBackground {
     return ^(id block) {
-        return [d __catchOn:dispatch_get_global_queue(0, 0) execute:^(id obj) {
+        return [self->d __catchOn:dispatch_get_global_queue(0, 0) execute:^(id obj) {
             return PMKCallVariadicBlock(block, obj);
         }];
     };
@@ -96,13 +98,13 @@ NSString *const PMKErrorDomain = @"PMKErrorDomain";
 
 - (AnyPromise *(^)(dispatch_block_t))ensure {
     return ^(dispatch_block_t block) {
-        return [d __ensureOn:dispatch_get_main_queue() execute:block];
+        return [self->d __ensureOn:dispatch_get_main_queue() execute:block];
     };
 }
 
 - (AnyPromise *(^)(dispatch_queue_t, dispatch_block_t))ensureOn {
     return ^(dispatch_queue_t queue, dispatch_block_t block) {
-        return [d __ensureOn:queue execute:block];
+        return [self->d __ensureOn:queue execute:block];
     };
 }
 
