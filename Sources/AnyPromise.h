@@ -63,6 +63,12 @@ typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
 /// - Returns: if the promise is pending resolution.
 @property (nonatomic, readonly) BOOL pending NS_REFINED_FOR_SWIFT;
 
+/// - Returns: if the promise is resolved and fulfilled.
+@property (nonatomic, readonly) BOOL fulfilled NS_REFINED_FOR_SWIFT;
+
+/// - Returns: if the promise is resolved and rejected.
+@property (nonatomic, readonly) BOOL rejected NS_REFINED_FOR_SWIFT;
+
 
 /**
  The provided block is executed when its receiver is resolved.

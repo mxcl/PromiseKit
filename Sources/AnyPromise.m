@@ -112,6 +112,14 @@ NSString *const PMKErrorDomain = @"PMKErrorDomain";
     return [[d valueForKey:@"__pending"] boolValue];
 }
 
+- (BOOL)rejected {
+    return IsError([d __value]);
+}
+
+- (BOOL)fulfilled {
+    return !self.rejected;
+}
+
 - (id)value {
     id obj = [d __value];
 
