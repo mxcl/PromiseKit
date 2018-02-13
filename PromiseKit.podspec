@@ -26,7 +26,7 @@ Pod::Spec.new do |s|
   # even though for us it is nonsense. Our root spec has no
   # sources.
   s.ios.deployment_target = '8.0'
-  s.osx.deployment_target = '10.11'
+  s.osx.deployment_target = '10.9'
   s.watchos.deployment_target = '2.0'
   s.tvos.deployment_target = '9.0'
   
@@ -39,7 +39,7 @@ Pod::Spec.new do |s|
     ss.ios.frameworks = ss.osx.frameworks = 'Accounts'
     ss.dependency 'PromiseKit/CorePromise'
     ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
+    ss.osx.deployment_target = '10.9'
   end
 
   s.subspec 'Alamofire' do |ss|
@@ -78,7 +78,7 @@ Pod::Spec.new do |s|
     ss.dependency 'PromiseKit/CorePromise'
     ss.dependency 'Bolts', '~> 1.6.0'
     ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
+    ss.osx.deployment_target = '10.9'
     ss.watchos.deployment_target = '2.0'
     ss.tvos.deployment_target = '9.0'
   end
@@ -88,7 +88,7 @@ Pod::Spec.new do |s|
     ss.frameworks = 'CloudKit'
     ss.dependency 'PromiseKit/CorePromise'
     ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
+    ss.osx.deployment_target = '10.9'
     ss.tvos.deployment_target = '9.0'
     ss.watchos.deployment_target = '3.0'
   end
@@ -98,7 +98,7 @@ Pod::Spec.new do |s|
     ss.ios.frameworks = ss.osx.frameworks = ss.tvos.frameworks = 'CoreBluetooth'
     ss.dependency 'PromiseKit/CorePromise'
     ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
+    ss.osx.deployment_target = '10.9'
     ss.tvos.deployment_target = '9.0'
   end
 
@@ -115,7 +115,7 @@ Pod::Spec.new do |s|
     ss.frameworks = 'Foundation'
     
     ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
+    ss.osx.deployment_target = '10.9'
     ss.watchos.deployment_target = '2.0'
     ss.tvos.deployment_target = '9.0'
   end
@@ -127,7 +127,7 @@ Pod::Spec.new do |s|
     ss.frameworks = 'CoreLocation'
 
     ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
+    ss.osx.deployment_target = '10.9'
     ss.watchos.deployment_target = '3.0'
     ss.tvos.deployment_target = '9.0'
   end
@@ -138,7 +138,7 @@ Pod::Spec.new do |s|
     ss.dependency 'PromiseKit/CorePromise'
 
     ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
+    ss.osx.deployment_target = '10.9'
     ss.watchos.deployment_target = '2.0'
   end
   
@@ -147,7 +147,7 @@ Pod::Spec.new do |s|
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'Foundation'
     ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
+    ss.osx.deployment_target = '10.9'
     ss.watchos.deployment_target = '2.0'
     ss.tvos.deployment_target = '9.0'
   end
@@ -157,7 +157,7 @@ Pod::Spec.new do |s|
     ss.ios.frameworks = ss.osx.frameworks = ss.tvos.frameworks = 'MapKit'
     ss.dependency 'PromiseKit/CorePromise'
     ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
+    ss.osx.deployment_target = '10.9'
     ss.watchos.deployment_target = '2.0'
     ss.tvos.deployment_target = '9.2'
   end
@@ -174,7 +174,7 @@ Pod::Spec.new do |s|
     ss.dependency 'PromiseKit/Foundation'
     ss.dependency 'OMGHTTPURLRQ', '~> 3.2'
     ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
+    ss.osx.deployment_target = '10.9'
     ss.watchos.deployment_target = '2.0'
     ss.tvos.deployment_target = '9.0'
   end
@@ -194,7 +194,7 @@ Pod::Spec.new do |s|
     ss.osx.frameworks = ss.ios.frameworks = ss.tvos.frameworks = 'QuartzCore'
     ss.dependency 'PromiseKit/CorePromise'
     ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
+    ss.osx.deployment_target = '10.9'
     ss.tvos.deployment_target = '9.0'
   end
 
@@ -204,7 +204,7 @@ Pod::Spec.new do |s|
     ss.ios.frameworks = ss.osx.frameworks = 'Social'
     ss.dependency 'PromiseKit/Foundation'
     ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
+    ss.osx.deployment_target = '10.9'
   end
 
   s.subspec 'StoreKit' do |ss|
@@ -212,7 +212,7 @@ Pod::Spec.new do |s|
     ss.ios.frameworks = ss.osx.frameworks = ss.tvos.frameworks = 'StoreKit'
     ss.dependency 'PromiseKit/CorePromise'
     ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
+    ss.osx.deployment_target = '10.9'
     ss.tvos.deployment_target = '9.0'
   end
 
@@ -221,7 +221,7 @@ Pod::Spec.new do |s|
     ss.ios.frameworks = ss.osx.frameworks = ss.tvos.frameworks = 'SystemConfiguration'
     ss.dependency 'PromiseKit/CorePromise'
     ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
+    ss.osx.deployment_target = '10.9'
     ss.tvos.deployment_target = '9.0'
   end
 

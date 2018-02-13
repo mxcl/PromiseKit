@@ -149,6 +149,7 @@ public extension DispatchQueue {
      - Returns: A new `Promise` resolved by the result of the provided closure.
      - Note: There is no Promise/Thenable version of this due to Swift compiler ambiguity issues.
      */
+    @available(macOS 10.10, iOS 8.0, tvOS 9.0, watchOS 2.0, *)
     final func async<T>(_: PMKNamespacer, group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], execute body: @escaping () throws -> T) -> Promise<T> {
         let promise = Promise<T>(.pending)
         async(group: group, qos: qos, flags: flags) {
