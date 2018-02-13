@@ -88,7 +88,7 @@ Pod::Spec.new do |s|
     ss.frameworks = 'CloudKit'
     ss.dependency 'PromiseKit/CorePromise'
     ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.9'
+    ss.osx.deployment_target = '10.10'
     ss.tvos.deployment_target = '9.0'
     ss.watchos.deployment_target = '3.0'
   end
