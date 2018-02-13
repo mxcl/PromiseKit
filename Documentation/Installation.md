@@ -1,6 +1,7 @@
 # Xcode 8 or 9 / Swift 3 or 4
 
-We recommend CocoaPods.
+We recommend Carthage over CocoaPods, but both are supported installation
+methods.
 
 ## CocoaPods
 
@@ -15,7 +16,7 @@ eg:
 ```ruby
 use_frameworks!
 
-target "MyTarget" do
+target "Change Me!" do
   pod "PromiseKit", "~> 6.0"
 end
 ```
@@ -46,8 +47,8 @@ PromiseKit contains Swift, so there have been rev-lock issues with Xcode:
 
 | PromiseKit | Swift    | Xcode    |   CI Status  |   Release Notes   |
 | ---------- | -------- | -------- | ------------ | ----------------- |
-|      6     | 3.x, 4.x | 8.x, 9.x | ![ci-master] |   Coming Soon!    |
-|      5     | 3.x, 4.x | 8.x, 9.x | ![ci-master] |    Deprecated     |
+|      6     | 3.x, 4.x | 8.x, 9.x | ![ci-master] | [2018/02][news-6] |
+|      5     | 3.x, 4.x | 8.x, 9.x | ![ci-master] |    *Deprecated*   |
 |      4     | 3.x, 4.x | 8.x, 9.x | ![ci-master] | [2016/09][news-4] |
 |      3     | 2.x      | 7.x, 8.0 | ![ci-swift2] | [2015/10][news-3] |
 |      2     | 1.x      | 7.x      | Unsupported  | [2015/10][news-3] |
@@ -94,6 +95,7 @@ github "mxcl/PromiseKit" ~> 3.5
 [news-2]: http://promisekit.org/news/2015/05/PromiseKit-2.0-Released/
 [news-3]: https://github.com/mxcl/PromiseKit/blob/master/CHANGELOG.markdown#300-oct-1st-2015
 [news-4]: http://promisekit.org/news/2016/09/PromiseKit-4.0-Released/
+[news-6]: http://promisekit.org/news/2018/02/PromiseKit-6.0-Released/
 [swift-2.3-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.3-minimal-changes
 [swift-2.2-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.2-minimal-changes
 [swift-2.0-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.0-minimal-changes

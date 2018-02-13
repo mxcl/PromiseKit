@@ -257,7 +257,7 @@ How do we convert this to a promise? Well, it's easy:
 
 ```swift
 func fetch() -> Promise<String> {
-    return Promise { fetch(completion: $0.resolve) }
+    return Promise { foo(completion: $0.resolve) }
 }
 ```
 

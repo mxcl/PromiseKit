@@ -2,7 +2,7 @@
 
 ![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] [![Build Status](https://travis-ci.org/mxcl/PromiseKit.svg?branch=master)](https://travis-ci.org/mxcl/PromiseKit)
 
-[繁體中文](README.zh_Hant.md), [简体中文](README.zh_CN.md)
+[繁體中文](README.zh_Hant.md) (*outdated*), [简体中文](README.zh_CN.md) (*outdated*)
 
 ---
 
@@ -13,8 +13,11 @@ more readable code. Your co-workers will thank you.
 ```swift
 UIApplication.shared.isNetworkActivityIndicatorVisible = true
 
+let fetchImage = URLSession.shared.dataTask(.promise, with: url).flatMap{ UIImage(data: $0.data) }
+let fetchLocation = CLLocationManager.requestLocation()
+
 firstly {
-    when(fulfilled: URLSession.dataTask(with: url).asImage(), CLLocationManager.promise())
+    when(fulfilled: fetchImage, fetchLocation)
 }.done { image, location in
     self.imageView.image = image
     self.label.text = "\(location)"
@@ -32,8 +35,7 @@ pod used in many of the most popular apps in the world.
 
 # PromiseKit 6 Released
 
-PromiseKit 6 has been released. What happened to PMK5 and where is the migration
-guide? Coming soon!
+PromiseKit 6 has been released; [read the release notes and migration guide][PMK6].
 
 # Quick Start
 
@@ -127,7 +129,7 @@ firstly {
 firstly {
     URLSession.shared.dataTask(.promise, with: try makeRequest())
 }.flatMap {
-    try JSONDecoder().decoder(Foo.self, with: $0.data)
+    try JSONDecoder().decode(Foo.self, with: $0.data)
 }.done { foo in
     //…
 }.catch { error in
@@ -172,3 +174,4 @@ Ask your question at our [Gitter chat channel] or on [our bug tracker].
 [Gitter chat channel]: https://gitter.im/mxcl/PromiseKit
 [our bug tracker]: https://github.com/mxcl/PromiseKit/issues/new
 [Podfile]: https://guides.cocoapods.org/syntax/podfile.html
+[PMK6]: http://promisekit.org/news/2018/02/PromiseKit-6.0-Released/

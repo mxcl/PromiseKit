@@ -94,8 +94,9 @@ when(fulfilled: p1, p2).catch { error in
 ## Is PromiseKit “heavy”?
 
 No, PromiseKit is hardly any sources in fact, it is “light-weight”. Any
-“weight” relative to other promise implementations is 6 years of bug fixes or 
-important things like [Zalgo prevention](http://blog.izs.me/post/59142742143/designing-apis-for-asynchrony)
+“weight” relative to other promise implementations is 6 years of bug fixes, the
+fact we have *stellar* Objective-C to Swift bridging or important things like
+[Zalgo prevention](http://blog.izs.me/post/59142742143/designing-apis-for-asynchrony)
 that hobby-project implementations don’t consider.
 
 ## Why is debugging hard?
@@ -227,7 +228,7 @@ PromiseKit.conf.Q.return = .main  //NOTE this is the default
 ## How do I use PromiseKit server-side?
 
 If your server framework requires the main-queue remain unused (eg. Kitura) then you must use
-PromiseKit 5 and you must tell PromiseKit to not dispatch to the main-queue by default. This
+PromiseKit 6 and you must tell PromiseKit to not dispatch to the main-queue by default. This
 is easy enough:
 
 ```swift
