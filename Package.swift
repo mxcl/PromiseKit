@@ -14,6 +14,7 @@ let package = Package(
         "Sources/PMKCallVariadicBlock.m",
         "Sources/when.m",
         "Sources/after.m",
+        "Sources/race.m",
         "Sources/AnyPromise+Private.h",
         "Sources/AnyPromise.h",
         "Sources/PromiseKit.h",
