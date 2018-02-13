@@ -70,6 +70,7 @@
 		63B0AC9A1D595E6300FA21D9 /* when.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B0AC7D1D595E6300FA21D9 /* when.swift */; };
 		63B18AEC1F2D205C00B79E37 /* CustomStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B18AEB1F2D205C00B79E37 /* CustomStringConvertible.swift */; };
 		63B912AA1F1D7B1300D49110 /* firstly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B912A91F1D7B1300D49110 /* firstly.swift */; };
+		63D9B2EF203385FD0075C00B /* race.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D9B2EE203385FD0075C00B /* race.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -178,6 +179,7 @@
 		63B0AC7D1D595E6300FA21D9 /* when.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = when.swift; path = Sources/when.swift; sourceTree = "<group>"; };
 		63B18AEB1F2D205C00B79E37 /* CustomStringConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomStringConvertible.swift; path = Sources/CustomStringConvertible.swift; sourceTree = "<group>"; };
 		63B912A91F1D7B1300D49110 /* firstly.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = firstly.swift; path = Sources/firstly.swift; sourceTree = "<group>"; };
+		63D9B2EE203385FD0075C00B /* race.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = race.m; path = Sources/race.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -230,6 +232,7 @@
 				63B0AC6B1D595E6300FA21D9 /* hang.m */,
 				63B0AC6D1D595E6300FA21D9 /* join.m */,
 				63B0AC7C1D595E6300FA21D9 /* when.m */,
+				63D9B2EE203385FD0075C00B /* race.m */,
 			);
 			name = Features;
 			sourceTree = "<group>";
@@ -622,6 +625,7 @@
 				63B0AC9A1D595E6300FA21D9 /* when.swift in Sources */,
 				636A29271F1C3927001229C2 /* Resolver.swift in Sources */,
 				63B0AC991D595E6300FA21D9 /* when.m in Sources */,
+				63D9B2EF203385FD0075C00B /* race.m in Sources */,
 				63B0AC801D595E6300FA21D9 /* after.swift in Sources */,
 				63B18AEC1F2D205C00B79E37 /* CustomStringConvertible.swift in Sources */,
 				6330B5E11F2E991200D60528 /* Configuration.swift in Sources */,

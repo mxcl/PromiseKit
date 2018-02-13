@@ -155,6 +155,10 @@ extern AnyPromise * __nonnull dispatch_promise(id __nonnull block) NS_SWIFT_UNAV
 */
 extern AnyPromise * __nonnull dispatch_promise_on(dispatch_queue_t __nonnull queue, id __nonnull block) NS_SWIFT_UNAVAILABLE("Use our `DispatchQueue.async` override instead");
 
+/**
+ Returns a new promise that resolves when the value of the first resolved promise in the provided array of promises.
+*/
+extern AnyPromise * __nonnull PMKRace(NSArray * __nonnull promises) NS_REFINED_FOR_SWIFT;
 
 #ifdef __cplusplus
 }   // Extern C
