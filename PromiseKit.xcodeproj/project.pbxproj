@@ -71,6 +71,7 @@
 		63B18AEC1F2D205C00B79E37 /* CustomStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B18AEB1F2D205C00B79E37 /* CustomStringConvertible.swift */; };
 		63B912AA1F1D7B1300D49110 /* firstly.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B912A91F1D7B1300D49110 /* firstly.swift */; };
 		63D9B2EF203385FD0075C00B /* race.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D9B2EE203385FD0075C00B /* race.m */; };
+		63D9B2F120338D5D0075C00B /* Deprecations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D9B2F020338D5D0075C00B /* Deprecations.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -180,6 +181,7 @@
 		63B18AEB1F2D205C00B79E37 /* CustomStringConvertible.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CustomStringConvertible.swift; path = Sources/CustomStringConvertible.swift; sourceTree = "<group>"; };
 		63B912A91F1D7B1300D49110 /* firstly.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = firstly.swift; path = Sources/firstly.swift; sourceTree = "<group>"; };
 		63D9B2EE203385FD0075C00B /* race.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = race.m; path = Sources/race.m; sourceTree = "<group>"; };
+		63D9B2F020338D5D0075C00B /* Deprecations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Deprecations.swift; path = Sources/Deprecations.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -365,6 +367,7 @@
 				636A291E1F1C16FF001229C2 /* Box.swift */,
 				6330B5E01F2E991200D60528 /* Configuration.swift */,
 				63B18AEB1F2D205C00B79E37 /* CustomStringConvertible.swift */,
+				63D9B2F020338D5D0075C00B /* Deprecations.swift */,
 			);
 			name = Sources.swift;
 			sourceTree = "<group>";
@@ -640,6 +643,7 @@
 				63B0AC8B1D595E6300FA21D9 /* join.m in Sources */,
 				63B0AC891D595E6300FA21D9 /* hang.m in Sources */,
 				63B0AC831D595E6300FA21D9 /* AnyPromise.swift in Sources */,
+				63D9B2F120338D5D0075C00B /* Deprecations.swift in Sources */,
 				63B0AC871D595E6300FA21D9 /* Error.swift in Sources */,
 				0CC3AF2B1FCF84F7000E98C9 /* hang.swift in Sources */,
 				63B0AC7F1D595E6300FA21D9 /* after.m in Sources */,
