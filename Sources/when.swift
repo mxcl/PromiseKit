@@ -170,7 +170,11 @@ public func when<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrent
         func testDone() {
             barrier.sync {
                 if pendingPromises == 0 {
+                  #if !swift(>=3.3) || (swift(>=4) && !swift(>=4.1))
                     root.resolver.fulfill(promises.flatMap{ $0.value })
+                  #else
+                    root.resolver.fulfill(promises.compactMap{ $0.value })
+                  #endif
                 }
             }
         }

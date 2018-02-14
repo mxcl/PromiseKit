@@ -45,14 +45,14 @@ You can just drop `PromiseKit.xcodeproj` into your project and then add
 
 PromiseKit contains Swift, so there have been rev-lock issues with Xcode:
 
-| PromiseKit | Swift    | Xcode    |   CI Status  |   Release Notes   |
-| ---------- | -------- | -------- | ------------ | ----------------- |
-|      6     | 3.x, 4.x | 8.x, 9.x | ![ci-master] | [2018/02][news-6] |
-|      5     | 3.x, 4.x | 8.x, 9.x | ![ci-master] |    *Deprecated*   |
-|      4     | 3.x, 4.x | 8.x, 9.x | ![ci-master] | [2016/09][news-4] |
-|      3     | 2.x      | 7.x, 8.0 | ![ci-swift2] | [2015/10][news-3] |
-|      2     | 1.x      | 7.x      | Unsupported  | [2015/10][news-3] |
-|      1†    | *N/A*    | *        | ![ci-legacy] |         –         |
+| PromiseKit | Swift                   | Xcode    |   CI Status  |   Release Notes   |
+| ---------- | ----------------------- | -------- | ------------ | ----------------- |
+|      6     | 3.1, 3.2, 3.3, 4.x      | 8.3, 9.x | ![ci-master] | [2018/02][news-6] |
+|      5     | 3.1, 3.2, 3.3, 4.x      | 8.3, 9.x | *Deprecated* |       *n/a*       |
+|      4     | 3.0, 3.1, 3.2, 3.3, 4.x | 8.x, 9.x | ![ci-master] | [2016/09][news-4] |
+|      3     | 2.x                     | 7.x, 8.0 | ![ci-swift2] | [2015/10][news-3] |
+|      2     | 1.x                     | 7.x      | *Deprecated* | [2015/10][news-3] |
+|      1†    | *N/A*                   | *        | ![ci-legacy] |         –         |
                                      
 
 † PromiseKit 1 is pure Objective-C and thus can be used with any Xcode, it is
@@ -149,9 +149,13 @@ Then when you `pod update`, ensure you also update your submodules:
 
 # Release History
 
+## [6.0](https://github.com/mxcl/PromiseKit/releases/tag/6.0.0) Feb 13th, 2019
+
+* [PromiseKit 4 announcement post][news-6].
+
 ## [4.0](https://github.com/mxcl/PromiseKit/releases/tag/4.0.0)
 
-* [PromiseKit 4 announcement post](http://promisekit.org/news/2016/09/PromiseKit-4.0-Released/).
+* [PromiseKit 4 announcement post][news-4].
 
 ## [3.0](https://github.com/mxcl/PromiseKit/releases/tag/3.0.0) Oct 1st, 2015
 

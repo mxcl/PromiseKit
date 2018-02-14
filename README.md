@@ -49,8 +49,8 @@ target "Change Me!" do
 end
 ```
 
-PromiseKit 6, 5 and 4 support Xcode 8.1, 8.2, 8.3, 9.0, 9.1 and 9.2; Swift 3.0,
-3.1, 3.2, 4.0 and 4.1 ; iOS, macOS, tvOS, watchOS, Linux and Android; CocoaPods,
+PromiseKit 6, 5 and 4 support Xcode 8.3, 9.0, 9.1 and 9.2; Swift 3.1,
+3.2, 3.3, 4.0 and 4.1 ; iOS, macOS, tvOS, watchOS, Linux and Android; CocoaPods,
 Carthage and SwiftPM; ([CI Matrix](https://travis-ci.org/mxcl/PromiseKit)).
 
 For Carthage, SwiftPM, etc., or for instructions when using older Swifts or

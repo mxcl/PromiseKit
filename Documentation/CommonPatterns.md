@@ -128,7 +128,7 @@ avoiding throwing an error because you can’t be bothered to define a good glob
 
 ## Abstracting Away Asychronicity
 
-```switch
+```swift
 var fetch = API.fetch()
 
 override func viewDidAppear() {
@@ -288,10 +288,10 @@ func attempt<T>(interdelay: DispatchTimeInterval = .seconds(2), maxRepeat: Int =
     var attempts = 0
     func attempt() -> Promise<T> {
         attempts += 1
-        return body().recover { error in
+        return body().recover { error -> Promise<T> in
             guard attempts < maxRepeat else { throw error }
 
-            return after(interval: interdelay).then {
+            return after(interdelay).then {
                 attempt()
             }
         }
@@ -370,7 +370,7 @@ CLLocationManager.promise().then { locations in
 
 Sometimes you don’t want an error to cascade, instead you have a default value:
 
-```
+```swift
 CLLocationManager.promise().recover { error -> CLLocation in
     guard error == MyError.airplaneMode else {
         throw error

@@ -1,12 +1,5 @@
 import Dispatch
 
-
-//TODO fire off a message to the Queue's runloop to avoid zalgo
-// if no runloop, show warning about zalgo
-// in case of `nil` don't do that and also don't dispatch to queue later
-// in caes of `main` we can optimize and avoid a dispatch if we're on the main queue and zalgo was avoided
-
-
 public protocol Thenable: class {
     associatedtype T
     func pipe(to: @escaping(Result<T>) -> Void)
@@ -181,10 +174,10 @@ public extension Thenable where T: Sequence {
 
     func compactMap<U>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping(T.Iterator.Element) throws -> U?) -> Promise<[U]> {
         return map(on: on) { foo -> [U] in
-          #if swift(>=4.1)
-            return try foo.compactMap(transform) }
-          #else
+          #if !swift(>=3.3) || (swift(>=4) && !swift(>=4.1))
             return try foo.flatMap(transform)
+          #else
+            return try foo.compactMap(transform)
           #endif
         }
     }
