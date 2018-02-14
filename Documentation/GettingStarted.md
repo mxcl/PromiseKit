@@ -18,7 +18,7 @@ If this code used completion handlers it would look like this:
 login { creds, error in
     if let creds = creds {
         fetch(avatar: creds.user) { image, error in
-            if let image = image else {
+            if let image = image {
                 self.imageView = image
             }
         }
@@ -55,7 +55,7 @@ A `Promise` represents the future value of an asynchronous task. It has a type
 that represents the type of object it wraps. In the above example `login` is a
 function that returns a `Promise` that *will* represent an instance of `Creds`.
 
-> Note, `done` is new to PromiseKit 5, previously we had a `then` variant that
+> *Note* `done` is new to PromiseKit 5, previously we had a `then` variant that
 did not require a promise to be returned. The problem is, this often confused
 Swift leading to confusing and hard to debug error diagnostics, but also it made
 using PromiseKit more painful; introducing `done` makes it possible to type out
@@ -160,13 +160,13 @@ Here it would be trivial for somebody to amend this code and not unset the activ
 promises this is almost impossible, the Swift compiler will resist you supplementing the chain without promises, you
 almost won’t need to review the pull-requests.
 
-> Note PromiseKit has inconveniently switched between naming this function
+> *Note* PromiseKit has inconveniently switched between naming this function
 `always` and `ensure` multiple times. Sorry about this, we suck.
 
 
 # `when`
 
-With completion handlers reacting to multiple asycnhronous operations is either
+With completion handlers, reacting to multiple asynchronous operations is either
 slow or hard. Slow means doing it serially:
 
 ```swift
@@ -261,7 +261,7 @@ func fetch() -> Promise<String> {
 }
 ```
 
-You may provde the expanded version more readable:
+You may find the expanded version more readable:
 
 ```swift
 func fetch() -> Promise<String> {
@@ -278,22 +278,22 @@ methods for the common variety of completion handlers, and even some rarer
 situations thus making it really easy for you to add promises to your existing
 codebases.
 
-> Note we tried to make it so you could just do `Promise(fetch)` but we couldn’t
+> *Note* we tried to make it so you could just do `Promise(fetch)` but we couldn’t
 make this simpler pattern work for the wide variety of situations you encounter
 without making the 90% case easy to use and un-ambiguous for the Swift compiler.
 Sorry, we tried.
 
-> Note with PMK 4 this initializer provided two parameters to your closure,
+> *Note* with PMK 4 this initializer provided two parameters to your closure,
 `fulfill` and `reject`. PMK 5/6 provide an object that has a `fulfill` and
-`reject` method, but also many variants of the method `resolve`, you can
-typically just pass resolve to completion handler parameters and Swift figures
-out which one to use for you.
+`reject` method, but also many variants of the method `resolve`. Thus you can
+typically just pass `resolve` to completion handler parameters and Swift figures
+out which one to use for you (like the first example).
 
 
 # `Guarantee<T>`
 
-Since PromiseKit 5 we have provided `Guarantee` as a supplemently class to
-`Promise`. We do as a complement to Swift’s strong Error handling system.
+Since PromiseKit 5 we have provided `Guarantee` as a supplementary class to
+`Promise`. We do this as a complement to Swift’s strong Error handling system.
 
 Guarantees *never* fail, so they cannot be rejected. A good example is `after`:
 
@@ -307,8 +307,8 @@ firstly {
 
 Relatedly Swift *warns* you if you don’t terminate a `Promise` (ie. not
 `Guarantee`) chain, and the way we expect you to satisfy this warning is to
-either `catch` or `return` (where you will then have to `catch`) where you
-receive that promise.
+either `catch` or `return` (where you will then have to `catch` where you
+receive that promise).
 
 Thus use `Guarantee`s wherever possible to force yourself to write code that has
 error handling where required and not where not required.
@@ -327,10 +327,10 @@ another promise.
 an object or value type.
 
 `flatMap` provides you the result of the previous promise and requires you
-return an `Optional`, if you return `nil` the chain fails with
+return an `Optional`. If you return `nil` the chain fails with
 `PMKError.flatMap`.
 
-> *Rationale* before PromiseKit 4 `then` handled all these cases, and it was
+> *Rationale* before PromiseKit 4, `then` handled all these cases and it was
 painful. We imagined the pain would disappear with new Swift versions, however
 it has become clear the various pain-points are here to stay, and in fact, we,
 as library-authors, are expected to disambiguate at the naming level of our API.
@@ -350,7 +350,7 @@ firstly {
     //…
 }.catch { error in
     // Foundation.JSONError if JSON was badly formed
-    // PMKError.flatMap if JSON was not different type
+    // PMKError.flatMap if JSON was of different type
 }
 ```
 
@@ -373,7 +373,7 @@ firstly {
 
 # `tap`
 
-We provider `tap` for debugging, it is the same as `get` but provides the
+We provide `tap` for debugging, it is the same as `get` but provides the
 `Result<T>` of the Promise so you can inspect the value of the chain at this
 moment without any side-effects:
 
@@ -414,14 +414,13 @@ login().then { creds in
 
 Here is a key understanding: `login()` returns `Promise` and all `Promise` have a `then` function.
 
-Thus, indeed, `firstly` returns `Promise` and, indeed, `then` returns `Promise`, but don’t worry too much about these details. To start
-with learn the *patterns*, then, when you are ready to advance, learn the underlying architecture.
+Thus, indeed, `firstly` returns `Promise` and, indeed, `then` returns `Promise`, but don’t worry too much about these details. Learn the *patterns* to start with, then, when you are ready to advance, learn the underlying architecture.
 
 ## `when` variants
 
 `when` is one of PromiseKit’s more useful functions, and thus we offer several variants.
 
-* The default `when` and the one you should typically use is `when(fulfilled:)` this variant waits on all its promises, but if any fail, it fails, and thus the chain *rejects*. It is important to note that all promises in the when *continue*. Promises have *no* control over the tasks they represent, promises are merely are wrapper around tasks.
+* The default `when` and the one you should typically use is `when(fulfilled:)` this variant waits on all its promises, but if any fail, it fails, and thus the chain *rejects*. It is important to note that all promises in the when *continue*. Promises have *no* control over the tasks they represent, promises are merely a wrapper around tasks.
 * We provide `when(resolved:)`. This variant waits even if one or more of its promises fails, consequently the result of this promise is an array of `Result<T>`, and consequently this variant requires that all its promises have the same generic type. See our advanced patterns guide for work arounds for this limitation.
 * We provide `race`, this variant allows you to *race* several promises, whichever finishes first is the result. See our advanced patterns guide for typical usage.
 
@@ -449,12 +448,8 @@ However this is a blessing and a curse, as the Swift compiler often will fail
 to infer return types. See our [Troubleshooting Guide](Troubleshooting.md) if
 you require further assistance.
 
-> By adding `done` to PromiseKit 5 we have managed to avoid many of the common
-pain points in using PromiseKit and Swift. This was also our justification for
-making you specify `.pending` when using the Promise initializer (although this
-has been less successful as Swift will choose the `Promise(value:)` initializer
-if you don’t specify `.pending` which is our main reason for holding off on
-releasing version 5).
+> By adding `done` to PromiseKit 5 we have managed to avoid many of these common
+pain points in using PromiseKit and Swift.
 
 
 # Further Reading
