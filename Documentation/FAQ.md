@@ -1,5 +1,15 @@
 # FAQ
 
+## Why should I use PromiseKit over X-Promises-Foo?
+
+* PromiseKit has a heavy focus on **developer-experience**. You’re a developer, do you care about your experience? Yes? Then pick PromiseKit.
+* Do you care about having any bugs you find fixed? Then pick PromiseKit.
+* Do you care about having your input heard and reacted to in a fast fashion? Then pick PromiseKit.
+* Do you want a library that has been maintained continuously and passionately for 6 years? Then pick PromiseKit.
+* Do you want a library that the community has chosen to be their №1 Promises/Futures library? Then pick PromiseKit.
+* Do you want to be able to use Promises with Apple’s SDKs rather than have to do all the work of writing the Promise implementations yourself? Then pick PromiseKit.
+* Do you want to be able to use Promises with Swift 3.x, Swift 4.x, ObjC, iOS, tvOS, watchOS, macOS Android, & Linux? Then pick PromiseKit.
+
 ## Do I need to worry about retain cycles?
 
 Generally no, provided the promise completes then all handlers are released thus
