@@ -8,7 +8,7 @@
 * Do you want a library that has been maintained continuously and passionately for 6 years? Then pick PromiseKit.
 * Do you want a library that the community has chosen to be their №1 Promises/Futures library? Then pick PromiseKit.
 * Do you want to be able to use Promises with Apple’s SDKs rather than have to do all the work of writing the Promise implementations yourself? Then pick PromiseKit.
-* Do you want to be able to use Promises with Swift 3.x, Swift 4.x, ObjC, iOS, tvOS, watchOS, macOS Android, & Linux? Then pick PromiseKit.
+* Do you want to be able to use Promises with Swift 3.x, Swift 4.x, ObjC, iOS, tvOS, watchOS, macOS, Android & Linux? Then pick PromiseKit.
 
 ## Do I need to worry about retain cycles?
 
