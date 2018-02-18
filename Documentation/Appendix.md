@@ -67,3 +67,16 @@ return firstly {
     return items
 }
 ```
+
+# Background loaded member variables
+
+```swift
+class MyViewController: UIViewController {
+    private let ambience: Promise<AVAudioPlayer> = DispatchQueue.global().async(.promise) {
+        guard let asset = NSDataAsset(name: "CreepyPad") else { throw PMKError.badInput }
+        let player =  try AVAudioPlayer(data: asset.data)
+        player.prepareToPlay()
+        return player
+    }
+}
+```
