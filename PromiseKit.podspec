@@ -76,7 +76,7 @@ Pod::Spec.new do |s|
   s.subspec 'Bolts' do |ss|
     ss.source_files = 'Extensions/Bolts/Sources/*'
     ss.dependency 'PromiseKit/CorePromise'
-    ss.dependency 'Bolts', '~> 1.6.0'
+    ss.dependency 'Bolts', '~> 1.9.0'
     ss.ios.deployment_target = '8.0'
     ss.osx.deployment_target = '10.9'
     ss.watchos.deployment_target = '2.0'
