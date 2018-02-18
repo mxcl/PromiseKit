@@ -24,6 +24,9 @@ public enum PMKError: Error {
     case flatMap(Any, Any.Type)
 
     case compactMap(Any, Any.Type)
+
+    /// the lastValue or firstValue of a sequence was requested but the sequence was empty
+    case emptySequence
 }
 
 extension PMKError: CustomDebugStringConvertible {
@@ -41,6 +44,8 @@ extension PMKError: CustomDebugStringConvertible {
             return "Bad input was provided to a PromiseKit function"
         case .cancelled:
             return "The asynchronous sequence was cancelled"
+        case .emptySequence:
+            return "The first or last element was requested for an empty sequence"
         }
     }
 }

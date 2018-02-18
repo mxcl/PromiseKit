@@ -220,7 +220,7 @@ public extension Thenable where T: Collection {
             if let a1 = aa.first {
                 return a1
             } else {
-                throw PMKError.badInput
+                throw PMKError.emptySequence
             }
         }
     }
@@ -228,7 +228,7 @@ public extension Thenable where T: Collection {
     var lastValue: Promise<T.Iterator.Element> {
         return map(on: nil) { aa in
             if aa.isEmpty {
-                throw PMKError.badInput
+                throw PMKError.emptySequence
             } else {
                 let i = aa.index(aa.endIndex, offsetBy: -1)
                 return aa[i]
