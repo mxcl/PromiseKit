@@ -13,8 +13,8 @@ use `weak self` (and check for `self == nil`) to prevent any such side-effects.
 should be protected against are in fact *not* side-effects.
 
 Side-effects include: changes to global application state. They *do not* include
-chaging the view of a viewController. So protect against setting UserDefaults or
-modifying the application database, and don't bother protecting agsinst changing
+changing the view of a viewController. So, protect against setting UserDefaults or
+modifying the application database, and don't bother protecting against changing
 the text in a `UILabel`.
 
 [This stackoverflow question](https://stackoverflow.com/questions/39281214/should-i-use-weak-self-in-promisekit-blocks)
@@ -23,7 +23,7 @@ has some good discussion on the topic.
 ## Where should I put my `catch`?
 
 `catch` deliberately terminates the chain, you should place low in your promise
-hierarchy: at as root a point as possible. Typically this would be your view
+hierarchy: at as-root a point as possible. Typically this would be your view
 controllers where your `catch` can then display a message to the user.
 
 This means you should be writing one catch for many `then`s and be returning
@@ -55,8 +55,8 @@ You now have a branched chain. When `promise` resolves both chains receive its
 value. However the two chains are entirely separate and Swift will prompt you
 to ensure both have `catch` handlers.
 
-Probably however you can ignore the catch for one, but be careful in these
-situations as Swift cannot help you ensure your chains are error handled.
+Probably, however, you can ignore the catch for one, but be careful in these
+situations as Swift cannot help you ensure your chains are error-handled.
 
 ```
 promise.then {
@@ -114,7 +114,7 @@ DispatchQueue.default = zalgo
 PMKSetDefaultDispatchQueue(zalgo)
 ```
 
-Don’t leave this is on, we always dispatch to avoid you accidentally writing
+Don’t leave this on, we always dispatch to avoid you accidentally writing
 a common bug pattern: http://blog.izs.me/post/59142742143/designing-apis-for-asynchrony
 
 ## Where is `all()`?
