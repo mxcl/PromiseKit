@@ -202,7 +202,7 @@ public extension Thenable where T: Sequence {
     func thenFlatMap<U: Thenable>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping(T.Iterator.Element) throws -> U) -> Promise<[U.T.Iterator.Element]> where U.T: Sequence {
         return then(on: on) {
             when(fulfilled: try $0.map(transform))
-        }.map(on: on) {
+        }.map(on: nil) {
             $0.flatMap{ $0 }
         }
     }
