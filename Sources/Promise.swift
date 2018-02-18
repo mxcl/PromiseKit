@@ -94,10 +94,6 @@ public extension Promise {
         return self
     }
 
-    public func asVoid() -> Promise<Void> {
-        return map(on: nil) { _ in }
-    }
-    
     /**
      Blocks this thread, so you know, don’t call this on a serial thread that
      any part of your chain may use. Like the main thread for example.
