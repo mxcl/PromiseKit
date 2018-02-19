@@ -16,6 +16,7 @@ class StressTests: XCTestCase {
         waitForExpectations(timeout: 10, handler: nil)
     }
 
+    @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
     func testThensAreSequentialForLongTime() {
         var values = [Int]()
         let ex = expectation(description: "")

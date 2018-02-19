@@ -26,6 +26,7 @@ class PromiseTests: XCTestCase {
         XCTAssertFalse(Promise().isRejected)
     }
 
+    @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
     func testDispatchQueueAsyncExtensionReturnsPromise() {
         let ex = expectation(description: "")
 
@@ -40,6 +41,7 @@ class PromiseTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
+    @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
     func testDispatchQueueAsyncExtensionCanThrowInBody() {
         let ex = expectation(description: "")
 
