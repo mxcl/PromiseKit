@@ -41,7 +41,7 @@ class MyRestAPI {
     func user() -> Promise<User> {
         return firstly {
             URLSession.shared.dataTask(.promise, with: url)
-        }.flatMap {
+        }.compactMap {
             JSONSerialization.jsonObject(with: $0.data) as? [String: Any]
         }.then { dict in
             User(dict: dict)
@@ -51,7 +51,7 @@ class MyRestAPI {
     func avatar() -> Promise<UIImage> {
         return user().then { user in
             URLSession.shared.dataTask(.promise, with: user.imageUrl)
-        }.flatMap {
+        }.compactMap {
             UIImage(data: $0.data)
         }
     }
@@ -73,7 +73,7 @@ class MyRestAPI {
             user()
         }.then(on: bgq) { user in
             URLSession.shared.dataTask(.promise, with: user.imageUrl)
-        }.flatMap(on: bgq) {
+        }.compactMap(on: bgq) {
             UIImage(data: $0)
         }
     }
@@ -85,7 +85,7 @@ the handler executes upon. The default is always the main queue.
 
 PromiseKit is *entirely* thread safe.
 
-> *Tip* with caution you can have all `flatMap`, `then`, `map`, etc. run on
+> *Tip* with caution you can have all `then`, `map`, `compactMap`, etc. run on
 a background queue, see `PromiseKit.conf`. Note that we suggest only changing
 the queue for the `map` suite of functions, thus `done` and `catch` will
 continue to run on the main queue which is *usually* what you want.

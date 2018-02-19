@@ -13,7 +13,7 @@ more readable code. Your co-workers will thank you.
 ```swift
 UIApplication.shared.isNetworkActivityIndicatorVisible = true
 
-let fetchImage = URLSession.shared.dataTask(.promise, with: url).flatMap{ UIImage(data: $0.data) }
+let fetchImage = URLSession.shared.dataTask(.promise, with: url).compactMap{ UIImage(data: $0.data) }
 let fetchLocation = CLLocationManager.requestLocation()
 
 firstly {
@@ -116,7 +116,7 @@ firstly {
 // https://github.com/PromiseKit/OMGHTTPURLRQ
 firstly {
     URLSession.POST("http://example.com", JSON: params)
-}.flatMap {
+}.compactMap {
     try JSONDecoder().decoder(Foo.self, with: $0.data)
 }.done { foo in
     //…
@@ -128,7 +128,7 @@ firstly {
 // https://github.com/PromiseKit/Foundation
 firstly {
     URLSession.shared.dataTask(.promise, with: try makeRequest())
-}.flatMap {
+}.compactMap {
     try JSONDecoder().decode(Foo.self, with: $0.data)
 }.done { foo in
     //…
@@ -150,7 +150,7 @@ Nowadays, considering that:
 
 * We almost always POST JSON
 * We now have `JSONDecoder`
-* PromiseKit now has `flatMap`
+* PromiseKit now has `compactMap`
 
 We recommend vanilla `URLSession`; use less black-boxes, stick closer to the
 metal. Alamofire was essential until the three bulletpoints above became true,

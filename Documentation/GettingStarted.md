@@ -318,7 +318,7 @@ and we have gone to great lengths to try and ensure this, so please open
 tickets if you find an issue.
 
 
-# `map`, `flatMap`, etc.
+# `map`, `compactMap`, etc.
 
 `then` provides you the result of the previous promise and requires you return
 another promise.
@@ -326,9 +326,9 @@ another promise.
 `map` provides you the result of the previous promise and requires you return
 an object or value type.
 
-`flatMap` provides you the result of the previous promise and requires you
+`compactMap` provides you the result of the previous promise and requires you
 return an `Optional`. If you return `nil` the chain fails with
-`PMKError.flatMap`.
+`PMKError.compactMap`.
 
 > *Rationale* before PromiseKit 4, `then` handled all these cases and it was
 painful. We imagined the pain would disappear with new Swift versions, however
@@ -344,7 +344,7 @@ chains, eg:
 ```swift
 firstly {
     URLSession.shared.dataTask(.promise, with: rq)
-}.flatMap {
+}.compactMap {
     try JSONSerialization.jsonObject($0.data) as? [String]
 }.done { arrayOfStrings in
     //…
@@ -354,8 +354,8 @@ firstly {
 }
 ```
 
-> *Tip* we provide most of the other functional programming functions that
-`Swift` provides, eg. `filter`, `first`, `last`, etc. Use them!
+> *Tip* we provide most of the functional methods you would expect for sequences
+too! Eg. `map`, `thenMap`, `compactMapValues`, `firstValue`, etc.
 
 # `get`
 
