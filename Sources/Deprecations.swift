@@ -69,7 +69,7 @@ public extension Thenable where T: Sequence {
 public extension Thenable where T: Collection {
     @available(*, deprecated: 6.1, message: "See: `firstValue`")
     var first: Promise<T.Iterator.Element> {
-        fatalError()
+        return firstValue
     }
 
     @available(*, deprecated: 6.1, message: "See: `lastValue`")
