@@ -20,7 +20,10 @@ public enum PMKError: Error {
     case cancelled
 
     /// `nil` was returned from `flatMap`
+    @available(*, deprecated: 6.1, message: "See: compactMap")
     case flatMap(Any, Any.Type)
+
+    case compactMap(Any, Any.Type)
 }
 
 extension PMKError: CustomDebugStringConvertible {
@@ -28,6 +31,8 @@ extension PMKError: CustomDebugStringConvertible {
         switch self {
         case .flatMap(let obj, let type):
             return "Could not `flatMap<\(type)>`: \(obj)"
+        case .compactMap(let obj, let type):
+            return "Could not `compactMap<\(type)>`: \(obj)"
         case .invalidCallingConvention:
             return "A closure was called with an invalid calling convention, probably (nil, nil)"
         case .returnedSelf:
