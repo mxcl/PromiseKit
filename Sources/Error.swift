@@ -20,7 +20,7 @@ public enum PMKError: Error {
     case cancelled
 
     /// `nil` was returned from `flatMap`
-    @available(*, deprecated: 6.1, message: "See: compactMap")
+    @available(*, deprecated, message: "See: `compactMap`")
     case flatMap(Any, Any.Type)
 
     case compactMap(Any, Any.Type)
