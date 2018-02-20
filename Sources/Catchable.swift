@@ -114,19 +114,23 @@ public extension CatchMixin where T == Void {
         return rg
     }
 
-    func recover(on: DispatchQueue? = conf.Q.map, _ body: @escaping(Error) throws -> Void) -> Promise<Void> {
+    func recover(on: DispatchQueue? = conf.Q.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> Void) -> Promise<Void> {
         let rg = Promise<Void>(.pending)
         pipe {
             switch $0 {
             case .fulfilled:
                 rg.box.seal(.fulfilled(()))
             case .rejected(let error):
-                on.async {
-                    do {
-                        rg.box.seal(.fulfilled(try body(error)))
-                    } catch {
-                        rg.box.seal(.rejected(error))
+                if policy == .allErrors || !error.isCancelled {
+                    on.async {
+                        do {
+                            rg.box.seal(.fulfilled(try body(error)))
+                        } catch {
+                            rg.box.seal(.rejected(error))
+                        }
                     }
+                } else {
+                    rg.box.seal(.rejected(error))
                 }
             }
         }
