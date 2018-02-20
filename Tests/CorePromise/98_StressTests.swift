@@ -10,7 +10,7 @@ class StressTests: XCTestCase {
             promise.done { s in
                 XCTAssertEqual("ok", s)
                 return
-            }
+            }.silenceWarning()
         }, fulfill: { "ok" })
 
         waitForExpectations(timeout: 10, handler: nil)
@@ -44,7 +44,7 @@ class StressTests: XCTestCase {
         stressDataRace(expectation: e1, stressFunction: { promise in
             promise.done(on: nil) { s in
                 XCTAssertEqual("ok", s)
-            }
+            }.silenceWarning()
         }, fulfill: {
             return "ok"
         })

@@ -4,12 +4,18 @@ import XCTest
 class WhenTests: XCTestCase {
 
     func testEmpty() {
-        let e = expectation(description: "")
+        let e1 = expectation(description: "")
         let promises: [Promise<Void>] = []
         when(fulfilled: promises).done { _ in
-            e.fulfill()
-        }
-        waitForExpectations(timeout: 1, handler: nil)
+            e1.fulfill()
+        }.silenceWarning()
+
+        let e2 = expectation(description: "")
+        when(resolved: promises).done { _ in
+            e2.fulfill()
+        }.silenceWarning()
+
+        wait(for: [e1, e2], timeout: 1)
     }
 
     func testInt() {
@@ -26,7 +32,7 @@ class WhenTests: XCTestCase {
             XCTAssertEqual(x[3], 4)
             XCTAssertEqual(x.count, 4)
             e1.fulfill()
-        }
+        }.silenceWarning()
         waitForExpectations(timeout: 1, handler: nil)
     }
 
@@ -38,7 +44,7 @@ class WhenTests: XCTestCase {
             XCTAssertEqual(x, 1)
             XCTAssertEqual(y, "abc")
             e1.fulfill()
-        }
+        }.silenceWarning()
         waitForExpectations(timeout: 1, handler: nil)
     }
 
@@ -52,7 +58,7 @@ class WhenTests: XCTestCase {
             XCTAssertEqual("abc", v)
             XCTAssertEqual(1.0, w)
             e1.fulfill()
-        }
+        }.silenceWarning()
         waitForExpectations(timeout: 1, handler: nil)
     }
 
@@ -68,7 +74,7 @@ class WhenTests: XCTestCase {
             XCTAssertEqual(1.0, w)
             XCTAssertEqual(true, x)
             e1.fulfill()
-        }
+        }.silenceWarning()
         waitForExpectations(timeout: 1, handler: nil)
     }
 
@@ -86,7 +92,7 @@ class WhenTests: XCTestCase {
             XCTAssertEqual(true, x)
             XCTAssertEqual("a" as Character, y)
             e1.fulfill()
-        }
+        }.silenceWarning()
         waitForExpectations(timeout: 1, handler: nil)
     }
 
@@ -97,7 +103,7 @@ class WhenTests: XCTestCase {
         let p3 = Promise.value(3).done { _ in }
         let p4 = Promise.value(4).done { _ in }
 
-        when(fulfilled: p1, p2, p3, p4).done(e1.fulfill)
+        when(fulfilled: p1, p2, p3, p4).done(e1.fulfill).silenceWarning()
 
         waitForExpectations(timeout: 1, handler: nil)
     }
@@ -133,7 +139,7 @@ class WhenTests: XCTestCase {
         when(fulfilled: p1, p2, p3, p4).done { _ in
             XCTAssertEqual(progress.completedUnitCount, 1)
             ex.fulfill()
-        }
+        }.silenceWarning()
 
         progress.resignCurrent()
         
@@ -174,7 +180,7 @@ class WhenTests: XCTestCase {
 
         let q = DispatchQueue.main
         p1.done(on: q, finally)
-        p2.ensure(on: q, finally)
+        p2.ensure(on: q, finally).silenceWarning()
         p3.done(on: q, finally)
         p4.done(on: q, finally)
 
@@ -216,8 +222,8 @@ class WhenTests: XCTestCase {
             ex1.fulfill()
         }
 
-        p2.ensure { after(.milliseconds(100)).done(ex2.fulfill) }
-        p3.ensure { after(.milliseconds(100)).done(ex3.fulfill) }
+        p2.ensure { after(.milliseconds(100)).done(ex2.fulfill) }.silenceWarning()
+        p3.ensure { after(.milliseconds(100)).done(ex3.fulfill) }.silenceWarning()
 
         waitForExpectations(timeout: 1, handler: nil)
     }
@@ -240,5 +246,19 @@ class WhenTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 1)
+    }
+
+    func testGuaranteeWhen() {
+        let ex1 = expectation(description: "")
+        when(Guarantee(), Guarantee()).done {
+            ex1.fulfill()
+        }
+
+        let ex2 = expectation(description: "")
+        when(guarantees: [Guarantee(), Guarantee()]).done {
+            ex2.fulfill()
+        }
+
+        wait(for: [ex1, ex2], timeout: 10)
     }
 }

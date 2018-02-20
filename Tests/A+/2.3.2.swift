@@ -36,7 +36,7 @@ class Test232: XCTestCase {
                         promise.done {
                             XCTAssertEqual($0, sentinel)
                             expectation.fulfill()
-                        }
+                        }.silenceWarning()
                     }
                 }
                 describe("`x` is eventually-fulfilled") {
@@ -54,7 +54,7 @@ class Test232: XCTestCase {
                         promise.done {
                             XCTAssertEqual($0, sentinel)
                             expectation.fulfill()
-                        }
+                        }.silenceWarning()
                     }
                 }
             }

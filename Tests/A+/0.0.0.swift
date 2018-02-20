@@ -147,11 +147,15 @@ extension Promise {
             case .rejected:
                 onRejected()
             }
-        }
+        }.silenceWarning()
     }
 }
 
 prefix func ++(a: inout Int) -> Int {
     a += 1
     return a
+}
+
+extension Promise {
+    func silenceWarning() {}
 }

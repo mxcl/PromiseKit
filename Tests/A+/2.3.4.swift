@@ -11,7 +11,7 @@ class Test234: XCTestCase {
                 }.done { value in
                     XCTAssertEqual(value, 1)
                     exception.fulfill()
-                }
+                }.silenceWarning()
             }
             testRejected { promise, expectation, _ in
                 promise.recover { _ -> Promise<UInt32> in
@@ -19,7 +19,7 @@ class Test234: XCTestCase {
                 }.done { value in
                     XCTAssertEqual(value, 1)
                     expectation.fulfill()
-                }
+                }.silenceWarning()
             }
         }
     }

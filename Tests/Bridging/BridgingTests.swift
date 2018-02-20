@@ -69,7 +69,7 @@ class BridgingTests: XCTestCase {
         }.done { value in
             XCTAssertEqual(123, value as? Int)
             ex.fulfill()
-        }
+        }.silenceWarning()
 
         waitForExpectations(timeout: 1)
     }
@@ -83,7 +83,7 @@ class BridgingTests: XCTestCase {
                 ex.fulfill()
             }
             return Promise()
-        }
+        }.silenceWarning()
 
         waitForExpectations(timeout: 1)
     }
@@ -93,9 +93,9 @@ class BridgingTests: XCTestCase {
 
         PMKDummyAnyPromise_Manifold().then { obj -> Promise<Void> in
             defer { ex.fulfill() }
-            XCTAssertEqual(obj as? NSNumber, NSNumber(value: true), "\(obj) is not @YES")
+            XCTAssertEqual(obj as? NSNumber, NSNumber(value: true), "\(obj ?? "nil") is not @YES")
             return Promise()
-        }
+        }.silenceWarning()
 
         waitForExpectations(timeout: 1)
     }
@@ -106,7 +106,7 @@ class BridgingTests: XCTestCase {
         PMKDummyAnyPromise_YES().then { obj -> Promise<Void>  in
             ex.fulfill()
             return Promise()
-        }
+        }.silenceWarning()
 
         waitForExpectations(timeout: 1)
     }
@@ -145,7 +145,7 @@ class BridgingTests: XCTestCase {
             PMKDummyAnyPromise_YES()
         }.done { _ in
             ex.fulfill()
-        }
+        }.silenceWarning()
         waitForExpectations(timeout: 1)
     }
 
@@ -162,7 +162,7 @@ class BridgingTests: XCTestCase {
         }.done { value in
             XCTAssertEqual(value, 2)
             ex.fulfill()
-        }
+        }.silenceWarning()
 
         waitForExpectations(timeout: 1)
     }
@@ -180,7 +180,7 @@ class BridgingTests: XCTestCase {
         }.done { obj in
             XCTAssertEqual(obj as? Int, 2)
             ex.fulfill()
-        }
+        }.silenceWarning()
 
         waitForExpectations(timeout: 1)
     }
@@ -198,7 +198,7 @@ class BridgingTests: XCTestCase {
         }.done { value in
             XCTAssertEqual(value, 2)
             ex.fulfill()
-        }
+        }.silenceWarning()
 
         waitForExpectations(timeout: 1, handler: nil)
     }
@@ -212,7 +212,7 @@ class BridgingTests: XCTestCase {
         }.done { x in
             XCTAssertEqual(x as? Int, 1)
             ex.fulfill()
-        }
+        }.silenceWarning()
         waitForExpectations(timeout: 1, handler: nil)
     }
 
@@ -239,4 +239,8 @@ class BridgingTests: XCTestCase {
 
 private enum Error: Swift.Error {
     case dummy
+}
+
+extension Promise {
+    func silenceWarning() {}
 }

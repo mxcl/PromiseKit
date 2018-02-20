@@ -12,25 +12,25 @@ class Test226: XCTestCase {
                             XCTAssertEqual($0, sentinel)
                             XCTAssertEqual(++orderValidator, 1)
                             exes[0].fulfill()
-                        }
+                        }.silenceWarning()
                         promise.catch { _ in XCTFail() }
                         promise.done {
                             XCTAssertEqual($0, sentinel)
                             XCTAssertEqual(++orderValidator, 2)
                             exes[1].fulfill()
-                        }
+                        }.silenceWarning()
                         promise.catch { _ in XCTFail() }
                         promise.done {
                             XCTAssertEqual($0, sentinel)
                             XCTAssertEqual(++orderValidator, 3)
                             exes[2].fulfill()
-                        }
+                        }.silenceWarning()
                         promise.catch { _ in XCTFail() }
                         promise.done {
                             XCTAssertEqual($0, sentinel)
                             XCTAssertEqual(++orderValidator, 4)
                             exes[3].fulfill()
-                        }
+                        }.silenceWarning()
                     }
                 }
                 describe("multiple fulfillment handlers, one of which throws") {
@@ -40,26 +40,26 @@ class Test226: XCTestCase {
                             XCTAssertEqual($0, sentinel)
                             XCTAssertEqual(++orderValidator, 1)
                             exes[0].fulfill()
-                        }
+                        }.silenceWarning()
                         promise.catch { _ in XCTFail() }
                         promise.done {
                             XCTAssertEqual($0, sentinel)
                             XCTAssertEqual(++orderValidator, 2)
                             exes[1].fulfill()
-                        }
+                        }.silenceWarning()
                         promise.catch { _ in XCTFail() }
                         promise.done {
                             XCTAssertEqual($0, sentinel)
                             XCTAssertEqual(++orderValidator, 3)
                             exes[2].fulfill()
                             throw Error.dummy
-                        }
+                        }.silenceWarning()
                         promise.catch { value in XCTFail() }
                         promise.done {
                             XCTAssertEqual($0, sentinel)
                             XCTAssertEqual(++orderValidator, 4)
                             exes[3].fulfill()
-                        }
+                        }.silenceWarning()
                     }
                 }
                 describe("results in multiple branching chains with their own fulfillment values") {
@@ -73,7 +73,7 @@ class Test226: XCTestCase {
                         }.done { value in
                             XCTAssertEqual(sentinel1, value)
                             exes[0].fulfill()
-                        }
+                        }.silenceWarning()
 
                         promise.done { _ in
                             throw NSError(domain: PMKErrorDomain, code: sentinel2, userInfo: nil)
@@ -87,7 +87,7 @@ class Test226: XCTestCase {
                         }.done {
                             XCTAssertEqual($0, sentinel3)
                             exes[2].fulfill()
-                        }
+                        }.silenceWarning()
                     }
                 }
                 describe("`onFulfilled` handlers are called in the original order") {
@@ -97,15 +97,15 @@ class Test226: XCTestCase {
                         promise.done { _ in
                             XCTAssertEqual(++orderValidator, 1)
                             exes[0].fulfill()
-                        }
+                        }.silenceWarning()
                         promise.done { _ in
                             XCTAssertEqual(++orderValidator, 2)
                             exes[1].fulfill()
-                        }
+                        }.silenceWarning()
                         promise.done { _ in
                             XCTAssertEqual(++orderValidator, 3)
                             exes[2].fulfill()
-                        }
+                        }.silenceWarning()
                     }
                 }
                 describe("even when one handler is added inside another handler") {
@@ -119,13 +119,13 @@ class Test226: XCTestCase {
                                 XCTAssertEqual(x, 2)
                                 x += 1
                                 exes[1].fulfill()
-                            }
-                        }
+                            }.silenceWarning()
+                        }.silenceWarning()
                         promise.done { _ in
                             XCTAssertEqual(x, 1)
                             x += 1
                             exes[2].fulfill()
-                        }
+                        }.silenceWarning()
                     }
                 }
             }
@@ -139,19 +139,19 @@ class Test226: XCTestCase {
                             XCTAssertEqual(++ticket, 1)
                             exes[0].fulfill()
                         }
-                        promise.done { _ in XCTFail() }
+                        promise.done { _ in XCTFail() }.silenceWarning()
                         promise.catch { err in
                             guard case Error.sentinel(let x) = err, x == sentinel else { return XCTFail() }
                             XCTAssertEqual(++ticket, 2)
                             exes[1].fulfill()
                         }
-                        promise.done { _ in XCTFail() }
+                        promise.done { _ in XCTFail() }.silenceWarning()
                         promise.catch { err in
                             guard case Error.sentinel(let x) = err, x == sentinel else { return XCTFail() }
                             XCTAssertEqual(++ticket, 3)
                             exes[2].fulfill()
                         }
-                        promise.done { _ in XCTFail() }
+                        promise.done { _ in XCTFail() }.silenceWarning()
                         promise.catch { err in
                             guard case Error.sentinel(let x) = err, x == sentinel else { return XCTFail() }
                             XCTAssertEqual(++ticket, 4)
@@ -168,13 +168,13 @@ class Test226: XCTestCase {
                             XCTAssertEqual(++orderValidator, 1)
                             exes[0].fulfill()
                         }
-                        promise.done { _ in XCTFail() }
+                        promise.done { _ in XCTFail() }.silenceWarning()
                         promise.catch { err in
                             guard case Error.sentinel(let x) = err, x == sentinel else { return XCTFail() }
                             XCTAssertEqual(++orderValidator, 2)
                             exes[1].fulfill()
                         }
-                        promise.done { _ in XCTFail() }
+                        promise.done { _ in XCTFail() }.silenceWarning()
                         promise.recover { err -> Promise<UInt32> in
                             if case Error.sentinel(let x) = err {
                                 XCTAssertEqual(x, sentinel)
@@ -184,8 +184,8 @@ class Test226: XCTestCase {
                             XCTAssertEqual(++orderValidator, 3)
                             exes[2].fulfill()
                             throw Error.dummy
-                        }
-                        promise.done { _ in XCTFail() }
+                        }.silenceWarning()
+                        promise.done { _ in XCTFail() }.silenceWarning()
                         promise.catch { err in
                             guard case Error.sentinel(let x) = err, x == sentinel else { return XCTFail() }
                             XCTAssertEqual(++orderValidator, 4)

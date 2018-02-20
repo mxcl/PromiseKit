@@ -119,6 +119,15 @@ class CancellationTests: XCTestCase {
         XCTAssertTrue(LocalError.cancel.isCancelled)
         XCTAssertTrue((LocalError.cancel as NSError).isCancelled)
     }
+
+#if swift(>=3.2)
+    func testIsCancelled() {
+        XCTAssertTrue(PMKError.cancelled.isCancelled)
+        XCTAssertTrue(NSError(domain: NSURLErrorDomain, code: URLError.cancelled.rawValue, userInfo: nil).isCancelled)
+        XCTAssertTrue(NSError(domain: NSCocoaErrorDomain, code: CocoaError.userCancelled.rawValue, userInfo: nil).isCancelled)
+        XCTAssertFalse(NSError(domain: NSCocoaErrorDomain, code: CocoaError.coderInvalidValue.rawValue, userInfo: nil).isCancelled)
+    }
+#endif
 }
 
 private enum LocalError: CancellableError {

@@ -6,7 +6,7 @@ class ZalgoTests: XCTestCase {
         var resolved = false
         Promise.value(1).done(on: nil) { _ in
             resolved = true
-        }
+        }.silenceWarning()
         XCTAssertTrue(resolved)
     }
 
@@ -21,7 +21,7 @@ class ZalgoTests: XCTestCase {
         let (p2, seal) = Promise<Int>.pending()
         p2.done(on: nil) { _ in
             x = 1
-        }
+        }.silenceWarning()
         XCTAssertEqual(x, 0)
         
         seal.fulfill(1)
@@ -55,7 +55,7 @@ class ZalgoTests: XCTestCase {
         p1.then(on: nil) { _ -> Promise<Int> in
             ex.fulfill()
             return p1
-        }
+        }.silenceWarning()
         waitForExpectations(timeout: 1)
     }
 }

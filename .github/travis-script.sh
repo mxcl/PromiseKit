@@ -6,7 +6,7 @@ set -x # echo commands
 
 case $PLAT in
 iOS|tvOS|macOS)
-  xcodebuild -scheme PromiseKit SWIFT_VERSION=$SWFT -destination "$DST" -enableCodeCoverage YES test;;
+  xcodebuild -scheme PromiseKit SWIFT_VERSION=$SWFT -destination "$DST" test;;
 *)
   ;;
 esac

@@ -23,7 +23,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             if numbers == squareNumbers {
                 e.fulfill()
             }
-        }
+        }.silenceWarning()
 
         waitForExpectations(timeout: 3, handler: nil)
     }
@@ -35,12 +35,11 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             return nil
         }
 
-        when(fulfilled: generator, concurrently: 5)
-            .done { numbers in
-                if numbers.count == 0 {
-                    e.fulfill()
-                }
-        }
+        when(fulfilled: generator, concurrently: 5).done { numbers in
+            if numbers.count == 0 {
+                e.fulfill()
+            }
+        }.silenceWarning()
 
         waitForExpectations(timeout: 1, handler: nil)
     }
@@ -112,7 +111,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
         when(fulfilled: generator, concurrently: expectedConcurrently).done { _ in
             XCTAssertEqual(expectedConcurrently, maxConcurrently)
             e.fulfill()
-        }
+        }.silenceWarning()
 
         waitForExpectations(timeout: 3)
     }

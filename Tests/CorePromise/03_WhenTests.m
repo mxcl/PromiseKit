@@ -249,4 +249,17 @@
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
+- (void)test_when_nil {
+    NSArray *foo = nil;
+    NSError *err = PMKWhen(foo).value;
+    XCTAssertEqual(err.domain, PMKErrorDomain);
+    XCTAssertEqual(err.code, PMKInvalidUsageError);
+}
+
+
+- (void)test_when_bad_input {
+    id foo = @"a";
+    XCTAssertEqual(PMKWhen(foo).value, foo);
+}
+
 @end

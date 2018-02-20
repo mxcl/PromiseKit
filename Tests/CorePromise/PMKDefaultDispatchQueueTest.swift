@@ -30,7 +30,7 @@ class PMKDefaultDispatchQueueTest: XCTestCase {
             ex.fulfill()
             XCTAssertFalse(Thread.isMainThread)
             return Promise()
-        }
+        }.silenceWarning()
 
         XCTAssertTrue(Thread.isMainThread)
 
@@ -56,10 +56,15 @@ class PMKDefaultDispatchQueueTest: XCTestCase {
         Promise.value(1).ensure {
             ex.fulfill()
             XCTAssertFalse(Thread.isMainThread)
-        }
+        }.silenceWarning()
 
         XCTAssertTrue(Thread.isMainThread)
 
         waitForExpectations(timeout: 1)
     }
+}
+
+
+extension Promise {
+    func silenceWarning() {}
 }

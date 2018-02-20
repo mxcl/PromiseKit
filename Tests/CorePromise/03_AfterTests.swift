@@ -12,7 +12,7 @@ class AfterTests: XCTestCase {
         waitForExpectations(timeout: 2, handler: nil)
 
         let ex4 = expectation(description: "")
-        __PMKAfter(0).done{ _ in ex4.fulfill() }
+        __PMKAfter(0).done{ _ in ex4.fulfill() }.silenceWarning()
         waitForExpectations(timeout: 2, handler: nil)
     }
 
@@ -26,7 +26,7 @@ class AfterTests: XCTestCase {
         waitForExpectations(timeout: 2, handler: nil)
 
         let ex4 = expectation(description: "")
-        __PMKAfter(-1).done{ _ in ex4.fulfill() }
+        __PMKAfter(-1).done{ _ in ex4.fulfill() }.silenceWarning()
         waitForExpectations(timeout: 2, handler: nil)
     }
 
@@ -40,7 +40,7 @@ class AfterTests: XCTestCase {
         waitForExpectations(timeout: 2, handler: nil)
 
         let ex4 = expectation(description: "")
-        __PMKAfter(1).done{ _ in ex4.fulfill() }
+        __PMKAfter(1).done{ _ in ex4.fulfill() }.silenceWarning()
         waitForExpectations(timeout: 2, handler: nil)
     }
 }

@@ -80,4 +80,11 @@
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
+- (void)test_join_nil {
+    NSArray *foo = nil;
+    NSError *err = PMKJoin(foo).value;
+    XCTAssertEqual(err.domain, PMKErrorDomain);
+    XCTAssertEqual(err.code, PMKInvalidUsageError);
+}
+
 @end

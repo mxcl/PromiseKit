@@ -2,7 +2,7 @@ import PromiseKit
 import XCTest
 
 class WrapTests: XCTestCase {
-    class KittenFetcher {
+    fileprivate class KittenFetcher {
         let value: Int?
         let error: Error?
 
@@ -16,26 +16,40 @@ class WrapTests: XCTestCase {
                 block(self.value, self.error)
             }
         }
+
+        func fetchWithCompletionBlock2(block: @escaping(Error?, Int?) -> Void) {
+            after(.milliseconds(20)).done {
+                block(self.error, self.value)
+            }
+        }
+
+        func fetchWithCompletionBlock3(block: @escaping(Int, Error?) -> Void) {
+            after(.milliseconds(20)).done {
+                block(self.value ?? -99, self.error)
+            }
+        }
+
+        func fetchWithCompletionBlock4(block: @escaping(Error?) -> Void) {
+            after(.milliseconds(20)).done {
+                block(self.error)
+            }
+        }
     }
 
     func testSuccess() {
         let ex = expectation(description: "")
         let kittenFetcher = KittenFetcher(value: 2, error: nil)
-        let promise = Promise { seal in
+        Promise { seal in
             kittenFetcher.fetchWithCompletionBlock(block: seal.resolve)
         }.done {
             XCTAssertEqual($0, 2)
             ex.fulfill()
-        }
+        }.silenceWarning()
 
         waitForExpectations(timeout: 1)
     }
 
     func testError() {
-        enum Error: Swift.Error {
-            case test
-        }
-
         let ex = expectation(description: "")
 
         let kittenFetcher = KittenFetcher(value: nil, error: Error.test)
@@ -52,10 +66,6 @@ class WrapTests: XCTestCase {
     }
 
     func testInvalidCallingConvention() {
-        enum Error: Swift.Error {
-            case test
-        }
-
         let ex = expectation(description: "")
 
         let kittenFetcher = KittenFetcher(value: nil, error: nil)
@@ -70,4 +80,87 @@ class WrapTests: XCTestCase {
 
         waitForExpectations(timeout: 1)
     }
+
+    func testInvertedCallingConvention() {
+        let ex = expectation(description: "")
+        let kittenFetcher = KittenFetcher(value: 2, error: nil)
+        Promise { seal in
+            kittenFetcher.fetchWithCompletionBlock2(block: seal.resolve)
+        }.done {
+            XCTAssertEqual($0, 2)
+            ex.fulfill()
+        }.silenceWarning()
+
+        waitForExpectations(timeout: 1)
+
+    }
+
+    func testNonOptionalFirstParameter() {
+        let ex1 = expectation(description: "")
+        let kf1 = KittenFetcher(value: 2, error: nil)
+        Promise { seal in
+            kf1.fetchWithCompletionBlock3(block: seal.resolve)
+        }.done {
+            XCTAssertEqual($0, 2)
+            ex1.fulfill()
+        }.silenceWarning()
+
+        let ex2 = expectation(description: "")
+        let kf2 = KittenFetcher(value: -100, error: Error.test)
+        Promise { seal in
+            kf2.fetchWithCompletionBlock3(block: seal.resolve)
+        }.catch { _ in ex2.fulfill() }
+
+        wait(for: [ex1, ex2] ,timeout: 1)
+    }
+
+#if swift(>=3.1)
+    func testVoidCompletionValue() {
+        let ex1 = expectation(description: "")
+        let kf1 = KittenFetcher(value: nil, error: nil)
+        Promise { seal in
+            kf1.fetchWithCompletionBlock4(block: seal.resolve)
+        }.done(ex1.fulfill).silenceWarning()
+
+        let ex2 = expectation(description: "")
+        let kf2 = KittenFetcher(value: nil, error: Error.test)
+        Promise { seal in
+            kf2.fetchWithCompletionBlock4(block: seal.resolve)
+        }.catch { _ in ex2.fulfill() }
+
+        wait(for: [ex1, ex2], timeout: 1)
+    }
+#endif
+
+    func testIsFulfilled() {
+        XCTAssertTrue(Promise.value(()).result?.isFulfilled ?? false)
+        XCTAssertFalse(Promise<Int>(error: Error.test).result?.isFulfilled ?? true)
+    }
+
+    func testPendingPromiseDeallocated() {
+
+        // NOTE this doesn't seem to register the `deinit` as covered :(
+        // BUT putting a breakpoint in the deinit CLEARLY shows it getting covered…
+
+        class Foo {
+            let p = Promise<Void>.pending()
+            var ex: XCTestExpectation!
+
+            deinit {
+                after(.milliseconds(100)).done(ex.fulfill)
+            }
+        }
+
+        let ex = expectation(description: "")
+        autoreleasepool {
+            // for code coverage report for `Resolver.deinit` warning
+            let foo = Foo()
+            foo.ex = ex
+        }
+        wait(for: [ex], timeout: 10)
+    }
+}
+
+private enum Error: Swift.Error {
+    case test
 }

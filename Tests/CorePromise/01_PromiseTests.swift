@@ -64,27 +64,32 @@ class PromiseTests: XCTestCase {
         XCTAssertEqual("\(Promise<Int>.pending().promise)", "Promise(…Int)")
         XCTAssertEqual("\(Promise.value(3))", "Promise(3)")
         XCTAssertEqual("\(Promise<Void>(error: Error.dummy))", "Promise(dummy)")
+
+        XCTAssertEqual("\(AnyPromise(Promise<Int>.pending().promise))", "AnyPromise(…)")
+        XCTAssertEqual("\(AnyPromise(Promise.value(1)))", "AnyPromise(1)")
+        XCTAssertEqual("\(AnyPromise(Promise<Int?>.value(nil)))", "AnyPromise(nil)")
     }
 
     func testCannotFulfillWithError() {
-        let foo = Promise { seal in
+
+        // sadly this test proves the opposite :(
+        // left here so maybe one day we can prevent instantiation of `Promise<Error>`
+
+        _ = Promise { seal in
             seal.fulfill(Error.dummy)
         }
 
-        let bar = Promise<Error>.pending()
+        _ = Promise<Error>.pending()
 
-        let baz = Promise.value(Error.dummy)
+        _ = Promise.value(Error.dummy)
 
-        let bad = Promise().done { Error.dummy }
+        _ = Promise().map { Error.dummy }
     }
 
 #if swift(>=3.1)
     func testCanMakeVoidPromise() {
-        let promise = Promise()
-        XCTAssert(promise.value is Optional<Void>)
-
-        let guarantee = Guarantee()
-        XCTAssert(guarantee.value is Optional<Void>)
+        _ = Promise()
+        _ = Guarantee()
     }
 #endif
 
@@ -99,5 +104,51 @@ class PromiseTests: XCTestCase {
         XCTAssertTrue(p.isRejected)
         guard let err = p.error, case Error.dummy = err else { return XCTFail() }
     }
-}
 
+    func testThrowsInFirstly() {
+        let ex = expectation(description: "")
+
+        firstly { () -> Promise<Int> in
+            throw Error.dummy
+        }.catch {
+            XCTAssertEqual($0 as? Error, Error.dummy)
+            ex.fulfill()
+        }
+
+        wait(for: [ex], timeout: 10)
+    }
+
+    func testWait() throws {
+        let p = after(.milliseconds(100)).then(on: nil){ Promise.value(1) }
+        XCTAssertEqual(try p.wait(), 1)
+
+        do {
+            let p = after(.milliseconds(100)).map(on: nil){ throw Error.dummy }
+            try p.wait()
+            XCTFail()
+        } catch {
+            XCTAssertEqual(error as? Error, Error.dummy)
+        }
+    }
+
+    @available(macOS 10.10, iOS 8.0, tvOS 9.0, watchOS 2.0, *)
+    func testAsyncThrows() {
+        let ex = expectation(description: "")
+        DispatchQueue.global().async(.promise) {
+            throw Error.dummy
+        }.catch {
+            XCTAssertEqual($0 as? Error, Error.dummy)
+            ex.fulfill()
+        }
+        wait(for: [ex], timeout: 10)
+    }
+
+    func testPipeForResolved() {
+        let ex = expectation(description: "")
+        Promise.value(1).done {
+            XCTAssertEqual(1, $0)
+            ex.fulfill()
+        }.silenceWarning()
+        wait(for: [ex], timeout: 10)
+    }
+}
