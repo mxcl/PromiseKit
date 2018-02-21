@@ -215,11 +215,6 @@ extension CatchableTests {
     }
 }
 
-
-//MARK: Helpers
-
-private typealias EquatableError = Swift.Error & Equatable
-
 private enum Error: CancellableError {
     case dummy
     case cancelled
@@ -227,8 +222,4 @@ private enum Error: CancellableError {
     var isCancelled: Bool {
         return self == Error.cancelled
     }
-}
-
-extension Promise {
-    func silenceWarning() {}
 }

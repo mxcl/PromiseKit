@@ -1,26 +1,27 @@
 import PromiseKit
+import Dispatch
 import XCTest
 
 class PromiseTests: XCTestCase {
-    func testPending() {
+    func testIsPending() {
         XCTAssertTrue(Promise<Void>.pending().promise.isPending)
         XCTAssertFalse(Promise().isPending)
         XCTAssertFalse(Promise<Void>(error: Error.dummy).isPending)
     }
 
-    func testResolved() {
+    func testIsResolved() {
         XCTAssertFalse(Promise<Void>.pending().promise.isResolved)
         XCTAssertTrue(Promise().isResolved)
         XCTAssertTrue(Promise<Void>(error: Error.dummy).isResolved)
     }
 
-    func testFulfilled() {
+    func testIsFulfilled() {
         XCTAssertFalse(Promise<Void>.pending().promise.isFulfilled)
         XCTAssertTrue(Promise().isFulfilled)
         XCTAssertFalse(Promise<Void>(error: Error.dummy).isFulfilled)
     }
 
-    func testRejected() {
+    func testIsRejected() {
         XCTAssertFalse(Promise<Void>.pending().promise.isRejected)
         XCTAssertTrue(Promise<Void>(error: Error.dummy).isRejected)
         XCTAssertFalse(Promise().isRejected)

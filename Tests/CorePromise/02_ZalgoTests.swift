@@ -30,19 +30,17 @@ class ZalgoTests: XCTestCase {
 
     // returning a pending promise from its own zalgo’d then handler doesn’t hang
     func test3() {
-        autoreleasepool {
-            let ex = (expectation(description: ""), expectation(description: ""))
+        let ex = (expectation(description: ""), expectation(description: ""))
 
-            var p1: Promise<Void>!
-            p1 = after(.milliseconds(100)).then(on: nil) { _ -> Promise<Void> in
-                ex.0.fulfill()
-                return p1
-            }
+        var p1: Promise<Void>!
+        p1 = after(.milliseconds(100)).then(on: nil) { _ -> Promise<Void> in
+            ex.0.fulfill()
+            return p1
+        }
 
-            p1.catch { err in
-                defer{ ex.1.fulfill() }
-                guard case PMKError.returnedSelf = err else { return XCTFail() }
-            }
+        p1.catch { err in
+            defer{ ex.1.fulfill() }
+            guard case PMKError.returnedSelf = err else { return XCTFail() }
         }
 
         waitForExpectations(timeout: 1)

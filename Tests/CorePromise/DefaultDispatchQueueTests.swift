@@ -8,6 +8,7 @@
 
 import class Foundation.Thread
 import PromiseKit
+import Dispatch
 import XCTest
 
 private enum Error: Swift.Error { case dummy }
@@ -21,6 +22,10 @@ class PMKDefaultDispatchQueueTest: XCTestCase {
         // can actually only set the default queue once
         // - See: PMKSetDefaultDispatchQueue
         conf.Q = (myQueue, myQueue)
+    }
+
+    override func tearDown() {
+        conf.Q = (.main, .main)
     }
 
     func testOverrodeDefaultThenQueue() {

@@ -235,6 +235,28 @@ class BridgingTests: XCTestCase {
 
         XCTAssertEqual(p.value, q.value)
     }
+
+    /// testing NSError to Error for cancelledError types
+    func testErrorCancellationBridging() {
+        let ex = expectation(description: "")
+
+        let p = Promise().done {
+            throw LocalError.cancel as NSError
+        }
+        p.catch { _ in
+            XCTFail()
+        }
+        p.catch(policy: .allErrors) {
+            XCTAssertTrue($0.isCancelled)
+            ex.fulfill()
+        }
+        waitForExpectations(timeout: 1)
+
+        // here we verify that Swift’s NSError bridging works as advertised
+
+        XCTAssertTrue(LocalError.cancel.isCancelled)
+        XCTAssertTrue((LocalError.cancel as NSError).isCancelled)
+    }
 }
 
 private enum Error: Swift.Error {
@@ -243,4 +265,16 @@ private enum Error: Swift.Error {
 
 extension Promise {
     func silenceWarning() {}
+}
+
+private enum LocalError: CancellableError {
+    case notCancel
+    case cancel
+
+    var isCancelled: Bool {
+        switch self {
+        case .notCancel: return false
+        case .cancel: return true
+        }
+    }
 }

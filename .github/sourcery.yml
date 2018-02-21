@@ -1,0 +1,12 @@
+sources:
+  include:
+    - ../Tests/A+
+    - ../Tests/CorePromise
+  exclude:
+    - ../Tests/A+/0.0.0.swift
+    - ../Tests/CorePromise/Utilities.swift
+templates:
+  include:
+    - LinuxMain.stencil
+output:
+  ../Tests/LinuxMain.swift
