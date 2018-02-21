@@ -239,8 +239,14 @@ extension Promise {
 
 #if os(Linux)
 extension XCTestCase {
-    func wait(for: [XCTestExpectation], timeout: TimeInterval, file: StaticString = #file, line: Int = #line) {
+    func wait(for: [XCTestExpectation], timeout: TimeInterval, file: StaticString = #file, line: UInt = #line) {
         waitForExpectations(timeout: timeout, file: file, line: line)
+    }
+}
+
+extension XCTestExpectation {
+    func fulfill() {
+        fulfill(#file, line: #line)
     }
 }
 #endif
