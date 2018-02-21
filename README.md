@@ -18,13 +18,13 @@ let fetchLocation = CLLocationManager.requestLocation()
 
 firstly {
     when(fulfilled: fetchImage, fetchLocation)
-}.done { image, location in
-    self.imageView.image = image
-    self.label.text = "\(location)"
+}.done { [weak self] image, location in
+    self?.imageView.image = image
+    self?.label.text = "\(location)"
 }.ensure {
     UIApplication.shared.isNetworkActivityIndicatorVisible = false
-}.catch { error in
-    self.show(UIAlertController(for: error), sender: self)
+}.catch { [weak self] error in
+    self?.show(UIAlertController(for: error), sender: self)
 }
 ```
 
