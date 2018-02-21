@@ -152,7 +152,7 @@ class WrapTests: XCTestCase {
         }
 
         let ex = expectation(description: "")
-        autoreleasepool {
+        do {
             // for code coverage report for `Resolver.deinit` warning
             let foo = Foo()
             foo.ex = ex
