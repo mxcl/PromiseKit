@@ -76,7 +76,7 @@ class Test226: XCTestCase {
                         }.silenceWarning()
 
                         promise.done { _ in
-                            throw NSError(domain: PMKErrorDomain, code: sentinel2, userInfo: nil)
+                            throw NSError(domain: NSCocoaErrorDomain, code: sentinel2, userInfo: nil)
                         }.catch { err in
                             XCTAssertEqual((err as NSError).code, sentinel2)
                             exes[1].fulfill()

@@ -63,8 +63,3 @@ class PMKDefaultDispatchQueueTest: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 }
-
-
-extension Promise {
-    func silenceWarning() {}
-}

@@ -65,9 +65,11 @@ class PromiseTests: XCTestCase {
         XCTAssertEqual("\(Promise.value(3))", "Promise(3)")
         XCTAssertEqual("\(Promise<Void>(error: Error.dummy))", "Promise(dummy)")
 
+    #if !SWIFT_PACKAGE
         XCTAssertEqual("\(AnyPromise(Promise<Int>.pending().promise))", "AnyPromise(…)")
         XCTAssertEqual("\(AnyPromise(Promise.value(1)))", "AnyPromise(1)")
         XCTAssertEqual("\(AnyPromise(Promise<Int?>.value(nil)))", "AnyPromise(nil)")
+    #endif
     }
 
     func testCannotFulfillWithError() {
@@ -105,7 +107,7 @@ class PromiseTests: XCTestCase {
         guard let err = p.error, case Error.dummy = err else { return XCTFail() }
     }
 
-    func testThrowsInFirstly() {
+    func testThrowInFirstly() {
         let ex = expectation(description: "")
 
         firstly { () -> Promise<Int> in
@@ -129,18 +131,6 @@ class PromiseTests: XCTestCase {
         } catch {
             XCTAssertEqual(error as? Error, Error.dummy)
         }
-    }
-
-    @available(macOS 10.10, iOS 8.0, tvOS 9.0, watchOS 2.0, *)
-    func testAsyncThrows() {
-        let ex = expectation(description: "")
-        DispatchQueue.global().async(.promise) {
-            throw Error.dummy
-        }.catch {
-            XCTAssertEqual($0 as? Error, Error.dummy)
-            ex.fulfill()
-        }
-        wait(for: [ex], timeout: 10)
     }
 
     func testPipeForResolved() {
