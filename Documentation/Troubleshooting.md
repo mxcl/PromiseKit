@@ -1,91 +1,56 @@
 # Troubleshooting
 
-Sadly, Swift often gives misleading diagnostic messages for compile errors with
-PromiseKit.
+99% of questions about compile issues with PromiseKit can be solved by either:
 
-## Fulfilling a `Void` promise with Swift 4
+## 1. Specifying Closure Return Types
 
-With Swift 4, fulfill a Void promise with `fulfill(())`. Yes this is weird. Yes we’d also like swift-core to fix it. Please open or +1 a bug at https://bugs.swift.org.
+Please try it.
 
-## Compile Errors
+We made great effort to reduce the need for this with PromiseKit 6, but like
+normal functions in Swift (eg. Array.map) that return a generic type, if the
+closure body is longer than one line you may need to tell Swift what returns.
 
-### Cannot convert return expression of type … to return type AnyPromise
+> Tip: Sometimes you can force a one liner with semi-colons.
 
-Specify the return type for the closure. DON’T return `AnyPromise` (unless you
-wanted to).
+## 2. Move Code To A Temporary Inline Function
 
-### Missing return in a closure expected to return AnyPromise
-
-Specify the return type for the closure. DON’T return `AnyPromise` (unless you
-wanted to).
-
-### Generic parameter T could not be inferred
-
-Specify the return type for any closures that don’t have return types, or fully specify any `Promise { fulfill, reject in` instantiations (eg. `Promise<Void> { fulfill, reject in`).
-
-### Ambiguous *bar*
-
-Specify the return type for the closure.
-
-### Confusing Errors
-
-The best one I saw lately was *`UIImage` is not convertible to `UIImage?`*…
-
-Swift’s diagnostic reporting will be flat-out misleading and wrong inside
-complicated closures, and with PromiseKit we have a lot of those.
-
-When specifying the `return` types doesn’t help try the advice in the next
-section:
-
-## Pain Free Swift Promises
-
-The best way is to appease Swift is to decompose your chains into separated
-local functions. For example:
+Take the code out of the closure and put it in a standalone function, now Swift
+will tell you the *real* error message. For example:
 
 ```swift
-func foo() -> Promise<Int>
-    func step1() -> Promise<String> {
-        // many
-        // lines
-        // of
-        // code
-    }
-    
-    func step2() -> Promise<Int> {
-        // many
-        // lines
-        // of
-        // code
-    }
-
-    return firstly {
-        step1()
+func doStuff() {
+    firstly {
+        foo()
     }.then {
-        step2()
+        let bar = bar()
+        let baz = baz()
+        when(fulfilled: bar, baz)
     }
 }
 ```
 
-Otherwise try to always have your chain return to something that specifies the
-promise type. This is easy when you are writing functions that return promises,
-and in general this is what you should aim for anyway: because it makes your
-promises more composable.
-
-When you return promises from functions that specify the return type Swift can
-infer the types properly and it makes writing chains that much easier.
-
-## Neither `catch` or `then` are called in my chain
-
-Check something didn’t throw a `CancellableError`. Easiest way is to amend your
-`catch`:
+Becomes:
 
 ```swift
-foo.then {
-    //…
-}.catch(policy: .allErrorsIncludingCancellation) {
-    // cancelled errors are handled *as well*
+func doStuff() {
+    func fluff() -> Promise<…> {
+        let bar = bar()
+        let baz = baz()
+        when(fulfilled: bar, baz)  
+    }
+
+    firstly {
+        foo()
+    }.then {
+        fluff()
+    }
 }
 ```
+
+So an *inline* function is all you need. Now Swift will tell you the real
+error message. Probably that you forgot a `return`.
+
+# Other Issues
 
 ## `Pending Promise Deallocated!`
 
