@@ -10,5 +10,5 @@ iOS|tvOS|macOS)
 watchOS)
   xcodebuild -scheme PromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" build;;
 *)
-  docker-compose run PromiseKit;;
+  ;;
 esac
