@@ -1,4 +1,5 @@
 import PromiseKit
+import Dispatch
 import XCTest
 
 enum Error: Swift.Error {
@@ -159,3 +160,17 @@ prefix func ++(a: inout Int) -> Int {
 extension Promise {
     func silenceWarning() {}
 }
+
+#if os(Linux)
+import func Glibc.random
+
+func arc4random() -> UInt32 {
+    return UInt32(random())
+}
+
+extension XCTestExpectation {
+    func fulfill() {
+        fulfill(file: #file, line: #line)
+    }
+}
+#endif
