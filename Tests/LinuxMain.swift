@@ -3,7 +3,7 @@ import XCTest
 @testable import Core
 
 XCTMain([
-    testCase(RaceTests.allTests),
+//    testCase(RaceTests.allTests),
     testCase(ThenableTests.allTests),
     testCase(PMKErrorTests.allTests),
     testCase(ZalgoTests.allTests),
