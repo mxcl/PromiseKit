@@ -1,6 +1,6 @@
 import XCTest
-import A_
-import Core
+@testable import A_
+@testable import Core
 
 XCTMain([
     testCase(RaceTests.allTests),
