@@ -1,24 +1,22 @@
-import Foundation.NSURLError
+import Foundation
 import PromiseKit
 import XCTest
 
 class CancellationTests: XCTestCase {
     func testCancellation() {
-        autoreleasepool {
-            let ex1 = expectation(description: "")
+        let ex1 = expectation(description: "")
 
-            let p = after(seconds: 0).done { _ in
-                throw LocalError.cancel
-            }.done {
-                XCTFail()
-            }
-            p.catch { _ in
-                XCTFail()
-            }
-            p.catch(policy: .allErrors) {
-                XCTAssertTrue($0.isCancelled)
-                ex1.fulfill()
-            }
+        let p = after(seconds: 0).done { _ in
+            throw LocalError.cancel
+        }.done {
+            XCTFail()
+        }
+        p.catch { _ in
+            XCTFail()
+        }
+        p.catch(policy: .allErrors) {
+            XCTAssertTrue($0.isCancelled)
+            ex1.fulfill()
         }
 
         waitForExpectations(timeout: 60)
@@ -40,26 +38,24 @@ class CancellationTests: XCTestCase {
     }
 
     func testRecoverWithCancellation() {
-        autoreleasepool {
-            let ex1 = expectation(description: "")
-            let ex2 = expectation(description: "")
+        let ex1 = expectation(description: "")
+        let ex2 = expectation(description: "")
 
-            let p = after(seconds: 0).done { _ in
-                throw NSError(domain: NSCocoaErrorDomain, code: NSUserCancelledError, userInfo: nil)
-            }.recover(policy: .allErrors) { err -> Promise<Void> in
-                ex1.fulfill()
-                XCTAssertTrue(err.isCancelled)
-                throw err
-            }.done { _ in
-                XCTFail()
-            }
-            p.catch { _ in
-                XCTFail()
-            }
-            p.catch(policy: .allErrors) {
-                XCTAssertTrue($0.isCancelled)
-                ex2.fulfill()
-            }
+        let p = after(seconds: 0).done { _ in
+            throw NSError(domain: NSCocoaErrorDomain, code: NSUserCancelledError, userInfo: nil)
+        }.recover(policy: .allErrors) { err -> Promise<Void> in
+            ex1.fulfill()
+            XCTAssertTrue(err.isCancelled)
+            throw err
+        }.done { _ in
+            XCTFail()
+        }
+        p.catch { _ in
+            XCTFail()
+        }
+        p.catch(policy: .allErrors) {
+            XCTAssertTrue($0.isCancelled)
+            ex2.fulfill()
         }
 
         waitForExpectations(timeout: 1)
@@ -99,6 +95,9 @@ class CancellationTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
+#if !SWIFT_PACKAGE
+    // ^^ `as NSError` does not work on Linux… surprised about this though
+
     func testBridging() {
         let ex = expectation(description: "")
 
@@ -119,6 +118,7 @@ class CancellationTests: XCTestCase {
         XCTAssertTrue(LocalError.cancel.isCancelled)
         XCTAssertTrue((LocalError.cancel as NSError).isCancelled)
     }
+#endif
 
 #if swift(>=3.2)
     func testIsCancelled() {
