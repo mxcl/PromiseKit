@@ -753,6 +753,8 @@ static inline AnyPromise *fulfillLater() {
     XCTAssertNil([AnyPromise promiseWithResolverBlock:^(id a){}].value);
     XCTAssertTrue([AnyPromise promiseWithResolverBlock:^(id a){}].pending);
     XCTAssertFalse([AnyPromise promiseWithValue:@1].pending);
+    XCTAssertTrue([AnyPromise promiseWithValue:@1].fulfilled);
+    XCTAssertFalse([AnyPromise promiseWithValue:@1].rejected);
 }
 
 - (void)test_promiseWithValue {
@@ -766,6 +768,54 @@ static inline AnyPromise *fulfillLater() {
     id p = PMKAfter(0.1).then(^{ return @2; });
     PMKRace(@[PMKAfter(0.2), PMKAfter(0.5), p]).then(^(id obj){
         XCTAssertEqual(2, [obj integerValue]);
+        [ex fulfill];
+    });
+    [self waitForExpectationsWithTimeout:1 handler:nil];
+}
+
+- (void)testInBackground {
+    id ex = [self expectationWithDescription:@""];
+    PMKAfter(0.1).thenInBackground(^{ [ex fulfill]; });
+    [self waitForExpectationsWithTimeout:1 handler:nil];
+}
+
+- (void)testEnsureOn {
+    id ex = [self expectationWithDescription:@""];
+    PMKAfter(0.1).ensureOn(dispatch_get_global_queue(0, 0), ^{ [ex fulfill]; });
+    [self waitForExpectationsWithTimeout:1 handler:nil];
+}
+
+- (void)testAdapterBlock {
+    void (^fetch)(PMKAdapter) = ^(PMKAdapter block){
+        block(@1, nil);
+    };
+    id ex = [self expectationWithDescription:@""];
+    [AnyPromise promiseWithAdapterBlock:fetch].then(^(id obj){
+        XCTAssertEqualObjects(obj, @1);
+        [ex fulfill];
+    });
+    [self waitForExpectationsWithTimeout:1 handler:nil];
+}
+
+- (void)testIntegerAdapterBlock {
+    void (^fetch)(PMKIntegerAdapter) = ^(PMKIntegerAdapter block){
+        block(1, nil);
+    };
+    id ex = [self expectationWithDescription:@""];
+    [AnyPromise promiseWithIntegerAdapterBlock:fetch].then(^(id obj){
+        XCTAssertEqualObjects(obj, @1);
+        [ex fulfill];
+    });
+    [self waitForExpectationsWithTimeout:1 handler:nil];
+}
+
+- (void)testBooleanAdapterBlock {
+    void (^fetch)(PMKBooleanAdapter) = ^(PMKBooleanAdapter block){
+        block(YES, nil);
+    };
+    id ex = [self expectationWithDescription:@""];
+    [AnyPromise promiseWithBooleanAdapterBlock:fetch].then(^(id obj){
+        XCTAssertEqualObjects(obj, @YES);
         [ex fulfill];
     });
     [self waitForExpectationsWithTimeout:1 handler:nil];
