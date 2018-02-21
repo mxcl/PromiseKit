@@ -8,6 +8,7 @@
 
 import class Foundation.Thread
 import PromiseKit
+import Dispatch
 import XCTest
 
 private enum Error: Swift.Error { case dummy }

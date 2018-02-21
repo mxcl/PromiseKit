@@ -1,4 +1,5 @@
 import PromiseKit
+import Dispatch
 import XCTest
 
 class StressTests: XCTestCase {
