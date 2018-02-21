@@ -31,17 +31,32 @@ matrix:
     - {osx_image: xcode9.3beta, env: 'SWFT=4.1  PLAT=macOS    DST="arch=x86_64"',                    os: osx, language: objective-c}
     - {osx_image: xcode9.3beta, env: 'SWFT=4.1  PLAT=watchOS  DST="OS=4.3,name=Apple Watch - 38mm"', os: osx, language: objective-c}
 
-    - {os: linux, dist: trusty, sudo: required, services: docker, env: 'SWFT=3.2'}
-    - {os: linux, dist: trusty, sudo: required, services: docker, env: 'SWFT=4.0'}
+    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWFT=3'}
+    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWFT=4'}
 
 before_install:
-  - if [ "$TRAVIS_OS_NAME" == "linux" ]; then
-      docker pull swift:4;
-    fi
+  if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+    export SWIFT_VERSION=4.0;
+    eval "$(curl -sL https://swiftenv.fuller.li/install.sh)";
+  fi
 install:
-  - .github/travis-install.sh
+  case $PLAT in
+  iOS|tvOS|macOS)
+    xcodebuild -scheme PromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" build-for-testing;;
+  watchOS)
+    xcodebuild -scheme PromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" build;;
+  *)
+    swift build;;
+  esac
 script:
-  - .github/travis-script.sh
+  case $PLAT in
+  iOS|tvOS|macOS)
+    xcodebuild -scheme PromiseKit SWIFT_VERSION=$SWFT -destination "$DST" test;;
+  watchOS)
+    ;;
+  *)
+    swift test -Xswiftc -swift-version -Xswiftc $SWFT;;
+  esac
 after_success:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
       bash <(curl -s https://codecov.io/bash);
