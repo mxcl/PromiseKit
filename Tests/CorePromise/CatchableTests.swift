@@ -229,6 +229,18 @@ private enum Error: CancellableError {
     }
 }
 
+
+
+//TODO MOVE BELOW
+
 extension Promise {
     func silenceWarning() {}
 }
+
+#if os(Linux)
+extension XCTestCase {
+    func wait(for: [XCTestExpectation], timeout: TimeInterval, file: StaticString = #file, line: Int = #line) {
+        waitForExpectations(timeout: timeout, file: file, line: line)
+    }
+}
+#endif

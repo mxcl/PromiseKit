@@ -170,7 +170,13 @@ func arc4random() -> UInt32 {
 
 extension XCTestExpectation {
     func fulfill() {
-        fulfill(file: #file, line: #line)
+        fulfill(#file, line: #line)
+    }
+}
+
+extension XCTestCase {
+    func wait(for: [XCTestExpectation], timeout: TimeInterval, file: StaticString = #file, line: Int = #line) {
+        waitForExpectations(timeout: timeout, file: file, line: line)
     }
 }
 #endif
