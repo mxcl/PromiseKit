@@ -1,4 +1,4 @@
-// Generated using Sourcery 0.10.1 — https://github.com/krzysztofzablocki/Sourcery
+// Generated using Sourcery 0.10.0 — https://github.com/krzysztofzablocki/Sourcery
 // DO NOT EDIT
 
 
@@ -191,12 +191,16 @@ extension Test234 {
 extension ThenableTests {
     static var allTests = [
         ("testGet", ThenableTests.testGet),
-        ("testCompactMapError", ThenableTests.testCompactMapError),
+        ("testCompactMap", ThenableTests.testCompactMap),
+        ("testCompactMapThrows", ThenableTests.testCompactMapThrows),
+        ("testRejectedPromiseCompactMap", ThenableTests.testRejectedPromiseCompactMap),
+        ("testPMKErrorCompactMap", ThenableTests.testPMKErrorCompactMap),
         ("testCompactMapValues", ThenableTests.testCompactMapValues),
         ("testThenMap", ThenableTests.testThenMap),
         ("testThenFlatMap", ThenableTests.testThenFlatMap),
         ("testLastValueForEmpty", ThenableTests.testLastValueForEmpty),
         ("testFirstValueForEmpty", ThenableTests.testFirstValueForEmpty),
+        ("testThenOffRejected", ThenableTests.testThenOffRejected),
     ]
 }
 

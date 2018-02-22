@@ -15,7 +15,50 @@ class ThenableTests: XCTestCase {
         wait(for: [ex1, ex2], timeout: 10)
     }
 
-    func testCompactMapError() {
+    func testCompactMap() {
+        let ex = expectation(description: "")
+        Promise.value(1.0).compactMap {
+            Int($0)
+        }.done {
+            XCTAssertEqual($0, 1)
+            ex.fulfill()
+        }.silenceWarning()
+        wait(for: [ex], timeout: 10)
+    }
+
+    func testCompactMapThrows() {
+
+        enum E: Error { case dummy }
+
+        let ex = expectation(description: "")
+        Promise.value("a").compactMap { x -> Int in
+            throw E.dummy
+        }.catch {
+            if case E.dummy = $0 {} else {
+                XCTFail()
+            }
+            ex.fulfill()
+        }
+        wait(for: [ex], timeout: 10)
+    }
+
+    func testRejectedPromiseCompactMap() {
+
+        enum E: Error { case dummy }
+
+        let ex = expectation(description: "")
+        Promise(error: E.dummy).compactMap {
+            Int($0)
+        }.catch {
+            if case E.dummy = $0 {} else {
+                XCTFail()
+            }
+            ex.fulfill()
+        }
+        wait(for: [ex], timeout: 10)
+    }
+
+    func testPMKErrorCompactMap() {
         let ex = expectation(description: "")
         Promise.value("a").compactMap {
             Int($0)
@@ -67,5 +110,19 @@ class ThenableTests: XCTestCase {
 
     func testFirstValueForEmpty() {
         XCTAssertTrue(Promise.value([]).firstValue.isRejected)
+    }
+
+    func testThenOffRejected() {
+        // surprisingly missing in our CI, mainly due to
+        // extensive use of `done` in A+ tests since PMK 5
+
+        let ex = expectation(description: "")
+        Promise<Int>(error: PMKError.badInput).then { x -> Promise<Int> in
+            XCTFail()
+            return .value(x)
+        }.catch { _ in
+            ex.fulfill()
+        }
+        wait(for: [ex], timeout: 10)
     }
 }
