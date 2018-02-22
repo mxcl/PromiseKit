@@ -40,9 +40,10 @@
 
     if ([promises isKindOfClass:[NSDictionary class]])
         return newPromise = [PMKPromise new:^(PMKPromiseFulfiller fulfiller, PMKPromiseRejecter rejecter){
+            NSDictionary *promiseDictionary = (NSDictionary *) promises;
             NSMutableDictionary *results = [NSMutableDictionary new];
-            for (id key in promises) {
-                PMKPromise *promise = promises[key];
+            for (id key in promiseDictionary) {
+                PMKPromise *promise = promiseDictionary[key];
                 if (![promise isKindOfClass:[PMKPromise class]])
                     promise = [PMKPromise promiseWithValue:promise];
                 promise.catch(rejecter(key));
