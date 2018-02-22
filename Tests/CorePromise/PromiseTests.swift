@@ -65,12 +65,6 @@ class PromiseTests: XCTestCase {
         XCTAssertEqual("\(Promise<Int>.pending().promise)", "Promise(…Int)")
         XCTAssertEqual("\(Promise.value(3))", "Promise(3)")
         XCTAssertEqual("\(Promise<Void>(error: Error.dummy))", "Promise(dummy)")
-
-    #if !SWIFT_PACKAGE
-        XCTAssertEqual("\(AnyPromise(Promise<Int>.pending().promise))", "AnyPromise(…)")
-        XCTAssertEqual("\(AnyPromise(Promise.value(1)))", "AnyPromise(1)")
-        XCTAssertEqual("\(AnyPromise(Promise<Int?>.value(nil)))", "AnyPromise(nil)")
-    #endif
     }
 
     func testCannotFulfillWithError() {

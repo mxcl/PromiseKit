@@ -115,7 +115,7 @@ extension AnyPromise: Thenable, CatchMixin {
             bridge.pipe {
                 switch $0 {
                 case .rejected(let error):
-                    resolve(error)
+                    resolve(error as NSError)
                 case .fulfilled(let value):
                     resolve(value)
                 }
@@ -171,12 +171,13 @@ extension AnyPromise: Thenable, CatchMixin {
     }
 
     public var result: Result<Any?>? {
+        guard let value = __value else {
+            return nil
+        }
         if let error = value as? Error {
             return .rejected(error)
-        } else if let value = value {
-            return .fulfilled(value)
         } else {
-            return nil
+            return .fulfilled(value)
         }
     }
 
