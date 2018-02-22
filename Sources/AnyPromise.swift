@@ -61,11 +61,10 @@ import Foundation
         }))
     }
 
+    /// Internal, do not use! Some behaviors undefined.
     @objc public func __pipe(_ to: @escaping (Any?) -> Void) {
         let to = { (obj: Any?) -> Void in
-            if let p = obj as? AnyPromise {
-                p.d.__pipe(to)
-            } else if let err = obj as? Error {
+            if let err = obj as? Error {
                 to(err as NSError)  // or we cannot determine if objects are errors in objc land
             } else {
                 to(obj)
