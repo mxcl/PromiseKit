@@ -124,27 +124,13 @@ extension AnyPromise: Thenable, CatchMixin {
     }
 
     public func pipe(to body: @escaping (Result<Any?>) -> Void) {
-        sewer {
-            switch $0 {
-            case .fulfilled:
-                // calling through to the ObjC `value` property unwraps (any) PMKManifold
-                // and considering this is the Swift pipe; we want that.
-                body(.fulfilled(self.value(forKey: "value")))
-            case .rejected:
-                body($0)
-            }
+
+        func fulfill() {
+            // calling through to the ObjC `value` property unwraps (any) PMKManifold
+            // and considering this is the Swift pipe; we want that.
+            body(.fulfilled(self.value(forKey: "value")))
         }
-    }
 
-    fileprivate var d: __AnyPromise {
-        return value(forKey: "__d") as! __AnyPromise
-    }
-
-    var box: Box<Any?> {
-        return d.box
-    }
-
-    fileprivate func sewer(to body: @escaping (Result<Any?>) -> Void) {
         switch box.inspect() {
         case .pending:
             box.inspect {
@@ -154,20 +140,28 @@ extension AnyPromise: Thenable, CatchMixin {
                         if let error = $0 as? Error {
                             body(.rejected(error))
                         } else {
-                            body(.fulfilled($0))
+                            fulfill()
                         }
                     }
                 case .resolved(let error as Error):
                     body(.rejected(error))
-                case .resolved(let value):
-                    body(.fulfilled(value))
+                case .resolved:
+                    fulfill()
                 }
             }
         case .resolved(let error as Error):
             body(.rejected(error))
-        case .resolved(let value):
-            body(.fulfilled(value))
+        case .resolved:
+            fulfill()
         }
+    }
+
+    fileprivate var d: __AnyPromise {
+        return value(forKey: "__d") as! __AnyPromise
+    }
+
+    var box: Box<Any?> {
+        return d.box
     }
 
     public var result: Result<Any?>? {
