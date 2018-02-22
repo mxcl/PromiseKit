@@ -68,7 +68,7 @@ return firstly {
 }
 ```
 
-# Background loaded member variables
+## Background loaded member variables
 
 ```swift
 class MyViewController: UIViewController {
@@ -77,6 +77,25 @@ class MyViewController: UIViewController {
         let player =  try AVAudioPlayer(data: asset.data)
         player.prepareToPlay()
         return player
+    }
+}
+```
+
+## Chaining Animations
+
+```swift
+firstly {
+    UIView.animate(.promise, duration: 0.3) {
+        self.button1.alpha = 0
+    }
+}.then {
+    UIView.animate(.promise, duration: 0.3) {
+        self.button2.alpha = 1
+    }
+}.then {
+    UIView.animate(.promise, duration: 0.3) {
+        adjustConstraints()
+        self.view.layoutIfNeeded()
     }
 }
 ```
