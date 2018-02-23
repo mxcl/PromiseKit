@@ -54,16 +54,16 @@ error message. Probably that you forgot a `return`.
 
 ## `Pending Promise Deallocated!`
 
-If you see this warning you have a path in your `Promise` initializer where
-neither `fulfill` or `reject` are called:
+If you see this warning you have a path in your `Promise` initializer where the
+promise is not sealed:
 
 ```swift
-Promise<String> { fulfill, reject in
+Promise<String> { seal in
     task { value, error in
         if let value = value as? String {
-            fulfill(value)
+            seal.fulfill(value)
         } else if let error = error {
-            reject(error)
+            seal.reject(error)
         }
     }
 }
@@ -76,7 +76,7 @@ probably the awful: infinite spinner.
 So let’s be thorough:
 
 ```swift
-Promise<String> { fulfill, reject in
+Promise<String> { seal in
     task { value, error in
         if let value = value as? String {
             fulfill(value)
@@ -92,7 +92,7 @@ Promise<String> { fulfill, reject in
 }
 ```
 
-If this seems tedious it shouldn’t. You would have to be this thorough without promises too, the difference is without promises you wouldn’t get a warning in the console letting you know your mistake!
+If this seems tedious it shouldn’t. You would have to be this thorough withoutpromises too, the difference is without promises you wouldn’t get a warning in the console letting you know your mistake!
 
 ## Slow Compilation / Compiler Cannot Solve in Reasonable Time
 
