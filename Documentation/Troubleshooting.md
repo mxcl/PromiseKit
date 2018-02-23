@@ -97,3 +97,11 @@ If this seems tedious it shouldn’t. You would have to be this thorough without
 ## Slow Compilation / Compiler Cannot Solve in Reasonable Time
 
 Add return types to your closures.
+
+## My Promise Never Resolves
+
+Check your asynchronous task even *starts*. You’d be surprised how often this is
+the cause. For example if you are using `URLSession` (without our extension, but
+don’t do that, *use* our extension, it’s thorough) did you forget to call
+`resume` on the task? If so it never starts, so of course, it never finishes
+either.
