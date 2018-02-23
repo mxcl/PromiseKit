@@ -68,6 +68,8 @@ return firstly {
 }
 ```
 
+# Tips n’ Tricks
+
 ## Background loaded member variables
 
 ```swift
