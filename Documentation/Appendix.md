@@ -137,3 +137,21 @@ when(fulfilled: p1, p2, p3, /*…*/, p10).then {
 
 Note the reason you don’t have to do this usually with `when` is we do this *for
 you* for `when`s with up to 5 parameters.
+
+
+## Blocking (await)
+
+Sometimes you have to block the main thread, but the task is asynchronous, in
+these cases you can (with caution) use `wait`:
+
+```swift
+public extension UNUserNotificationCenter {
+    var wasPushRequested: Bool {
+        let settings = Guarantee(resolver: getNotificationSettings).wait()
+        return settings != .notDetermined
+    }
+}
+```
+
+The task under the promise **must not** callback onto the current thread or you get
+deadlock.
