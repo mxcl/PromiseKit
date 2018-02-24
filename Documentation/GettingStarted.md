@@ -193,7 +193,7 @@ operation2 {
     result2 = $0
     group.leave()
 }
-group.completion = {
+group.notify(queue: .main) {
     finish(result1, result2)
 }
 ```
