@@ -82,6 +82,7 @@ class DeprecationTests: XCTestCase {
         wait(for: [ex], timeout: 10)
     }
 
+#if PMKFullDeprecations
     func testFlatMap() {
         let ex = expectation(description: "")
         Promise.value(1).flatMap { _ -> Int? in
@@ -116,6 +117,7 @@ class DeprecationTests: XCTestCase {
         }.silenceWarning()
         wait(for: [ex], timeout: 10)
     }
+#endif
 
     func testSequenceFilter() {
         let ex = expectation(description: "")
