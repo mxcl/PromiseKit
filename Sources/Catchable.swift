@@ -1,5 +1,6 @@
 import Dispatch
 
+/// Provides `catch` and `recover` to your object that conforms to `Thenable`
 public protocol CatchMixin: Thenable
 {}
 
@@ -54,12 +55,14 @@ public extension CatchMixin {
     /**
      The provided closure executes when this promise rejects.
      
-     Unlike `catch`, `recover` continues the chain provided the closure does not throw.
+     Unlike `catch`, `recover` continues the chain.
      Use `recover` in circumstances where recovering the chain from certain errors is a possibility. For example:
-     
-         CLLocationManager.promise().recover { error in
+
+         firstly {
+             CLLocationManager.requestLocation()
+         }.recover { error in
              guard error == CLError.unknownLocation else { throw error }
-             return .value(CLLocation.Chicago)
+             return .value(CLLocation.chicago)
          }
      
      - Parameter on: The queue to which the provided closure dispatches.
@@ -94,8 +97,8 @@ public extension CatchMixin {
     /**
      The provided closure executes when this promise rejects.
      
-     This variant of `recover` requires the handler to return a Guarantee, thus it returns a Guarantee itself.
-     Note it is logically impossible for this to take a catchPolicy, thus allErrors are handled.
+     This variant of `recover` requires the handler to return a Guarantee, thus it returns a Guarantee itself and your closure cannot `throw`.
+     Note it is logically impossible for this to take a `catchPolicy`, thus `allErrors` are handled.
      
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter body: The handler to execute if this promise is rejected.
@@ -121,13 +124,13 @@ public extension CatchMixin {
      The provided closure executes when this promise resolves, whether it rejects or not.
      
          firstly {
-            UIApplication.shared.networkActivityIndicatorVisible = true
+             UIApplication.shared.networkActivityIndicatorVisible = true
          }.done {
-            //…
+             //…
          }.ensure {
-            UIApplication.shared.networkActivityIndicatorVisible = false
+             UIApplication.shared.networkActivityIndicatorVisible = false
          }.catch {
-            //…
+             //…
          }
      
      - Parameter on: The queue to which the provided closure dispatches.
@@ -145,6 +148,10 @@ public extension CatchMixin {
         return rp
     }
 
+    /**
+     Consumes the Swift unused-result warning.
+     - Note: You should `catch`, but in situations where you know you don’t need a `catch`, `cauterize` makes your intentions clear.
+     */
     func cauterize() {
         self.catch {
             print("PromiseKit:cauterized-error:", $0)
@@ -158,7 +165,7 @@ public extension CatchMixin where T == Void {
     /**
      The provided closure executes when this promise rejects.
      
-     This variant of `recover` ensures that no error is thrown from the handler, thus producing a Guarantee.
+     This variant of `recover` is specialized for `Void` promises and de-errors your chain returning a `Guarantee`, thus you cannot `throw` and you must handle all errors including cancellation.
      
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter body: The handler to execute if this promise is rejected.

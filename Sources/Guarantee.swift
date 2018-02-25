@@ -1,6 +1,7 @@
 import class Foundation.Thread
 import Dispatch
 
+/// A `Guarantee` is a functional abstraction around an asynchronous operation that cannot error.
 public class Guarantee<T>: Thenable {
     let box: Box<T>
 
