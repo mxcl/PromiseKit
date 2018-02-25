@@ -117,6 +117,23 @@ public extension CatchMixin {
         return rg
     }
 
+    /**
+     The provided closure executes when this promise resolves, whether it rejects or not.
+     
+         firstly {
+            UIApplication.shared.networkActivityIndicatorVisible = true
+         }.done {
+            //…
+         }.ensure {
+            UIApplication.shared.networkActivityIndicatorVisible = false
+         }.catch {
+            //…
+         }
+     
+     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter body: The closure that executes when this promise resolves.
+     - Returns: A new promise, resolved with this promise’s resolution.
+     */
     func ensure(on: DispatchQueue? = conf.Q.return, _ body: @escaping () -> Void) -> Promise<T> {
         let rp = Promise<T>(.pending)
         pipe { result in
