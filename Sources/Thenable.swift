@@ -14,7 +14,7 @@ public extension Thenable {
      This allows chaining promises. The promise returned by the provided closure is resolved before the promise returned by this closure resolves.
      
      - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter execute: The closure that executes when this promise fulfills. It must return a promise.
+     - Parameter body: The closure that executes when this promise fulfills. It must return a promise.
      - Returns: A new promise that resolves when the promise returned from the provided closure resolves. For example:
      
          URLSession.GET(url1).then { data in
@@ -50,7 +50,7 @@ public extension Thenable {
      This is like `then` but it requires the closure to return a non-promise.
      
      - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter body: The closure that is executed when this Promise is fulfilled. It must return a non-promise.
+     - Parameter transform: The closure that is executed when this Promise is fulfilled. It must return a non-promise.
      - Returns: A new promise that is resolved with the value returned from the provided closure. For example:
      
          URLSession.GET(url).then { data -> Int in
