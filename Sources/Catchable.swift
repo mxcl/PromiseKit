@@ -50,6 +50,22 @@ public class PMKFinalizer {
 
 
 public extension CatchMixin {
+    
+    /**
+     The provided closure executes when this promise rejects.
+     
+     Unlike `catch`, `recover` continues the chain provided the closure does not throw.
+     Use `recover` in circumstances where recovering the chain from certain errors is a possibility. For example:
+     
+         CLLocationManager.promise().recover { error in
+             guard error == CLError.unknownLocation else { throw error }
+             return .value(CLLocation.Chicago)
+         }
+     
+     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter body: The handler to execute if this promise is rejected.
+     - SeeAlso: [Cancellation](http://promisekit.org/docs/)
+     */
     func recover<U: Thenable>(on: DispatchQueue? = conf.Q.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> U) -> Promise<T> where U.T == T {
         let rp = Promise<U.T>(.pending)
         pipe {
@@ -126,7 +142,6 @@ public extension CatchMixin where T == Void {
      The provided closure executes when this promise rejects.
      
      This variant of `recover` ensures that no error is thrown from the handler, thus producing a Guarantee.
-     Note it is logically impossible for this to take a catchPolicy, thus allErrors are handled.
      
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter body: The handler to execute if this promise is rejected.
@@ -152,14 +167,7 @@ public extension CatchMixin where T == Void {
     /**
      The provided closure executes when this promise rejects.
      
-     Unlike `catch`, `recover` continues the chain provided the closure does not throw. Use `recover` in circumstances where recovering the chain from certain errors is a possibility. For example:
-     
-         CLLocationManager.promise().recover { error in
-             guard error == CLError.unknownLocation else { throw error }
-             return .value(CLLocation.Chicago)
-         }
-     
-     Note it is logically impossible for this to take a catchPolicy, thus allErrors are handled.
+     This variant of `recover` ensures that no error is thrown from the handler and allows specifying a catch policy.
      
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter body: The handler to execute if this promise is rejected.
