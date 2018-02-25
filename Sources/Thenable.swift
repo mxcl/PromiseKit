@@ -7,6 +7,22 @@ public protocol Thenable: class {
 }
 
 public extension Thenable {
+    
+    /**
+     The provided closure executes when this promise resolves.
+     
+     This allows chaining promises. The promise returned by the provided closure is resolved before the promise returned by this closure resolves.
+     
+     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter execute: The closure that executes when this promise fulfills. It must return a promise.
+     - Returns: A new promise that resolves when the promise returned from the provided closure resolves. For example:
+     
+         URLSession.GET(url1).then { data in
+            return CLLocationManager.promise()
+         }.done { location in
+            //…
+         }
+     */
     func then<U: Thenable>(on: DispatchQueue? = conf.Q.map, file: StaticString = #file, line: UInt = #line, _ body: @escaping(T) throws -> U) -> Promise<U.T> {
         let rp = Promise<U.T>(.pending)
         pipe {
@@ -28,6 +44,21 @@ public extension Thenable {
         return rp
     }
 
+    /**
+     The provided closure is executed when this promise is resolved.
+     
+     This is like `then` but it requires the closure to return a non-promise.
+     
+     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter body: The closure that is executed when this Promise is fulfilled. It must return a non-promise.
+     - Returns: A new promise that is resolved with the value returned from the provided closure. For example:
+     
+         URLSession.GET(url).then { data -> Int in
+            return data.length
+         }.done { length in
+            //…
+         }
+     */
     func map<U>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping(T) throws -> U) -> Promise<U> {
         let rp = Promise<U>(.pending)
         pipe {
@@ -81,6 +112,19 @@ public extension Thenable {
         return rp
     }
 
+    /**
+     The provided closure is executed when this promise is resolved.
+     
+     This is like `then` but it returns a `Void` promise.
+     
+     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter body: The closure that is executed when this Promise is fulfilled.
+     - Returns: A new promise that is resolved with a Void value. For example:
+     
+         URLSession.GET(url).done { data in
+            print(data)
+         }
+     */
     func done(on: DispatchQueue? = conf.Q.return, _ body: @escaping(T) throws -> Void) -> Promise<Void> {
         let rp = Promise<Void>(.pending)
         pipe {
@@ -101,7 +145,24 @@ public extension Thenable {
         return rp
     }
 
-    /// Immutably access the fulfilled value; the returned Promise maintains that value.
+    /**
+     The provided closure is executed when this promise is resolved.
+     
+     This is like `done` but it returns the same value that the handler is fed.
+     `get` immutably accesses the fulfilled value; the returned Promise maintains that value.
+     
+     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter body: The closure that is executed when this Promise is fulfilled.
+     - Returns: A new promise that is resolved with the value that the handler is fed. For example:
+     
+         firstly {
+            .value(1)
+         }.get { foo in
+            print(foo, " is 1")
+         }.done { foo in
+            print(foo, " is 1")
+         }
+     */
     func get(_ body: @escaping (T) throws -> Void) -> Promise<T> {
         return map(on: PromiseKit.conf.Q.return) {
             try body($0)
