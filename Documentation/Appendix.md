@@ -155,3 +155,48 @@ public extension UNUserNotificationCenter {
 
 The task under the promise **must not** callback onto the current thread or you get
 deadlock.
+
+## Starting a chain on a background queue/thread
+
+`firstly` deliberately does not take a queue, (rationale in the ticket tracker).
+So if you want to start a chain by dispatching to the background you have to use
+`DispatchQueue.async`:
+
+```swift
+DispatchQueue.global().async(.promise) {
+    return value  
+}.done { value in
+    //…
+}
+```
+
+However this function cannot return a promise (due to Swift compiler ambiguity
+issues), thus if you must start a promise on a background queue then you need to
+do something like this:
+
+
+```swift
+Promise { seal in
+    DispatchQueue.global().async {
+        seal(value)
+    }  
+}.done { value in
+    //…
+}
+```
+
+Or more simply (though with caveats, see the documentation for `wait`)
+
+```swift
+DispatchQueue.global().async(.promise) {
+    return try fetch().wait()
+}.done { value in
+    //…
+}
+```
+
+However, you shouldn't need to do this (often) if you find yourself wanting this
+then maybe you should instead go to the function definition for `fetch` and make
+it do its work on a background thread instead. Promises abstract asynchronicity,
+so… abstract that asynchronicity by making it so your consumers don’t care about
+the queue your function is called upon.
