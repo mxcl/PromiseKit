@@ -163,6 +163,21 @@ almost won’t need to review the pull-requests.
 > *Note* PromiseKit has inconveniently switched between naming this function
 `always` and `ensure` multiple times. Sorry about this, we suck.
 
+You can also use `finally` as an `ensure` that terminates the promise chain and does not return a value:
+
+```
+spinner(visible: true)
+
+firstly {
+    foo()
+}.done {
+    //…
+}.catch {
+    //…
+}.finally {
+    self.spinner(visible: false)
+}
+```
 
 # `when`
 
