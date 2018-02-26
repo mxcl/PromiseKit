@@ -1,5 +1,7 @@
 # Troubleshooting
 
+## Compile Errors
+
 99% of questions about compile issues with PromiseKit can be solved by either:
 
 ## 1. Specifying Closure Return Types
@@ -105,3 +107,15 @@ the cause. For example if you are using `URLSession` (without our extension, but
 don’t do that, *use* our extension, it’s thorough) did you forget to call
 `resume` on the task? If so it never starts, so of course, it never finishes
 either.
+
+## `Result of call to 'foo(on:_:)' is unused`
+
+Promise deliberately avoids the `@discardableResult` annotation because the
+unused result warning is your hint that you have not handled the error in your
+chain. So do one of these:
+
+1. Add a `catch`
+2. `return` the promise (thus punting the error handling to the caller)
+3. Use `cauterize()` to silence the warning.
+
+Obviously do 1. or 2. in preference to 3.
