@@ -163,9 +163,7 @@ almost won’t need to review the pull-requests.
 > *Note* PromiseKit has inconveniently switched between naming this function
 `always` and `ensure` multiple times. Sorry about this, we suck.
 
-# `finally`
-
-`finally` is like `ensure` but it is meant to terminate the promise chain and does not return a value.
+You can also use `finally` as an `ensure` that terminates the promise chain and does not return a value:
 
 ```
 spinner(visible: true)
