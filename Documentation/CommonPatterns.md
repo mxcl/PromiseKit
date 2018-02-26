@@ -112,9 +112,9 @@ Thus if you call a throwing function, you don't have to wrap it in a `do`:
 
 ```swift
 foo().then { baz in
-    return bar(baz)
+    bar(baz)
 }.then { result in
-    return try doOtherThing()
+    try doOtherThing()
 }.catch { error in
     // if doOtherThing() throws, we end up here
 }
@@ -170,16 +170,16 @@ When you have a series of tasks to perform on an array of data:
 ```swift
 // fade all visible table cells one by one in a “cascading” effect
 
-let fade = Promise()
+let fade = Guarantee()
 for cell in tableView.visibleCells {
     fade = fade.then {
-        UIView.promise(animateWithDuration:0.1) {
+        UIView.animate(.promise, duration: 0.1) {
             cell.alpha = 0
         }
     }
 }
-fade.then {
-    //finish
+fade.done {
+    // finish
 }
 ```
 
@@ -284,23 +284,21 @@ need to cancel the underlying task!
 ## Retry / Polling
 
 ```swift
-func attempt<T>(interdelay: DispatchTimeInterval = .seconds(2), maxRepeat: Int = 3, body: @escaping () -> Promise<T>) -> Promise<T> {
+func attempt<T>(maximumRetryCount: Int = 3, delayBeforeRetry: DispatchTimeInterval = .seconds(2), _ body: @escaping () -> Promise<T>) -> Promise<T> {
     var attempts = 0
     func attempt() -> Promise<T> {
         attempts += 1
         return body().recover { error -> Promise<T> in
-            guard attempts < maxRepeat else { throw error }
-
-            return after(interdelay).then {
-                attempt()
-            }
+            guard attempts < maximumRetryCount else { throw error }
+            return after(delayBeforeRetry).then(on: nil, attempt)
         }
     }
-
     return attempt()
 }
 
-attempt{ flakeyTask() }.then {
+attempt(maximumRetryCount: 3) {
+    flakeyTask(parameters: foo)
+}.then {
     //…
 }.catch { _ in
     // we attempted three times but still failed
@@ -371,12 +369,12 @@ CLLocationManager.promise().then { locations in
 Sometimes you don’t want an error to cascade, instead you have a default value:
 
 ```swift
-CLLocationManager.promise().recover { error -> CLLocation in
+CLLocationManager.requestLocation().recover { error -> Promise<CLLocation> in
     guard error == MyError.airplaneMode else {
         throw error
     }
-    return CLLocation.savannah
-}.then { location in
+    return .value(CLLocation.savannah)
+}.done { location in
     //…
 }
 ```
@@ -426,37 +424,37 @@ Let’s say you have:
 ```swift
 login().then { username in
     fetch(avatar: username)
-}.then { image in
+}.done { image in
     //…
 }
 ```
 
-In the second `then` how can you access `username` as well as `image`?
+What if you want access to both `username` and `image` in your `done`?
 
 The most obvious way is with nesting:
 
 ```swift
 login().then { username in
-    fetch(avatar: username).then { image in
-        // we have image and username
+    fetch(avatar: username).done { image in
+        // we have access to both `image` and `username`
     }
-}.then {
+}.done {
     // the chain still continues as you'd expect
 }
 ```
 
-However you could instead use Swift tuples:
+However this nesting reduces the chain’s clarity; instead we could use Swift
+tuples:
 
 ```swift
 login().then { username in
-    fetch(avatar: username).then { ($0, username) }
+    fetch(avatar: username).map { ($0, username) }
 }.then { image, username in
     //…
 }
 ```
 
-The above is a quick transforming `then` that simply maps the `Promise<String>`
-into `Promise<(UIImage, String)>`.
+The above simply maps `Promise<String>` into `Promise<(UIImage, String)>`.
 
 
 ## Waiting on multiple promises whatever their result
