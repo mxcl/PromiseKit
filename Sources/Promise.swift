@@ -53,10 +53,11 @@ public class Promise<T>: Thenable, CatchMixin {
     /// Initialize a new promise that can be resolved with the provided `Resolver`.
     public init(resolver body: (Resolver<T>) throws -> Void) {
         box = EmptyBox()
+        let resolver = Resolver(box)
         do {
-            try body(Resolver(box))
+            try body(resolver)
         } catch {
-            box.seal(.rejected(error))
+            resolver.reject(error)
         }
     }
 
