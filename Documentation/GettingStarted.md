@@ -255,6 +255,8 @@ All our extensions are available at the [PromiseKit organization](https://github
 to see what is available and to read the sources so that you can read the documentation. We have copiously documented every
 file and every function.
 
+> We also provide extensions for common libraries like [Alamofire](https://github.com/PromiseKit/Alamofire-).
+
 
 # Making Promises
 

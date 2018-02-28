@@ -61,6 +61,8 @@ class MyRestAPI {
 This way, your asynchronous systems can easily be engaged in chains all over
 your apps.
 
+> Note we provide [promises for Alamofire](https://github.com/PromiseKit/Alamofire-) too!
+
 
 ## Background Work
 
