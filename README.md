@@ -14,7 +14,7 @@ more readable code. Your co-workers will thank you.
 UIApplication.shared.isNetworkActivityIndicatorVisible = true
 
 let fetchImage = URLSession.shared.dataTask(.promise, with: url).compactMap{ UIImage(data: $0.data) }
-let fetchLocation = CLLocationManager.requestLocation()
+let fetchLocation = CLLocationManager.requestLocation().lastValue
 
 firstly {
     when(fulfilled: fetchImage, fetchLocation)
