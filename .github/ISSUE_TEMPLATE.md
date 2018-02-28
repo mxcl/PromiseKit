@@ -1,6 +1,12 @@
-* PromiseKit version: **major version is enough unless you have a build issue**
-* Xcode version: **only required for build issues**
-* CocoaPods version: **only required for build issues**
-* Carthage version: **only required for build issues**
+If your issue is a Swift compile issue then read our [Troubleshooting guide] first!
 
-> Please format your code in triple backticks and delete this line before submitting your ticket. Failure to remove this line may result in mockery.
+Please specify the following information:
+
+* PromiseKit version: **major version is enough unless you have a build issue**
+* If you used CocoaPods or Carthage or some other method to install
+
+> Please format your code in triple backticks!
+
+> Please indent your code so it is readable!
+
+[Troubleshooting]: https://github.com/mxcl/PromiseKit/blob/master/Documentation/Troubleshooting.md
