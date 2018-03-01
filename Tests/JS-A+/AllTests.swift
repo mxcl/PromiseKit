@@ -46,8 +46,27 @@ class AllTests: XCTestCase {
         let consoleLog: @convention(block) (String) -> Void = { str in
             print("Log: \(str)")
         }
-        
         context.setObject(consoleLog, forKeyedSubscript: "consoleLog" as NSString)
+        
+        let setTimeout: @convention(block) (JSValue, Double) -> Void = { function, interval in
+            print("Set timeout")
+        }
+        context.setObject(setTimeout, forKeyedSubscript: "setTimeout" as NSString)
+        
+        let clearTimeout: @convention(block) (Int) -> Void = { timeoutID in
+            print("Clear timeout")
+        }
+        context.setObject(clearTimeout, forKeyedSubscript: "clearTimeout" as NSString)
+        
+        let setInterval: @convention(block) (JSValue, Double) -> Void = { function, interval in
+            print("Set interval")
+        }
+        context.setObject(setInterval, forKeyedSubscript: "setInterval" as NSString)
+        
+        let clearInterval: @convention(block) (Int) -> Void = { intervalID in
+            print("Clear interval")
+        }
+        context.setObject(clearInterval, forKeyedSubscript: "clearInterval" as NSString)
         
         // Evaluate contents of `build.js`, which exposes `promisesAplusTests` in the global context
         context.evaluateScript(script)
