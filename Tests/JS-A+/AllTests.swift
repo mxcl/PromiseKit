@@ -15,7 +15,8 @@ class AllTests: XCTestCase {
             return XCTFail()
         }
         
-        guard let scriptPath = Bundle(for: AllTests.self).url(forResource: "build", withExtension: "js", subdirectory: "build") else {
+        let bundle = Bundle(for: AllTests.self)
+        guard let scriptPath = bundle.url(forResource: "build", withExtension: "js", subdirectory: "build") else {
             return XCTFail("Couldn't find test suite")
         }
         
@@ -25,23 +26,21 @@ class AllTests: XCTestCase {
         
         context.exceptionHandler = { context, exception in
             
-            guard let exception = exception, let message = exception.toString() else {
+            guard let exception = exception,
+                let message = exception.toString(),
+                let lineNumber = exception.objectForKeyedSubscript("line"),
+                let column = exception.objectForKeyedSubscript("column" )else {
                 return XCTFail("Unknown JS exception")
             }
             
-            //print("JS Exception: \(message)")
+            print("JS Exception at \(lineNumber):\(column): \(message)")
             
-            if let stacktrace = exception.objectForKeyedSubscript("stack").toString(),
-                let lineNumber = exception.objectForKeyedSubscript("line"),
-                let column = exception.objectForKeyedSubscript("column") {
-                //print("\(stacktrace)")
+            if let stacktrace = exception.objectForKeyedSubscript("stack").toString() {
+                let lines = stacktrace.split(separator: "\n").map { "\t> \($0)" }.joined(separator: "\n")
+                print(lines)
             }
             
-            if let message = exception.toString() {
-                XCTFail("JS Exception: \(message)")
-            } else {
-                XCTFail("Unknown JS exception")
-            }
+            XCTFail("JS exception")
         }
         
         let consoleLog: @convention(block) (String) -> Void = { str in
@@ -51,7 +50,7 @@ class AllTests: XCTestCase {
         context.setObject(consoleLog, forKeyedSubscript: "consoleLog" as NSString)
         
         // Evaluate contents of `build.js`, which exposes `promisesAplusTests` in the global context
-        context.evaluateScript(script, withSourceURL: scriptPath)
+        context.evaluateScript(script)
         
         let result = context.evaluateScript("promisesAplusTests")
         

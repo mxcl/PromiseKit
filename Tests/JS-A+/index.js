@@ -19,7 +19,7 @@ const requireTest = require.context('promises-aplus-tests/lib/tests', false, /\.
 requireTest.keys().forEach(file => {
   mocha.suite.emit('pre-require', global, file, mocha)
   mocha.suite.emit('require', requireTest(file), file, mocha)
-  mocha.suite.emit('post-require', global, file, mocha)
+  // mocha.suite.emit('post-require', global, file, mocha)
 })
 
 mocha.run(failures => {

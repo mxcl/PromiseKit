@@ -9,6 +9,6 @@ module.exports = {
     library: 'promisesAplusTests'
   },
   node: {
-    fs: "empty"
-  }
+    fs: 'empty'
+  },
 };
