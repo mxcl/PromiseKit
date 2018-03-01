@@ -154,7 +154,6 @@ class AllTests: XCTestCase {
         let expectation = self.expectation(description: "async")
         let callback: @convention(block) (JSValue) -> Void = { failures in
             expectation.fulfill()
-//            print(failures.toString())
         }
         context.setObject(callback, forKeyedSubscript: "mainCallback" as NSString)
         guard let callbackValue = context.objectForKeyedSubscript("mainCallback") else {
@@ -163,6 +162,6 @@ class AllTests: XCTestCase {
         
         // Call `runTests`
         runTests.call(withArguments: [adapter, callbackValue])
-        self.wait(for: [expectation], timeout: 100)
+        self.wait(for: [expectation], timeout: 1000)
     }
 }
