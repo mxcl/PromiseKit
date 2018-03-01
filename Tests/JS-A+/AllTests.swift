@@ -36,9 +36,13 @@ class JSPromise: NSObject, JSPromiseProtocol {
             }
             switch result {
             case .fulfilled(let value):
+                guard onFulfilled.isObject else {
+                    return
+                }
                 onFulfilled.call(withArguments: [value])
+                
             case .rejected(let error):
-                guard let typedError = error as? Error else {
+                guard let typedError = error as? Error, onRejected.isObject else {
                     return
                 }
                 onRejected.call(withArguments: [typedError.reason])
