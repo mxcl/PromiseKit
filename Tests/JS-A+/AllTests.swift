@@ -9,8 +9,83 @@ import XCTest
 import PromiseKit
 import JavaScriptCore
 
+@available(iOS 10.0, *)
+class MockNodeEnvironment {
+    
+    private var timers: [Int: Timer] = [:]
+    
+    func setup(with context: JSContext) {
+        
+        // console.log
+        if let console = context.objectForKeyedSubscript("console") {
+            let consoleLog: @convention(block) () -> Void = {
+                guard let arguments = JSContext.currentArguments(), let format = arguments.first as? JSValue else {
+                    return
+                }
+                
+                let otherArguments = arguments.dropFirst().flatMap { ($0 as? JSValue)?.toObject() as? CVarArg }
+                if otherArguments.count == 0 {
+                    print(format)
+                } else {
+                    let format = format.toString().replacingOccurrences(of: "%s", with: "%@")
+                    let output = String(format: format, arguments: otherArguments)
+//                    print(format)
+                    print(output)
+                }
+            }
+            console.setObject(consoleLog, forKeyedSubscript: "log" as NSString)
+        }
+        
+        // setTimeout
+        let setTimeout: @convention(block) (JSValue, Double) -> Int = { function, intervalMs in
+            let timerID = self.addTimer(interval: intervalMs / 1000, repeats: false, function: function)
+            return timerID
+        }
+        context.setObject(setTimeout, forKeyedSubscript: "setTimeout" as NSString)
+        
+        // clearTimeout
+        let clearTimeout: @convention(block) (Int) -> Void = { timeoutID in
+            self.removeTimer(timerID: timeoutID)
+        }
+        context.setObject(clearTimeout, forKeyedSubscript: "clearTimeout" as NSString)
+        
+        // setInterval
+        let setInterval: @convention(block) (JSValue, Double) -> Int = { function, intervalMs in
+            let timerID = self.addTimer(interval: intervalMs / 1000, repeats: true, function: function)
+            return timerID
+        }
+        context.setObject(setInterval, forKeyedSubscript: "setInterval" as NSString)
+        
+        // clearInterval
+        let clearInterval: @convention(block) (Int) -> Void = { intervalID in
+            self.removeTimer(timerID: intervalID)
+        }
+        context.setObject(clearInterval, forKeyedSubscript: "clearInterval" as NSString)
+    }
+    
+    private func addTimer(interval: TimeInterval, repeats: Bool, function: JSValue) -> Int {
+        let hash = UUID().uuidString.hash
+        let timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: false) { _ in
+            DispatchQueue.main.async {
+                function.call(withArguments: [])
+            }
+        }
+        timers[hash] = timer
+        return hash
+    }
+    
+    private func removeTimer(timerID: Int) {
+        timers[timerID]?.invalidate()
+        timers[timerID] = nil
+    }
+}
+
+@available(iOS 10.0, *)
 class AllTests: XCTestCase {
     func testAll() {
+        
+        let environment = MockNodeEnvironment()
+        
         guard let context = JSContext() else {
             return XCTFail()
         }
@@ -43,37 +118,10 @@ class AllTests: XCTestCase {
             XCTFail("JS exception")
         }
         
-        let consoleLog: @convention(block) (String) -> Void = { str in
-            print("Log: \(str)")
-        }
-        context.setObject(consoleLog, forKeyedSubscript: "consoleLog" as NSString)
-        
-        let setTimeout: @convention(block) (JSValue, Double) -> Void = { function, interval in
-            print("Set timeout")
-        }
-        context.setObject(setTimeout, forKeyedSubscript: "setTimeout" as NSString)
-        
-        let clearTimeout: @convention(block) (Int) -> Void = { timeoutID in
-            print("Clear timeout")
-        }
-        context.setObject(clearTimeout, forKeyedSubscript: "clearTimeout" as NSString)
-        
-        let setInterval: @convention(block) (JSValue, Double) -> Void = { function, interval in
-            print("Set interval")
-        }
-        context.setObject(setInterval, forKeyedSubscript: "setInterval" as NSString)
-        
-        let clearInterval: @convention(block) (Int) -> Void = { intervalID in
-            print("Clear interval")
-        }
-        context.setObject(clearInterval, forKeyedSubscript: "clearInterval" as NSString)
+        environment.setup(with: context)
         
         // Evaluate contents of `build.js`, which exposes `promisesAplusTests` in the global context
         context.evaluateScript(script)
-        
-        let result = context.evaluateScript("promisesAplusTests")
-        
-//        let result = context.evaluateScript("require('promises-aplus-tests')")
         
     }
 }
