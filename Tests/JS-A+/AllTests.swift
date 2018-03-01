@@ -16,26 +16,43 @@ import JavaScriptCore
 class JSPromise: NSObject, JSPromiseProtocol {
     
     class Error: CustomNSError {
-        let reason: String
-        init(reason: String) {
+        let reason: JSValue
+        init(reason: JSValue) {
             self.reason = reason
         }
     }
     
-    let promise = Promise<JSValue>.pending()
+    let promise: Promise<JSValue>
+    
+    init(promise: Promise<JSValue>) {
+        self.promise = promise
+    }
     
     func then(_ onFulfilled: JSValue, _ onRejected: JSValue) -> JSPromise {
-        print("then called")
-        return JSPromise()
+        let newPromise = promise.tap { result in
+            switch result {
+            case .fulfilled(let value):
+                onFulfilled.call(withArguments: [value])
+            case .rejected(let error):
+                guard let typedError = error as? Error else {
+                    return
+                }
+                onRejected.call(withArguments: [typedError.reason])
+            }
+        }
+        return JSPromise(promise: newPromise)
     }
 }
 
 let resolved: @convention(block) (JSValue) -> JSPromise = { value in
-    return JSPromise()
+    let promise = Promise<JSValue>.value(value)
+    return JSPromise(promise: promise)
 }
 
 let rejected: @convention(block) (JSValue) -> JSPromise = { reason in
-    return JSPromise()
+    let error = JSPromise.Error(reason: reason)
+    let promise = Promise<JSValue>(error: error)
+    return JSPromise(promise: promise)
 }
 
 let deferred: @convention(block) () -> JSValue = {
@@ -46,21 +63,22 @@ let deferred: @convention(block) () -> JSValue = {
         fatalError("Couldn't create object")
     }
     
-    let promise = JSPromise()
+    let pendingPromise = Promise<JSValue>.pending()
+    let jsPromise = JSPromise(promise: pendingPromise.promise)
     
     // promise
-    object.setObject(promise, forKeyedSubscript: "promise" as NSString)
+    object.setObject(jsPromise, forKeyedSubscript: "promise" as NSString)
     
     // resolve
     let resolve: @convention(block) (JSValue) -> Void = { value in
-        promise.promise.resolver.fulfill(value)
+        pendingPromise.resolver.fulfill(value)
     }
     object.setObject(resolve, forKeyedSubscript: "resolve" as NSString)
     
     // reject
     let reject: @convention(block) (JSValue) -> Void = { reason in
-        let error = JSPromise.Error(reason: reason.toString())
-        promise.promise.resolver.reject(error)
+        let error = JSPromise.Error(reason: reason)
+        pendingPromise.resolver.reject(error)
     }
     object.setObject(reject, forKeyedSubscript: "reject" as NSString)
     
