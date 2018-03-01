@@ -78,6 +78,7 @@
 		63CF6D80203CD19200EC8927 /* ThenableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CF6D7F203CD19200EC8927 /* ThenableTests.swift */; };
 		63D9B2EF203385FD0075C00B /* race.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D9B2EE203385FD0075C00B /* race.m */; };
 		63D9B2F120338D5D0075C00B /* Deprecations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D9B2F020338D5D0075C00B /* Deprecations.swift */; };
+		C013F73620486FDD006B57B1 /* MockNodeEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F73520486FDD006B57B1 /* MockNodeEnvironment.swift */; };
 		C0244E5E2047A6CB00ACB4AC /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B0AC571D595E1B00FA21D9 /* PromiseKit.framework */; };
 		C0244E692047AC9F00ACB4AC /* AllTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0244E682047AC9F00ACB4AC /* AllTests.swift */; };
 		C0244E6F2047AF1700ACB4AC /* build in CopyFiles */ = {isa = PBXBuildFile; fileRef = C0244E6D2047AEA400ACB4AC /* build */; };
@@ -217,6 +218,7 @@
 		63CF6D7F203CD19200EC8927 /* ThenableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThenableTests.swift; sourceTree = "<group>"; };
 		63D9B2EE203385FD0075C00B /* race.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = race.m; path = Sources/race.m; sourceTree = "<group>"; };
 		63D9B2F020338D5D0075C00B /* Deprecations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Deprecations.swift; path = Sources/Deprecations.swift; sourceTree = "<group>"; };
+		C013F73520486FDD006B57B1 /* MockNodeEnvironment.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockNodeEnvironment.swift; sourceTree = "<group>"; };
 		C0244E622047A6CB00ACB4AC /* PMKJSA+Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "PMKJSA+Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0244E632047A6CC00ACB4AC /* PMKA+Tests copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "PMKA+Tests copy-Info.plist"; path = "/Users/ldiqual/Sandbox/PromiseKit/PMKA+Tests copy-Info.plist"; sourceTree = "<absolute>"; };
 		C0244E682047AC9F00ACB4AC /* AllTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AllTests.swift; path = "Tests/JS-A+/AllTests.swift"; sourceTree = "<group>"; };
@@ -478,6 +480,7 @@
 			children = (
 				C0244E6D2047AEA400ACB4AC /* build */,
 				C0244E682047AC9F00ACB4AC /* AllTests.swift */,
+				C013F73520486FDD006B57B1 /* MockNodeEnvironment.swift */,
 			);
 			name = "JS/A+";
 			sourceTree = "<group>";
@@ -758,6 +761,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				C0244E692047AC9F00ACB4AC /* AllTests.swift in Sources */,
+				C013F73620486FDD006B57B1 /* MockNodeEnvironment.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
