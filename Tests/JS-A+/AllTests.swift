@@ -97,6 +97,68 @@ class MockNodeEnvironment {
     }
 }
 
+@objc class JSPromise: NSObject, JSExport {
+    
+    class Error: CustomNSError {
+        let reason: String
+        init(reason: String) {
+            self.reason = reason
+        }
+    }
+    
+    let promise = Promise<JSValue>.pending()
+}
+
+@objc protocol JSAdapterProtocol: JSExport {
+    func resolved() -> JSPromise
+    func rejected() -> JSPromise
+    func deferred() -> JSValue
+}
+
+@objc class JSAdapter: NSObject, JSAdapterProtocol {
+    
+    let context: JSContext
+    
+    init(context: JSContext) {
+        self.context = context
+    }
+    
+    @objc func resolved() -> JSPromise {
+        return JSPromise()
+    }
+    
+    func rejected() -> JSPromise {
+        return JSPromise()
+    }
+    
+    @objc func deferred() -> JSValue {
+        
+        guard let object = JSValue(object: NSDictionary(), in: context) else {
+            fatalError("Couldn't create object")
+        }
+        
+        let promise = JSPromise()
+        
+        // promise
+        object.setObject(promise, forKeyedSubscript: "promise" as NSString)
+        
+        // resolve
+        let resolve: @convention(block) (JSValue) -> Void = { value in
+            promise.promise.resolver.fulfill(value)
+        }
+        object.setObject(resolve, forKeyedSubscript: "resolve" as NSString)
+        
+        // reject
+        let reject: @convention(block) (JSValue) -> Void = { reason in
+            let error = JSPromise.Error(reason: reason.toString())
+            promise.promise.resolver.reject(error)
+        }
+        object.setObject(reject, forKeyedSubscript: "reject" as NSString)
+        
+        return JSValue(object: promise, in: context)
+    }
+}
+
 @available(iOS 10.0, *)
 class AllTests: XCTestCase {
     func testAll() {
@@ -137,6 +199,10 @@ class AllTests: XCTestCase {
         // Setup mock functions (timers, console.log, etc)
         environment.setup(with: context)
         
+        // Expose JSPromise and JSAdapter in the javascript context
+        context.setObject(JSAdapter.self, forKeyedSubscript: "JSAdapter" as NSString)
+        context.setObject(JSPromise.self, forKeyedSubscript: "JSPromise" as NSString)
+        
         // Evaluate contents of `build.js`, which exposes `runTests` in the global context
         context.evaluateScript(script)
         guard let runTests = context.objectForKeyedSubscript("runTests") else {
@@ -155,7 +221,8 @@ class AllTests: XCTestCase {
         }
         
         // Call `runTests`
-        runTests.call(withArguments: [callbackValue])
+        let adapter = JSAdapter(context: context)
+        runTests.call(withArguments: [adapter, callbackValue])
         self.wait(for: [expectation], timeout: 10)
     }
 }

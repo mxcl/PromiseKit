@@ -1,13 +1,19 @@
 require('mocha')
 
-const adapter = {
-  resolved: () => { return null; console.log(arguments) },
-  rejected: () => { return null; console.log(arguments) },
-  deferred: () => { return null; console.log(arguments) },
-  promise: {}
-}
+// const adapter = {
+//   resolved: () => { return null; console.log(arguments) },
+//   rejected: () => { return null; console.log(arguments) },
+//   deferred: () => { return null; console.log(arguments) },
+//   promise: {}
+// }
 
-module.exports = function(done) {
+// const adapter = new JSAdapter()
+
+module.exports = function(adapter, done) {
+  
+  console.log(adapter.resolved)
+  console.log(adapter.rejected)
+  console.log(adapter.deferred)
   
   global.adapter = adapter
   const mocha = new Mocha({ ui: 'bdd' })
