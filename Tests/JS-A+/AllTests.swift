@@ -29,7 +29,11 @@ class JSPromise: NSObject, JSPromiseProtocol {
     }
     
     func then(_ onFulfilled: JSValue, _ onRejected: JSValue) -> JSPromise {
-        let newPromise = promise.tap { result in
+        
+        let newPromise = promise.ensure {
+            guard let result = self.promise.result else {
+                return
+            }
             switch result {
             case .fulfilled(let value):
                 onFulfilled.call(withArguments: [value])
@@ -45,8 +49,7 @@ class JSPromise: NSObject, JSPromiseProtocol {
 }
 
 let resolved: @convention(block) (JSValue) -> JSPromise = { value in
-    let promise = Promise<JSValue>.value(value)
-    return JSPromise(promise: promise)
+    return JSPromise(promise: .value(value))
 }
 
 let rejected: @convention(block) (JSValue) -> JSPromise = { reason in
