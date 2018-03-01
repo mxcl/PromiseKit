@@ -1,0 +1,10 @@
+{
+  "scripts": {
+    "build": "webpack-cli"
+  },
+  "dependencies": {
+    "promises-aplus-tests": "^2.1.2",
+    "webpack": "^4.0.1",
+    "webpack-cli": "^2.0.9"
+  }
+}
