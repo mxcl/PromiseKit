@@ -6,9 +6,9 @@ module.exports = {
   output: {
     path: __dirname + '/build',
     filename: 'build.js',
-    library: 'library'
+    library: 'promisesAplusTests'
   },
   node: {
-    fs: 'empty'
+    fs: "empty"
   }
 };
