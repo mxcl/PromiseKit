@@ -113,58 +113,46 @@ class JSPromise: NSObject, JSPromiseProtocol {
     let promise = Promise<JSValue>.pending()
 }
 
-@objc protocol JSAdapterProtocol: JSExport {
-    func resolved() -> JSPromise
-    func rejected() -> JSPromise
-    func deferred() -> JSValue
+let resolved: @convention(block) (JSValue) -> JSPromise = { value in
+    return JSPromise()
 }
 
-@objc class JSAdapter: NSObject, JSAdapterProtocol {
+let rejected: @convention(block) (JSValue) -> JSPromise = { reason in
+    return JSPromise()
+}
+
+let deferred: @convention(block) () -> JSValue = {
     
-    let context: JSContext
+    let context = JSContext.current()
     
-    init(context: JSContext) {
-        self.context = context
+    guard let object = JSValue(object: NSDictionary(), in: context) else {
+        fatalError("Couldn't create object")
     }
     
-    func resolved() -> JSPromise {
-        return JSPromise()
+    let promise = JSPromise()
+    
+    // promise
+    object.setObject(promise, forKeyedSubscript: "promise" as NSString)
+    
+    // resolve
+    let resolve: @convention(block) (JSValue) -> Void = { value in
+        promise.promise.resolver.fulfill(value)
     }
-
-    func rejected() -> JSPromise {
-        return JSPromise()
+    object.setObject(resolve, forKeyedSubscript: "resolve" as NSString)
+    
+    // reject
+    let reject: @convention(block) (JSValue) -> Void = { reason in
+        let error = JSPromise.Error(reason: reason.toString())
+        promise.promise.resolver.reject(error)
     }
-
-    func deferred() -> JSValue {
-
-        guard let object = JSValue(object: NSDictionary(), in: context) else {
-            fatalError("Couldn't create object")
-        }
-
-        let promise = JSPromise()
-
-        // promise
-        object.setObject(promise, forKeyedSubscript: "promise" as NSString)
-
-        // resolve
-        let resolve: @convention(block) (JSValue) -> Void = { value in
-            promise.promise.resolver.fulfill(value)
-        }
-        object.setObject(resolve, forKeyedSubscript: "resolve" as NSString)
-
-        // reject
-        let reject: @convention(block) (JSValue) -> Void = { reason in
-            let error = JSPromise.Error(reason: reason.toString())
-            promise.promise.resolver.reject(error)
-        }
-        object.setObject(reject, forKeyedSubscript: "reject" as NSString)
-
-        return object
-    }
+    object.setObject(reject, forKeyedSubscript: "reject" as NSString)
+    
+    return object
 }
 
 @available(iOS 10.0, *)
 class AllTests: XCTestCase {
+    
     func testAll() {
         
         let environment = MockNodeEnvironment()
@@ -204,8 +192,15 @@ class AllTests: XCTestCase {
         environment.setup(with: context)
         
         // Expose JSPromise and JSAdapter in the javascript context
-        context.setObject(JSAdapter.self, forKeyedSubscript: "JSAdapter" as NSString)
         context.setObject(JSPromise.self, forKeyedSubscript: "JSPromise" as NSString)
+        
+        // Create adapter
+        guard let adapter = JSValue(object: NSDictionary(), in: context) else {
+            fatalError("Couldn't create adapter")
+        }
+        adapter.setObject(resolved, forKeyedSubscript: "resolved" as NSString)
+        adapter.setObject(rejected, forKeyedSubscript: "rejected" as NSString)
+        adapter.setObject(deferred, forKeyedSubscript: "deferred" as NSString)
         
         // Evaluate contents of `build.js`, which exposes `runTests` in the global context
         context.evaluateScript(script)
@@ -225,7 +220,6 @@ class AllTests: XCTestCase {
         }
         
         // Call `runTests`
-        let adapter = JSAdapter(context: context)
         runTests.call(withArguments: [adapter, callbackValue])
         self.wait(for: [expectation], timeout: 10)
     }
