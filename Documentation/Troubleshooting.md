@@ -4,6 +4,34 @@
 
 99% of questions about compile issues with PromiseKit can be solved by either:
 
+### 0. Check Your Handler
+
+```swift
+return firstly {
+      URLSession.shared.dataTask(.promise, with: url)
+}.compactMap {
+    JSONSerialization.jsonObject(with: $0.data) as? [String: Any]
+}.then { dict in
+    User(dict: dict)
+}
+```
+
+Swift (unhelpfully) says:
+
+> Cannot convert value of type '([String : Any]) -> User' to expected argument type '([String : Any]) -> _'
+
+What’s the real problem? `then` *must* return a `Promise`, you wanted `map`:
+
+```swift
+return firstly {
+      URLSession.shared.dataTask(.promise, with: url)
+}.compactMap {
+    JSONSerialization.jsonObject(with: $0.data) as? [String: Any]
+}.map { dict in
+    User(dict: dict)
+}
+```
+
 ### 1. Specifying Closure Return Types
 
 Please try it.
@@ -50,7 +78,7 @@ func doStuff() {
 ```
 
 So an *inline* function is all you need. Now Swift will tell you the real
-error message. Probably that you forgot a `return`.
+error message. Here that you forgot a `return`.
 
 ## You Copied Code Off The Internet That Doesn’t Work
 
