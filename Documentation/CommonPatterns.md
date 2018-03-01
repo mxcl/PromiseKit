@@ -42,8 +42,8 @@ class MyRestAPI {
         return firstly {
             URLSession.shared.dataTask(.promise, with: url)
         }.compactMap {
-            JSONSerialization.jsonObject(with: $0.data) as? [String: Any]
-        }.then { dict in
+            try JSONSerialization.jsonObject(with: $0.data) as? [String: Any]
+        }.map { dict in
             User(dict: dict)
         }
     }
@@ -70,7 +70,7 @@ your apps.
 class MyRestAPI {
     func avatar() -> Promise<UIImage> {
         let bgq = DispatchQueue.global(qos: .userInitiated)
-        
+
         return firstly {
             user()
         }.then(on: bgq) { user in
@@ -147,7 +147,7 @@ func buttonPressed() {
 
 func refresh() {
     // ensure only one fetch operation happens at a time
-    
+
     if fetch.isResolved {
         startSpinner()
         fetch = API.fetch().ensure {
@@ -337,13 +337,13 @@ class PMKCLLocationManagerProxy: NSObject, CLLocationManagerDelegate {
         super.init()
         retainCycle = self
         manager.delegate = self // does not retain hence the `retainCycle` property
-        
+
         promise.ensure {
             // ensure we break the retain cycle
             self.retainCycle = nil
         }
     }
-    
+
     @objc fileprivate func locationManager(_: CLLocationManager, didUpdateLocations locations: [CLLocation]) {
         seal.fulfill(locations)
     }
@@ -390,12 +390,12 @@ Be careful not to ignore all errors; recover only those errors that make sense.
 class ViewController: UIViewController {
 
     private let (promise, seal) = Guarantee<…>.pending()  // use Promise if your flow can fail
-    
+
     func show(in: UIViewController) -> Promise<…> {
         in.show(self, sender: in)
         return promise
     }
-    
+
     func done() {
         dismiss(animated: true)
         seal.fulfill(…)
