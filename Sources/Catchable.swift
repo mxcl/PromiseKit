@@ -44,6 +44,7 @@ public extension CatchMixin {
 public class PMKFinalizer {
     let pending = Guarantee<Void>.pending()
 
+    /// `finally` is the same as `ensure`, but it is not chainable
     public func finally(_ body: @escaping () -> Void) {
         pending.guarantee.done(body)
     }
