@@ -99,12 +99,13 @@ class AllTests: XCTestCase {
             return XCTFail("Couldn't read content of test suite JS file")
         }
         
+        // Add a global exception handler
         context.exceptionHandler = { context, exception in
             
             guard let exception = exception,
                 let message = exception.toString(),
                 let lineNumber = exception.objectForKeyedSubscript("line"),
-                let column = exception.objectForKeyedSubscript("column" )else {
+                let column = exception.objectForKeyedSubscript("column") else {
                 return XCTFail("Unknown JS exception")
             }
             
@@ -118,10 +119,28 @@ class AllTests: XCTestCase {
             XCTFail("JS exception")
         }
         
+        // Setup mock functions (timers, console.log, etc)
         environment.setup(with: context)
         
-        // Evaluate contents of `build.js`, which exposes `promisesAplusTests` in the global context
+        // Evaluate contents of `build.js`, which exposes `runTests` in the global context
         context.evaluateScript(script)
+        guard let runTests = context.objectForKeyedSubscript("runTests") else {
+            return XCTFail("Couldn't find `runTests` in JS context")
+        }
         
+        // Create a new callback that we'll send to `runTest` so that it notifies when tests are done running.
+        let expectation = self.expectation(description: "async")
+        let callback: @convention(block) (JSValue) -> Void = { failures in
+            expectation.fulfill()
+            print(failures.toString())
+        }
+        context.setObject(callback, forKeyedSubscript: "mainCallback" as NSString)
+        guard let callbackValue = context.objectForKeyedSubscript("mainCallback") else {
+            return XCTFail("Couldn't create callback value")
+        }
+        
+        // Call `runTests`
+        runTests.call(withArguments: [callbackValue])
+        self.wait(for: [expectation], timeout: 10)
     }
 }
