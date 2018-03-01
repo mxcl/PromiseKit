@@ -126,14 +126,12 @@ class AllTests: XCTestCase {
                 return XCTFail("Unknown JS exception")
             }
             
-            print("JS Exception at \(lineNumber):\(column): \(message)")
+            XCTFail("JS Exception at \(lineNumber):\(column): \(message)")
             
             if let stacktrace = exception.objectForKeyedSubscript("stack").toString() {
                 let lines = stacktrace.split(separator: "\n").map { "\t> \($0)" }.joined(separator: "\n")
                 print(lines)
             }
-            
-            XCTFail("JS exception")
         }
         
         // Setup mock functions (timers, console.log, etc)
