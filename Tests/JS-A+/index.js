@@ -11,9 +11,9 @@ require('mocha')
 
 module.exports = function(adapter, done) {
   
-  console.log(adapter.resolved)
-  console.log(adapter.rejected)
-  console.log(adapter.deferred)
+  console.log(adapter.resolved())
+  console.log(adapter.rejected())
+  console.log(adapter.deferred())
   
   global.adapter = adapter
   const mocha = new Mocha({ ui: 'bdd' })

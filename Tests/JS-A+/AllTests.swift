@@ -97,7 +97,11 @@ class MockNodeEnvironment {
     }
 }
 
-@objc class JSPromise: NSObject, JSExport {
+@objc protocol JSPromiseProtocol: JSExport {
+    
+}
+
+class JSPromise: NSObject, JSPromiseProtocol {
     
     class Error: CustomNSError {
         let reason: String
@@ -123,39 +127,39 @@ class MockNodeEnvironment {
         self.context = context
     }
     
-    @objc func resolved() -> JSPromise {
+    func resolved() -> JSPromise {
         return JSPromise()
     }
-    
+
     func rejected() -> JSPromise {
         return JSPromise()
     }
-    
-    @objc func deferred() -> JSValue {
-        
+
+    func deferred() -> JSValue {
+
         guard let object = JSValue(object: NSDictionary(), in: context) else {
             fatalError("Couldn't create object")
         }
-        
+
         let promise = JSPromise()
-        
+
         // promise
         object.setObject(promise, forKeyedSubscript: "promise" as NSString)
-        
+
         // resolve
         let resolve: @convention(block) (JSValue) -> Void = { value in
             promise.promise.resolver.fulfill(value)
         }
         object.setObject(resolve, forKeyedSubscript: "resolve" as NSString)
-        
+
         // reject
         let reject: @convention(block) (JSValue) -> Void = { reason in
             let error = JSPromise.Error(reason: reason.toString())
             promise.promise.resolver.reject(error)
         }
         object.setObject(reject, forKeyedSubscript: "reject" as NSString)
-        
-        return JSValue(object: promise, in: context)
+
+        return object
     }
 }
 
