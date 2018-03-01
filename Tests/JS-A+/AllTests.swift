@@ -30,6 +30,7 @@ class JSPromise: NSObject, JSPromiseProtocol {
     
     func then(_ onFulfilled: JSValue, _ onRejected: JSValue) -> JSPromise {
         
+        // TODO: Use tap. Fails because it's not async in case promise is already resolved.
         let newPromise = promise.ensure {
             guard let result = self.promise.result else {
                 return
