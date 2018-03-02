@@ -38,7 +38,7 @@ class JSPromise: NSObject, JSPromiseProtocol {
             fatalError()
         }
         
-        // 2.2.5: onFulfilled/onRejected must be called as functions (with no `this` value)
+        
         guard let undefined = JSValue(undefinedIn: context) else {
             XCTFail("Couldn't create `undefined` value")
             fatalError()
@@ -74,10 +74,13 @@ class JSPromise: NSObject, JSPromiseProtocol {
                 return .value(value)
             }
             
+            // Call `onFulfilled`
+            // 2.2.5: onFulfilled/onRejected must be called as functions (with no `this` value)
             guard let returnValue = try call(handler: onFulfilled, arguments: [undefined, value]) else {
                 return .value(value)
             }
             
+            // Extract JSPromise.promise if available, or use plain return value
             if let jsPromise = returnValue.toObjectOf(JSPromise.self) as? JSPromise {
                 return jsPromise.promise
             } else {
@@ -92,10 +95,13 @@ class JSPromise: NSObject, JSPromiseProtocol {
                 throw error
             }
             
+            // Call `onRejected`
+            // 2.2.5: onFulfilled/onRejected must be called as functions (with no `this` value)
             guard let returnValue = try call(handler: onRejected, arguments: [undefined, jsError.reason]) else {
                 throw error
             }
             
+            // Extract JSPromise.promise if available, or use plain return value
             if let jsPromise = returnValue.toObjectOf(JSPromise.self) as? JSPromise {
                 return jsPromise.promise
             } else {
