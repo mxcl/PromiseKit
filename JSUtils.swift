@@ -70,4 +70,26 @@ enum JSUtils {
         return returnValue
     }
     
+    static func printCurrentStackTrace() {
+        guard let exception = JSUtils.sharedContext.evaluateScript("new Error()") else {
+            return print("Couldn't get current stack trace")
+        }
+        printStackTrace(exception: exception, includeExceptionDescription: false)
+    }
+    
+    static func printStackTrace(exception: JSValue, includeExceptionDescription: Bool) {
+        guard let lineNumber = exception.objectForKeyedSubscript("line"),
+            let column = exception.objectForKeyedSubscript("column"),
+            let message = exception.objectForKeyedSubscript("message"),
+            let stacktrace = exception.objectForKeyedSubscript("stack")?.toString() else {
+                return print("Couldn't print stack trace")
+        }
+        
+        if includeExceptionDescription {
+            print("JS Exception at \(lineNumber):\(column): \(message)")
+        }
+        
+        let lines = stacktrace.split(separator: "\n").map { "\t> \($0)" }.joined(separator: "\n")
+        print(lines)
+    }
 }

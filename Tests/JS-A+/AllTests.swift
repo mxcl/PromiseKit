@@ -32,7 +32,7 @@ class AllTests: XCTestCase {
             guard let exception = exception else {
                 return XCTFail("Unknown JS exception")
             }
-            MockNodeEnvironment.printStackTrace(exception: exception, includeExceptionDescription: true)
+            JSUtils.printStackTrace(exception: exception, includeExceptionDescription: true)
         }
         
         // Setup mock functions (timers, console.log, etc)
