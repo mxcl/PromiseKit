@@ -30,6 +30,8 @@ class JSPromise: NSObject, JSPromiseProtocol {
     
     func then(_ onFulfilled: JSValue, _ onRejected: JSValue) -> JSPromise {
         
+        let context = JSContext.current()
+        
         // TODO: Use tap. Fails because it's not async in case promise is already resolved.
         let newPromise = promise.ensure {
             guard let result = self.promise.result else {
@@ -38,7 +40,6 @@ class JSPromise: NSObject, JSPromiseProtocol {
             
             // Spec requires onFulfilled/onRejected to be called as pure functions (without `this`)
             // See 2.2.5
-            let context = JSContext.current()
             guard let this = JSValue(undefinedIn: context) else {
                 return print("couldn't create UNDEFINED")
             }
@@ -46,13 +47,13 @@ class JSPromise: NSObject, JSPromiseProtocol {
             switch result {
             case .fulfilled(let value):
                 guard onFulfilled.isObject else {
-                    return print("ERR")
+                    return
                 }
                 onFulfilled.invokeMethod("call", withArguments: [this, value])
                 
             case .rejected(let error):
                 guard let typedError = error as? Error, onRejected.isObject else {
-                    return print("ERR")
+                    return
                 }
                 onRejected.invokeMethod("call", withArguments: [this, typedError.reason])
             }
