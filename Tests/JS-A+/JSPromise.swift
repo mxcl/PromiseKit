@@ -52,18 +52,17 @@ class JSPromise: NSObject, JSPromiseProtocol {
             var caughtException: JSValue?
             let savedExceptionHandler = context.exceptionHandler
             context.exceptionHandler = { context, exception in
-                MockNodeEnvironment.printStackTrace(exception: exception!, includeExceptionDescription: true)
                 caughtException = exception
             }
             
             // Call the handler
             let returnValue = handler.invokeMethod("call", withArguments: arguments)
+            context.exceptionHandler = savedExceptionHandler
             
             // If an exception was caught, throw it
             if let exception = caughtException {
                 throw JSError(reason: exception)
             }
-            context.exceptionHandler = savedExceptionHandler
             
             // 2.2.7.1: If we have a return value that is not `undefined`, return it
             if let returnValue = returnValue, !returnValue.isUndefined {
@@ -105,8 +104,7 @@ class JSPromise: NSObject, JSPromiseProtocol {
             do {
                 let returnValue = try call(handler: onRejected, arguments: [undefined, jsError.reason])
                 if let returnValue = returnValue {
-                    let error = JSError(reason: returnValue)
-                    newPromise.resolver.reject(error)
+                    newPromise.resolver.fulfill(returnValue)
                 } else {
                     newPromise.resolver.reject(jsError)
                 }
