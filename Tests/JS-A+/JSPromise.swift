@@ -26,8 +26,6 @@ class JSPromise: NSObject, JSPromiseProtocol {
     
     func then(_ onFulfilled: JSValue, _ onRejected: JSValue) -> JSPromise {
         
-        
-        
         let afterFulfill = promise.then { value -> Promise<JSValue> in
             
             // 2.2.1: ignored if not a function
