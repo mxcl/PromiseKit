@@ -110,8 +110,16 @@ class AllTests: XCTestCase {
             return XCTFail("Couldn't create callback value")
         }
         
+        // If there's a need to only run one specific test, provide its name here
+        let testName: JSValue
+        if true {
+            testName = JSValue(object: "2.2.7", in: context)
+        } else {
+            testName = JSValue(undefinedIn: context)
+        }
+        
         // Call `runTests`
-        runTests.call(withArguments: [adapter, callbackValue])
+        runTests.call(withArguments: [adapter, callbackValue, testName])
         self.wait(for: [expectation], timeout: 1000)
     }
 }

@@ -1,15 +1,22 @@
+const _ = require('lodash')
 require('mocha')
 
-module.exports = function(adapter, done) {
+module.exports = function(adapter, done, testName) {
   
   global.adapter = adapter
   const mocha = new Mocha({ ui: 'bdd' })
 
   // Require all tests
   console.log('Loading test files')
-  const requireTest = require.context('promises-aplus-tests/lib/tests', false, /2\.2\.6\.js$/)
+  const requireTest = require.context('promises-aplus-tests/lib/tests', false, /\.js$/)    
   requireTest.keys().forEach(file => {
-    console.log(`\t${file}`)
+    
+    let currentTestName = _.replace(_.replace(file, './', ''), '.js', '')
+    if (testName && currentTestName !== testName) {
+      return
+    }
+    
+    console.log(`\t${currentTestName}`)
     mocha.suite.emit('pre-require', global, file, mocha)
     mocha.suite.emit('require', requireTest(file), file, mocha)
     mocha.suite.emit('post-require', global, file, mocha)
