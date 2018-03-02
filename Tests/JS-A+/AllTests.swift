@@ -9,16 +9,19 @@ import XCTest
 import PromiseKit
 import JavaScriptCore
 
+@available(iOS 10.0, *)
 let resolved: @convention(block) (JSValue) -> JSPromise = { value in
     return JSPromise(promise: .value(value))
 }
 
+@available(iOS 10.0, *)
 let rejected: @convention(block) (JSValue) -> JSPromise = { reason in
     let error = JSPromise.JSError(reason: reason)
     let promise = Promise<JSValue>(error: error)
     return JSPromise(promise: promise)
 }
 
+@available(iOS 10.0, *)
 let deferred: @convention(block) () -> JSValue = {
     
     let context = JSContext.current()

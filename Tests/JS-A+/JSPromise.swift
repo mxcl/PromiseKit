@@ -10,10 +10,12 @@ import XCTest
 import PromiseKit
 import JavaScriptCore
 
+@available(iOS 10.0, *)
 @objc protocol JSPromiseProtocol: JSExport {
     func then(_: JSValue, _: JSValue) -> JSPromise
 }
 
+@available(iOS 10.0, *)
 class JSPromise: NSObject, JSPromiseProtocol {
     
     class JSError: CustomNSError {
@@ -50,6 +52,7 @@ class JSPromise: NSObject, JSPromiseProtocol {
             var caughtException: JSValue?
             let savedExceptionHandler = context.exceptionHandler
             context.exceptionHandler = { context, exception in
+                MockNodeEnvironment.printStackTrace(exception: exception!, includeExceptionDescription: true)
                 caughtException = exception
             }
             
