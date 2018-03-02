@@ -16,4 +16,8 @@ module.exports = function(adapter, done) {
   const runner = mocha.run(failures => {
     done(failures)
   })
+  
+  runner.on('fail', (test, err) => {
+    console.error(err)
+  })
 }

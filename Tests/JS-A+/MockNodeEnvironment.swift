@@ -18,7 +18,7 @@ class MockNodeEnvironment {
         guard let exception = JSContext.current().evaluateScript("new Error()"),
             let lineNumber = exception.objectForKeyedSubscript("line"),
             let column = exception.objectForKeyedSubscript("column"),
-            let stacktrace = exception.objectForKeyedSubscript("stack").toString() else {
+            let stacktrace = exception.objectForKeyedSubscript("stack")?.toString() else {
             return print("Couldn't get current stack trace")
         }
         

@@ -40,19 +40,19 @@ class JSPromise: NSObject, JSPromiseProtocol {
             // See 2.2.5
             let context = JSContext.current()
             guard let this = JSValue(undefinedIn: context) else {
-                return
+                return print("couldn't create UNDEFINED")
             }
             
             switch result {
             case .fulfilled(let value):
                 guard onFulfilled.isObject else {
-                    return
+                    return print("ERR")
                 }
                 onFulfilled.invokeMethod("call", withArguments: [this, value])
                 
             case .rejected(let error):
                 guard let typedError = error as? Error, onRejected.isObject else {
-                    return
+                    return print("ERR")
                 }
                 onRejected.invokeMethod("call", withArguments: [this, typedError.reason])
             }
