@@ -43,14 +43,31 @@ class JSPromise: NSObject, JSPromiseProtocol {
         }
         
         // Calls a JS handler and throws any potential exception wrapped in a JSError
-        func call(handler: JSValue, arguments: [JSValue]) throws {
+        func call(handler: JSValue, arguments: [JSValue]) throws -> JSValue? {
+            
+            // Create a new exception handler that will store a potential exception
+            // thrown in the handler. Save the value of the old handler.
+            var caughtException: JSValue?
             let savedExceptionHandler = context.exceptionHandler
-            context.exceptionHandler = { _ in }
-            handler.invokeMethod("call", withArguments: arguments)
-            if let exception = context.exception {
+            context.exceptionHandler = { context, exception in
+                caughtException = exception
+            }
+            
+            // Call the handler
+            let returnValue = handler.invokeMethod("call", withArguments: arguments)
+            
+            // If an exception was caught, throw it
+            if let exception = caughtException {
                 throw JSError(reason: exception)
             }
             context.exceptionHandler = savedExceptionHandler
+            
+            // 2.2.7.1: If we have a return value that is not `undefined`, return it
+            if let returnValue = returnValue, !returnValue.isUndefined {
+                return returnValue
+            } else {
+                return nil
+            }
         }
         
         let newPromise = Promise<JSValue>.pending()
@@ -64,8 +81,12 @@ class JSPromise: NSObject, JSPromiseProtocol {
             }
             
             do {
-                try call(handler: onFulfilled, arguments: [undefined, value])
-                newPromise.resolver.fulfill(value)
+                let returnValue = try call(handler: onFulfilled, arguments: [undefined, value])
+                if let returnValue = returnValue {
+                    newPromise.resolver.fulfill(returnValue)
+                } else {
+                    newPromise.resolver.fulfill(value)
+                }
             } catch {
                 newPromise.resolver.reject(error)
             }
@@ -79,8 +100,13 @@ class JSPromise: NSObject, JSPromiseProtocol {
             }
             
             do {
-                try call(handler: onRejected, arguments: [undefined, jsError.reason])
-                newPromise.resolver.reject(jsError)
+                let returnValue = try call(handler: onRejected, arguments: [undefined, jsError.reason])
+                if let returnValue = returnValue {
+                    let error = JSError(reason: returnValue)
+                    newPromise.resolver.reject(error)
+                } else {
+                    newPromise.resolver.reject(jsError)
+                }
             } catch {
                 newPromise.resolver.reject(error)
             }

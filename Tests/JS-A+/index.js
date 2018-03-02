@@ -6,8 +6,10 @@ module.exports = function(adapter, done) {
   const mocha = new Mocha({ ui: 'bdd' })
 
   // Require all tests
+  console.log('Loading test files')
   const requireTest = require.context('promises-aplus-tests/lib/tests', false, /2\.2\.6\.js$/)
   requireTest.keys().forEach(file => {
+    console.log(`\t${file}`)
     mocha.suite.emit('pre-require', global, file, mocha)
     mocha.suite.emit('require', requireTest(file), file, mocha)
     mocha.suite.emit('post-require', global, file, mocha)
