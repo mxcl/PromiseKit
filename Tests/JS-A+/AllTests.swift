@@ -35,18 +35,26 @@ class JSPromise: NSObject, JSPromiseProtocol {
             guard let result = self.promise.result else {
                 return
             }
+            
+            // Spec requires onFulfilled/onRejected to be called as pure functions (without `this`)
+            // See 2.2.5
+            let context = JSContext.current()
+            guard let this = JSValue(undefinedIn: context) else {
+                return
+            }
+            
             switch result {
             case .fulfilled(let value):
                 guard onFulfilled.isObject else {
                     return
                 }
-                onFulfilled.call(withArguments: [value])
+                onFulfilled.invokeMethod("call", withArguments: [this, value])
                 
             case .rejected(let error):
                 guard let typedError = error as? Error, onRejected.isObject else {
                     return
                 }
-                onRejected.call(withArguments: [typedError.reason])
+                onRejected.invokeMethod("call", withArguments: [this, typedError.reason])
             }
         }
         return JSPromise(promise: newPromise)
