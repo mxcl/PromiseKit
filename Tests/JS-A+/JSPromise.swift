@@ -18,13 +18,6 @@ import JavaScriptCore
 @available(iOS 10.0, *)
 class JSPromise: NSObject, JSPromiseProtocol {
     
-    class JSError: CustomNSError {
-        let reason: JSValue
-        init(reason: JSValue) {
-            self.reason = reason
-        }
-    }
-    
     let promise: Promise<JSValue>
     
     init(promise: Promise<JSValue>) {
@@ -33,50 +26,18 @@ class JSPromise: NSObject, JSPromiseProtocol {
     
     func then(_ onFulfilled: JSValue, _ onRejected: JSValue) -> JSPromise {
         
-        guard let context = JSContext.current() else {
-            XCTFail("Couldn't get current JS context")
-            fatalError()
-        }
         
-        
-        guard let undefined = JSValue(undefinedIn: context) else {
-            XCTFail("Couldn't create `undefined` value")
-            fatalError()
-        }
-        
-        // Calls a JS handler and throws any potential exception wrapped in a JSError
-        func call(handler: JSValue, arguments: [JSValue]) throws -> JSValue? {
-            
-            // Create a new exception handler that will store a potential exception
-            // thrown in the handler. Save the value of the old handler.
-            var caughtException: JSValue?
-            let savedExceptionHandler = context.exceptionHandler
-            context.exceptionHandler = { context, exception in
-                caughtException = exception
-            }
-            
-            // Call the handler
-            let returnValue = handler.invokeMethod("call", withArguments: arguments)
-            context.exceptionHandler = savedExceptionHandler
-            
-            // If an exception was caught, throw it
-            if let exception = caughtException {
-                throw JSError(reason: exception)
-            }
-            
-            return returnValue
-        }
         
         let afterFulfill = promise.then { value -> Promise<JSValue> in
             
             // 2.2.1: ignored if not a function
-            guard MockNodeEnvironment.isFunction(value: onFulfilled) else {
+            guard JSUtils.isFunction(value: onFulfilled) else {
                 return .value(value)
             }
             
             // Call `onFulfilled`
             // 2.2.5: onFulfilled/onRejected must be called as functions (with no `this` value)
-            guard let returnValue = try call(handler: onFulfilled, arguments: [undefined, value]) else {
+            guard let returnValue = try JSUtils.call(function: onFulfilled, arguments: [JSUtils.undefined, value]) else {
                 return .value(value)
             }
             
@@ -91,13 +52,13 @@ class JSPromise: NSObject, JSPromiseProtocol {
         let afterReject = promise.recover { error -> Promise<JSValue> in
             
             // 2.2.1: ignored if not a function
-            guard let jsError = error as? JSError, MockNodeEnvironment.isFunction(value: onRejected) else {
+            guard let jsError = error as? JSUtils.JSError, JSUtils.isFunction(value: onRejected) else {
                 throw error
             }
             
             // Call `onRejected`
             // 2.2.5: onFulfilled/onRejected must be called as functions (with no `this` value)
-            guard let returnValue = try call(handler: onRejected, arguments: [undefined, jsError.reason]) else {
+            guard let returnValue = try JSUtils.call(function: onRejected, arguments: [JSUtils.undefined, jsError.reason]) else {
                 throw error
             }
             

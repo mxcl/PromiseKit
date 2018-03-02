@@ -36,20 +36,6 @@ class MockNodeEnvironment {
         print(lines)
     }
     
-    // @warning: relies on lodash to be present
-    static func isFunction(value: JSValue) -> Bool {
-        guard let context = value.context else {
-            return false
-        }
-        guard let lodash = context.objectForKeyedSubscript("_") else {
-            fatalError("Couldn't get lodash in JS context")
-        }
-        guard let result = lodash.invokeMethod("isFunction", withArguments: [value]) else {
-            fatalError("Couldn't invoke _.isFunction")
-        }
-        return result.toBool()
-    }
-    
     func setup(with context: JSContext) {
         
         // console.log

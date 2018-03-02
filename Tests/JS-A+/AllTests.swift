@@ -16,10 +16,6 @@ class AllTests: XCTestCase {
         
         let environment = MockNodeEnvironment()
         
-        guard let context = JSContext() else {
-            return XCTFail()
-        }
-        
         let bundle = Bundle(for: AllTests.self)
         guard let scriptPath = bundle.url(forResource: "build", withExtension: "js", subdirectory: "build") else {
             return XCTFail("Couldn't find test suite")
@@ -28,6 +24,8 @@ class AllTests: XCTestCase {
         guard let script = try? String(contentsOf: scriptPath) else {
             return XCTFail("Couldn't read content of test suite JS file")
         }
+        
+        let context = JSUtils.sharedContext
         
         // Add a global exception handler
         context.exceptionHandler = { context, exception in

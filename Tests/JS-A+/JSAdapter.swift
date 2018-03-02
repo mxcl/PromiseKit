@@ -17,7 +17,7 @@ enum JSAdapter {
     }
     
     static let rejected: @convention(block) (JSValue) -> JSPromise = { reason in
-        let error = JSPromise.JSError(reason: reason)
+        let error = JSUtils.JSError(reason: reason)
         let promise = Promise<JSValue>(error: error)
         return JSPromise(promise: promise)
     }
@@ -44,7 +44,7 @@ enum JSAdapter {
         
         // reject
         let reject: @convention(block) (JSValue) -> Void = { reason in
-            let error = JSPromise.JSError(reason: reason)
+            let error = JSUtils.JSError(reason: reason)
             pendingPromise.resolver.reject(error)
         }
         object.setObject(reject, forKeyedSubscript: "reject" as NSString)
