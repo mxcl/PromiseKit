@@ -100,26 +100,24 @@ class AllTests: XCTestCase {
             return XCTFail("Couldn't find `runTests` in JS context")
         }
         
+        // Create a callback that's called whenever there's a failure
+        let onFail: @convention(block) (JSValue, JSValue) -> Void = { test, error in
+            XCTFail("\(test.toString()) failed: \(error.toString())")
+        }
+        let onFailValue = JSValue(object: onFail, in: context)
+        
         // Create a new callback that we'll send to `runTest` so that it notifies when tests are done running.
         let expectation = self.expectation(description: "async")
-        let callback: @convention(block) (JSValue) -> Void = { failures in
+        let onDone: @convention(block) (JSValue) -> Void = { failures in
             expectation.fulfill()
         }
-        context.setObject(callback, forKeyedSubscript: "mainCallback" as NSString)
-        guard let callbackValue = context.objectForKeyedSubscript("mainCallback") else {
-            return XCTFail("Couldn't create callback value")
-        }
+        let onDoneValue = JSValue(object: onDone, in: context)
         
         // If there's a need to only run one specific test, provide its name here
-        let testName: JSValue
-        if false {
-            testName = JSValue(object: "2.3.1", in: context)
-        } else {
-            testName = JSValue(undefinedIn: context)
-        }
+        let testName = false ? JSValue(object: "2.3.1", in: context) : JSValue(undefinedIn: context)
         
         // Call `runTests`
-        runTests.call(withArguments: [adapter, callbackValue, testName])
+        runTests.call(withArguments: [adapter, onFailValue, onDoneValue, testName])
         self.wait(for: [expectation], timeout: 1000)
     }
 }

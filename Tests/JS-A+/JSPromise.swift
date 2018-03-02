@@ -64,12 +64,7 @@ class JSPromise: NSObject, JSPromiseProtocol {
                 throw JSError(reason: exception)
             }
             
-            // 2.2.7.1: If we have a return value that is not `undefined`, return it
-            if let returnValue = returnValue, !returnValue.isUndefined {
-                return returnValue
-            } else {
-                return nil
-            }
+            return returnValue
         }
         
         let afterFulfill = promise.then { value -> Promise<JSValue> in
@@ -114,6 +109,12 @@ class JSPromise: NSObject, JSPromiseProtocol {
             switch result {
             case .fulfilled: return afterFulfill
             case .rejected: return afterReject
+            }
+        }
+        
+        newPromise.catch { error in
+            if let error = error as? PMKError, case .returnedSelf = error {
+                return
             }
         }
         

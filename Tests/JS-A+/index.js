@@ -6,7 +6,7 @@ const ignoredTests = [
   '2.3.3'
 ]
 
-module.exports = function(adapter, done, testName) {
+module.exports = function(adapter, onFail, onDone, testName) {
   
   global.adapter = adapter
   const mocha = new Mocha({ ui: 'bdd' })
@@ -32,10 +32,11 @@ module.exports = function(adapter, done, testName) {
   })
 
   const runner = mocha.run(failures => {
-    done(failures)
+    onDone(failures)
   })
   
   runner.on('fail', (test, err) => {
     console.error(err)
+    onFail(test.title, err)
   })
 }
