@@ -14,8 +14,6 @@ class AllTests: XCTestCase {
     
     func testAll() {
         
-        let environment = MockNodeEnvironment()
-        
         let bundle = Bundle(for: AllTests.self)
         guard let scriptPath = bundle.url(forResource: "build", withExtension: "js", subdirectory: "build") else {
             return XCTFail("Couldn't find test suite")
@@ -36,9 +34,10 @@ class AllTests: XCTestCase {
         }
         
         // Setup mock functions (timers, console.log, etc)
+        let environment = MockNodeEnvironment()
         environment.setup(with: context)
         
-        // Expose JSPromise and JSAdapter in the javascript context
+        // Expose JSPromise in the javascript context
         context.setObject(JSPromise.self, forKeyedSubscript: "JSPromise" as NSString)
         
         // Create adapter
@@ -57,19 +56,22 @@ class AllTests: XCTestCase {
         
         // Create a callback that's called whenever there's a failure
         let onFail: @convention(block) (JSValue, JSValue) -> Void = { test, error in
-            XCTFail("\(test.toString()) failed: \(error.toString())")
+            guard let test = test.toString(), let error = error.toString() else {
+                return XCTFail("Unknown test failure")
+            }
+            XCTFail("\(test) failed: \(error)")
         }
-        let onFailValue = JSValue(object: onFail, in: context)
+        let onFailValue: JSValue = JSValue(object: onFail, in: context)
         
         // Create a new callback that we'll send to `runTest` so that it notifies when tests are done running.
         let expectation = self.expectation(description: "async")
         let onDone: @convention(block) (JSValue) -> Void = { failures in
             expectation.fulfill()
         }
-        let onDoneValue = JSValue(object: onDone, in: context)
+        let onDoneValue: JSValue = JSValue(object: onDone, in: context)
         
         // If there's a need to only run one specific test, provide its name here
-        let testName = false ? JSValue(object: "2.3.1", in: context) : JSValue(undefinedIn: context)
+        let testName: JSValue = false ? JSValue(object: "2.3.1", in: context) : JSValue(undefinedIn: context)
         
         // Call `runTests`
         runTests.call(withArguments: [adapter, onFailValue, onDoneValue, testName])
