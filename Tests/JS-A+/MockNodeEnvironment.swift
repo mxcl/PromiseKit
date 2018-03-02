@@ -13,6 +13,21 @@ class MockNodeEnvironment {
     
     private var timers: [UInt32: Timer] = [:]
     
+    static func printCurrentStackTrace() {
+        
+        guard let exception = JSContext.current().evaluateScript("new Error()"),
+            let lineNumber = exception.objectForKeyedSubscript("line"),
+            let column = exception.objectForKeyedSubscript("column"),
+            let stacktrace = exception.objectForKeyedSubscript("stack").toString() else {
+            return print("Couldn't get current stack trace")
+        }
+        
+        print("At \(lineNumber):\(column)")
+        
+        let lines = stacktrace.split(separator: "\n").map { "\t> \($0)" }.joined(separator: "\n")
+        print(lines)
+    }
+    
     func setup(with context: JSContext) {
         
         // console.log
@@ -50,35 +65,38 @@ class MockNodeEnvironment {
                 }
             }
             console.setObject(consoleLog, forKeyedSubscript: "log" as NSString)
+            console.setObject(consoleLog, forKeyedSubscript: "error" as NSString)
         }
         
         // setTimeout
         let setTimeout: @convention(block) (JSValue, Double) -> UInt32 = { function, intervalMs in
             let timerID = self.addTimer(interval: intervalMs / 1000, repeats: false, function: function)
-            print("setTimeout: \(timerID)")
             return timerID
         }
         context.setObject(setTimeout, forKeyedSubscript: "setTimeout" as NSString)
         
         // clearTimeout
-        let clearTimeout: @convention(block) (UInt32) -> Void = { timeoutID in
-            print("clearTimeout: \(timeoutID)")
-            self.removeTimer(timerID: timeoutID)
+        let clearTimeout: @convention(block) (JSValue) -> Void = { timeoutID in
+            guard timeoutID.isNumber else {
+                return
+            }
+            self.removeTimer(timerID: timeoutID.toUInt32())
         }
         context.setObject(clearTimeout, forKeyedSubscript: "clearTimeout" as NSString)
         
         // setInterval
         let setInterval: @convention(block) (JSValue, Double) -> UInt32 = { function, intervalMs in
             let timerID = self.addTimer(interval: intervalMs / 1000, repeats: true, function: function)
-            print("setInterval: \(timerID)")
             return timerID
         }
         context.setObject(setInterval, forKeyedSubscript: "setInterval" as NSString)
         
         // clearInterval
-        let clearInterval: @convention(block) (UInt32) -> Void = { intervalID in
-            print("clearInterval: \(intervalID)")
-            self.removeTimer(timerID: intervalID)
+        let clearInterval: @convention(block) (JSValue) -> Void = { intervalID in
+            guard intervalID.isNumber else {
+                return
+            }
+            self.removeTimer(timerID: intervalID.toUInt32())
         }
         context.setObject(clearInterval, forKeyedSubscript: "clearInterval" as NSString)
     }
