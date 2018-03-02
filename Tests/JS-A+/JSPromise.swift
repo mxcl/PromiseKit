@@ -36,8 +36,7 @@ class JSPromise: NSObject, JSPromiseProtocol {
             fatalError()
         }
         
-        // Spec requires onFulfilled/onRejected to be called as pure functions (without `this`)
-        // See 2.2.5
+        // 2.2.5: onFulfilled/onRejected must be called as functions (with no `this` value)
         guard let undefined = JSValue(undefinedIn: context) else {
             XCTFail("Couldn't create `undefined` value")
             fatalError()
@@ -58,7 +57,7 @@ class JSPromise: NSObject, JSPromiseProtocol {
         
         promise.done { value in
             
-            // Ignore handlers that are not functions
+            // 2.2.1: ignored if not a function
             guard onFulfilled.isObject else {
                 newPromise.resolver.fulfill(value)
                 return
@@ -73,7 +72,7 @@ class JSPromise: NSObject, JSPromiseProtocol {
             
         }.catch { error in
             
-            // Ignore handlers that are not functions
+            // 2.2.1: ignored if not a function
             guard let jsError = error as? JSError, onRejected.isObject else {
                 newPromise.resolver.reject(error)
                 return
