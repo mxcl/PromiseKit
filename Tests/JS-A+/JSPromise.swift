@@ -77,7 +77,7 @@ class JSPromise: NSObject, JSPromiseProtocol {
         promise.done { value in
             
             // 2.2.1: ignored if not a function
-            guard onFulfilled.isObject else {
+            guard MockNodeEnvironment.isFunction(value: onFulfilled) else {
                 newPromise.resolver.fulfill(value)
                 return
             }
@@ -96,7 +96,7 @@ class JSPromise: NSObject, JSPromiseProtocol {
         }.catch { error in
             
             // 2.2.1: ignored if not a function
-            guard let jsError = error as? JSError, onRejected.isObject else {
+            guard let jsError = error as? JSError, MockNodeEnvironment.isFunction(value: onRejected) else {
                 newPromise.resolver.reject(error)
                 return
             }
