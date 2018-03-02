@@ -71,20 +71,10 @@ class AllTests: XCTestCase {
         
         // Add a global exception handler
         context.exceptionHandler = { context, exception in
-            
-            guard let exception = exception,
-                let message = exception.toString(),
-                let lineNumber = exception.objectForKeyedSubscript("line"),
-                let column = exception.objectForKeyedSubscript("column") else {
+            guard let exception = exception else {
                 return XCTFail("Unknown JS exception")
             }
-            
-            XCTFail("JS Exception at \(lineNumber):\(column): \(message)")
-            
-            if let stacktrace = exception.objectForKeyedSubscript("stack").toString() {
-                let lines = stacktrace.split(separator: "\n").map { "\t> \($0)" }.joined(separator: "\n")
-                print(lines)
-            }
+            MockNodeEnvironment.printStackTrace(exception: exception, includeExceptionDescription: true)
         }
         
         // Setup mock functions (timers, console.log, etc)

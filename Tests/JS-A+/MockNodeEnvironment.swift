@@ -14,15 +14,23 @@ class MockNodeEnvironment {
     private var timers: [UInt32: Timer] = [:]
     
     static func printCurrentStackTrace() {
-        
-        guard let exception = JSContext.current().evaluateScript("new Error()"),
-            let lineNumber = exception.objectForKeyedSubscript("line"),
-            let column = exception.objectForKeyedSubscript("column"),
-            let stacktrace = exception.objectForKeyedSubscript("stack")?.toString() else {
+        guard let exception = JSContext.current().evaluateScript("new Error()") else {
             return print("Couldn't get current stack trace")
         }
+        printStackTrace(exception: exception, includeExceptionDescription: false)
+    }
+    
+    static func printStackTrace(exception: JSValue, includeExceptionDescription: Bool) {
+        guard let lineNumber = exception.objectForKeyedSubscript("line"),
+            let column = exception.objectForKeyedSubscript("column"),
+            let message = exception.objectForKeyedSubscript("message"),
+            let stacktrace = exception.objectForKeyedSubscript("stack")?.toString() else {
+            return print("Couldn't print stack trace")
+        }
         
-        print("At \(lineNumber):\(column)")
+        if includeExceptionDescription {
+            print("JS Exception at \(lineNumber):\(column): \(message)")
+        }
         
         let lines = stacktrace.split(separator: "\n").map { "\t> \($0)" }.joined(separator: "\n")
         print(lines)
