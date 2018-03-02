@@ -70,7 +70,7 @@ class MockNodeEnvironment {
                 let otherArguments = otherArguments.flatMap { $0 as? JSValue }
                 let format = format.toString().replacingOccurrences(of: "%s", with: "%@")
                 
-                // TODO: fix this format hack
+                // TODO: find a better way to extract patterns
                 let expectedTypes = " \(format)".split(separator: "%").dropFirst().flatMap { $0.first }.map { String($0) }
                 
                 let typedArguments = otherArguments.enumerated().flatMap { index, value -> CVarArg? in
