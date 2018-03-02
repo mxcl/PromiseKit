@@ -113,7 +113,7 @@ class AllTests: XCTestCase {
         // If there's a need to only run one specific test, provide its name here
         let testName: JSValue
         if true {
-            testName = JSValue(object: "2.2.7", in: context)
+            testName = JSValue(object: "2.3.1", in: context)
         } else {
             testName = JSValue(undefinedIn: context)
         }
