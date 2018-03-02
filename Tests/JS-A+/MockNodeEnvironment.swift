@@ -136,8 +136,7 @@ class MockNodeEnvironment {
     
     private func removeTimer(timerID: UInt32) {
         guard let timer = timers[timerID] else {
-            print("Cache miss: \(timerID)")
-            return
+            return print("Couldn't find timer \(timerID)")
         }
         timer.invalidate()
         timers[timerID] = nil
