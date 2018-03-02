@@ -72,47 +72,51 @@ class JSPromise: NSObject, JSPromiseProtocol {
             }
         }
         
-        let newPromise = Promise<JSValue>.pending()
-        
-        promise.done { value in
+        let afterFulfill = promise.then { value -> Promise<JSValue> in
             
             // 2.2.1: ignored if not a function
             guard MockNodeEnvironment.isFunction(value: onFulfilled) else {
-                newPromise.resolver.fulfill(value)
-                return
+                return .value(value)
             }
             
-            do {
-                let returnValue = try call(handler: onFulfilled, arguments: [undefined, value])
-                if let returnValue = returnValue {
-                    newPromise.resolver.fulfill(returnValue)
-                } else {
-                    newPromise.resolver.fulfill(value)
-                }
-            } catch {
-                newPromise.resolver.reject(error)
+            guard let returnValue = try call(handler: onFulfilled, arguments: [undefined, value]) else {
+                return .value(value)
             }
             
-        }.catch { error in
-            
-            // 2.2.1: ignored if not a function
-            guard let jsError = error as? JSError, MockNodeEnvironment.isFunction(value: onRejected) else {
-                newPromise.resolver.reject(error)
-                return
-            }
-            
-            do {
-                let returnValue = try call(handler: onRejected, arguments: [undefined, jsError.reason])
-                if let returnValue = returnValue {
-                    newPromise.resolver.fulfill(returnValue)
-                } else {
-                    newPromise.resolver.reject(jsError)
-                }
-            } catch {
-                newPromise.resolver.reject(error)
+            if let jsPromise = returnValue.toObjectOf(JSPromise.self) as? JSPromise {
+                return jsPromise.promise
+            } else {
+                return .value(returnValue)
             }
         }
         
-        return JSPromise(promise: newPromise.promise)
+        let afterReject = promise.recover { error -> Promise<JSValue> in
+            
+            // 2.2.1: ignored if not a function
+            guard let jsError = error as? JSError, MockNodeEnvironment.isFunction(value: onRejected) else {
+                throw error
+            }
+            
+            guard let returnValue = try call(handler: onRejected, arguments: [undefined, jsError.reason]) else {
+                throw error
+            }
+            
+            if let jsPromise = returnValue.toObjectOf(JSPromise.self) as? JSPromise {
+                return jsPromise.promise
+            } else {
+                return .value(returnValue)
+            }
+        }
+        
+        let newPromise = Promise<Result<JSValue>> { resolver in
+            _ = promise.tap(resolver.fulfill)
+        }.then { result -> Promise<JSValue> in
+            switch result {
+            case .fulfilled: return afterFulfill
+            case .rejected: return afterReject
+            }
+        }
+        
+        return JSPromise(promise: newPromise)
     }
 }

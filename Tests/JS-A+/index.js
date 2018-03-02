@@ -1,6 +1,11 @@
 const _ = require('lodash')
 require('mocha')
 
+// Ignored by design
+const ignoredTests = [
+  '2.3.3'
+]
+
 module.exports = function(adapter, done, testName) {
   
   global.adapter = adapter
@@ -13,6 +18,10 @@ module.exports = function(adapter, done, testName) {
     
     let currentTestName = _.replace(_.replace(file, './', ''), '.js', '')
     if (testName && currentTestName !== testName) {
+      return
+    }
+    
+    if (_.includes(ignoredTests, currentTestName)) {
       return
     }
     
