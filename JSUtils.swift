@@ -31,6 +31,15 @@ enum JSUtils {
         return undefined
     }
     
+    static func typeError(message: String) -> JSValue {
+        let message = message.replacingOccurrences(of: "\"", with: "\\\"")
+        let script = "new TypeError(\"\(message)\")"
+        guard let result = sharedContext.evaluateScript(script) else {
+            fatalError("Couldn't create TypeError")
+        }
+        return result
+    }
+    
     // @warning: relies on lodash to be present
     static func isFunction(value: JSValue) -> Bool {
         guard let context = value.context else {
