@@ -99,7 +99,12 @@ class MockNodeEnvironment {
             }
         }
         let timer = Timer.scheduledTimer(timeInterval: interval, target: block, selector: #selector(Operation.main), userInfo: nil, repeats: repeats)
-        let hash = UInt32.init(truncatingBitPattern: UUID().uuidString.hashValue)
+        let rawHash = UUID().uuidString.hashValue
+    #if swift(>=4.0)
+        let hash = UInt32(truncatingIfNeeded: rawHash)
+    #else
+        let hash = UInt32(truncatingBitPattern: rawHash)
+    #endif
         timers[hash] = timer
         return hash
     }
