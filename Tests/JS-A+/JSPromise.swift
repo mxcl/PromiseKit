@@ -70,7 +70,7 @@ class JSPromise: NSObject, JSPromiseProtocol {
         
         let newPromise = Promise<Result<JSValue>> { resolver in
             _ = promise.tap(resolver.fulfill)
-        }.then { result -> Promise<JSValue> in
+        }.then(on: nil) { result -> Promise<JSValue> in
             switch result {
             case .fulfilled: return afterFulfill
             case .rejected: return afterReject
