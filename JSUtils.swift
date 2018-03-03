@@ -102,3 +102,15 @@ enum JSUtils {
         print(lines)
     }
 }
+
+#if !swift(>=3.2)
+extension String {
+    func split(separator: Character) -> [String] {
+        return characters.split(separator: separator).map(String.init)
+    }
+
+    var first: Character? {
+        return characters.first
+    }
+}
+#endif
