@@ -26,6 +26,9 @@ class JSPromise: NSObject, JSPromiseProtocol {
     
     func then(_ onFulfilled: JSValue, _ onRejected: JSValue) -> JSPromise {
         
+        // Keep a reference to the returned promise so we can compare to 2.3.1
+        var returnedPromiseRef: Promise<JSValue>?
+        
         let afterFulfill = promise.then { value -> Promise<JSValue> in
             
             // 2.2.1: ignored if not a function
@@ -41,6 +44,11 @@ class JSPromise: NSObject, JSPromiseProtocol {
             
             // Extract JSPromise.promise if available, or use plain return value
             if let jsPromise = returnValue.toObjectOf(JSPromise.self) as? JSPromise {
+                
+                // 2.3.1: if returned value is the promise that `then` returned, throw TypeError
+                if jsPromise.promise === returnedPromiseRef {
+                    throw JSUtils.JSError(reason: JSUtils.typeError(message: "Returned self"))
+                }
                 return jsPromise.promise
             } else {
                 return .value(returnValue)
@@ -62,6 +70,11 @@ class JSPromise: NSObject, JSPromiseProtocol {
             
             // Extract JSPromise.promise if available, or use plain return value
             if let jsPromise = returnValue.toObjectOf(JSPromise.self) as? JSPromise {
+                
+                // 2.3.1: if returned value is the promise that `then` returned, throw TypeError
+                if jsPromise.promise === returnedPromiseRef {
+                    throw JSUtils.JSError(reason: JSUtils.typeError(message: "Returned self"))
+                }
                 return jsPromise.promise
             } else {
                 return .value(returnValue)
@@ -76,12 +89,7 @@ class JSPromise: NSObject, JSPromiseProtocol {
             case .rejected: return afterReject
             }
         }
-        
-        newPromise.catch { error in
-            if let error = error as? PMKError, case .returnedSelf = error {
-                return
-            }
-        }
+        returnedPromiseRef = newPromise
         
         return JSPromise(promise: newPromise)
     }
