@@ -253,11 +253,11 @@ public func when<T>(resolved promises: [Promise<T>]) -> Guarantee<[Result<T>]> {
 }
 
 /// Waits on all provided Guarantees.
-public func when(_ guarantees: Guarantee<Void>...) -> Guarantee<Void> {
+public func when<T>(_ guarantees: Guarantee<T>...) -> Guarantee<[T]> {
     return when(guarantees: guarantees)
 }
 
 // Waits on all provided Guarantees.
-public func when(guarantees: [Guarantee<Void>]) -> Guarantee<Void> {
-    return when(fulfilled: guarantees).recover{ _ in }.asVoid()
+public func when<T>(guarantees: [Guarantee<T>]) -> Guarantee<[T]> {
+    return when(fulfilled: guarantees).recover{ _ in }
 }
