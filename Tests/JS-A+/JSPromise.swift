@@ -26,7 +26,7 @@ class JSPromise: NSObject, JSPromiseProtocol {
     
     func then(_ onFulfilled: JSValue, _ onRejected: JSValue) -> JSPromise {
         
-        // Keep a reference to the returned promise so we can compare to 2.3.1
+        // Keep a reference to the returned promise so we can comply to 2.3.1
         var returnedPromiseRef: Promise<JSValue>?
         
         let afterFulfill = promise.then { value -> Promise<JSValue> in
