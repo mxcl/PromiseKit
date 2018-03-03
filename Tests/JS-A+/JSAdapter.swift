@@ -9,7 +9,6 @@ import Foundation
 import JavaScriptCore
 import PromiseKit
 
-@available(iOS 10.0, *)
 enum JSAdapter {
     
     static let resolved: @convention(block) (JSValue) -> JSPromise = { value in

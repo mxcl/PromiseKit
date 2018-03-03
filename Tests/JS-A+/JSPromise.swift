@@ -10,12 +10,10 @@ import XCTest
 import PromiseKit
 import JavaScriptCore
 
-@available(iOS 10.0, *)
 @objc protocol JSPromiseProtocol: JSExport {
     func then(_: JSValue, _: JSValue) -> JSPromise
 }
 
-@available(iOS 10.0, *)
 class JSPromise: NSObject, JSPromiseProtocol {
     
     let promise: Promise<JSValue>

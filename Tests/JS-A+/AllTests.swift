@@ -9,7 +9,6 @@ import XCTest
 import PromiseKit
 import JavaScriptCore
 
-@available(iOS 10.0, *)
 class AllTests: XCTestCase {
     
     func testAll() {

@@ -8,7 +8,6 @@
 import Foundation
 import JavaScriptCore
 
-@available(iOS 10.0, *)
 class MockNodeEnvironment {
     
     private var timers: [UInt32: Timer] = [:]
@@ -94,11 +93,12 @@ class MockNodeEnvironment {
     }
     
     private func addTimer(interval: TimeInterval, repeats: Bool, function: JSValue) -> UInt32 {
-        let timer = Timer.scheduledTimer(withTimeInterval: interval, repeats: repeats) { _ in
+        let block = BlockOperation {
             DispatchQueue.main.async {
                 function.call(withArguments: [])
             }
         }
+        let timer = Timer.scheduledTimer(timeInterval: interval, target: block, selector: #selector(Operation.main), userInfo: nil, repeats: repeats)
         let hash = UInt32.init(truncatingBitPattern: UUID().uuidString.hashValue)
         timers[hash] = timer
         return hash
