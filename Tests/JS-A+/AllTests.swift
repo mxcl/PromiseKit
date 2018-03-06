@@ -71,7 +71,7 @@ class AllTests: XCTestCase {
         
         // If there's a need to only run one specific test, uncomment the next line and comment the one after
         // let testName: JSValue = JSValue(object: "2.3.1", in: context)
-        let testName: JSValue = JSValue(undefinedIn: context)
+        let testName = JSUtils.undefined
         
         // Call `runTests`
         runTests.call(withArguments: [adapter, onFailValue, onDoneValue, testName])
