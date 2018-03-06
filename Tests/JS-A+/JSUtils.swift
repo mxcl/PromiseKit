@@ -105,8 +105,8 @@ enum JSUtils {
 
 #if !swift(>=3.2)
 extension String {
-    func split(separator: Character) -> [String] {
-        return characters.split(separator: separator).map(String.init)
+    func split(separator: Character, omittingEmptySubsequences: Bool = true) -> [String] {
+        return characters.split(separator: separator, omittingEmptySubsequences: omittingEmptySubsequences).map(String.init)
     }
     
     var first: Character? {
