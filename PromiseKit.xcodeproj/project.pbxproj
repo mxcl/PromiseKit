@@ -81,7 +81,7 @@
 		C013F7382048E3B6006B57B1 /* MockNodeEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F7372048E3B6006B57B1 /* MockNodeEnvironment.swift */; };
 		C013F73A2049076A006B57B1 /* JSPromise.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F7392049076A006B57B1 /* JSPromise.swift */; };
 		C013F73C20494291006B57B1 /* JSAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F73B20494291006B57B1 /* JSAdapter.swift */; };
-		C013F73E204944FC006B57B1 /* JSUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F73D204944FC006B57B1 /* JSUtils.swift */; };
+		C013F740204E5064006B57B1 /* JSUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F73F204E5063006B57B1 /* JSUtils.swift */; };
 		C0244E5E2047A6CB00ACB4AC /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B0AC571D595E1B00FA21D9 /* PromiseKit.framework */; };
 		C0244E692047AC9F00ACB4AC /* AllTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0244E682047AC9F00ACB4AC /* AllTests.swift */; };
 		C0244E6F2047AF1700ACB4AC /* build in CopyFiles */ = {isa = PBXBuildFile; fileRef = C0244E6D2047AEA400ACB4AC /* build */; };
@@ -224,7 +224,7 @@
 		C013F7372048E3B6006B57B1 /* MockNodeEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockNodeEnvironment.swift; path = "Tests/JS-A+/MockNodeEnvironment.swift"; sourceTree = "<group>"; };
 		C013F7392049076A006B57B1 /* JSPromise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JSPromise.swift; path = "Tests/JS-A+/JSPromise.swift"; sourceTree = "<group>"; };
 		C013F73B20494291006B57B1 /* JSAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JSAdapter.swift; path = "Tests/JS-A+/JSAdapter.swift"; sourceTree = "<group>"; };
-		C013F73D204944FC006B57B1 /* JSUtils.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JSUtils.swift; sourceTree = "<group>"; };
+		C013F73F204E5063006B57B1 /* JSUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSUtils.swift; path = "Tests/JS-A+/JSUtils.swift"; sourceTree = "<group>"; };
 		C0244E622047A6CB00ACB4AC /* PMKJSA+Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "PMKJSA+Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0244E632047A6CC00ACB4AC /* PMKA+Tests copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "PMKA+Tests copy-Info.plist"; path = "/Users/ldiqual/Sandbox/PromiseKit/PMKA+Tests copy-Info.plist"; sourceTree = "<absolute>"; };
 		C0244E682047AC9F00ACB4AC /* AllTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AllTests.swift; path = "Tests/JS-A+/AllTests.swift"; sourceTree = "<group>"; };
@@ -489,7 +489,7 @@
 				C013F7372048E3B6006B57B1 /* MockNodeEnvironment.swift */,
 				C013F7392049076A006B57B1 /* JSPromise.swift */,
 				C013F73B20494291006B57B1 /* JSAdapter.swift */,
-				C013F73D204944FC006B57B1 /* JSUtils.swift */,
+				C013F73F204E5063006B57B1 /* JSUtils.swift */,
 			);
 			name = "JS/A+";
 			sourceTree = "<group>";
@@ -771,7 +771,7 @@
 			files = (
 				C013F73C20494291006B57B1 /* JSAdapter.swift in Sources */,
 				C0244E692047AC9F00ACB4AC /* AllTests.swift in Sources */,
-				C013F73E204944FC006B57B1 /* JSUtils.swift in Sources */,
+				C013F740204E5064006B57B1 /* JSUtils.swift in Sources */,
 				C013F73A2049076A006B57B1 /* JSPromise.swift in Sources */,
 				C013F7382048E3B6006B57B1 /* MockNodeEnvironment.swift in Sources */,
 			);
