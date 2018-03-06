@@ -75,6 +75,6 @@ class AllTests: XCTestCase {
         
         // Call `runTests`
         runTests.call(withArguments: [adapter, onFailValue, onDoneValue, testName])
-        self.wait(for: [expectation], timeout: 1000)
+        self.wait(for: [expectation], timeout: 60)
     }
 }
