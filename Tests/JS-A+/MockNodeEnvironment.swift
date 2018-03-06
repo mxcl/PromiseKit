@@ -61,32 +61,20 @@ class MockNodeEnvironment {
                 return
             }
             
+            // If we only have one argument, print it
             let otherArguments = arguments.dropFirst()
-            if otherArguments.count == 0 {
-                print(format)
-            } else {
-                
-                let otherArguments = otherArguments.flatMap { $0 as? JSValue }
-                let format = format.toString().replacingOccurrences(of: "%s", with: "%@")
-                
-                // TODO: find a better way to extract patterns
-                let expectedTypes = " \(format)".split(separator: "%").dropFirst().flatMap { $0.first }.map { String($0) }
-                
-                let typedArguments = otherArguments.enumerated().flatMap { index, value -> CVarArg? in
-                    let expectedType = expectedTypes[index]
-                    let converted: CVarArg
-                    switch expectedType {
-                    case "s": converted = value.toString()
-                    case "d": converted = value.toInt32()
-                    case "f": converted = value.toDouble()
-                    default: converted = value.toString()
-                    }
-                    return converted
-                }
-                
-                let output = String(format: format, arguments: typedArguments)
-                print(output)
+            guard otherArguments.count > 0 else {
+                return print(format)
             }
+            
+            // If we have more than one argument, first argument is a string format
+            // and following arguments are values to match the specifiers
+            let swiftFormat = format.toString()
+                .replacingOccurrences(of: "%s", with: "%@")
+                .replacingOccurrences(of: "%%", with: "%@")
+            let typedArguments = otherArguments.flatMap { ($0 as? JSValue)?.toObject() as? CVarArg }
+            let output = String(format: swiftFormat, arguments: typedArguments)
+            print(output)
         }
         console.setObject(consoleLog, forKeyedSubscript: "log" as NSString)
         console.setObject(consoleLog, forKeyedSubscript: "error" as NSString)
