@@ -32,7 +32,7 @@ return firstly {
 }
 ```
 
-### 1. Specifying Closure Return Types
+### 1. Specifying Closure Parameters **and** Return Types
 
 Please try it.
 
@@ -41,6 +41,42 @@ normal functions in Swift (eg. Array.map) that return a generic type, if the
 closure body is longer than one line you may need to tell Swift what returns.
 
 > Tip: Sometimes you can force a one liner with semi-colons.
+
+For example:
+
+```swift
+func _() -> Promise<Void> {
+    return firstly {
+        proc.launch(.promise)      // proc: Foundation.Process
+    }.then {
+        when(fulfilled: p1, p2)    // both p1 & p2 are `Promise<Void>`
+    }
+}
+```
+
+Fails to compile with: 
+
+    Cannot invoke 'then' with an argument list of type '(() -> _)
+  
+Highlighting the `then`. The fix is to specify the closure parameter of the
+`then`:
+
+```swift
+func _() -> Promise<Void> {
+    return firstly {
+        proc.launch(.promise)
+    }.then { _ in
+        when(fulfilled: p1, p2)
+    }
+}
+```
+
+Why is this the fix? Well `Process.launch(.promise)` returns
+`Promise<(String, String)>` and we were ignoring this value in our `then`, if
+we’d used `$0` or named the parameter we’d be fine.
+
+Swift’s diagnostics were unhelpful at every stage trying to troubleshoot this
+example. You’re on your own :(
 
 ### 2. Move Code To A Temporary Inline Function
 
