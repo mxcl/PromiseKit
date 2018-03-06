@@ -226,7 +226,6 @@
 		C013F73B20494291006B57B1 /* JSAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JSAdapter.swift; path = "Tests/JS-A+/JSAdapter.swift"; sourceTree = "<group>"; };
 		C013F73F204E5063006B57B1 /* JSUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSUtils.swift; path = "Tests/JS-A+/JSUtils.swift"; sourceTree = "<group>"; };
 		C0244E622047A6CB00ACB4AC /* PMKJSA+Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "PMKJSA+Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
-		C0244E632047A6CC00ACB4AC /* PMKA+Tests copy-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; name = "PMKA+Tests copy-Info.plist"; path = "/Users/ldiqual/Sandbox/PromiseKit/PMKA+Tests copy-Info.plist"; sourceTree = "<absolute>"; };
 		C0244E682047AC9F00ACB4AC /* AllTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AllTests.swift; path = "Tests/JS-A+/AllTests.swift"; sourceTree = "<group>"; };
 		C0244E6D2047AEA400ACB4AC /* build */ = {isa = PBXFileReference; lastKnownFileType = folder; name = build; path = "Tests/JS-A+/build"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -411,7 +410,6 @@
 				63B912AB1F1E657400D49110 /* Sources.objc */,
 				635D64061D59630200BC0AF5 /* Tests */,
 				635893991D5BE51700F14B55 /* … */,
-				C0244E632047A6CC00ACB4AC /* PMKA+Tests copy-Info.plist */,
 			);
 			sourceTree = "<group>";
 		};
