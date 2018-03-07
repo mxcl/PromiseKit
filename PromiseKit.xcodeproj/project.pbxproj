@@ -78,6 +78,13 @@
 		63CF6D80203CD19200EC8927 /* ThenableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CF6D7F203CD19200EC8927 /* ThenableTests.swift */; };
 		63D9B2EF203385FD0075C00B /* race.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D9B2EE203385FD0075C00B /* race.m */; };
 		63D9B2F120338D5D0075C00B /* Deprecations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D9B2F020338D5D0075C00B /* Deprecations.swift */; };
+		C013F7382048E3B6006B57B1 /* MockNodeEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F7372048E3B6006B57B1 /* MockNodeEnvironment.swift */; };
+		C013F73A2049076A006B57B1 /* JSPromise.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F7392049076A006B57B1 /* JSPromise.swift */; };
+		C013F73C20494291006B57B1 /* JSAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F73B20494291006B57B1 /* JSAdapter.swift */; };
+		C013F740204E5064006B57B1 /* JSUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F73F204E5063006B57B1 /* JSUtils.swift */; };
+		C0244E5E2047A6CB00ACB4AC /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B0AC571D595E1B00FA21D9 /* PromiseKit.framework */; };
+		C0244E692047AC9F00ACB4AC /* AllTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0244E682047AC9F00ACB4AC /* AllTests.swift */; };
+		C0244E6F2047AF1700ACB4AC /* build in CopyFiles */ = {isa = PBXBuildFile; fileRef = C0244E6D2047AEA400ACB4AC /* build */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -109,7 +116,27 @@
 			remoteGlobalIDString = 63B0AC561D595E1B00FA21D9;
 			remoteInfo = PromiseKit;
 		};
+		C0244E502047A6CB00ACB4AC /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 6399A3721D595D9100D65233 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 63B0AC561D595E1B00FA21D9;
+			remoteInfo = PromiseKit;
+		};
 /* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		C0244E6E2047AF0B00ACB4AC /* CopyFiles */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 7;
+			files = (
+				C0244E6F2047AF1700ACB4AC /* build in CopyFiles */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
 		0C42F3191FCF86240051309C /* HangTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HangTests.swift; sourceTree = "<group>"; };
@@ -194,6 +221,13 @@
 		63CF6D7F203CD19200EC8927 /* ThenableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThenableTests.swift; sourceTree = "<group>"; };
 		63D9B2EE203385FD0075C00B /* race.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = race.m; path = Sources/race.m; sourceTree = "<group>"; };
 		63D9B2F020338D5D0075C00B /* Deprecations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Deprecations.swift; path = Sources/Deprecations.swift; sourceTree = "<group>"; };
+		C013F7372048E3B6006B57B1 /* MockNodeEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockNodeEnvironment.swift; path = "Tests/JS-A+/MockNodeEnvironment.swift"; sourceTree = "<group>"; };
+		C013F7392049076A006B57B1 /* JSPromise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JSPromise.swift; path = "Tests/JS-A+/JSPromise.swift"; sourceTree = "<group>"; };
+		C013F73B20494291006B57B1 /* JSAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JSAdapter.swift; path = "Tests/JS-A+/JSAdapter.swift"; sourceTree = "<group>"; };
+		C013F73F204E5063006B57B1 /* JSUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSUtils.swift; path = "Tests/JS-A+/JSUtils.swift"; sourceTree = "<group>"; };
+		C0244E622047A6CB00ACB4AC /* PMKJSA+Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "PMKJSA+Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C0244E682047AC9F00ACB4AC /* AllTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AllTests.swift; path = "Tests/JS-A+/AllTests.swift"; sourceTree = "<group>"; };
+		C0244E6D2047AEA400ACB4AC /* build */ = {isa = PBXFileReference; lastKnownFileType = folder; name = build; path = "Tests/JS-A+/build"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -233,6 +267,14 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		C0244E5D2047A6CB00ACB4AC /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C0244E5E2047A6CB00ACB4AC /* PromiseKit.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -348,6 +390,7 @@
 		635D64061D59630200BC0AF5 /* Tests */ = {
 			isa = PBXGroup;
 			children = (
+				C0244E6B2047ACAF00ACB4AC /* JS/A+ */,
 				631751AA1D59768200A9DDDC /* A+ */,
 				6314113D1D59797100E24B9E /* Bridging */,
 				6317518A1D59765700A9DDDC /* Core */,
@@ -378,6 +421,7 @@
 				631751A81D59766500A9DDDC /* PMKA+Tests.xctest */,
 				6314113C1D59795700E24B9E /* PMKBridgeTests.xctest */,
 				633027EA203CC0060037E136 /* PMKDeprecatedTests.xctest */,
+				C0244E622047A6CB00ACB4AC /* PMKJSA+Tests.xctest */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -433,6 +477,19 @@
 				63B0AC7D1D595E6300FA21D9 /* when.swift */,
 			);
 			name = Features;
+			sourceTree = "<group>";
+		};
+		C0244E6B2047ACAF00ACB4AC /* JS/A+ */ = {
+			isa = PBXGroup;
+			children = (
+				C0244E6D2047AEA400ACB4AC /* build */,
+				C0244E682047AC9F00ACB4AC /* AllTests.swift */,
+				C013F7372048E3B6006B57B1 /* MockNodeEnvironment.swift */,
+				C013F7392049076A006B57B1 /* JSPromise.swift */,
+				C013F73B20494291006B57B1 /* JSAdapter.swift */,
+				C013F73F204E5063006B57B1 /* JSUtils.swift */,
+			);
+			name = "JS/A+";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -537,6 +594,24 @@
 			productReference = 63B0AC571D595E1B00FA21D9 /* PromiseKit.framework */;
 			productType = "com.apple.product-type.framework";
 		};
+		C0244E4E2047A6CB00ACB4AC /* PMKJSA+Tests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C0244E5F2047A6CB00ACB4AC /* Build configuration list for PBXNativeTarget "PMKJSA+Tests" */;
+			buildPhases = (
+				C0244E512047A6CB00ACB4AC /* Sources */,
+				C0244E5D2047A6CB00ACB4AC /* Frameworks */,
+				C0244E6E2047AF0B00ACB4AC /* CopyFiles */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				C0244E4F2047A6CB00ACB4AC /* PBXTargetDependency */,
+			);
+			name = "PMKJSA+Tests";
+			productName = PromiseKit;
+			productReference = C0244E622047A6CB00ACB4AC /* PMKJSA+Tests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
 /* End PBXNativeTarget section */
 
 /* Begin PBXProject section */
@@ -562,6 +637,9 @@
 						LastSwiftMigration = 0920;
 						ProvisioningStyle = Automatic;
 					};
+					C0244E4E2047A6CB00ACB4AC = {
+						LastSwiftMigration = 0920;
+					};
 				};
 			};
 			buildConfigurationList = 6399A3751D595D9100D65233 /* Build configuration list for PBXProject "PromiseKit" */;
@@ -581,6 +659,7 @@
 				631411321D59795700E24B9E /* PMKBridgeTests */,
 				630019011D596292003B4E30 /* PMKCoreTests */,
 				633027E0203CC0060037E136 /* PMKDeprecatedTests */,
+				C0244E4E2047A6CB00ACB4AC /* PMKJSA+Tests */,
 			);
 		};
 /* End PBXProject section */
@@ -684,6 +763,18 @@
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		C0244E512047A6CB00ACB4AC /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				C013F73C20494291006B57B1 /* JSAdapter.swift in Sources */,
+				C0244E692047AC9F00ACB4AC /* AllTests.swift in Sources */,
+				C013F740204E5064006B57B1 /* JSUtils.swift in Sources */,
+				C013F73A2049076A006B57B1 /* JSPromise.swift in Sources */,
+				C013F7382048E3B6006B57B1 /* MockNodeEnvironment.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
@@ -706,6 +797,11 @@
 			isa = PBXTargetDependency;
 			target = 63B0AC561D595E1B00FA21D9 /* PromiseKit */;
 			targetProxy = 635D64041D5962F900BC0AF5 /* PBXContainerItemProxy */;
+		};
+		C0244E4F2047A6CB00ACB4AC /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 63B0AC561D595E1B00FA21D9 /* PromiseKit */;
+			targetProxy = C0244E502047A6CB00ACB4AC /* PBXContainerItemProxy */;
 		};
 /* End PBXTargetDependency section */
 
@@ -1020,6 +1116,33 @@
 			};
 			name = Release;
 		};
+		C0244E602047A6CB00ACB4AC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 3.0;
+			};
+			name = Debug;
+		};
+		C0244E612047A6CB00ACB4AC /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				CLANG_ENABLE_MODULES = YES;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks @loader_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "$(inherited) @executable_path/../Frameworks @loader_path/../Frameworks";
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_VERSION = 3.0;
+			};
+			name = Release;
+		};
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
@@ -1073,6 +1196,15 @@
 			buildConfigurations = (
 				63B0AC5D1D595E1B00FA21D9 /* Debug */,
 				63B0AC5E1D595E1B00FA21D9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C0244E5F2047A6CB00ACB4AC /* Build configuration list for PBXNativeTarget "PMKJSA+Tests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				C0244E602047A6CB00ACB4AC /* Debug */,
+				C0244E612047A6CB00ACB4AC /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

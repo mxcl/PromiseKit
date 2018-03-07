@@ -1,0 +1,17 @@
+{
+  "scripts": {
+    "build": "webpack-cli",
+    "watch": "webpack-cli --watch --mode development"
+  },
+  "dependencies": {
+    "babel-core": "^6.26.0",
+    "babel-loader": "^7.1.3",
+    "babel-preset-env": "^1.6.1",
+    "lodash": "^4.17.5",
+    "mocha": "^5.0.1",
+    "promises-aplus-tests": "^2.1.2",
+    "sinon": "^4.4.2",
+    "webpack": "^4.0.1",
+    "webpack-cli": "^2.0.9"
+  }
+}
