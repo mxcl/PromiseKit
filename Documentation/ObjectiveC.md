@@ -5,8 +5,7 @@ PromiseKit has two promise classes:
 * `Promise<T>` (Swift)
 * `AnyPromise` (Objective-C)
 
-Each is designed to be an approproate promise implementation for the strong
-points of its language:
+Each is designed to be an appropriate promise implementation for the strong points of its language:
 
 * `Promise<T>` is strict, defined and precise.
 * `AnyPromise` is loose and dynamic.
