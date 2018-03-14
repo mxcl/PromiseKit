@@ -149,7 +149,7 @@ Then when you `pod update`, ensure you also update your submodules:
 
 # Release History
 
-## [6.0](https://github.com/mxcl/PromiseKit/releases/tag/6.0.0) Feb 13th, 2019
+## [6.0](https://github.com/mxcl/PromiseKit/releases/tag/6.0.0) Feb 13th, 2018
 
 * [PromiseKit 6 announcement post][news-6].
 
