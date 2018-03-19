@@ -200,10 +200,6 @@ URLSession.GET("http://example.com").asDictionary().then { json in
 ```
 針對使用 [AFNetworking] 的開發者, 我們推薦使用 [csotiriou/AFNetworking].
 
-# 有轉換您現有的程式碼到 Promises 的需求嗎?
-
-[與我聯繫](mailto:mxcl@me.com), 我在 iOS 上使用 Promises 進行開發已經有多年的經驗, 同時也有 10 年以上開發行動裝置 App 的經驗.
-
 # 支援
 
 可以在 [Gitter chat channel](https://gitter.im/mxcl/PromiseKit) 詢問相關問題, 或者直接追蹤我們的 [bug tracker](https://github.com/mxcl/PromiseKit/issues/new) 
