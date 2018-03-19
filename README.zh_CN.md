@@ -202,10 +202,6 @@ URLSession.GET("http://example.com").asDictionary().then { json in
 ```
 [AFNetworking] 我们推荐使用 [csotiriou/AFNetworking]。
 
-# 需要将您的代码转换到 Promises?
-
-[有偿帮助](mailto:mxcl@me.com)，我有几年 Promises 编码经验并在移动开发领域已有 10 年的开发经验。
-
 # 支持 
 
 如果您有任何问题可以访问 [Gitter chat channel](https://gitter.im/mxcl/PromiseKit)，也可以进行 [bug 追踪](https://github.com/mxcl/PromiseKit/issues/new)
