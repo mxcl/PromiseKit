@@ -132,7 +132,7 @@ firstly {
 }
 ```
 
-// And (of course) plain `URLSession`:
+And (of course) plain `URLSession`:
 
 ```swift
 // pod 'PromiseKit/Foundation'  # https://github.com/PromiseKit/Foundation
