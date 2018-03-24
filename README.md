@@ -123,7 +123,7 @@ firstly {
 
 firstly {
     URLSession.shared.POST("http://example.com", JSON: params)
-}.compactMap {
+}.map {
     try JSONDecoder().decoder(Foo.self, with: $0.data)
 }.done { foo in
     //…
@@ -139,7 +139,7 @@ firstly {
 
 firstly {
     URLSession.shared.dataTask(.promise, with: try makeUrlRequest())
-}.compactMap {
+}.map {
     try JSONDecoder().decode(Foo.self, with: $0.data)
 }.done { foo in
     //…
@@ -161,7 +161,7 @@ Nowadays, considering that:
 
 * We almost always POST JSON
 * We now have `JSONDecoder`
-* PromiseKit now has `compactMap`
+* PromiseKit now has `map` and other functional primitives
 
 We recommend vanilla `URLSession`; use less black-boxes, stick closer to the
 metal. Alamofire was essential until the three bulletpoints above became true,
