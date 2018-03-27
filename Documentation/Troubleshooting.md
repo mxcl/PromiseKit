@@ -123,6 +123,10 @@ up. Your code is probably for an older PromiseKit. *Read the definitions of the
 functions*. Doing this with Xcode is easy (option click or command click). All
 PromiseKit functions are documented and provide examples.
 
+## Context type for closure argument expects 1 argument, which cannot be implicitly ignored
+
+You have a `then` you want a `done`.
+
 ## Other Issues
 
 ### `Pending Promise Deallocated!`

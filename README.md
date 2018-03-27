@@ -171,7 +171,8 @@ rarely network anything but JSON.
 
 # Support
 
-Ask your question at our [Gitter chat channel] or on [our bug tracker].
+Please check our [Troubleshooting Guide](Documentation/Troubleshooting.md) and
+if after that you still have a question ask at our [Gitter chat channel] or on [our bug tracker].
 
 
 [badge-pod]: https://img.shields.io/cocoapods/v/PromiseKit.svg?label=version
