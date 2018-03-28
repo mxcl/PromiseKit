@@ -155,7 +155,7 @@ public extension CatchMixin {
      */
     func cauterize() {
         self.catch {
-            print("PromiseKit:cauterized-error:", $0)
+            Swift.print("PromiseKit:cauterized-error:", $0)
         }
     }
 }

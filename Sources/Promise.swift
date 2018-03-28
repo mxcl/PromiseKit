@@ -116,7 +116,7 @@ public extension Promise {
     public func wait() throws -> T {
 
         if Thread.isMainThread {
-            print("PromiseKit: warning: `wait()` called on main thread!")
+            Swift.print("PromiseKit: warning: `wait()` called on main thread!")
         }
 
         var result = self.result
