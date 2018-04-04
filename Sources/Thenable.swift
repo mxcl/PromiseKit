@@ -177,8 +177,8 @@ public extension Thenable {
                print(foo, " is Void")
            }
      */
-    func get(_ body: @escaping (T) throws -> Void) -> Promise<T> {
-        return map(on: PromiseKit.conf.Q.return) {
+    func get(on: DispatchQueue? = conf.Q.return, _ body: @escaping (T) throws -> Void) -> Promise<T> {
+        return map(on: on) {
             try body($0)
             return $0
         }
