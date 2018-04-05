@@ -235,6 +235,17 @@ PromiseKit.conf.Q.map = .global()
 PromiseKit.conf.Q.return = .main  //NOTE this is the default
 ```
 
+Be very careful about setting either of these queues to `nil`.  It has the
+effect of running *immediately*, and this is not what you usually want to do in
+your application.  This is, however, useful when you are running specs, and want
+your promises to resolve immediately (basically the same behavior as "stubbing"
+an HTTP request).
+
+```swift
+// in your test suite setup code
+PromiseKit.conf.Q.map = nil
+PromiseKit.conf.Q.return = nil
+```
 
 ## How do I use PromiseKit server-side?
 

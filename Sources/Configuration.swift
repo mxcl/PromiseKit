@@ -2,7 +2,7 @@ import Dispatch
 
 public struct PMKConfiguration {
     /// the default queues that promises handlers dispatch to
-    public var Q = (map: DispatchQueue.main, return: DispatchQueue.main)
+    public var Q: (map: DispatchQueue?, return: DispatchQueue?) = (map: DispatchQueue.main, return: DispatchQueue.main)
 
     public var catchPolicy = CatchPolicy.allErrorsExceptCancellation
 }
