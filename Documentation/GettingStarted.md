@@ -353,9 +353,9 @@ it has become clear the various pain-points are here to stay, and in fact, we,
 as library-authors, are expected to disambiguate at the naming level of our API.
 Thus we have split the three main kinds of then out into: `then`, `map` and
 `done`. When using these new functions we became enamored and realized this is
-much nicer in use, so we added `flatMap` as well (modeled on `Optional.flatMap`)
+much nicer in use, so we added `compactMap` as well (modeled on `Optional.compactMap`)
 
-`flatMap` can be especially useful and enables quick composition of promise
+`compactMap` can be especially useful and enables quick composition of promise
 chains, eg:
 
 ```swift
@@ -367,7 +367,7 @@ firstly {
     //…
 }.catch { error in
     // Foundation.JSONError if JSON was badly formed
-    // PMKError.flatMap if JSON was of different type
+    // PMKError.compactMap if JSON was of different type
 }
 ```
 
