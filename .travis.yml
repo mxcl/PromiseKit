@@ -15,20 +15,22 @@ matrix:
     - {osx_image: xcode9.3,     env: 'SWFT=3.3  PLAT=macOS    DST="arch=x86_64"',                    os: osx, language: objective-c}
     - {osx_image: xcode9.3,     env: 'SWFT=3.3  PLAT=watchOS  DST="OS=4.3,name=Apple Watch - 38mm"', os: osx, language: objective-c}
 
-    - {osx_image: xcode9.2,     env: 'SWFT=4.0  PLAT=iOS      DST="OS=8.4,name=iPhone 4s"',          os: osx, language: objective-c}
-    - {osx_image: xcode9.2,     env: 'SWFT=4.0  PLAT=iOS      DST="OS=9.3,name=iPhone SE"',          os: osx, language: objective-c}
-    - {osx_image: xcode9.2,     env: 'SWFT=4.0  PLAT=iOS      DST="OS=10.3.1,name=iPhone SE"',       os: osx, language: objective-c}
     - {osx_image: xcode9.2,     env: 'SWFT=4.0  PLAT=iOS      DST="OS=11.2,name=iPhone SE"',         os: osx, language: objective-c}
-    - {osx_image: xcode9.2,     env: 'SWFT=4.0  PLAT=tvOS     DST="OS=10.2,name=Apple TV 1080p"',    os: osx, language: objective-c}
     - {osx_image: xcode9.2,     env: 'SWFT=4.0  PLAT=tvOS     DST="OS=11.2,name=Apple TV"',          os: osx, language: objective-c}
     - {osx_image: xcode9.2,     env: 'SWFT=4.0  PLAT=macOS    DST="arch=x86_64"',                    os: osx, language: objective-c}
-    - {osx_image: xcode9.2,     env: 'SWFT=4.0  PLAT=watchOS  DST="OS=2.2,name=Apple Watch - 38mm"', os: osx, language: objective-c}
-    - {osx_image: xcode9.2,     env: 'SWFT=4.0  PLAT=watchOS  DST="OS=3.2,name=Apple Watch - 38mm"', os: osx, language: objective-c}
     - {osx_image: xcode9.2,     env: 'SWFT=4.0  PLAT=watchOS  DST="OS=4.2,name=Apple Watch - 38mm"', os: osx, language: objective-c}
 
+    # we would test this with Xcode 9.3 but it reliably fails and gives no useful rationale for failure
+    - {osx_image: xcode9.2,     env: 'SWFT=4.0  PLAT=iOS      DST="OS=8.4,name=iPhone 4s"',          os: osx, language: objective-c}    
+    
+    - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=iOS      DST="OS=9.3,name=iPhone SE"',          os: osx, language: objective-c}
+    - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=iOS      DST="OS=10.3.1,name=iPhone SE"',       os: osx, language: objective-c}
     - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=iOS      DST="OS=11.3,name=iPhone SE"',         os: osx, language: objective-c}
+    - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=tvOS     DST="OS=10.2,name=Apple TV 1080p"',    os: osx, language: objective-c}
     - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=tvOS     DST="OS=11.3,name=Apple TV"',          os: osx, language: objective-c}
     - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=macOS    DST="arch=x86_64"',                    os: osx, language: objective-c}
+    - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=watchOS  DST="OS=2.2,name=Apple Watch - 38mm"', os: osx, language: objective-c}
+    - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=watchOS  DST="OS=3.2,name=Apple Watch - 38mm"', os: osx, language: objective-c}
     - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=watchOS  DST="OS=4.3,name=Apple Watch - 38mm"', os: osx, language: objective-c}
 
     - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWFT=3'}
