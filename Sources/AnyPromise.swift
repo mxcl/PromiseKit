@@ -25,7 +25,7 @@ import Foundation
     @objc public func __thenOn(_ q: DispatchQueue, execute: @escaping (Any?) -> Any?) -> AnyPromise {
         return AnyPromise(__D: __AnyPromise(resolver: { resolve in
             self.__pipe { obj in
-                if !(obj is Error) {
+                if !(obj is NSError || obj is Error ) {
                     q.async {
                         resolve(execute(obj))
                     }
@@ -39,7 +39,7 @@ import Foundation
     @objc public func __catchOn(_ q: DispatchQueue, execute: @escaping (Any?) -> Any?) -> AnyPromise {
         return AnyPromise(__D: __AnyPromise(resolver: { resolve in
             self.__pipe { obj in
-                if obj is Error {
+                if obj is NSError || obj is Error {
                     q.async {
                         resolve(execute(obj))
                     }
@@ -64,8 +64,8 @@ import Foundation
     /// Internal, do not use! Some behaviors undefined.
     @objc public func __pipe(_ to: @escaping (Any?) -> Void) {
         let to = { (obj: Any?) -> Void in
-            if let err = obj as? Error {
-                to(err as NSError)  // or we cannot determine if objects are errors in objc land
+             if obj is NSError || obj is Error {
+                to(obj as? NSError)  // or we cannot determine if objects are errors in objc land
             } else {
                 to(obj)
             }
