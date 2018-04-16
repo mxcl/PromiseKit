@@ -43,17 +43,15 @@ before_install:
   fi
 install:
   case $PLAT in
-  iOS|tvOS|macOS)
-    xcodebuild -scheme PromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" build-for-testing;;
-  watchOS)
-    xcodebuild -scheme PromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" build;;
+  iOS|tvOS|macOS|watchOS)
+    xcodebuild -scheme PromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build;;
   *)
     swift build;;
   esac
 script:
   case $PLAT in
   iOS|tvOS|macOS)
-    xcodebuild -scheme PromiseKit SWIFT_VERSION=$SWFT -destination "$DST" test;;
+    xcodebuild -scheme PromiseKit -destination "$DST" -quiet test -enableCodeCoverage YES;;
   watchOS)
     ;;
   *)
