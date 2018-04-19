@@ -30,6 +30,7 @@ static inline AnyPromise *fulfillLater() {
 }
 
 
+
 @interface AnyPromiseTestSuite : XCTestCase @end @implementation AnyPromiseTestSuite
 
 - (void)test_01_resolve {
@@ -819,6 +820,60 @@ static inline AnyPromise *fulfillLater() {
         [ex fulfill];
     });
     [self waitForExpectationsWithTimeout:1 handler:nil];
+}
+
+static NSHashTable *errorArray;
+
+- (void)setUp {
+    [super setUp];
+    errorArray = [NSHashTable weakObjectsHashTable];
+}
+
+- (void)testErrorLeaks {
+    id ex1 = [self expectationWithDescription:@""];
+    NSError *error = dummyWithCode(1001);
+    [errorArray addObject:error];
+    [AnyPromise promiseWithValue:error]
+    .then(^{
+        XCTFail();
+    }).catch(^(NSError *e){
+        XCTAssertEqual(e.localizedDescription.intValue, 1001);
+    }).then(^{
+        NSError *err = dummyWithCode(1002);
+        [errorArray addObject:err];
+        return err;
+    }).catch(^(NSError *e){
+        XCTAssertEqual(e.localizedDescription.intValue, 1002);
+    }).then(^{
+        NSError *err = dummyWithCode(1003);
+        [errorArray addObject:err];
+        return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve){
+            resolve(err);
+        }];
+    }).catch(^(NSError *e){
+        XCTAssertEqual(e.localizedDescription.intValue, 1003);
+        NSError *err = dummyWithCode(1004);
+        [errorArray addObject:err];
+        return err;
+    }).catch(^(NSError *e){
+        XCTAssertEqual(e.localizedDescription.intValue, 1004);
+    }).then(^{
+        NSError *err = dummyWithCode(1005);
+        [errorArray addObject:err];
+        // throw will lead to leak, if not use complie flag with "-fobjc-arc-exceptions"
+        @throw err;
+    }).catch(^(NSError *e){
+        XCTAssertEqual(e.localizedDescription.intValue, 1005);
+    }).ensure(^{
+        [ex1 fulfill];
+    });
+    
+    [self waitForExpectationsWithTimeout:1 handler:nil];
+}
+
+- (void)tearDown {
+    XCTAssertEqual(errorArray.allObjects.count, 0);
+    [super tearDown];
 }
 
 //- (void)test_nil_block {

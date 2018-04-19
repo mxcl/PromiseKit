@@ -10,7 +10,7 @@
 		0C42F31B1FCF86320051309C /* HangTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C42F3191FCF86240051309C /* HangTests.swift */; };
 		0CC3AF2B1FCF84F7000E98C9 /* hang.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CC3AF2A1FCF84F7000E98C9 /* hang.swift */; };
 		49A5584D1DC5185900E4D01B /* ResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A5584B1DC5172F00E4D01B /* ResolverTests.swift */; };
-		630A8056203CEF6800D25F23 /* AnyPromiseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 630A8051203CEF6800D25F23 /* AnyPromiseTests.m */; };
+		630A8056203CEF6800D25F23 /* AnyPromiseTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 630A8051203CEF6800D25F23 /* AnyPromiseTests.m */; settings = {COMPILER_FLAGS = "-fobjc-arc-exceptions"; }; };
 		630A8057203CEF6800D25F23 /* PMKManifoldTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 630A8052203CEF6800D25F23 /* PMKManifoldTests.m */; };
 		630A8058203CEF6800D25F23 /* JoinTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 630A8053203CEF6800D25F23 /* JoinTests.m */; };
 		630A8059203CEF6800D25F23 /* HangTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 630A8054203CEF6800D25F23 /* HangTests.m */; };
