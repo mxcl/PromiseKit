@@ -213,6 +213,39 @@ extension CatchableTests {
         }
         wait(for: [ex], timeout: 10)
     }
+
+    func testEnsureThen_Error() {
+        let ex = expectation(description: "")
+
+        Promise.value(1).done {
+            XCTAssertEqual($0, 1)
+            throw Error.dummy
+        }.ensureThen {
+            after(seconds: 0.01)
+        }.catch {
+            XCTAssertEqual(Error.dummy, $0 as? Error)
+        }.finally {
+            ex.fulfill()
+        }
+
+        wait(for: [ex], timeout: 10)
+    }
+
+    func testEnsureThen_Value() {
+        let ex = expectation(description: "")
+
+        Promise.value(1).ensureThen {
+            after(seconds: 0.01)
+        }.done {
+            XCTAssertEqual($0, 1)
+        }.catch { _ in
+            XCTFail()
+        }.finally {
+            ex.fulfill()
+        }
+
+        wait(for: [ex], timeout: 10)
+    }
 }
 
 private enum Error: CancellableError {
