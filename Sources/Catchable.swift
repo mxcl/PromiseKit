@@ -151,14 +151,14 @@ public extension CatchMixin {
 
     /**
      The provided closure executes when this promise resolves, whether it rejects or not.
-     The chain waits on the returned `Guarantee`.
+     The chain waits on the returned `Guarantee<Void>`.
 
          firstly {
              setup()
          }.done {
              //…
-         }.ensure {
-             teardown()
+         }.ensureThen {
+             teardown()  // -> Guarante<Void>
          }.catch {
              //…
          }
