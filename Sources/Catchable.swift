@@ -150,6 +150,38 @@ public extension CatchMixin {
     }
 
     /**
+     The provided closure executes when this promise resolves, whether it rejects or not.
+     The chain waits on the returned `Guarantee`.
+
+         firstly {
+             setup()
+         }.done {
+             //…
+         }.ensure {
+             teardown()
+         }.catch {
+             //…
+         }
+
+     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter body: The closure that executes when this promise resolves.
+     - Returns: A new promise, resolved with this promise’s resolution.
+     */
+    func ensureThen(on: DispatchQueue? = conf.Q.return, _ body: @escaping () -> Guarantee<Void>) -> Promise<T> {
+        let rp = Promise<T>(.pending)
+        pipe { result in
+            on.async {
+                body().done {
+                    rp.box.seal(result)
+                }
+            }
+        }
+        return rp
+    }
+
+
+
+    /**
      Consumes the Swift unused-result warning.
      - Note: You should `catch`, but in situations where you know you don’t need a `catch`, `cauterize` makes your intentions clear.
      */
