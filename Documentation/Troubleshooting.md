@@ -116,6 +116,7 @@ func doStuff() {
 So an *inline* function is all you need. Now Swift will tell you the real
 error message. Here that you forgot a `return`.
 
+
 ## You Copied Code Off The Internet That Doesn’t Work
 
 Swift changed a lot over the years and thus PromiseKit has had to change to keep
@@ -126,6 +127,18 @@ PromiseKit functions are documented and provide examples.
 ## Context type for closure argument expects 1 argument, which cannot be implicitly ignored
 
 You have a `then` you want a `done`.
+
+## Missing argument for parameter #1 in call
+
+This is part of Swift 4’s “tuplegate”.
+
+You must specify your `Void` parameter:
+
+```swift
+seal.fulfill(())
+```
+
+Yes: we hope they revert this change in Swift 5 too.
 
 ## Other Issues
 
