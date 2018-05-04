@@ -246,7 +246,7 @@ func foo() -> (Promise<Void>, cancel: () -> Void) {
 
     let promise = Promise<Void> { seal in
         task.completion = { value in
-            guard !cancelme else { reject(NSError.cancelledError) }
+            guard !cancelme else { return reject(PMKError.cancelled) }
             seal.fulfill(value)
         }
         task.start()
