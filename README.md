@@ -2,8 +2,6 @@
 
 ![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] [![Build Status](https://travis-ci.org/mxcl/PromiseKit.svg?branch=master)](https://travis-ci.org/mxcl/PromiseKit)
 
-[繁體中文](README.zh_Hant.md) (*outdated*), [简体中文](README.zh_CN.md) (*outdated*)
-
 ---
 
 Promises simplify asynchronous programming, freeing you up to focus on the more
@@ -70,9 +68,7 @@ that we sincerely recommend [Carthage](https://github.com/Carthage/Carthage).
   * [Objective-C Guide](Documentation/ObjectiveC.md)
   * [Troubleshooting](Documentation/Troubleshooting.md) (eg. solutions to common compile errors)
   * [Appendix](Documentation/Appendix.md)
-
-If you are looking for a function’s documentation, then please note
-[our sources](Sources/) are thoroughly documented.
+* [API Reference](https://promisekit.org/reference/)
 
 # Extensions
 

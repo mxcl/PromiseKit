@@ -10,3 +10,4 @@
   * [Objective-C Guide](ObjectiveC.md)
   * [Troubleshooting](Troubleshooting.md)
   * [Appendix](Appendix.md)
+* [API Reference](https://promisekit.org/reference/)
