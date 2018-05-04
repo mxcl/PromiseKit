@@ -68,6 +68,8 @@ return firstly {
 }
 ```
 
+Note see `compactMap` when you want to error for conditions where API outside your control returns an Optional and you don’t want `nil`.
+
 # Tips n’ Tricks
 
 ## Background loaded member variables
