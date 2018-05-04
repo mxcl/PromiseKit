@@ -472,8 +472,8 @@ pain points in using PromiseKit and Swift.
 # Further Reading
 
 The above is the 90% you will use. We **strongly** suggest reading the
-[sources], though strictly we are only suggesting you read the function
-documentation, don't worry about the internals. There are numerous little
+[API Reference].
+There are numerous little
 functions that may be useful to you and the documentation for all of the above
 is more thorough at the source.
 
@@ -483,4 +483,4 @@ documentation while you are developing.
 Otherwise return to our [contents page](/Documentation).
 
 
-[sources]: https://github.com/mxcl/PromiseKit/tree/master/Sources
+[API Reference]: https://promisekit.org/reference/
