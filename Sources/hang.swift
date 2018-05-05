@@ -2,14 +2,15 @@ import Foundation
 import CoreFoundation
 
 /**
- Suspends the active thread waiting on the provided promise.
+ Runs the active run-loop until the provided promise resolves.
 
- Useful when an application's main thread should not terminate before the promise is resolved
- (e.g. commandline applications).
+ This is for debug and is not a generally safe function to use in your applications. We mostly provide it for use in testing environments.
 
- - Returns: The value of the provided promise once resolved.
- - Throws: An error, should the promise be resolved with an error.
- - SeeAlso: `wait()`
+ Still if you like, study how it works (by reading the sources!) and use at your own risk.
+
+ - Returns: The value of the resolved promise
+ - Throws: An error, should the promise be rejected
+ - See: `wait()`
 */
 public func hang<T>(_ promise: Promise<T>) throws -> T {
 #if os(Linux)

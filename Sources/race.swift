@@ -8,30 +8,29 @@ private func _race<U: Thenable>(_ thenables: [U]) -> Promise<U.T> {
 }
 
 /**
- Resolves with the first resolving promise from a set of promises.
+ Waits for one promise to resolve
 
      race(promise1, promise2, promise3).then { winner in
          //…
      }
 
- - Returns: A new promise that resolves when the first promise in the provided promises resolves.
- - Warning: If any of the provided promises reject, the returned promise is rejected.
- - Warning: aborts if the array is empty.
+ - Returns: The promise that resolves first
+ - Warning: If the first resolution is a rejection, the returned promise is rejected
 */
 public func race<U: Thenable>(_ thenables: U...) -> Promise<U.T> {
     return _race(thenables)
 }
 
 /**
- Resolves with the first resolving promise from a set of promises.
+ Waits for one promise to resolve
 
      race(promise1, promise2, promise3).then { winner in
          //…
      }
 
- - Returns: A new promise that resolves when the first promise in the provided promises resolves.
- - Warning: If any of the provided promises reject, the returned promise is rejected.
- - Remark: Returns promise rejected with PMKError.badInput if empty array provided
+ - Returns: The promise that resolves first
+ - Warning: If the first resolution is a rejection, the returned promise is rejected
+ - Remark: If the provided array is empty the returned promise is rejected with PMKError.badInput
 */
 public func race<U: Thenable>(_ thenables: [U]) -> Promise<U.T> {
     guard !thenables.isEmpty else {
@@ -41,15 +40,13 @@ public func race<U: Thenable>(_ thenables: [U]) -> Promise<U.T> {
 }
 
 /**
- Resolves with the first resolving Guarantee from a set of promises.
+ Waits for one guarantee to resolve
 
      race(promise1, promise2, promise3).then { winner in
          //…
      }
 
- - Returns: A new guarantee that resolves when the first promise in the provided promises resolves.
- - Warning: If any of the provided promises reject, the returned promise is rejected.
- - Remark: Returns promise rejected with PMKError.badInput if empty array provided
+ - Returns: The guarantee that resolves first
 */
 public func race<T>(_ guarantees: Guarantee<T>...) -> Guarantee<T> {
     let rg = Guarantee<T>(.pending)

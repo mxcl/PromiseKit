@@ -23,6 +23,7 @@ public enum PMKError: Error {
     @available(*, deprecated, message: "See: `compactMap`")
     case flatMap(Any, Any.Type)
 
+    /// `nil` was returned from `compactMap`
     case compactMap(Any, Any.Type)
 
     /// the lastValue or firstValue of a sequence was requested but the sequence was empty
@@ -59,7 +60,9 @@ extension PMKError: LocalizedError {
 
 //////////////////////////////////////////////////////////// Cancellation
 
+/// An error that may represent the cancelled condition
 public protocol CancellableError: Error {
+    /// returns true if this Error represents a cancelled condition
     var isCancelled: Bool { get }
 }
 
@@ -81,7 +84,11 @@ extension Error {
     }
 }
 
+/// Used by `catch` and `recover`
 public enum CatchPolicy {
+    /// Indicates that `catch` or `recover` handle all error types including cancellable-errors.
     case allErrors
+
+    /// Indicates that `catch` or `recover` handle all error except cancellable-errors.
     case allErrorsExceptCancellation
 }

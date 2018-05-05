@@ -1,7 +1,10 @@
 import class Foundation.Thread
 import Dispatch
 
-/// A `Promise` is a functional abstraction around a failable asynchronous operation.
+/**
+ A `Promise` is a functional abstraction around a failable asynchronous operation.
+ - See: `Thenable`
+ */
 public class Promise<T>: Thenable, CatchMixin {
     let box: Box<Result<T>>
 
@@ -66,7 +69,7 @@ public class Promise<T>: Thenable, CatchMixin {
         return { ($0, Resolver($0.box)) }(Promise<T>(.pending))
     }
 
-    /// Internal function required for `Thenable` conformance.
+    /// - See: `Thenable.pipe`
     public func pipe(to: @escaping(Result<T>) -> Void) {
         switch box.inspect() {
         case .pending:
@@ -83,7 +86,7 @@ public class Promise<T>: Thenable, CatchMixin {
         }
     }
 
-    /// - Returns: The current `Result` for this promise.
+    /// - See: `Thenable.result`
     public var result: Result<T>? {
         switch box.inspect() {
         case .pending:
@@ -113,7 +116,7 @@ public extension Promise {
      Blocks this thread, so—you know—don’t call this on a serial thread that
      any part of your chain may use. Like the main thread for example.
      */
-    public func wait() throws -> T {
+    func wait() throws -> T {
 
         if Thread.isMainThread {
             Swift.print("PromiseKit: warning: `wait()` called on main thread!")

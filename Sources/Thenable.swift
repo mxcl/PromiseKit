@@ -2,13 +2,17 @@ import Dispatch
 
 /// Thenable represents an asynchronous operation that can be chained.
 public protocol Thenable: class {
+    /// The type of the wrapped value
     associatedtype T
+
+    /// `pipe` is immediately executed when this `Thenable` is resolved
     func pipe(to: @escaping(Result<T>) -> Void)
+
+    /// The resolved result or nil if pending.
     var result: Result<T>? { get }
 }
 
 public extension Thenable {
-    
     /**
      The provided closure executes when this promise resolves.
      

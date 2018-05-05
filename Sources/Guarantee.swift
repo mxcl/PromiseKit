@@ -1,7 +1,10 @@
 import class Foundation.Thread
 import Dispatch
 
-/// A `Guarantee` is a functional abstraction around an asynchronous operation that cannot error.
+/**
+ A `Guarantee` is a functional abstraction around an asynchronous operation that cannot error.
+ - See: `Thenable`
+*/
 public class Guarantee<T>: Thenable {
     let box: Box<T>
 
@@ -9,15 +12,18 @@ public class Guarantee<T>: Thenable {
         self.box = box
     }
 
+    /// Returns a `Guarantee` sealed with the provided value.
     public static func value(_ value: T) -> Guarantee<T> {
         return .init(box: SealedBox(value: value))
     }
 
+    /// Returns a pending `Guarantee` that can be resolved with the provided closure’s parameter.
     public init(resolver body: (@escaping(T) -> Void) -> Void) {
         box = EmptyBox()
         body(box.seal)
     }
 
+    /// - See: `Thenable.pipe`
     public func pipe(to: @escaping(Result<T>) -> Void) {
         pipe{ to(.fulfilled($0)) }
     }
@@ -38,6 +44,7 @@ public class Guarantee<T>: Thenable {
         }
     }
 
+    /// - See: `Thenable.result`
     public var result: Result<T>? {
         switch box.inspect() {
         case .pending:
@@ -51,6 +58,7 @@ public class Guarantee<T>: Thenable {
         box = EmptyBox()
     }
 
+    /// Returns a tuple of a pending `Guarantee` and a function that resolves it.
     public class func pending() -> (guarantee: Guarantee<T>, resolve: (T) -> Void) {
         return { ($0, $0.box.seal) }(Guarantee<T>(.pending))
     }

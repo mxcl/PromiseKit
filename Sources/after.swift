@@ -6,7 +6,7 @@ import Dispatch
          //…
      }
 
-- Returns: A new promise that fulfills after the specified duration.
+- Returns: A guarantee that resolves after the specified duration.
 */
 public func after(seconds: TimeInterval) -> Guarantee<Void> {
     let (rg, seal) = Guarantee<Void>.pending()
@@ -24,7 +24,7 @@ public func after(seconds: TimeInterval) -> Guarantee<Void> {
          //…
      }
 
- - Returns: A new promise that fulfills after the specified duration.
+ - Returns: A guarantee that resolves after the specified duration.
 */
 public func after(_ interval: DispatchTimeInterval) -> Guarantee<Void> {
     let (rg, seal) = Guarantee<Void>.pending()

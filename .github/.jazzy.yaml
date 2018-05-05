@@ -1,0 +1,8 @@
+root_url:
+  https://promisekit.org/reference/
+readme:
+  foo.md
+exclude:
+  - Sources/Deprecations.swift
+  - Sources/AnyPromise.swift 
+  
