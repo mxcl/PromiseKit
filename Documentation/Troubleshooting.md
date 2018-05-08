@@ -34,7 +34,39 @@ return firstly {
 
 ### 1. Specifying Closure Parameters **and** Return Types
 
-Please try it.
+For example:
+
+```swift
+return firstly {
+    foo()
+}.then { user in
+    //…
+    return bar()
+}
+```
+
+May compile if you specify the type of user:
+
+
+```swift
+return firstly {
+    foo()
+}.then { (user: User) in
+    //…
+    return bar()
+}
+```
+
+If it still doesn't perhaps you need to specify the return type too:
+
+```swift
+return firstly {
+    foo()
+}.then { (user: User) -> Promise<Bar> in
+    //…
+    return bar()
+}
+```
 
 We made great effort to reduce the need for this with PromiseKit 6, but like
 normal functions in Swift (eg. Array.map) that return a generic type, if the
@@ -42,7 +74,11 @@ closure body is longer than one line you may need to tell Swift what returns.
 
 > Tip: Sometimes you can force a one liner with semi-colons.
 
-For example:
+
+### 2. Specify `_` as closure type
+
+You can’t not annotate the parameters in closures that have them, but Swift
+will give you a useless error message about it. For example:
 
 ```swift
 func _() -> Promise<Void> {
