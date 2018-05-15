@@ -13,7 +13,7 @@ import CoreFoundation
  - See: `wait()`
 */
 public func hang<T>(_ promise: Promise<T>) throws -> T {
-#if os(Linux)
+#if os(Linux) || os(Android)
     // isMainThread is not yet implemented on Linux.
     let runLoopModeRaw = RunLoopMode.defaultRunLoopMode.rawValue._bridgeToObjectiveC()
     let runLoopMode: CFString = unsafeBitCast(runLoopModeRaw, to: CFString.self)
