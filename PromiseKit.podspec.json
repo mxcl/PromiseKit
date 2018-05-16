@@ -1,0 +1,552 @@
+{
+  "name": "PromiseKit",
+  "version": "6.2.7",
+  "source": {
+    "git": "https://github.com/mxcl/PromiseKit.git",
+    "tag": "6.2.7",
+    "submodules": true
+  },
+  "license": "MIT",
+  "summary": "Promises for Swift & ObjC.",
+  "homepage": "http://promisekit.org",
+  "description": "A thoughtful and complete implementation of promises for iOS, macOS, watchOS and tvOS with first-class support for both Objective-C and Swift.",
+  "social_media_url": "https://twitter.com/mxcl",
+  "authors": {
+    "Max Howell": "mxcl@me.com"
+  },
+  "documentation_url": "http://promisekit.org/docs/",
+  "default_subspecs": [
+    "CorePromise",
+    "UIKit",
+    "Foundation"
+  ],
+  "requires_arc": true,
+  "swift_version": "4.0",
+  "platforms": {
+    "ios": "8.0",
+    "osx": "10.9",
+    "watchos": "2.0",
+    "tvos": "9.0"
+  },
+  "pod_target_xcconfig": {
+    "OTHER_SWIFT_FLAGS": "-DPMKCocoaPods"
+  },
+  "subspecs": [
+    {
+      "name": "Accounts",
+      "osx": {
+        "source_files": "Extensions/Accounts/Sources/*",
+        "frameworks": "Accounts"
+      },
+      "ios": {
+        "source_files": "Extensions/Accounts/Sources/*",
+        "frameworks": "Accounts"
+      },
+      "dependencies": {
+        "PromiseKit/CorePromise": [
+
+        ]
+      },
+      "platforms": {
+        "ios": "8.0",
+        "osx": "10.9"
+      }
+    },
+    {
+      "name": "Alamofire",
+      "source_files": "Extensions/Alamofire/Sources/*",
+      "dependencies": {
+        "Alamofire": [
+          "~> 4.0"
+        ],
+        "PromiseKit/CorePromise": [
+
+        ]
+      },
+      "platforms": {
+        "ios": "8.0",
+        "osx": "10.11",
+        "watchos": "2.0",
+        "tvos": "9.0"
+      }
+    },
+    {
+      "name": "AddressBook",
+      "ios": {
+        "source_files": "Extensions/AddressBook/Sources/*",
+        "frameworks": "AddressBook"
+      },
+      "dependencies": {
+        "PromiseKit/CorePromise": [
+
+        ]
+      },
+      "platforms": {
+        "ios": "8.0"
+      }
+    },
+    {
+      "name": "AssetsLibrary",
+      "ios": {
+        "source_files": "Extensions/AssetsLibrary/Sources/*",
+        "frameworks": "AssetsLibrary"
+      },
+      "dependencies": {
+        "PromiseKit/CorePromise": [
+
+        ]
+      },
+      "platforms": {
+        "ios": "8.0"
+      }
+    },
+    {
+      "name": "AVFoundation",
+      "ios": {
+        "source_files": "Extensions/AVFoundation/Sources/*",
+        "frameworks": "AVFoundation"
+      },
+      "dependencies": {
+        "PromiseKit/CorePromise": [
+
+        ]
+      },
+      "platforms": {
+        "ios": "8.0"
+      }
+    },
+    {
+      "name": "Bolts",
+      "source_files": "Extensions/Bolts/Sources/*",
+      "dependencies": {
+        "PromiseKit/CorePromise": [
+
+        ],
+        "Bolts": [
+          "~> 1.9.0"
+        ]
+      },
+      "platforms": {
+        "ios": "8.0",
+        "osx": "10.9",
+        "watchos": "2.0",
+        "tvos": "9.0"
+      }
+    },
+    {
+      "name": "CloudKit",
+      "source_files": "Extensions/CloudKit/Sources/*",
+      "frameworks": "CloudKit",
+      "dependencies": {
+        "PromiseKit/CorePromise": [
+
+        ]
+      },
+      "platforms": {
+        "ios": "8.0",
+        "osx": "10.10",
+        "tvos": "9.0",
+        "watchos": "3.0"
+      }
+    },
+    {
+      "name": "CoreBluetooth",
+      "tvos": {
+        "source_files": "Extensions/CoreBluetooth/Sources/*",
+        "frameworks": "CoreBluetooth"
+      },
+      "osx": {
+        "source_files": "Extensions/CoreBluetooth/Sources/*",
+        "frameworks": "CoreBluetooth"
+      },
+      "ios": {
+        "source_files": "Extensions/CoreBluetooth/Sources/*",
+        "frameworks": "CoreBluetooth"
+      },
+      "dependencies": {
+        "PromiseKit/CorePromise": [
+
+        ]
+      },
+      "platforms": {
+        "ios": "8.0",
+        "osx": "10.9",
+        "tvos": "9.0"
+      }
+    },
+    {
+      "name": "CorePromise",
+      "source_files": [
+        "Sources/when.swift",
+        "Sources/Guarantee.swift",
+        "Sources/race.swift",
+        "Sources/Error.swift",
+        "Sources/after.swift",
+        "Sources/Resolver.swift",
+        "Sources/Deprecations.swift",
+        "Sources/hang.swift",
+        "Sources/Box.swift",
+        "Sources/Catchable.swift",
+        "Sources/Promise.swift",
+        "Sources/AnyPromise.swift",
+        "Sources/firstly.swift",
+        "Sources/CustomStringConvertible.swift",
+        "Sources/Thenable.swift",
+        "Sources/Configuration.swift",
+        "Sources/{after,AnyPromise,GlobalState,dispatch_promise,hang,join,PMKPromise,when,race}.m",
+        "Sources/fwd.h",
+        "Sources/AnyPromise.h",
+        "Sources/PromiseKit.h"
+      ],
+      "public_header_files": [
+        "Sources/fwd.h",
+        "Sources/AnyPromise.h",
+        "Sources/PromiseKit.h"
+      ],
+      "preserve_paths": [
+        "Sources/AnyPromise+Private.h",
+        "Sources/PMKCallVariadicBlock.m",
+        "Sources/NSMethodSignatureForBlock.m"
+      ],
+      "frameworks": "Foundation",
+      "platforms": {
+        "ios": "8.0",
+        "osx": "10.9",
+        "watchos": "2.0",
+        "tvos": "9.0"
+      }
+    },
+    {
+      "name": "CoreLocation",
+      "source_files": "Extensions/CoreLocation/Sources/*",
+      "watchos": {
+        "source_files": "Extensions/CoreLocation/Sources/CLGeocoder*"
+      },
+      "dependencies": {
+        "PromiseKit/CorePromise": [
+
+        ]
+      },
+      "frameworks": "CoreLocation",
+      "platforms": {
+        "ios": "8.0",
+        "osx": "10.9",
+        "watchos": "3.0",
+        "tvos": "9.0"
+      }
+    },
+    {
+      "name": "EventKit",
+      "watchos": {
+        "source_files": "Extensions/EventKit/Sources/*",
+        "frameworks": "EventKit"
+      },
+      "osx": {
+        "source_files": "Extensions/EventKit/Sources/*",
+        "frameworks": "EventKit"
+      },
+      "ios": {
+        "source_files": "Extensions/EventKit/Sources/*",
+        "frameworks": "EventKit"
+      },
+      "dependencies": {
+        "PromiseKit/CorePromise": [
+
+        ]
+      },
+      "platforms": {
+        "ios": "8.0",
+        "osx": "10.9",
+        "watchos": "2.0"
+      }
+    },
+    {
+      "name": "Foundation",
+      "source_files": [
+        "Extensions/Foundation/Sources/NSURLSession+AnyPromise.h",
+        "Extensions/Foundation/Sources/NSNotificationCenter+Promise.swift",
+        "Extensions/Foundation/Sources/NSNotificationCenter+AnyPromise.m",
+        "Extensions/Foundation/Sources/afterlife.swift",
+        "Extensions/Foundation/Sources/NSTask+AnyPromise.h",
+        "Extensions/Foundation/Sources/NSURLSession+Promise.swift",
+        "Extensions/Foundation/Sources/NSURLSession+AnyPromise.m",
+        "Extensions/Foundation/Sources/NSObject+Promise.swift",
+        "Extensions/Foundation/Sources/NSNotificationCenter+AnyPromise.h",
+        "Extensions/Foundation/Sources/PMKFoundation.h",
+        "Extensions/Foundation/Sources/Process+Promise.swift",
+        "Extensions/Foundation/Sources/NSTask+AnyPromise.m"
+      ],
+      "dependencies": {
+        "PromiseKit/CorePromise": [
+
+        ]
+      },
+      "frameworks": "Foundation",
+      "platforms": {
+        "ios": "8.0",
+        "osx": "10.9",
+        "watchos": "2.0",
+        "tvos": "9.0"
+      }
+    },
+    {
+      "name": "MapKit",
+      "tvos": {
+        "source_files": "Extensions/MapKit/Sources/*",
+        "frameworks": "MapKit"
+      },
+      "osx": {
+        "source_files": "Extensions/MapKit/Sources/*",
+        "frameworks": "MapKit"
+      },
+      "ios": {
+        "source_files": "Extensions/MapKit/Sources/*",
+        "frameworks": "MapKit"
+      },
+      "dependencies": {
+        "PromiseKit/CorePromise": [
+
+        ]
+      },
+      "platforms": {
+        "ios": "8.0",
+        "osx": "10.9",
+        "watchos": "2.0",
+        "tvos": "9.2"
+      }
+    },
+    {
+      "name": "MessageUI",
+      "ios": {
+        "source_files": "Extensions/MessagesUI/Sources/*",
+        "frameworks": "MessageUI"
+      },
+      "dependencies": {
+        "PromiseKit/CorePromise": [
+
+        ]
+      },
+      "platforms": {
+        "ios": "8.0"
+      }
+    },
+    {
+      "name": "OMGHTTPURLRQ",
+      "source_files": "Extensions/OMGHTTPURLRQ/Sources/*",
+      "dependencies": {
+        "PromiseKit/Foundation": [
+
+        ],
+        "OMGHTTPURLRQ": [
+          "~> 3.2"
+        ]
+      },
+      "platforms": {
+        "ios": "8.0",
+        "osx": "10.9",
+        "watchos": "2.0",
+        "tvos": "9.0"
+      }
+    },
+    {
+      "name": "Photos",
+      "osx": {
+        "source_files": "Extensions/Photos/Sources/*",
+        "frameworks": "Photos"
+      },
+      "tvos": {
+        "source_files": "Extensions/Photos/Sources/*",
+        "frameworks": "Photos"
+      },
+      "ios": {
+        "source_files": "Extensions/Photos/Sources/*",
+        "frameworks": "Photos"
+      },
+      "dependencies": {
+        "PromiseKit/CorePromise": [
+
+        ]
+      },
+      "platforms": {
+        "ios": "8.0",
+        "osx": "10.13",
+        "tvos": "10.0"
+      }
+    },
+    {
+      "name": "QuartzCore",
+      "tvos": {
+        "source_files": "Extensions/QuartzCore/Sources/*",
+        "frameworks": "QuartzCore"
+      },
+      "ios": {
+        "source_files": "Extensions/QuartzCore/Sources/*",
+        "frameworks": "QuartzCore"
+      },
+      "osx": {
+        "source_files": "Extensions/QuartzCore/Sources/*",
+        "frameworks": "QuartzCore"
+      },
+      "dependencies": {
+        "PromiseKit/CorePromise": [
+
+        ]
+      },
+      "platforms": {
+        "ios": "8.0",
+        "osx": "10.9",
+        "tvos": "9.0"
+      }
+    },
+    {
+      "name": "Social",
+      "ios": {
+        "source_files": "Extensions/Social/Sources/*",
+        "frameworks": "Social"
+      },
+      "osx": {
+        "source_files": [
+          "Extensions/Social/Sources/SLRequest+AnyPromise.m",
+          "Extensions/Social/Sources/SLRequest+Promise.swift",
+          "Extensions/Social/Sources/PMKSocial.h",
+          "Extensions/Social/Sources/SLRequest+AnyPromise.h",
+          "Extensions/Social/Sources/SLComposeViewController+Promise.swift"
+        ],
+        "frameworks": "Social"
+      },
+      "dependencies": {
+        "PromiseKit/Foundation": [
+
+        ]
+      },
+      "platforms": {
+        "ios": "8.0",
+        "osx": "10.9"
+      }
+    },
+    {
+      "name": "StoreKit",
+      "tvos": {
+        "source_files": "Extensions/StoreKit/Sources/*",
+        "frameworks": "StoreKit"
+      },
+      "osx": {
+        "source_files": "Extensions/StoreKit/Sources/*",
+        "frameworks": "StoreKit"
+      },
+      "ios": {
+        "source_files": "Extensions/StoreKit/Sources/*",
+        "frameworks": "StoreKit"
+      },
+      "dependencies": {
+        "PromiseKit/CorePromise": [
+
+        ]
+      },
+      "platforms": {
+        "ios": "8.0",
+        "osx": "10.9",
+        "tvos": "9.0"
+      }
+    },
+    {
+      "name": "SystemConfiguration",
+      "tvos": {
+        "source_files": "Extensions/SystemConfiguration/Sources/*",
+        "frameworks": "SystemConfiguration"
+      },
+      "osx": {
+        "source_files": "Extensions/SystemConfiguration/Sources/*",
+        "frameworks": "SystemConfiguration"
+      },
+      "ios": {
+        "source_files": "Extensions/SystemConfiguration/Sources/*",
+        "frameworks": "SystemConfiguration"
+      },
+      "dependencies": {
+        "PromiseKit/CorePromise": [
+
+        ]
+      },
+      "platforms": {
+        "ios": "8.0",
+        "osx": "10.9",
+        "tvos": "9.0"
+      }
+    },
+    {
+      "name": "UIKit",
+      "tvos": {
+        "source_files": [
+          "Extensions/UIKit/Sources/UIViewController+AnyPromise.m",
+          "Extensions/UIKit/Sources/PMKUIKit.h",
+          "Extensions/UIKit/Sources/UIView+AnyPromise.h",
+          "Extensions/UIKit/Sources/UIView+Promise.swift",
+          "Extensions/UIKit/Sources/UIViewController+AnyPromise.h",
+          "Extensions/UIKit/Sources/UIView+AnyPromise.m",
+          "Extensions/UIKit/Sources/UIViewPropertyAnimator+Promise.swift"
+        ],
+        "frameworks": "UIKit"
+      },
+      "ios": {
+        "source_files": [
+          "Extensions/UIKit/Sources/UIViewController+AnyPromise.m",
+          "Extensions/UIKit/Sources/PMKUIKit.h",
+          "Extensions/UIKit/Sources/UIView+AnyPromise.h",
+          "Extensions/UIKit/Sources/UIView+Promise.swift",
+          "Extensions/UIKit/Sources/UIViewController+AnyPromise.h",
+          "Extensions/UIKit/Sources/UIView+AnyPromise.m",
+          "Extensions/UIKit/Sources/UIViewPropertyAnimator+Promise.swift"
+        ],
+        "frameworks": "UIKit"
+      },
+      "dependencies": {
+        "PromiseKit/CorePromise": [
+
+        ]
+      },
+      "platforms": {
+        "ios": "8.0",
+        "tvos": "9.0"
+      }
+    },
+    {
+      "name": "UIImagePickerController",
+      "ios": {
+        "source_files": "Extensions/UIKit/Sources/UIImagePickerController+Promise.swift",
+        "frameworks": "UIKit",
+        "xcconfig": {
+          "GCC_PREPROCESSOR_DEFINITIONS": "$(inherited) PMKImagePickerController=1"
+        }
+      },
+      "dependencies": {
+        "PromiseKit/UIKit": [
+
+        ]
+      },
+      "platforms": {
+        "ios": "8.0"
+      }
+    },
+    {
+      "name": "WatchConnectivity",
+      "watchos": {
+        "source_files": "Extensions/WatchConnectivity/Sources/*",
+        "frameworks": "WatchConnectivity"
+      },
+      "ios": {
+        "source_files": "Extensions/WatchConnectivity/Sources/*",
+        "frameworks": "WatchConnectivity"
+      },
+      "dependencies": {
+        "PromiseKit/CorePromise": [
+
+        ]
+      },
+      "platforms": {
+        "ios": "8.0",
+        "watchos": "2.0"
+      }
+    }
+  ]
+}
