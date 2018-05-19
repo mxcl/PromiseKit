@@ -283,6 +283,8 @@ asynchronous task. Promises are a wrapper around asynchronicity but they have no
 control over the underlying tasks. If you need to cancel the underlying task you
 need to cancel the underlying task!
 
+> The library [CancellablePromiseKit](https://github.com/johannesd/CancellablePromiseKit) extends the concept of Promises to fully cover cancellable tasks.
+
 ## Retry / Polling
 
 ```swift
