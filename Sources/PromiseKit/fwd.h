@@ -3,7 +3,7 @@
 @class NSError;
 @class NSString;
 @class NSOperationQueue;
-@class PMKPromise;
+@class PMKPromise<ResultType>;
 
 extern NSOperationQueue *PMKOperationQueue(void);
 
