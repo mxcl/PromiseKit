@@ -90,7 +90,7 @@ NSString const*const PMKURLErrorFailingData = PMKURLErrorFailingDataKey;
                 fluff(PMKManifold(responseObject, rsp, data));
             };
             PMKPromiseRejecter rejecter = ^(NSError *error){
-                id userInfo = error.userInfo.mutableCopy ?: [NSMutableDictionary new];
+                NSMutableDictionary *userInfo = error.userInfo.mutableCopy ?: [NSMutableDictionary new];
                 if (data) userInfo[PMKURLErrorFailingDataKey] = data;
                 if (rsp) userInfo[PMKURLErrorFailingURLResponseKey] = rsp;
                 error = [NSError errorWithDomain:error.domain code:error.code userInfo:userInfo];

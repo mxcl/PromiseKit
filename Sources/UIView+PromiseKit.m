@@ -69,6 +69,9 @@
 #endif
 
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-implementations"
+
 // deprecated
 
 + (PMKPromise *)promiseAnimationWithDuration:(NSTimeInterval)duration animations:(void(^)(void))animations {
@@ -103,5 +106,7 @@
 }
 
 #endif
+
+#pragma clang diagnostic pop
 
 @end

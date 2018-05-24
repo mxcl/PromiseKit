@@ -11,7 +11,7 @@
         return [self all:promises];
     } else if (promises) {
         return [self all:@[promises]].then(^(NSArray *values){
-            return values[0];
+            return [values objectAtIndex:0];
         });
     } else {
         return [PMKPromise promiseWithValue:nil];
@@ -32,8 +32,8 @@
     #define rejecter(key) ^(NSError *err){ \
         if (newPromise.resolved) \
             return; \
-        id userInfo = err.userInfo.mutableCopy; \
-        userInfo[PMKFailingPromiseIndexKey] = key; \
+        NSMutableDictionary *userInfo = err.userInfo.mutableCopy; \
+        [userInfo setObject:key forKey:PMKFailingPromiseIndexKey]; \
         err = [NSError errorWithDomain:err.domain code:err.code userInfo:userInfo]; \
         rejecter(err); \
     }
@@ -43,13 +43,13 @@
             NSDictionary *promiseDictionary = (NSDictionary *) promises;
             NSMutableDictionary *results = [NSMutableDictionary new];
             for (id key in promiseDictionary) {
-                PMKPromise *promise = promiseDictionary[key];
+                PMKPromise *promise = [promiseDictionary objectForKey:key];
                 if (![promise isKindOfClass:[PMKPromise class]])
                     promise = [PMKPromise promiseWithValue:promise];
                 promise.catch(rejecter(key));
                 promise.then(^(id o){
                     if (o)
-                        results[key] = o;
+                        [results setObject:o forKey:key];
                     if (--count == 0)
                         fulfiller(results);
                 });

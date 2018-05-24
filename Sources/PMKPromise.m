@@ -25,6 +25,7 @@ static const id PMKNull = @"PMKNull";
 
 
 @interface PMKArray : NSObject
+- (id)objectAtIndexedSubscript:(NSUInteger)idx;
 @end
 
 
@@ -118,19 +119,19 @@ id pmk_safely_call_block(id frock, id result) {
                 case 1: \
                     return ((type(^)(void))frock)(); \
                 case 2: { \
-                    const id arg = [result class] == [PMKArray class] ? result[0] : result; \
+                    const id arg = [result class] == [PMKArray class] ? ((PMKArray *)result)[0] : result; \
                     return ((type(^)(id))frock)(arg); \
                 } \
                 case 3: { \
                     type (^block)(id, id) = frock; \
                     return [result class] == [PMKArray class] \
-                        ? block(result[0], result[1]) \
+                        ? block(((PMKArray *)result)[0], ((PMKArray *)result)[1]) \
                         : block(result, nil); \
                 } \
                 case 4: { \
                     type (^block)(id, id, id) = frock; \
                     return [result class] == [PMKArray class] \
-                        ? block(result[0], result[1], result[2]) \
+                        ? block(((PMKArray *)result)[0], ((PMKArray *)result)[1], ((PMKArray *)result)[2]) \
                         : block(result, nil, nil); \
                 } \
                 default: \
@@ -568,7 +569,7 @@ static void PMKResolve(PMKPromise *this, id result) {
     if (IsPromise(result))
         return [(PMKPromise *)result value];
     if ([result isKindOfClass:[PMKArray class]])
-        return result[0];
+        return ((PMKArray *)result)[0];
     if (result == PMKNull)
         return nil;
     else
