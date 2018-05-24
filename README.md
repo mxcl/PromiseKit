@@ -149,7 +149,7 @@ func makeUrlRequest() throws -> URLRequest {
     rq.httpMethod = "POST"
     rq.addValue("application/json", forHTTPHeaderField: "Content-Type")
     rq.addValue("application/json", forHTTPHeaderField: "Accept")
-    rq.httpBody = try JSONSerialization.jsonData(with: obj)
+    rq.httpBody = try JSONEncoder().encode(obj)
     return rq
 }
 ```
