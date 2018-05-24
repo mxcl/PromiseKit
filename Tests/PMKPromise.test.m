@@ -32,7 +32,7 @@
 - (void)test_01_resolve {
     id ex1 = [self expectationWithDescription:@""];
 
-    PMKPromise *promise = [PMKPromise new:^(void (^f)(id), id r){
+    PMKPromise<NSNumber*> *promise = [PMKPromise new:^(void (^f)(id), id r){
         f(@1);
     }];
     promise.then(^(NSNumber *o){
@@ -49,7 +49,7 @@
 - (void)test_02_reject {
     id ex1 = [self expectationWithDescription:@""];
 
-    PMKPromise *promise = [PMKPromise new:^(id f, void (^r)(id)){
+    PMKPromise<NSNumber*> *promise = [PMKPromise new:^(id f, void (^r)(id)){
         r(@2);
     }];
     promise.then(^{
@@ -66,7 +66,7 @@
 - (void)test_03_throw {
     id ex1 = [self expectationWithDescription:@""];
 
-    PMKPromise *promise = [PMKPromise new:^(void (^f)(id), id r){
+    PMKPromise<NSNumber*> *promise = [PMKPromise new:^(void (^f)(id), id r){
         f(@2);
     }];
     promise.then(^{
@@ -85,7 +85,7 @@
 - (void)test_04_throw_doesnt_compromise_result {
     id ex1 = [self expectationWithDescription:@""];
 
-    PMKPromise *promise = [PMKPromise new:^(void (^f)(id), id r){
+    PMKPromise<NSNumber*> *promise = [PMKPromise new:^(void (^f)(id), id r){
         f(@4);
     }].then(^{
         @throw @4;

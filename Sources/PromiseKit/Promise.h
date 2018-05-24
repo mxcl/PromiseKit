@@ -18,7 +18,7 @@
  @see [PromiseKit `then` Guide](http://promisekit.org/then/)
  @see [PromiseKit Chaining Guide](http://promisekit.org/chaining/)
 */
-@interface PMKPromise : NSObject
+@interface PMKPromise<ResultType> : NSObject
 
 /**
  The provided block is executed when its receiver is resolved.
