@@ -13,38 +13,39 @@
 
 ## Do I need to worry about retain cycles?
 
-Generally no, provided the promise completes then all handlers are released thus
+Generally, no. Once a promise completes, all handlers are released and so
 any references to `self` are also released.
 
-However, if your chain contains side-effects that you would typically
-not want to happen after, say, a view controller is popped then you should still
-use `weak self` (and check for `self == nil`) to prevent any such side-effects.
+However, if your chain contains side effects that you would typically
+not want to happen after, say, a view controller is popped, then you should still
+use `weak self` (and check for `self == nil`) to prevent any such side effects.
 
-*However*, in our experience most things that developers consider side-effects that
-should be protected against are in fact *not* side-effects.
+*However*, in our experience most things that developers consider side effects that
+should be protected against are in fact *not* side effects.
 
-Side-effects include: changes to global application state. They *do not* include
+Side effects include changes to global application state. They *do not* include
 changing the view of a viewController. So, protect against setting UserDefaults or
 modifying the application database, and don't bother protecting against changing
 the text in a `UILabel`.
 
 [This stackoverflow question](https://stackoverflow.com/questions/39281214/should-i-use-weak-self-in-promisekit-blocks)
-has some good discussion on the topic.
+has some good discussion on this topic.
 
 ## Where should I put my `catch`?
 
-`catch` deliberately terminates the chain, you should place low in your promise
-hierarchy: at as-root a point as possible. Typically this would be your view
-controllers where your `catch` can then display a message to the user.
+`catch` deliberately terminates the chain. You should put it low in your promise
+hierarchy at a point as close to the root as possible. Typically, this would be 
+somewhere such as a view controller, where your `catch` can then display a message
+to the user.
 
-This means you should be writing one catch for many `then`s and be returning
-promises without there being `catch` handlers.
+This means you should be writing one catch for many `then`s and returning
+promises that do not have internal `catch` handlers of their own.
 
-This is obviously a guideline, do what is necessary.
+This is obviously a guideline; do what is necessary.
 
 ## How do branched chains work?
 
-If you have a promise:
+Suppose you have a promise:
 
 ```
 let promise = foo()
@@ -62,12 +63,12 @@ promise.then {
 }
 ```
 
-You now have a branched chain. When `promise` resolves both chains receive its
-value. However the two chains are entirely separate and Swift will prompt you
-to ensure both have `catch` handlers.
+You now have a branched chain. When `promise` resolves, both chains receive its
+value. However, the two chains are entirely separate and Swift will prompt you
+to ensure that both have `catch` handlers.
 
-Probably, however, you can ignore the catch for one, but be careful in these
-situations as Swift cannot help you ensure your chains are error-handled.
+You can most likely ignore the `catch` for one of these branches, but be careful:
+in these situations, Swift cannot help you ensure that your chains are error-handled.
 
 ```
 promise.then {
@@ -99,23 +100,23 @@ when(fulfilled: p1, p2).catch { error in
 }
 ```
 
-> It's worth noting that you can add multiple `catch` handlers to a promise too,
-> and indeed, both will be called if the chain is rejected.
+> It's worth noting that you can add multiple `catch` handlers to a promise, too.
+> And indeed, both will be called if the chain is rejected.
 
 ## Is PromiseKit “heavy”?
 
-No, PromiseKit is hardly any sources in fact, it is “light-weight”. Any
-“weight” relative to other promise implementations is 6 years of bug fixes, the
-fact we have *stellar* Objective-C to Swift bridging or important things like
-[Zalgo prevention](http://blog.izs.me/post/59142742143/designing-apis-for-asynchrony)
+No. PromiseKit contains hardly any source code. In fact, it is quite lightweight. Any
+“weight” relative to other promise implementations derives from 6 years of bug fixes
+and tuning, from the fact that we have *stellar* Objective-C-to-Swift bridging, and 
+from important things such as [Zalgo prevention](http://blog.izs.me/post/59142742143/designing-apis-for-asynchrony)
 that hobby-project implementations don’t consider.
 
 ## Why is debugging hard?
 
-Because promises always execute via `dispatch` the backtraces you get have less
+Because promises always execute via `dispatch`, the backtraces you get have less
 information than is often required to trace the path of execution.
 
-One solution is (during debugging) to turn off the dispatch:
+One solution is to turn off dispatch during debugging:
 
 ```swift
 // Swift
@@ -125,20 +126,20 @@ DispatchQueue.default = zalgo
 PMKSetDefaultDispatchQueue(zalgo)
 ```
 
-Don’t leave this on, we always dispatch to avoid you accidentally writing
+Don’t leave this on. In normal use, we always dispatch to avoid you accidentally writing
 a common bug pattern: http://blog.izs.me/post/59142742143/designing-apis-for-asynchrony
 
 ## Where is `all()`?
 
-Some promise libraries provide `all`, we provide `when`, it is the same. `when`
-was chosen as it is the more common choice which we also think reads better.
-
+Some promise libraries provide `all` for awaiting multiple results. We call this function
+`when`, but it is the same thing. We chose `when` because it's the more common term and
+because we think it reads better in code.
 
 ## How can I test APIs that return promises?
 
 You need to use `XCTestExpectation`.
 
-We also provide `.wait()` and `hang()`, if you must, but be careful as they
+We also define `wait()` and `hang()`. Use them if you must, but be careful because they
 block the current thread!
 
 ## Is PromiseKit thread-safe?
@@ -148,16 +149,16 @@ Yes, entirely.
 However the code *you* write in your `then`s might not be!
 
 Just make sure you don’t access state outside the chain from concurrent queues.
-By default PromiseKit handlers run on the `main` thread, which is serial, so
-typically you won't have to worry about this.
+By default, PromiseKit handlers run on the `main` thread, which is serial, so
+you typically won't have to worry about this.
 
 ## Why are there separate classes for Objective-C and Swift?
 
-`Promise<T>` is generic and and thus cannot be represented by Objective-C.
+`Promise<T>` is generic and and so cannot be represented by Objective-C.
 
 ## Does PromiseKit conform to Promises/A+?
 
-Yes, we have tests that prove this.
+Yes. We have tests that prove this.
 
 ## How do PromiseKit and RxSwift differ?
 
@@ -165,7 +166,7 @@ https://github.com/mxcl/PromiseKit/issues/484
 
 ## Why can’t I return from a catch like I can in Javascript?
 
-Swift demands functions with one purpose, thus we have two error handlers:
+Swift demands that functions have one purpose. Thus, we have two error handlers:
 
 * `catch`: ends the chain and handles errors
 * `recover`: attempts to recover from errors in a chain
@@ -197,9 +198,10 @@ case, it “starts” immediately when `foo()` is called.
 
 ## What is a good way to use Firebase with PromiseKit
 
-There is no good way to use Firebase with PromiseKit. See the next question for rationale.
+There is no good way to use Firebase with PromiseKit. See the next question for
+a more detailed rationale.
 
-The best option is to embed your chain in your firebase handler:
+The best option is to embed your chain in your Firebase handler:
 
 ```
 foo.observe(.value) { snapshot in
@@ -218,17 +220,17 @@ foo.observe(.value) { snapshot in
 
 ## I need my `then` to fire multiple times
 
-Then we’re afraid that you cannot use PromiseKit for that event. Promises only
-resolve `once`, this is the fundamental nature of promises and is considered a
+Then we’re afraid you cannot use PromiseKit for that event. Promises only
+resolve *once*. This is the fundamental nature of promises and is considered a
 feature since it gives you guarantees about the flow of your chains.
 
 
-## How do I change the default queues that handlers run upon?
+## How do I change the default queues that handlers run on?
 
-You can change the values of `PromiseKit.conf.Q`, there are two variables that
-change the defaults that the two kinds of handler run upon. Thus a typical
-pattern is to change all your `then`-type handlers to run in a background queue
-and have all your “finalizers” run on the main queue:
+You can change the values of `PromiseKit.conf.Q`. There are two variables that
+change the default queues that the two kinds of handler run on. A typical
+pattern is to change all your `then`-type handlers to run on a background queue
+and to have all your “finalizers” run on the main queue:
 
 ```
 PromiseKit.conf.Q.map = .global()
@@ -237,9 +239,9 @@ PromiseKit.conf.Q.return = .main  //NOTE this is the default
 
 Be very careful about setting either of these queues to `nil`.  It has the
 effect of running *immediately*, and this is not what you usually want to do in
-your application.  This is, however, useful when you are running specs, and want
-your promises to resolve immediately (basically the same behavior as "stubbing"
-an HTTP request).
+your application.  This is, however, useful when you are running specs and want
+your promises to resolve immediately. (This is basically the same idea as "stubbing"
+an HTTP request.)
 
 ```swift
 // in your test suite setup code
@@ -247,17 +249,17 @@ PromiseKit.conf.Q.map = nil
 PromiseKit.conf.Q.return = nil
 ```
 
-## How do I use PromiseKit server-side?
+## How do I use PromiseKit on the server side?
 
-If your server framework requires the main-queue remain unused (eg. Kitura) then you must use
-PromiseKit 6 and you must tell PromiseKit to not dispatch to the main-queue by default. This
-is easy enough:
+If your server framework requires that the main queue remain unused (e.g., Kitura),
+then you must use PromiseKit 6 and you must tell PromiseKit not to dispatch to the
+main queue by default. This is easy enough:
 
 ```swift
 PromiseKit.conf.Q = (map: DispatchQueue.global(), return: DispatchQueue.global())
 ```
 
-Here’s a more full example:
+Here’s a more complete example:
 
 ```swift
 import Foundation
