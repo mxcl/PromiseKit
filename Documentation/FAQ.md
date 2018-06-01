@@ -31,6 +31,12 @@ the text in a `UILabel`.
 [This stackoverflow question](https://stackoverflow.com/questions/39281214/should-i-use-weak-self-in-promisekit-blocks)
 has some good discussion on this topic.
 
+## Do I need to retain my promises?
+
+No, every promise handler retains its promise until the handler is executed. Once
+all handlers are executed the promise is deallocated. So you only need to retain
+the promise if you need to reference its final value after its chain has completed.
+
 ## Where should I put my `catch`?
 
 `catch` deliberately terminates the chain. You should put it low in your promise
