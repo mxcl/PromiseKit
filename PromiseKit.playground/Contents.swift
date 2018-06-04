@@ -11,17 +11,17 @@ func promise3() -> Promise<Int> {
 }
 
 firstly {
-    Promise(value: 1)
+    Promise.value(1)
 }.map { _ in
     2
 }.then { _ in
     promise3()
 }.done {
     print($0)  // => 3
-}.ensure {
-    PlaygroundPage.current.finishExecution()
 }.catch { error in
     // only happens for errors
+}.finally {
+    PlaygroundPage.current.finishExecution()
 }
 
 PlaygroundPage.current.needsIndefiniteExecution = true
