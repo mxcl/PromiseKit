@@ -1,4 +1,4 @@
-# Xcode 8 or 9 / Swift 3 or 4
+# Xcode 8, 9 or 10 / Swift 3 or 4
 
 We recommend CocoaPods.
 
@@ -46,8 +46,7 @@ PromiseKit contains Swift, so there have been rev-lock issues with Xcode:
 
 | PromiseKit | Swift    | Xcode    |   CI Status  |   Release Notes   |
 | ---------- | -------- | -------- | ------------ | ----------------- |
-|      5     | 3.x, 4.x | 8.x, 9.x | ![ci-master] |      In beta      |
-|      4     | 3.x, 4.x | 8.x, 9.x | ![ci-master] | [2016/09][news-4] |
+|      4     | 3.x, 4.x | 8.x, 9.x, 10.x | ![ci-master] | [2016/09][news-4] |
 |      3     | 2.x      | 7.x, 8.0 | ![ci-swift2] | [2015/10][news-3] |
 |      2     | 1.x      | 7.x      | Unsupported  | [2015/10][news-3] |
 |      1†    | *N/A*    | *        | ![ci-legacy] |         –         |

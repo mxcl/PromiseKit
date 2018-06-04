@@ -41,7 +41,7 @@ target "Change Me!" do
 end
 ```
 
-PromiseKit 4 supports Xcode 8.1, 8.2, 8.3 and 9.0; Swift 3.0, 3.1, 3.2 and 4.0; iOS, macOS, tvOS, watchOS, Linux and Android; CocoaPods, Carthage and SwiftPM; ([CI Matrix](https://travis-ci.org/mxcl/PromiseKit)).
+PromiseKit 4 supports Xcode 8.1, 8.2, 8.3, 9.0, 9.1, 9.2 and 10.0; Swift 3.0, 3.1, 3.3, 4.0, 4.1 and 4.2; iOS, macOS, tvOS, watchOS, Linux and Android; CocoaPods, Carthage and SwiftPM; ([CI Matrix](https://travis-ci.org/mxcl/PromiseKit)).
 
 For Carthage, SwiftPM, etc., or for instructions when using older Swifts or
 Xcodes see our [Installation Guide](Documentation/Installation.md).
