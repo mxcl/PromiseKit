@@ -2,6 +2,74 @@ matrix:
   include:
     - os: osx
       language: objective-c
+      osx_image: xcode9.3
+      env: SWFT=4.1 PLAT=macOS
+    - os: osx
+      language: objective-c
+      osx_image: xcode9.3
+      env: SWFT=4.1 PLAT=iOS
+    - os: osx
+      language: objective-c
+      osx_image: xcode9.3
+      env: SWFT=4.1 PLAT=tvOS
+    - os: osx
+      language: objective-c
+      osx_image: xcode9.3
+      env: SWFT=4.1 PLAT=watchOS
+      
+    - os: osx
+      language: objective-c
+      osx_image: xcode9.3
+      env: SWFT=3.2 PLAT=macOS
+    - os: osx
+      language: objective-c
+      osx_image: xcode9.3
+      env: SWFT=3.2 PLAT=iOS
+    - os: osx
+      language: objective-c
+      osx_image: xcode9.3
+      env: SWFT=3.2 PLAT=tvOS
+    - os: osx
+      language: objective-c
+      osx_image: xcode9.3
+      env: SWFT=3.2 PLAT=watchOS
+
+    - os: osx
+      language: objective-c
+      osx_image: xcode9.2
+      env: SWFT=4.0 PLAT=macOS
+    - os: osx
+      language: objective-c
+      osx_image: xcode9.2
+      env: SWFT=4.0 PLAT=iOS
+    - os: osx
+      language: objective-c
+      osx_image: xcode9.2
+      env: SWFT=4.0 PLAT=tvOS
+    - os: osx
+      language: objective-c
+      osx_image: xcode9.2
+      env: SWFT=4.0 PLAT=watchOS
+      
+    - os: osx
+      language: objective-c
+      osx_image: xcode9.2
+      env: SWFT=3.2 PLAT=macOS
+    - os: osx
+      language: objective-c
+      osx_image: xcode9.2
+      env: SWFT=3.2 PLAT=iOS
+    - os: osx
+      language: objective-c
+      osx_image: xcode9.2
+      env: SWFT=3.2 PLAT=tvOS
+    - os: osx
+      language: objective-c
+      osx_image: xcode9.2
+      env: SWFT=3.2 PLAT=watchOS
+
+    - os: osx
+      language: objective-c
       osx_image: xcode9.1
       env: SWFT=4.0 PLAT=macOS
     - os: osx
@@ -32,6 +100,40 @@ matrix:
     - os: osx
       language: objective-c
       osx_image: xcode9.1
+      env: SWFT=3.2 PLAT=watchOS
+
+    - os: osx
+      language: objective-c
+      osx_image: xcode9.0
+      env: SWFT=4.0 PLAT=macOS
+    - os: osx
+      language: objective-c
+      osx_image: xcode9.0
+      env: SWFT=4.0 PLAT=iOS
+    - os: osx
+      language: objective-c
+      osx_image: xcode9.0
+      env: SWFT=4.0 PLAT=tvOS
+    - os: osx
+      language: objective-c
+      osx_image: xcode9.0
+      env: SWFT=4.0 PLAT=watchOS
+      
+    - os: osx
+      language: objective-c
+      osx_image: xcode9.0
+      env: SWFT=3.2 PLAT=macOS
+    - os: osx
+      language: objective-c
+      osx_image: xcode9.0
+      env: SWFT=3.2 PLAT=iOS
+    - os: osx
+      language: objective-c
+      osx_image: xcode9.0
+      env: SWFT=3.2 PLAT=tvOS
+    - os: osx
+      language: objective-c
+      osx_image: xcode9.0
       env: SWFT=3.2 PLAT=watchOS
 
     - os: osx
