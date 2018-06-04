@@ -70,9 +70,9 @@ public enum PMKURLError: Error {
         case .invalidImageData:
             return nil
         case .badResponse(_, _, let rsp):
-            return rsp as! Foundation.HTTPURLResponse
+            return rsp as? Foundation.HTTPURLResponse
         case .stringEncoding(_, _, let rsp):
-            return rsp as! Foundation.HTTPURLResponse
+            return rsp as? Foundation.HTTPURLResponse
         }
     }
 }
