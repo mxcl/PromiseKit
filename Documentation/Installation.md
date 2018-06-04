@@ -1,4 +1,4 @@
-# Xcode 8 or 9 / Swift 3 or 4
+# Xcode 8.3, 9.x or 10.x / Swift 3 or 4
 
 We recommend Carthage over CocoaPods, but both are supported installation
 methods.
@@ -47,15 +47,16 @@ PromiseKit contains Swift, so there have been rev-lock issues with Xcode:
 
 | PromiseKit | Swift                   | Xcode    |   CI Status  |   Release Notes   |
 | ---------- | ----------------------- | -------- | ------------ | ----------------- |
-|      6     | 3.1, 3.2, 3.3, 4.x      | 8.3, 9.x | ![ci-master] | [2018/02][news-6] |
+|      6     | 3.1, 3.2, 3.3, 4.x      | 8.3, 9.x, 10.x | ![ci-master] | [2018/02][news-6] |
 |      5     | 3.1, 3.2, 3.3, 4.x      | 8.3, 9.x | *Deprecated* |       *n/a*       |
-|      4     | 3.0, 3.1, 3.2, 3.3, 4.x | 8.x, 9.x | ![ci-master] | [2016/09][news-4] |
+|      4†    | 3.0, 3.1, 3.2, 3.3, 4.x | 8.x, 9.x | ![ci-master] | [2016/09][news-4] |
 |      3     | 2.x                     | 7.x, 8.0 | ![ci-swift2] | [2015/10][news-3] |
 |      2     | 1.x                     | 7.x      | *Deprecated* | [2015/10][news-3] |
-|      1†    | *N/A*                   | *        | ![ci-legacy] |         –         |
+|      1‡    | *N/A*                   | *        | ![ci-legacy] |         –         |
                                      
+† Probably supports Xcode 10 and Swift 4.2, if not, PR welcome.
 
-† PromiseKit 1 is pure Objective-C and thus can be used with any Xcode, it is
+‡ PromiseKit 1 is pure Objective-C and thus can be used with any Xcode, it is
 also your only choice if you need to support iOS 7 or below.
 
 ---
