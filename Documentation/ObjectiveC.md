@@ -49,6 +49,38 @@ myPromise.then(^{
     //…
 });
 ```
+#### :warning: Caution:
+ARC in Objective-C unlike Objective-C++ is not exception safe by default.
+So, throwing an error will result in keeping a strong reference to the closure containing the throw statement.
+This will consequently result in memory leaks if you're not careful.
+````
+Note:
+Only having a strong reference to the closure would result in memory leaks.
+In our case PromisKit automatically keeps a strong reference to the closure until it's released.
+````
+__Workarounds:__
+1. Return a Promise with value NSError\
+Instead of throwing a normal error, you can return a Promise with value NSError instead.
+(Make sure to handle the thrown error in the catch closure if needed).
+
+```objc
+myPromise.then(^{
+    @throw [NSError myCustomError];
+}).catch(^(NSError *error){
+    if ([error isEqual:[NSError myCustomError]]) {
+        // In case, same error as the one we thrown
+        return;
+    }
+    //…
+});
+```
+2. Enable ARC for exceptions in Objective-C (not recomended)\
+You can add this  ```-fobjc-arc-exceptions to your``` to your compiler flags to enable ARC for exceptions.
+This is not recommended unless you're a 100% sure of what you're doing.
+
+For more details on ARC and exceptions:
+https://clang.llvm.org/docs/AutomaticReferenceCounting.html#exceptions
+
 
 ---
 
