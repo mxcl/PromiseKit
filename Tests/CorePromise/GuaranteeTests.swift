@@ -16,4 +16,12 @@ class GuaranteeTests: XCTestCase {
     func testWait() {
         XCTAssertEqual(after(.milliseconds(100)).map(on: nil){ 1 }.wait(), 1)
     }
+
+    func testThenMap() {
+        Guarantee.value([1, 2, 3])
+            .thenMap { Guarantee.value($0 * 2) }
+            .done { values in
+                XCTAssertEqual([2, 4, 6], values)
+        }
+    }
 }
