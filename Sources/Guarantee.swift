@@ -138,9 +138,9 @@ public extension Guarantee where T: Sequence {
      // $0 => [2,4,6]
      }
      */
-    func thenMap<U>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping(T.Iterator.Element) throws -> Guarantee<U>) -> Guarantee<[U]> {
+    func thenMap<U>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping(T.Iterator.Element) -> Guarantee<U>) -> Guarantee<[U]> {
         return then(on: on) {
-            when(fulfilled: try $0.map(transform))
+            when(fulfilled: $0.map(transform))
         }
         .recover { _ in return .value([]) }
     }
