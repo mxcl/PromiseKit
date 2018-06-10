@@ -97,10 +97,8 @@ public extension CatchMixin {
 
     /**
      The provided closure executes when this promise rejects.
-     
      This variant of `recover` requires the handler to return a Guarantee, thus it returns a Guarantee itself and your closure cannot `throw`.
-     Note it is logically impossible for this to take a `catchPolicy`, thus `allErrors` are handled.
-     
+     - Note it is logically impossible for this to take a `catchPolicy`, thus `allErrors` are handled.
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter body: The handler to execute if this promise is rejected.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
