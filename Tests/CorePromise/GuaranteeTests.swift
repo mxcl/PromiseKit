@@ -18,10 +18,16 @@ class GuaranteeTests: XCTestCase {
     }
 
     func testThenMap() {
+
+        let ex = expectation(description: "")
+
         Guarantee.value([1, 2, 3])
             .thenMap { Guarantee.value($0 * 2) }
             .done { values in
                 XCTAssertEqual([2, 4, 6], values)
+                ex.fulfill()
         }
+
+        wait(for: [ex], timeout: 10)
     }
 }
