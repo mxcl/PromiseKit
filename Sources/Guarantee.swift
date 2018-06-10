@@ -142,7 +142,7 @@ public extension Guarantee where T: Sequence {
         return then(on: on) {
             when(fulfilled: $0.map(transform))
         }
-        .recover { _ in return .value([]) }
+            .recover { fatalError( String(describing: $0)) }
     }
 }
 
