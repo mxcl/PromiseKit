@@ -125,6 +125,27 @@ public extension Guarantee {
     }
 }
 
+public extension Guarantee where T: Sequence {
+
+    /**
+     `Guarantee<[T]>` => `T` -> `Guarantee<U>` => `Guaranetee<[U]>`
+
+     firstly {
+     .value([1,2,3])
+     }.thenMap { integer in
+     .value(integer * 2)
+     }.done {
+     // $0 => [2,4,6]
+     }
+     */
+    func thenMap<U>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping(T.Iterator.Element) -> Guarantee<U>) -> Guarantee<[U]> {
+        return then(on: on) {
+            when(fulfilled: $0.map(transform))
+        }
+            .recover { fatalError( String(describing: $0)) }
+    }
+}
+
 #if swift(>=3.1)
 public extension Guarantee where T == Void {
     convenience init() {
