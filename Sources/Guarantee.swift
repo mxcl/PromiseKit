@@ -66,10 +66,10 @@ public class Guarantee<T>: Thenable {
 
 public extension Guarantee {
     @discardableResult
-    func done(on: DispatchQueue? = conf.Q.return, _ body: @escaping(T) -> Void) -> Guarantee<Void> {
+    func done(on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(T) -> Void) -> Guarantee<Void> {
         let rg = Guarantee<Void>(.pending)
         pipe { (value: T) in
-            on.async {
+            on.async(flags: flags) {
                 body(value)
                 rg.box.seal(())
             }
@@ -77,10 +77,10 @@ public extension Guarantee {
         return rg
     }
 
-    func map<U>(on: DispatchQueue? = conf.Q.map, _ body: @escaping(T) -> U) -> Guarantee<U> {
+    func map<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(T) -> U) -> Guarantee<U> {
         let rg = Guarantee<U>(.pending)
         pipe { value in
-            on.async {
+            on.async(flags: flags) {
                 rg.box.seal(body(value))
             }
         }
@@ -88,10 +88,10 @@ public extension Guarantee {
     }
 
 	@discardableResult
-    func then<U>(on: DispatchQueue? = conf.Q.map, _ body: @escaping(T) -> Guarantee<U>) -> Guarantee<U> {
+    func then<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(T) -> Guarantee<U>) -> Guarantee<U> {
         let rg = Guarantee<U>(.pending)
         pipe { value in
-            on.async {
+            on.async(flags: flags) {
                 body(value).pipe(to: rg.box.seal)
             }
         }
@@ -138,8 +138,8 @@ public extension Guarantee where T: Sequence {
              // $0 => [2,4,6]
          }
      */
-    func thenMap<U>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping(T.Iterator.Element) -> Guarantee<U>) -> Guarantee<[U]> {
-        return then(on: on) {
+    func thenMap<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(T.Iterator.Element) -> Guarantee<U>) -> Guarantee<[U]> {
+        return then(on: on, flags: flags) {
             when(fulfilled: $0.map(transform))
         }.recover {
             // if happens then is bug inside PromiseKit
