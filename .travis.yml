@@ -50,8 +50,12 @@ install:
   esac
 script:
   case $PLAT in
-  iOS|tvOS|macOS)
-    xcodebuild -scheme PromiseKit -destination "$DST" -quiet test -enableCodeCoverage YES;;
+  iOS|tvOS)
+    osascript -e "tell application \"Simulator\" to quit"
+    DST=$(echo "$DST" | awk -F',' '{printf "%s", $2}')
+    xcodebuild -scheme PromiseKit -destination "$DST" test -enableCodeCoverage YES;;
+  macOS)
+    xcodebuild -scheme PromiseKit -destination "$DST" test -enableCodeCoverage YES;;
   watchOS)
     ;;
   *)
