@@ -1,18 +1,23 @@
 import PromiseKit
+import Dispatch
 import XCTest
 
 class CatchableTests: XCTestCase {
 
     func testFinally() {
+        let finallyQueue = DispatchQueue(label: "\(#file):\(#line)", attributes: .concurrent)
 
-        func helper(error: Error) {
+        func helper(error: Error, on queue: DispatchQueue? = nil, flags: DispatchWorkItemFlags? = nil) {
             let ex = (expectation(description: ""), expectation(description: ""))
             var x = 0
             Promise<Void>(error: error).catch(policy: .allErrors) { _ in
                 XCTAssertEqual(x, 0)
                 x += 1
                 ex.0.fulfill()
-            }.finally {
+            }.finally(on: queue) {
+                if let q = queue {
+                    dispatchPrecondition(condition: .onQueue(q))
+                }
                 XCTAssertEqual(x, 1)
                 x += 1
                 ex.1.fulfill()
@@ -22,6 +27,8 @@ class CatchableTests: XCTestCase {
 
         helper(error: Error.dummy)
         helper(error: Error.cancelled)
+
+        helper(error: Error.dummy, on: finallyQueue, flags: .barrier)
     }
 
     func testCauterize() {
