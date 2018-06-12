@@ -1,4 +1,4 @@
-# `then` & `done`
+# `then` and `done`
 
 Here is a typical promise chain:
 
@@ -12,7 +12,7 @@ firstly {
 }
 ```
 
-If this code used completion handlers it would look like this:
+If this code used completion handlers, it would look like this:
 
 ```swift
 login { creds, error in
@@ -26,53 +26,55 @@ login { creds, error in
 }
 ```
 
-`then` *is* just another way to do completion handlers, but it is also quite a
-bit more. At this initial stage of our understanding it merely helps
-readability. The promise chain above is easy to read, one asynchronous operation
-leads into the other, read line by line. It's as close to
-procedural code as we can easily get with the current state of Swift.
+`then` *is* just another way to structure completion handlers, but it is also quite a
+bit more. At this initial stage of our understanding, it mostly helps
+readability. The promise chain above is easy to scan and understand: one asynchronous
+operation leads into the other, line by line. It's as close to
+procedural code as we can easily come given the current state of Swift.
 
-`done` is the same as `then` but you cannot return a promise, it is the
-typically the end of the “success” part of the chain. Above you can see how we
-get the final image in our `done` and use if to set our UI.
+`done` is the same as `then` but you cannot return a promise. It is 
+typically the end of the “success” part of the chain. Above, you can see that we
+receive the final image in our `done` and use it to set up the UI.
 
 Let’s compare the signatures of the two login methods:
 
 ```swift
 func login() -> Promise<Creds>
     
-// compared with:
+// Compared with:
 
 func login(completion: (Creds?, Error?) -> Void)
                         // ^^ ugh. Optionals. Double optionals.
 ```
 
-The distinction is that with promises your functions returns *promises*. So for each handler in our
-chain we return a promise. By doing this we can call `then`. Each `then` waits on its promise, so the
-chains resolve procedurally, one at a time.
+The distinction is that with promises, your functions return *promises* instead 
+of accepting and running callbacks. Each handler in a chain returns a promise. 
+`Promise` objects define the `then` method, which waits for the completion of the
+promise before continuing the chain. Chains resolve procedurally, one promise
+at a time.
 
 A `Promise` represents the future value of an asynchronous task. It has a type
-that represents the type of object it wraps. In the above example `login` is a
-function that returns a `Promise` that *will* represent an instance of `Creds`.
+that represents the type of object it wraps. For example, in the example above,
+`login` is a function that returns a `Promise` that *will* represent an instance
+of `Creds`.
 
-> *Note* `done` is new to PromiseKit 5, previously we had a `then` variant that
-did not require a promise to be returned. The problem is, this often confused
-Swift leading to confusing and hard to debug error diagnostics, but also it made
-using PromiseKit more painful; introducing `done` makes it possible to type out
-promise chains that compile without additional qualification to help the
-compiler.
+> *Note*: `done` is new to PromiseKit 5. We previously defined a variant of `then` that
+did not require you to return a promise. Unfortunately, this convention often confused
+Swift and led to odd and hard-to-debug error messages. It also made using PromiseKit 
+more painful. The introduction of `done` lets you type out promise chains that
+compile without additional qualification to help the compiler figure out type information.
 
 ---
 
-You may notice that unlike the completion pattern, the promise chain appear to
-ignore errors, this is not the case, instead it is the opposite: the promise
-chain makes error handling more accessible and harder to ignore.
+You may notice that unlike the completion pattern, the promise chain appears to
+ignore errors. This is not the case! In fact, it has the opposite effect: the promise
+chain makes error handling more accessible and makes errors harder to ignore.
 
 
 # `catch`
 
-With promises, errors cascade ensuring your apps are robust and the code,
-clearer:
+With promises, errors cascade along the promise chain, ensuring that your apps are
+robust and your code is clear:
 
 ```swift
 firstly {
@@ -86,15 +88,15 @@ firstly {
 }
 ```
 
-> In fact, Swift emits a warning if you forget to `catch` a chain. But we'll
-> talk about that more later.
+> Swift emits a warning if you forget to `catch` a chain. But we'll
+> talk about that in more detail later.
 
-Promises each are objects that represent individual asychnronous tasks. If those
-tasks fail their promises become *rejected*. Chains that contain rejected
-promises skip all subsequent `then`s, instead the next `catch` is executed
-(strictly, *any* subsequent `catch` handlers).
+Each promise is an object that represents an individual, asychnronous task.
+If a task fails, its promise becomes *rejected*. Chains that contain rejected
+promises skip all subsequent `then`s. Instead, the next `catch` is executed.
+(Strictly speaking, *all* subsequent `catch` handlers are executed.)
 
-For fun let’s compare this pattern with a completion handler equivalent:
+For fun, let’s compare this pattern with its completion handler equivalent:
 
 ```swift
 func handle(error: Error) {
@@ -110,7 +112,7 @@ login { creds, error in
 }
 ```
 
-Use of `guard` and a consolidated error handler help, but the promise chain’s
+The use of `guard` and a consolidated error handler help, but the promise chain’s
 readability speaks for itself.
 
 
@@ -133,10 +135,10 @@ firstly {
 }
 ```
 
-Whatever the outcome in your chain—failure or success—your `ensure`
-handler is called.
+No matter the outcome of your chain—-failure or success—-your `ensure`
+handler is always called.
 
-For fun let’s compare this pattern with a completion handler equivalent:
+Let’s compare this pattern with its completion handler equivalent:
 
 ```swift
 UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -156,12 +158,13 @@ login { creds, error in
 }
 ```
 
-Here it would be trivial for somebody to amend this code and not unset the activity indicator leading to a bug. With
-promises this is almost impossible, the Swift compiler will resist you supplementing the chain without promises, you
-almost won’t need to review the pull-requests.
+It would be very easy for someone to amend this code and forget to unset 
+the activity indicator, leading to a bug. With promises, this type of error is
+almost impossible: the Swift compiler resists your supplementing the chain without 
+using promises. You almost won’t need to review the pull requests.
 
-> *Note* PromiseKit has inconveniently switched between naming this function
-`always` and `ensure` multiple times. Sorry about this, we suck.
+> *Note*: PromiseKit has perhaps capriciously switched between the names `always`
+and `ensure` for this function several times in the past. Sorry about this. We suck.
 
 You can also use `finally` as an `ensure` that terminates the promise chain and does not return a value:
 
@@ -178,6 +181,7 @@ firstly {
     self.spinner(visible: false)
 }
 ```
+
 
 # `when`
 
@@ -223,15 +227,16 @@ firstly {
 }
 ```
 
-`when` takes promises, waits for them to resolve and returns a promise with the results.
+`when` takes promises, waits for them to resolve, and returns a promise containing the results.
 
-And of course, if any of them fail the chain calls the next `catch`, like *any* promise chain.
+As with any promise chain, if any of the component promises fail, the chain calls the next `catch`.
 
 
-# PromiseKit Extensions
+# PromiseKit extensions
 
-When we made PromiseKit we understood that we wanted to *only* use promises, thus, wherever possible, we offer
-extensions on top of Apple’s APIs that add promises. For example:
+When we made PromiseKit, we understood that we wanted to use *only* promises to implement 
+asynchronous behavior. So wherever possible, we offer extensions to Apple’s APIs that reframe
+the API in terms of promises. For example:
 
 ```swift
 firstly {
@@ -243,7 +248,7 @@ firstly {
 }
 ```
 
-To use these you need to specify subspecs:
+To use these extensions, you need to specify subspecs:
 
 ```ruby
 pod "PromiseKit"
@@ -251,20 +256,21 @@ pod "PromiseKit/CoreLocation"
 pod "PromiseKit/MapKit"
 ```
 
-All our extensions are available at the [PromiseKit organization](https://github.com/PromiseKit) and you should go there
-to see what is available and to read the sources so that you can read the documentation. We have copiously documented every
-file and every function.
+All of these extensions are available at the [PromiseKit organization](https://github.com/PromiseKit).
+Go there to see what's available and to read the source code and documentation. Every file and function
+has been copiously documented.
 
-> We also provide extensions for common libraries like [Alamofire](https://github.com/PromiseKit/Alamofire-).
+> We also provide extensions for common libraries such as [Alamofire](https://github.com/PromiseKit/Alamofire-).
 
 
-# Making Promises
+# Making promises
 
-You can get a long way with our extensions, but sometimes you have to start chains of your own. Maybe you have a third party
-API that doesn’t provide promises, or maybe you wrote your own asynchronous system. Either way, we provide the starting point,
-and if you were to look at the code of our extensions, you would see it is the same method below as we use ourselves.
+The standard extensions will take you a long way, but sometimes you'll still need to start chains
+of your own. Maybe you're using a third party API that doesn’t provide promises, or perhaps you wrote
+your own asynchronous system. Either way, it's easy to add promises. If you look at the code of the
+standard extensions, you'll see that it uses the same approach  described below.
 
-Let’s say we have a method:
+Let’s say we have the following method:
 
 ```swift
 func fetch(completion: (String?, Error?) -> Void)
@@ -290,27 +296,26 @@ func fetch() -> Promise<String> {
 }
 ```
 
-You’ll find the `seal` object the Promise initializer provides you has many
-methods for the common variety of completion handlers, and even some rarer
-situations thus making it really easy for you to add promises to your existing
-codebases.
+The `seal` object that the `Promise` initializer provides to you defines 
+many methods for handling garden-variety completion handlers. It even 
+covers a variety of rarer situations, thus making it easy for you to add 
+promises to an existing codebase.
 
-> *Note* we tried to make it so you could just do `Promise(fetch)` but we couldn’t
-make this simpler pattern work for the wide variety of situations you encounter
-without making the 90% case easy to use and un-ambiguous for the Swift compiler.
-Sorry, we tried.
+> *Note*: We tried to make it so that you could just do `Promise(fetch)`, but we
+were not able to make this simpler pattern work universally without requiring
+extra disambiguation for the Swift compiler. Sorry; we tried.
 
-> *Note* with PMK 4 this initializer provided two parameters to your closure,
-`fulfill` and `reject`. PMK 5/6 provide an object that has a `fulfill` and
-`reject` method, but also many variants of the method `resolve`. Thus you can
-typically just pass `resolve` to completion handler parameters and Swift figures
-out which one to use for you (like the first example).
+> *Note*: In PMK 4, this initializer provided two parameters to your closure:
+`fulfill` and `reject`. PMK 5 and 6 give you an object that has both `fulfill` and
+`reject` methods, but also many variants of the method `resolve`. You can
+typically just pass completion handler parameters to `resolve` and let Swift figure
+out which variant to apply to your particular case (as shown in the example above).
 
 
 # `Guarantee<T>`
 
-Since PromiseKit 5 we have provided `Guarantee` as a supplementary class to
-`Promise`. We do this as a complement to Swift’s strong Error handling system.
+Since PromiseKit 5, we have provided `Guarantee` as a supplementary class to
+`Promise`. We do this to complement Swift’s strong error handling system.
 
 Guarantees *never* fail, so they cannot be rejected. A good example is `after`:
 
@@ -322,41 +327,40 @@ firstly {
 }
 ```
 
-Relatedly Swift *warns* you if you don’t terminate a `Promise` (ie. not
-`Guarantee`) chain, and the way we expect you to satisfy this warning is to
-either `catch` or `return` (where you will then have to `catch` where you
-receive that promise).
+Swift warns you if you don’t terminate a regular `Promise` chain (i.e., not
+a `Guarantee` chain). You're expected to silence this warning by supplying 
+either a `catch` or a `return`. (In the latter case, you will then have to `catch` 
+at the point where you receive that promise.)
 
-Thus use `Guarantee`s wherever possible to force yourself to write code that has
-error handling where required and not where not required.
+Use `Guarantee`s wherever possible so that your code has error handling where
+it's required and no error handling where it's not required.
 
-In general you should be able to use `Guarantee`s and `Promise`s interchangably
-and we have gone to great lengths to try and ensure this, so please open
-tickets if you find an issue.
+In general, you should be able to use `Guarantee`s and `Promise`s interchangeably,
+We have gone to great lengths to try and ensure this, so please open a ticket
+if you find an issue.
 
 
 # `map`, `compactMap`, etc.
 
-`then` provides you the result of the previous promise and requires you return
+`then` provides you with the result of the previous promise and requires you to return
 another promise.
 
-`map` provides you the result of the previous promise and requires you return
+`map` provides you with the result of the previous promise and requires you to return
 an object or value type.
 
-`compactMap` provides you the result of the previous promise and requires you
-return an `Optional`. If you return `nil` the chain fails with
+`compactMap` provides you with the result of the previous promise and requires you
+to return an `Optional`. If you return `nil`, the chain fails with
 `PMKError.compactMap`.
 
-> *Rationale* before PromiseKit 4, `then` handled all these cases and it was
-painful. We imagined the pain would disappear with new Swift versions, however
-it has become clear the various pain-points are here to stay, and in fact, we,
-as library-authors, are expected to disambiguate at the naming level of our API.
-Thus we have split the three main kinds of then out into: `then`, `map` and
-`done`. When using these new functions we became enamored and realized this is
-much nicer in use, so we added `compactMap` as well (modeled on `Optional.compactMap`)
+> *Rationale*: Before PromiseKit 4, `then` handled all these cases, and it was
+painful. We hoped the pain would disappear with new Swift versions. However,
+it has become clear that the various pain points are here to stay. In fact, we
+as library authors are expected to disambiguate at the naming level of our API.
+Therefore, we have split the three main kinds of `then` into `then`, `map`, and
+`done`. After using these new functions, we realized this is much nicer in practice,
+so we added `compactMap` as well (modeled on `Optional.compactMap`).
 
-`compactMap` can be especially useful and enables quick composition of promise
-chains, eg:
+`compactMap` facilitates quick composition of promise chains. For example:
 
 ```swift
 firstly {
@@ -371,8 +375,9 @@ firstly {
 }
 ```
 
-> *Tip* we provide most of the functional methods you would expect for sequences
-too! Eg. `map`, `thenMap`, `compactMapValues`, `firstValue`, etc.
+> *Tip*: We also provide most of the functional methods you would expect for sequences,
+e.g., `map`, `thenMap`, `compactMapValues`, `firstValue`, etc.
+
 
 # `get`
 
@@ -388,11 +393,12 @@ firstly {
 }
 ```
 
+
 # `tap`
 
-We provide `tap` for debugging, it is the same as `get` but provides the
-`Result<T>` of the Promise so you can inspect the value of the chain at this
-moment without any side-effects:
+We provide `tap` for debugging. It's the same as `get` but provides the
+`Result<T>` of the `Promise` so you can inspect the value of the chain at this
+point without causing any side effects:
 
 ```swift
 firstly {
@@ -406,12 +412,14 @@ firstly {
 }
 ```
 
+
 # Supplement
 
 ## `firstly`
 
-Above we kept using `firstly`, but what is it? Well, it is just [syntactic sugar](https://en.wikipedia.org/wiki/Syntactic_sugar),
-you don’t need it, but it helps make your chains more readable. Instead of:
+We've used `firstly` several times on this page, but what is it, really? In fact,
+it is just [syntactic sugar](https://en.wikipedia.org/wiki/Syntactic_sugar).
+You don’t really need it, but it helps to make your chains more readable. Instead of:
 
 ```swift
 firstly {
@@ -429,23 +437,31 @@ login().then { creds in
 }
 ```
 
-Here is a key understanding: `login()` returns `Promise` and all `Promise` have a `then` function.
+Here is a key understanding: `login()` returns a `Promise`, and all `Promise`s have a `then` function. `firstly` returns a `Promise`, and `then` returns a `Promise`, too! But don’t worry too much about these details. Learn the *patterns* to start with. Then, when you are ready to advance, learn the underlying architecture.
 
-Thus, indeed, `firstly` returns `Promise` and, indeed, `then` returns `Promise`, but don’t worry too much about these details. Learn the *patterns* to start with, then, when you are ready to advance, learn the underlying architecture.
 
 ## `when` variants
 
-`when` is one of PromiseKit’s more useful functions, and thus we offer several variants.
+`when` is one of PromiseKit’s more useful functions, and so we offer several variants.
 
-* The default `when` and the one you should typically use is `when(fulfilled:)` this variant waits on all its promises, but if any fail, it fails, and thus the chain *rejects*. It is important to note that all promises in the when *continue*. Promises have *no* control over the tasks they represent, promises are merely a wrapper around tasks.
-* We provide `when(resolved:)`. This variant waits even if one or more of its promises fails, consequently the result of this promise is an array of `Result<T>`, and consequently this variant requires that all its promises have the same generic type. See our advanced patterns guide for work arounds for this limitation.
-* We provide `race`, this variant allows you to *race* several promises, whichever finishes first is the result. See our advanced patterns guide for typical usage.
+* The default `when`, and the one you should typically use, is `when(fulfilled:)`. This variant
+waits on all its component promises, but if any fail, `when` fails too, and thus the chain *rejects*. 
+It's important to note that all promises in the `when` *continue*. Promises have *no* control over
+the tasks they represent. Promises are just wrappers around tasks.
+
+* `when(resolved:)` waits even if one or more of its component promises fails. The value produced
+by this variant of `when` is an array of `Result<T>`. Consequently, this variant requires all its 
+component promises to have the same generic type. See our advanced patterns guide for work-arounds
+for this limitation.
+
+* The `race` variant lets you *race* several promises. Whichever finishes first is the result. See the
+advanced patterns guide for typical usage.
 
 
-## Swift Closure Inference
+## Swift closure inference
 
-Swift will automatically infer returns and return types for one line closures,
-thus these are the same:
+Swift automatically infers returns and return types for one-line closures.
+The following two forms are the same:
 
 ```swift
 foo.then {
@@ -461,26 +477,27 @@ foo.then { baz -> Promise<String> in
 
 Our documentation often omits the `return` for clarity.
 
-However this is a blessing and a curse, as the Swift compiler often will fail
-to infer return types. See our [Troubleshooting Guide](Troubleshooting.md) if
+However, this shorthand is both a blessing and a curse. You may find that the Swift compiler
+often fails to infer return types properly. See our [Troubleshooting Guide](Troubleshooting.md) if
 you require further assistance.
 
-> By adding `done` to PromiseKit 5 we have managed to avoid many of these common
+> By adding `done` to PromiseKit 5, we have managed to avoid many of these common
 pain points in using PromiseKit and Swift.
 
 
-# Further Reading
 
-The above is the 90% you will use. We **strongly** suggest reading the
+# Further reading
+
+The above information is the 90% you will use. We **strongly** suggest reading the
 [API Reference].
 There are numerous little
-functions that may be useful to you and the documentation for all of the above
+functions that may be useful to you, and the documentation for everything outlined above
 is more thorough at the source.
 
-In Xcode don’t forget to `⌥` click on PromiseKit functions to get at this
-documentation while you are developing.
+In Xcode, don’t forget to option-click on PromiseKit functions to access this
+documentation while you're coding.
 
-Otherwise return to our [contents page](/Documentation).
+Otherwise, return to our [contents page](/Documentation).
 
 
 [API Reference]: https://promisekit.org/reference/

@@ -2,12 +2,12 @@
 
 ## Why should I use PromiseKit over X-Promises-Foo?
 
-* PromiseKit has a heavy focus on **developer-experience**. You’re a developer, do you care about your experience? Yes? Then pick PromiseKit.
+* PromiseKit has a heavy focus on **developer experience**. You’re a developer; do you care about your experience? Yes? Then pick PromiseKit.
 * Do you care about having any bugs you find fixed? Then pick PromiseKit.
 * Do you care about having your input heard and reacted to in a fast fashion? Then pick PromiseKit.
 * Do you want a library that has been maintained continuously and passionately for 6 years? Then pick PromiseKit.
 * Do you want a library that the community has chosen to be their №1 Promises/Futures library? Then pick PromiseKit.
-* Do you want to be able to use Promises with Apple’s SDKs rather than have to do all the work of writing the Promise implementations yourself? Then pick PromiseKit.
+* Do you want to be able to use Promises with Apple’s SDKs rather than having to do all the work of writing the Promise implementations yourself? Then pick PromiseKit.
 * Do you want to be able to use Promises with Swift 3.x, Swift 4.x, ObjC, iOS, tvOS, watchOS, macOS, Android & Linux? Then pick PromiseKit.
 * PromiseKit verifies its correctness by testing against the entire [Promises/A+ test suite](https://github.com/promises-aplus/promises-tests).
 
@@ -24,7 +24,7 @@ use `weak self` (and check for `self == nil`) to prevent any such side effects.
 should be protected against are in fact *not* side effects.
 
 Side effects include changes to global application state. They *do not* include
-changing the view of a viewController. So, protect against setting UserDefaults or
+changing the display state of a viewController. So, protect against setting UserDefaults or
 modifying the application database, and don't bother protecting against changing
 the text in a `UILabel`.
 
@@ -33,9 +33,9 @@ has some good discussion on this topic.
 
 ## Do I need to retain my promises?
 
-No, every promise handler retains its promise until the handler is executed. Once
-all handlers are executed the promise is deallocated. So you only need to retain
-the promise if you need to reference its final value after its chain has completed.
+No. Every promise handler retains its promise until the handler is executed. Once
+all handlers have been executed, the promise is deallocated. So you only need to retain
+the promise if you need to refer to its final value after its chain has completed.
 
 ## Where should I put my `catch`?
 
@@ -119,8 +119,8 @@ that hobby-project implementations don’t consider.
 
 ## Why is debugging hard?
 
-Because promises always execute via `dispatch`, the backtraces you get have less
-information than is often required to trace the path of execution.
+Because promises always execute via dispatch, the backtrace you see at the point of 
+an error has less information than is usually required to trace the path of execution.
 
 One solution is to turn off dispatch during debugging:
 
@@ -133,7 +133,7 @@ PMKSetDefaultDispatchQueue(zalgo)
 ```
 
 Don’t leave this on. In normal use, we always dispatch to avoid you accidentally writing
-a common bug pattern: http://blog.izs.me/post/59142742143/designing-apis-for-asynchrony
+a common bug pattern. See [this blog post](http://blog.izs.me/post/59142742143/designing-apis-for-asynchrony).
 
 ## Where is `all()`?
 
@@ -166,9 +166,53 @@ you typically won't have to worry about this.
 
 Yes. We have tests that prove this.
 
-## How do PromiseKit and RxSwift differ?
+## How do PromiseKit and RxSwift/ReactiveSwift differ?
 
-https://github.com/mxcl/PromiseKit/issues/484
+PromiseKit is a lot simpler.
+
+The top-level difference between PromiseKit and RxSwift is that RxSwift `Observable`s (roughly 
+analogous to PromiseKit `Promise`s) do not necessarily return a single result: they may emit
+zero, one, or an infinite stream of values. This small conceptual change ramifies into an API
+that's both surprisingly powerful and surprisingly complex.
+
+RxSwift requires commitment to a paradigm shift in how you program: it proposes that you
+restructure your code as a matrix of interacting value pipelines. When applied properly
+to a suitable problem, RxSwift can yield great benefits in robustness and simplicity.
+But not all applications are suitable for RxSwift. 
+
+By contrast, PromiseKit selectively applies the best parts of reactive programming
+to the hardest part of pure Swift development, the management of asynchrony. It's a broadly 
+applicable tool: most asynchronous code can be clarified, simplified, and made more robust
+just by converting it to use promises. (And the conversion process is easy.)
+
+Promises make for code that is clear to most developers. RxSwift, perhaps not: take a look at this 
+[signup panel](https://github.com/ReactiveX/RxSwift/tree/master/RxExample/RxExample/Examples/GitHubSignup)
+implemented in RxSwift and see what you think. (Note that this is one of RxSwift's own examples.)
+
+Even where PromiseKit and RxSwift are broadly similar, there are many differences in implementation:
+
+* RxSwift has a separate API for chain-terminating elements ("subscribers") versus interior
+elements. In PromiseKit, all elements of a chain use roughly the same code pattern.
+
+* The RxSwift API to define an interior element of a chain (an "operator") is hair-raisingly complex.
+So, RxSwift tries hard to supply every operator you might ever want to use right off the shelf. There are
+hundreds. PromiseKit supplies a few utilities to help with specific scenarios, but because it's trivial
+to write your own chain elements, there's no need for all this extra code in the library.
+
+* PromiseKit dispatches the execution of every block. RxSwift might or might not. Moreover, the 
+current dispatching state is an attribute of the chain, not the specific block, as it is in PromiseKit.
+The RxSwift system is more powerful but more complex. PromiseKit is simple, predictable, and safe.
+
+* In PromiseKit, both sides of a branched chain refer back to their shared common ancestors. In RxSwift, 
+branching normally creates a duplicate parallel chain that reruns the code at the head of the chain.
+Except when it doesn't. The rules for determining what will actually happen are complex, and given
+a chain created by another chunk of code, you can't really tell what the behavior will be.
+
+* Because RxSwift chains don't necessarily terminate on their own, RxSwift needs you to take on some
+explicit garbage collection duties to ensure that pipelines that are no longer needed are properly
+deallocated. All promises yield a single value, terminate, and then automatically deallocate themselves.
+
+You can find some additional discussion in [this ticket](https://github.com/mxcl/PromiseKit/issues/484).
 
 ## Why can’t I return from a catch like I can in Javascript?
 
@@ -199,7 +243,7 @@ func foo() -> Promise<Any>
 }
 ```
 
-Who chooses when this promise starts? The answer is: Alamofire does and in this
+Who chooses when this promise starts? The answer is: Alamofire does, and in this
 case, it “starts” immediately when `foo()` is called.
 
 ## What is a good way to use Firebase with PromiseKit
@@ -227,8 +271,8 @@ foo.observe(.value) { snapshot in
 ## I need my `then` to fire multiple times
 
 Then we’re afraid you cannot use PromiseKit for that event. Promises only
-resolve *once*. This is the fundamental nature of promises and is considered a
-feature since it gives you guarantees about the flow of your chains.
+resolve *once*. This is the fundamental nature of promises and it is considered a
+feature because it gives you guarantees about the flow of your chains.
 
 
 ## How do I change the default queues that handlers run on?

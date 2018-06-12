@@ -10,13 +10,13 @@ Each is designed to be an appropriate promise implementation for the strong poin
 * `Promise<T>` is strict, defined and precise.
 * `AnyPromise` is loose and dynamic.
 
-Unlike most libraries we have extensive bridging support, you can use PromiseKit
+Unlike most libraries, we have extensive bridging support, you can use PromiseKit
 in mixed projects with mixed language targets and mixed language libraries.
 
 
 # Using PromiseKit with Objective-C
 
-`AnyPromise` is our promise class for Objective-C. It behaves almost identically to `Promise<T>` (our Swift promise class).
+`AnyPromise` is our promise class for Objective-C. It behaves almost identically to `Promise<T>`, our Swift promise class.
 
 ```objc
 myPromise.then(^(NSString *bar){
@@ -50,14 +50,14 @@ myPromise.then(^{
 });
 ```
 #### :warning: Caution:
-ARC in Objective-C unlike Objective-C++ is not exception safe by default.
-So, throwing an error will result in keeping a strong reference to the closure containing the throw statement.
-This will consequently result in memory leaks if you're not careful.
-````
-Note:
-Only having a strong reference to the closure would result in memory leaks.
-In our case PromisKit automatically keeps a strong reference to the closure until it's released.
-````
+ARC in Objective-C, unlike in Objective-C++, is not exception-safe by default.
+So, throwing an error will result in keeping a strong reference to the closure 
+that contains the throw statement.
+This pattern will consequently result in memory leaks if you're not careful.
+
+> *Note:* Only having a strong reference to the closure would result in memory leaks.
+> In our case, PromisKit automatically keeps a strong reference to the closure until it's released.
+
 __Workarounds:__
 1. Return a Promise with value NSError\
 Instead of throwing a normal error, you can return a Promise with value NSError instead.
@@ -109,7 +109,7 @@ We do runtime inspection of the block you pass to achieve this magic.
 
 Another important distinction is that the equivalent function to Swift’s `recover` is combined with `AnyPromise`’s `catch`. This is typical to other “dynamic” promise implementations and thus achieves our goal that `AnyPromise` is loose and dynamic while `Promise<T>` is strict and specific.
 
-A sometimes unexpected consequence of this is that returning nothing from a `catch` *resolves* the returned promise:
+A sometimes unexpected consequence of this fact is that returning nothing from a `catch` *resolves* the returned promise:
 
 ```objc
 myPromise.catch(^{
@@ -121,10 +121,10 @@ myPromise.catch(^{
 
 ---
 
-Another important distinction is that the `value` property returns even if the promise is rejected, in that case it returns the `NSError` object with which the promise was rejected.
+Another important distinction is that the `value` property returns even if the promise is rejected; in that case, it returns the `NSError` object with which the promise was rejected.
 
 
-# Bridging Between Objective-C & Swift
+# Bridging between Objective-C & Swift
 
 Let’s say you have:
 
@@ -134,9 +134,8 @@ Let’s say you have:
 @end
 ```
 
-Ensure this interface is included in your bridging header.
-
-You can now use this in your Swift code:
+Ensure that this interface is included in your bridging header. You can now use the 
+following pattern in your Swift code:
 
 ```swift
 let foo = Foo()
@@ -159,9 +158,9 @@ Let’s say you have:
 @objc class Bar: NSObject { /*…*/ }
 ```
 
-Ensure that your project is generating a `…-Swift.h` header so your Objective-C can see your Swift code.
+Ensure that your project is generating a `…-Swift.h` header so that Objective-C can see your Swift code.
 
-If you built this and opened the `…-Swift.h` header you would only see this:
+If you built this project and opened the `…-Swift.h` header, you would only see this:
 
 ```objc
 @interface Foo
@@ -171,7 +170,7 @@ If you built this and opened the `…-Swift.h` header you would only see this:
 @end
 ```
 
-This is because Objective-C cannot import Swift objects that are generic. Thus we need to write some stubs:
+That's because Objective-C cannot import Swift objects that are generic. So we need to write some stubs:
 
 ```swift
 @objc class Foo: NSObject {
@@ -184,7 +183,7 @@ This is because Objective-C cannot import Swift objects that are generic. Thus w
 }
 ```
 
-If we built this and opened our generated header we would now see:
+If we built this and opened our generated header, we would now see:
 
 ```objc
 @interface Foo
@@ -198,5 +197,5 @@ If we built this and opened our generated header we would now see:
 
 Perfect.
 
-Note that AnyPromise can only bridge objects that conform to `AnyObject` or derive `NSObject`. This is a limitation of Objective-C.
+Note that AnyPromise can only bridge objects that conform to `AnyObject` or derive from `NSObject`. This is a limitation of Objective-C.
 
