@@ -2,7 +2,7 @@
 // DO NOT EDIT
 
 
-@testable import Core
+@testable import CorePromise
 @testable import A_
 import XCTest
 
