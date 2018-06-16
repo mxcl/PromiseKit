@@ -185,8 +185,9 @@ public extension CatchMixin {
      Consumes the Swift unused-result warning.
      - Note: You should `catch`, but in situations where you know you don’t need a `catch`, `cauterize` makes your intentions clear.
      */
-    func cauterize() {
-        self.catch {
+    @discardableResult
+    func cauterize() -> PMKFinalizer {
+        return self.catch {
             Swift.print("PromiseKit:cauterized-error:", $0)
         }
     }
