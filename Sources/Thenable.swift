@@ -372,6 +372,15 @@ public extension Thenable where T: Collection {
         }
     }
 
+    func firstValue(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, where test: @escaping (T.Iterator.Element) -> Bool) -> Promise<T.Iterator.Element> {
+        return map(on: on, flags: flags) {
+            for x in $0 where test(x) {
+                return x
+            }
+            throw PMKError.emptySequence
+        }
+    }
+
     /// - Returns: a promise fulfilled with the last value of this `Collection` or, if empty, a promise rejected with PMKError.emptySequence.
     var lastValue: Promise<T.Iterator.Element> {
         return map(on: nil) { aa in
