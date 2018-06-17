@@ -61,11 +61,10 @@ In our case PromisKit automatically keeps a strong reference to the closure unti
 __Workarounds:__
 1. Return a Promise with value NSError\
 Instead of throwing a normal error, you can return a Promise with value NSError instead.
-(Make sure to handle the thrown error in the catch closure if needed).
 
 ```objc
 myPromise.then(^{
-    @throw [NSError myCustomError];
+    return [AnyPromise promiseWithValue:[NSError myCustomError]];
 }).catch(^(NSError *error){
     if ([error isEqual:[NSError myCustomError]]) {
         // In case, same error as the one we thrown
@@ -76,7 +75,7 @@ myPromise.then(^{
 ```
 2. Enable ARC for exceptions in Objective-C (not recomended)\
 You can add this  ```-fobjc-arc-exceptions to your``` to your compiler flags to enable ARC for exceptions.
-This is not recommended unless you're a 100% sure of what you're doing.
+This is not recommended unless you've read the Apple documentation and are comfortable with the caveats.
 
 For more details on ARC and exceptions:
 https://clang.llvm.org/docs/AutomaticReferenceCounting.html#exceptions
