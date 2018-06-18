@@ -1,7 +1,7 @@
 import Dispatch
 
 public protocol Dispatcher {
-    func async(execute work: @escaping () -> Void)
+    func async(_ body: @escaping () -> Void)
 }
 
 public struct DispatchQueueDispatcher: Dispatcher {
@@ -14,8 +14,8 @@ public struct DispatchQueueDispatcher: Dispatcher {
         self.flags = flags
     }
 
-    public func async(execute work: @escaping () -> Void) {
-        queue.async(flags: flags, execute: work)
+    public func async(_ body: @escaping () -> Void) {
+        queue.async(flags: flags, execute: body)
     }
 
 }
@@ -23,8 +23,8 @@ public struct DispatchQueueDispatcher: Dispatcher {
 extension DispatchQueue: Dispatcher {
     
     /// Explicit declaration required; actual function signature is not identical to protocol
-    public func async(execute work: @escaping () -> Void) {
-        async(execute: work)
+    public func async(_ body: @escaping () -> Void) {
+        async(execute: body)
     }
     
 }
