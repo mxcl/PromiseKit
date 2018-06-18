@@ -106,7 +106,7 @@ public extension Guarantee {
     }
 
     public func asVoid() -> Guarantee<Void> {
-        return map { _ in }
+        return map(on: nil) { _ in }
     }
     
     /**

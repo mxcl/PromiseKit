@@ -212,7 +212,7 @@ public extension Thenable {
 
     /// - Returns: a new promise chained off this promise but with its value discarded.
     func asVoid() -> Promise<Void> {
-        return map { _ in }
+        return map(on: nil) { _ in }
     }
 }
 
