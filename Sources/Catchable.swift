@@ -14,14 +14,14 @@ public extension CatchMixin {
      of a chain. Often utility promises will not have a catch, instead
      delegating the error handling to the caller.
      
-     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter on: The dispatcher that executes the provided closure.
      - Parameter policy: The default policy does not execute your handler for cancellation errors.
      - Parameter execute: The handler to execute if this promise is rejected.
      - Returns: A promise finalizer.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
     @discardableResult
-    func `catch`(on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) -> Void) -> PMKFinalizer {
+    func `catch`(on: Dispatcher? = conf.D.return, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) -> Void) -> PMKFinalizer {
         let finalizer = PMKFinalizer()
         pipe {
             switch $0 {
@@ -29,7 +29,7 @@ public extension CatchMixin {
                 guard policy == .allErrors || !error.isCancelled else {
                     fallthrough
                 }
-                on.async(flags: flags) {
+                on.async {
                     body(error)
                     finalizer.pending.resolve(())
                 }
@@ -45,8 +45,8 @@ public class PMKFinalizer {
     let pending = Guarantee<Void>.pending()
 
     /// `finally` is the same as `ensure`, but it is not chainable
-    public func finally(on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, _ body: @escaping () -> Void) {
-        pending.guarantee.done(on: on, flags: flags) {
+    public func finally(on: Dispatcher? = conf.D.return, _ body: @escaping () -> Void) {
+        pending.guarantee.done(on: on) {
             body()
         }
     }
@@ -68,11 +68,11 @@ public extension CatchMixin {
              return .value(CLLocation.chicago)
          }
      
-     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The handler to execute if this promise is rejected.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func recover<U: Thenable>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> U) -> Promise<T> where U.T == T {
+    func recover<U: Thenable>(on: Dispatcher? = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> U) -> Promise<T> where U.T == T {
         let rp = Promise<U.T>(.pending)
         pipe {
             switch $0 {
@@ -80,7 +80,7 @@ public extension CatchMixin {
                 rp.box.seal(.fulfilled(value))
             case .rejected(let error):
                 if policy == .allErrors || !error.isCancelled {
-                    on.async(flags: flags) {
+                    on.async {
                         do {
                             let rv = try body(error)
                             guard rv !== rp else { throw PMKError.returnedSelf }
@@ -101,19 +101,19 @@ public extension CatchMixin {
      The provided closure executes when this promise rejects.
      This variant of `recover` requires the handler to return a Guarantee, thus it returns a Guarantee itself and your closure cannot `throw`.
      - Note it is logically impossible for this to take a `catchPolicy`, thus `allErrors` are handled.
-     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The handler to execute if this promise is rejected.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
     @discardableResult
-    func recover(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(Error) -> Guarantee<T>) -> Guarantee<T> {
+    func recover(on: Dispatcher? = conf.D.map, _ body: @escaping(Error) -> Guarantee<T>) -> Guarantee<T> {
         let rg = Guarantee<T>(.pending)
         pipe {
             switch $0 {
             case .fulfilled(let value):
                 rg.box.seal(value)
             case .rejected(let error):
-                on.async(flags: flags) {
+                on.async {
                     body(error).pipe(to: rg.box.seal)
                 }
             }
@@ -134,14 +134,14 @@ public extension CatchMixin {
              //…
          }
      
-     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The closure that executes when this promise resolves.
      - Returns: A new promise, resolved with this promise’s resolution.
      */
-    func ensure(on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, _ body: @escaping () -> Void) -> Promise<T> {
+    func ensure(on: Dispatcher? = conf.D.return, _ body: @escaping () -> Void) -> Promise<T> {
         let rp = Promise<T>(.pending)
         pipe { result in
-            on.async(flags: flags) {
+            on.async {
                 body()
                 rp.box.seal(result)
             }
@@ -163,14 +163,14 @@ public extension CatchMixin {
              //…
          }
 
-     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The closure that executes when this promise resolves.
      - Returns: A new promise, resolved with this promise’s resolution.
      */
-    func ensureThen(on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, _ body: @escaping () -> Guarantee<Void>) -> Promise<T> {
+    func ensureThen(on: Dispatcher? = conf.D.return, _ body: @escaping () -> Guarantee<Void>) -> Promise<T> {
         let rp = Promise<T>(.pending)
         pipe { result in
-            on.async(flags: flags) {
+            on.async {
                 body().done {
                     rp.box.seal(result)
                 }
@@ -178,7 +178,6 @@ public extension CatchMixin {
         }
         return rp
     }
-
 
 
     /**
@@ -201,19 +200,19 @@ public extension CatchMixin where T == Void {
      
      This variant of `recover` is specialized for `Void` promises and de-errors your chain returning a `Guarantee`, thus you cannot `throw` and you must handle all errors including cancellation.
      
-     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The handler to execute if this promise is rejected.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
     @discardableResult
-    func recover(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(Error) -> Void) -> Guarantee<Void> {
+    func recover(on: Dispatcher? = conf.D.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(Error) -> Void) -> Guarantee<Void> {
         let rg = Guarantee<Void>(.pending)
         pipe {
             switch $0 {
             case .fulfilled:
                 rg.box.seal(())
             case .rejected(let error):
-                on.async(flags: flags) {
+                on.async {
                     body(error)
                     rg.box.seal(())
                 }
@@ -227,11 +226,11 @@ public extension CatchMixin where T == Void {
      
      This variant of `recover` ensures that no error is thrown from the handler and allows specifying a catch policy.
      
-     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The handler to execute if this promise is rejected.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func recover(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> Void) -> Promise<Void> {
+    func recover(on: Dispatcher? = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> Void) -> Promise<Void> {
         let rg = Promise<Void>(.pending)
         pipe {
             switch $0 {
@@ -239,7 +238,7 @@ public extension CatchMixin where T == Void {
                 rg.box.seal(.fulfilled(()))
             case .rejected(let error):
                 if policy == .allErrors || !error.isCancelled {
-                    on.async(flags: flags) {
+                    on.async {
                         do {
                             rg.box.seal(.fulfilled(try body(error)))
                         } catch {
