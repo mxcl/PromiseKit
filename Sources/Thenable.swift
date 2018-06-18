@@ -182,7 +182,7 @@ public extension Thenable {
            }
      */
     func get(on: Dispatcher? = conf.D.return, _ body: @escaping (T) throws -> Void) -> Promise<T> {
-        return map(on: on, flags: flags) {
+        return map(on: on) {
             try body($0)
             return $0
         }
