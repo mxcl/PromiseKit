@@ -1,7 +1,6 @@
 # Xcode 8.3, 9.x or 10.x / Swift 3 or 4
 
-We recommend Carthage over CocoaPods, but both are supported installation
-methods.
+We recommend Carthage over CocoaPods, but both installation methods are supported.
 
 ## CocoaPods
 
@@ -10,8 +9,8 @@ use_frameworks!
 pod "PromiseKit", "~> 6.0"
 ```
 
-Since CocoaPods 1.0 you will (probably) need to add the `pod` line to a `target`,
-eg:
+After CocoaPods 1.0, you will (probably) need to add the `pod` line to a `target`,
+e.g.:
 
 ```ruby
 use_frameworks!
@@ -71,7 +70,7 @@ We also maintain a series of branches to aid migration for PromiseKit 2:
 |  7.1  |  2.1  | 2          | [swift-2.0-minimal-changes] | ![ci-20]  |
 |  7.0  |  2.0  | 2          | [swift-2.0-minimal-changes] | ![ci-20]  |
 
-We do **not** usually backport fixes to these branches, but pull-requests are welcome.
+We do **not** usually backport fixes to these branches, but pull requests are welcome.
 
 
 ## Xcode 8 / Swift 2.3 or Xcode 7
@@ -102,27 +101,27 @@ github "mxcl/PromiseKit" ~> 3.5
 [swift-2.0-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.0-minimal-changes
 
 
-# Using Git Submodules for PromiseKit’s Extensions
+# Using Git submodules for PromiseKit’s extensions
 
-> Please note, this is a more advanced technique
+> *Note*: This is a more advanced technique.
 
-If you use CocoaPods and a few PromiseKit extensions then importing PromiseKit
-causes that module to import all the extension frameworks. Thus if you have an
-app and a few app-extensions (eg. iOS app, iOS watch extension, iOS Today
+If you use CocoaPods and a few PromiseKit extensions, then importing PromiseKit
+causes that module to import all the extension frameworks. Thus, if you have an
+app and a few app extensions (e.g., iOS app, iOS watch extension, iOS Today
 extension) then all your final products that use PromiseKit will have forced
 dependencies on all the Apple frameworks that PromiseKit provides extensions
 for.
 
-This isn’t that bad, but every framework that loads is overhead and startup
-time.
+This isn’t that bad, but every framework that loads entails overhead and 
+lengthens startup time.
 
-It’s better and worse with Carthage since we build individual micro-frameworks
-for each PromiseKit-extension, so at least all your final products only link
-against the Apple frameworks that they actually need. However, Apple have
-advised that apps only link against “about 12” frameworks for performance
-reasons, so for Carthage, we are worse off for this metric.
+It’s both better and worse with Carthage. We build individual micro-frameworks
+for each PromiseKit extension, so your final products link
+against only the Apple frameworks that they actually need. However, Apple has
+advised that apps link only against “about 12” frameworks for performance
+reasons. So with Carthage, we are worse off on this metric.
 
-The solution is to instead only import CorePromise:
+The solution is to instead import only CorePromise:
 
 ```ruby
 # CocoaPods
@@ -142,7 +141,7 @@ git submodule add https://github.com/PromiseKit/UIKit Submodules/PMKUIKit
 
 Then in Xcode you can add these sources to your targets on a per-target basis.
 
-Then when you `pod update`, ensure you also update your submodules:
+Then when you `pod update`, ensure that you also update your submodules:
 
     pod update && git submodule update --recursive --remote
 

@@ -5,7 +5,7 @@
 ---
 
 Promises simplify asynchronous programming, freeing you up to focus on the more
-important things. They are easy to learn, easy to master and result in clearer,
+important things. They are easy to learn, easy to master, and result in clearer,
 more readable code. Your co-workers will thank you.
 
 ```swift
@@ -27,8 +27,8 @@ firstly {
 ```
 
 PromiseKit is a thoughtful and complete implementation of promises for any
-platform with a `swiftc`, it has *excellent* Objective-C bridging and
-*delightful* specializations for iOS, macOS, tvOS and watchOS. It is a top-100
+platform that has a `swiftc`. It has *excellent* Objective-C bridging and
+*delightful* specializations for iOS, macOS, tvOS, and watchOS. It is a top-100
 pod used in many of the most popular apps in the world.
 
 [![codecov](https://codecov.io/gh/mxcl/PromiseKit/branch/master/graph/badge.svg)](https://codecov.io/gh/mxcl/PromiseKit)
@@ -49,13 +49,13 @@ target "Change Me!" do
 end
 ```
 
-PromiseKit 6, 5 and 4 support Xcode 8.3, 9.x and 10.0; Swift 3.1,
-3.2, 3.3, 4.0, 4.1 and 4.2 ; iOS, macOS, tvOS, watchOS, Linux and Android; CocoaPods,
-Carthage and SwiftPM; ([CI Matrix](https://travis-ci.org/mxcl/PromiseKit)).
+PromiseKit 6, 5, and 4 support Xcode 8.3, 9.x, and 10.0; Swift 3.1,
+3.2, 3.3, 4.0, 4.1, and 4.2 ; iOS, macOS, tvOS, watchOS, Linux, and Android; CocoaPods,
+Carthage, and SwiftPM; ([CI Matrix](https://travis-ci.org/mxcl/PromiseKit)).
 
 For Carthage, SwiftPM, etc., or for instructions when using older Swifts or
-Xcodes see our [Installation Guide](Documentation/Installation.md). Please note
-that we sincerely recommend [Carthage](https://github.com/Carthage/Carthage).
+Xcodes, see our [Installation Guide](Documentation/Installation.md). We 
+recommend [Carthage](https://github.com/Carthage/Carthage).
 
 # Documentation
 
@@ -66,17 +66,17 @@ that we sincerely recommend [Carthage](https://github.com/Carthage/Carthage).
 * Manual
   * [Installation Guide](Documentation/Installation.md)
   * [Objective-C Guide](Documentation/ObjectiveC.md)
-  * [Troubleshooting](Documentation/Troubleshooting.md) (eg. solutions to common compile errors)
+  * [Troubleshooting](Documentation/Troubleshooting.md) (e.g., solutions to common compile errors)
   * [Appendix](Documentation/Appendix.md)
 * [API Reference](https://promisekit.org/reference/)
 
 # Extensions
 
-Promises are only as useful as the asynchronous tasks they represent, thus we
+Promises are only as useful as the asynchronous tasks they represent. Thus, we
 have converted (almost) all of Apple’s APIs to promises. The default CocoaPod
 provides Promises and the extensions for Foundation and UIKit. The other
 extensions are available by specifying additional subspecs in your `Podfile`,
-eg:
+e.g.:
 
 ```ruby
 pod "PromiseKit/MapKit"          # MKDirections().calculate().then { /*…*/ }
@@ -93,43 +93,12 @@ Then don’t have them:
 pod "PromiseKit/CorePromise", "~> 6.0"
 ```
 
-> *Note* Carthage installations come with no extensions by default.
+> *Note:* Carthage installations come with no extensions by default.
 
-## Choose Your Networking Library
+## Choose your networking library
 
-Promise chains are commonly started with networking, thus we offer [Alamofire]:
-
-```swift
-// pod 'PromiseKit/Alamofire'  # https://github.com/PromiseKit/Alamofire-
-
-firstly {
-    Alamofire
-        .request("http://example.com", method: .post, parameters: params)
-        .responseDecodable(Foo.self)
-}.done { foo in
-    //…
-}.catch { error in
-    //…
-}
-```
-
-[OMGHTTPURLRQ]:
-
-```swift
-// pod 'PromiseKit/OMGHTTPURLRQ'  # https://github.com/PromiseKit/OMGHTTPURLRQ
-
-firstly {
-    URLSession.shared.POST("http://example.com", JSON: params)
-}.map {
-    try JSONDecoder().decoder(Foo.self, with: $0.data)
-}.done { foo in
-    //…
-}.catch { error in
-    //…
-}
-```
-
-And (of course) plain `URLSession`:
+Promise chains commonly start with a network operation. Thus, we offer
+extensions for `URLSession`:
 
 ```swift
 // pod 'PromiseKit/Foundation'  # https://github.com/PromiseKit/Foundation
@@ -154,22 +123,54 @@ func makeUrlRequest() throws -> URLRequest {
 }
 ```
 
+[Alamofire]:
+
+```swift
+// pod 'PromiseKit/Alamofire'  # https://github.com/PromiseKit/Alamofire-
+
+firstly {
+    Alamofire
+        .request("http://example.com", method: .post, parameters: params)
+        .responseDecodable(Foo.self)
+}.done { foo in
+    //…
+}.catch { error in
+    //…
+}
+```
+
+And [OMGHTTPURLRQ]:
+
+```swift
+// pod 'PromiseKit/OMGHTTPURLRQ'  # https://github.com/PromiseKit/OMGHTTPURLRQ
+
+firstly {
+    URLSession.shared.POST("http://example.com", JSON: params)
+}.map {
+    try JSONDecoder().decoder(Foo.self, with: $0.data)
+}.done { foo in
+    //…
+}.catch { error in
+    //…
+}
+```
+
 Nowadays, considering that:
 
 * We almost always POST JSON
 * We now have `JSONDecoder`
 * PromiseKit now has `map` and other functional primitives
 
-We recommend vanilla `URLSession`; use less black-boxes, stick closer to the
+We recommend vanilla `URLSession`. It uses fewer black boxes and sticks closer to the
 metal. Alamofire was essential until the three bulletpoints above became true,
 but nowadays it isn’t really necessary. OMGHTTPURLRQ was developed before JSON
-was the modern standard and thus REST requests were hard, but nowadays you
-rarely network anything but JSON.
+was the modern standard and thus REST requests were hard, but these days you
+rarely need to speak any format but JSON.
 
 # Support
 
-Please check our [Troubleshooting Guide](Documentation/Troubleshooting.md) and
-if after that you still have a question ask at our [Gitter chat channel] or on [our bug tracker].
+Please check our [Troubleshooting Guide](Documentation/Troubleshooting.md), and
+if after that you still have a question, ask at our [Gitter chat channel] or on [our bug tracker].
 
 
 [badge-pod]: https://img.shields.io/cocoapods/v/PromiseKit.svg?label=version

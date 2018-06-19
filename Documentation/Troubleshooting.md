@@ -1,10 +1,10 @@
 # Troubleshooting
 
-## Compile Errors
+## Compilation errors
 
-99% of questions about compile issues with PromiseKit can be solved by either:
+99% of compilation issues involving PromiseKit can be addressed or diagnosed by one of the fixes below.
 
-### 0. Check Your Handler
+### Check your handler
 
 ```swift
 return firstly {
@@ -20,7 +20,7 @@ Swift (unhelpfully) says:
 
 > Cannot convert value of type '([String : Any]) -> User' to expected argument type '([String : Any]) -> _'
 
-What’s the real problem? `then` *must* return a `Promise`, you wanted `map`:
+What’s the real problem? `then` *must* return a `Promise`, and you're trying to return something else. What you really want is `map`:
 
 ```swift
 return firstly {
@@ -32,7 +32,7 @@ return firstly {
 }
 ```
 
-### 1. Specifying Closure Parameters **and** Return Types
+### Specify closure parameters **and** return type
 
 For example:
 
@@ -45,7 +45,7 @@ return firstly {
 }
 ```
 
-May compile if you specify the type of user:
+This code may compile if you specify the type of `user`:
 
 
 ```swift
@@ -57,7 +57,7 @@ return firstly {
 }
 ```
 
-If it still doesn't perhaps you need to specify the return type too:
+If it still doesn't compile, perhaps you need to specify the return type, too:
 
 ```swift
 return firstly {
@@ -68,17 +68,17 @@ return firstly {
 }
 ```
 
-We made great effort to reduce the need for this with PromiseKit 6, but like
-normal functions in Swift (eg. Array.map) that return a generic type, if the
-closure body is longer than one line you may need to tell Swift what returns.
+We have made great effort to reduce the need for explicit typing in PromiseKit 6, 
+but as with all Swift functions that return a generic type (e.g., `Array.map`),
+you may need to explicitly tell Swift what a closure returns if the closure's body is
+longer than one line.
 
-> Tip: Sometimes you can force a one liner with semi-colons.
+> *Tip*: Sometimes you can force a one-liner by using semicolons.
 
 
-### 2. Specify `_` as closure type
+### Acknowledge all incoming closure parameters
 
-You can’t not annotate the parameters in closures that have them, but Swift
-will give you a useless error message about it. For example:
+Swift does not permit you to silently ignore a closure's parameters. For example, this code:
 
 ```swift
 func _() -> Promise<Void> {
@@ -90,12 +90,18 @@ func _() -> Promise<Void> {
 }
 ```
 
-Fails to compile with: 
+Fails to compile with the error:
 
     Cannot invoke 'then' with an argument list of type '(() -> _)
   
-Highlighting the `then`. The fix is to specify the closure parameter of the
-`then`:
+What's the problem? Well, `Process.launch(.promise)` returns
+`Promise<(String, String)>`, and we are ignoring this value in our `then` closure. 
+If we’d referenced `$0` or named the parameter, Swift would have been satisfied.
+
+Assuming that we really do want to ignore the argument, the fix is to explicitly
+acknowledge its existence by assigning it the name "_". That's Swift-ese for "I
+know there's a value here, but I'm ignoring it."
+
 
 ```swift
 func _() -> Promise<Void> {
@@ -107,17 +113,21 @@ func _() -> Promise<Void> {
 }
 ```
 
-Why is this the fix? Well `Process.launch(.promise)` returns
-`Promise<(String, String)>` and we were ignoring this value in our `then`, if
-we’d used `$0` or named the parameter we’d be fine.
+In this situation, you won't always receive an error message that's as clear as the
+one shown above. Sometimes, a missing closure parameter sends Swift scurrying off
+into type inference limbo. When it finally concludes that there's no way for it to make
+all the inferred types work together, it may end up assigning blame to some other
+closure entirely and giving you an error message that makes no sense at all.
 
-Swift’s diagnostics were unhelpful at every stage trying to troubleshoot this
-example. You’re on your own :(
+When faced with this kind of enigmatic complaint, a good rule of thumb is to
+double-check your argument and return types carefully. If everything looks OK, 
+temporarily add explicit type information as shown above, just to rule
+out mis-inference as a possible cause.
 
-### 2. Move Code To A Temporary Inline Function
+### Try moving code to a temporary inline function
 
-Take the code out of the closure and put it in a standalone function, now Swift
-will tell you the *real* error message. For example:
+Try taking the code out of a closure and putting it in a standalone function. Now Swift
+will give you the *real* error message. For example:
 
 ```swift
 func doStuff() {
@@ -149,22 +159,23 @@ func doStuff() {
 }
 ```
 
-So an *inline* function is all you need. Now Swift will tell you the real
-error message. Here that you forgot a `return`.
+An *inline* function like this is all you need. Here, the problem is that you
+forgot to mark the last line of the closure with an explicit `return`. It's required
+here because the closure is longer than one line.
 
 
-## You Copied Code Off The Internet That Doesn’t Work
+## You copied code off the Internet that doesn’t work
 
-Swift changed a lot over the years and thus PromiseKit has had to change to keep
-up. Your code is probably for an older PromiseKit. *Read the definitions of the
-functions*. Doing this with Xcode is easy (option click or command click). All
-PromiseKit functions are documented and provide examples.
+Swift has changed a lot over the years and so PromiseKit has had to change to keep
+up. The code you copied is probably for an older PromiseKit. *Read the definitions of the
+functions.* It's easy to do this in Xcode by option-clicking or command-clicking function names.
+All PromiseKit functions are documented and provide examples.
 
-## Context type for closure argument expects 1 argument, which cannot be implicitly ignored
+## "Context type for closure argument expects 1 argument, which cannot be implicitly ignored"
 
-You have a `then` you want a `done`.
+You have a `then`; you want a `done`.
 
-## Missing argument for parameter #1 in call
+## "Missing argument for parameter #1 in call"
 
 This is part of Swift 4’s “tuplegate”.
 
@@ -176,12 +187,12 @@ seal.fulfill(())
 
 Yes: we hope they revert this change in Swift 5 too.
 
-## Other Issues
+## Other issues
 
 ### `Pending Promise Deallocated!`
 
-If you see this warning you have a path in your `Promise` initializer where the
-promise is not sealed:
+If you see this warning, you have a path in your `Promise` initializer that allows
+the promise to escape without being sealed:
 
 ```swift
 Promise<String> { seal in
@@ -195,9 +206,9 @@ Promise<String> { seal in
 }
 ```
 
-There are two missing paths here and if either occur the promise will soon be
-deallocated without resolving. This will show itself as a bug in your app,
-probably the awful: infinite spinner.
+There are two missing paths here, and if either occurs, the promise will soon be
+deallocated without resolving. This will manifest itself as a bug in your app,
+probably the awful infinite spinner.
 
 So let’s be thorough:
 
@@ -218,28 +229,32 @@ Promise<String> { seal in
 }
 ```
 
-If this seems tedious it shouldn’t. You would have to be this thorough withoutpromises too, the difference is without promises you wouldn’t get a warning in the console letting you know your mistake!
+If this seems tedious, it shouldn’t. You would have to be this thorough without promises, too.
+The difference is that without promises, you wouldn’t get a warning in the console notifying
+you of your mistake!
 
-### Slow Compilation / Compiler Cannot Solve in Reasonable Time
+### Slow compilation / compiler cannot solve in reasonable time
 
 Add return types to your closures.
 
-### My Promise Never Resolves
+### My promise never resolves
 
-Check your asynchronous task even *starts*. You’d be surprised how often this is
-the cause. For example if you are using `URLSession` (without our extension, but
-don’t do that, *use* our extension, it’s thorough) did you forget to call
-`resume` on the task? If so it never starts, so of course, it never finishes
-either.
+Check to be sure that your asynchronous task even *starts*. You’d be surprised how
+often this is the cause.
+
+For example, if you are using `URLSession` without our extension (but
+don’t do that; *use* our extension! we know all the pitfalls), did you forget
+to call `resume` on the task? If so, the task never actually starts, and so of
+course it never finishes, either.
 
 ### `Result of call to 'foo(on:_:)' is unused`
 
-Promise deliberately avoids the `@discardableResult` annotation because the
-unused result warning is your hint that you have not handled the error in your
+PromiseKit deliberately avoids the `@discardableResult` annotation because the
+unused result warning is a hint that you have not handled the error in your
 chain. So do one of these:
 
 1. Add a `catch`
 2. `return` the promise (thus punting the error handling to the caller)
 3. Use `cauterize()` to silence the warning.
 
-Obviously do 1. or 2. in preference to 3.
+Obviously, do 1 or 2 in preference to 3.
