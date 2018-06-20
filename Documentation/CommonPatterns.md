@@ -1,7 +1,7 @@
-# Common patterns
+# Common Patterns
 
 One feature of promises that makes them particularly useful is that they are composable.
-This fact enables complex, yet safe, asynchronous patterns that would otherwise be quite
+This fact enables complex, yet safe asynchronous patterns that would otherwise be quite
 intimidating when implemented with traditional methods.
 
 
@@ -32,7 +32,7 @@ apps without fear of the spaghetti code (and associated refactoring pains) of
 asynchronous systems that use completion handlers.
 
 
-## APIs that use promises
+## APIs That Use Promises
 
 Promises are composable, so return them instead of accepting completion blocks:
 
@@ -64,7 +64,7 @@ your app without violating architectural boundaries.
 > *Note*: We provide [promises for Alamofire](https://github.com/PromiseKit/Alamofire-) too!
 
 
-## Background work
+## Background Work
 
 ```swift
 class MyRestAPI {
@@ -92,7 +92,7 @@ a background queue. See `PromiseKit.conf`. Note that we suggest only changing
 the queue for the `map` suite of functions, so `done` and `catch` will
 continue to run on the main queue, which is *usually* what you want.
 
-## Failing chains
+## Failing Chains
 
 If an error occurs mid-chain, simply throw an error:
 
@@ -129,7 +129,7 @@ avoiding throwing an error because you couldn't be bothered to define a good glo
 `Error` `enum`.
 
 
-## Abstracting away asychronicity
+## Abstracting Away Asychronicity
 
 ```swift
 var fetch = API.fetch()
@@ -166,7 +166,7 @@ Above, we see that you can call `then` as many times on a promise as you
 like. All the blocks will be executed in the order they were added.
 
 
-## Chaining sequences
+## Chaining Sequences
 
 When you have a series of tasks to perform on an array of data:
 
@@ -213,7 +213,7 @@ to ensure this is to use `asVoid()`.
 Note that if any component promise rejects, the `race` will reject, too.
 
 
-# Minimum duration
+# Minimum Duration
 
 Sometimes you need a task to take *at least* a certain amount of time. (For example,
 you want to show a progress spinner, but if it shows for less than 0.3 seconds, the UI
@@ -287,7 +287,7 @@ need to cancel the underlying task!
 
 > The library [CancellablePromiseKit](https://github.com/johannesd/CancellablePromiseKit) extends the concept of Promises to fully cover cancellable tasks.
 
-## Retry / polling
+## Retry / Polling
 
 ```swift
 func attempt<T>(maximumRetryCount: Int = 3, delayBeforeRetry: DispatchTimeInterval = .seconds(2), _ body: @escaping () -> Promise<T>) -> Promise<T> {
@@ -315,7 +315,7 @@ In most cases, you should probably supplement the code above so that it re-attem
 specific error conditions.
 
 
-## Wrapping delegate systems
+## Wrapping Delegate Systems
 
 Be careful with Promises and delegate systems, as they are not always compatible.
 Promises complete *once*, whereas most delegate systems may notify their delegate many
@@ -388,7 +388,7 @@ CLLocationManager.requestLocation().recover { error -> Promise<CLLocation> in
 Be careful not to ignore all errors, though! Recover only those errors that make sense to recover.
 
 
-## Promises for modal view controllers
+## Promises for Modal View Controllers
 
 ```swift
 class ViewController: UIViewController {
@@ -422,7 +422,7 @@ explicitly.
 Nothing seems to beat storyboard segues for decoupling an app's controllers.
 
 
-## Saving previous results
+## Saving Previous Results
 
 Let’s say you have:
 
@@ -463,7 +463,7 @@ login().then { username in
 The code above simply maps `Promise<String>` into `Promise<(UIImage, String)>`.
 
 
-## Waiting on multiple promises, whatever their result
+## Waiting on Multiple Promises, Whatever Their Result
 
 Use `when(resolved:)`:
 

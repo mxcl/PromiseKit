@@ -101,7 +101,7 @@ github "mxcl/PromiseKit" ~> 3.5
 [swift-2.0-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.0-minimal-changes
 
 
-# Using Git submodules for PromiseKit’s extensions
+# Using Git Submodules for PromiseKit’s Extensions
 
 > *Note*: This is a more advanced technique.
 

@@ -113,7 +113,7 @@ when(fulfilled: p1, p2).catch { error in
 
 No. PromiseKit contains hardly any source code. In fact, it is quite lightweight. Any
 “weight” relative to other promise implementations derives from 6 years of bug fixes
-and tuning, from the fact that we have *stellar* Objective-C-to-Swift bridging, and 
+and tuning, from the fact that we have *stellar* Objective-C-to-Swift bridging and 
 from important things such as [Zalgo prevention](http://blog.izs.me/post/59142742143/designing-apis-for-asynchrony)
 that hobby-project implementations don’t consider.
 
@@ -201,7 +201,7 @@ to write your own chain elements, there's no need for all this extra code in the
 
 * PromiseKit dispatches the execution of every block. RxSwift dispatches only when told to do so. Moreover, the 
 current dispatching state is an attribute of the chain, not the specific block, as it is in PromiseKit.
-The RxSwift system is more powerful but more complex. PromiseKit is simple, predictable, and safe.
+The RxSwift system is more powerful but more complex. PromiseKit is simple, predictable and safe.
 
 * In PromiseKit, both sides of a branched chain refer back to their shared common ancestors. In RxSwift, 
 branching normally creates a duplicate parallel chain that reruns the code at the head of the chain...except 
@@ -210,7 +210,7 @@ a chain created by another chunk of code, you can't really tell what the behavio
 
 * Because RxSwift chains don't necessarily terminate on their own, RxSwift needs you to take on some
 explicit garbage collection duties to ensure that pipelines that are no longer needed are properly
-deallocated. All promises yield a single value, terminate, and then automatically deallocate themselves.
+deallocated. All promises yield a single value, terminate and then automatically deallocate themselves.
 
 You can find some additional discussion in [this ticket](https://github.com/mxcl/PromiseKit/issues/484).
 
