@@ -77,7 +77,8 @@ class DispatcherTests: XCTestCase {
         let oldConf = PromiseKit.conf.D
         PromiseKit.conf.D = (map: dispatcher, return: dispatcher)
         
-        DispatchQueue.global(qos: .background).setSpecific(key: queueIDKey, value: 100)
+        let background = DispatchQueue.global(qos: .background)
+        background.setSpecific(key: queueIDKey, value: 100)
         DispatchQueue.main.setSpecific(key: queueIDKey, value: 102)
         dispatcher.queue.setSpecific(key: queueIDKey, value: 103)
         
@@ -103,7 +104,7 @@ class DispatcherTests: XCTestCase {
             XCTAssertNotNil(queueID)
             XCTAssertEqual(queueID!, 103)
             return x + 10
-        }.done(on: .global(qos: .background)) {
+        }.done(on: background) {
             XCTAssertEqual($0, 70)
             let queueID = DispatchQueue.getSpecific(key: queueIDKey)
             XCTAssertNotNil(queueID)
@@ -116,25 +117,27 @@ class DispatcherTests: XCTestCase {
         
     }
 
-    func testDispatcherPromiseExtension() {
+    @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
+    func testDispatcherExtensionReturnsGuarantee() {
         let ex = expectation(description: "Dispatcher.promise")
-        dispatcher.promise {
-            return 42
-        }.done(on: dispatcher) {
-            XCTAssertEqual($0, 42)
-            XCTAssertEqual(self.dispatcher.dispatchCount, 2)
+        dispatcher.dispatch(.promise) { () -> Int in
+            XCTAssertFalse(Thread.isMainThread)
+            return 1
+        }.done { one in
+            XCTAssertEqual(one, 1)
             ex.fulfill()
-        }.cauterize()
+        }
         waitForExpectations(timeout: 1)
     }
-
-    func testDispatcherGuaranteeExtension() {
-        let ex = expectation(description: "Dispatcher.guarantee")
-        dispatcher.guarantee {
-            return 42
-        }.done(on: .main) {
-            XCTAssertEqual($0, 42)
-            XCTAssertEqual(self.dispatcher.dispatchCount, 1)
+    
+    @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
+    func testDispatcherExtensionCanThrowInBody() {
+        let ex = expectation(description: "Dispatcher.promise")
+        dispatcher.dispatch(.promise) { () -> Int in
+            throw PMKError.badInput
+        }.done { _ in
+            XCTFail()
+        }.catch { _ in
             ex.fulfill()
         }
         waitForExpectations(timeout: 1)
