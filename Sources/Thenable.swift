@@ -30,12 +30,12 @@ public extension Thenable {
                //…
            }
      */
-    func then<U: Thenable>(on: Dispatcher? = conf.D.map, _ body: @escaping(T) throws -> U) -> Promise<U.T> {
+    func then<U: Thenable>(on: Dispatcher = conf.D.map, _ body: @escaping(T) throws -> U) -> Promise<U.T> {
         let rp = Promise<U.T>(.pending)
         pipe {
             switch $0 {
             case .fulfilled(let value):
-                on.async {
+                on.dispatch {
                     do {
                         let rv = try body(value)
                         guard rv !== rp else { throw PMKError.returnedSelf }
@@ -68,12 +68,12 @@ public extension Thenable {
                //…
            }
      */
-    func map<U>(on: Dispatcher? = conf.D.map, _ transform: @escaping(T) throws -> U) -> Promise<U> {
+    func map<U>(on: Dispatcher = conf.D.map, _ transform: @escaping(T) throws -> U) -> Promise<U> {
         let rp = Promise<U>(.pending)
         pipe {
             switch $0 {
             case .fulfilled(let value):
-                on.async {
+                on.dispatch {
                     do {
                         rp.box.seal(.fulfilled(try transform(value)))
                     } catch {
@@ -102,12 +102,12 @@ public extension Thenable {
                // either `PMKError.compactMap` or a `JSONError`
            }
      */
-    func compactMap<U>(on: Dispatcher? = conf.D.map, _ transform: @escaping(T) throws -> U?) -> Promise<U> {
+    func compactMap<U>(on: Dispatcher = conf.D.map, _ transform: @escaping(T) throws -> U?) -> Promise<U> {
         let rp = Promise<U>(.pending)
         pipe {
             switch $0 {
             case .fulfilled(let value):
-                on.async {
+                on.dispatch {
                     do {
                         if let rv = try transform(value) {
                             rp.box.seal(.fulfilled(rv))
@@ -141,12 +141,12 @@ public extension Thenable {
                print(response.data)
            }
      */
-    func done(on: Dispatcher? = conf.D.return, _ body: @escaping(T) throws -> Void) -> Promise<Void> {
+    func done(on: Dispatcher = conf.D.return, _ body: @escaping(T) throws -> Void) -> Promise<Void> {
         let rp = Promise<Void>(.pending)
         pipe {
             switch $0 {
             case .fulfilled(let value):
-                on.async {
+                on.dispatch {
                     do {
                         try body(value)
                         rp.box.seal(.fulfilled(()))
@@ -181,7 +181,7 @@ public extension Thenable {
                print(foo, " is Void")
            }
      */
-    func get(on: Dispatcher? = conf.D.return, _ body: @escaping (T) throws -> Void) -> Promise<T> {
+    func get(on: Dispatcher = conf.D.return, _ body: @escaping (T) throws -> Void) -> Promise<T> {
         return map(on: on) {
             try body($0)
             return $0
@@ -286,7 +286,7 @@ public extension Thenable where T: Sequence {
              // $0 => [2,4,6]
          }
      */
-    func mapValues<U>(on: Dispatcher? = conf.D.map, _ transform: @escaping(T.Iterator.Element) throws -> U) -> Promise<[U]> {
+    func mapValues<U>(on: Dispatcher = conf.D.map, _ transform: @escaping(T.Iterator.Element) throws -> U) -> Promise<[U]> {
         return map(on: on) { try $0.map(transform) }
     }
 
@@ -301,7 +301,7 @@ public extension Thenable where T: Sequence {
              // $0 => [1,1,2,2,3,3]
          }
      */
-    func flatMapValues<U: Sequence>(on: Dispatcher? = conf.D.map, _ transform: @escaping(T.Iterator.Element) throws -> U) -> Promise<[U.Iterator.Element]> {
+    func flatMapValues<U: Sequence>(on: Dispatcher = conf.D.map, _ transform: @escaping(T.Iterator.Element) throws -> U) -> Promise<[U.Iterator.Element]> {
         return map(on: on){ (foo: T) in
             try foo.flatMap{ try transform($0) }
         }
@@ -318,7 +318,7 @@ public extension Thenable where T: Sequence {
              // $0 => [1,2,3]
          }
      */
-    func compactMapValues<U>(on: Dispatcher? = conf.D.map, _ transform: @escaping(T.Iterator.Element) throws -> U?) -> Promise<[U]> {
+    func compactMapValues<U>(on: Dispatcher = conf.D.map, _ transform: @escaping(T.Iterator.Element) throws -> U?) -> Promise<[U]> {
         return map(on: on) { foo -> [U] in
           #if !swift(>=3.3) || (swift(>=4) && !swift(>=4.1))
             return try foo.flatMap(transform)
@@ -339,7 +339,7 @@ public extension Thenable where T: Sequence {
              // $0 => [2,4,6]
          }
      */
-    func thenMap<U: Thenable>(on: Dispatcher? = conf.D.map, _ transform: @escaping(T.Iterator.Element) throws -> U) -> Promise<[U.T]> {
+    func thenMap<U: Thenable>(on: Dispatcher = conf.D.map, _ transform: @escaping(T.Iterator.Element) throws -> U) -> Promise<[U.T]> {
         return then(on: on) {
             when(fulfilled: try $0.map(transform))
         }
@@ -356,7 +356,7 @@ public extension Thenable where T: Sequence {
              // $0 => [1,1,2,2,3,3]
          }
      */
-    func thenFlatMap<U: Thenable>(on: Dispatcher? = conf.D.map, _ transform: @escaping(T.Iterator.Element) throws -> U) -> Promise<[U.T.Iterator.Element]> where U.T: Sequence {
+    func thenFlatMap<U: Thenable>(on: Dispatcher = conf.D.map, _ transform: @escaping(T.Iterator.Element) throws -> U) -> Promise<[U.T.Iterator.Element]> where U.T: Sequence {
         return then(on: on) {
             when(fulfilled: try $0.map(transform))
         }.map(on: nil) {
@@ -375,7 +375,7 @@ public extension Thenable where T: Sequence {
              // $0 => [2,3]
          }
      */
-    func filterValues(on: Dispatcher? = conf.D.map, _ isIncluded: @escaping (T.Iterator.Element) -> Bool) -> Promise<[T.Iterator.Element]> {
+    func filterValues(on: Dispatcher = conf.D.map, _ isIncluded: @escaping (T.Iterator.Element) -> Bool) -> Promise<[T.Iterator.Element]> {
         return map(on: on) {
             $0.filter(isIncluded)
         }
@@ -394,7 +394,7 @@ public extension Thenable where T: Collection {
         }
     }
 
-    func firstValue(on: Dispatcher? = conf.D.map, where test: @escaping (T.Iterator.Element) -> Bool) -> Promise<T.Iterator.Element> {
+    func firstValue(on: Dispatcher = conf.D.map, where test: @escaping (T.Iterator.Element) -> Bool) -> Promise<T.Iterator.Element> {
         return map(on: on) {
             for x in $0 where test(x) {
                 return x
@@ -418,7 +418,7 @@ public extension Thenable where T: Collection {
 
 public extension Thenable where T: Sequence, T.Iterator.Element: Comparable {
     /// - Returns: a promise fulfilled with the sorted values of this `Sequence`.
-    func sortedValues(on: Dispatcher? = conf.D.map) -> Promise<[T.Iterator.Element]> {
+    func sortedValues(on: Dispatcher = conf.D.map) -> Promise<[T.Iterator.Element]> {
         return map(on: on){ $0.sorted() }
     }
 }

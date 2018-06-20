@@ -184,7 +184,7 @@ public extension Dispatcher {
      */
     func promise<T>(execute body: @escaping () throws -> T) -> Promise<T> {
         let promise = Promise<T>(.pending)
-        async {
+        dispatch {
             do {
                 promise.box.seal(.fulfilled(try body()))
             } catch {

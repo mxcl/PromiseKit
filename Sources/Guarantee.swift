@@ -66,10 +66,10 @@ public class Guarantee<T>: Thenable {
 
 public extension Guarantee {
     @discardableResult
-    func done(on: Dispatcher? = conf.D.return, _ body: @escaping(T) -> Void) -> Guarantee<Void> {
+    func done(on: Dispatcher = conf.D.return, _ body: @escaping(T) -> Void) -> Guarantee<Void> {
         let rg = Guarantee<Void>(.pending)
         pipe { (value: T) in
-            on.async {
+            on.dispatch {
                 body(value)
                 rg.box.seal(())
             }
@@ -84,10 +84,10 @@ public extension Guarantee {
         }
     }
 
-    func map<U>(on: Dispatcher? = conf.D.map, _ body: @escaping(T) -> U) -> Guarantee<U> {
+    func map<U>(on: Dispatcher = conf.D.map, _ body: @escaping(T) -> U) -> Guarantee<U> {
         let rg = Guarantee<U>(.pending)
         pipe { value in
-            on.async {
+            on.dispatch {
                 rg.box.seal(body(value))
             }
         }
@@ -95,10 +95,10 @@ public extension Guarantee {
     }
 
 	@discardableResult
-    func then<U>(on: Dispatcher? = conf.D.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(T) -> Guarantee<U>) -> Guarantee<U> {
+    func then<U>(on: Dispatcher = conf.D.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(T) -> Guarantee<U>) -> Guarantee<U> {
         let rg = Guarantee<U>(.pending)
         pipe { value in
-            on.async {
+            on.dispatch {
                 body(value).pipe(to: rg.box.seal)
             }
         }
@@ -145,7 +145,7 @@ public extension Guarantee where T: Sequence {
              // $0 => [2,4,6]
          }
      */
-    func thenMap<U>(on: Dispatcher? = conf.D.map, _ transform: @escaping(T.Iterator.Element) -> Guarantee<U>) -> Guarantee<[U]> {
+    func thenMap<U>(on: Dispatcher = conf.D.map, _ transform: @escaping(T.Iterator.Element) -> Guarantee<U>) -> Guarantee<[U]> {
         return then(on: on) {
             when(fulfilled: $0.map(transform))
         }.recover {
@@ -204,7 +204,7 @@ public extension Dispatcher {
      */
     func guarantee<T>(execute body: @escaping () -> T) -> Guarantee<T> {
         let rg = Guarantee<T>(.pending)
-        async {
+        dispatch {
             rg.box.seal(body())
         }
         return rg
