@@ -202,7 +202,7 @@ public extension Dispatcher {
      - Returns: A new `Guarantee` resolved by the result of the provided closure.
      - Note: There is no Promise/Thenable version of this due to Swift compiler ambiguity issues.
      */
-    func guarantee<T>(execute body: @escaping () -> T) -> Guarantee<T> {
+    func dispatch<T>(_: PMKNamespacer, _ body: @escaping () -> T) -> Guarantee<T> {
         let rg = Guarantee<T>(.pending)
         dispatch {
             rg.box.seal(body())
