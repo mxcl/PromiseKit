@@ -82,16 +82,3 @@ class EmptyBox<T>: Box<T> {
         }
     }
 }
-
-
-extension Optional: Dispatcher where Wrapped == Dispatcher {
-    @inline(__always)
-    public func async(_ body: @escaping () -> Void) {
-        switch self {
-        case .none:
-            body()
-        case .some(let dispatcher):
-            dispatcher.async(body)
-        }
-    }
-}

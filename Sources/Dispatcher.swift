@@ -1,10 +1,10 @@
 import Dispatch
 
 public protocol Dispatcher {
-    func async(_ body: @escaping () -> Void)
+    func dispatch(_ body: @escaping () -> Void)
 }
 
-public struct DispatchQueueDispatcher: Dispatcher {
+public class DispatchQueueDispatcher: Dispatcher {
     
     let queue: DispatchQueue
     let flags: DispatchWorkItemFlags
@@ -14,19 +14,23 @@ public struct DispatchQueueDispatcher: Dispatcher {
         self.flags = flags
     }
 
-    public func async(_ body: @escaping () -> Void) {
+    public func dispatch(_ body: @escaping () -> Void) {
         queue.async(flags: flags, execute: body)
     }
 
 }
 
+public struct CurrentThreadDispatcher: Dispatcher {
+    public func dispatch(_ body: @escaping () -> Void) {
+        body()
+    }
+}
+
 extension DispatchQueue: Dispatcher {
-    
     /// Explicit declaration required; actual function signature is not identical to protocol
-    public func async(_ body: @escaping () -> Void) {
+    public func dispatch(_ body: @escaping () -> Void) {
         async(execute: body)
     }
-    
 }
 
 /// Used as default parameter for backward compatibility since clients may explicitly
@@ -38,15 +42,13 @@ public extension DispatchQueue {
     static var pmkDefault = DispatchQueue(label: "org.promisekit.sentinel")
 }
 
-extension DispatchQueue {
-    
-    public func asDispatcher(withFlags flags: DispatchWorkItemFlags? = nil) -> Dispatcher {
+public extension DispatchQueue {
+    func asDispatcher(withFlags flags: DispatchWorkItemFlags? = nil) -> Dispatcher {
         if let flags = flags {
             return DispatchQueueDispatcher(queue: self, flags: flags)
         }
         return self
     }
-
 }
 
 /// This hairball disambiguates all the various combinations of explicit arguments, default
@@ -56,18 +58,18 @@ extension DispatchQueue {
 ///
 /// TODO: should conf.D = nil turn off dispatching even if explicit dispatch arguments are given?
 
-fileprivate func selectDispatcher(given: DispatchQueue?, configured: Dispatcher?, flags: DispatchWorkItemFlags?) -> Dispatcher? {
+fileprivate func selectDispatcher(given: DispatchQueue?, configured: Dispatcher, flags: DispatchWorkItemFlags?) -> Dispatcher {
     guard let given = given else {
         if flags != nil {
             print("PromiseKit: warning: nil DispatchQueue specified, but DispatchWorkItemFlags were also supplied (ignored)")
         }
-        return nil
+        return CurrentThreadDispatcher()
     }
     if given !== DispatchQueue.pmkDefault {
         return given.asDispatcher(withFlags: flags)
     } else if let flags = flags, let configured = configured as? DispatchQueue {
         return configured.asDispatcher(withFlags: flags)
-    } else if flags != nil && configured != nil {
+    } else if flags != nil {
         print("PromiseKit: warning: DispatchWorkItemFlags flags specified, but default dispatcher is not a DispatchQueue (ignored)")
     }
     return configured

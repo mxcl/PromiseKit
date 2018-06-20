@@ -5,11 +5,11 @@ public struct PMKConfiguration {
     /// Backward compatibility: default DispatchQueues that promise handlers dispatch to
     public var Q: (map: DispatchQueue?, return: DispatchQueue?) {
         get { return (map: D.map as? DispatchQueue, return: D.return as? DispatchQueue) }
-        set { D = (map: newValue.map, return: newValue.return) }
+        set { D = (map: newValue.map ?? CurrentThreadDispatcher(), return: newValue.return ?? CurrentThreadDispatcher()) }
     }
 
     /// The default Dispatchers that promise handlers dispatch to
-    public var D: (map: Dispatcher?, return: Dispatcher?) = (map: DispatchQueue.main, return: DispatchQueue.main)
+    public var D: (map: Dispatcher, return: Dispatcher) = (map: DispatchQueue.main, return: DispatchQueue.main)
 
     /// The default catch-policy for all `catch` and `resolve`
     public var catchPolicy = CatchPolicy.allErrorsExceptCancellation
