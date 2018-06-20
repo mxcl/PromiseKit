@@ -95,7 +95,7 @@ public extension Guarantee {
     }
 
 	@discardableResult
-    func then<U>(on: Dispatcher = conf.D.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(T) -> Guarantee<U>) -> Guarantee<U> {
+    func then<U>(on: Dispatcher = conf.D.map, _ body: @escaping(T) -> Guarantee<U>) -> Guarantee<U> {
         let rg = Guarantee<U>(.pending)
         pipe { value in
             on.dispatch {

@@ -1,13 +1,23 @@
 import PromiseKit
 import XCTest
 
+fileprivate let queueIDKey = DispatchSpecificKey<Int>()
+
 class RecordingDispatcher: Dispatcher {
     
-    var dispatchCount = 0
+    static var queueIndex = 1
     
-    func async(_ body: @escaping () -> Void) {
+    var dispatchCount = 0
+    let queue: DispatchQueue
+    
+    init() {
+        queue = DispatchQueue(label: "org.promisekit.testqueue \(RecordingDispatcher.queueIndex)")
+        RecordingDispatcher.queueIndex += 1
+    }
+    
+    func dispatch(_ body: @escaping () -> Void) {
         dispatchCount += 1
-        DispatchQueue.global(qos: .background).async(execute: body)
+        queue.async(execute: body)
     }
     
 }
@@ -60,22 +70,50 @@ class DispatcherTests: XCTestCase {
         XCTAssertEqual(self.dispatcher.dispatchCount, 2)
     }
     
-    func testDispatchQueueBackwardCompatibility() {
+    func testDispatchQueueSelection() {
+        
         let ex = expectation(description: "DispatchQueue compatibility")
+        
         let oldConf = PromiseKit.conf.D
         PromiseKit.conf.D = (map: dispatcher, return: dispatcher)
+        
+        DispatchQueue.global(qos: .background).setSpecific(key: queueIDKey, value: 100)
+        DispatchQueue.main.setSpecific(key: queueIDKey, value: 102)
+        dispatcher.queue.setSpecific(key: queueIDKey, value: 103)
+        
         Promise.value(42).map(on: .global(qos: .background), flags: .barrier) { (x: Int) -> Int in
+            let queueID = DispatchQueue.getSpecific(key: queueIDKey)
+            XCTAssertNotNil(queueID)
+            XCTAssertEqual(queueID!, 100)
             return x + 10
-        }.then(on: .main, flags: []) {
-            XCTAssertEqual($0, 52)
+        }.then(on: .main, flags: []) { (x: Int) -> Promise<Int> in
+            XCTAssertEqual(x, 52)
+            let queueID = DispatchQueue.getSpecific(key: queueIDKey)
+            XCTAssertNotNil(queueID)
+            XCTAssertEqual(queueID!, 102)
             return Promise.value(50)
-        }.done(on: .global(qos: .userInitiated)) {
-            XCTAssertEqual($0, 50)
+        }.map(on: nil) { (x: Int) -> Int in
+            let queueID = DispatchQueue.getSpecific(key: queueIDKey)
+            XCTAssertNotNil(queueID)
+            XCTAssertEqual(queueID!, 102)
+            return x + 10
+        }.map { (x: Int) -> Int in
+            XCTAssertEqual(x, 60)
+            let queueID = DispatchQueue.getSpecific(key: queueIDKey)
+            XCTAssertNotNil(queueID)
+            XCTAssertEqual(queueID!, 103)
+            return x + 10
+        }.done(on: .global(qos: .background)) {
+            XCTAssertEqual($0, 70)
+            let queueID = DispatchQueue.getSpecific(key: queueIDKey)
+            XCTAssertNotNil(queueID)
+            XCTAssertEqual(queueID!, 100)
             ex.fulfill()
         }.cauterize()
+        
         waitForExpectations(timeout: 1)
-        XCTAssertEqual(self.dispatcher.dispatchCount, 0)
         PromiseKit.conf.D = oldConf
+        
     }
 
     func testDispatcherPromiseExtension() {
@@ -86,7 +124,7 @@ class DispatcherTests: XCTestCase {
             XCTAssertEqual($0, 42)
             XCTAssertEqual(self.dispatcher.dispatchCount, 2)
             ex.fulfill()
-        }.cauterize()
+        }.cauterize()
         waitForExpectations(timeout: 1)
     }
 
