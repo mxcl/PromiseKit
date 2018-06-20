@@ -192,7 +192,7 @@ public extension Dispatcher {
      - Returns: A new `Promise` resolved by the result of the provided closure.
      - Note: There is no Promise/Thenable version of this due to Swift compiler ambiguity issues.
      */
-    func promise<T>(execute body: @escaping () throws -> T) -> Promise<T> {
+    func dispatch<T>(_: PMKNamespacer, _ body: @escaping () throws -> T) -> Promise<T> {
         let promise = Promise<T>(.pending)
         dispatch {
             do {
