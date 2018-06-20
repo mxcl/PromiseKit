@@ -81,6 +81,7 @@
 		63D9B2EF203385FD0075C00B /* race.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D9B2EE203385FD0075C00B /* race.m */; };
 		63D9B2F120338D5D0075C00B /* Deprecations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D9B2F020338D5D0075C00B /* Deprecations.swift */; };
 		BB2524DE20D729A60010F7B0 /* Dispatcher.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB2524DD20D729A60010F7B0 /* Dispatcher.swift */; };
+		BB4AF7C520D820700008333D /* DispatcherTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB4AF7C320D819360008333D /* DispatcherTests.swift */; };
 		C013F7382048E3B6006B57B1 /* MockNodeEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F7372048E3B6006B57B1 /* MockNodeEnvironment.swift */; };
 		C013F73A2049076A006B57B1 /* JSPromise.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F7392049076A006B57B1 /* JSPromise.swift */; };
 		C013F73C20494291006B57B1 /* JSAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F73B20494291006B57B1 /* JSAdapter.swift */; };
@@ -225,6 +226,7 @@
 		63D9B2EE203385FD0075C00B /* race.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = race.m; path = Sources/race.m; sourceTree = "<group>"; };
 		63D9B2F020338D5D0075C00B /* Deprecations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Deprecations.swift; path = Sources/Deprecations.swift; sourceTree = "<group>"; };
 		BB2524DD20D729A60010F7B0 /* Dispatcher.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Dispatcher.swift; path = Sources/Dispatcher.swift; sourceTree = "<group>"; };
+		BB4AF7C320D819360008333D /* DispatcherTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DispatcherTests.swift; sourceTree = "<group>"; };
 		C013F7372048E3B6006B57B1 /* MockNodeEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockNodeEnvironment.swift; path = "Tests/JS-A+/MockNodeEnvironment.swift"; sourceTree = "<group>"; };
 		C013F7392049076A006B57B1 /* JSPromise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JSPromise.swift; path = "Tests/JS-A+/JSPromise.swift"; sourceTree = "<group>"; };
 		C013F73B20494291006B57B1 /* JSAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JSAdapter.swift; path = "Tests/JS-A+/JSAdapter.swift"; sourceTree = "<group>"; };
@@ -354,6 +356,7 @@
 				635D640D1D59635300BC0AF5 /* ZalgoTests.swift */,
 				639BF755203DF02C00FA577B /* Utilities.swift */,
 				085B96B121A6358900E5E22F /* LoggingTests.swift */,
+				BB4AF7C320D819360008333D /* DispatcherTests.swift */,
 			);
 			name = Core;
 			path = Tests/CorePromise;
@@ -680,6 +683,7 @@
 				635D64221D59635300BC0AF5 /* ZalgoTests.swift in Sources */,
 				635D64271D59635300BC0AF5 /* RaceTests.swift in Sources */,
 				632FBBE51F33B338008F8FBB /* CatchableTests.swift in Sources */,
+				BB4AF7C520D820700008333D /* DispatcherTests.swift in Sources */,
 				63CF6D80203CD19200EC8927 /* ThenableTests.swift in Sources */,
 				635D642B1D59635300BC0AF5 /* StressTests.swift in Sources */,
 				630A805A203CEF6800D25F23 /* WhenTests.m in Sources */,

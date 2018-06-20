@@ -141,7 +141,7 @@ public extension Thenable {
                print(response.data)
            }
      */
-    func done(on: Dispatcher? = conf.Q.return, _ body: @escaping(T) throws -> Void) -> Promise<Void> {
+    func done(on: Dispatcher? = conf.D.return, _ body: @escaping(T) throws -> Void) -> Promise<Void> {
         let rp = Promise<Void>(.pending)
         pipe {
             switch $0 {
