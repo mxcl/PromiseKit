@@ -172,20 +172,20 @@ PromiseKit is a lot simpler.
 
 The top-level difference between PromiseKit and RxSwift is that RxSwift `Observable`s (roughly 
 analogous to PromiseKit `Promise`s) do not necessarily return a single result: they may emit
-zero, one, or an infinite stream of values. This small conceptual change ramifies into an API
+zero, one, or an infinite stream of values. This small conceptual change leads to an API
 that's both surprisingly powerful and surprisingly complex.
 
-RxSwift requires commitment to a paradigm shift in how you program: it proposes that you
+RxSwift requires commitment to a paradigm shift in how you program. It proposes that you
 restructure your code as a matrix of interacting value pipelines. When applied properly
 to a suitable problem, RxSwift can yield great benefits in robustness and simplicity.
 But not all applications are suitable for RxSwift. 
 
 By contrast, PromiseKit selectively applies the best parts of reactive programming
 to the hardest part of pure Swift development, the management of asynchrony. It's a broadly 
-applicable tool: most asynchronous code can be clarified, simplified, and made more robust
+applicable tool. Most asynchronous code can be clarified, simplified and made more robust
 just by converting it to use promises. (And the conversion process is easy.)
 
-Promises make for code that is clear to most developers. RxSwift, perhaps not: take a look at this 
+Promises make for code that is clear to most developers. RxSwift, perhaps not. Take a look at this 
 [signup panel](https://github.com/ReactiveX/RxSwift/tree/master/RxExample/RxExample/Examples/GitHubSignup)
 implemented in RxSwift and see what you think. (Note that this is one of RxSwift's own examples.)
 
@@ -199,13 +199,13 @@ So, RxSwift tries hard to supply every operator you might ever want to use right
 hundreds. PromiseKit supplies a few utilities to help with specific scenarios, but because it's trivial
 to write your own chain elements, there's no need for all this extra code in the library.
 
-* PromiseKit dispatches the execution of every block. RxSwift might or might not. Moreover, the 
+* PromiseKit dispatches the execution of every block. RxSwift dispatches only when told to do so. Moreover, the 
 current dispatching state is an attribute of the chain, not the specific block, as it is in PromiseKit.
 The RxSwift system is more powerful but more complex. PromiseKit is simple, predictable, and safe.
 
 * In PromiseKit, both sides of a branched chain refer back to their shared common ancestors. In RxSwift, 
-branching normally creates a duplicate parallel chain that reruns the code at the head of the chain.
-Except when it doesn't. The rules for determining what will actually happen are complex, and given
+branching normally creates a duplicate parallel chain that reruns the code at the head of the chain...except 
+when it doesn't. The rules for determining what will actually happen are complex, and given
 a chain created by another chunk of code, you can't really tell what the behavior will be.
 
 * Because RxSwift chains don't necessarily terminate on their own, RxSwift needs you to take on some
