@@ -1,13 +1,8 @@
-If your issue is a Swift compile issue then read our Troubleshooting guide first:
-
-    https://github.com/mxcl/PromiseKit/blob/master/Documentation/Troubleshooting.md
-
----    
-
-In your ticket PLEASE specify the PromiseKit version (major version is enough).
+[PLEASE READ THE TROUBLESHOOTING GUIDE](https://github.com/mxcl/PromiseKit/blob/master/Documentation/Troubleshooting.md).
 
 ---
 
-Please format your code in triple backticks and ensure readable indentation:
+You read the guide but it didn’t help? OK, we’re here to help.
 
-     https://help.github.com/articles/creating-and-highlighting-code-blocks/
+* Please specify the PromiseKit major version you are using
+* [Please format your code in triple backticks and ensure readable indentation](https://help.github.com/articles/creating-and-highlighting-code-blocks/)

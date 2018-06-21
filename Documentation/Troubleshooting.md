@@ -247,7 +247,7 @@ don’t do that; *use* our extension! we know all the pitfalls), did you forget
 to call `resume` on the task? If so, the task never actually starts, and so of
 course it never finishes, either.
 
-### `Result of call to 'foo(on:_:)' is unused`
+### `Result of call to 'done(on:_:)' is unused`, `Result of call to 'then(on:_:)' is unused`
 
 PromiseKit deliberately avoids the `@discardableResult` annotation because the
 unused result warning is a hint that you have not handled the error in your
