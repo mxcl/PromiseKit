@@ -1,6 +1,6 @@
-# Common misusage
+# Common Misusage
 
-## Doubling up promises
+## Doubling up Promises
 
 Don’t do this:
 
@@ -37,7 +37,7 @@ func toggleNetworkSpinnerWithPromise<T>(funcToCall: () -> Promise<T>) -> Promise
 You already *had* a promise, you don’t need to wrap it in another promise.
 
 
-## Optionals in promises
+## Optionals in Promises
 
 When we see `Promise<Item?>`, it usually implies a misuse of promises. For
 example:
@@ -73,9 +73,9 @@ return firstly {
 
 > *Note*: Use `compactMap` when an API outside your control returns an Optional and you want to generate an error instead of propagating `nil`.
 
-# Tips n’ tricks
+# Tips n’ Tricks
 
-## Background-loaded member variables
+## Background-Loaded Member Variables
 
 ```swift
 class MyViewController: UIViewController {
@@ -88,7 +88,7 @@ class MyViewController: UIViewController {
 }
 ```
 
-## Chaining animations
+## Chaining Animations
 
 ```swift
 firstly {
@@ -108,7 +108,7 @@ firstly {
 ```
 
 
-## Voiding promises
+## Voiding Promises
 
 It is often convenient to erase the type of a promise to facilitate chaining.
 For example, `UIView.animate(.promise)` returns `Guarantee<Bool>` because UIKit’s
@@ -145,7 +145,7 @@ You normally don't have to do this explicitly because `when` does it for you
 for up to 5 parameters.
 
 
-## Blocking (await)
+## Blocking (Await)
 
 Sometimes you have to block the main thread to await completion of an asynchronous task.
 In these cases, you can (with caution) use `wait`:
@@ -162,7 +162,7 @@ public extension UNUserNotificationCenter {
 The task under the promise **must not** call back onto the current thread or it
 will deadlock.
 
-## Starting a chain on a background queue/thread
+## Starting a Chain on a Background Queue/Thread
 
 `firstly` deliberately does not take a queue. A detailed rationale for this choice
 can be found in the ticket tracker.

@@ -5,7 +5,7 @@
 ---
 
 Promises simplify asynchronous programming, freeing you up to focus on the more
-important things. They are easy to learn, easy to master, and result in clearer,
+important things. They are easy to learn, easy to master and result in clearer,
 more readable code. Your co-workers will thank you.
 
 ```swift
@@ -28,7 +28,7 @@ firstly {
 
 PromiseKit is a thoughtful and complete implementation of promises for any
 platform that has a `swiftc`. It has *excellent* Objective-C bridging and
-*delightful* specializations for iOS, macOS, tvOS, and watchOS. It is a top-100
+*delightful* specializations for iOS, macOS, tvOS and watchOS. It is a top-100
 pod used in many of the most popular apps in the world.
 
 [![codecov](https://codecov.io/gh/mxcl/PromiseKit/branch/master/graph/badge.svg)](https://codecov.io/gh/mxcl/PromiseKit)
@@ -49,9 +49,9 @@ target "Change Me!" do
 end
 ```
 
-PromiseKit 6, 5, and 4 support Xcode 8.3, 9.x, and 10.0; Swift 3.1,
-3.2, 3.3, 4.0, 4.1, and 4.2 ; iOS, macOS, tvOS, watchOS, Linux, and Android; CocoaPods,
-Carthage, and SwiftPM; ([CI Matrix](https://travis-ci.org/mxcl/PromiseKit)).
+PromiseKit 6, 5 and 4 support Xcode 8.3, 9.x and 10.0; Swift 3.1,
+3.2, 3.3, 4.0, 4.1 and 4.2; iOS, macOS, tvOS, watchOS, Linux and Android; CocoaPods,
+Carthage and SwiftPM; ([CI Matrix](https://travis-ci.org/mxcl/PromiseKit)).
 
 For Carthage, SwiftPM, etc., or for instructions when using older Swifts or
 Xcodes, see our [Installation Guide](Documentation/Installation.md). We 
@@ -95,7 +95,7 @@ pod "PromiseKit/CorePromise", "~> 6.0"
 
 > *Note:* Carthage installations come with no extensions by default.
 
-## Choose your networking library
+## Choose Your Networking Library
 
 Promise chains commonly start with a network operation. Thus, we offer
 extensions for `URLSession`:
