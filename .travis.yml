@@ -32,8 +32,8 @@ matrix:
     - {osx_image: xcode9.3,     env: 'SWFT=4.1  PLAT=watchOS  DST="OS=3.2,name=Apple Watch - 38mm"',        os: osx, language: objective-c}
     - {osx_image: xcode9.4,     env: 'SWFT=4.1  PLAT=watchOS  DST="OS=4.3,name=Apple Watch - 38mm"',        os: osx, language: objective-c}
 
-    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.0'}
-    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.0'}
+    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.0  TEST=1'}
+    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.0  TEST=1'}
     - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=DEVELOPMENT-SNAPSHOT-2018-06-20-a'}
 
 before_install:
@@ -48,6 +48,7 @@ install:
       xcodebuild -scheme PromiseKit -quiet -destination "$DST" build;
     fi;;
   *)
+    swift --version;
     swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION;;
   esac
 script:
@@ -59,7 +60,9 @@ script:
   watchOS)
     ;;
   *)
-    swift test -Xswiftc -swift-version -Xswiftc 4;;
+    if [[ TEST == "1" ]]; then
+      swift test -Xswiftc -swift-version -Xswiftc 4;
+    fi;;
   esac
 after_success:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
