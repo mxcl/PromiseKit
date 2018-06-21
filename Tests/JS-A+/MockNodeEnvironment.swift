@@ -66,11 +66,11 @@ class MockNodeEnvironment {
                 print(format)
             } else {
                 
-                let otherArguments = otherArguments.flatMap { $0 as? JSValue }
+                let otherArguments = otherArguments.compactMap { $0 as? JSValue }
                 let format = format.toString().replacingOccurrences(of: "%s", with: "%@")
-                let expectedTypes = format.split(separator: "%", omittingEmptySubsequences: false).dropFirst().flatMap { $0.first }.map { String($0) }
+                let expectedTypes = format.split(separator: "%", omittingEmptySubsequences: false).dropFirst().compactMap { $0.first }.map { String($0) }
                 
-                let typedArguments = otherArguments.enumerated().flatMap { index, value -> CVarArg? in
+                let typedArguments = otherArguments.enumerated().compactMap { index, value -> CVarArg? in
                     let expectedType = expectedTypes[index]
                     let converted: CVarArg
                     switch expectedType {

@@ -10,10 +10,10 @@ matrix:
     - {osx_image: xcode9.2,     env: 'SWFT=3.2  PLAT=macOS    DST="arch=x86_64"',                    os: osx, language: objective-c}
     - {osx_image: xcode9.2,     env: 'SWFT=3.2  PLAT=watchOS  DST="OS=4.2,name=Apple Watch - 38mm"', os: osx, language: objective-c}
 
-    - {osx_image: xcode9.3,     env: 'SWFT=3.3  PLAT=iOS      DST="OS=11.3,name=iPhone SE"',         os: osx, language: objective-c}
-    - {osx_image: xcode9.3,     env: 'SWFT=3.3  PLAT=tvOS     DST="OS=11.3,name=Apple TV"',          os: osx, language: objective-c}
-    - {osx_image: xcode9.3,     env: 'SWFT=3.3  PLAT=macOS    DST="arch=x86_64"',                    os: osx, language: objective-c}
-    - {osx_image: xcode9.3,     env: 'SWFT=3.3  PLAT=watchOS  DST="OS=4.3,name=Apple Watch - 38mm"', os: osx, language: objective-c}
+    - {osx_image: xcode9.4,     env: 'SWFT=3.3  PLAT=iOS      DST="OS=11.4,name=iPhone SE"',         os: osx, language: objective-c}
+    - {osx_image: xcode9.4,     env: 'SWFT=3.3  PLAT=tvOS     DST="OS=11.4,name=Apple TV"',          os: osx, language: objective-c}
+    - {osx_image: xcode9.4,     env: 'SWFT=3.3  PLAT=macOS    DST="arch=x86_64"',                    os: osx, language: objective-c}
+    - {osx_image: xcode9.4,     env: 'SWFT=3.3  PLAT=watchOS  DST="OS=4.3,name=Apple Watch - 38mm"', os: osx, language: objective-c}
 
     - {osx_image: xcode9.2,     env: 'SWFT=4.0  PLAT=iOS      DST="OS=11.2,name=iPhone SE"',         os: osx, language: objective-c}
     - {osx_image: xcode9.2,     env: 'SWFT=4.0  PLAT=tvOS     DST="OS=11.2,name=Apple TV"',          os: osx, language: objective-c}
@@ -43,9 +43,12 @@ before_install:
 install:
   case $PLAT in
   iOS|tvOS|macOS|watchOS)
-    xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build;;
+    xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build;
+    if [[ TEST == "1" ]]; then
+      xcodebuild -scheme PromiseKit -quiet -destination "$DST" build;
+    fi;;
   *)
-    swift build;;
+    swift build -Xswiftc -swift-version -Xswiftc $SWFT;;
   esac
 script:
   case $PLAT in
@@ -56,7 +59,7 @@ script:
   watchOS)
     ;;
   *)
-    swift test -Xswiftc -swift-version -Xswiftc $SWFT;;
+    swift test -Xswiftc -swift-version -Xswiftc 4;;
   esac
 after_success:
   - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
