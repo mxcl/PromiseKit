@@ -107,9 +107,15 @@ public extension Promise {
 
          promise.tap{ print($0) }.then{ /*…*/ }
      */
-    func tap(_ body: @escaping(Result<T>) -> Void) -> Promise {
-        pipe(to: body)
-        return self
+    func tap(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(Result<T>) -> Void) -> Promise {
+        return Promise { seal in
+            pipe { result in
+                on.async(flags: flags) {
+                    body(result)
+                    seal.resolve(result)
+                }
+            }
+        }
     }
 
     /**
