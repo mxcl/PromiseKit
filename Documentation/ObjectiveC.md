@@ -124,7 +124,7 @@ myPromise.catch(^{
 Another important distinction is that the `value` property returns even if the promise is rejected; in that case, it returns the `NSError` object with which the promise was rejected.
 
 
-# Bridging between Objective-C & Swift
+# Bridging Between Objective-C & Swift
 
 Let’s say you have:
 

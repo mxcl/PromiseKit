@@ -227,12 +227,12 @@ firstly {
 }
 ```
 
-`when` takes promises, waits for them to resolve, and returns a promise containing the results.
+`when` takes promises, waits for them to resolve and returns a promise containing the results.
 
 As with any promise chain, if any of the component promises fail, the chain calls the next `catch`.
 
 
-# PromiseKit extensions
+# PromiseKit Extensions
 
 When we made PromiseKit, we understood that we wanted to use *only* promises to implement 
 asynchronous behavior. So wherever possible, we offer extensions to Apple’s APIs that reframe
@@ -263,7 +263,7 @@ has been copiously documented.
 > We also provide extensions for common libraries such as [Alamofire](https://github.com/PromiseKit/Alamofire-).
 
 
-# Making promises
+# Making Promises
 
 The standard extensions will take you a long way, but sometimes you'll still need to start chains
 of your own. Maybe you're using a third party API that doesn’t provide promises, or perhaps you wrote
@@ -356,7 +356,7 @@ to return an `Optional`. If you return `nil`, the chain fails with
 painful. We hoped the pain would disappear with new Swift versions. However,
 it has become clear that the various pain points are here to stay. In fact, we
 as library authors are expected to disambiguate at the naming level of our API.
-Therefore, we have split the three main kinds of `then` into `then`, `map`, and
+Therefore, we have split the three main kinds of `then` into `then`, `map` and
 `done`. After using these new functions, we realized this is much nicer in practice,
 so we added `compactMap` as well (modeled on `Optional.compactMap`).
 
@@ -440,7 +440,7 @@ login().then { creds in
 Here is a key understanding: `login()` returns a `Promise`, and all `Promise`s have a `then` function. `firstly` returns a `Promise`, and `then` returns a `Promise`, too! But don’t worry too much about these details. Learn the *patterns* to start with. Then, when you are ready to advance, learn the underlying architecture.
 
 
-## `when` variants
+## `when` Variants
 
 `when` is one of PromiseKit’s more useful functions, and so we offer several variants.
 
@@ -458,7 +458,7 @@ for this limitation.
 advanced patterns guide for typical usage.
 
 
-## Swift closure inference
+## Swift Closure Inference
 
 Swift automatically infers returns and return types for one-line closures.
 The following two forms are the same:
@@ -486,7 +486,7 @@ pain points in using PromiseKit and Swift.
 
 
 
-# Further reading
+# Further Reading
 
 The above information is the 90% you will use. We **strongly** suggest reading the
 [API Reference].
