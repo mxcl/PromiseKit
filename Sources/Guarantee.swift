@@ -76,6 +76,13 @@ public extension Guarantee {
         }
         return rg
     }
+    
+    func get(on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, _ body: @escaping (T) -> Void) -> Guarantee<T> {
+        return map(on: on, flags: flags) {
+            body($0)
+            return $0
+        }
+    }
 
     func map<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(T) -> U) -> Guarantee<U> {
         let rg = Guarantee<U>(.pending)
