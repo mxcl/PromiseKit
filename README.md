@@ -104,7 +104,8 @@ extensions for `URLSession`:
 // pod 'PromiseKit/Foundation'  # https://github.com/PromiseKit/Foundation
 
 firstly {
-    URLSession.shared.dataTask(.promise, with: try makeUrlRequest())
+    URLSession.shared.dataTask(.promise, with: try makeUrlRequest()).validate()
+    // ^^ we provide `.validate()` so that eg. 404s get converted to errors
 }.map {
     try JSONDecoder().decode(Foo.self, with: $0.data)
 }.done { foo in
