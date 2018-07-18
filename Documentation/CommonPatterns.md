@@ -275,7 +275,7 @@ intercept cancellation if you like:
 ```swift
 foo.then {
     //…
-}.catch(policy: .allErrorsIncludingCancellation) {
+}.catch(policy: .allErrors) {
     // cancelled errors are handled *as well*
 }
 ```
