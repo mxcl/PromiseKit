@@ -46,6 +46,7 @@ Pod::Spec.new do |s|
     ss.source_files = 'Extensions/Alamofire/Sources/*'
     ss.dependency 'Alamofire', '~> 4.0'
     ss.dependency 'PromiseKit/CorePromise'
+    ss.dependency 'PromiseKit/Cancel'
     ss.ios.deployment_target = '8.0'
     ss.osx.deployment_target = '10.11'
     ss.watchos.deployment_target = '2.0'
@@ -76,7 +77,18 @@ Pod::Spec.new do |s|
   s.subspec 'Bolts' do |ss|
     ss.source_files = 'Extensions/Bolts/Sources/*'
     ss.dependency 'PromiseKit/CorePromise'
+    ss.dependency 'PromiseKit/Cancel'
     ss.dependency 'Bolts', '~> 1.9.0'
+    ss.ios.deployment_target = '8.0'
+    ss.osx.deployment_target = '10.10'
+    ss.watchos.deployment_target = '2.0'
+    ss.tvos.deployment_target = '9.0'
+  end
+
+  s.subspec 'Cancel' do |ss|
+    ss.source_files = 'Extensions/Cancel/Sources/*'
+    ss.frameworks = 'Cancel'
+    ss.dependency 'PromiseKit/CorePromise'
     ss.ios.deployment_target = '8.0'
     ss.osx.deployment_target = '10.10'
     ss.watchos.deployment_target = '2.0'
@@ -124,6 +136,7 @@ Pod::Spec.new do |s|
     ss.source_files = 'Extensions/CoreLocation/Sources/*'
     ss.watchos.source_files = 'Extensions/CoreLocation/Sources/CLGeocoder*'
     ss.dependency 'PromiseKit/CorePromise'
+    ss.dependency 'PromiseKit/Cancel'
     ss.frameworks = 'CoreLocation'
 
     ss.ios.deployment_target = '8.0'
@@ -145,6 +158,7 @@ Pod::Spec.new do |s|
   s.subspec 'Foundation' do |ss|
     ss.source_files = Dir['Extensions/Foundation/Sources/*']
     ss.dependency 'PromiseKit/CorePromise'
+    ss.dependency 'PromiseKit/Cancel'
     ss.frameworks = 'Foundation'
     ss.ios.deployment_target = '8.0'
     ss.osx.deployment_target = '10.10'
@@ -156,6 +170,7 @@ Pod::Spec.new do |s|
     ss.ios.source_files = ss.osx.source_files = ss.tvos.source_files = 'Extensions/MapKit/Sources/*'
     ss.ios.frameworks = ss.osx.frameworks = ss.tvos.frameworks = 'MapKit'
     ss.dependency 'PromiseKit/CorePromise'
+    ss.dependency 'PromiseKit/Cancel'
     ss.ios.deployment_target = '8.0'
     ss.osx.deployment_target = '10.10'
     ss.watchos.deployment_target = '2.0'
@@ -173,6 +188,7 @@ Pod::Spec.new do |s|
     ss.source_files = 'Extensions/OMGHTTPURLRQ/Sources/*'
     ss.dependency 'PromiseKit/Foundation'
     ss.dependency 'OMGHTTPURLRQ', '~> 3.2'
+    ss.dependency 'PromiseKit/Cancel'
     ss.ios.deployment_target = '8.0'
     ss.osx.deployment_target = '10.10'
     ss.watchos.deployment_target = '2.0'
@@ -211,6 +227,7 @@ Pod::Spec.new do |s|
     ss.ios.source_files = ss.osx.source_files = ss.tvos.source_files = 'Extensions/StoreKit/Sources/*'
     ss.ios.frameworks = ss.osx.frameworks = ss.tvos.frameworks = 'StoreKit'
     ss.dependency 'PromiseKit/CorePromise'
+    ss.dependency 'PromiseKit/Cancel'
     ss.ios.deployment_target = '8.0'
     ss.osx.deployment_target = '10.10'
     ss.tvos.deployment_target = '9.0'
@@ -220,6 +237,7 @@ Pod::Spec.new do |s|
     ss.ios.source_files = ss.osx.source_files = ss.tvos.source_files = 'Extensions/SystemConfiguration/Sources/*'
     ss.ios.frameworks = ss.osx.frameworks = ss.tvos.frameworks = 'SystemConfiguration'
     ss.dependency 'PromiseKit/CorePromise'
+    ss.dependency 'PromiseKit/Cancel'
     ss.ios.deployment_target = '8.0'
     ss.osx.deployment_target = '10.10'
     ss.tvos.deployment_target = '9.0'
@@ -231,6 +249,7 @@ Pod::Spec.new do |s|
     ss.ios.source_files = ss.tvos.source_files = Dir['Extensions/UIKit/Sources/*'] - [picker_cc]
     ss.tvos.frameworks = ss.ios.frameworks = 'UIKit'
     ss.dependency 'PromiseKit/CorePromise'
+    ss.dependency 'PromiseKit/Cancel'
     ss.ios.deployment_target = '8.0'
     ss.tvos.deployment_target = '9.0'
   end
