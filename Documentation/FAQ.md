@@ -11,7 +11,17 @@
 * Do you want to be able to use Promises with Swift 3.x, Swift 4.x, ObjC, iOS, tvOS, watchOS, macOS, Android & Linux? Then pick PromiseKit.
 * PromiseKit verifies its correctness by testing against the entire [Promises/A+ test suite](https://github.com/promises-aplus/promises-tests).
 
-## How do I “Early `return`”?
+## How do I create a fulfilled `Void` promise?
+
+```swift
+let foo = Promise()
+
+// or:
+
+let bar = Promise.value(())
+```
+
+## How do I “early `return`”?
 
 ```swift
 func foo() -> Promise<Void> {
