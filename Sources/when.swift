@@ -252,6 +252,35 @@ public func when<T>(resolved promises: [Promise<T>]) -> Guarantee<[Result<T>]> {
     return rg
 }
 
+public func when<U: Thenable>(resolved thenables: [U]) -> Guarantee<[U.T]> {
+    return _when(thenables).map(on: nil) { thenables.map{ $0.value! } }.recover(on:nil) { _ -> Guarantee<[U.T]> in .value([U.T]()) }
+}
+
+public func when<U: Thenable>(resolved guarantees: U...) -> Guarantee<Void> where U.T == Void {
+    return _when(guarantees).recover(on:nil) { _ -> Guarantee<Void> in .value(()) }
+}
+
+public func when<U: Thenable>(resolved guarantees: [U]) -> Guarantee<Void> where U.T == Void {
+    return _when(guarantees).recover(on:nil) { _ -> Guarantee<Void> in .value(()) }
+}
+
+public func when<U: Thenable, V: Thenable>(resolved pu: U, _ pv: V) -> Guarantee<(U.T, V.T)> {
+    return _when([pu.asVoid(), pv.asVoid()]).map(on: nil) { (pu.value!, pv.value!) }.recover(on:nil) { _ -> Guarantee<(U.T, V.T)> in .value(pu.value!, pv.value!) }
+}
+
+public func when<U: Thenable, V: Thenable, W: Thenable>(resolved pu: U, _ pv: V, _ pw: W) -> Guarantee<(U.T, V.T, W.T)> {
+    return _when([pu.asVoid(), pv.asVoid(), pw.asVoid()]).map(on: nil) { (pu.value!, pv.value!, pw.value!) }.recover(on:nil) { _ -> Guarantee<(U.T, V.T, W.T)> in .value(pu.value!, pv.value!, pw.value!) }
+}
+
+public func when<U: Thenable, V: Thenable, W: Thenable, X: Thenable>(resolved pu: U, _ pv: V, _ pw: W, _ px: X) -> Guarantee<(U.T, V.T, W.T, X.T)> {
+    return _when([pu.asVoid(), pv.asVoid(), pw.asVoid(), px.asVoid()]).map(on: nil) { (pu.value!, pv.value!, pw.value!, px.value!) }.recover(on:nil) { _ -> Guarantee<(U.T, V.T, W.T, X.T)> in .value(pu.value!, pv.value!, pw.value!, px.value!) }
+}
+
+public func when<U: Thenable, V: Thenable, W: Thenable, X: Thenable, Y: Thenable>(resolved pu: U, _ pv: V, _ pw: W, _ px: X, _ py: Y) -> Guarantee<(U.T, V.T, W.T, X.T, Y.T)> {
+    return _when([pu.asVoid(), pv.asVoid(), pw.asVoid(), px.asVoid(), py.asVoid()]).map(on: nil) { (pu.value!, pv.value!, pw.value!, px.value!, py.value!) }.recover(on:nil) { _ -> Guarantee<(U.T, V.T, W.T, X.T, Y.T)> in .value(pu.value!, pv.value!, pw.value!, px.value!, py.value!) }
+}
+
+
 /// Waits on all provided Guarantees.
 public func when(_ guarantees: Guarantee<Void>...) -> Guarantee<Void> {
     return when(guarantees: guarantees)
