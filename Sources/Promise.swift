@@ -102,6 +102,23 @@ public class Promise<T>: Thenable, CatchMixin {
 }
 
 public extension Promise {
+    
+    /**
+     Shorter way to make an async function
+
+     func myAsynFunc() -> Promise<Int> {
+         return .async {
+             let myNumber1 = try self.myPromisedCalulation().wait()
+             let myNumber2 = try self.myOtherLongCalculation().wait()
+     
+             return myNumber1 + myNumber2
+         }
+     }
+     */
+    public class func async(group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], execute body: @escaping () throws -> T) -> Promise<T> {
+        return DispatchQueue.global(qos: qos.qosClass).async(.promise, group: group, qos: qos, flags: flags, execute: body)
+    }
+    
     /**
      Blocks this thread, so—you know—don’t call this on a serial thread that
      any part of your chain may use. Like the main thread for example.
