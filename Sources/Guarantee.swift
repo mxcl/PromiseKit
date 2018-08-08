@@ -77,8 +77,8 @@ public extension Guarantee {
         return rg
     }
     
-    func get(on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, _ body: @escaping (T) -> Void) -> Guarantee<T> {
-        return map(on: on, flags: flags) {
+    func get(on: Dispatcher = conf.D.return, _ body: @escaping (T) -> Void) -> Guarantee<T> {
+        return map(on: on) {
             body($0)
             return $0
         }

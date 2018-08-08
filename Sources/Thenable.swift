@@ -193,16 +193,16 @@ public extension Thenable {
 
      This is like `get` but provides the Result<T> of the Promise so you can inspect the value of the chain at this point without causing any side effects.
 
-     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The closure that is executed with Result of Promise.
      - Returns: A new promise that is resolved with the result that the handler is fed. For example:
 
      promise.tap{ print($0) }.then{ /*…*/ }
      */
-    func tap(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(Result<T>) -> Void) -> Promise<T> {
+    func tap(on: Dispatcher = conf.D.map, _ body: @escaping(Result<T>) -> Void) -> Promise<T> {
         return Promise { seal in
             pipe { result in
-                on.async(flags: flags) {
+                on.dispatch {
                     body(result)
                     seal.resolve(result)
                 }

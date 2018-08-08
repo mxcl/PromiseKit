@@ -85,6 +85,11 @@ public extension Guarantee {
         return done(on: dispatcher, body)
     }
 
+    func get(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping (T) -> Void) -> Guarantee<T> {
+        let dispatcher = selectDispatcher(given: on, configured: conf.D.return, flags: flags)
+        return get(on: dispatcher, body)
+    }
+    
     func map<U>(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(T) -> U) -> Guarantee<U> {
         let dispatcher = selectDispatcher(given: on, configured: conf.D.map, flags: flags)
         return map(on: dispatcher, body)
@@ -213,11 +218,28 @@ public extension Thenable {
          }.done { foo in
             print(foo, " is Void")
          }
-         */
+     */
     func get(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping (T) throws -> Void) -> Promise<T> {
         let dispatcher = selectDispatcher(given: on, configured: conf.D.return, flags: flags)
         return get(on: dispatcher, body)
     }
+    
+    /**
+     The provided closure is executed with promise result.
+     
+     This is like `get` but provides the Result<T> of the Promise so you can inspect the value of the chain at this point without causing any side effects.
+     
+     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter body: The closure that is executed with Result of Promise.
+     - Returns: A new promise that is resolved with the result that the handler is fed. For example:
+     
+     promise.tap{ print($0) }.then{ /*…*/ }
+     */
+    func tap(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(Result<T>) -> Void) -> Promise<T> {
+        let dispatcher = selectDispatcher(given: on, configured: conf.D.map, flags: flags)
+        return tap(on: dispatcher, body)
+    }
+
 }
 
 public extension Thenable where T: Sequence {
