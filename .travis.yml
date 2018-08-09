@@ -37,9 +37,9 @@ matrix:
     # Swift 4.1
     - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.1.2  TEST=1'}
     # Swift 3.3
-    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=3  SWIFT_VERSION=DEVELOPMENT-SNAPSHOT-2018-08-06-a'}
+    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=3  SWIFT_VERSION=DEVELOPMENT-SNAPSHOT-2018-07-31-a'}
     # Swift 4.2
-    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=DEVELOPMENT-SNAPSHOT-2018-08-06-a'}
+    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=DEVELOPMENT-SNAPSHOT-2018-07-31-a'}
 
 before_install:
   if [ "$TRAVIS_OS_NAME" == "linux" ]; then
