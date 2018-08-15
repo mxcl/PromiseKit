@@ -339,6 +339,8 @@ main queue by default. This is easy enough:
 PromiseKit.conf.Q = (map: DispatchQueue.global(), return: DispatchQueue.global())
 ```
 
+> Note, we recommend using your own queue rather than `.global()`, we've seen better performance this way.
+
 Here’s a more complete example:
 
 ```swift
@@ -350,7 +352,8 @@ import PromiseKit
 
 HeliumLogger.use(.info)
 
-PromiseKit.conf.Q = (map: DispatchQueue.global(), return: DispatchQueue.global())
+let pmkQ = DispatchQueue(label: "pmkQ", qos: .default, attributes: .concurrent, autoreleaseFrequency: .workItem)
+PromiseKit.conf.Q = (map: pmkQ, return: pmkQ)
 
 let router = Router()
 router.get("/") { _, response, next in
