@@ -4,10 +4,10 @@ extension Promise {
     func silenceWarning() {}
 }
 
-#if !os(Linux) || (swift(>=4.0) && !swift(>=4.1))
-typealias LineInt = UInt
-#else
+#if os(Linux) && (swift(>=4.0) && !swift(>=4.1))
 typealias LineInt = Int
+#else
+typealias LineInt = UInt
 #endif
 
 #if os(Linux)
