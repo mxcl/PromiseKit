@@ -103,7 +103,7 @@ class Test232: XCTestCase {
 /////////////////////////////////////////////////////////////////////////
 
 extension Test232 {
-    fileprivate func testPromiseResolution(factory: @escaping () -> Promise<UInt32>, line: UInt = #line, test: (Promise<UInt32>, XCTestExpectation) -> Void) {
+    fileprivate func testPromiseResolution(factory: @escaping () -> Promise<UInt32>, line: LineInt = #line, test: (Promise<UInt32>, XCTestExpectation) -> Void) {
         specify("via return from a fulfilled promise", file: #file, line: line) { d, expectation in
             let promise = Promise.value(arc4random()).then { _ in factory() }
             test(promise, expectation)

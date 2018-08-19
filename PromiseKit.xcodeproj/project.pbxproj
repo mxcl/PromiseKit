@@ -175,7 +175,7 @@
 		635893921D5BE4E000F14B55 /* PromiseKit.playground */ = {isa = PBXFileReference; lastKnownFileType = file.playground; path = PromiseKit.playground; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		635893941D5BE4F900F14B55 /* LICENSE */ = {isa = PBXFileReference; lastKnownFileType = text; path = LICENSE; sourceTree = "<group>"; };
 		635893951D5BE4F900F14B55 /* Package.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Package.swift; sourceTree = "<group>"; };
-		635893961D5BE4F900F14B55 /* PromiseKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; path = PromiseKit.podspec; sourceTree = "<group>"; };
+		635893961D5BE4F900F14B55 /* PromiseKit.podspec */ = {isa = PBXFileReference; lastKnownFileType = text; name = PromiseKit.podspec; path = .github/PromiseKit.podspec; sourceTree = "<group>"; };
 		635893971D5BE4F900F14B55 /* README.md */ = {isa = PBXFileReference; lastKnownFileType = net.daringfireball.markdown; path = README.md; sourceTree = "<group>"; };
 		635D64081D59635300BC0AF5 /* PromiseTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PromiseTests.swift; sourceTree = "<group>"; };
 		635D64091D59635300BC0AF5 /* CancellableErrorTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CancellableErrorTests.swift; sourceTree = "<group>"; };
