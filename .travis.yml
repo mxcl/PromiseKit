@@ -60,23 +60,20 @@ before_install:
 install:
   case $PLAT in
   iOS|tvOS|macOS|watchOS)
-    xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build;
-    if [[ TEST == "1" ]]; then
-      xcodebuild -scheme PromiseKit -quiet -destination "$DST" build;
-    fi;;
+    xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build;;
   *)
     swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION;;
   esac
 script:
   case $PLAT in
   iOS|tvOS|macOS)
-    if [[ TEST == "1" ]]; then
+    if [[ $TEST == "1" ]]; then
       xcodebuild -scheme PromiseKit -destination "$DST" test -enableCodeCoverage YES;
     fi;;
   watchOS)
     ;;
   *)
-    if [[ TEST == "1" ]]; then
+    if [[ $TEST == "1" ]]; then
       swift test -Xswiftc -swift-version -Xswiftc 4;
     fi;;
   esac
