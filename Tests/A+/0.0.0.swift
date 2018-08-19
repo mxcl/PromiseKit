@@ -176,7 +176,10 @@ extension XCTestExpectation {
 
 extension XCTestCase {
     func wait(for: [XCTestExpectation], timeout: TimeInterval, file: StaticString = #file, line: UInt = #line) {
-        waitForExpectations(timeout: timeout, file: file, line: Int(line))
+    #if !(swift(>=4.0) && !swift(>=4.1))
+        let line = Int(line)
+    #endif
+        waitForExpectations(timeout: timeout, file: file, line: line)
     }
 }
 #endif
