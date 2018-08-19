@@ -70,7 +70,7 @@ extension CatchableTests {
     }
 
     func test__void_specialized_conditional_recover() {
-        func helper(policy: CatchPolicy, error: Swift.Error, line: LineInt = #line) {
+        func helper(policy: CatchPolicy, error: Swift.Error, line: UInt = #line) {
             let ex = expectation(description: "")
             var x = 0
             Promise<Void>(error: error).recover(policy: policy) { err in
@@ -88,7 +88,7 @@ extension CatchableTests {
 
     func test__void_specialized_conditional_recover__no_recover() {
 
-        func helper(policy: CatchPolicy, error: Error, line: LineInt = #line) {
+        func helper(policy: CatchPolicy, error: Error, line: UInt = #line) {
             let ex = expectation(description: "")
             Promise<Void>(error: error).recover(policy: policy) { err in
                 throw err
@@ -158,7 +158,7 @@ extension CatchableTests {
 
 
     func test__conditional_recover() {
-        func helper(policy: CatchPolicy, error: Swift.Error, line: LineInt = #line) {
+        func helper(policy: CatchPolicy, error: Swift.Error, line: UInt = #line) {
             let ex = expectation(description: "")
             var x = 0
             Promise<Int>(error: error).recover(policy: policy) { err -> Promise<Int> in

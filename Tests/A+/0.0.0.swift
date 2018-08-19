@@ -2,12 +2,6 @@ import PromiseKit
 import Dispatch
 import XCTest
 
-#if os(Linux) && (swift(>=4.0) && !swift(>=4.1))
-typealias LineInt = Int
-#else
-typealias LineInt = UInt
-#endif
-
 enum Error: Swift.Error {
     case dummy  // we reject with this when we don't intend to test against it
     case sentinel(UInt32)
@@ -16,7 +10,7 @@ enum Error: Swift.Error {
 private let timeout: TimeInterval = 10
 
 extension XCTestCase {
-    func describe(_ description: String, file: StaticString = #file, line: LineInt = #line, body: () throws -> Void) {
+    func describe(_ description: String, file: StaticString = #file, line: UInt = #line, body: () throws -> Void) {
 
         PromiseKit.conf.Q.map = .main
 
@@ -27,7 +21,7 @@ extension XCTestCase {
         }
     }
 
-    func specify(_ description: String, file: StaticString = #file, line: LineInt = #line, body: ((promise: Promise<Void>, fulfill: () -> Void, reject: (Error) -> Void), XCTestExpectation) throws -> Void) {
+    func specify(_ description: String, file: StaticString = #file, line: UInt = #line, body: ((promise: Promise<Void>, fulfill: () -> Void, reject: (Error) -> Void), XCTestExpectation) throws -> Void) {
         let expectation = self.expectation(description: description)
         let (pending, seal) = Promise<Void>.pending()
 
@@ -43,19 +37,19 @@ extension XCTestCase {
         }
     }
 
-    func testFulfilled(file: StaticString = #file, line: LineInt = #line, body: @escaping (Promise<UInt32>, XCTestExpectation, UInt32) -> Void) {
+    func testFulfilled(file: StaticString = #file, line: UInt = #line, body: @escaping (Promise<UInt32>, XCTestExpectation, UInt32) -> Void) {
         testFulfilled(withExpectationCount: 1, file: file, line: line) {
             body($0, $1.first!, $2)
         }
     }
 
-    func testRejected(file: StaticString = #file, line: LineInt = #line, body: @escaping (Promise<UInt32>, XCTestExpectation, UInt32) -> Void) {
+    func testRejected(file: StaticString = #file, line: UInt = #line, body: @escaping (Promise<UInt32>, XCTestExpectation, UInt32) -> Void) {
         testRejected(withExpectationCount: 1, file: file, line: line) {
             body($0, $1.first!, $2)
         }
     }
 
-    func testFulfilled(withExpectationCount: Int, file: StaticString = #file, line: LineInt = #line, body: @escaping (Promise<UInt32>, [XCTestExpectation], UInt32) -> Void) {
+    func testFulfilled(withExpectationCount: Int, file: StaticString = #file, line: UInt = #line, body: @escaping (Promise<UInt32>, [XCTestExpectation], UInt32) -> Void) {
 
         let specify = mkspecify(withExpectationCount, file: file, line: line, body: body)
 
@@ -78,7 +72,7 @@ extension XCTestCase {
         }
     }
 
-    func testRejected(withExpectationCount: Int, file: StaticString = #file, line: LineInt = #line, body: @escaping (Promise<UInt32>, [XCTestExpectation], UInt32) -> Void) {
+    func testRejected(withExpectationCount: Int, file: StaticString = #file, line: UInt = #line, body: @escaping (Promise<UInt32>, [XCTestExpectation], UInt32) -> Void) {
 
         let specify = mkspecify(withExpectationCount, file: file, line: line, body: body)
 
@@ -104,7 +98,7 @@ extension XCTestCase {
 
 /////////////////////////////////////////////////////////////////////////
 
-    private func mkspecify(_ numberOfExpectations: Int, file: StaticString, line: LineInt, body: @escaping (Promise<UInt32>, [XCTestExpectation], UInt32) -> Void) -> (String, _ feed: (UInt32) -> (Promise<UInt32>, () -> Void)) -> Void {
+    private func mkspecify(_ numberOfExpectations: Int, file: StaticString, line: UInt, body: @escaping (Promise<UInt32>, [XCTestExpectation], UInt32) -> Void) -> (String, _ feed: (UInt32) -> (Promise<UInt32>, () -> Void)) -> Void {
         return { desc, feed in
             let value = arc4random()
             let (promise, executeAfter) = feed(value)
@@ -181,7 +175,7 @@ extension XCTestExpectation {
 }
 
 extension XCTestCase {
-    func wait(for: [XCTestExpectation], timeout: TimeInterval, file: StaticString = #file, line: LineInt = #line) {
+    func wait(for: [XCTestExpectation], timeout: TimeInterval, file: StaticString = #file, line: UInt = #line) {
         waitForExpectations(timeout: timeout, file: file, line: Int(line))
     }
 }
