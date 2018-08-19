@@ -24,7 +24,7 @@ import XCTest
 
 extension XCTestCase {
     func wait(for: [XCTestExpectation], timeout: TimeInterval, file: StaticString = #file, line: LineInt = #line) {
-        waitForExpectations(timeout: timeout, file: file, line: line)
+        waitForExpectations(timeout: timeout, file: file, line: Int(line))
     }
 }
 

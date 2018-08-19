@@ -182,10 +182,7 @@ extension XCTestExpectation {
 
 extension XCTestCase {
     func wait(for: [XCTestExpectation], timeout: TimeInterval, file: StaticString = #file, line: LineInt = #line) {
-    #if os(Linux)
-        let line = Int(line)
-    #endif
-        waitForExpectations(timeout: timeout, file: file, line: line)
+        waitForExpectations(timeout: timeout, file: file, line: Int(line))
     }
 }
 #endif
