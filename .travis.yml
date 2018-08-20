@@ -43,11 +43,13 @@ matrix:
     - {osx_image: xcode10,  env: 'SWFT=4.2  PLAT=watchOS  DST="OS=5.0,name=Apple Watch Series 3 - 42mm"', os: osx, language: objective-c}
 
     # Swift 3.2
-    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.1.2  TEST=1'}
+    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.0.3'}
     # Swift 3.3
+    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.1.2  TEST=1'}
+    # Swift 3.4
     - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=3  SWIFT_VERSION=DEVELOPMENT-SNAPSHOT-2018-06-20-a  TEST=1'}
     # Swift 4.0
-    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.0.3  TEST=1'}
+    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.0.3'}
     # Swift 4.1
     - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.1.2  TEST=1'}
     # Swift 4.2
@@ -60,7 +62,10 @@ before_install:
 install:
   case $PLAT in
   iOS|tvOS|macOS|watchOS)
-    xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build;;
+    xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build;
+    if [ "$TEST" == "1" ]; then
+      xcodebuild -scheme PromiseKit -quiet -destination "$DST" build;  # build tests with swift-version defined in xcodeproj
+    fi;;
   *)
     swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION;;
   esac
