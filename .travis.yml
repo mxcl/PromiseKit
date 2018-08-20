@@ -64,7 +64,7 @@ install:
   iOS|tvOS|macOS|watchOS)
     xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build;
     if [ "$TEST" == "1" ]; then
-      xcodebuild -scheme PromiseKit -quiet -destination "$DST" build;  # build tests with swift-version defined in xcodeproj
+      xcodebuild -scheme PromiseKit -quiet -destination "$DST" build;
     fi;;
   *)
     swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION;;
