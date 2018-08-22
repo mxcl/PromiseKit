@@ -151,7 +151,16 @@ Pod::Spec.new do |s|
     ss.watchos.deployment_target = '2.0'
     ss.tvos.deployment_target = '9.0'
   end
-    
+
+  s.subspec 'HomeKit' do |ss|
+    ss.source_files = Dir['Extensions/HomeKit/Sources/*']
+    ss.dependency 'PromiseKit/CorePromise'
+    ss.frameworks = 'HomeKit'
+    ss.ios.deployment_target = '8.0'
+    ss.watchos.deployment_target = '3.0'
+    ss.tvos.deployment_target = '9.0'
+  end
+
   s.subspec 'MapKit' do |ss|
     ss.ios.source_files = ss.osx.source_files = ss.tvos.source_files = 'Extensions/MapKit/Sources/*'
     ss.ios.frameworks = ss.osx.frameworks = ss.tvos.frameworks = 'MapKit'

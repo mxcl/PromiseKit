@@ -61,3 +61,6 @@
 [submodule "Extensions/AVFoundation"]
 	path = Extensions/AVFoundation
 	url = https://github.com/PromiseKit/AVFoundation
+[submodule "Extensions/HomeKit"]
+	path = Extensions/HomeKit
+	url = https://github.com/PromiseKit/HomeKit.git
