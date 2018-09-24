@@ -10,13 +10,12 @@ extern NSString * __nonnull const PMKErrorDomain;
 #define PMKUnexpectedError 1l
 #define PMKInvalidUsageError 3l
 #define PMKAccessDeniedError 4l
-#define PMKOperationCancelled 5l
 #define PMKOperationFailed 8l
 #define PMKTaskError 9l
 #define PMKJoinError 10l
 
 
-#if __cplusplus
+#ifdef __cplusplus
 extern "C" {
 #endif
 
@@ -118,51 +117,6 @@ extern id __nullable PMKHang(AnyPromise * __nonnull promise);
 
 
 /**
- Sets the unhandled exception handler.
-
- If an exception is thrown inside an AnyPromise handler it is caught and
- this handler is executed to determine if the promise is rejected.
- 
- The default handler rejects the promise if an NSError or an NSString is
- thrown.
- 
- The default handler in PromiseKit 1.x would reject whatever object was
- thrown (including nil).
-
- @warning *Important* This handler is provided to allow you to customize
- which exceptions cause rejection and which abort. You should either
- return a fully-formed NSError object or nil. Returning nil causes the
- exception to be re-thrown.
-
- @warning *Important* The handler is executed on an undefined queue.
-
- @warning *Important* This function is thread-safe, but to facilitate this
- it can only be called once per application lifetime and it must be called
- before any promise in the app throws an exception. Subsequent calls will
- silently fail.
-*/
-extern void PMKSetUnhandledExceptionHandler(NSError * __nullable (^__nonnull handler)(id __nullable));
-
-/**
- If an error cascades through a promise chain and is not handled by any
- `catch`, the unhandled error handler is called. The default logs all
- non-cancelled errors.
-
- This handler can only be set once, and must be set before any promises
- are rejected in your application.
-
-     PMKSetUnhandledErrorHandler({ error in
-        mylogf("Unhandled error: \(error)")
-     })
-
- - Warning: *Important* The handler is executed on an undefined queue.
- - Warning: *Important* Don’t use promises in your handler, or you risk an infinite error loop.
-*/
-extern void PMKSetUnhandledErrorHandler(void (^__nonnull handler)(NSError * __nonnull));
-
-extern void PMKUnhandledErrorHandler(NSError * __nonnull error);
-
-/**
  Executes the provided block on a background queue.
 
  dispatch_promise is a convenient way to start a promise chain where the
@@ -201,40 +155,11 @@ extern AnyPromise * __nonnull dispatch_promise(id __nonnull block) NS_SWIFT_UNAV
 */
 extern AnyPromise * __nonnull dispatch_promise_on(dispatch_queue_t __nonnull queue, id __nonnull block) NS_SWIFT_UNAVAILABLE("Use our `DispatchQueue.async` override instead");
 
-
-#define PMKJSONDeserializationOptions ((NSJSONReadingOptions)(NSJSONReadingAllowFragments | NSJSONReadingMutableContainers))
-
 /**
- Really we shouldn’t assume JSON for (application|text)/(x-)javascript,
- really we should return a String of Javascript. However in practice
- for the apps we write it *will be* JSON. Thus if you actually want
- a Javascript String, use the promise variant of our category functions.
+ Returns a new promise that resolves when the value of the first resolved promise in the provided array of promises.
 */
-#define PMKHTTPURLResponseIsJSON(rsp) [@[@"application/json", @"text/json", @"text/javascript", @"application/x-javascript", @"application/javascript"] containsObject:[rsp MIMEType]]
-#define PMKHTTPURLResponseIsImage(rsp) [@[@"image/tiff", @"image/jpeg", @"image/gif", @"image/png", @"image/ico", @"image/x-icon", @"image/bmp", @"image/x-bmp", @"image/x-xbitmap", @"image/x-win-bitmap"] containsObject:[rsp MIMEType]]
-#define PMKHTTPURLResponseIsText(rsp) [[rsp MIMEType] hasPrefix:@"text/"]
+extern AnyPromise * __nonnull PMKRace(NSArray * __nonnull promises) NS_REFINED_FOR_SWIFT;
 
-/**
- The default queue for all calls to `then`, `catch` etc. is the main queue.
-
- By default this returns dispatch_get_main_queue()
- */
-extern __nonnull dispatch_queue_t PMKDefaultDispatchQueue(void) NS_REFINED_FOR_SWIFT;
-
-/**
- You may alter the default dispatch queue, but you may only alter it once, and you must alter it before any `then`, etc. calls are made in your app.
- 
- The primary motivation for this function is so that your tests can operate off the main thread preventing dead-locking, or with `zalgo` to speed them up.
-*/
-extern void PMKSetDefaultDispatchQueue(__nonnull dispatch_queue_t) NS_REFINED_FOR_SWIFT;
-
-#if __cplusplus
+#ifdef __cplusplus
 }   // Extern C
 #endif
-
-
-typedef NS_OPTIONS(NSInteger, PMKAnimationOptions) {
-    PMKAnimationOptionsNone = 1 << 0,
-    PMKAnimationOptionsAppear = 1 << 1,
-    PMKAnimationOptionsDisappear = 1 << 2,
-};

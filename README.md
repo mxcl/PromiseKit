@@ -1,281 +1,171 @@
 ![PromiseKit](http://promisekit.org/public/img/logo-tight.png)
 
-![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] ![badge-mit]
-
-[繁體中文](README.zh_Hant.md) [简体中文](README.zh_CN.md)
+![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] [![Build Status](https://travis-ci.org/mxcl/PromiseKit.svg?branch=master)](https://travis-ci.org/mxcl/PromiseKit)
 
 ---
 
-Modern development is highly asynchronous: isn’t it about time we had tools that
-made programming asynchronously powerful, easy and delightful?
+Promises simplify asynchronous programming, freeing you up to focus on the more
+important things. They are easy to learn, easy to master and result in clearer,
+more readable code. Your co-workers will thank you.
 
 ```swift
 UIApplication.shared.isNetworkActivityIndicatorVisible = true
 
+let fetchImage = URLSession.shared.dataTask(.promise, with: url).compactMap{ UIImage(data: $0.data) }
+let fetchLocation = CLLocationManager.requestLocation().lastValue
+
 firstly {
-    when(URLSession.dataTask(with: url).asImage(), CLLocationManager.promise())
-}.then { image, location -> Void in
+    when(fulfilled: fetchImage, fetchLocation)
+}.done { image, location in
     self.imageView.image = image
     self.label.text = "\(location)"
-}.always {
+}.ensure {
     UIApplication.shared.isNetworkActivityIndicatorVisible = false
 }.catch { error in
-    UIAlertView(/*…*/).show()
+    self.show(UIAlertController(for: error), sender: self)
 }
 ```
 
 PromiseKit is a thoughtful and complete implementation of promises for any
-platform with a `swiftc` (indeed, this includes *Linux*), it has *excellent* Objective-C bridging and
-*delightful* specializations for iOS, macOS, tvOS and watchOS.
+platform that has a `swiftc`. It has *excellent* Objective-C bridging and
+*delightful* specializations for iOS, macOS, tvOS and watchOS. It is a top-100
+pod used in many of the most popular apps in the world.
+
+[![codecov](https://codecov.io/gh/mxcl/PromiseKit/branch/master/graph/badge.svg)](https://codecov.io/gh/mxcl/PromiseKit)
+
+# PromiseKit 6 Released
+
+PromiseKit 6 has been released; [read the release notes and migration guide][PMK6].
 
 # Quick Start
 
-We recommend [CocoaPods] or [Carthage], however you can just drop `PromiseKit.xcodeproj` into your project and add `PromiseKit.framework` to your app’s embedded frameworks.
-
-## Xcode 9 / Swift 4
+In your [Podfile]:
 
 ```ruby
-# CocoaPods
-swift_version = "4.0"
-pod "PromiseKit", branch: "swift4-beta1"
+use_frameworks!
 
-# Carthage
-github "mxcl/PromiseKit" "swift4-beta1"
-
-# SwiftPM
-package.dependencies.append(
-    .package(url: "https://github.com/mxcl/PromiseKit", .branch("swift4-beta1"))
-)
+target "Change Me!" do
+  pod "PromiseKit", "~> 6.0"
+end
 ```
 
-### Please Note
+PromiseKit 6, 5 and 4 support Xcode 8.3, 9.x and 10.0; Swift 3.1,
+3.2, 3.3, 3.4, 4.0, 4.1 and 4.2; iOS, macOS, tvOS, watchOS, Linux and Android; CocoaPods,
+Carthage and SwiftPM; ([CI Matrix](https://travis-ci.org/mxcl/PromiseKit)).
 
-We have not ported the extensions yet. This is your opportunity to contribute.
-
-1. Clone:
-
-       cd your-project/..
-       git clone https://github.com/mxcl/PromiseKit PMK-swift4-beta1 --recursive -b swift4-beta1
-
-2. Amend your `Podfile`:
-
-       pod "PromiseKit", path: "../PMK-swift4-beta1"
-
-3. Make your fixes for the PromiseKit extensions you use.
-4. Fork, push & pull-request.
-
-## Xcode 8 / Swift 3 *and* Xcode 9 / Swift 3.2
-
-*Indeed, PromiseKit 4 already supports Swift 3.2 and thus Xcode 9.*
-
-```ruby
-# CocoaPods
-swift_version = "3.0"
-pod "PromiseKit", "~> 4.0"
-
-# Carthage
-github "mxcl/PromiseKit" ~> 4.0
-
-# SwiftPM
-let package = Package(
-    dependencies: [
-        .Package(url: "https://github.com/mxcl/PromiseKit", majorVersion: 4)
-    ]
-)
-```
-
-## Xcode 8 / Swift 2.3 or Xcode 7
-
-```ruby
-# CocoaPods
-swift_version = "2.3"
-pod "PromiseKit", "~> 3.5"
-
-# Carthage
-github "mxcl/PromiseKit" ~> 3.5
-```
+For Carthage, SwiftPM, etc., or for instructions when using older Swifts or
+Xcodes, see our [Installation Guide](Documentation/Installation.md). We 
+recommend [Carthage](https://github.com/Carthage/Carthage).
 
 # Documentation
 
-We have thorough and complete documentation at [promisekit.org].
-
-## Overview
-
-Promises are defined by the function `then`:
-
-```swift
-login().then { json in
-    //…
-}
-```
-
-They are chainable:
-
-```swift
-login().then { json -> Promise<UIImage> in
-    return fetchAvatar(json["username"])
-}.then { avatarImage in
-    self.imageView.image = avatarImage
-}
-```
-
-Errors cascade through chains:
-
-```swift
-login().then {
-    return fetchAvatar()
-}.then { avatarImage in
-    //…
-}.catch { error in
-    UIAlertView(/*…*/).show()
-}
-```
-
-They are composable:
-
-```swift
-let username = login().then{ $0["username"] }
-
-when(username, CLLocationManager.promise()).then { user, location in
-    return fetchAvatar(user, location: location)
-}.then { image in
-    //…
-}
-```
-
-They are trivial to refactor:
-
-```swift
-func avatar() -> Promise<UIImage> {
-    let username = login().then{ $0["username"] }
-
-    return when(username, CLLocationManager.promise()).then { user, location in
-        return fetchAvatar(user, location: location)
-    }
-}
-```
-
-You can easily create a new, pending promise.
-```swift
-func fetchAvatar(user: String) -> Promise<UIImage> {
-    return Promise { fulfill, reject in
-        MyWebHelper.GET("\(user)/avatar") { data, err in
-            guard let data = data else { return reject(err) }
-            guard let img = UIImage(data: data) else { return reject(MyError.InvalidImage) }
-            guard let img.size.width > 0 else { return reject(MyError.ImageTooSmall) }
-            fulfill(img)
-        }
-    }
-}
-```
-
-## Continue Learning…
-
-Complete and progressive learning guide at [promisekit.org].
-
-## PromiseKit vs. Xcode
-
-PromiseKit contains Swift, so we engage in an unending battle with Xcode:
-
-| Swift | Xcode | PromiseKit |   CI Status  |   Release Notes   |
-| ----- | ----- | ---------- | ------------ | ----------------- |
-|   3   |   8   |      4     | ![ci-master] | [2016/09][news-4] |
-|   2   |  7/8  |      3     | ![ci-swift2] | [2015/10][news-3] |
-|   1   |   7   |      3     |       –      | [2015/10][news-3] |
-| *N/A* |   *   |      1†    | ![ci-legacy] |         –         |
-
-† PromiseKit 1 is pure Objective-C and thus can be used with any Xcode, it is
-also your only choice if you need to support iOS 7 or below.
-
----
-
-We also maintain some branches to aid migrating between Swift versions:
-
-| Xcode | Swift | PromiseKit | Branch                      | CI Status |
-| ----- | ----- | -----------| --------------------------- | --------- |
-|  8.0  |  2.3  | 2          | [swift-2.3-minimal-changes] | ![ci-23]  |
-|  7.3  |  2.2  | 2          | [swift-2.2-minimal-changes] | ![ci-22]  |
-|  7.2  |  2.2  | 2          | [swift-2.2-minimal-changes] | ![ci-22]  |
-|  7.1  |  2.1  | 2          | [swift-2.0-minimal-changes] | ![ci-20]  |
-|  7.0  |  2.0  | 2          | [swift-2.0-minimal-changes] | ![ci-20]  |
-
-We do **not** usually backport fixes to these branches, but pull-requests are welcome.
+* Handbook
+  * [Getting Started](Documentation/GettingStarted.md)
+  * [Promises: Common Patterns](Documentation/CommonPatterns.md)
+  * [Frequently Asked Questions](Documentation/FAQ.md)
+* Manual
+  * [Installation Guide](Documentation/Installation.md)
+  * [Objective-C Guide](Documentation/ObjectiveC.md)
+  * [Troubleshooting](Documentation/Troubleshooting.md) (e.g., solutions to common compile errors)
+  * [Appendix](Documentation/Appendix.md)
+* [API Reference](https://promisekit.org/reference/)
 
 # Extensions
 
-Promises are only as useful as the asynchronous tasks they represent, thus we 
-have converted (almost) all of Apple’s APIs to Promises. The default CocoaPod
-comes with promises UIKit and Foundation, the rest are accessed by specifying
-additional subspecs in your `Podfile`, eg:
+Promises are only as useful as the asynchronous tasks they represent. Thus, we
+have converted (almost) all of Apple’s APIs to promises. The default CocoaPod
+provides Promises and the extensions for Foundation and UIKit. The other
+extensions are available by specifying additional subspecs in your `Podfile`,
+e.g.:
 
 ```ruby
-pod "PromiseKit/MapKit"        # MKDirections().promise().then { /*…*/ }
-pod "PromiseKit/CoreLocation"  # CLLocationManager.promise().then { /*…*/ }
+pod "PromiseKit/MapKit"          # MKDirections().calculate().then { /*…*/ }
+pod "PromiseKit/CoreLocation"    # CLLocationManager.requestLocation().then { /*…*/ }
 ```
 
-All our extensions are separate repositories at the [PromiseKit org ](https://github.com/PromiseKit).
+All our extensions are separate repositories at the [PromiseKit organization].
 
-For Carthage specify the additional repositories in your `Cartfile`:
+## I don't want the extensions!
+
+Then don’t have them:
 
 ```ruby
-github "PromiseKit/MapKit" ~> 1.0
+pod "PromiseKit/CorePromise", "~> 6.0"
 ```
+
+> *Note:* Carthage installations come with no extensions by default.
 
 ## Choose Your Networking Library
 
-`NSURLSession` is typically inadequate; choose from [Alamofire] or [OMGHTTPURLRQ]:
+Promise chains commonly start with a network operation. Thus, we offer
+extensions for `URLSession`:
 
 ```swift
-// pod 'PromiseKit/Alamofire'  
-Alamofire.request("http://example.com", withMethod: .GET).responseJSON().then { json in
+// pod 'PromiseKit/Foundation'  # https://github.com/PromiseKit/Foundation
+
+firstly {
+    URLSession.shared.dataTask(.promise, with: try makeUrlRequest()).validate()
+    // ^^ we provide `.validate()` so that eg. 404s get converted to errors
+}.map {
+    try JSONDecoder().decode(Foo.self, with: $0.data)
+}.done { foo in
     //…
 }.catch { error in
     //…
 }
 
-// pod 'PromiseKit/OMGHTTPURLRQ'
-URLSession.GET("http://example.com").asDictionary().then { json in
-    
+func makeUrlRequest() throws -> URLRequest {
+    var rq = URLRequest(url: url)
+    rq.httpMethod = "POST"
+    rq.addValue("application/json", forHTTPHeaderField: "Content-Type")
+    rq.addValue("application/json", forHTTPHeaderField: "Accept")
+    rq.httpBody = try JSONEncoder().encode(obj)
+    return rq
+}
+```
+
+And [Alamofire]:
+
+```swift
+// pod 'PromiseKit/Alamofire'  # https://github.com/PromiseKit/Alamofire-
+
+firstly {
+    Alamofire
+        .request("http://example.com", method: .post, parameters: params)
+        .responseDecodable(Foo.self)
+}.done { foo in
+    //…
 }.catch { error in
     //…
 }
 ```
 
-For [AFNetworking] we recommend [csotiriou/AFNetworking].
+Nowadays, considering that:
 
+* We almost always POST JSON
+* We now have `JSONDecoder`
+* PromiseKit now has `map` and other functional primitives
+* PromiseKit (like Alamofire, but not raw-URLSession) also defaults to having callbacks go to the main thread
 
-# Need to convert your codebase to Promises?
-
-From experience it really improves the robustness of your app, feel free to ask us how to go about it.
+We recommend vanilla `URLSession`. It uses fewer black boxes and sticks closer to the
+metal. Alamofire was essential until the three bulletpoints above became true,
+but nowadays it isn’t really necessary.
 
 # Support
 
-Ask your question at our [Gitter chat channel](https://gitter.im/mxcl/PromiseKit) or on
-[our bug tracker](https://github.com/mxcl/PromiseKit/issues/new).
+Please check our [Troubleshooting Guide](Documentation/Troubleshooting.md), and
+if after that you still have a question, ask at our [Gitter chat channel] or on [our bug tracker].
 
 
-[travis]: https://travis-ci.org/mxcl/PromiseKit
-[ci-master]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=master
-[ci-legacy]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=legacy-1.x
-[ci-swift2]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-2.x
-[ci-23]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-2.3-minimal-changes
-[ci-22]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-2.2-minimal-changes
-[ci-20]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-2.0-minimal-changes
-[news-2]: http://promisekit.org/news/2015/05/PromiseKit-2.0-Released/
-[news-3]: https://github.com/mxcl/PromiseKit/blob/master/CHANGELOG.markdown#300-oct-1st-2015
-[news-4]: http://promisekit.org/news/2016/09/PromiseKit-4.0-Released/
-[swift-2.3-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.3-minimal-changes
-[swift-2.2-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.2-minimal-changes
-[swift-2.0-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.0-minimal-changes
-[promisekit.org]: http://promisekit.org/docs/
 [badge-pod]: https://img.shields.io/cocoapods/v/PromiseKit.svg?label=version
-[badge-platforms]: https://img.shields.io/badge/platforms-macOS%20%7C%20iOS%20%7C%20watchOS%20%7C%20tvOS-lightgrey.svg
-[badge-languages]: https://img.shields.io/badge/languages-Swift%20%7C%20ObjC-orange.svg
-[badge-mit]: https://img.shields.io/badge/license-MIT-blue.svg
 [badge-pms]: https://img.shields.io/badge/supports-CocoaPods%20%7C%20Carthage%20%7C%20SwiftPM-green.svg
-[OMGHTTPURLRQ]: https://github.com/mxcl/OMGHTTPURLRQ
-[Alamofire]: http://alamofire.org
-[AFNetworking]: https://github.com/AFNetworking/AFNetworking
-[csotiriou/AFNetworking]: https://github.com/csotiriou/AFNetworking-PromiseKit
-[CocoaPods]: http://cocoapods.org
-[Carthage]: 2016-09-05-PromiseKit-4.0-Released
+[badge-languages]: https://img.shields.io/badge/languages-Swift%20%7C%20ObjC-orange.svg
+[badge-platforms]: https://img.shields.io/badge/platforms-macOS%20%7C%20iOS%20%7C%20watchOS%20%7C%20tvOS%20%7C%20Linux-lightgrey.svg
+[badge-mit]: https://img.shields.io/badge/license-MIT-blue.svg
+[OMGHTTPURLRQ]: https://github.com/PromiseKit/OMGHTTPURLRQ
+[Alamofire]: http://github.com/PromiseKit/Alamofire-
+[PromiseKit organization]: https://github.com/PromiseKit
+[Gitter chat channel]: https://gitter.im/mxcl/PromiseKit
+[our bug tracker]: https://github.com/mxcl/PromiseKit/issues/new
+[Podfile]: https://guides.cocoapods.org/syntax/podfile.html
+[PMK6]: http://promisekit.org/news/2018/02/PromiseKit-6.0-Released/

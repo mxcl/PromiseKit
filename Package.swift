@@ -1,22 +1,30 @@
+// swift-tools-version:4.0
+
 import PackageDescription
 
-let package = Package(
-    name: "PromiseKit",
-    exclude: [
-        "Sources/AnyPromise.swift",
-        "Sources/Promise+AnyPromise.swift",
-        "Sources/AnyPromise.m",
-        "Sources/dispatch_promise.m",
-        "Sources/GlobalState.m",
-        "Sources/hang.m",
-        "Sources/NSMethodSignatureForBlock.m",
-        "Sources/join.m",
-        "Sources/PMKCallVariadicBlock.m",
-        "Sources/when.m",
-        "Sources/after.m",
-        "Sources/AnyPromise+Private.h",
-        "Sources/AnyPromise.h",
-        "Sources/PromiseKit.h",
-        "Tests"
-    ]
-)
+let pkg = Package(name: "PromiseKit")
+pkg.products = [
+    .library(name: "PromiseKit", targets: ["PromiseKit"]),
+]
+
+let pmk: Target = .target(name: "PromiseKit")
+pmk.path = "Sources"
+pmk.exclude = [
+    "AnyPromise.swift",
+    "AnyPromise.m",
+    "PMKCallVariadicBlock.m",
+    "dispatch_promise.m",
+    "join.m",
+    "when.m",
+    "NSMethodSignatureForBlock.m",
+    "after.m",
+    "hang.m",
+    "race.m",
+    "Deprecations.swift"
+]
+pkg.swiftLanguageVersions = [3, 4]
+pkg.targets = [
+    pmk,
+    .testTarget(name: "A+", dependencies: ["PromiseKit"]),
+    .testTarget(name: "CorePromise", dependencies: ["PromiseKit"], path: "Tests/CorePromise"),
+]

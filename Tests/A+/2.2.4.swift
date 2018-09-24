@@ -8,10 +8,10 @@ class Test224: XCTestCase {
             describe("`then` returns before the promise becomes fulfilled or rejected") {
                 testFulfilled { promise, expectation, dummy in
                     var thenHasReturned = false
-                    promise.then { _ -> Void in
+                    promise.done { _ in
                         XCTAssert(thenHasReturned)
                         expectation.fulfill()
-                    }
+                    }.silenceWarning()
                     thenHasReturned = true
                 }
                 testRejected { promise, expectation, memo in
@@ -28,44 +28,44 @@ class Test224: XCTestCase {
             describe("Clean-stack execution ordering tests (fulfillment case)") {
                 specify("when `onFulfilled` is added immediately before the promise is fulfilled") { d, expectation in
                     var onFulfilledCalled = false
-                    d.promise.then { _ -> Void in
+                    d.promise.done {
                         onFulfilledCalled = true
                         expectation.fulfill()
-                    }
+                    }.silenceWarning()
                     d.fulfill()
                     XCTAssertFalse(onFulfilledCalled)
                 }
                 specify("when `onFulfilled` is added immediately after the promise is fulfilled") { d, expectation in
                     var onFulfilledCalled = false
                     d.fulfill()
-                    d.promise.then { _ -> Void in
+                    d.promise.done {
                         onFulfilledCalled = true
                         expectation.fulfill()
-                    }
+                    }.silenceWarning()
                     XCTAssertFalse(onFulfilledCalled)
                 }
                 specify("when one `onFulfilled` is added inside another `onFulfilled`") { _, expectation in
                     var firstOnFulfilledFinished = false
-                    let promise = Promise(value: ())
-                    promise.then { _ -> Void in
-                        promise.then { _ -> Void in
+                    let promise = Promise()
+                    promise.done {
+                        promise.done {
                             XCTAssertTrue(firstOnFulfilledFinished)
                             expectation.fulfill()
-                        }
+                        }.silenceWarning()
                         firstOnFulfilledFinished = true
-                    }
+                    }.silenceWarning()
                 }
 
                 specify("when `onFulfilled` is added inside an `onRejected`") { _, expectation in
-                    var promise1 = Promise<Void>(error: Error.dummy)
-                    var promise2 = Promise(value: ())
+                    let promise1 = Promise<Void>(error: Error.dummy)
+                    let promise2 = Promise()
                     var firstOnRejectedFinished = false
 
                     promise1.catch { _ in
-                        promise2.then { _ -> Void in
+                        promise2.done {
                             XCTAssertTrue(firstOnRejectedFinished)
                             expectation.fulfill()
-                        }
+                        }.silenceWarning()
                         firstOnRejectedFinished = true
                     }
                 }
@@ -78,10 +78,10 @@ class Test224: XCTestCase {
                         firstStackFinished = true
                     }
 
-                    d.promise.then { _ -> Void in
+                    d.promise.done {
                         XCTAssertTrue(firstStackFinished)
                         expectation.fulfill()
-                    }
+                    }.silenceWarning()
                 }
             }
 
@@ -105,20 +105,20 @@ class Test224: XCTestCase {
                     XCTAssertFalse(onRejectedCalled)
                 }
                 specify("when `onRejected` is added inside an `onFulfilled`") { d, expectation in
-                    var promise1 = Promise(value: ())
-                    var promise2 = Promise<Void>(error: Error.dummy)
+                    let promise1 = Promise()
+                    let promise2 = Promise<Void>(error: Error.dummy)
                     var firstOnFulfilledFinished = false
 
-                    promise1.then { _ -> Void in
+                    promise1.done { _ in
                         promise2.catch { _ in
                             XCTAssertTrue(firstOnFulfilledFinished)
                             expectation.fulfill()
                         }
                         firstOnFulfilledFinished = true
-                    }
+                    }.silenceWarning()
                 }
                 specify("when one `onRejected` is added inside another `onRejected`") { d, expectation in
-                    var promise = Promise<Void>(error: Error.dummy)
+                    let promise = Promise<Void>(error: Error.dummy)
                     var firstOnRejectedFinished = false;
 
                     promise.catch { _ in

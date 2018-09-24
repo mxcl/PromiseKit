@@ -6,6 +6,11 @@
 @import Foundation.NSNull;
 #import "PromiseKit.h"
 
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+// ^^ OSAtomicDecrement32 is deprecated on watchOS
+
+
 // NSProgress resources:
 //  * https://robots.thoughtbot.com/asynchronous-nsprogress
 //  * http://oleb.net/blog/2014/03/nsprogress/
@@ -67,7 +72,7 @@ AnyPromise *PMKWhen(id promises) {
                 if (IsError(value)) {
                     progress.completedUnitCount = progress.totalUnitCount;
 
-                    NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:[value userInfo] ?: @{}];
+                    NSMutableDictionary *userInfo = [NSMutableDictionary dictionaryWithDictionary:[(NSError *)value userInfo] ?: @{}];
                     userInfo[PMKFailingPromiseIndexKey] = key;
                     [userInfo setObject:value forKey:NSUnderlyingErrorKey];
                     id err = [[NSError alloc] initWithDomain:[value domain] code:[value code] userInfo:userInfo];
@@ -98,3 +103,5 @@ AnyPromise *PMKWhen(id promises) {
         }
     }];
 }
+
+#pragma GCC diagnostic pop

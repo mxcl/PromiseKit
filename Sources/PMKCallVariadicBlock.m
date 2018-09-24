@@ -109,6 +109,12 @@ static id PMKCallVariadicBlock(id frock, id result) {
     @try {
         return _PMKCallVariadicBlock(frock, result);
     } @catch (id thrown) {
-        return PMKProcessUnhandledException(thrown);
+        if ([thrown isKindOfClass:[NSString class]])
+            return thrown;
+        if ([thrown isKindOfClass:[NSError class]])
+            return thrown;
+
+        // we don’t catch objc exceptions: they are meant to crash your app
+        @throw thrown;
     }
 }

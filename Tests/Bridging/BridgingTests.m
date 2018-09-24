@@ -24,8 +24,7 @@
 
     testCase626().then(^{
         XCTFail();
-        [ex fulfill];
-    }).catch(^{
+    }).ensure(^{
         [ex fulfill];
     });
 

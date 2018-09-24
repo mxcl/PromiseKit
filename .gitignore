@@ -4,3 +4,6 @@
 /Cartfile.resolved
 /.build
 .DS_Store
+DerivedData
+/PromiseKit.podspec
+/Extensions/Carthage

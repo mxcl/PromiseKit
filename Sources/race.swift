@@ -1,40 +1,57 @@
-/**
- Resolves with the first resolving promise from a set of promises.
-
-     race(promise1, promise2, promise3).then { winner in
-         //…
-     }
-
- - Returns: A new promise that resolves when the first promise in the provided promises resolves.
- - Warning: If any of the provided promises reject, the returned promise is rejected.
- - Warning: aborts if the array is empty.
-*/
-public func race<T>(promises: [Promise<T>]) -> Promise<T> {
-    guard promises.count > 0 else {
-        fatalError("Cannot race with an empty array of promises")
+@inline(__always)
+private func _race<U: Thenable>(_ thenables: [U]) -> Promise<U.T> {
+    let rp = Promise<U.T>(.pending)
+    for thenable in thenables {
+        thenable.pipe(to: rp.box.seal)
     }
-    return _race(promises: promises)
+    return rp
 }
 
 /**
- Resolves with the first resolving promise from a set of promises.
+ Waits for one promise to resolve
 
      race(promise1, promise2, promise3).then { winner in
          //…
      }
 
- - Returns: A new promise that resolves when the first promise in the provided promises resolves.
- - Warning: If any of the provided promises reject, the returned promise is rejected.
- - Warning: aborts if the array is empty.
+ - Returns: The promise that resolves first
+ - Warning: If the first resolution is a rejection, the returned promise is rejected
 */
-public func race<T>(_ promises: Promise<T>...) -> Promise<T> {
-    return _race(promises: promises)
+public func race<U: Thenable>(_ thenables: U...) -> Promise<U.T> {
+    return _race(thenables)
 }
 
-private func _race<T>(promises: [Promise<T>]) -> Promise<T> {
-    return Promise(sealant: { resolve in
-        for promise in promises {
-            promise.state.pipe(resolve)
-        }
-    })
+/**
+ Waits for one promise to resolve
+
+     race(promise1, promise2, promise3).then { winner in
+         //…
+     }
+
+ - Returns: The promise that resolves first
+ - Warning: If the first resolution is a rejection, the returned promise is rejected
+ - Remark: If the provided array is empty the returned promise is rejected with PMKError.badInput
+*/
+public func race<U: Thenable>(_ thenables: [U]) -> Promise<U.T> {
+    guard !thenables.isEmpty else {
+        return Promise(error: PMKError.badInput)
+    }
+    return _race(thenables)
+}
+
+/**
+ Waits for one guarantee to resolve
+
+     race(promise1, promise2, promise3).then { winner in
+         //…
+     }
+
+ - Returns: The guarantee that resolves first
+*/
+public func race<T>(_ guarantees: Guarantee<T>...) -> Guarantee<T> {
+    let rg = Guarantee<T>(.pending)
+    for guarantee in guarantees {
+        guarantee.pipe(to: rg.box.seal)
+    }
+    return rg
 }
