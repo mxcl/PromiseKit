@@ -87,14 +87,15 @@ can continue to make tools and software you need and love. I appreciate it x.
 # Documentation
 
 * Handbook
-  * [Getting Started](Documentation/GettingStarted.md)
-  * [Promises: Common Patterns](Documentation/CommonPatterns.md)
-  * [Frequently Asked Questions](Documentation/FAQ.md)
+  * [Getting Started](Documents/GettingStarted.md)
+  * [Promises: Common Patterns](Documents/CommonPatterns.md)
+  * [Cancelling Promises](Documents/Cancel.md)
+  * [Frequently Asked Questions](Documents/FAQ.md)
 * Manual
-  * [Installation Guide](Documentation/Installation.md)
-  * [Objective-C Guide](Documentation/ObjectiveC.md)
-  * [Troubleshooting](Documentation/Troubleshooting.md) (e.g., solutions to common compile errors)
-  * [Appendix](Documentation/Appendix.md)
+  * [Installation Guide](Documents/Installation.md)
+  * [Objective-C Guide](Documents/ObjectiveC.md)
+  * [Troubleshooting](Documents/Troubleshooting.md) (e.g., solutions to common compile errors)
+  * [Appendix](Documents/Appendix.md)
 * [API Reference](https://mxcl.github.io/PromiseKit/reference/v6/)
 
 # Extensions
@@ -170,7 +171,7 @@ but nowadays it isn’t really necessary.
 
 # Support
 
-Please check our [Troubleshooting Guide](Documentation/Troubleshooting.md), and
+Please check our [Troubleshooting Guide](Documents/Troubleshooting.md), and
 if after that you still have a question, ask at our [Gitter chat channel] or on [our bug tracker].
 
 # Contributing
@@ -192,7 +193,7 @@ Generate the Xcode project:
 [our bug tracker]: https://github.com/mxcl/PromiseKit/issues/new
 [Podfile]: https://guides.cocoapods.org/syntax/podfile.html
 [PMK6]: http://mxcl.github.io/PromiseKit/news/2018/02/PromiseKit-6.0-Released/
-[Installation Guide]: Documentation/Installation.md
+[Installation Guide]: Documents/Installation.md
 [badge-travis]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=master
 [travis]: https://travis-ci.org/mxcl/PromiseKit
 [cocoapods]: https://cocoapods.org/pods/PromiseKit

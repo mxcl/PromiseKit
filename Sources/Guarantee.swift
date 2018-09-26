@@ -23,6 +23,12 @@ public final class Guarantee<T>: Thenable {
         body(box.seal)
     }
 
+    /// Returns a pending `Guarantee` that can be resolved with the provided closure’s parameter.
+    public convenience init(cancellableTask: CancellableTask, resolver body: (@escaping(T) -> Void) -> Void) {
+        self.init(resolver: body)
+        self.cancellableTask = cancellableTask
+    }
+    
     /// - See: `Thenable.pipe`
     public func pipe(to: @escaping(Result<T, Error>) -> Void) {
         pipe{ to(.success($0)) }
@@ -72,6 +78,12 @@ public final class Guarantee<T>: Thenable {
     /// Returns a tuple of a pending `Guarantee` and a function that resolves it.
     public class func pending() -> (guarantee: Guarantee<T>, resolve: (T) -> Void) {
         return { ($0, $0.box.seal) }(Guarantee<T>(.pending))
+    }
+    
+    var cancellableTask: CancellableTask?
+    
+    public func setCancellableTask(_ task: CancellableTask) {
+        cancellableTask = task
     }
 }
 

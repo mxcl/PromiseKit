@@ -64,6 +64,19 @@ public final class Promise<T>: Thenable, CatchMixin {
         }
     }
 
+    /// Initialize a new promise that can be resolved with the provided `Resolver`.
+    public init(cancellableTask: CancellableTask, resolver body: (Resolver<T>) throws -> Void) {
+        box = EmptyBox()
+        let resolver = Resolver(box)
+        self.cancellableTask = cancellableTask
+        self.rejectIfCancelled = resolver.reject
+        do {
+            try body(resolver)
+        } catch {
+            resolver.reject(error)
+        }
+    }
+
     /// - Returns: a tuple of a new pending promise and its `Resolver`.
     public class func pending() -> (promise: Promise<T>, resolver: Resolver<T>) {
         return { ($0, Resolver($0.box)) }(Promise<T>(.pending))
@@ -98,6 +111,14 @@ public final class Promise<T>: Thenable, CatchMixin {
 
     init(_: PMKUnambiguousInitializer) {
         box = EmptyBox()
+    }
+    
+    var cancellableTask: CancellableTask?
+    var rejectIfCancelled: ((Error) -> Void)?
+    
+    public func setCancellableTask(_ task: CancellableTask?, reject: ((Error) -> Void)? = nil) {
+        cancellableTask = task
+        rejectIfCancelled = reject
     }
 }
 

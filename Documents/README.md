@@ -4,6 +4,7 @@
 * Handbook
   * [Getting Started](GettingStarted.md)
   * [Promises: Common Patterns](CommonPatterns.md)
+  * [Cancelling Promises](Cancel.md)
   * [Frequently Asked Questions](FAQ.md)
 * Manual
   * [Installation Guide](Installation.md)
