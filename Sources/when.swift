@@ -208,7 +208,7 @@ public func when<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrent
 /**
  Waits on all provided promises.
 
- `when(fulfilled:)` rejects as soon as one of the provided promises rejects. `when(resolved:)` waits on all provided promises and **never** rejects.
+ `when(fulfilled:)` rejects as soon as one of the provided promises rejects. `when(resolved:)` waits on all provided promises whatever their result, and then provides an array of `Result<T>` so you can individually inspect the results. As a consequence this function returns a `Guarantee`, ie. errors are lifted from the individual promises into the results array of the returned `Guarantee`.
 
      when(resolved: promise1, promise2, promise3).then { results in
          for result in results where case .fulfilled(let value) {
@@ -219,15 +219,14 @@ public func when<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrent
      }
 
  - Returns: A new promise that resolves once all the provided promises resolve. The array is ordered the same as the input, ie. the result order is *not* resolution order.
- - Warning: The returned promise can *not* be rejected.
- - Note: Any promises that error are implicitly consumed, your UnhandledErrorHandler will not be called.
- - Remark: Doesn't take Thenable due to protocol associatedtype paradox
+ - Note: we do not provide tuple variants for `when(resolved:)` but will accept a pull-request
+ - Remark: Doesn't take Thenable due to protocol `associatedtype` paradox
 */
 public func when<T>(resolved promises: Promise<T>...) -> Guarantee<[Result<T>]> {
     return when(resolved: promises)
 }
 
-/// Waits on all provided promises.
+/// - See: `when(resolved: Promise<T>...)`
 public func when<T>(resolved promises: [Promise<T>]) -> Guarantee<[Result<T>]> {
     guard !promises.isEmpty else {
         return .value([])
