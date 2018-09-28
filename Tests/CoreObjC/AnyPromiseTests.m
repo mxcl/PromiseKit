@@ -189,13 +189,22 @@ static inline AnyPromise *fulfillLater() {
     }).then(^{
         XCTAssertEqual(x, 1);
         x++;
-        
+    }).then(^{
+        XCTAssertEqual(x, 2);
+        x++;
+    }).then(^{
+        XCTAssertEqual(x, 3);
+        x++;
+    }).then(^{
+        XCTAssertEqual(x, 4);
+        x++;
+
         [ex1 fulfill];
     });
     
     [self waitForExpectationsWithTimeout:1 handler:nil];
     
-    XCTAssertEqual(x, 2);
+    XCTAssertEqual(x, 5);
 }
 
 - (void)test_10_then_returns_resolved_promise {
