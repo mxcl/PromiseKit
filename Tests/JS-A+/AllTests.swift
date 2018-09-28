@@ -13,9 +13,9 @@ class AllTests: XCTestCase {
     
     func testAll() {
         
-        let bundle = Bundle(for: AllTests.self)
-        guard let scriptPath = bundle.url(forResource: "build", withExtension: "js", subdirectory: "build") else {
-            return XCTFail("Couldn't find test suite")
+        let scriptPath = URL(fileURLWithPath: #file).deletingLastPathComponent().appendingPathComponent("build/build.js")
+        guard FileManager.default.fileExists(atPath: scriptPath.path) else {
+            return print("Skipping JS-A+: see README for instructions on how to build")
         }
         
         guard let script = try? String(contentsOf: scriptPath) else {

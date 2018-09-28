@@ -54,16 +54,23 @@ matrix:
     - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.1.2  TEST=1'}
     # Swift 4.2
     - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=DEVELOPMENT-SNAPSHOT-2018-06-20-a  TEST=1'}
-
+cache:
+  - Tests/JS-A+/build
 before_install:
   if [ "$TRAVIS_OS_NAME" == "linux" ]; then
     eval "$(curl -sL https://swiftenv.fuller.li/install.sh)";
+  elif [ "$TEST" == "1" ]; then
+    brew install node;
   fi
 install:
   case $PLAT in
   iOS|tvOS|macOS|watchOS)
     xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build;
     if [ "$TEST" == "1" ]; then
+      pushd Tests/JS-A+;
+      npm ci;
+      npm run build;
+      popd;
       xcodebuild -scheme PromiseKit -quiet -destination "$DST" build;
     fi;;
   *)
@@ -83,6 +90,6 @@ script:
     fi;;
   esac
 after_success:
-  - if [ "$TRAVIS_OS_NAME" == "osx" ]; then
-      bash <(curl -s https://codecov.io/bash);
-    fi
+  if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+    bash <(curl -s https://codecov.io/bash);
+  fi

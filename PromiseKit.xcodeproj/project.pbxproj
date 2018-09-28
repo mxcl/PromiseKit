@@ -84,7 +84,6 @@
 		C013F740204E5064006B57B1 /* JSUtils.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F73F204E5063006B57B1 /* JSUtils.swift */; };
 		C0244E5E2047A6CB00ACB4AC /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B0AC571D595E1B00FA21D9 /* PromiseKit.framework */; };
 		C0244E692047AC9F00ACB4AC /* AllTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = C0244E682047AC9F00ACB4AC /* AllTests.swift */; };
-		C0244E6F2047AF1700ACB4AC /* build in CopyFiles */ = {isa = PBXBuildFile; fileRef = C0244E6D2047AEA400ACB4AC /* build */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -132,7 +131,6 @@
 			dstPath = "";
 			dstSubfolderSpec = 7;
 			files = (
-				C0244E6F2047AF1700ACB4AC /* build in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -227,7 +225,6 @@
 		C013F73F204E5063006B57B1 /* JSUtils.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = JSUtils.swift; path = "Tests/JS-A+/JSUtils.swift"; sourceTree = "<group>"; };
 		C0244E622047A6CB00ACB4AC /* PMKJSA+Tests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "PMKJSA+Tests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 		C0244E682047AC9F00ACB4AC /* AllTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = AllTests.swift; path = "Tests/JS-A+/AllTests.swift"; sourceTree = "<group>"; };
-		C0244E6D2047AEA400ACB4AC /* build */ = {isa = PBXFileReference; lastKnownFileType = folder; name = build; path = "Tests/JS-A+/build"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -482,7 +479,6 @@
 		C0244E6B2047ACAF00ACB4AC /* JS/A+ */ = {
 			isa = PBXGroup;
 			children = (
-				C0244E6D2047AEA400ACB4AC /* build */,
 				C0244E682047AC9F00ACB4AC /* AllTests.swift */,
 				C013F7372048E3B6006B57B1 /* MockNodeEnvironment.swift */,
 				C013F7392049076A006B57B1 /* JSPromise.swift */,
