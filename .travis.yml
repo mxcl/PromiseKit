@@ -65,6 +65,7 @@ before_install:
 install:
   case $PLAT in
   iOS|tvOS|macOS|watchOS)
+    set -e;
     xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build;
     if [ "$TEST" == "1" ]; then
       pushd Tests/JS-A+;
