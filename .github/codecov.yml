@@ -1,6 +1,8 @@
 ignore:
   - "Tests"
-  
+  - "README.md"
+  - "Documentation"
+
 codecov:
   notify:
     require_ci_to_pass: yes
@@ -25,5 +27,6 @@ parsers:
 
 comment:
   layout: "reach, diff, flags, files, footer"
-  behavior: default
+  behavior: once
   require_changes: no
+  comment: off
