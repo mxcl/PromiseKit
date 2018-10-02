@@ -59,8 +59,6 @@ cache:
 before_install:
   if [ "$TRAVIS_OS_NAME" == "linux" ]; then
     eval "$(curl -sL https://swiftenv.fuller.li/install.sh)";
-  elif [ "$TEST" == "1" ]; then
-    brew install node;
   fi
 install:
   case $PLAT in
@@ -69,7 +67,7 @@ install:
     xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build;
     if [ "$TEST" == "1" ]; then
       pushd Tests/JS-A+;
-      npm ci;
+      npm ci || npm i;
       npm run build;
       popd;
       xcodebuild -scheme PromiseKit -quiet -destination "$DST" build;
