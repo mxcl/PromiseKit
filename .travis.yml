@@ -1,6 +1,9 @@
 # - `pod lib lint` weirdness explanation: https://github.com/CocoaPods/CocoaPods/issues/7123
 # - In Travis `cd foo` returns non-zero exit, hence `set +e` before changing directory
 
+branches:
+  only: 
+    - master
 matrix:
   include:
     - {osx_image: xcode10,  env: 'POD_LINT=1',                                                            os: osx, language: objective-c}
@@ -62,13 +65,6 @@ matrix:
 cache:
   - Tests/JS-A+/build
   - Tests/JS-A+/node_modules
-deploy:
-  provider: script
-  script:
-    - mv .github/PromiseKit.podspec .
-    - pod trunk push
-  on:
-    tags: true
 before_install:
   if [ "$TRAVIS_OS_NAME" == "linux" ]; then
     eval "$(curl -sL https://swiftenv.fuller.li/install.sh)";
