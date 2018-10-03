@@ -1,5 +1,10 @@
+# - `pod lib lint` weirdness explanation: https://github.com/CocoaPods/CocoaPods/issues/7123
+# - In Travis `cd foo` returns non-zero exit, hence `set +e` before changing directory
+
 matrix:
   include:
+    - {osx_image: xcode10,  env: 'POD_LINT=1',                                                            os: osx, language: objective-c}
+
     - {osx_image: xcode8.3, env: 'SWFT=3.1  PLAT=iOS      DST="OS=10.3.1,name=iPhone SE"',                os: osx, language: objective-c}
     - {osx_image: xcode8.3, env: 'SWFT=3.1  PLAT=tvOS     DST="OS=10.2,name=Apple TV 1080p"',             os: osx, language: objective-c}
     - {osx_image: xcode8.3, env: 'SWFT=3.1  PLAT=macOS    DST="arch=x86_64"',                             os: osx, language: objective-c}
@@ -47,15 +52,23 @@ matrix:
     # Swift 3.3
     - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.1.2  TEST=1'}
     # Swift 3.4
-    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=3  SWIFT_VERSION=DEVELOPMENT-SNAPSHOT-2018-06-20-a  TEST=1'}
+    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.2    TEST=1'}
     # Swift 4.0
     - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.0.3'}
     # Swift 4.1
     - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.1.2  TEST=1'}
     # Swift 4.2
-    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=DEVELOPMENT-SNAPSHOT-2018-06-20-a  TEST=1'}
+    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.2    TEST=1'}
 cache:
   - Tests/JS-A+/build
+  - Tests/JS-A+/node_modules
+deploy:
+  provider: script
+  script:
+    - mv .github/PromiseKit.podspec .
+    - pod trunk push
+  on:
+    tags: true
 before_install:
   if [ "$TRAVIS_OS_NAME" == "linux" ]; then
     eval "$(curl -sL https://swiftenv.fuller.li/install.sh)";
@@ -65,25 +78,27 @@ install:
   iOS|tvOS|macOS|watchOS)
     set -e;
     xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build;
-    set +e;
     if [ "$TEST" == "1" ]; then
-      set -e;
       npm install -g npm;
       set +e;
       cd Tests/JS-A+;
-      set -ex;
+      set -e;
       npm ci;
       npm run build;
       set +ex;
       cd ../..;
       set -e;
       xcodebuild -scheme PromiseKit -quiet -destination "$DST" build;
-      set +e;
     fi;;
   *)
-    swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION;;
+    if [[ $POD_LINT != "1" ]]; then
+      swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION;
+    else
+      gem install cocoapods --pre;
+    fi;;
   esac
 script:
+  set -e;
   case $PLAT in
   iOS|tvOS|macOS)
     if [[ $TEST == "1" ]]; then
@@ -94,9 +109,12 @@ script:
   *)
     if [[ $TEST == "1" ]]; then
       swift test -Xswiftc -swift-version -Xswiftc 4;
+    elif [[ $POD_LINT == "1" ]]; then 
+      mv .github/PromiseKit.podspec .;
+      pod lib lint --fail-fast --verbose | ruby -e 'ARGF.each{ print "." }';
     fi;;
   esac
 after_success:
-  if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+  if [ "$TRAVIS_OS_NAME" == "osx" && $POD_LINT != "1" ]; then
     bash <(curl -s https://codecov.io/bash);
   fi
