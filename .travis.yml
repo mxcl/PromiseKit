@@ -1,5 +1,7 @@
 matrix:
   include:
+    - {osx_image: xcode10,  env: 'POD_LINT=1',                                                            os: osx, language: objective-c}
+
     - {osx_image: xcode8.3, env: 'SWFT=3.1  PLAT=iOS      DST="OS=10.3.1,name=iPhone SE"',                os: osx, language: objective-c}
     - {osx_image: xcode8.3, env: 'SWFT=3.1  PLAT=tvOS     DST="OS=10.2,name=Apple TV 1080p"',             os: osx, language: objective-c}
     - {osx_image: xcode8.3, env: 'SWFT=3.1  PLAT=macOS    DST="arch=x86_64"',                             os: osx, language: objective-c}
@@ -65,25 +67,25 @@ install:
   iOS|tvOS|macOS|watchOS)
     set -e;
     xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build;
-    set +e;
     if [ "$TEST" == "1" ]; then
-      set -e;
       npm install -g npm;
       set +e;
       cd Tests/JS-A+;
-      set -ex;
+      set -e;
       npm ci;
       npm run build;
       set +ex;
       cd ../..;
       set -e;
       xcodebuild -scheme PromiseKit -quiet -destination "$DST" build;
-      set +e;
     fi;;
   *)
-    swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION;;
+    if [[ $POD_LINT != "1" ]]; then
+      swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION;
+    fi;;
   esac
 script:
+  set -e;
   case $PLAT in
   iOS|tvOS|macOS)
     if [[ $TEST == "1" ]]; then
@@ -94,9 +96,12 @@ script:
   *)
     if [[ $TEST == "1" ]]; then
       swift test -Xswiftc -swift-version -Xswiftc 4;
+    elif [[ $POD_LINT == "1" ]]; then 
+      mv .github/PromiseKit.podspec .;
+      pod lib lint --fail-fast;
     fi;;
   esac
 after_success:
-  if [ "$TRAVIS_OS_NAME" == "osx" ]; then
+  if [ "$TRAVIS_OS_NAME" == "osx" && $POD_LINT != "1" ]; then
     bash <(curl -s https://codecov.io/bash);
   fi

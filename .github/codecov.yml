@@ -2,6 +2,7 @@ ignore:
   - "Tests"
   - "README.md"
   - "Documentation"
+  - ".travis.yml"
 
 codecov:
   notify:
