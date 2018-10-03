@@ -1,3 +1,6 @@
+# - `pod lib lint` weirdness explanation: https://github.com/CocoaPods/CocoaPods/issues/7123
+# - In Travis `cd foo` returns non-zero exit, hence `set +e` before changing directory
+
 matrix:
   include:
     - {osx_image: xcode10,  env: 'POD_LINT=1',                                                            os: osx, language: objective-c}
@@ -108,7 +111,7 @@ script:
       swift test -Xswiftc -swift-version -Xswiftc 4;
     elif [[ $POD_LINT == "1" ]]; then 
       mv .github/PromiseKit.podspec .;
-      pod lib lint --fail-fast;
+      pod lib lint --fail-fast --verbose | ruby -e 'ARGF.each{ print "." }';
     fi;;
   esac
 after_success:
