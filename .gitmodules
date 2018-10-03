@@ -64,3 +64,6 @@
 [submodule "Extensions/HomeKit"]
 	path = Extensions/HomeKit
 	url = https://github.com/PromiseKit/HomeKit.git
+[submodule "Extensions/HealthKit"]
+	path = Extensions/HealthKit
+	url = https://github.com/PromiseKit/PMKHealthKit

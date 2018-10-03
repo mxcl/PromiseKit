@@ -152,6 +152,14 @@ Pod::Spec.new do |s|
     ss.tvos.deployment_target = '9.0'
   end
 
+  s.subspec 'HealthKit' do |ss|
+    ss.source_files = Dir['Extensions/HealthKit/Sources/*']
+    ss.dependency 'PromiseKit/CorePromise'
+    ss.frameworks = 'HealthKit'
+    ss.ios.deployment_target = '9.0'
+    ss.watchos.deployment_target = '2.0'
+  end
+
   s.subspec 'HomeKit' do |ss|
     ss.source_files = Dir['Extensions/HomeKit/Sources/*']
     ss.dependency 'PromiseKit/CorePromise'
