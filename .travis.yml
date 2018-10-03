@@ -65,12 +65,20 @@ install:
   iOS|tvOS|macOS|watchOS)
     set -e;
     xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build;
+    set +e;
     if [ "$TEST" == "1" ]; then
-      pushd Tests/JS-A+;
-      npm ci || npm i;
+      set -e;
+      npm install -g npm;
+      set +e;
+      cd Tests/JS-A+;
+      set -ex;
+      npm ci;
       npm run build;
-      popd;
+      set +ex;
+      cd ../..;
+      set -e;
       xcodebuild -scheme PromiseKit -quiet -destination "$DST" build;
+      set +e;
     fi;;
   *)
     swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION;;
