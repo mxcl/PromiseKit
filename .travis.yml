@@ -82,6 +82,8 @@ install:
   *)
     if [[ $POD_LINT != "1" ]]; then
       swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION;
+    else
+      gem install cocoapods --pre;
     fi;;
   esac
 script:
