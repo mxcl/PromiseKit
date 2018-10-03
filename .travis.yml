@@ -1,5 +1,6 @@
 # - `pod lib lint` weirdness explanation: https://github.com/CocoaPods/CocoaPods/issues/7123
 # - In Travis `cd foo` returns non-zero exit, hence `set +e` before changing directory
+# - We need a newer version of npm in order to assemble our JS/A+ tests
 
 branches:
   only: 
@@ -68,6 +69,8 @@ cache:
 before_install:
   if [ "$TRAVIS_OS_NAME" == "linux" ]; then
     eval "$(curl -sL https://swiftenv.fuller.li/install.sh)";
+  else
+    mv .github/PromiseKit.podspec .;
   fi
 install:
   case $PLAT in
@@ -87,10 +90,10 @@ install:
       xcodebuild -scheme PromiseKit -quiet -destination "$DST" build;
     fi;;
   *)
-    if [[ $POD_LINT != "1" ]]; then
-      swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION;
-    else
+    if [[ $POD_LINT == "1" ]]; then
       gem install cocoapods --pre;
+    else
+      swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION;
     fi;;
   esac
 script:
@@ -99,6 +102,9 @@ script:
   iOS|tvOS|macOS)
     if [[ $TEST == "1" ]]; then
       xcodebuild -scheme PromiseKit -destination "$DST" test -enableCodeCoverage YES;
+    fi;
+    if [[ $PLAT == "macOS" ]]; then
+      pod lib lint --subspec=PromiseKit/CorePromise --skip-tests --fail-fast;
     fi;;
   watchOS)
     ;;
@@ -106,8 +112,7 @@ script:
     if [[ $TEST == "1" ]]; then
       swift test -Xswiftc -swift-version -Xswiftc 4;
     elif [[ $POD_LINT == "1" ]]; then 
-      mv .github/PromiseKit.podspec .;
-      pod lib lint --fail-fast --verbose | ruby -e 'ARGF.each{ print "." }';
+      pod lib lint --fail-fast --verbose --skip-tests | ruby -e 'ARGF.each{ print "." }';
     fi;;
   esac
 after_success:
