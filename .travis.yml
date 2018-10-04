@@ -108,7 +108,7 @@ script:
       xcodebuild -scheme PromiseKit -destination "$DST" test -enableCodeCoverage YES;
     fi;
     if [[ $PLAT == "macOS" ]]; then
-      pod lib lint --subspec=PromiseKit/CorePromise --skip-tests --fail-fast --swift-version=$SWFT;
+      pod lib lint --subspec=PromiseKit/CorePromise --fail-fast --swift-version=$SWFT;
     fi;;
   watchOS)
     ;;
@@ -116,7 +116,7 @@ script:
     if [[ $TEST == "1" ]]; then
       swift test -Xswiftc -swift-version -Xswiftc 4;
     elif [[ $POD_LINT == "1" ]]; then 
-      pod lib lint --fail-fast --verbose --skip-tests | ruby -e 'ARGF.each{ print "." }';
+      pod lib lint --fail-fast --verbose --swift-version=4.2 | ruby -e 'ARGF.each{ print "." }';
     fi;;
   esac
 after_success:
