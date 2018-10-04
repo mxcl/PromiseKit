@@ -311,6 +311,11 @@ extra disambiguation for the Swift compiler. Sorry; we tried.
 typically just pass completion handler parameters to `resolve` and let Swift figure
 out which variant to apply to your particular case (as shown in the example above).
 
+> *Note* `Guarantees` (below) have a slightly different initializer (since they
+cannot error) so the parameter to the initializer closure is just a closure. Not
+a `Resolver` object. Thus do `seal(value)` rather than `seal.fulfill(value)`. This
+is because there is no variations in what guarantees can be sealed with, they can
+*only* fulfill.
 
 # `Guarantee<T>`
 
@@ -339,6 +344,27 @@ In general, you should be able to use `Guarantee`s and `Promise`s interchangeabl
 We have gone to great lengths to try and ensure this, so please open a ticket
 if you find an issue.
 
+---
+
+If you are creating your own guarantees the syntax is simpler than that of promises;
+
+```swift
+func fetch() -> Promise<String> {
+    return Guarantee { seal in
+        fetch { result in
+            seal(result)
+        }
+    }
+}
+```
+
+Which could be reduced to:
+
+```swift
+func fetch() -> Promise<String> {
+    return Guarantee(resolver: fetch)
+}
+```
 
 # `map`, `compactMap`, etc.
 
