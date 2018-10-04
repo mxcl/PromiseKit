@@ -67,6 +67,7 @@ cache:
   - Tests/JS-A+/build
   - Tests/JS-A+/node_modules
 before_install:
+  set -e;
   if [ "$TRAVIS_OS_NAME" == "linux" ]; then
     eval "$(curl -sL https://swiftenv.fuller.li/install.sh)";
   else
@@ -79,9 +80,9 @@ before_install:
     fi;
   fi
 install:
+  set -e;
   case $PLAT in
-  iOS|tvOS|macOS|watchOS)
-    set -e;
+  iOS|tvOS|macOS|watchOS)  
     xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build;
     if [ "$TEST" == "1" ]; then
       set +e;
@@ -95,7 +96,9 @@ install:
       xcodebuild -scheme PromiseKit -quiet -destination "$DST" build;
     fi;;
   *)
-    swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION;;
+    if [[ $POD_LINT != "1" ]]; then
+      swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION;
+    fi;;
   esac
 script:
   set -e;
@@ -105,7 +108,7 @@ script:
       xcodebuild -scheme PromiseKit -destination "$DST" test -enableCodeCoverage YES;
     fi;
     if [[ $PLAT == "macOS" ]]; then
-      pod lib lint --subspec=PromiseKit/CorePromise --skip-tests --fail-fast;
+      pod lib lint --subspec=PromiseKit/CorePromise --skip-tests --fail-fast --swift-version=$SWFT;
     fi;;
   watchOS)
     ;;
