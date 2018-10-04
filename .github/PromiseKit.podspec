@@ -20,7 +20,10 @@ Pod::Spec.new do |s|
   s.documentation_url = 'http://promisekit.org/docs/'
   s.default_subspecs = 'CorePromise', 'UIKit', 'Foundation'
   s.requires_arc = true
-  s.swift_version = '4.0'
+  
+  # CocoaPods documentation (like usual) is unclear about the
+  # consequences of setting this; we support 3.2 THROUGH 4.2
+  # s.swift_version = '4.0'
 
   # CocoaPods requires us to specify the root deployment targets
   # even though for us it is nonsense. Our root spec has no
