@@ -82,6 +82,7 @@ jobs:
         EOF
       script: pod trunk push --allow-warnings
 
+<<<<<<< HEAD
     - name: Generate Documentation
       git.depth: false
       install: gem install jazzy
@@ -105,3 +106,76 @@ jobs:
         git commit -m "Updated docs for v$TRAVIS_TAG"
         git remote add secure-origin https://${GITHUB_TOKEN}@github.com/mxcl/PromiseKit.git
         git push secure-origin gh-pages
+=======
+    # Swift 3.2
+    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.0.3'}
+    # Swift 3.3
+    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.1.2  TEST=1'}
+    # Swift 3.4
+    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.2    TEST=1'}
+    # Swift 4.0
+    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.0.3'}
+    # Swift 4.1
+    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.1.2  TEST=1'}
+    # Swift 4.2
+    - {os: linux, dist: trusty, sudo: required, language: generic, env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.2    TEST=1'}
+cache:
+  - Tests/JS-A+/build
+  - Tests/JS-A+/node_modules
+before_install:
+  set -e;
+  if [ "$TRAVIS_OS_NAME" == "linux" ]; then
+    eval "$(curl -sL https://swiftenv.fuller.li/install.sh)";
+  else
+    if [[ $POD_LINT == "1" || $PLAT == "macOS" ]]; then
+      mv .github/PromiseKit.podspec .;
+      gem install cocoapods --prerelease --version 1.6.0.beta.1;
+    fi;
+    if [ "$TEST" == "1" ]; then
+      npm install -g npm;
+    fi;
+  fi
+install:
+  set -e;
+  case $PLAT in
+  iOS|tvOS|macOS|watchOS)  
+    xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWFT -quiet -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build;
+    if [ "$TEST" == "1" ]; then
+      set +e;
+      cd Tests/JS-A+;
+      set -e;
+      npm ci;
+      npm run build;
+      set +e;
+      cd ../..;
+      set -e;
+      xcodebuild -scheme PromiseKit -quiet -destination "$DST" build;
+    fi;;
+  *)
+    if [[ $POD_LINT != "1" ]]; then
+      swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION;
+    fi;;
+  esac
+script:
+  set -e;
+  case $PLAT in
+  iOS|tvOS|macOS)
+    if [[ $TEST == "1" ]]; then
+      xcodebuild -scheme PromiseKit -destination "$DST" test -enableCodeCoverage YES;
+    fi;
+    if [[ $PLAT == "macOS" ]]; then
+      pod lib lint --subspec=PromiseKit/CorePromise --fail-fast --swift-version=$SWFT;
+    fi;;
+  watchOS)
+    ;;
+  *)
+    if [[ $TEST == "1" ]]; then
+      swift test -Xswiftc -swift-version -Xswiftc 4;
+    elif [[ $POD_LINT == "1" ]]; then 
+      pod lib lint --fail-fast --verbose --swift-version=4.2 | ruby -e 'ARGF.each{ print "." }';
+    fi;;
+  esac
+after_success:
+  if [ "$TRAVIS_OS_NAME" == "osx" && $POD_LINT != "1" ]; then
+    bash <(curl -s https://codecov.io/bash);
+  fi
