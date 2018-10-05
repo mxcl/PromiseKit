@@ -6,81 +6,81 @@
 branches:
   only: 
     - master
+jobs:
+  include:
+    - &mac
+      stage: test
+      os: osx
+      language: objective-c
+      before_install: >
+        mv .github/PromiseKit.podspec .
+        gem install cocoapods --prerelease --version 1.6.0.beta.1
+        npm install -g npm
+      install:
+        xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWFT -quiet SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build
+      script: >
+        xcodebuild -scheme PromiseKit -destination "$DST" test -enableCodeCoverage YES
+        pod lib lint --subspec=PromiseKit/CorePromise --fail-fast --swift-version=$SWFT
+      cache:
+        - Tests/JS-A+/build
+        - Tests/JS-A+/node_modules
+      after_success:
+        bash <(curl -s https://codecov.io/bash)
 
-- &mac
-  stage: test
-  os: osx
-  language: objective-c
-  before_install: >
-    mv .github/PromiseKit.podspec .
-    gem install cocoapods --prerelease --version 1.6.0.beta.1
-    npm install -g npm
-  install:
-    xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWFT -quiet SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build
-  script: >
-    xcodebuild -scheme PromiseKit -destination "$DST" test -enableCodeCoverage YES
-    pod lib lint --subspec=PromiseKit/CorePromise --fail-fast --swift-version=$SWFT
-  cache:
-    - Tests/JS-A+/build
-    - Tests/JS-A+/node_modules
-  after_success:
-    bash <(curl -s https://codecov.io/bash)
+    - <<: *mac
+      osx_image: xcode8.3
+      env: SWFT=3.1
+    - <<: *mac
+      osx_image: xcode9.2
+      env: SWFT=3.2
+    - <<: *mac
+      osx_image: xcode10
+      env: SWFT=3.3
+    - <<: *mac
+      osx_image: xcode9.2
+      env: SWFT=4.0
+    - <<: *mac
+      osx_image: xcode9.4
+      env: SWFT=4.1
+    - <<: *mac
+      osx_image: xcode10
+      env: SWFT=4.2
 
-- <<: *mac
-  osx_image: xcode8.3
-  env: SWFT=3.1
-- <<: *mac
-  osx_image: xcode9.2
-  env: SWFT=3.2
-- <<: *mac
-  osx_image: xcode10
-  env: SWFT=3.3
-- <<: *mac
-  osx_image: xcode9.2
-  env: SWFT=4.0
-- <<: *mac
-  osx_image: xcode9.4
-  env: SWFT=4.1
-- <<: *mac
-  osx_image: xcode10
-  env: SWFT=4.2
+    - &linux
+      stage: test
+      os: linux
+      dist: trusty
+      sudo: required
+      language: generic
+      before_install:
+        eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
+      install:
+        swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION
+      script: >
+        if [[ $TEST == 1 ]]; then
+          swift test -Xswiftc -swift-version -Xswiftc 4
+        fi
 
-- &linux
-  stage: test
-  os: linux
-  dist: trusty
-  sudo: required
-  language: generic
-  before_install:
-    eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
-  install:
-    swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION
-  script: >
-    if [[ $TEST == 1 ]]; then
-      swift test -Xswiftc -swift-version -Xswiftc 4
-    fi
+    # Swift 3.2
+    - <<: *linux
+      env: 'SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.0.3'
+    # Swift 3.3
+    - <<: *linux
+      env: 'SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.1.2  TEST=1'
+    # Swift 3.4
+    - <<: *linux
+      env: 'SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.2    TEST=1'
+    # Swift 4.0
+      env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.0.3'
+    # Swift 4.1
+      env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.1.2  TEST=1'
+    # Swift 4.2
+      env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.2    TEST=1'
 
-# Swift 3.2
-- <<: *linux
-  env: 'SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.0.3'
-# Swift 3.3
-- <<: *linux
-  env: 'SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.1.2  TEST=1'
-# Swift 3.4
-- <<: *linux
-  env: 'SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.2    TEST=1'
-# Swift 4.0
-  env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.0.3'
-# Swift 4.1
-  env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.1.2  TEST=1'
-# Swift 4.2
-  env: 'SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.2    TEST=1'
-
-stages:
-  - name: deploy
-    script: pod trunk push --verbose --swift-version=4.2 | ruby -e 'ARGF.each{ print "." }'
-    os: osx
-    osx_image: xcode10
-    language: objective-c
-    on:
-      tags: true
+    - stage: deploy
+      script: pod trunk push --verbose --swift-version=4.2 | ruby -e 'ARGF.each{ print "." }'
+      os: osx
+      osx_image: xcode10
+      language: objective-c
+      on:
+        tags: true
