@@ -10,15 +10,16 @@ jobs:
   include:
     - &mac
       stage: test
+      name: macOS
       os: osx
       language: objective-c
-      before_install: >
+      before_install: |
         mv .github/PromiseKit.podspec .
         gem install cocoapods --prerelease --version 1.6.0.beta.1
         npm install -g npm
       install:
         xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWFT -quiet SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build
-      script: >
+      script: |
         xcodebuild -scheme PromiseKit -destination "$DST" test -enableCodeCoverage YES
         pod lib lint --subspec=PromiseKit/CorePromise --fail-fast --swift-version=$SWFT
       cache:
@@ -48,6 +49,7 @@ jobs:
 
     - &linux
       stage: test
+      name: SwiftPM
       os: linux
       dist: trusty
       sudo: required
