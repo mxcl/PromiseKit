@@ -1,21 +1,25 @@
 branches:
   only: 
     - master
+stages:
+  - lint
+  - compile
+  - test
+  - deploy
+deploy:
+  on:
+    tags: true
 jobs:
   include:
     - &macOS
-      stage: test
-      osx_image: xcode10
-      env: SWIFT=4.2
-      name: macOS / Swift 4.2
+      stage: compile
+      osx_image: xcode8.3
+      env: SWIFT=3.1
+      name: macOS / Swift 3.1
       os: osx
       language: objective-c
       install:
         xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWIFT -quiet SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build
-      script:
-        xcodebuild -scheme PromiseKit test -enableCodeCoverage YES
-      after_success:
-        bash <(curl -s https://codecov.io/bash)
 
     - <<: *macOS
       osx_image: xcode9.4
@@ -34,23 +38,24 @@ jobs:
       env: SWIFT=3.2
       name: macOS / Swift 3.2
     - <<: *macOS
-      osx_image: xcode8.3
-      env: SWIFT=3.1
-      name: macOS / Swift 3.1
+      osx_image: xcode10
+      env: SWIFT=4.2
+      name: macOS / Swift 4.2
+      stage: test
+      script:
+        xcodebuild -scheme PromiseKit test -enableCodeCoverage YES
+      after_success:
+        bash <(curl -s https://codecov.io/bash)
 
     - &iOS
-      stage: test
-      osx_image: xcode10
-      env: SWIFT=4.2 DST="OS=12.0,name=iPhone SE"
-      name: iOS / Swift 4.2
+      stage: compile
+      osx_image: xcode8.3
+      env: SWIFT=3.1 DST="OS=10.3.1,name=iPhone SE"
+      name: iOS / Swift 3.1
       os: osx
       language: objective-c
       install:
         xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWIFT -destination "$DST" -quiet SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build
-      script:
-        xcodebuild -scheme PromiseKit -destination "$DST" test -enableCodeCoverage YES
-      after_success:
-        bash <(curl -s https://codecov.io/bash)
 
     - <<: *iOS
       osx_image: xcode9.4
@@ -86,15 +91,20 @@ jobs:
       env: SWIFT=3.2 DST="OS=11.2,name=iPhone SE"
       name: iOS / Swift 3.2
     - <<: *iOS
-      osx_image: xcode8.3
-      env: SWIFT=3.1 DST="OS=10.3.1,name=iPhone SE"
-      name: iOS / Swift 3.1
+      osx_image: xcode10
+      env: SWIFT=4.2 DST="OS=12.0,name=iPhone SE"
+      name: iOS / Swift 4.2
+      stage: test
+      script:
+        xcodebuild -scheme PromiseKit -destination "$DST" test -enableCodeCoverage YES
+      after_success:
+        bash <(curl -s https://codecov.io/bash)
 
     - &tvOS
-      stage: test
-      name: tvOS / Swift 4.2
-      osx_image: xcode10
-      env: SWIFT=4.2 DST="OS=12.0,name=Apple TV"
+      stage: compile
+      name: tvOS / Swift 3.1
+      osx_image: xcode8.3
+      env: SWIFT=3.1 DST="10.2,name=Apple TV 1080p"
       os: osx
       language: objective-c
       install:
@@ -133,10 +143,17 @@ jobs:
       osx_image: xcode9.2
       env: SWIFT=3.2 DST="OS=11.2,name=Apple TV"
       name: iOS / Swift 3.2
+
     - <<: *tvOS
-      osx_image: xcode8.3
-      env: SWIFT=3.1 DST="10.2,name=Apple TV 1080p"
-      name: iOS / Swift 3.1
+      osx_image: xcode10
+      env: SWIFT=4.2 DST="OS=12.0,name=Apple TV"
+      name: iOS / Swift 4.2
+      stage: test
+      script:
+        xcodebuild -scheme PromiseKit -destination "$DST" test -enableCodeCoverage YES
+      after_success:
+        bash <(curl -s https://codecov.io/bash)
+
 
     - &watchOS
       stage: compile
@@ -183,7 +200,7 @@ jobs:
       name: watchOS / Swift 3.1
 
     - &pod
-      stage: test
+      stage: lint
       osx_image: xcode10
       env: SWIFT=4.2
       name: pod lib lint --swift-version=4.2
@@ -221,9 +238,9 @@ jobs:
       name: pod lib lint --swift-version=3.1
       
     - &linux
-      stage: test
-      env: SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.2  TEST=1
-      name: Linux / Swift 4.2
+      stage: compile
+      env: SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.0.3
+      name: Linux / Swift 3.2
       os: linux
       dist: trusty
       sudo: required
@@ -232,26 +249,28 @@ jobs:
         eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
       install:
         swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION
-      script: |
-        if [[ $TEST == 1 ]]; then
-          swift test -Xswiftc -swift-version -Xswiftc 4
-        fi
 
     - <<: *linux
-      env: SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.1.2  TEST=1
-      name: Linux / Swift 4.1
+      env: SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.1.2
+      name: Linux / Swift 3.3
+    - <<: *linux
+      env: SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.2
+      name: Linux / Swift 3.4
     - <<: *linux
       env: SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.0.3
       name: Linux / Swift 4.0
+      stage: test
+      install: swift test -Xswiftc -swift-version -Xswiftc 4
     - <<: *linux
-      env: SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.2    TEST=1
-      name: Linux / Swift 3.4
+      env: SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.1.2
+      name: Linux / Swift 4.1
+      stage: test
+      install: swift test -Xswiftc -swift-version -Xswiftc 4
     - <<: *linux
-      env: SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.1.2  TEST=1
-      name: Linux / Swift 3.3
-    - <<: *linux
-      env: SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.0.3
-      name: Linux / Swift 3.2
+      env: SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.2
+      name: Linux / Swift 4.2
+      stage: test
+      install: swift test -Xswiftc -swift-version -Xswiftc 4
 
 
     # only run one instance of these since they test behavior
@@ -291,5 +310,3 @@ jobs:
       os: osx
       osx_image: xcode10
       language: objective-c
-      on:
-        tags: true
