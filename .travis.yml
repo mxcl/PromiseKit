@@ -5,10 +5,17 @@
 branches:
   only: 
     - master
+jobs:
+  include:
+    - stage: deploy
+      script: pod trunk push --verbose --swift-version=4.2 | ruby -e 'ARGF.each{ print "." }'
+      os: osx
+      osx_image: xcode10
+      language: objective-c
+      on:
+        tags: true
 matrix:
   include:
-    - {osx_image: xcode10,  env: 'POD_LINT=1',                                                            os: osx, language: objective-c}
-
     - {osx_image: xcode8.3, env: 'SWFT=3.1  PLAT=iOS      DST="OS=10.3.1,name=iPhone SE"',                os: osx, language: objective-c}
     - {osx_image: xcode8.3, env: 'SWFT=3.1  PLAT=tvOS     DST="OS=10.2,name=Apple TV 1080p"',             os: osx, language: objective-c}
     - {osx_image: xcode8.3, env: 'SWFT=3.1  PLAT=macOS    DST="arch=x86_64"',                             os: osx, language: objective-c}
@@ -71,7 +78,7 @@ before_install:
   if [ "$TRAVIS_OS_NAME" == "linux" ]; then
     eval "$(curl -sL https://swiftenv.fuller.li/install.sh)";
   else
-    if [[ $POD_LINT == "1" || $PLAT == "macOS" ]]; then
+    if [[ $PLAT == "macOS" ]]; then
       mv .github/PromiseKit.podspec .;
       gem install cocoapods --prerelease --version 1.6.0.beta.1;
     fi;
@@ -96,9 +103,7 @@ install:
       xcodebuild -scheme PromiseKit -quiet -destination "$DST" build;
     fi;;
   *)
-    if [[ $POD_LINT != "1" ]]; then
-      swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION;
-    fi;;
+    swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION;
   esac
 script:
   set -e;
@@ -115,8 +120,6 @@ script:
   *)
     if [[ $TEST == "1" ]]; then
       swift test -Xswiftc -swift-version -Xswiftc 4;
-    elif [[ $POD_LINT == "1" ]]; then 
-      pod lib lint --fail-fast --verbose --swift-version=4.2 | ruby -e 'ARGF.each{ print "." }';
     fi;;
   esac
 after_success:
