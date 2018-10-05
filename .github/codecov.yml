@@ -26,8 +26,4 @@ parsers:
       method: no
       macro: no
 
-comment:
-  layout: "reach, diff, flags, files, footer"
-  behavior: once
-  require_changes: no
-  comment: off
+comment: off
