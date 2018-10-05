@@ -10,6 +10,8 @@ jobs:
   include:
     - &mac
       stage: test
+      osx_image: xcode8.3
+      env: SWFT=3.1
       name: macOS
       os: osx
       language: objective-c
@@ -29,9 +31,6 @@ jobs:
         bash <(curl -s https://codecov.io/bash)
 
     - <<: *mac
-      osx_image: xcode8.3
-      env: SWFT=3.1
-    - <<: *mac
       osx_image: xcode9.2
       env: SWFT=3.2
     - <<: *mac
@@ -47,8 +46,10 @@ jobs:
       osx_image: xcode10
       env: SWFT=4.2
 
+    # Swift 3.2
     - &linux
       stage: test
+      env: 'SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.0.3'
       name: SwiftPM
       os: linux
       dist: trusty
@@ -63,7 +64,6 @@ jobs:
           swift test -Xswiftc -swift-version -Xswiftc 4
         fi
 
-    # Swift 3.2
     - <<: *linux
       env: 'SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.0.3'
     # Swift 3.3
