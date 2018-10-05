@@ -6,9 +6,6 @@ stages:
   - compile
   - test
   - deploy
-deploy:
-  on:
-    tags: true
 jobs:
   include:
     - &macOS
@@ -111,9 +108,9 @@ jobs:
 
     - &tvOS
       stage: compile
-      name: tvOS / Swift 3.1 / tvOS 10
+      name: tvOS 10 / Swift 3.1
       osx_image: xcode8.3
-      env: SWIFT=3.1 DST="10.2,name=Apple TV 1080p"
+      env: SWIFT=3.1 DST="OS=10.2,name=Apple TV 1080p"
       os: osx
       language: objective-c
       install:
@@ -123,37 +120,37 @@ jobs:
     - <<: *tvOS
       osx_image: xcode9.2
       env: SWIFT=3.2 DST="OS=11.2,name=Apple TV"
-      name: iOS / Swift 3.2 / tvOS 11
+      name: tvOS 11 / Swift 3.2
     - <<: *tvOS
       osx_image: xcode9.4
       env: SWIFT=3.3 DST="OS=11.4,name=Apple TV"
-      name: iOS / Swift 3.3 / tvOS 11
+      name: tvOS 11 / Swift 3.3
     - <<: *tvOS
       osx_image: xcode10
       env: SWIFT=3.4 DST="OS=11.4,name=Apple TV"
-      name: iOS / Swift 3.4 / tvOS 11
+      name: tvOS 11 / Swift 3.4
     - <<: *tvOS
       osx_image: xcode9.2
       env: SWIFT=4.0 DST="OS=11.2,name=Apple TV"
-      name: iOS / Swift 4.0 / tvOS 11
+      name: tvOS 11 / Swift 4.0
 
     - <<: *tvOS
       osx_image: xcode9.3
       env: SWIFT=4.1 DST="OS=9.2,name=Apple TV 1080p"
-      name: tvOS / Swift 4.1 / tvOS 9
+      name: tvOS 9 / Swift 4.1
     - <<: *tvOS
       osx_image: xcode9.3
       env: SWIFT=4.1 DST="OS=10.2,name=Apple TV 1080p"
-      name: tvOS / Swift 4.1 / tvOS 10
+      name: tvOS 10 / Swift 4.1
     - <<: *tvOS
       osx_image: xcode9.4
       env: SWIFT=4.1 DST="OS=11.4,name=Apple TV"
-      name: tvOS / Swift 4.1 / tvOS 11
+      name: tvOS 11 / Swift 4.1
 
     - <<: *tvOS
       osx_image: xcode10
       env: SWIFT=4.2 DST="OS=12.0,name=Apple TV"
-      name: iOS / Swift 4.2 / tvOS 12
+      name: tvOS 12 / Swift 4.2
       stage: test
       script:
         xcodebuild -scheme PromiseKit -destination "$DST" test -enableCodeCoverage YES
@@ -164,7 +161,7 @@ jobs:
     - &watchOS
       stage: compile
       osx_image: xcode10
-      env: SWIFT=4.2 "OS=5.0,name=Apple Watch Series 3 - 42mm"
+      env: SWIFT=4.2 DST="OS=5.0,name=Apple Watch Series 3 - 42mm"
       name: watchOS / Swift 4.2 / watchOS 5
       os: osx
       language: objective-c
@@ -193,17 +190,17 @@ jobs:
       name: watchOS / Swift 4.0 / watchOS 4
 
     - <<: *watchOS
-      osx_image: xcode9.4
-      env: SWIFT=4.1 DST="OS=4.3,name=Apple Watch - 38mm"
-      name: watchOS / Swift 4.1 / watchOS 4
+      osx_image: xcode9.3
+      env: SWIFT=4.1 DST="OS=2.2,name=Apple Watch - 38mm"
+      name: watchOS / Swift 4.1 / watchOS 2
     - <<: *watchOS
       osx_image: xcode9.3
       env: SWIFT=4.1 DST="OS=3.2,name=Apple Watch - 38mm"
       name: watchOS / Swift 4.1 / watchOS 3
     - <<: *watchOS
-      osx_image: xcode9.3
-      env: SWIFT=4.1 DST="OS=2.2,name=Apple Watch - 38mm"
-      name: watchOS / Swift 4.1 / watchOS 2
+      osx_image: xcode9.4
+      env: SWIFT=4.1 DST="OS=4.3,name=Apple Watch - 38mm"
+      name: watchOS / Swift 4.1 / watchOS 4
 
     - <<: *watchOS
       osx_image: xcode10
@@ -314,12 +311,13 @@ jobs:
 
 
     - stage: deploy
+      if: tag IS present
       script: |
         set -euxo pipefail
         pod trunk push --verbose --swift-version=4.2 | ruby -e 'ARGF.each{ print "." }'
         # This pipe because Travis times us out if there is no output
         # AND `pod` defaults to hardly any output
-        # BUT `--verbose` generates so much output that Travis kills our script
+        # BUT `--verbose` generates so much output that Travis kills our script due to *too much* output!
       os: osx
       osx_image: xcode10
       language: objective-c
