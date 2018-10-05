@@ -1,8 +1,3 @@
-# - `pod lib lint` weirdness explanation: https://github.com/CocoaPods/CocoaPods/issues/7123
-# - In Travis `cd foo` returns non-zero exit, hence `set +e` before changing directory
-# - We need a newer version of npm in order to assemble our JS/A+ tests
-
-
 branches:
   only: 
     - master
@@ -11,44 +6,36 @@ jobs:
     - &macOS
       stage: test
       osx_image: xcode10
-      env: SWFT=4.2
+      env: SWIFT=4.2
       name: macOS / Swift 4.2
       os: osx
       language: objective-c
-      before_install: |
-        mv .github/PromiseKit.podspec .
-        gem install cocoapods --prerelease --version 1.6.0.beta.1
-        npm install -g npm
       install:
-        xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWFT -quiet SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build
-      script: |
+        xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWIFT -quiet SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build
+      script:
         xcodebuild -scheme PromiseKit test -enableCodeCoverage YES
-        pod lib lint --subspec=PromiseKit/CorePromise --fail-fast --swift-version=$SWFT
-      cache:
-        - Tests/JS-A+/build
-        - Tests/JS-A+/node_modules
       after_success:
         bash <(curl -s https://codecov.io/bash)
 
     - <<: *macOS
       osx_image: xcode9.4
-      env: SWFT=4.1
+      env: SWIFT=4.1
       name: macOS / Swift 4.1
     - <<: *macOS
       osx_image: xcode9.2
-      env: SWFT=4.0
+      env: SWIFT=4.0
       name: macOS / Swift 4.0
     - <<: *macOS
       osx_image: xcode10
-      env: SWFT=3.3
+      env: SWIFT=3.3
       name: macOS / Swift 3.3
     - <<: *macOS
       osx_image: xcode9.2
-      env: SWFT=3.2
+      env: SWIFT=3.2
       name: macOS / Swift 3.2
     - <<: *macOS
       osx_image: xcode8.3
-      env: SWFT=3.1
+      env: SWIFT=3.1
       name: macOS / Swift 3.1
 
     - &iOS
@@ -59,48 +46,48 @@ jobs:
       os: osx
       language: objective-c
       install:
-        xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWFT -destination "$DST" -quiet SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build
-      script: |
+        xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWIFT -destination "$DST" -quiet SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build
+      script:
         xcodebuild -scheme PromiseKit -destination "$DST" test -enableCodeCoverage YES
       after_success:
         bash <(curl -s https://codecov.io/bash)
 
     - <<: *iOS
       osx_image: xcode9.4
-      env: SWFT=4.1 DST="OS=11.4,name=iPhone SE"
+      env: SWIFT=4.1 DST="OS=11.4,name=iPhone SE"
       name: iOS / Swift 4.1 / iOS 11
     - <<: *iOS
       osx_image: xcode9.4
-      env: SWFT=4.1 DST="OS=10.3.1,name=iPhone SE"
+      env: SWIFT=4.1 DST="OS=10.3.1,name=iPhone SE"
       name: iOS / Swift 4.1 / iOS 10
     - <<: *iOS
       osx_image: xcode9.4
-      env: SWFT=4.1 DST="OS=9.3,name=iPhone 5s"
+      env: SWIFT=4.1 DST="OS=9.3,name=iPhone 5s"
       name: iOS / Swift 4.1 / iOS 9
     - <<: *iOS
       osx_image: xcode9.4
-      env: SWFT=4.1 DST="OS=8.4,name=iPhone 4s"
+      env: SWIFT=4.1 DST="OS=8.4,name=iPhone 4s"
       name: iOS / Swift 4.1 / iOS 8
 
     - <<: *iOS
       osx_image: xcode9.2
-      env: SWFT=4.0 DST="OS=11.2,name=iPhone SE"
+      env: SWIFT=4.0 DST="OS=11.2,name=iPhone SE"
       name: iOS / Swift 4.0
     - <<: *iOS
       osx_image: xcode10
-      env: SWFT=3.4 DST="OS=12.0,name=iPhone SE"
+      env: SWIFT=3.4 DST="OS=12.0,name=iPhone SE"
       name: iOS / Swift 3.4
     - <<: *iOS
       osx_image: xcode9.4
-      env: SWFT=3.3 DST="OS=11.4,name=iPhone SE"
+      env: SWIFT=3.3 DST="OS=11.4,name=iPhone SE"
       name: iOS / Swift 3.3
     - <<: *iOS
       osx_image: xcode9.2
-      env: SWFT=3.2 DST="OS=11.2,name=iPhone SE"
+      env: SWIFT=3.2 DST="OS=11.2,name=iPhone SE"
       name: iOS / Swift 3.2
     - <<: *iOS
       osx_image: xcode8.3
-      env: SWFT=3.1 DST="OS=10.3.1,name=iPhone SE"
+      env: SWIFT=3.1 DST="OS=10.3.1,name=iPhone SE"
       name: iOS / Swift 3.1
 
     - &tvOS
@@ -111,7 +98,7 @@ jobs:
       os: osx
       language: objective-c
       install:
-        xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWFT -destination "$DST" -quiet SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build
+        xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWIFT -destination "$DST" -quiet SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build
       script: |
         xcodebuild -scheme PromiseKit -destination "$DST" test -enableCodeCoverage YES
       after_success:
@@ -119,83 +106,120 @@ jobs:
 
     - <<: *tvOS
       osx_image: xcode9.4
-      env: SWFT=4.1 DST="OS=11.4,name=Apple TV"
+      env: SWIFT=4.1 DST="OS=11.4,name=Apple TV"
       name: tvOS / Swift 4.1 / tvOS 11
     - <<: *tvOS
       osx_image: xcode9.3
-      env: SWFT=4.1 DST="OS=10.2,name=Apple TV 1080p"
+      env: SWIFT=4.1 DST="OS=10.2,name=Apple TV 1080p"
       name: tvOS / Swift 4.1 / tvOS 10
     - <<: *tvOS
       osx_image: xcode9.3
-      env: SWFT=4.1 DST="OS=9.2,name=Apple TV 1080p"
+      env: SWIFT=4.1 DST="OS=9.2,name=Apple TV 1080p"
       name: tvOS / Swift 4.1 / tvOS 9
 
     - <<: *tvOS
       osx_image: xcode9.2
-      env: SWFT=4.0 DST="OS=11.2,name=Apple TV"
+      env: SWIFT=4.0 DST="OS=11.2,name=Apple TV"
       name: iOS / Swift 4.0
     - <<: *tvOS
       osx_image: xcode10
-      env: SWFT=3.4 DST="OS=11.4,name=Apple TV"
+      env: SWIFT=3.4 DST="OS=11.4,name=Apple TV"
       name: iOS / Swift 3.4
     - <<: *tvOS
       osx_image: xcode9.4
-      env: SWFT=3.3 DST="OS=11.4,name=Apple TV"
+      env: SWIFT=3.3 DST="OS=11.4,name=Apple TV"
       name: iOS / Swift 3.3
     - <<: *tvOS
       osx_image: xcode9.2
-      env: SWFT=3.2 DST="OS=11.2,name=Apple TV"
+      env: SWIFT=3.2 DST="OS=11.2,name=Apple TV"
       name: iOS / Swift 3.2
     - <<: *tvOS
       osx_image: xcode8.3
-      env: SWFT=3.1 DST="10.2,name=Apple TV 1080p"
+      env: SWIFT=3.1 DST="10.2,name=Apple TV 1080p"
       name: iOS / Swift 3.1
 
     - &watchOS
       stage: compile
       osx_image: xcode10
-      env: SWFT=4.2 "OS=5.0,name=Apple Watch Series 3 - 42mm"
+      env: SWIFT=4.2 "OS=5.0,name=Apple Watch Series 3 - 42mm"
       name: watchOS / Swift 4.2
       os: osx
       language: objective-c
       script:
-        xcodebuild -scheme PromiseKit SWIFT_VERSION=$SWFT -destination "$DST" -quiet SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build
+        xcodebuild -scheme PromiseKit SWIFT_VERSION=$SWIFT -destination "$DST" -quiet SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build
 
     - <<: *watchOS
       osx_image: xcode9.4
-      env: SWFT=4.1 DST="OS=4.3,name=Apple Watch - 38mm"
+      env: SWIFT=4.1 DST="OS=4.3,name=Apple Watch - 38mm"
       name: watchOS / Swift 4.1 / watchOS 4
     - <<: *watchOS
       osx_image: xcode9.3
-      env: SWFT=4.1 DST="OS=3.2,name=Apple Watch - 38mm"
+      env: SWIFT=4.1 DST="OS=3.2,name=Apple Watch - 38mm"
       name: watchOS / Swift 4.1 / watchOS 3
     - <<: *watchOS
       osx_image: xcode9.3
-      env: SWFT=4.1 DST="OS=2.2,name=Apple Watch - 38mm"
+      env: SWIFT=4.1 DST="OS=2.2,name=Apple Watch - 38mm"
       name: watchOS / Swift 4.1 / watchOS 2
 
     - <<: *watchOS
       osx_image: xcode9.2
-      env: SWFT=4.0 DST="OS=4.2,name=Apple Watch - 38mm"
-      name: watchOS / Swift 4.0 / watchOS 4
+      env: SWIFT=4.0 DST="OS=4.2,name=Apple Watch - 38mm"
+      name: watchOS / Swift 4.0
     - <<: *watchOS
       osx_image: xcode10
-      env: SWFT=3.4 DST="OS=5.0,name=Apple Watch Series 3 - 42mm"
-      name: watchOS / Swift 3.4 / watchOS 4
+      env: SWIFT=3.4 DST="OS=5.0,name=Apple Watch Series 3 - 42mm"
+      name: watchOS / Swift 3.4
     - <<: *watchOS
       osx_image: xcode9.4
-      env: SWFT=3.3 DST="OS=4.3,name=Apple Watch - 38mm"
-      name: watchOS / Swift 3.3 / watchOS 4
+      env: SWIFT=3.3 DST="OS=4.3,name=Apple Watch - 38mm"
+      name: watchOS / Swift 3.3
     - <<: *watchOS
       osx_image: xcode9.2
-      env: SWFT=3.2 DST="OS=4.2,name=Apple Watch - 38mm"
-      name: watchOS / Swift 3.2 / watchOS 4
+      env: SWIFT=3.2 DST="OS=4.2,name=Apple Watch - 38mm"
+      name: watchOS / Swift 3.2
     - <<: *watchOS
       osx_image: xcode8.3
-      env: SWFT=3.1 DST="OS=3.2,name=Apple Watch - 38mm"
-      name: watchOS / Swift 3.1 / watchOS 4
+      env: SWIFT=3.1 DST="OS=3.2,name=Apple Watch - 38mm"
+      name: watchOS / Swift 3.1
 
+    - &pod
+      stage: test
+      osx_image: xcode10
+      env: SWIFT=4.2
+      name: pod lib lint --swift-version=4.2
+      os: osx
+      language: objective-c
+      before_install: |
+        mv .github/PromiseKit.podspec .
+        gem install cocoapods --prerelease --version 1.6.0.beta.1
+      script:
+        pod lib lint --subspec=PromiseKit/CorePromise --fail-fast --swift-version=$SWIFT
 
+    - <<: *pod
+      osx_image: xcode9.4
+      env: SWIFT=4.1
+      name: pod lib lint --swift-version=4.1
+    - <<: *pod
+      osx_image: xcode9.2
+      env: SWIFT=4.0
+      name: pod lib lint --swift-version=4.0
+    - <<: *pod
+      osx_image: xcode10
+      env: SWIFT=3.4
+      name: pod lib lint --swift-version=3.3
+    - <<: *pod
+      osx_image: xcode9.4
+      env: SWIFT=3.3
+      name: pod lib lint --swift-version=3.3
+    - <<: *pod
+      osx_image: xcode9.2
+      env: SWIFT=3.2
+      name: pod lib lint --swift-version=3.2
+    - <<: *pod
+      osx_image: xcode8.3
+      env: SWIFT=3.1
+      name: pod lib lint --swift-version=3.1
+      
     - &linux
       stage: test
       env: SWIFT_BUILD_VERSION=4  SWIFT_VERSION=4.2  TEST=1
@@ -208,7 +232,7 @@ jobs:
         eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
       install:
         swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION
-      script: >
+      script: |
         if [[ $TEST == 1 ]]; then
           swift test -Xswiftc -swift-version -Xswiftc 4
         fi
@@ -228,6 +252,34 @@ jobs:
     - <<: *linux
       env: SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.0.3
       name: Linux / Swift 3.2
+
+
+    # only run one instance of these since they test behavior
+    - stage: test
+      name: Promises/A+ via Javascript Bridge
+      language: objective-c
+      os: osx
+      osx_image: xcode10
+      before_install:
+        npm install -g npm
+        # ^^ need newer npm than comes with the image
+      install: |
+        cd Tests/JS-A+
+        set -e
+        npm ci
+        npm run build
+        set +e
+        # ^^ `cd` on travis returns a non-zero exit code!
+        cd ../..
+        xcodebuild -scheme PromiseKit -quiet SWIFT_VERSION=4.2 SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build
+      script:
+        xcodebuild -scheme PromiseKit SWIFT_VERSION=4.2 test
+        # TODO only run the A+ tests
+        # TODO shouldn’t build twice! Be kind to Travis.
+      cache:
+        - Tests/JS-A+/build
+        - Tests/JS-A+/node_modules
+
 
     - stage: deploy
       script: |
