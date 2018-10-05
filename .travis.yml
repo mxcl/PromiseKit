@@ -20,23 +20,28 @@ jobs:
       language: objective-c
       install:
         xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWIFT -quiet SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build
+      script: "true"
 
     - <<: *macOS
+      osx_image: xcode9.2
+      env: SWIFT=3.2
+      name: macOS / Swift 3.2
+    - <<: *macOS
       osx_image: xcode9.4
-      env: SWIFT=4.1
-      name: macOS / Swift 4.1
+      env: SWIFT=3.3
+      name: macOS / Swift 3.3
+    - <<: *macOS
+      osx_image: xcode10
+      env: SWIFT=3.4
+      name: macOS / Swift 3.4
     - <<: *macOS
       osx_image: xcode9.2
       env: SWIFT=4.0
       name: macOS / Swift 4.0
     - <<: *macOS
-      osx_image: xcode10
-      env: SWIFT=3.3
-      name: macOS / Swift 3.3
-    - <<: *macOS
-      osx_image: xcode9.2
-      env: SWIFT=3.2
-      name: macOS / Swift 3.2
+      osx_image: xcode9.4
+      env: SWIFT=4.1
+      name: macOS / Swift 4.1
     - <<: *macOS
       osx_image: xcode10
       env: SWIFT=4.2
@@ -47,107 +52,108 @@ jobs:
       after_success:
         bash <(curl -s https://codecov.io/bash)
 
+
     - &iOS
       stage: compile
       osx_image: xcode8.3
       env: SWIFT=3.1 DST="OS=10.3.1,name=iPhone SE"
-      name: iOS / Swift 3.1
+      name: iOS / Swift 3.1 / iOS 10
       os: osx
       language: objective-c
       install:
         xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWIFT -destination "$DST" -quiet SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build
+      script: "true"
 
     - <<: *iOS
-      osx_image: xcode9.4
-      env: SWIFT=4.1 DST="OS=11.4,name=iPhone SE"
-      name: iOS / Swift 4.1 / iOS 11
+      osx_image: xcode9.2
+      env: SWIFT=3.2 DST="OS=11.2,name=iPhone SE"
+      name: iOS / Swift 3.2 / iOS 11
     - <<: *iOS
       osx_image: xcode9.4
-      env: SWIFT=4.1 DST="OS=10.3.1,name=iPhone SE"
-      name: iOS / Swift 4.1 / iOS 10
+      env: SWIFT=3.3 DST="OS=11.4,name=iPhone SE"
+      name: iOS / Swift 3.3 / iOS 11
+    - <<: *iOS
+      osx_image: xcode10
+      env: SWIFT=3.4 DST="OS=12.0,name=iPhone SE"
+      name: iOS / Swift 3.4 / iOS 12
+    - <<: *iOS
+      osx_image: xcode9.2
+      env: SWIFT=4.0 DST="OS=11.2,name=iPhone SE"
+      name: iOS / Swift 4.0 / iOS 11
+      
+    - <<: *iOS
+      osx_image: xcode
+      env: SWIFT=4.1 DST="OS=8.4,name=iPhone 4s"
+      name: iOS / Swift 4.1 / iOS 8
     - <<: *iOS
       osx_image: xcode9.4
       env: SWIFT=4.1 DST="OS=9.3,name=iPhone 5s"
       name: iOS / Swift 4.1 / iOS 9
     - <<: *iOS
       osx_image: xcode9.4
-      env: SWIFT=4.1 DST="OS=8.4,name=iPhone 4s"
-      name: iOS / Swift 4.1 / iOS 8
-
-    - <<: *iOS
-      osx_image: xcode9.2
-      env: SWIFT=4.0 DST="OS=11.2,name=iPhone SE"
-      name: iOS / Swift 4.0
-    - <<: *iOS
-      osx_image: xcode10
-      env: SWIFT=3.4 DST="OS=12.0,name=iPhone SE"
-      name: iOS / Swift 3.4
+      env: SWIFT=4.1 DST="OS=10.3.1,name=iPhone SE"
+      name: iOS / Swift 4.1 / iOS 10
     - <<: *iOS
       osx_image: xcode9.4
-      env: SWIFT=3.3 DST="OS=11.4,name=iPhone SE"
-      name: iOS / Swift 3.3
-    - <<: *iOS
-      osx_image: xcode9.2
-      env: SWIFT=3.2 DST="OS=11.2,name=iPhone SE"
-      name: iOS / Swift 3.2
+      env: SWIFT=4.1 DST="OS=11.4,name=iPhone SE"
+      name: iOS / Swift 4.1 / iOS 11
+
     - <<: *iOS
       osx_image: xcode10
       env: SWIFT=4.2 DST="OS=12.0,name=iPhone SE"
-      name: iOS / Swift 4.2
+      name: iOS / Swift 4.2 / iOS 12
       stage: test
       script:
         xcodebuild -scheme PromiseKit -destination "$DST" test -enableCodeCoverage YES
       after_success:
         bash <(curl -s https://codecov.io/bash)
 
+
     - &tvOS
       stage: compile
-      name: tvOS / Swift 3.1
+      name: tvOS / Swift 3.1 / tvOS 10
       osx_image: xcode8.3
       env: SWIFT=3.1 DST="10.2,name=Apple TV 1080p"
       os: osx
       language: objective-c
       install:
         xcodebuild -scheme PromiseKit -target PromiseKit SWIFT_VERSION=$SWIFT -destination "$DST" -quiet SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build
-      script: |
-        xcodebuild -scheme PromiseKit -destination "$DST" test -enableCodeCoverage YES
-      after_success:
-        bash <(curl -s https://codecov.io/bash)
+      script: "true"
 
     - <<: *tvOS
+      osx_image: xcode9.2
+      env: SWIFT=3.2 DST="OS=11.2,name=Apple TV"
+      name: iOS / Swift 3.2 / tvOS 11
+    - <<: *tvOS
       osx_image: xcode9.4
-      env: SWIFT=4.1 DST="OS=11.4,name=Apple TV"
-      name: tvOS / Swift 4.1 / tvOS 11
+      env: SWIFT=3.3 DST="OS=11.4,name=Apple TV"
+      name: iOS / Swift 3.3 / tvOS 11
+    - <<: *tvOS
+      osx_image: xcode10
+      env: SWIFT=3.4 DST="OS=11.4,name=Apple TV"
+      name: iOS / Swift 3.4 / tvOS 11
+    - <<: *tvOS
+      osx_image: xcode9.2
+      env: SWIFT=4.0 DST="OS=11.2,name=Apple TV"
+      name: iOS / Swift 4.0 / tvOS 11
+
+    - <<: *tvOS
+      osx_image: xcode9.3
+      env: SWIFT=4.1 DST="OS=9.2,name=Apple TV 1080p"
+      name: tvOS / Swift 4.1 / tvOS 9
     - <<: *tvOS
       osx_image: xcode9.3
       env: SWIFT=4.1 DST="OS=10.2,name=Apple TV 1080p"
       name: tvOS / Swift 4.1 / tvOS 10
     - <<: *tvOS
-      osx_image: xcode9.3
-      env: SWIFT=4.1 DST="OS=9.2,name=Apple TV 1080p"
-      name: tvOS / Swift 4.1 / tvOS 9
-
-    - <<: *tvOS
-      osx_image: xcode9.2
-      env: SWIFT=4.0 DST="OS=11.2,name=Apple TV"
-      name: iOS / Swift 4.0
-    - <<: *tvOS
-      osx_image: xcode10
-      env: SWIFT=3.4 DST="OS=11.4,name=Apple TV"
-      name: iOS / Swift 3.4
-    - <<: *tvOS
       osx_image: xcode9.4
-      env: SWIFT=3.3 DST="OS=11.4,name=Apple TV"
-      name: iOS / Swift 3.3
-    - <<: *tvOS
-      osx_image: xcode9.2
-      env: SWIFT=3.2 DST="OS=11.2,name=Apple TV"
-      name: iOS / Swift 3.2
+      env: SWIFT=4.1 DST="OS=11.4,name=Apple TV"
+      name: tvOS / Swift 4.1 / tvOS 11
 
     - <<: *tvOS
       osx_image: xcode10
       env: SWIFT=4.2 DST="OS=12.0,name=Apple TV"
-      name: iOS / Swift 4.2
+      name: iOS / Swift 4.2 / tvOS 12
       stage: test
       script:
         xcodebuild -scheme PromiseKit -destination "$DST" test -enableCodeCoverage YES
@@ -159,11 +165,32 @@ jobs:
       stage: compile
       osx_image: xcode10
       env: SWIFT=4.2 "OS=5.0,name=Apple Watch Series 3 - 42mm"
-      name: watchOS / Swift 4.2
+      name: watchOS / Swift 4.2 / watchOS 5
       os: osx
       language: objective-c
       script:
         xcodebuild -scheme PromiseKit SWIFT_VERSION=$SWIFT -destination "$DST" -quiet SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build
+
+    - <<: *watchOS
+      osx_image: xcode8.3
+      env: SWIFT=3.1 DST="OS=3.2,name=Apple Watch - 38mm"
+      name: watchOS / Swift 3.1 / watchOS 3
+    - <<: *watchOS
+      osx_image: xcode9.2
+      env: SWIFT=3.2 DST="OS=4.2,name=Apple Watch - 38mm"
+      name: watchOS / Swift 3.2 / watchOS 4
+    - <<: *watchOS
+      osx_image: xcode9.4
+      env: SWIFT=3.3 DST="OS=4.3,name=Apple Watch - 38mm"
+      name: watchOS / Swift 3.3 / watchOS 4
+    - <<: *watchOS
+      osx_image: xcode10
+      env: SWIFT=3.4 DST="OS=5.0,name=Apple Watch Series 3 - 42mm"
+      name: watchOS / Swift 3.4 / watchOS 5
+    - <<: *watchOS
+      osx_image: xcode9.2
+      env: SWIFT=4.0 DST="OS=4.2,name=Apple Watch - 38mm"
+      name: watchOS / Swift 4.0 / watchOS 4
 
     - <<: *watchOS
       osx_image: xcode9.4
@@ -179,25 +206,10 @@ jobs:
       name: watchOS / Swift 4.1 / watchOS 2
 
     - <<: *watchOS
-      osx_image: xcode9.2
-      env: SWIFT=4.0 DST="OS=4.2,name=Apple Watch - 38mm"
-      name: watchOS / Swift 4.0
-    - <<: *watchOS
       osx_image: xcode10
-      env: SWIFT=3.4 DST="OS=5.0,name=Apple Watch Series 3 - 42mm"
-      name: watchOS / Swift 3.4
-    - <<: *watchOS
-      osx_image: xcode9.4
-      env: SWIFT=3.3 DST="OS=4.3,name=Apple Watch - 38mm"
-      name: watchOS / Swift 3.3
-    - <<: *watchOS
-      osx_image: xcode9.2
-      env: SWIFT=3.2 DST="OS=4.2,name=Apple Watch - 38mm"
-      name: watchOS / Swift 3.2
-    - <<: *watchOS
-      osx_image: xcode8.3
-      env: SWIFT=3.1 DST="OS=3.2,name=Apple Watch - 38mm"
-      name: watchOS / Swift 3.1
+      env: SWIFT=4.2 DST="OS=5.0,name=Apple Watch Series 3 - 42mm"
+      name: watchOS / Swift 4.2 / watchOS 5
+
 
     - &pod
       stage: lint
@@ -223,7 +235,7 @@ jobs:
     - <<: *pod
       osx_image: xcode10
       env: SWIFT=3.4
-      name: pod lib lint --swift-version=3.3
+      name: pod lib lint --swift-version=3.4
     - <<: *pod
       osx_image: xcode9.4
       env: SWIFT=3.3
@@ -236,7 +248,8 @@ jobs:
       osx_image: xcode8.3
       env: SWIFT=3.1
       name: pod lib lint --swift-version=3.1
-      
+
+
     - &linux
       stage: compile
       env: SWIFT_BUILD_VERSION=3  SWIFT_VERSION=4.0.3
