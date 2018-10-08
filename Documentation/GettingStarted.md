@@ -523,7 +523,13 @@ is more thorough at the source.
 In Xcode, don’t forget to option-click on PromiseKit functions to access this
 documentation while you're coding.
 
-Otherwise, return to our [contents page](/Documentation).
+Here are some recent articles that document PromiseKit 5+:
+
+* [Using Promises - Agostini.tech](https://agostini.tech/2018/10/08/using-promisekit)
+
+Careful with general online references, many of them refer to PMK < 5 which has a subtly
+different API (sorry about that, but Swift has changed a lot over the years and thus
+we had to too).
 
 
 [API Reference]: https://promisekit.org/reference/
