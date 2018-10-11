@@ -203,7 +203,7 @@ component promises in parallel and so completes much faster. Use the pattern
 shown above in situations where tasks *must* be run sequentially; animation
 is a good example.
 
-We also provide `when(concurrently:)`, which lets you schedule more than
+> We also provide `when(concurrently:)`, which lets you schedule more than
 one promise at a time if you need to.
 
 ## Timeout
