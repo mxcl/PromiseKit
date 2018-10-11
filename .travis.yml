@@ -47,6 +47,7 @@ jobs:
       env: SWIFT=4.2
       name: pod lib lint --swift-version=4.2
       os: osx
+      cache: cocoapods
       language: objective-c
       before_install: mv .github/PromiseKit.podspec .
       install: gem install cocoapods --prerelease --version 1.6.0.beta.1
@@ -167,9 +168,8 @@ jobs:
       language: objective-c
       os: osx
       osx_image: xcode10
-      before_install:
-        npm install -g npm
-        # ^^ need newer npm than comes with the image
+      before_install: npm install -g npm
+      # ^^ need newer npm than comes with the image
       install: |
         cd Tests/JS-A+
         set -e
@@ -178,10 +178,9 @@ jobs:
         set +e
         # ^^ `cd` on travis returns a non-zero exit code!
         cd ../..
-        xcodebuild -scheme PromiseKit -quiet SWIFT_VERSION=4.2 SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build
+        xcodebuild -scheme PromiseKit -quiet build
       script:
-        xcodebuild -scheme PromiseKit SWIFT_VERSION=4.2 test
-        # TODO only run the A+ tests
+        xcodebuild -scheme PromiseKit -only-testing:PMKJSA+Tests test
         # TODO shouldn’t build twice! Be kind to Travis.
       cache:
         - Tests/JS-A+/build
