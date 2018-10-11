@@ -100,9 +100,16 @@ jobs:
       os: osx
       language: objective-c
       env: DST='platform=OS X,arch=x86_64'
-      install: xcodebuild -scheme PromiseKit -target PromiseKit -destination="$DST" -quiet SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build
-      script: xcodebuild -scheme PromiseKit -destination="$DST" -enableCodeCoverage YES test
-      after_success: bash <(curl -s https://codecov.io/bash)
+      before_install: |
+        set -euxo pipefail
+        gem install xcpretty
+      install:
+        xcodebuild -scheme PromiseKit -target PromiseKit -destination="$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build 2> /dev/null | xcpretty
+      script: |
+        set -o
+        xcodebuild -scheme PromiseKit -destination="$DST" -enableCodeCoverage YES test 2> /dev/null | xcpretty
+      after_success:
+        bash <(curl -s https://codecov.io/bash)
     - <<: *test
       name: macOS / Xcode 9.4
       osx_image: xcode 9.4
@@ -153,9 +160,14 @@ jobs:
       language: objective-c
       os: osx
       osx_image: xcode10
-      before_install: npm install -g npm
-      install: bash -c "cd Tests/JS-A+; npm ci &>/dev/null && npm run --hide-modules build"
-      script: xcodebuild -scheme PromiseKit -target PMKJSA+Tests -enableCodeCoverage NO -only-testing:PMKJSA+Tests test
+      before_install: |
+        npm install -g npm
+        gem install xcpretty
+      install:
+        bash -c "cd Tests/JS-A+; npm ci &>/dev/null && npm run --hide-modules build"
+      script: |
+        set -euxo pipefail
+        xcodebuild -scheme PromiseKit -target PMKJSA+Tests -enableCodeCoverage NO -only-testing:PMKJSA+Tests test 2> /dev/null | xcpretty
       #FIXME ^^ still builds *all* the tests
       cache:
         directories:
