@@ -104,9 +104,9 @@ jobs:
         gem install xcpretty
         set -eo pipefail
       install:
-        xcodebuild -scheme PromiseKit -target PromiseKit -destination="$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build 2> /dev/null | xcpretty
+        xcodebuild -scheme PromiseKit -target PromiseKit -destination="$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build | xcpretty
       script: |
-        xcodebuild -scheme PromiseKit -destination="$DST" -enableCodeCoverage YES test
+        xcodebuild -scheme PromiseKit -destination="$DST" -enableCodeCoverage YES test | xcpretty
       after_success:
         bash <(curl -s https://codecov.io/bash)
     - <<: *test
@@ -120,34 +120,10 @@ jobs:
       osx_image: xcode10
 
     - <<: *test
-      name: iOS / Xcode 8.3
-      osx_image: xcode8.3
-      env: DST='OS=10.3.1,name=iPhone SE'
-    - <<: *test
-      name: iOS / Xcode 9.2
-      osx_image: xcode9.2
-      env: DST='OS=11.2,name=iPhone SE'
-    - <<: *test
-      name: iOS / Xcode 9.4
-      osx_image: xcode9.4
-      env: DST='OS=11.4,name=iPhone SE'
-    - <<: *test
       name: iOS / Xcode 10.0
       osx_image: xcode10
       env: DST='OS=12.0,name=iPhone SE'
 
-    - <<: *test
-      name: tvOS / Xcode 8.3
-      osx_image: xcode8.3
-      env: DST='OS=10.2,name=Apple TV 1080p'
-    - <<: *test
-      name: tvOS / Xcode 9.2
-      osx_image: xcode9.2
-      env: DST='OS=11.2,name=Apple TV'
-    - <<: *test
-      name: tvOS / Xcode 9.4
-      osx_image: xcode9.4
-      env: DST='OS=11.4,name=Apple TV'
     - <<: *test
       name: tvOS / Xcode 10.0
       env: DST='OS=12.0,name=Apple TV'
@@ -159,13 +135,14 @@ jobs:
       os: osx
       osx_image: xcode10
       before_install: |
+        set -eo pipefail
         npm install -g npm
         gem install xcpretty
       install:
         bash -c "cd Tests/JS-A+; npm ci &>/dev/null && npm run --hide-modules build"
       script: |
-        set -eo pipefail
-        xcodebuild -scheme PromiseKit -target PMKJSA+Tests -enableCodeCoverage NO -only-testing:PMKJSA+Tests test 2> /dev/null | xcpretty
+        set -o
+        xcodebuild -scheme PromiseKit -target PMKJSA+Tests -enableCodeCoverage NO -only-testing:PMKJSA+Tests test | xcpretty
       #FIXME ^^ still builds *all* the tests
       cache:
         directories:
@@ -184,7 +161,7 @@ jobs:
 
     - stage: deploy
       script: |
-        set -euxo pipefail
+        set -eo pipefail
         pod trunk push --verbose --swift-version=4.2 | ruby -e 'ARGF.each{ print "." }'
       # ^^ pipe because Travis times us out if there is no output
       # AND `pod` defaults to hardly any output
