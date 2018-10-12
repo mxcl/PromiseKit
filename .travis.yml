@@ -134,36 +134,36 @@ jobs:
       name: tvOS / Xcode 10.0
       env: DST='OS=12.0,name=Apple TV'
       osx_image: xcode10
-
-    - stage: test
-      name: Promises/A+ (via WebKit JavaScript Bridge)
-      language: objective-c
-      os: osx
-      osx_image: xcode10
-      before_install: |
-        set -eo pipefail
-        npm install -g npm
-        gem install xcpretty
-      install:
-        bash -c "cd Tests/JS-A+; npm ci &>/dev/null && npm run --hide-modules build"
-      script: |
-        set -o
-        xcodebuild -scheme PromiseKit -target PMKJSA+Tests -enableCodeCoverage NO -only-testing:PMKJSA+Tests test | xcpretty
-      #FIXME ^^ still builds *all* the tests
-      cache:
-        directories:
-          - Tests/JS-A+/build
-          - Tests/JS-A+/node_modules
-
-    - &swiftpm
-      stage: compile
-      name: SwiftPM / macOS / Xcode 9.4
-      os: osx
-      osx_image: xcode9.4
-      script: swift build
-    - <<: *swiftpm
-      osx_image: xcode10
-      name: SwiftPM / macOS / Xcode 10.0
+    #
+    # - stage: test
+    #   name: Promises/A+ (via WebKit JavaScript Bridge)
+    #   language: objective-c
+    #   os: osx
+    #   osx_image: xcode10
+    #   before_install: |
+    #     set -eo pipefail
+    #     npm install -g npm
+    #     gem install xcpretty
+    #   install:
+    #     bash -c "cd Tests/JS-A+; npm ci &>/dev/null && npm run --hide-modules build"
+    #   script: |
+    #     set -o
+    #     xcodebuild -scheme PromiseKit -target PMKJSA+Tests -enableCodeCoverage NO -only-testing:PMKJSA+Tests test | xcpretty
+    #   #FIXME ^^ still builds *all* the tests
+    #   cache:
+    #     directories:
+    #       - Tests/JS-A+/build
+    #       - Tests/JS-A+/node_modules
+    #
+    # - &swiftpm
+    #   stage: compile
+    #   name: SwiftPM / macOS / Xcode 9.4
+    #   os: osx
+    #   osx_image: xcode9.4
+    #   script: swift build
+    # - <<: *swiftpm
+    #   osx_image: xcode10
+    #   name: SwiftPM / macOS / Xcode 10.0
 
     - stage: deploy
       script: |

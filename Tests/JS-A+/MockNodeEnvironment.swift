@@ -115,3 +115,12 @@ class MockNodeEnvironment {
         timers[timerID] = nil
     }
 }
+
+
+#if swift(>=4.0) && !swift(>=4.1) || !swift(>=3.3)
+extension Sequence {
+    func compactMap<T>(_ transform: (Self.Element) throws -> T?) rethrows -> [T] {
+        return try flatMap(transform)
+    }
+}
+#endif
