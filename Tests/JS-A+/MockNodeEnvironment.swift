@@ -5,7 +5,7 @@
 //  Created by Lois Di Qual on 3/1/18.
 //
 
-#if swift(>=3.1)
+#if swift(>=3.2)
 
 import Foundation
 import JavaScriptCore
