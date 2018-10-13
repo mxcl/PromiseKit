@@ -5,6 +5,8 @@
 //  Created by Lois Di Qual on 3/1/18.
 //
 
+#if swift(>=3.1)
+
 import Foundation
 import JavaScriptCore
 
@@ -123,12 +125,5 @@ extension Sequence {
         return try flatMap(transform)
     }
 }
-#elseif swift(>=3.3)
-// compactMap is defined
-#else
-extension Sequence {
-    func compactMap<T>(_ transform: (Self.Element) throws -> T?) rethrows -> [T] {
-        return try flatMap(transform)
-    }
-}
+#endif
 #endif
