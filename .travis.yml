@@ -9,89 +9,89 @@ stages:
     if: branch =~ ^\d+\.\d+\.\d+$
 jobs:
   include:
-    # - &carthage
-    #   stage: compile
-    #   osx_image: xcode8.3
-    #   name: Carthage / Xcode 8.3
-    #   os: osx
-    #   language: objective-c
-    #   script: carthage build --no-skip-current --configuration Release
-    # - <<: *carthage
-    #   osx_image: xcode9.2
-    #   name: Carthage / Xcode 9.2
-    # - <<: *carthage
-    #   osx_image: xcode9.4
-    #   name: Carthage / Xcode 9.4
-    # - <<: *carthage
-    #   osx_image: xcode10
-    #   name: Carthage / Xcode 10.0
-    #
-    # - &pod
-    #   stage: lint
-    #   osx_image: xcode8.3
-    #   env: SWIFT=3.1
-    #   name: pod lib lint --swift-version=3.1
-    #   os: osx
-    #   cache: cocoapods
-    #   language: objective-c
-    #   before_install: mv .github/PromiseKit.podspec .
-    #   install: gem install cocoapods --prerelease --version 1.6.0.beta.1
-    #   script: pod lib lint --subspec=PromiseKit/CorePromise --fail-fast --swift-version=$SWIFT
-    # - <<: *pod
-    #   osx_image: xcode9.2
-    #   env: SWIFT=3.2
-    #   name: pod lib lint --swift-version=3.2
-    # - <<: *pod
-    #   osx_image: xcode9.4
-    #   env: SWIFT=3.3
-    #   name: pod lib lint --swift-version=3.3
-    # - <<: *pod
-    #   osx_image: xcode10
-    #   env: SWIFT=3.4
-    #   name: pod lib lint --swift-version=3.4
-    # - <<: *pod
-    #   osx_image: xcode9.2
-    #   env: SWIFT=4.0
-    #   name: pod lib lint --swift-version=4.0
-    # - <<: *pod
-    #   osx_image: xcode9.4
-    #   env: SWIFT=4.1
-    #   name: pod lib lint --swift-version=4.1
-    # - <<: *pod
-    #   osx_image: xcode10
-    #   env: SWIFT=4.2
-    #   name: pod lib lint --swift-version=4.2
-    #
-    # - &linux
-    #   stage: compile
-    #   env: SWIFT_BUILD_VERSION=3 SWIFT_VERSION=4.0.3
-    #   name: Linux / Swift 3.2
-    #   os: linux
-    #   dist: trusty
-    #   sudo: required
-    #   language: generic
-    #   before_install: eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
-    #   install: swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION
-    #   script: "true"
-    # - <<: *linux
-    #   env: SWIFT_BUILD_VERSION=3 SWIFT_VERSION=4.1.2
-    #   name: Linux / Swift 3.3
-    # - <<: *linux
-    #   env: SWIFT_BUILD_VERSION=3 SWIFT_VERSION=4.2
-    #   name: Linux / Swift 3.4
-    # - <<: *linux
-    #   env: SWIFT_BUILD_VERSION=4 SWIFT_VERSION=4.0.3
-    #   name: Linux / Swift 4.0
-    #   stage: test
-    #   script: swift test -Xswiftc -swift-version -Xswiftc 4
-    # - <<: *linux
-    #   env: SWIFT_BUILD_VERSION=4 SWIFT_VERSION=4.1.2
-    #   name: Linux / Swift 4.1
-    # - <<: *linux
-    #   env: SWIFT_BUILD_VERSION=4 SWIFT_VERSION=4.2
-    #   name: Linux / Swift 4.2
-    #   stage: test
-    #   script: swift test -Xswiftc -swift-version -Xswiftc 4
+    - &carthage
+      stage: compile
+      osx_image: xcode8.3
+      name: Carthage / Xcode 8.3
+      os: osx
+      language: objective-c
+      script: carthage build --no-skip-current --configuration Release
+    - <<: *carthage
+      osx_image: xcode9.2
+      name: Carthage / Xcode 9.2
+    - <<: *carthage
+      osx_image: xcode9.4
+      name: Carthage / Xcode 9.4
+    - <<: *carthage
+      osx_image: xcode10
+      name: Carthage / Xcode 10.0
+
+    - &pod
+      stage: lint
+      osx_image: xcode8.3
+      env: SWIFT=3.1
+      name: pod lib lint --swift-version=3.1
+      os: osx
+      cache: cocoapods
+      language: objective-c
+      before_install: mv .github/PromiseKit.podspec .
+      install: gem install cocoapods --prerelease --version 1.6.0.beta.1
+      script: pod lib lint --subspec=PromiseKit/CorePromise --fail-fast --swift-version=$SWIFT
+    - <<: *pod
+      osx_image: xcode9.2
+      env: SWIFT=3.2
+      name: pod lib lint --swift-version=3.2
+    - <<: *pod
+      osx_image: xcode9.4
+      env: SWIFT=3.3
+      name: pod lib lint --swift-version=3.3
+    - <<: *pod
+      osx_image: xcode10
+      env: SWIFT=3.4
+      name: pod lib lint --swift-version=3.4
+    - <<: *pod
+      osx_image: xcode9.2
+      env: SWIFT=4.0
+      name: pod lib lint --swift-version=4.0
+    - <<: *pod
+      osx_image: xcode9.4
+      env: SWIFT=4.1
+      name: pod lib lint --swift-version=4.1
+    - <<: *pod
+      osx_image: xcode10
+      env: SWIFT=4.2
+      name: pod lib lint --swift-version=4.2
+
+    - &linux
+      stage: compile
+      env: SWIFT_BUILD_VERSION=3 SWIFT_VERSION=4.0.3
+      name: Linux / Swift 3.2
+      os: linux
+      dist: trusty
+      sudo: required
+      language: generic
+      before_install: eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
+      install: swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION
+      script: "true"
+    - <<: *linux
+      env: SWIFT_BUILD_VERSION=3 SWIFT_VERSION=4.1.2
+      name: Linux / Swift 3.3
+    - <<: *linux
+      env: SWIFT_BUILD_VERSION=3 SWIFT_VERSION=4.2
+      name: Linux / Swift 3.4
+    - <<: *linux
+      env: SWIFT_BUILD_VERSION=4 SWIFT_VERSION=4.0.3
+      name: Linux / Swift 4.0
+      stage: test
+      script: swift test -Xswiftc -swift-version -Xswiftc 4
+    - <<: *linux
+      env: SWIFT_BUILD_VERSION=4 SWIFT_VERSION=4.1.2
+      name: Linux / Swift 4.1
+    - <<: *linux
+      env: SWIFT_BUILD_VERSION=4 SWIFT_VERSION=4.2
+      name: Linux / Swift 4.2
+      stage: test
+      script: swift test -Xswiftc -swift-version -Xswiftc 4
 
     - &test
       stage: test
@@ -134,36 +134,36 @@ jobs:
       name: tvOS / Xcode 10.0
       env: DST='OS=12.0,name=Apple TV'
       osx_image: xcode10
-    #
-    # - stage: test
-    #   name: Promises/A+ (via WebKit JavaScript Bridge)
-    #   language: objective-c
-    #   os: osx
-    #   osx_image: xcode10
-    #   before_install: |
-    #     set -eo pipefail
-    #     npm install -g npm
-    #     gem install xcpretty
-    #   install:
-    #     bash -c "cd Tests/JS-A+; npm ci &>/dev/null && npm run --hide-modules build"
-    #   script: |
-    #     set -o
-    #     xcodebuild -scheme PromiseKit -target PMKJSA+Tests -enableCodeCoverage NO -only-testing:PMKJSA+Tests test | xcpretty
-    #   #FIXME ^^ still builds *all* the tests
-    #   cache:
-    #     directories:
-    #       - Tests/JS-A+/build
-    #       - Tests/JS-A+/node_modules
-    #
-    # - &swiftpm
-    #   stage: compile
-    #   name: SwiftPM / macOS / Xcode 9.4
-    #   os: osx
-    #   osx_image: xcode9.4
-    #   script: swift build
-    # - <<: *swiftpm
-    #   osx_image: xcode10
-    #   name: SwiftPM / macOS / Xcode 10.0
+
+    - stage: test
+      name: Promises/A+ (via WebKit JavaScript Bridge)
+      language: objective-c
+      os: osx
+      osx_image: xcode10
+      before_install: |
+        set -eo pipefail
+        npm install -g npm
+        gem install xcpretty
+      install:
+        bash -c "cd Tests/JS-A+; npm ci &>/dev/null && npm run --hide-modules build"
+      script: |
+        set -o
+        xcodebuild -scheme PromiseKit -target PMKJSA+Tests -enableCodeCoverage NO -only-testing:PMKJSA+Tests test | xcpretty
+      #FIXME ^^ still builds *all* the tests
+      cache:
+        directories:
+          - Tests/JS-A+/build
+          - Tests/JS-A+/node_modules
+
+    - &swiftpm
+      stage: compile
+      name: SwiftPM / macOS / Xcode 9.4
+      os: osx
+      osx_image: xcode9.4
+      script: swift build
+    - <<: *swiftpm
+      osx_image: xcode10
+      name: SwiftPM / macOS / Xcode 10.0
 
     - stage: deploy
       script: |
