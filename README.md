@@ -153,6 +153,11 @@ We recommend vanilla `URLSession`. It uses fewer black boxes and sticks closer t
 metal. Alamofire was essential until the three bulletpoints above became true,
 but nowadays it isn’t really necessary.
 
+# PromiseKit is Thousands of Hours of Work
+
+This project is a labor of love: to the pursuit of making quality, reusable, compartmentalized software that has general use
+to the wider development community. It is a widely used project where every change, fix and plan can have serious repurcussions to its users and thus must be carefully considered. If you use PromiseKit in your successful apps, please consider supporting its development with a donation to [my patreon](https://www.patreon.com/mxcl). Thank you.
+
 # Support
 
 Please check our [Troubleshooting Guide](Documentation/Troubleshooting.md), and
