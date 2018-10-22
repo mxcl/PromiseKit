@@ -29,7 +29,7 @@ public func fetch(image url: URL) -> Promise<Data> {
         return promise
     }
 
-    q.sync(flags: .barrier) {
+    q.sync {
         promise = Promise(.start) {
 
             let dst = try url.cacheDestination()
