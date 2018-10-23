@@ -103,16 +103,14 @@ class CancellationTests: XCTestCase {
             throw LocalError.cancel
         }
 
-        _ = p.ensure {
+        p.ensure {
             XCTFail()
-        }
-
-        _ = p.ensure(policy: .allErrors) {
+        }.catch(policy: .allErrors) {
+            XCTAssertTrue($0.isCancelled)
             ex1.fulfill()
         }
 
-        _ = p.catch(policy: .allErrors) {
-            XCTAssertTrue($0.isCancelled)
+        _ = p.ensure(policy: .allErrors) {
             ex2.fulfill()
         }
 
@@ -127,19 +125,17 @@ class CancellationTests: XCTestCase {
             throw LocalError.cancel
         }
 
-        _ = p.ensureThen {
+        p.ensureThen {
             XCTFail()
             return Guarantee.value(())
+        }.catch(policy: .allErrors) {
+            XCTAssertTrue($0.isCancelled)
+            ex1.fulfill()
         }
 
         _ = p.ensureThen(policy: .allErrors) {
-            ex1.fulfill()
-            return Guarantee.value(())
-        }
-
-        _ = p.catch(policy: .allErrors) {
-            XCTAssertTrue($0.isCancelled)
             ex2.fulfill()
+            return Guarantee.value(())
         }
 
         waitForExpectations(timeout: 1)
@@ -153,16 +149,14 @@ class CancellationTests: XCTestCase {
             throw LocalError.cancel
         }
 
-        _ = p.tap { _ in
+        p.tap { _ in
             XCTFail()
-        }
-
-        _ = p.tap(policy: .allErrors) { _ in
+        }.catch(policy: .allErrors) {
+            XCTAssertTrue($0.isCancelled)
             ex1.fulfill()
         }
 
-        _ = p.catch(policy: .allErrors) {
-            XCTAssertTrue($0.isCancelled)
+        _ = p.tap(policy: .allErrors) { _ in
             ex2.fulfill()
         }
 

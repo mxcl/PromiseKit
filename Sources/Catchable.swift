@@ -144,12 +144,12 @@ public extension CatchMixin {
         let rp = Promise<T>(.pending)
         pipe { result in
             if case .rejected(let error) = result, policy == .allErrorsExceptCancellation && error.isCancelled {
-                return
-            }
-
-            on.async(flags: flags) {
-                body()
-                rp.box.seal(result)
+                rp.box.seal(.rejected(error))
+            } else {
+                on.async(flags: flags) {
+                    body()
+                    rp.box.seal(result)
+                }
             }
         }
         return rp
@@ -179,12 +179,12 @@ public extension CatchMixin {
         let rp = Promise<T>(.pending)
         pipe { result in
             if case .rejected(let error) = result, policy == .allErrorsExceptCancellation && error.isCancelled {
-                return
-            }
-
-            on.async(flags: flags) {
-                body().done {
-                    rp.box.seal(result)
+                rp.box.seal(.rejected(error))
+            } else {
+                on.async(flags: flags) {
+                    body().done {
+                        rp.box.seal(result)
+                    }
                 }
             }
         }
@@ -209,12 +209,12 @@ public extension CatchMixin {
         return Promise { seal in
             pipe { result in
                 if case .rejected(let error) = result, policy == .allErrorsExceptCancellation && error.isCancelled {
-                    return
-                }
-
-                on.async(flags: flags) {
-                    body(result)
-                    seal.resolve(result)
+                    seal.reject(error)
+                } else {
+                    on.async(flags: flags) {
+                        body(result)
+                        seal.resolve(result)
+                    }
                 }
             }
         }
