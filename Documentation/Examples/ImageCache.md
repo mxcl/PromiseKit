@@ -15,7 +15,7 @@ import PromiseKit
  * Completely _ignores_ server caching headers!
  */
 
-private let q = DispatchQueue(label: "org.promisekit.cache.image")
+private let q = DispatchQueue(label: "org.promisekit.cache.image", qos: .utility, attributes: .concurrent)
 private var active: [URL: Promise<Data>] = [:]
 private var cleanup = Promise()
 
