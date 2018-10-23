@@ -408,7 +408,9 @@
 				635D64061D59630200BC0AF5 /* Tests */,
 				635893991D5BE51700F14B55 /* … */,
 			);
+			indentWidth = 4;
 			sourceTree = "<group>";
+			tabWidth = 4;
 		};
 		63B0AC581D595E1B00FA21D9 /* Products */ = {
 			isa = PBXGroup;

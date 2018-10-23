@@ -255,6 +255,47 @@ extension CatchableTests {
 
         wait(for: [ex], timeout: 10)
     }
+
+    func testTap_Value() {
+        let ex1 = expectation(description: "")
+        let ex2 = expectation(description: "")
+
+        Promise.value(1).tap {
+            if case .fulfilled(1) = $0 {
+                ex1.fulfill()
+            } else {
+                XCTFail()
+            }
+        }.done {
+            XCTAssertEqual($0, 1)
+            ex2.fulfill()
+        }.catch { _ in
+            XCTFail()
+        }
+
+        wait(for: [ex1, ex2], timeout: 10)
+    }
+
+    func testTap_Error() {
+        let ex1 = expectation(description: "")
+        let ex2 = expectation(description: "")
+
+        let p: Promise<Int> = Promise(error: Error.dummy)
+
+        p.tap {
+            if case .rejected(Error.dummy) = $0 {
+                ex1.fulfill()
+            } else {
+                XCTFail()
+            }
+        }.done { _ in
+            XCTFail()
+        }.catch { _ in
+            ex2.fulfill()
+        }
+
+        wait(for: [ex1, ex2], timeout: 10)
+    }
 }
 
 private enum Error: CancellableError {

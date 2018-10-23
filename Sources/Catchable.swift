@@ -135,12 +135,18 @@ public extension CatchMixin {
          }
      
      - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter policy: The default policy does not execute your handler for cancellation errors.
      - Parameter body: The closure that executes when this promise resolves.
      - Returns: A new promise, resolved with this promise’s resolution.
+     - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func ensure(on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, _ body: @escaping () -> Void) -> Promise<T> {
+    func ensure(on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping () -> Void) -> Promise<T> {
         let rp = Promise<T>(.pending)
         pipe { result in
+            if case .rejected(let error) = result, policy == .allErrorsExceptCancellation && error.isCancelled {
+                return
+            }
+
             on.async(flags: flags) {
                 body()
                 rp.box.seal(result)
@@ -164,12 +170,18 @@ public extension CatchMixin {
          }
 
      - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter policy: The default policy does not execute your handler for cancellation errors.
      - Parameter body: The closure that executes when this promise resolves.
      - Returns: A new promise, resolved with this promise’s resolution.
+     - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func ensureThen(on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, _ body: @escaping () -> Guarantee<Void>) -> Promise<T> {
+    func ensureThen(on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping () -> Guarantee<Void>) -> Promise<T> {
         let rp = Promise<T>(.pending)
         pipe { result in
+            if case .rejected(let error) = result, policy == .allErrorsExceptCancellation && error.isCancelled {
+                return
+            }
+
             on.async(flags: flags) {
                 body().done {
                     rp.box.seal(result)
@@ -179,7 +191,34 @@ public extension CatchMixin {
         return rp
     }
 
+    /**
+     The provided closure is executed with promise result.
 
+     This is like `get` but provides the Result<T> of the Promise so you can inspect the value of the chain at this point without causing any side effects.
+
+     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter policy: The default policy does not execute your handler for cancellation errors.
+     - Parameter body: The closure that is executed with Result of Promise.
+     - Returns: A new promise that is resolved with the result that the handler is fed. For example:
+
+     promise.tap{ print($0) }.then{ /*…*/ }
+
+     - SeeAlso: [Cancellation](http://promisekit.org/docs/)
+     */
+    func tap(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Result<T>) -> Void) -> Promise<T> {
+        return Promise { seal in
+            pipe { result in
+                if case .rejected(let error) = result, policy == .allErrorsExceptCancellation && error.isCancelled {
+                    return
+                }
+
+                on.async(flags: flags) {
+                    body(result)
+                    seal.resolve(result)
+                }
+            }
+        }
+    }
 
     /**
      Consumes the Swift unused-result warning.

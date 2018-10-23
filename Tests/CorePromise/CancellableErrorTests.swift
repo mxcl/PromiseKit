@@ -4,7 +4,7 @@ import XCTest
 
 class CancellationTests: XCTestCase {
     func testCancellation() {
-        let ex1 = expectation(description: "")
+        let ex = expectation(description: "")
 
         let p = after(seconds: 0).done { _ in
             throw LocalError.cancel
@@ -16,14 +16,14 @@ class CancellationTests: XCTestCase {
         }
         p.catch(policy: .allErrors) {
             XCTAssertTrue($0.isCancelled)
-            ex1.fulfill()
+            ex.fulfill()
         }
 
-        waitForExpectations(timeout: 60)
+        waitForExpectations(timeout: 1)
     }
 
     func testThrowCancellableErrorThatIsNotCancelled() {
-        let expct = expectation(description: "")
+        let ex = expectation(description: "")
 
         after(seconds: 0).done { _ in
             throw LocalError.notCancel
@@ -31,7 +31,7 @@ class CancellationTests: XCTestCase {
             XCTFail()
         }.catch {
             XCTAssertFalse($0.isCancelled)
-            expct.fulfill()
+            ex.fulfill()
         }
 
         waitForExpectations(timeout: 1)
@@ -90,6 +90,80 @@ class CancellationTests: XCTestCase {
         p.catch(policy: .allErrors) {
             XCTAssertTrue($0.isCancelled)
             ex.fulfill()
+        }
+
+        waitForExpectations(timeout: 1)
+    }
+
+    func testEnsureWithCancellation() {
+        let ex1 = expectation(description: "")
+        let ex2 = expectation(description: "")
+
+        let p = after(seconds: 0).done { _ in
+            throw LocalError.cancel
+        }
+
+        _ = p.ensure {
+            XCTFail()
+        }
+
+        _ = p.ensure(policy: .allErrors) {
+            ex1.fulfill()
+        }
+
+        _ = p.catch(policy: .allErrors) {
+            XCTAssertTrue($0.isCancelled)
+            ex2.fulfill()
+        }
+
+        waitForExpectations(timeout: 1)
+    }
+
+    func testEnsureThenWithCancellation() {
+        let ex1 = expectation(description: "")
+        let ex2 = expectation(description: "")
+
+        let p = after(seconds: 0).done { _ in
+            throw LocalError.cancel
+        }
+
+        _ = p.ensureThen {
+            XCTFail()
+            return Guarantee.value(())
+        }
+
+        _ = p.ensureThen(policy: .allErrors) {
+            ex1.fulfill()
+            return Guarantee.value(())
+        }
+
+        _ = p.catch(policy: .allErrors) {
+            XCTAssertTrue($0.isCancelled)
+            ex2.fulfill()
+        }
+
+        waitForExpectations(timeout: 1)
+    }
+
+    func testTapWithCancellation() {
+        let ex1 = expectation(description: "")
+        let ex2 = expectation(description: "")
+
+        let p = after(seconds: 0).done { _ in
+            throw LocalError.cancel
+        }
+
+        _ = p.tap { _ in
+            XCTFail()
+        }
+
+        _ = p.tap(policy: .allErrors) { _ in
+            ex1.fulfill()
+        }
+
+        _ = p.catch(policy: .allErrors) {
+            XCTAssertTrue($0.isCancelled)
+            ex2.fulfill()
         }
 
         waitForExpectations(timeout: 1)
