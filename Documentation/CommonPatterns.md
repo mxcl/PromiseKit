@@ -198,7 +198,7 @@ foo.done {
 }
 ```
 
-> *Note*: You *usually* want `when()`, since `when` executes all of its
+> *Note*: You *usually* want `then()`, since `when` executes all of its
 component promises in parallel and so completes much faster. Use the pattern 
 shown above in situations where tasks *must* be run sequentially; animation
 is a good example.
