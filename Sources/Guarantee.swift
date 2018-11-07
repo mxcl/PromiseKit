@@ -5,7 +5,7 @@ import Dispatch
  A `Guarantee` is a functional abstraction around an asynchronous operation that cannot error.
  - See: `Thenable`
 */
-public class Guarantee<T>: Thenable {
+public final class Guarantee<T>: Thenable {
     let box: Box<T>
 
     fileprivate init(box: SealedBox<T>) {
