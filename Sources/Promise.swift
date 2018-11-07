@@ -5,7 +5,7 @@ import Dispatch
  A `Promise` is a functional abstraction around a failable asynchronous operation.
  - See: `Thenable`
  */
-public class Promise<T>: Thenable, CatchMixin {
+public final class Promise<T>: Thenable, CatchMixin {
     let box: Box<Result<T>>
 
     fileprivate init(box: SealedBox<Result<T>>) {

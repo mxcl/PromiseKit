@@ -1,5 +1,5 @@
 /// An object for resolving promises
-public class Resolver<T> {
+public final class Resolver<T> {
     let box: Box<Result<T>>
 
     init(_ box: Box<Result<T>>) {
