@@ -187,6 +187,28 @@ seal.fulfill(())
 
 Yes: we hope they revert this change in Swift 5 too.
 
+## "Ambiguous reference to 'firstly(execute:)'"
+
+Remove the firstly, eg:
+
+```swift
+firstly {
+    foo()
+}.then {
+    //…
+}
+```
+
+becomes: 
+
+```swift
+foo().then {
+    //…
+}
+```
+
+Rebuild and Swift should now tell you the *real* error.
+
 ## Other issues
 
 ### `Pending Promise Deallocated!`
