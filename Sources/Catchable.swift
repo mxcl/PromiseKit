@@ -39,6 +39,70 @@ public extension CatchMixin {
         }
         return finalizer
     }
+
+    /**
+     The provided closure executes when this promise rejects with the specific error passed in, mimicing Swift's do-catch error pattern. As such, a final `catch` is still required at the end of your chain.
+
+     Rejecting a promise cascades: rejecting all subsequent promises (unless
+     recover is invoked) thus you will typically place your catch at the end
+     of a chain. Often utility promises will not have a catch, instead
+     delegating the error handling to the caller.
+
+     - Parameter only: The specific error to be caught and handled.
+     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter execute: The handler to execute if this promise is rejected.
+     - Note: Since this method handles only specific errors, supplying a `CatchPolicy` is unsupported. You can instead specify e.g. your cancellable error.
+     - SeeAlso: [Cancellation](http://promisekit.org/docs/)
+     */
+    func catchOnly<Error: Swift.Error>(_ only: Error, on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(Error) -> Void) -> Promise<Void> where Error: Equatable {
+        let rp = Promise<Void>(.pending)
+        pipe {
+            switch $0 {
+            case .rejected(let error as Error) where error == only:
+                on.async(flags: flags) {
+                    body(error)
+                    rp.box.seal(.fulfilled(()))
+                }
+            case .rejected(let error):
+                rp.box.seal(.rejected(error))
+            case .fulfilled:
+                rp.box.seal(.fulfilled(()))
+            }
+        }
+        return rp
+    }
+
+    /**
+     The provided closure executes when this promise rejects with an error of the type passed in, mimicing Swift's do-catch error pattern. As such, a final `catch` is still required at the end of your chain.
+
+     Rejecting a promise cascades: rejecting all subsequent promises (unless
+     recover is invoked) thus you will typically place your catch at the end
+     of a chain. Often utility promises will not have a catch, instead
+     delegating the error handling to the caller.
+
+     - Parameter only: The error type to be caught and handled.
+     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter execute: The handler to execute if this promise is rejected.
+     - Note: Since this method handles only specific errors, supplying a `CatchPolicy` is unsupported. You can instead specify e.g. your cancellable error.
+     - SeeAlso: [Cancellation](http://promisekit.org/docs/)
+     */
+    func catchOnly<Error: Swift.Error>(_ only: Error.Type, on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(Error) -> Void) -> Promise<Void> {
+        let rp = Promise<Void>(.pending)
+        pipe {
+            switch $0 {
+            case .rejected(let error as Error):
+                on.async(flags: flags) {
+                    body(error)
+                    rp.box.seal(.fulfilled(()))
+                }
+            case .rejected(let error):
+                rp.box.seal(.rejected(error))
+            case .fulfilled:
+                rp.box.seal(.fulfilled(()))
+            }
+        }
+        return rp
+    }
 }
 
 public class PMKFinalizer {
