@@ -116,7 +116,7 @@ public extension Guarantee {
     public func wait() -> T {
 
         if Thread.isMainThread {
-            print("PromiseKit: warning: `wait()` called on main thread!")
+            PromiseKit.log (PromiseKit.LogEvent.waitOnMainThread)
         }
 
         var result = value

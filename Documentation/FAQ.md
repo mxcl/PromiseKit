@@ -370,6 +370,34 @@ Kitura.addHTTPServer(onPort: 8888, with: router)
 Kitura.run()
 ```
 
+## How to I control console output?
+
+By default PromiseKit emits console messages when certain events occur.  These events include:
+
+```swift
+public enum LogEvent {
+    case waitOnMainThread
+    case pendingPromiseDeallocated
+    case cauterized(Error)
+}
+
+```
+
+You may turn off console logging with:
+
+```swift
+PromiseKit.loggingPolicy = .none
+```
+
+You may redirect the output to your own custom logger with
+
+```swift
+let loggingClosure: (PromiseKit.LogEvent) -> () = { event in
+    // Log event
+}
+PromiseKit.loggingPolicy = .custom(loggingClosure)
+```
+
 ## My question was not answered
 
 [Please open a ticket](https://github.com/mxcl/PromiseKit/issues/new).
