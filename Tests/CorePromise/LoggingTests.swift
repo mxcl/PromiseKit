@@ -6,7 +6,7 @@
 //
 
 import XCTest
-import PromiseKit
+@testable import PromiseKit
 
 class LoggingTests: XCTestCase {
 
@@ -33,13 +33,13 @@ class LoggingTests: XCTestCase {
         PromiseKit.log (PromiseKit.LogEvent.cauterized(ForTesting.purposes))
         PromiseKit.waitOnLogging()
         // Now test no logging
-        PromiseKit.loggingPolicy = .none
+        PromiseKit.conf.loggingPolicy = .none
         PromiseKit.log (PromiseKit.LogEvent.waitOnMainThread)
         PromiseKit.log (PromiseKit.LogEvent.pendingPromiseDeallocated)
         PromiseKit.log (PromiseKit.LogEvent.cauterized(ForTesting.purposes))
         XCTAssertNil (logOutput)
         // Switch back to logging to console
-        PromiseKit.loggingPolicy = .console
+        PromiseKit.conf.loggingPolicy = .console
         PromiseKit.log (PromiseKit.LogEvent.waitOnMainThread)
         PromiseKit.log (PromiseKit.LogEvent.pendingPromiseDeallocated)
         PromiseKit.log (PromiseKit.LogEvent.cauterized(ForTesting.purposes))
@@ -48,7 +48,7 @@ class LoggingTests: XCTestCase {
         let loggingClosure: (PromiseKit.LogEvent) -> () = { event in
             logOutput = "\(event)"
         }
-        PromiseKit.loggingPolicy = .custom(loggingClosure)
+        PromiseKit.conf.loggingPolicy = .custom(loggingClosure)
         PromiseKit.log (PromiseKit.LogEvent.waitOnMainThread)
         PromiseKit.waitOnLogging()
         XCTAssertEqual (logOutput!, "waitOnMainThread")

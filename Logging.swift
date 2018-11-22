@@ -7,54 +7,73 @@
 
 import Foundation
 
-public enum LoggingPolicy {
+/**
+    Specifies how certain PromiseKit events are logged.
+    The default policy is .console. To set the logging
+    policy, assign the desired policy in the PromiseKit
+    configuration, e.g.:
+    PromiseKit.conf.loggingPolicy = .none
+ 
+    ````
+    /// No Logging
     case none
+ 
+    /// Output to console
     case console
-    case custom((LogEvent) -> ()) // Closure provided must be thread safe
+ 
+    /// Log to the provided closure (closure must be thread safe)
+    case custom((LogEvent) -> ())
+    ````
+*/
+public enum LoggingPolicy {
+    /// No Logging
+    case none
+    
+    /// Output to console
+    case console
+    
+    /// Log to the provided closure (closure must be thread safe)
+    case custom((LogEvent) -> ())
 }
 
+/**
+    The PromiseKit events which may be logged.
+ 
+    ````
+     /// A promise or guarantee has blocked the main thread
+     case waitOnMainThread
+ 
+     /// A promise has been deallocated without being fulfilled
+     case pendingPromiseDeallocated
+ 
+     /// An error which occurred while fulfilling a promise was swallowed
+     case cauterized(Error)
+    ````
+*/
 public enum LogEvent {
+    /// A promise or guarantee has blocked the main thread
     case waitOnMainThread
+    
+    /// A promise has been deallocated without being fulfilled
     case pendingPromiseDeallocated
+    
+    /// An error which occurred while fulfilling a promise was swallowed
     case cauterized(Error)
 }
 
-public func log (_ event: PromiseKit.LogEvent) {
-    loggingQueue.async() {
-        activeLoggingClosure (event)
-    }
-}
-
-public var loggingPolicy: LoggingPolicy = PromiseKit.LoggingPolicy.console {
-    willSet (newValue) {
-        loggingQueue.sync() {
-            switch newValue {
-            case .none:
-                activeLoggingClosure = { event in }
-            case .console:
-                activeLoggingClosure = logConsoleClosure
-            case .custom (let closure):
-                activeLoggingClosure = closure
-            }
-        }
-    }
-}
-
+/**
+    Block the current thread until all pending events on the
+    PromiseKit logging queue have completed. Intended only for use
+    during testing.
+*/
 public func waitOnLogging() {
-    loggingQueue.sync(){}
+    conf.loggingQueue.sync(){}
 }
 
-private var activeLoggingClosure: (LogEvent) -> () = logConsoleClosure
-
-private let logConsoleClosure: (LogEvent) -> () = { event in
-    switch event {
-    case .waitOnMainThread:
-        print ("PromiseKit: warning: `wait()` called on main thread!")
-    case .pendingPromiseDeallocated:
-        print ("PromiseKit: warning: pending promise deallocated")
-    case .cauterized (let error):
-        print("PromiseKit:cauterized-error: \(error)")
+internal func log (_ event: PromiseKit.LogEvent) {
+    conf.loggingQueue.async() {
+        conf.activeLoggingClosure (event)
     }
 }
 
-private let loggingQueue = DispatchQueue(label: "PromiseKitLogging")
+
