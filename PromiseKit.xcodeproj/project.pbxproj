@@ -431,6 +431,7 @@
 		63B0AC601D595E4C00FA21D9 /* Sources.swift */ = {
 			isa = PBXGroup;
 			children = (
+				085B96AF21A625E800E5E22F /* Logging.swift */,
 				636A29191F1C156B001229C2 /* Promise.swift */,
 				636A29221F1C17A6001229C2 /* Guarantee.swift */,
 				636A29201F1C1716001229C2 /* Thenable.swift */,
@@ -477,7 +478,6 @@
 				63B912A91F1D7B1300D49110 /* firstly.swift */,
 				636A29241F1C3089001229C2 /* race.swift */,
 				63B0AC7D1D595E6300FA21D9 /* when.swift */,
-				085B96AF21A625E800E5E22F /* Logging.swift */,
 			);
 			name = Features;
 			sourceTree = "<group>";
