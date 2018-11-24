@@ -116,7 +116,7 @@ public extension Guarantee {
     public func wait() -> T {
 
         if Thread.isMainThread {
-            PromiseKit.log (PromiseKit.LogEvent.waitOnMainThread)
+            PromiseKit.log(PromiseKit.LogEvent.waitOnMainThread)
         }
 
         var result = value

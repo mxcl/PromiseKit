@@ -1,17 +1,10 @@
-//
-//  LoggingTests.swift
-//  PMKA+Tests
-//
-//  Created by Neal Lester on 11/21/18.
-//
-
-import XCTest
 @testable import PromiseKit
+import Dispatch
+import XCTest
 
 class LoggingTests: XCTestCase {
 
 /**
-     
      The test should emit the following log messages twice
      
      PromiseKit: warning: `wait()` called on main thread!
@@ -28,50 +21,50 @@ class LoggingTests: XCTestCase {
         }
         
         // Test Logging to Console, the default behavior
-        PromiseKit.log (PromiseKit.LogEvent.waitOnMainThread)
-        PromiseKit.log (PromiseKit.LogEvent.pendingPromiseDeallocated)
-        PromiseKit.log (PromiseKit.LogEvent.cauterized(ForTesting.purposes))
+        PromiseKit.log(PromiseKit.LogEvent.waitOnMainThread)
+        PromiseKit.log(PromiseKit.LogEvent.pendingPromiseDeallocated)
+        PromiseKit.log(PromiseKit.LogEvent.cauterized(ForTesting.purposes))
         PromiseKit.waitOnLogging()
         // Now test no logging
         PromiseKit.conf.loggingPolicy = .none
-        PromiseKit.log (PromiseKit.LogEvent.waitOnMainThread)
-        PromiseKit.log (PromiseKit.LogEvent.pendingPromiseDeallocated)
-        PromiseKit.log (PromiseKit.LogEvent.cauterized(ForTesting.purposes))
-        XCTAssertNil (logOutput)
+        PromiseKit.log(PromiseKit.LogEvent.waitOnMainThread)
+        PromiseKit.log(PromiseKit.LogEvent.pendingPromiseDeallocated)
+        PromiseKit.log(PromiseKit.LogEvent.cauterized(ForTesting.purposes))
+        XCTAssertNil(logOutput)
         // Switch back to logging to console
         PromiseKit.conf.loggingPolicy = .console
-        PromiseKit.log (PromiseKit.LogEvent.waitOnMainThread)
-        PromiseKit.log (PromiseKit.LogEvent.pendingPromiseDeallocated)
-        PromiseKit.log (PromiseKit.LogEvent.cauterized(ForTesting.purposes))
+        PromiseKit.log(PromiseKit.LogEvent.waitOnMainThread)
+        PromiseKit.log(PromiseKit.LogEvent.pendingPromiseDeallocated)
+        PromiseKit.log(PromiseKit.LogEvent.cauterized(ForTesting.purposes))
         PromiseKit.waitOnLogging()
         // Custom logger
         let loggingClosure: (PromiseKit.LogEvent) -> () = { event in
             logOutput = "\(event)"
         }
         PromiseKit.conf.loggingPolicy = .custom(loggingClosure)
-        PromiseKit.log (PromiseKit.LogEvent.waitOnMainThread)
+        PromiseKit.log(PromiseKit.LogEvent.waitOnMainThread)
         PromiseKit.waitOnLogging()
-        XCTAssertEqual (logOutput!, "waitOnMainThread")
+        XCTAssertEqual(logOutput!, "waitOnMainThread")
         logOutput = nil
-        PromiseKit.log (PromiseKit.LogEvent.pendingPromiseDeallocated)
+        PromiseKit.log(PromiseKit.LogEvent.pendingPromiseDeallocated)
         PromiseKit.waitOnLogging()
-        XCTAssertEqual (logOutput!, "pendingPromiseDeallocated")
+        XCTAssertEqual(logOutput!, "pendingPromiseDeallocated")
         logOutput = nil
-        PromiseKit.log (PromiseKit.LogEvent.cauterized(ForTesting.purposes))
+        PromiseKit.log(PromiseKit.LogEvent.cauterized(ForTesting.purposes))
         PromiseKit.waitOnLogging()
-        XCTAssertTrue (logOutput!.contains ("cauterized"))
-        XCTAssertTrue (logOutput!.contains ("ForTesting.purposes"))
+        XCTAssertTrue(logOutput!.contains ("cauterized"))
+        XCTAssertTrue(logOutput!.contains ("ForTesting.purposes"))
         logOutput = nil
         // Verify waiting on main thread in Promise is logged
         var promiseResolver = Promise<String>.pending()
-        let workQueue = DispatchQueue (label: "worker")
+        let workQueue = DispatchQueue(label: "worker")
         workQueue.async {
             promiseResolver.resolver.fulfill ("PromiseFulfilled")
         }
         let promisedString = try promiseResolver.promise.wait()
-        XCTAssertEqual ("PromiseFulfilled", promisedString)
+        XCTAssertEqual("PromiseFulfilled", promisedString)
         PromiseKit.waitOnLogging()
-        XCTAssertEqual (logOutput!, "waitOnMainThread")
+        XCTAssertEqual(logOutput!, "waitOnMainThread")
         // Verify Promise.cauterize() is logged
         logOutput = nil
         func createPromise() -> Promise<String> {
@@ -112,13 +105,12 @@ class LoggingTests: XCTestCase {
         logOutput = nil
         let guaranteeResolve = Guarantee<String>.pending()
         workQueue.async {
-            guaranteeResolve.resolve ("GuaranteeFulfilled")
+            guaranteeResolve.resolve("GuaranteeFulfilled")
         }
         let guaranteedString = guaranteeResolve.guarantee.wait()
-        XCTAssertEqual ("GuaranteeFulfilled", guaranteedString)
+        XCTAssertEqual("GuaranteeFulfilled", guaranteedString)
         PromiseKit.waitOnLogging()
-        XCTAssertEqual (logOutput!, "waitOnMainThread")
+        XCTAssertEqual(logOutput!, "waitOnMainThread")
         //TODO Verify pending promise dealocation is logged
     }
-
 }

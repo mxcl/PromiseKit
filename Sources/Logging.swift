@@ -1,10 +1,3 @@
-//
-//  Logging.swift
-//  PromiseKit
-//
-//  Created by Neal Lester on 11/21/18.
-//
-
 import Foundation
 
 /**
@@ -70,10 +63,8 @@ public func waitOnLogging() {
     conf.loggingQueue.sync(){}
 }
 
-internal func log (_ event: PromiseKit.LogEvent) {
-    conf.loggingQueue.async() {
-        conf.activeLoggingClosure (event)
+internal func log(_ event: PromiseKit.LogEvent) {
+    conf.loggingQueue.async {
+        conf.activeLoggingClosure(event)
     }
 }
-
-
