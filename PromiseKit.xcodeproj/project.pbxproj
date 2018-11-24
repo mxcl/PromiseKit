@@ -431,7 +431,6 @@
 		63B0AC601D595E4C00FA21D9 /* Sources.swift */ = {
 			isa = PBXGroup;
 			children = (
-				085B96BE21A9B37C00E5E22F /* Logging.swift */,
 				636A29191F1C156B001229C2 /* Promise.swift */,
 				636A29221F1C17A6001229C2 /* Guarantee.swift */,
 				636A29201F1C1716001229C2 /* Thenable.swift */,
@@ -440,6 +439,7 @@
 				63B0AC691D595E6300FA21D9 /* Error.swift */,
 				636A29261F1C3927001229C2 /* Resolver.swift */,
 				636A291E1F1C16FF001229C2 /* Box.swift */,
+				085B96BE21A9B37C00E5E22F /* Logging.swift */,
 				6330B5E01F2E991200D60528 /* Configuration.swift */,
 				63B18AEB1F2D205C00B79E37 /* CustomStringConvertible.swift */,
 				63D9B2F020338D5D0075C00B /* Deprecations.swift */,
