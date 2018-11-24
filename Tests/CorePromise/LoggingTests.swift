@@ -5,6 +5,9 @@ import XCTest
 class LoggingTests: XCTestCase {
 
 /**
+     
+     // Verify LoggingPolicy directs output correctly
+     
      The test should emit the following log messages twice
      
      PromiseKit: warning: `wait()` called on main thread!
@@ -12,7 +15,7 @@ class LoggingTests: XCTestCase {
      PromiseKit:cauterized-error: purposes
      
 */
-    func testLogging() throws {
+    func testLogging() {
         
         var logOutput: String? = nil
         
@@ -54,9 +57,21 @@ class LoggingTests: XCTestCase {
         PromiseKit.waitOnLogging()
         XCTAssertTrue(logOutput!.contains ("cauterized"))
         XCTAssertTrue(logOutput!.contains ("ForTesting.purposes"))
-        logOutput = nil
-        // Verify waiting on main thread in Promise is logged
-        var promiseResolver = Promise<String>.pending()
+    }
+
+    // Verify waiting on main thread in Promise is logged
+    func testPromiseWaitOnMainThreadLogged() throws {
+        
+        enum ForTesting: Error {
+            case purposes
+        }
+        
+        var logOutput: String? = nil
+        let loggingClosure: (PromiseKit.LogEvent) -> () = { event in
+            logOutput = "\(event)"
+        }
+        PromiseKit.conf.loggingPolicy = .custom(loggingClosure)
+        let promiseResolver = Promise<String>.pending()
         let workQueue = DispatchQueue(label: "worker")
         workQueue.async {
             promiseResolver.resolver.fulfill ("PromiseFulfilled")
@@ -65,10 +80,22 @@ class LoggingTests: XCTestCase {
         XCTAssertEqual("PromiseFulfilled", promisedString)
         PromiseKit.waitOnLogging()
         XCTAssertEqual(logOutput!, "waitOnMainThread")
-        // Verify Promise.cauterize() is logged
-        logOutput = nil
+    }
+    
+    // Verify Promise.cauterize() is logged
+    func testCauterizeIsLogged() {
+        
+        enum ForTesting: Error {
+            case purposes
+        }
+
+        var logOutput: String? = nil
+        let loggingClosure: (PromiseKit.LogEvent) -> () = { event in
+            logOutput = "\(event)"
+        }
+        PromiseKit.conf.loggingPolicy = .custom(loggingClosure)
         func createPromise() -> Promise<String> {
-            promiseResolver = Promise<String>.pending()
+            let promiseResolver = Promise<String>.pending()
             
             let queue = DispatchQueue(label: "workQueue")
             queue.async {
@@ -101,9 +128,22 @@ class LoggingTests: XCTestCase {
             }
         }
         waitForExpectations(timeout: 1)
-        // Verify waiting on main thread in Guarantee is logged
-        logOutput = nil
+    }
+
+    // Verify waiting on main thread in Guarantee is logged
+    func testGuaranteeWaitOnMainThreadLogged() {
+        
+        enum ForTesting: Error {
+            case purposes
+        }
+        
+        var logOutput: String? = nil
+        let loggingClosure: (PromiseKit.LogEvent) -> () = { event in
+            logOutput = "\(event)"
+        }
+        PromiseKit.conf.loggingPolicy = .custom(loggingClosure)
         let guaranteeResolve = Guarantee<String>.pending()
+        let workQueue = DispatchQueue(label: "worker")
         workQueue.async {
             guaranteeResolve.resolve("GuaranteeFulfilled")
         }
@@ -111,6 +151,8 @@ class LoggingTests: XCTestCase {
         XCTAssertEqual("GuaranteeFulfilled", guaranteedString)
         PromiseKit.waitOnLogging()
         XCTAssertEqual(logOutput!, "waitOnMainThread")
-        //TODO Verify pending promise dealocation is logged
     }
+    
+    //TODO Verify pending promise dealocation is logged
+
 }
