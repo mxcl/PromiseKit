@@ -11,15 +11,13 @@ public struct PMKConfiguration {
     /// Defines how events (defined by PromiseKit.LogEvent) are logged. default: .console
     public var loggingPolicy: LoggingPolicy = PromiseKit.LoggingPolicy.console {
         willSet (newValue) {
-            loggingQueue.sync() {
-                switch newValue {
-                case .none:
-                    activeLoggingClosure = { event in }
-                case .console:
-                    activeLoggingClosure = PMKConfiguration.logConsoleClosure
-                case .custom (let closure):
-                    activeLoggingClosure = closure
-                }
+            switch newValue {
+            case .none:
+                activeLoggingClosure = { event in }
+            case .console:
+                activeLoggingClosure = PMKConfiguration.logConsoleClosure
+            case .custom (let closure):
+                activeLoggingClosure = closure
             }
         }
     }
@@ -38,9 +36,6 @@ public struct PMKConfiguration {
             print("PromiseKit:cauterized-error: \(error)")
         }
     }
-    
-    // A queue protecting access to the activeLoggingClosure
-    internal let loggingQueue = DispatchQueue(label: "PromiseKitLogging")
     
 }
 

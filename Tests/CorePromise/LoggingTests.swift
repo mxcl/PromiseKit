@@ -27,7 +27,6 @@ class LoggingTests: XCTestCase {
         PromiseKit.log(PromiseKit.LogEvent.waitOnMainThread)
         PromiseKit.log(PromiseKit.LogEvent.pendingPromiseDeallocated)
         PromiseKit.log(PromiseKit.LogEvent.cauterized(ForTesting.purposes))
-        PromiseKit.waitOnLogging()
         // Now test no logging
         PromiseKit.conf.loggingPolicy = .none
         PromiseKit.log(PromiseKit.LogEvent.waitOnMainThread)
@@ -39,22 +38,18 @@ class LoggingTests: XCTestCase {
         PromiseKit.log(PromiseKit.LogEvent.waitOnMainThread)
         PromiseKit.log(PromiseKit.LogEvent.pendingPromiseDeallocated)
         PromiseKit.log(PromiseKit.LogEvent.cauterized(ForTesting.purposes))
-        PromiseKit.waitOnLogging()
         // Custom logger
         let loggingClosure: (PromiseKit.LogEvent) -> () = { event in
             logOutput = "\(event)"
         }
         PromiseKit.conf.loggingPolicy = .custom(loggingClosure)
         PromiseKit.log(PromiseKit.LogEvent.waitOnMainThread)
-        PromiseKit.waitOnLogging()
         XCTAssertEqual(logOutput!, "waitOnMainThread")
         logOutput = nil
         PromiseKit.log(PromiseKit.LogEvent.pendingPromiseDeallocated)
-        PromiseKit.waitOnLogging()
         XCTAssertEqual(logOutput!, "pendingPromiseDeallocated")
         logOutput = nil
         PromiseKit.log(PromiseKit.LogEvent.cauterized(ForTesting.purposes))
-        PromiseKit.waitOnLogging()
         XCTAssertTrue(logOutput!.contains ("cauterized"))
         XCTAssertTrue(logOutput!.contains ("ForTesting.purposes"))
     }
@@ -78,7 +73,6 @@ class LoggingTests: XCTestCase {
         }
         let promisedString = try promiseResolver.promise.wait()
         XCTAssertEqual("PromiseFulfilled", promisedString)
-        PromiseKit.waitOnLogging()
         XCTAssertEqual(logOutput!, "waitOnMainThread")
     }
     
@@ -110,7 +104,6 @@ class LoggingTests: XCTestCase {
             ex.fulfill()
         }.cauterize()
         waitForExpectations(timeout: 1)
-        PromiseKit.waitOnLogging()
         ex = expectation(description: "read")
         let readQueue = DispatchQueue(label: "readQueue")
         readQueue.async {
@@ -149,7 +142,6 @@ class LoggingTests: XCTestCase {
         }
         let guaranteedString = guaranteeResolve.guarantee.wait()
         XCTAssertEqual("GuaranteeFulfilled", guaranteedString)
-        PromiseKit.waitOnLogging()
         XCTAssertEqual(logOutput!, "waitOnMainThread")
     }
     

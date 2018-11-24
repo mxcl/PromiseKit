@@ -54,17 +54,6 @@ public enum LogEvent {
     case cauterized(Error)
 }
 
-/**
-    Block the current thread until all pending events on the
-    PromiseKit logging queue have completed. Intended only for use
-    during testing.
-*/
-public func waitOnLogging() {
-    conf.loggingQueue.sync(){}
-}
-
 internal func log(_ event: PromiseKit.LogEvent) {
-    conf.loggingQueue.async {
-        conf.activeLoggingClosure(event)
-    }
+    conf.activeLoggingClosure(event)
 }
