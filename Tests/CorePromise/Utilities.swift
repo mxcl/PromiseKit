@@ -4,6 +4,10 @@ extension Promise {
     func silenceWarning() {}
 }
 
+extension PMKCascadingFinalizer {
+    func silenceWarning() {}
+}
+
 #if os(Linux)
 import func CoreFoundation._CFIsMainThread
 
