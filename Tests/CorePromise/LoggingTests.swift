@@ -40,7 +40,16 @@ class LoggingTests: XCTestCase {
         PromiseKit.log(PromiseKit.LogEvent.cauterized(ForTesting.purposes))
         // Custom logger
         let loggingClosure: (PromiseKit.LogEvent) -> () = { event in
-            logOutput = "\(event)"
+            switch event {
+            case .waitOnMainThread:
+                logOutput = "\(event)"
+            case .pendingPromiseDeallocated:
+                logOutput = "\(event)"
+            case .cauterized:
+                // Using an enum with associated value does not convert to a string properly in
+                // earlier versions of swift
+                logOutput = "cauterized"
+            }
         }
         PromiseKit.conf.loggingPolicy = .custom(loggingClosure)
         PromiseKit.log(PromiseKit.LogEvent.waitOnMainThread)
@@ -50,8 +59,7 @@ class LoggingTests: XCTestCase {
         XCTAssertEqual(logOutput!, "pendingPromiseDeallocated")
         logOutput = nil
         PromiseKit.log(PromiseKit.LogEvent.cauterized(ForTesting.purposes))
-        XCTAssertTrue(logOutput!.contains ("cauterized"), "Actual logoutput: \(logOutput!)")
-        XCTAssertTrue(logOutput!.contains ("ForTesting.purposes"), "Actual logoutput: \(logOutput!)")
+        XCTAssertEqual(logOutput!, "cauterized")
     }
 
     // Verify waiting on main thread in Promise is logged
@@ -85,7 +93,16 @@ class LoggingTests: XCTestCase {
 
         var logOutput: String? = nil
         let loggingClosure: (PromiseKit.LogEvent) -> () = { event in
-            logOutput = "\(event)"
+            switch event {
+            case .waitOnMainThread:
+                logOutput = "\(event)"
+            case .pendingPromiseDeallocated:
+                logOutput = "\(event)"
+            case .cauterized:
+                // Using an enum with associated value does not convert to a string properly in
+                // earlier versions of swift
+                logOutput = "cauterized"
+            }
         }
         PromiseKit.conf.loggingPolicy = .custom(loggingClosure)
         func createPromise() -> Promise<String> {
@@ -110,8 +127,7 @@ class LoggingTests: XCTestCase {
             var outputSet = false
             while !outputSet {
                 if let logOutput = logOutput {
-                    XCTAssertTrue (logOutput.contains("cauterized"), "Actual logOutput: \(logOutput)")
-                    XCTAssertTrue (logOutput.contains("ForTesting.purposes"), "Actual logOutput: \(logOutput)")
+                    XCTAssertEqual(logOutput, "cauterized")
                     outputSet = true
                     ex.fulfill()
                 }
@@ -132,7 +148,16 @@ class LoggingTests: XCTestCase {
         
         var logOutput: String? = nil
         let loggingClosure: (PromiseKit.LogEvent) -> () = { event in
-            logOutput = "\(event)"
+            switch event {
+            case .waitOnMainThread:
+                logOutput = "\(event)"
+            case .pendingPromiseDeallocated:
+                logOutput = "\(event)"
+            case .cauterized:
+                // Using an enum with associated value does not convert to a string properly in
+                // earlier versions of swift
+                logOutput = "cauterized"
+            }
         }
         PromiseKit.conf.loggingPolicy = .custom(loggingClosure)
         let guaranteeResolve = Guarantee<String>.pending()
