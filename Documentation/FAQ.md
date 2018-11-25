@@ -398,15 +398,6 @@ let loggingClosure: (PromiseKit.LogEvent) -> () = { event in
 PromiseKit.conf.loggingPolicy = .custom(loggingClosure)
 ```
 
-PromiseKit log events are delivered asynchronously. Use
-
-````swift
-PromiseKit.waitOnLogging()
-````
-
-to block the current thread until the queue has been emptied (intended for use during
-testing only).
-
 ## My question was not answered
 
 [Please open a ticket](https://github.com/mxcl/PromiseKit/issues/new).
