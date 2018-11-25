@@ -50,8 +50,8 @@ class LoggingTests: XCTestCase {
         XCTAssertEqual(logOutput!, "pendingPromiseDeallocated")
         logOutput = nil
         PromiseKit.log(PromiseKit.LogEvent.cauterized(ForTesting.purposes))
-        XCTAssertTrue(logOutput!.contains ("cauterized"))
-        XCTAssertTrue(logOutput!.contains ("ForTesting.purposes"))
+        XCTAssertTrue(logOutput!.contains ("cauterized"), "Actual logoutput: \(logOutput!)")
+        XCTAssertTrue(logOutput!.contains ("ForTesting.purposes"), "Actual logoutput: \(logOutput!)")
     }
 
     // Verify waiting on main thread in Promise is logged
@@ -110,8 +110,8 @@ class LoggingTests: XCTestCase {
             var outputSet = false
             while !outputSet {
                 if let logOutput = logOutput {
-                    XCTAssertTrue (logOutput.contains("cauterized"))
-                    XCTAssertTrue (logOutput.contains("ForTesting.purposes"))
+                    XCTAssertTrue (logOutput.contains("cauterized"), "Actual logOutput: \(logOutput)")
+                    XCTAssertTrue (logOutput.contains("ForTesting.purposes"), "Actual logOutput: \(logOutput)")
                     outputSet = true
                     ex.fulfill()
                 }
