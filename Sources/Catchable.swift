@@ -83,14 +83,16 @@ public extension CatchMixin {
      - Parameter only: The error type to be caught and handled.
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter execute: The handler to execute if this promise is rejected.
-     - Note: Since this method handles only specific errors, supplying a `CatchPolicy` is unsupported. You can instead specify e.g. your cancellable error.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func catchOnly<Error: Swift.Error>(_ only: Error.Type, on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(Error) -> Void) -> PMKCascadingFinalizer {
+    func catchOnly<Error: Swift.Error>(_ only: Error.Type, on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) -> Void) -> PMKCascadingFinalizer {
         let finalizer = PMKCascadingFinalizer()
         pipe {
             switch $0 {
             case .rejected(let error as Error):
+                guard policy == .allErrors || !error.isCancelled else {
+                    return finalizer.pending.resolver.reject(error)
+                }
                 on.async(flags: flags) {
                     body(error)
                     finalizer.pending.resolver.fulfill(())
@@ -171,11 +173,10 @@ public class PMKCascadingFinalizer {
      - Parameter only: The error type to be caught and handled.
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter execute: The handler to execute if this promise is rejected.
-     - Note: Since this method handles only specific errors, supplying a `CatchPolicy` is unsupported. You can instead specify e.g. your cancellable error.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    public func catchOnly<Error: Swift.Error>(_ only: Error.Type, on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(Error) -> Void) -> PMKCascadingFinalizer {
-        return pending.promise.catchOnly(only, on: on, flags: flags) {
+    public func catchOnly<Error: Swift.Error>(_ only: Error.Type, on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) -> Void) -> PMKCascadingFinalizer {
+        return pending.promise.catchOnly(only, on: on, flags: flags, policy: policy) {
             body($0)
         }
     }
