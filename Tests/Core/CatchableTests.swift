@@ -387,6 +387,32 @@ extension CatchableTests {
 
         wait(for: [x], timeout: 5)
     }
+
+    func testCatchOnly_Type_Cancellation_Ignore() {
+        let x = expectation(description: #file + #function)
+
+        Promise<Int>(error: Error.cancelled).catchOnly(Error.self) { _ in
+            XCTFail()
+            x.fulfill()
+        }.catch(policy: .allErrors) { _ in
+            x.fulfill()
+        }
+
+        wait(for: [x], timeout: 5)
+    }
+
+    func testCatchOnly_Type_Cancellation_Handle() {
+        let x = expectation(description: #file + #function)
+
+        Promise<Int>(error: Error.cancelled).catchOnly(Error.self, policy: .allErrors) { _ in
+            x.fulfill()
+        }.catch { _ in
+            XCTFail()
+            x.fulfill()
+        }
+
+        wait(for: [x], timeout: 5)
+    }
 }
 
 private enum Error: CancellableError {
