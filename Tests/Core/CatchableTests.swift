@@ -264,7 +264,7 @@ extension CatchableTests {
 
         Promise.value(1).then { _ -> Promise<Void> in
             throw Error.dummy
-        }.catchOnly(Error.dummy) { _ in
+        }.catchOnly(Error.dummy) {
             x.fulfill()
         }.silenceWarning()
 
@@ -276,10 +276,10 @@ extension CatchableTests {
 
         Promise.value(1).then { _ -> Promise<Void> in
             throw Error.dummy
-        }.catchOnly(Error.dummy) { _ in
+        }.catchOnly(Error.dummy) {
             x.fulfill()
         }.catchOnly(Error.cancelled) {
-            XCTFail("\($0) error was caught")
+            XCTFail()
             x.fulfill()
         }.silenceWarning()
 
@@ -292,9 +292,9 @@ extension CatchableTests {
         Promise.value(1).then { _ -> Promise<Void> in
             throw Error.dummy
         }.catchOnly(Error.cancelled) {
-            XCTFail("\($0) error was caught")
+            XCTFail()
             x.fulfill()
-        }.catchOnly(Error.dummy) { _ in
+        }.catchOnly(Error.dummy) {
             x.fulfill()
         }.silenceWarning()
 
@@ -306,7 +306,7 @@ extension CatchableTests {
 
         Promise.value(1).then { _ -> Promise<Void> in
             throw Error.dummy
-        }.catchOnly(Error.dummy) { _ in
+        }.catchOnly(Error.dummy) {
             x.fulfill()
         }.catch { _ in
             XCTFail()
@@ -321,7 +321,7 @@ extension CatchableTests {
 
         Promise.value(1).then { _ -> Promise<Void> in
             throw Error.dummy
-        }.catchOnly(Error.cancelled) { _ in
+        }.catchOnly(Error.cancelled) {
             XCTFail()
             x.fulfill()
         }.catch { _ in
@@ -351,7 +351,7 @@ extension CatchableTests {
         }.catchOnly(Error.self) { _ in
             x.fulfill()
         }.catchOnly(Error.dummy) {
-            XCTFail("\($0) error was caught")
+            XCTFail()
             x.fulfill()
         }.silenceWarning()
 
@@ -363,10 +363,10 @@ extension CatchableTests {
 
         Promise.value(1).then { _ -> Promise<Void> in
             throw Error.dummy
-        }.catchOnly(Error.dummy) { _ in
+        }.catchOnly(Error.dummy) {
             x.fulfill()
-        }.catchOnly(Error.self) {
-            XCTFail("\($0) error was caught")
+        }.catchOnly(Error.self) { _ in
+            XCTFail()
             x.fulfill()
         }.silenceWarning()
 
