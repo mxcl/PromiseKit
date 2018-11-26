@@ -331,6 +331,21 @@ extension CatchableTests {
         wait(for: [x], timeout: 5)
     }
 
+    func testCatchOnly_Type_Ignored() {
+        let x = expectation(description: #file + #function)
+
+        enum Foo: Swift.Error {}
+
+        Promise<Int>(error: Error.dummy).catchOnly(Foo.self) { _ in
+            XCTFail()
+            x.fulfill()
+        }.catch { _ in
+            x.fulfill()
+        }
+
+        wait(for: [x], timeout: 5)
+    }
+
     func testCatchOnly_Type_PatternMatch_1() {
         let x = expectation(description: "Pattern match only Error.Type")
 
@@ -392,6 +407,21 @@ extension CatchableTests {
             XCTFail()
             x.fulfill()
         }
+
+        wait(for: [x], timeout: 5)
+    }
+
+    func testCatchOnly_Mixed() {
+        let x = expectation(description: #file + #function)
+
+        enum Foo: Swift.Error { case bar }
+
+        Promise<Int>(error: Foo.bar).catchOnly(Error.dummy) {
+            XCTFail()
+            x.fulfill()
+        }.catchOnly(Foo.self) { _ in
+            x.fulfill()
+        }.silenceWarning()
 
         wait(for: [x], timeout: 5)
     }
@@ -552,6 +582,36 @@ extension CatchableTests {
         }.catch { _ in
             XCTFail()
             x.fulfill()
+        }
+
+        wait(for: [x], timeout: 5)
+    }
+
+    func testRecoverOnly_Object_DoesNotReturnSelf() {
+        let x = expectation(description: #file + #function)
+        var promise: Promise<Void>!
+        promise = Promise<Void>(error: Error.dummy).recoverOnly(Error.dummy) { () -> Promise<Void> in
+            return promise
+        }
+        promise.catch { err in
+            if case PMKError.returnedSelf = err {
+                x.fulfill()
+            }
+        }
+
+        wait(for: [x], timeout: 5)
+    }
+
+    func testRecoverOnly_Type_DoesNotReturnSelf() {
+        let x = expectation(description: #file + #function)
+        var promise: Promise<Void>!
+        promise = Promise<Void>(error: Error.dummy).recoverOnly(Error.self) { _ -> Promise<Void> in
+            return promise
+        }
+        promise.catch { err in
+            if case PMKError.returnedSelf = err {
+                x.fulfill()
+            }
         }
 
         wait(for: [x], timeout: 5)
