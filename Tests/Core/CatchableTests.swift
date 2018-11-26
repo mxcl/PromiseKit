@@ -262,9 +262,7 @@ extension CatchableTests {
     func testCatchOnly() {
         let x = expectation(description: #file + #function)
 
-        Promise.value(1).then { _ -> Promise<Void> in
-            throw Error.dummy
-        }.catchOnly(Error.dummy) {
+        Promise<Int>(error: Error.dummy).catchOnly(Error.dummy) {
             x.fulfill()
         }.silenceWarning()
 
@@ -274,9 +272,7 @@ extension CatchableTests {
     func testCatchOnly_PatternMatch_1() {
         let x = expectation(description: "Pattern match only Error.dummy")
 
-        Promise.value(1).then { _ -> Promise<Void> in
-            throw Error.dummy
-        }.catchOnly(Error.dummy) {
+        Promise<Int>(error: Error.dummy).catchOnly(Error.dummy) {
             x.fulfill()
         }.catchOnly(Error.cancelled) {
             XCTFail()
@@ -289,9 +285,7 @@ extension CatchableTests {
     func testCatchOnly_PatternMatch_2() {
         let x = expectation(description: "Pattern match only Error.dummy")
 
-        Promise.value(1).then { _ -> Promise<Void> in
-            throw Error.dummy
-        }.catchOnly(Error.cancelled) {
+        Promise<Int>(error: Error.dummy).catchOnly(Error.cancelled) {
             XCTFail()
             x.fulfill()
         }.catchOnly(Error.dummy) {
@@ -304,9 +298,7 @@ extension CatchableTests {
     func testCatchOnly_BaseCatchIsNotCalledAfterCatchOnlyExecutes() {
         let x = expectation(description: #file + #function)
 
-        Promise.value(1).then { _ -> Promise<Void> in
-            throw Error.dummy
-        }.catchOnly(Error.dummy) {
+        Promise<Int>(error: Error.dummy).catchOnly(Error.dummy) {
             x.fulfill()
         }.catch { _ in
             XCTFail()
@@ -319,9 +311,7 @@ extension CatchableTests {
     func testCatchOnly_BaseCatchIsCalledWhenCatchOnlyDoesNotExecute() {
         let x = expectation(description: #file + #function)
 
-        Promise.value(1).then { _ -> Promise<Void> in
-            throw Error.dummy
-        }.catchOnly(Error.cancelled) {
+        Promise<Int>(error: Error.dummy).catchOnly(Error.cancelled) {
             XCTFail()
             x.fulfill()
         }.catch { _ in
@@ -334,9 +324,7 @@ extension CatchableTests {
     func testCatchOnly_Type() {
         let x = expectation(description: #file + #function)
 
-        Promise.value(1).then { _ -> Promise<Void> in
-            throw Error.dummy
-        }.catchOnly(Error.self) { _ in
+        Promise<Int>(error: Error.dummy).catchOnly(Error.self) { _ in
             x.fulfill()
         }.silenceWarning()
 
@@ -346,9 +334,7 @@ extension CatchableTests {
     func testCatchOnly_Type_PatternMatch_1() {
         let x = expectation(description: "Pattern match only Error.Type")
 
-        Promise.value(1).then { _ -> Promise<Void> in
-            throw Error.dummy
-        }.catchOnly(Error.self) { _ in
+        Promise<Int>(error: Error.dummy).catchOnly(Error.self) { _ in
             x.fulfill()
         }.catchOnly(Error.dummy) {
             XCTFail()
@@ -361,9 +347,7 @@ extension CatchableTests {
     func testCatchOnly_Type_PatternMatch_2() {
         let x = expectation(description: "Pattern match only Error.dummy")
 
-        Promise.value(1).then { _ -> Promise<Void> in
-            throw Error.dummy
-        }.catchOnly(Error.dummy) {
+        Promise<Int>(error: Error.dummy).catchOnly(Error.dummy) {
             x.fulfill()
         }.catchOnly(Error.self) { _ in
             XCTFail()
@@ -376,9 +360,7 @@ extension CatchableTests {
     func testCatchOnly_Type_BaseCatchIsNotCalledAfterCatchOnlyExecutes() {
         let x = expectation(description: #file + #function)
 
-        Promise.value(1).then { _ -> Promise<Void> in
-            throw Error.dummy
-        }.catchOnly(Error.self) { _ in
+        Promise<Int>(error: Error.dummy).catchOnly(Error.self) { _ in
             x.fulfill()
         }.catch { _ in
             XCTFail()
