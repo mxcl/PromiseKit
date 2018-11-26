@@ -41,7 +41,7 @@ public extension CatchMixin {
     }
 
     /**
-     The provided closure executes when this promise rejects with the specific error passed in. A final `catch` is still required at the end of your chain.
+     The provided closure executes when this promise rejects with the specific error passed in. A final `catch` is still required at the end of the chain.
 
      Rejecting a promise cascades: rejecting all subsequent promises (unless
      recover is invoked) thus you will typically place your catch at the end
@@ -50,7 +50,7 @@ public extension CatchMixin {
 
      - Parameter only: The specific error to be caught and handled.
      - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter execute: The handler to execute if this promise is rejected.
+     - Parameter execute: The handler to execute if this promise is rejected with the provided error.
      - Note: Since this method handles only specific errors, supplying a `CatchPolicy` is unsupported. You can instead specify e.g. your cancellable error.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
@@ -73,7 +73,7 @@ public extension CatchMixin {
     }
 
     /**
-     The provided closure executes when this promise rejects with an error of the type passed in. A final `catch` is still required at the end of your chain.
+     The provided closure executes when this promise rejects with an error of the type passed in. A final `catch` is still required at the end of the chain.
 
      Rejecting a promise cascades: rejecting all subsequent promises (unless
      recover is invoked) thus you will typically place your catch at the end
@@ -82,7 +82,7 @@ public extension CatchMixin {
 
      - Parameter only: The error type to be caught and handled.
      - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter execute: The handler to execute if this promise is rejected.
+     - Parameter execute: The handler to execute if this promise is rejected with the provided error type.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
     func catchOnly<E: Swift.Error>(_ only: E.Type, on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) -> Void) -> PMKCascadingFinalizer {
@@ -143,7 +143,7 @@ public class PMKCascadingFinalizer {
     }
 
     /**
-     The provided closure executes when this promise rejects with the specific error passed in. A final `catch` is still required at the end of your chain.
+     The provided closure executes when this promise rejects with the specific error passed in. A final `catch` is still required at the end of the chain.
 
      Rejecting a promise cascades: rejecting all subsequent promises (unless
      recover is invoked) thus you will typically place your catch at the end
@@ -152,7 +152,7 @@ public class PMKCascadingFinalizer {
 
      - Parameter only: The specific error to be caught and handled.
      - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter execute: The handler to execute if this promise is rejected.
+     - Parameter execute: The handler to execute if this promise is rejected with the provided error.
      - Note: Since this method handles only specific errors, supplying a `CatchPolicy` is unsupported. You can instead specify e.g. your cancellable error.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
@@ -163,7 +163,7 @@ public class PMKCascadingFinalizer {
     }
 
     /**
-     The provided closure executes when this promise rejects with an error of the type passed in. A final `catch` is still required at the end of your chain.
+     The provided closure executes when this promise rejects with an error of the type passed in. A final `catch` is still required at the end of the chain.
 
      Rejecting a promise cascades: rejecting all subsequent promises (unless
      recover is invoked) thus you will typically place your catch at the end
@@ -172,7 +172,7 @@ public class PMKCascadingFinalizer {
 
      - Parameter only: The error type to be caught and handled.
      - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter execute: The handler to execute if this promise is rejected.
+     - Parameter execute: The handler to execute if this promise is rejected with the provided error type.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
     public func catchOnly<E: Swift.Error>(_ only: E.Type, on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) -> Void) -> PMKCascadingFinalizer {
