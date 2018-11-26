@@ -415,6 +415,167 @@ extension CatchableTests {
     }
 }
 
+/// `Promise<T>.recoverOnly`
+extension CatchableTests {
+    func testRecoverOnly_Object() {
+        let x = expectation(description: #file + #function)
+
+        Promise<Int>(error: Error.dummy).recoverOnly(Error.dummy) {
+            return Promise.value(1)
+        }.done { _ in
+            x.fulfill()
+        }.catch { _ in
+            XCTFail()
+            x.fulfill()
+        }
+
+        wait(for: [x], timeout: 5)
+    }
+
+    func testRecoverOnly_Object_Ignored() {
+        let x = expectation(description: #file + #function)
+
+        Promise.value(1).recoverOnly(Error.dummy) {
+            return Promise(error: Error.dummy)
+        }.done { _ in
+            x.fulfill()
+        }.catch { _ in
+            XCTFail()
+            x.fulfill()
+        }
+
+        wait(for: [x], timeout: 5)
+    }
+
+    func testRecoverOnly_Object_PatternMatch() {
+        let x = expectation(description: #file + #function)
+
+        Promise<Int>(error: Error.cancelled).recoverOnly(Error.dummy) {
+            return Promise.value(1)
+        }.done { _ in
+            XCTFail()
+            x.fulfill()
+        }.catch(policy: .allErrors) { _ in
+            x.fulfill()
+        }
+
+        wait(for: [x], timeout: 5)
+    }
+
+    func testRecoverOnly_Type() {
+        let x = expectation(description: #file + #function)
+
+        Promise<Int>(error: Error.dummy).recoverOnly(Error.self) { _ in
+            return Promise.value(1)
+        }.done { _ in
+            x.fulfill()
+        }.catch { _ in
+            XCTFail()
+            x.fulfill()
+        }
+
+        wait(for: [x], timeout: 5)
+    }
+
+    func testRecoverOnly_Type_Ignored() {
+        let x = expectation(description: #file + #function)
+
+        Promise.value(1).recoverOnly(Error.self) { _ in
+            return Promise(error: Error.dummy)
+        }.done { _ in
+            x.fulfill()
+        }.catch { _ in
+            XCTFail()
+            x.fulfill()
+        }
+
+        wait(for: [x], timeout: 5)
+    }
+
+    func testRecoverOnly_Type_PatternMatch() {
+        let x = expectation(description: #file + #function)
+
+        enum Foo: Swift.Error {}
+
+        Promise<Int>(error: Error.dummy).recoverOnly(Foo.self) { _ in
+            return Promise.value(1)
+        }.done { _ in
+            XCTFail()
+            x.fulfill()
+        }.catch { _ in
+            x.fulfill()
+        }
+
+        wait(for: [x], timeout: 5)
+    }
+
+    func testRecoverOnly_Type_Cancellation_Ignore() {
+        let x = expectation(description: #file + #function)
+
+        Promise<Int>(error: Error.cancelled).recoverOnly(Error.self) { _ in
+            return Promise.value(1)
+        }.done { _ in
+            XCTFail()
+            x.fulfill()
+        }.catch(policy: .allErrors) { _ in
+            x.fulfill()
+        }
+
+        wait(for: [x], timeout: 5)
+    }
+
+    func testRecoverOnly_Type_Cancellation_Handle() {
+        let x = expectation(description: #file + #function)
+
+        Promise<Int>(error: Error.cancelled).recoverOnly(Error.self, policy: .allErrors) { _ in
+            return Promise.value(1)
+        }.done { _ in
+            x.fulfill()
+        }.catch { _ in
+            XCTFail()
+            x.fulfill()
+        }
+
+        wait(for: [x], timeout: 5)
+    }
+
+    func testRecoverOnly_Chaining() {
+        let x = expectation(description: #file + #function)
+
+        enum Foo: Swift.Error { case bar }
+
+        Promise<Int>(error: Error.dummy).recoverOnly(Foo.self) { _ in
+            return Promise(error: Foo.bar)
+        }.recoverOnly(Error.dummy) {
+            return Promise.value(1)
+        }.done { _ in
+            x.fulfill()
+        }.catch { _ in
+            XCTFail()
+            x.fulfill()
+        }
+
+        wait(for: [x], timeout: 5)
+    }
+
+    func testRecoverOnly_BaseRecoverIsNotCalledAfterRecoverOnlyExecutes() {
+        let x = expectation(description: #file + #function)
+
+        Promise<Int>(error: Error.dummy).recoverOnly(Error.dummy) {
+            return Promise.value(1)
+        }.recover { _ in
+            return Promise(error: Error.dummy)
+        }.done { _ in
+            x.fulfill()
+        }.catch { _ in
+            XCTFail()
+            x.fulfill()
+        }
+
+        wait(for: [x], timeout: 5)
+    }
+}
+
 private enum Error: CancellableError {
     case dummy
     case cancelled
