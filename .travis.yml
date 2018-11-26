@@ -35,7 +35,7 @@ jobs:
       cache: cocoapods
       language: objective-c
       before_install: mv .github/PromiseKit.podspec .
-      install: gem install cocoapods --prerelease --version 1.6.0.beta.1
+      install: gem install cocoapods --prerelease --version 1.6.0.beta.2
       script: pod lib lint --subspec=PromiseKit/CorePromise --fail-fast --swift-version=$SWIFT
     - <<: *pod
       osx_image: xcode9.2
@@ -168,10 +168,13 @@ jobs:
     - stage: deploy
       script: |
         set -eo pipefail
-        pod trunk push --verbose --swift-version=4.2 | ruby -e 'ARGF.each{ print "." }'
+        gem install cocoapods --prerelease --version 1.6.0.beta.2
+        mv .github/PromiseKit.podspec .
+        pod trunk push --verbose --allow-warnings --swift-version=4.2 | ruby -e 'ARGF.each{ print "." }'
       # ^^ pipe because Travis times us out if there is no output
       # AND `pod` defaults to hardly any output
       # BUT `--verbose` generates so much output that Travis kills our script due to *too much* output!
+      # --allow-warnings because Bolts generates warnings and CocoaPods fails you even if your deps emit warnings
       os: osx
       osx_image: xcode10.1
       language: objective-c
