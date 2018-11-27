@@ -618,6 +618,127 @@ extension CatchableTests {
     }
 }
 
+/// `Promise<Void>.recoverOnly`
+extension CatchableTests {
+    func testRecoverOnly_Object_Void() {
+        let x = expectation(description: #file + #function)
+
+        Promise<Void>(error: Error.dummy).recoverOnly(Error.dummy) {
+            return ()
+        }.done {
+            x.fulfill()
+        }.catch { _ in
+            XCTFail()
+            x.fulfill()
+        }
+
+        wait(for: [x], timeout: 5)
+    }
+
+    func testRecoverOnly_Object_Void_Fufilled() {
+        let x = expectation(description: #file + #function)
+
+        Promise<Void>.value(()).recoverOnly(Error.dummy) {
+            XCTFail()
+            x.fulfill()
+        }.done {
+            x.fulfill()
+        }.silenceWarning()
+
+        wait(for: [x], timeout: 5)
+    }
+
+    func testRecoverOnly_Object_Void_Ignored() {
+        let x = expectation(description: #file + #function)
+
+        enum Foo: Swift.Error { case bar }
+
+        Promise<Void>(error: Error.dummy).recoverOnly(Foo.bar) {
+            XCTFail()
+            x.fulfill()
+        }.done {
+            XCTFail()
+            x.fulfill()
+        }.catch { _ in
+            x.fulfill()
+        }
+
+        wait(for: [x], timeout: 5)
+    }
+
+    func testRecoverOnly_Type_Void() {
+        let x = expectation(description: #file + #function)
+
+        Promise<Void>(error: Error.dummy).recoverOnly(Error.self) { _ in }.done {
+            x.fulfill()
+        }.catch { _ in
+            XCTFail()
+            x.fulfill()
+        }
+
+        wait(for: [x], timeout: 5)
+    }
+
+    func testRecoverOnly_Type_Void_Fufilled() {
+        let x = expectation(description: #file + #function)
+
+        Promise<Void>.value(()).recoverOnly(Error.self) { _ in
+            XCTFail()
+            x.fulfill()
+        }.done {
+            x.fulfill()
+        }.silenceWarning()
+
+        wait(for: [x], timeout: 5)
+    }
+
+    func testRecoverOnly_Type_Void_Ignored() {
+        let x = expectation(description: #file + #function)
+
+        enum Foo: Swift.Error { case bar }
+
+        Promise<Void>(error: Error.dummy).recoverOnly(Foo.self) { _ in
+            XCTFail()
+            x.fulfill()
+        }.done {
+            XCTFail()
+            x.fulfill()
+        }.catch { _ in
+            x.fulfill()
+        }
+
+        wait(for: [x], timeout: 5)
+    }
+
+    func testRecoverOnly_Type_Void_Rethrow() {
+        let x = expectation(description: #file + #function)
+
+        Promise<Void>(error: Error.dummy).recoverOnly(Error.self) { _ in
+            throw Error.dummy
+        }.done {
+            XCTFail()
+            x.fulfill()
+        }.catch { _ in
+            x.fulfill()
+        }
+
+        wait(for: [x], timeout: 5)
+    }
+
+    func testRecoverOnly_Type_Void_Cancellation_Ignore() {
+        let x = expectation(description: #file + #function)
+
+        Promise<Void>(error: Error.cancelled).recoverOnly(Error.self) { _ in }.done {
+            XCTFail()
+            x.fulfill()
+        }.catch(policy: .allErrors) { _ in
+            x.fulfill()
+        }
+
+        wait(for: [x], timeout: 5)
+    }
+}
+
 private enum Error: CancellableError {
     case dummy
     case cancelled

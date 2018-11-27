@@ -469,4 +469,85 @@ public extension CatchMixin where T == Void {
         }
         return rg
     }
+
+    /**
+     The provided closure executes when this promise rejects with the specific error passed in.
+
+     Unlike `catch`, `recover` continues the chain.
+     Use `recover` in circumstances where recovering the chain from certain errors is a possibility. For example:
+
+     firstly {
+         CLLocationManager.requestLocation()
+     }.recoverOnly(CLError.unknownLocation) {
+         return .value(CLLocation.chicago)
+     }
+
+     - Parameter only: The specific error to be recovered.
+     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter body: The handler to execute if this promise is rejected with the provided error.
+     - Note: Since this method recovers only specific errors, supplying a `CatchPolicy` is unsupported. You can instead specify e.g. your cancellable error.
+     - SeeAlso: [Cancellation](http://promisekit.org/docs/)
+     */
+    func recoverOnly<E: Swift.Error>(_ only: E, on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping() -> Void) -> Promise<Void> where E: Equatable {
+        let rp = Promise<Void>(.pending)
+        pipe {
+            switch $0 {
+            case .fulfilled:
+                rp.box.seal(.fulfilled())
+            case .rejected(let error as E) where error == only:
+                on.async(flags: flags) {
+                    body()
+                    rp.box.seal(.fulfilled())
+                }
+            case .rejected(let error):
+                rp.box.seal(.rejected(error))
+            }
+        }
+        return rp
+    }
+
+    /**
+     The provided closure executes when this promise rejects with an error of the type passed in.
+
+     Unlike `catch`, `recover` continues the chain.
+     Use `recover` in circumstances where recovering the chain from certain errors is a possibility. For example:
+
+     firstly {
+         API.fetchData()
+     }.recoverOnly(FetchError.self) { error in
+         guard case .missingImage(let partialData) = error else { throw error }
+         //…
+         return .value(dataWithDefaultImage)
+     }
+
+     - Parameter only: The error type to be recovered.
+     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter body: The handler to execute if this promise is rejected with the provided error type.
+     - SeeAlso: [Cancellation](http://promisekit.org/docs/)
+     */
+    func recoverOnly<E: Swift.Error>(_ only: E.Type, on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) throws -> Void) -> Promise<Void> {
+        let rp = Promise<Void>(.pending)
+        pipe {
+            switch $0 {
+            case .fulfilled:
+                rp.box.seal(.fulfilled())
+            case .rejected(let error as E):
+                if policy == .allErrors || !error.isCancelled {
+                    on.async(flags: flags) {
+                        do {
+                            try body(error)
+                            rp.box.seal(.fulfilled())
+                        } catch {
+                            rp.box.seal(.rejected(error))
+                        }
+                    }
+                } else {
+                    rp.box.seal(.rejected(error))
+                }
+            case .rejected(let error):
+                rp.box.seal(.rejected(error))
+            }
+        }
+        return rp
+    }
 }
