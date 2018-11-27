@@ -487,11 +487,11 @@ public extension CatchMixin where T == Void {
         pipe {
             switch $0 {
             case .fulfilled:
-                rp.box.seal(.fulfilled())
+                rp.box.seal(.fulfilled(()))
             case .rejected(let error as E) where error == only:
                 on.async(flags: flags) {
                     body()
-                    rp.box.seal(.fulfilled())
+                    rp.box.seal(.fulfilled(()))
                 }
             case .rejected(let error):
                 rp.box.seal(.rejected(error))
@@ -516,13 +516,12 @@ public extension CatchMixin where T == Void {
         pipe {
             switch $0 {
             case .fulfilled:
-                rp.box.seal(.fulfilled())
+                rp.box.seal(.fulfilled(()))
             case .rejected(let error as E):
                 if policy == .allErrors || !error.isCancelled {
                     on.async(flags: flags) {
                         do {
-                            try body(error)
-                            rp.box.seal(.fulfilled())
+                            rp.box.seal(.fulfilled(try body(error)))
                         } catch {
                             rp.box.seal(.rejected(error))
                         }
