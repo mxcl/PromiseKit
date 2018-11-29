@@ -65,6 +65,11 @@ extension Resolver where T == Void {
             fulfill(())
         }
     }
+
+    // Fulfills the promise
+    public func fulfill() {
+        self.fulfill(())
+    }
 }
 #endif
 
