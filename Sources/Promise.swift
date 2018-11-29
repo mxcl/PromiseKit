@@ -109,7 +109,7 @@ public extension Promise {
     func wait() throws -> T {
 
         if Thread.isMainThread {
-            PromiseKit.log(PromiseKit.LogEvent.waitOnMainThread)
+            conf.loggingClosure (LogEvent.waitOnMainThread)
         }
 
         var result = self.result

@@ -8,11 +8,12 @@ class LoggingTests: XCTestCase {
      
      // Verify LoggingPolicy directs output correctly
      
-     The test should emit the following log messages twice
+     The test should emit the following log messages:
      
      PromiseKit: warning: `wait()` called on main thread!
      PromiseKit: warning: pending promise deallocated
      PromiseKit:cauterized-error: purposes
+     This is an error message
      
 */
     func testLogging() {
@@ -24,21 +25,18 @@ class LoggingTests: XCTestCase {
         }
         
         // Test Logging to Console, the default behavior
-        PromiseKit.log(PromiseKit.LogEvent.waitOnMainThread)
-        PromiseKit.log(PromiseKit.LogEvent.pendingPromiseDeallocated)
-        PromiseKit.log(PromiseKit.LogEvent.cauterized(ForTesting.purposes))
-        // Now test no logging
-        PromiseKit.conf.loggingPolicy = .none
-        PromiseKit.log(PromiseKit.LogEvent.waitOnMainThread)
-        PromiseKit.log(PromiseKit.LogEvent.pendingPromiseDeallocated)
-        PromiseKit.log(PromiseKit.LogEvent.cauterized(ForTesting.purposes))
+        conf.loggingClosure (.waitOnMainThread)
+        conf.loggingClosure (.pendingPromiseDeallocated)
+        conf.loggingClosure (.cauterized(ForTesting.purposes))
+        conf.loggingClosure (.misc("This is an error message"))
         XCTAssertNil(logOutput)
-        // Switch back to logging to console
-        PromiseKit.conf.loggingPolicy = .console
-        PromiseKit.log(PromiseKit.LogEvent.waitOnMainThread)
-        PromiseKit.log(PromiseKit.LogEvent.pendingPromiseDeallocated)
-        PromiseKit.log(PromiseKit.LogEvent.cauterized(ForTesting.purposes))
-        // Custom logger
+        // Now test no logging
+        conf.loggingClosure = { event in }
+        conf.loggingClosure (.waitOnMainThread)
+        conf.loggingClosure (.pendingPromiseDeallocated)
+        conf.loggingClosure (.cauterized(ForTesting.purposes))
+        conf.loggingClosure (.misc("This is an error message"))
+        XCTAssertNil(logOutput)
         let loggingClosure: (PromiseKit.LogEvent) -> () = { event in
             switch event {
             case .waitOnMainThread:
@@ -49,17 +47,22 @@ class LoggingTests: XCTestCase {
                 // Using an enum with associated value does not convert to a string properly in
                 // earlier versions of swift
                 logOutput = "cauterized"
+            case .misc (let errorMessage):
+                logOutput = errorMessage
             }
         }
-        PromiseKit.conf.loggingPolicy = .custom(loggingClosure)
-        PromiseKit.log(PromiseKit.LogEvent.waitOnMainThread)
+        conf.loggingClosure = loggingClosure
+        conf.loggingClosure (.waitOnMainThread)
         XCTAssertEqual(logOutput!, "waitOnMainThread")
         logOutput = nil
-        PromiseKit.log(PromiseKit.LogEvent.pendingPromiseDeallocated)
+        conf.loggingClosure (.pendingPromiseDeallocated)
         XCTAssertEqual(logOutput!, "pendingPromiseDeallocated")
         logOutput = nil
-        PromiseKit.log(PromiseKit.LogEvent.cauterized(ForTesting.purposes))
+        conf.loggingClosure (.cauterized(ForTesting.purposes))
         XCTAssertEqual(logOutput!, "cauterized")
+        logOutput = nil
+        conf.loggingClosure (.misc("This is an error message"))
+        XCTAssertEqual(logOutput!, "This is an error message")
     }
 
     // Verify waiting on main thread in Promise is logged
@@ -73,7 +76,7 @@ class LoggingTests: XCTestCase {
         let loggingClosure: (PromiseKit.LogEvent) -> () = { event in
             logOutput = "\(event)"
         }
-        PromiseKit.conf.loggingPolicy = .custom(loggingClosure)
+        conf.loggingClosure = loggingClosure
         let promiseResolver = Promise<String>.pending()
         let workQueue = DispatchQueue(label: "worker")
         workQueue.async {
@@ -102,9 +105,10 @@ class LoggingTests: XCTestCase {
                 // Using an enum with associated value does not convert to a string properly in
                 // earlier versions of swift
                 logOutput = "cauterized"
-            }
+            case .misc (let errorMessage):
+                logOutput = errorMessage           }
         }
-        PromiseKit.conf.loggingPolicy = .custom(loggingClosure)
+        conf.loggingClosure = loggingClosure
         func createPromise() -> Promise<String> {
             let promiseResolver = Promise<String>.pending()
             
@@ -157,9 +161,10 @@ class LoggingTests: XCTestCase {
                 // Using an enum with associated value does not convert to a string properly in
                 // earlier versions of swift
                 logOutput = "cauterized"
-            }
+            case .misc (let errorMessage):
+                logOutput = errorMessage          }
         }
-        PromiseKit.conf.loggingPolicy = .custom(loggingClosure)
+        conf.loggingClosure = loggingClosure
         let guaranteeResolve = Guarantee<String>.pending()
         let workQueue = DispatchQueue(label: "worker")
         workQueue.async {

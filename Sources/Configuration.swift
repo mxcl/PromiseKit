@@ -8,25 +8,10 @@ public struct PMKConfiguration {
     /// The default catch-policy for all `catch` and `resolve`
     public var catchPolicy = CatchPolicy.allErrorsExceptCancellation
     
-    /// Defines how events (defined by PromiseKit.LogEvent) are logged. default: .console
-    public var loggingPolicy: LoggingPolicy = PromiseKit.LoggingPolicy.console {
-        willSet (newValue) {
-            switch newValue {
-            case .none:
-                activeLoggingClosure = { event in }
-            case .console:
-                activeLoggingClosure = PMKConfiguration.logConsoleClosure
-            case .custom (let closure):
-                activeLoggingClosure = closure
-            }
-        }
-    }
-
-    // The closure currently being used to log PromiseKit events
-    internal var activeLoggingClosure: (LogEvent) -> () = logConsoleClosure
-    
-    // A closure which logs PromiseKit.LogEvent to console
-    internal static let logConsoleClosure: (LogEvent) -> () = { event in
+    /// The closure used to log PromiseKit events.
+    /// Not thread safe; change before processing any promises.
+    /// Default: Log to console.
+    internal var loggingClosure: (LogEvent) -> () = { event in
         switch event {
         case .waitOnMainThread:
             print ("PromiseKit: warning: `wait()` called on main thread!")
@@ -34,9 +19,10 @@ public struct PMKConfiguration {
             print ("PromiseKit: warning: pending promise deallocated")
         case .cauterized (let error):
             print("PromiseKit:cauterized-error: \(error)")
+        case .misc(let errorMessage):
+            print (errorMessage)
         }
     }
-    
 }
 
 /// Modify this as soon as possible in your application’s lifetime

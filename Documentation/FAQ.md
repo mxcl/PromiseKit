@@ -373,29 +373,14 @@ Kitura.run()
 ## How do I control console output?
 
 By default PromiseKit emits console messages when certain events occur.  These events include:
+- A promise or guarantee has blocked the main thread
+- A promise has been deallocated without being fulfilled
+- An error which occurred while fulfilling a promise was swallowed using cauterize
+
+You may turn off or redirect this output by setting a thread safe closure in [PMKCOnfiguration](https://github.com/mxcl/PromiseKit/blob/master/Sources/Configuration.swift) **before** processing any promises. For example, to turn off console output:
 
 ```swift
-public enum LogEvent {
-    case waitOnMainThread
-    case pendingPromiseDeallocated
-    case cauterized(Error)
-}
-
-```
-
-You may turn off console logging with:
-
-```swift
-PromiseKit.conf.loggingPolicy = .none
-```
-
-You may redirect the output to your own custom logger with
-
-```swift
-let loggingClosure: (PromiseKit.LogEvent) -> () = { event in
-    // Log event (must be thread safe)
-}
-PromiseKit.conf.loggingPolicy = .custom(loggingClosure)
+conf.loggingClosure = { event in }
 ```
 
 ## My question was not answered

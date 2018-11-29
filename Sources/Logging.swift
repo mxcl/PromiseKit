@@ -1,35 +1,6 @@
 import Foundation
 
 /**
-    Specifies how certain PromiseKit events are logged.
-    The default policy is .console. To set the logging
-    policy, assign the desired policy in the PromiseKit
-    configuration, e.g.:
-    PromiseKit.conf.loggingPolicy = .none
- 
-    ````
-    /// No Logging
-    case none
- 
-    /// Output to console
-    case console
- 
-    /// Log to the provided closure (closure must be thread safe)
-    case custom((LogEvent) -> ())
-    ````
-*/
-public enum LoggingPolicy {
-    /// No Logging
-    case none
-    
-    /// Output to console
-    case console
-    
-    /// Log to the provided closure (closure must be thread safe)
-    case custom((LogEvent) -> ())
-}
-
-/**
     The PromiseKit events which may be logged.
  
     ````
@@ -41,6 +12,9 @@ public enum LoggingPolicy {
  
      /// An error which occurred while fulfilling a promise was swallowed
      case cauterized(Error)
+ 
+    /// Errors which give a string error message
+    case misc (String)
     ````
 */
 public enum LogEvent {
@@ -52,8 +26,8 @@ public enum LogEvent {
     
     /// An error which occurred while fulfilling a promise was swallowed
     case cauterized(Error)
+    
+    /// Errors which give a string error message
+    case misc (String)
 }
 
-internal func log(_ event: PromiseKit.LogEvent) {
-    conf.activeLoggingClosure(event)
-}

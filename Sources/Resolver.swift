@@ -8,7 +8,7 @@ public final class Resolver<T> {
 
     deinit {
         if case .pending = box.inspect() {
-            PromiseKit.log(PromiseKit.LogEvent.waitOnMainThread)
+            conf.loggingClosure(LogEvent.waitOnMainThread)
         }
     }
 }
