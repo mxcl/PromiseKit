@@ -62,11 +62,11 @@ extension Resolver where T == Void {
         if let error = error {
             reject(error)
         } else {
-            fulfill(())
+            fulfill()
         }
     }
 
-    // Fulfills the promise
+    /// Fulfills the promise
     public func fulfill() {
         self.fulfill(())
     }
