@@ -18,7 +18,7 @@ firstly {
     set($0)
     return animate()
 }.ensure {
-    cleanup()
+    // something that should happen whatever the outcome
 }.catch {
     handle(error: $0)
 }
