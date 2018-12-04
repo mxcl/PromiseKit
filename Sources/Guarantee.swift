@@ -116,7 +116,7 @@ public extension Guarantee {
     public func wait() -> T {
 
         if Thread.isMainThread {
-            conf.loggingClosure (LogEvent.waitOnMainThread)
+            conf.logHandler(.waitOnMainThread)
         }
 
         var result = value

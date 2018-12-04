@@ -8,7 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		085B96B321A6359500E5E22F /* LoggingTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085B96B121A6358900E5E22F /* LoggingTests.swift */; };
-		085B96BF21A9B37C00E5E22F /* Logging.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085B96BE21A9B37C00E5E22F /* Logging.swift */; };
+		085B96BF21A9B37C00E5E22F /* LogEvent.swift in Sources */ = {isa = PBXBuildFile; fileRef = 085B96BE21A9B37C00E5E22F /* LogEvent.swift */; };
 		0C42F31B1FCF86320051309C /* HangTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0C42F3191FCF86240051309C /* HangTests.swift */; };
 		0CC3AF2B1FCF84F7000E98C9 /* hang.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0CC3AF2A1FCF84F7000E98C9 /* hang.swift */; };
 		49A5584D1DC5185900E4D01B /* ResolverTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 49A5584B1DC5172F00E4D01B /* ResolverTests.swift */; };
@@ -140,7 +140,7 @@
 
 /* Begin PBXFileReference section */
 		085B96B121A6358900E5E22F /* LoggingTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoggingTests.swift; sourceTree = "<group>"; };
-		085B96BE21A9B37C00E5E22F /* Logging.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Logging.swift; path = Sources/Logging.swift; sourceTree = "<group>"; };
+		085B96BE21A9B37C00E5E22F /* LogEvent.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LogEvent.swift; path = Sources/LogEvent.swift; sourceTree = "<group>"; };
 		0C42F3191FCF86240051309C /* HangTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HangTests.swift; sourceTree = "<group>"; };
 		0CC3AF2A1FCF84F7000E98C9 /* hang.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = hang.swift; path = Sources/hang.swift; sourceTree = "<group>"; };
 		49A5584B1DC5172F00E4D01B /* ResolverTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ResolverTests.swift; sourceTree = "<group>"; };
@@ -439,10 +439,10 @@
 				63B0AC691D595E6300FA21D9 /* Error.swift */,
 				636A29261F1C3927001229C2 /* Resolver.swift */,
 				636A291E1F1C16FF001229C2 /* Box.swift */,
-				085B96BE21A9B37C00E5E22F /* Logging.swift */,
 				6330B5E01F2E991200D60528 /* Configuration.swift */,
 				63B18AEB1F2D205C00B79E37 /* CustomStringConvertible.swift */,
 				63D9B2F020338D5D0075C00B /* Deprecations.swift */,
+				085B96BE21A9B37C00E5E22F /* LogEvent.swift */,
 			);
 			name = Sources.swift;
 			sourceTree = "<group>";
@@ -747,7 +747,7 @@
 				63D9B2EF203385FD0075C00B /* race.m in Sources */,
 				63B0AC801D595E6300FA21D9 /* after.swift in Sources */,
 				63B18AEC1F2D205C00B79E37 /* CustomStringConvertible.swift in Sources */,
-				085B96BF21A9B37C00E5E22F /* Logging.swift in Sources */,
+				085B96BF21A9B37C00E5E22F /* LogEvent.swift in Sources */,
 				6330B5E11F2E991200D60528 /* Configuration.swift in Sources */,
 				63B912AA1F1D7B1300D49110 /* firstly.swift in Sources */,
 				636A29211F1C1716001229C2 /* Thenable.swift in Sources */,

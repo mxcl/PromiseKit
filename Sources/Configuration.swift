@@ -16,17 +16,15 @@ public struct PMKConfiguration {
     
     /// The closure used to log PromiseKit events.
     /// Not thread safe; change before processing any promises.
-    /// Default: Log to console.
-    internal var loggingClosure: (LogEvent) -> () = { event in
+    /// - Note: The default handler calls `print()`
+    public var logHandler: (LogEvent) -> () = { event in
         switch event {
         case .waitOnMainThread:
-            print ("PromiseKit: warning: `wait()` called on main thread!")
+            print("PromiseKit: warning: `wait()` called on main thread!")
         case .pendingPromiseDeallocated:
-            print ("PromiseKit: warning: pending promise deallocated")
+            print("PromiseKit: warning: pending promise deallocated")
         case .cauterized (let error):
             print("PromiseKit:cauterized-error: \(error)")
-        case .misc(let errorMessage):
-            print (errorMessage)
         }
     }
 }

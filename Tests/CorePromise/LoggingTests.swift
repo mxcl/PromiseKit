@@ -3,19 +3,14 @@ import Dispatch
 import XCTest
 
 class LoggingTests: XCTestCase {
-
-/**
-     
-     // Verify LoggingPolicy directs output correctly
-     
+    /**
      The test should emit the following log messages:
      
      PromiseKit: warning: `wait()` called on main thread!
      PromiseKit: warning: pending promise deallocated
      PromiseKit:cauterized-error: purposes
      This is an error message
-     
-*/
+    */
     func testLogging() {
         
         var logOutput: String? = nil
@@ -25,44 +20,36 @@ class LoggingTests: XCTestCase {
         }
         
         // Test Logging to Console, the default behavior
-        conf.loggingClosure (.waitOnMainThread)
-        conf.loggingClosure (.pendingPromiseDeallocated)
-        conf.loggingClosure (.cauterized(ForTesting.purposes))
-        conf.loggingClosure (.misc("This is an error message"))
+        conf.logHandler(.waitOnMainThread)
+        conf.logHandler(.pendingPromiseDeallocated)
+        conf.logHandler(.cauterized(ForTesting.purposes))
         XCTAssertNil(logOutput)
+
         // Now test no logging
-        conf.loggingClosure = { event in }
-        conf.loggingClosure (.waitOnMainThread)
-        conf.loggingClosure (.pendingPromiseDeallocated)
-        conf.loggingClosure (.cauterized(ForTesting.purposes))
-        conf.loggingClosure (.misc("This is an error message"))
+        conf.logHandler = { event in }
+        conf.logHandler(.waitOnMainThread)
+        conf.logHandler(.pendingPromiseDeallocated)
+        conf.logHandler(.cauterized(ForTesting.purposes))
         XCTAssertNil(logOutput)
-        let loggingClosure: (PromiseKit.LogEvent) -> () = { event in
+
+        conf.logHandler =  { event in
             switch event {
-            case .waitOnMainThread:
-                logOutput = "\(event)"
-            case .pendingPromiseDeallocated:
+            case .waitOnMainThread, .pendingPromiseDeallocated:
                 logOutput = "\(event)"
             case .cauterized:
                 // Using an enum with associated value does not convert to a string properly in
                 // earlier versions of swift
                 logOutput = "cauterized"
-            case .misc (let errorMessage):
-                logOutput = errorMessage
             }
         }
-        conf.loggingClosure = loggingClosure
-        conf.loggingClosure (.waitOnMainThread)
+        conf.logHandler(.waitOnMainThread)
         XCTAssertEqual(logOutput!, "waitOnMainThread")
         logOutput = nil
-        conf.loggingClosure (.pendingPromiseDeallocated)
+        conf.logHandler(.pendingPromiseDeallocated)
         XCTAssertEqual(logOutput!, "pendingPromiseDeallocated")
         logOutput = nil
-        conf.loggingClosure (.cauterized(ForTesting.purposes))
+        conf.logHandler(.cauterized(ForTesting.purposes))
         XCTAssertEqual(logOutput!, "cauterized")
-        logOutput = nil
-        conf.loggingClosure (.misc("This is an error message"))
-        XCTAssertEqual(logOutput!, "This is an error message")
     }
 
     // Verify waiting on main thread in Promise is logged
@@ -73,10 +60,9 @@ class LoggingTests: XCTestCase {
         }
         
         var logOutput: String? = nil
-        let loggingClosure: (PromiseKit.LogEvent) -> () = { event in
+        conf.logHandler = { event in
             logOutput = "\(event)"
         }
-        conf.loggingClosure = loggingClosure
         let promiseResolver = Promise<String>.pending()
         let workQueue = DispatchQueue(label: "worker")
         workQueue.async {
@@ -95,20 +81,16 @@ class LoggingTests: XCTestCase {
         }
 
         var logOutput: String? = nil
-        let loggingClosure: (PromiseKit.LogEvent) -> () = { event in
+        conf.logHandler = { event in
             switch event {
-            case .waitOnMainThread:
-                logOutput = "\(event)"
-            case .pendingPromiseDeallocated:
+            case .waitOnMainThread, .pendingPromiseDeallocated:
                 logOutput = "\(event)"
             case .cauterized:
                 // Using an enum with associated value does not convert to a string properly in
                 // earlier versions of swift
                 logOutput = "cauterized"
-            case .misc (let errorMessage):
-                logOutput = errorMessage           }
+            }
         }
-        conf.loggingClosure = loggingClosure
         func createPromise() -> Promise<String> {
             let promiseResolver = Promise<String>.pending()
             
@@ -118,7 +100,7 @@ class LoggingTests: XCTestCase {
             }
             return promiseResolver.promise
         }
-       var ex = expectation(description: "cauterize")
+        var ex = expectation(description: "cauterize")
         firstly {
             createPromise()
         }.ensure {
@@ -151,20 +133,16 @@ class LoggingTests: XCTestCase {
         }
         
         var logOutput: String? = nil
-        let loggingClosure: (PromiseKit.LogEvent) -> () = { event in
+        conf.logHandler = { event in
             switch event {
-            case .waitOnMainThread:
-                logOutput = "\(event)"
-            case .pendingPromiseDeallocated:
+            case .waitOnMainThread, .pendingPromiseDeallocated:
                 logOutput = "\(event)"
             case .cauterized:
                 // Using an enum with associated value does not convert to a string properly in
                 // earlier versions of swift
                 logOutput = "cauterized"
-            case .misc (let errorMessage):
-                logOutput = errorMessage          }
+            }
         }
-        conf.loggingClosure = loggingClosure
         let guaranteeResolve = Guarantee<String>.pending()
         let workQueue = DispatchQueue(label: "worker")
         workQueue.async {
@@ -175,6 +153,5 @@ class LoggingTests: XCTestCase {
         XCTAssertEqual(logOutput!, "waitOnMainThread")
     }
     
-    //TODO Verify pending promise dealocation is logged
-
+    //TODO Verify pending promise deallocation is logged
 }
