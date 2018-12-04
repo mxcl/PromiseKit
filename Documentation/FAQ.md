@@ -380,7 +380,7 @@ By default PromiseKit emits console messages when certain events occur.  These e
 You may turn off or redirect this output by setting a thread safe closure in [PMKCOnfiguration](https://github.com/mxcl/PromiseKit/blob/master/Sources/Configuration.swift) **before** processing any promises. For example, to turn off console output:
 
 ```swift
-conf.loggingClosure = { event in }
+conf.logHandler = { event in }
 ```
 
 ## My question was not answered
