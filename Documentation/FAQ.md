@@ -370,6 +370,19 @@ Kitura.addHTTPServer(onPort: 8888, with: router)
 Kitura.run()
 ```
 
+## How do I control console output?
+
+By default PromiseKit emits console messages when certain events occur.  These events include:
+- A promise or guarantee has blocked the main thread
+- A promise has been deallocated without being fulfilled
+- An error which occurred while fulfilling a promise was swallowed using cauterize
+
+You may turn off or redirect this output by setting a thread safe closure in [PMKCOnfiguration](https://github.com/mxcl/PromiseKit/blob/master/Sources/Configuration.swift) **before** processing any promises. For example, to turn off console output:
+
+```swift
+conf.loggingClosure = { event in }
+```
+
 ## My question was not answered
 
 [Please open a ticket](https://github.com/mxcl/PromiseKit/issues/new).

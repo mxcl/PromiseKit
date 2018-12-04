@@ -8,7 +8,7 @@ public final class Resolver<T> {
 
     deinit {
         if case .pending = box.inspect() {
-            print("PromiseKit: warning: pending promise deallocated")
+            conf.loggingClosure(LogEvent.waitOnMainThread)
         }
     }
 }

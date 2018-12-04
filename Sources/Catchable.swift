@@ -188,7 +188,7 @@ public extension CatchMixin {
     @discardableResult
     func cauterize() -> PMKFinalizer {
         return self.catch {
-            Swift.print("PromiseKit:cauterized-error:", $0)
+            conf.loggingClosure (LogEvent.cauterized($0))
         }
     }
 }
