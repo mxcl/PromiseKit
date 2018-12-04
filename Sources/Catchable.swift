@@ -188,7 +188,7 @@ public extension CatchMixin {
     @discardableResult
     func cauterize() -> PMKFinalizer {
         return self.catch {
-            conf.loggingClosure (LogEvent.cauterized($0))
+            conf.logHandler(.cauterized($0))
         }
     }
 }
