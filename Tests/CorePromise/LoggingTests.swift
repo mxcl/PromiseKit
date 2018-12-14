@@ -153,5 +153,27 @@ class LoggingTests: XCTestCase {
         XCTAssertEqual(logOutput!, "waitOnMainThread")
     }
     
+    // Verify pendingPromiseDeallocated is logged
+    func testPendingPromiseDeallocatedIsLogged() {
+        
+        var logOutput: String? = nil
+        conf.logHandler = { event in
+            switch event {
+            case .waitOnMainThread:
+                logOutput = "\(event)"
+            case .pendingPromiseDeallocated:
+                logOutput = "\(event)"
+            case .cauterized:
+                // Using an enum with associated value does not convert to a string properly in
+                // earlier versions of swift
+                logOutput = "cauterized"
+            }
+        }
+        do {
+            let _ = Promise<Int>.pending()
+        }
+        XCTAssertEqual ("pendingPromiseDeallocated", logOutput!)
+    }
+    
     //TODO Verify pending promise deallocation is logged
 }
