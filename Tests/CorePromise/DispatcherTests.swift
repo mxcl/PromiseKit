@@ -1,3 +1,4 @@
+import Dispatch
 import PromiseKit
 import XCTest
 
