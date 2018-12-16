@@ -1,3 +1,12 @@
+addons:
+  artifacts:
+    # To collect artifacts, define ARTIFACTS_KEY, ARTIFACTS_SECRET, ARTIFACTS_REGION, and 
+    # ARTIFACTS_BUCKET in the Travis environment. (AWS S3 is currently the only option.)
+    paths:
+      # Collect build directory contents and logs if configured to do so in the environment, 
+      # but skip the Promises/A+ products because there are a lot. Also omit some binaries.
+      - $(find /var/folders -name '*carthage-xcodebuild*' -print 2>/dev/null | tr "\n" ":")
+      - $(if [ `git ls-files -o | grep build.js | wc -l` -eq 0 ]; then git ls-files -o | grep -v x86_64- | tr "\n" ":" ; fi)
 stages:
   - name: lint
     if: branch = master OR branch =~ ^\d+\.\d+\.\d+$ OR branch =~ concat("^(",env(TRAVIS_BRANCHES),")$")
