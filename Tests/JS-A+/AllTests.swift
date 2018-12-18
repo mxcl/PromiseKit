@@ -5,6 +5,8 @@
 //  Created by Lois Di Qual on 2/28/18.
 //
 
+#if swift(>=3.2)
+
 import XCTest
 import PromiseKit
 import JavaScriptCore
@@ -78,3 +80,5 @@ class AllTests: XCTestCase {
         self.wait(for: [expectation], timeout: 60)
     }
 }
+
+#endif

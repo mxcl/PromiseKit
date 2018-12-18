@@ -49,13 +49,20 @@ target "Change Me!" do
 end
 ```
 
+> The above gives an Xcode warning? See our [Installation Guide].
+
 PromiseKit 6, 5 and 4 support Xcode 8.3, 9.x and 10.0; Swift 3.1,
 3.2, 3.3, 3.4, 4.0, 4.1 and 4.2; iOS, macOS, tvOS, watchOS, Linux and Android; CocoaPods,
 Carthage and SwiftPM; ([CI Matrix](https://travis-ci.org/mxcl/PromiseKit)).
 
 For Carthage, SwiftPM, etc., or for instructions when using older Swifts or
-Xcodes, see our [Installation Guide](Documentation/Installation.md). We 
+Xcodes, see our [Installation Guide]. We 
 recommend [Carthage](https://github.com/Carthage/Carthage).
+
+# PromiseKit is Thousands of Hours of Work
+
+This project is a labor of love: to the pursuit of making quality, reusable, compartmentalized software that has general use
+to the wider development community. It is a widely used project where every change, fix and plan can have serious repercussions to its users and thus must be carefully considered. If you use PromiseKit in your apps, please consider supporting its development with a donation to [my patreon](https://www.patreon.com/mxcl). Thank you.
 
 # Documentation
 
@@ -169,3 +176,4 @@ if after that you still have a question, ask at our [Gitter chat channel] or on 
 [our bug tracker]: https://github.com/mxcl/PromiseKit/issues/new
 [Podfile]: https://guides.cocoapods.org/syntax/podfile.html
 [PMK6]: http://promisekit.org/news/2018/02/PromiseKit-6.0-Released/
+[Installation Guide]: Documentation/Installation.md

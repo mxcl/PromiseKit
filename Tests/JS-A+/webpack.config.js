@@ -9,6 +9,9 @@ module.exports = {
     filename: 'build.js',
     library: 'runTests'
   },
+  stats: {
+    warnings: false
+  },
   module: {
     rules: [
       {

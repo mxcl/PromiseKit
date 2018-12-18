@@ -15,7 +15,7 @@ import PromiseKit
  * Completely _ignores_ server caching headers!
  */
 
-private let q = DispatchQueue(label: "org.promisekit.cache.image")
+private let q = DispatchQueue(label: "org.promisekit.cache.image", attributes: .concurrent)
 private var active: [URL: Promise<Data>] = [:]
 private var cleanup = Promise()
 
@@ -29,7 +29,7 @@ public func fetch(image url: URL) -> Promise<Data> {
         return promise
     }
 
-    q.sync(flags: .barrier) {
+    q.sync {
         promise = Promise(.start) {
 
             let dst = try url.cacheDestination()

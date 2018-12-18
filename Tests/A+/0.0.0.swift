@@ -26,7 +26,7 @@ extension XCTestCase {
         let (pending, seal) = Promise<Void>.pending()
 
         do {
-            try body((pending, { seal.fulfill(()) }, seal.reject), expectation)
+            try body((pending, { seal.fulfill() }, seal.reject), expectation)
             waitForExpectations(timeout: timeout) { err in
                 if let _ = err {
                     XCTFail("wait failed: \(description)", file: file, line: line)

@@ -1,5 +1,5 @@
 /// An object for resolving promises
-public class Resolver<T> {
+public final class Resolver<T> {
     let box: Box<Result<T>>
 
     init(_ box: Box<Result<T>>) {
@@ -8,7 +8,7 @@ public class Resolver<T> {
 
     deinit {
         if case .pending = box.inspect() {
-            print("PromiseKit: warning: pending promise deallocated")
+            conf.logHandler(.pendingPromiseDeallocated)
         }
     }
 }
@@ -62,8 +62,13 @@ extension Resolver where T == Void {
         if let error = error {
             reject(error)
         } else {
-            fulfill(())
+            fulfill()
         }
+    }
+
+    /// Fulfills the promise
+    public func fulfill() {
+        self.fulfill(())
     }
 }
 #endif

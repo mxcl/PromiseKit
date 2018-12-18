@@ -6,19 +6,30 @@ We recommend Carthage over CocoaPods, but both installation methods are supporte
 
 ```ruby
 use_frameworks!
-pod "PromiseKit", "~> 6.0"
-```
-
-After CocoaPods 1.0, you will (probably) need to add the `pod` line to a `target`,
-e.g.:
-
-```ruby
-use_frameworks!
 
 target "Change Me!" do
   pod "PromiseKit", "~> 6.0"
 end
 ```
+
+If the generated Xcode project gives you a warning that PromiseKit needs to be upgraded to
+Swift 4.0 or Swift 4.2, then add the following:
+
+```ruby
+post_install do |installer|
+  installer.pods_project.targets.each do |target|
+    if target.name == 'PromiseKit'
+      target.build_configurations.each do |config|
+        config.build_settings['SWIFT_VERSION'] = '4.2'
+      end
+    end
+  end
+end
+```
+
+Adjust the value for `SWIFT_VERSION` as needed.
+
+CocoaPods are aware of this [issue](https://github.com/CocoaPods/CocoaPods/issues/7134).
 
 ## Carthage
 

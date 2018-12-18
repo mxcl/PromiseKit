@@ -187,6 +187,28 @@ seal.fulfill(())
 
 Yes: we hope they revert this change in Swift 5 too.
 
+## "Ambiguous reference to 'firstly(execute:)'"
+
+Remove the firstly, eg:
+
+```swift
+firstly {
+    foo()
+}.then {
+    //…
+}
+```
+
+becomes: 
+
+```swift
+foo().then {
+    //…
+}
+```
+
+Rebuild and Swift should now tell you the *real* error.
+
 ## Other issues
 
 ### `Pending Promise Deallocated!`
@@ -239,13 +261,30 @@ Add return types to your closures.
 
 ### My promise never resolves
 
-Check to be sure that your asynchronous task even *starts*. You’d be surprised how
-often this is the cause.
+There are several potential causes:
+
+#### 1. Check to be sure that your asynchronous task even *starts*
+
+You’d be surprised how often this is the cause.
 
 For example, if you are using `URLSession` without our extension (but
 don’t do that; *use* our extension! we know all the pitfalls), did you forget
 to call `resume` on the task? If so, the task never actually starts, and so of
 course it never finishes, either.
+
+#### 2. Check that all paths in your custom Promise initializers are handled
+
+See “Pending Promise Deallocated” above. Usually you will see this warning if
+you are not handling a path, but that requires your promise deallocate, so you
+may not see this warning yet you are still not handling all paths.
+
+Unhandled paths mean the promise will not resolve.
+
+#### 3. Ensure the queue your promise handler runs upon is not blocked
+
+If the thread is blocked the handlers cannot execute. Commonly you can see this
+if you are using our `wait()` function. Please read the documentation for `wait()`
+for suggestions and caveats.
 
 ### `Result of call to 'done(on:_:)' is unused`, `Result of call to 'then(on:_:)' is unused`
 

@@ -18,7 +18,7 @@ firstly {
     set($0)
     return animate()
 }.ensure {
-    cleanup()
+    // something that should happen whatever the outcome
 }.catch {
     handle(error: $0)
 }
@@ -186,12 +186,24 @@ fade.done {
 }
 ```
 
-> *Note*: You *usually* you want `when()`, since `when` executes all of its
+Or if you have an array of promises:
+
+```swift
+var foo = Promise()
+for nextPromise in arrayOfPromises {
+    foo = foo.then { nextPromise }
+}
+foo.done {
+    // finish
+}
+```
+
+> *Note*: You *usually* want `when()`, since `when` executes all of its
 component promises in parallel and so completes much faster. Use the pattern 
 shown above in situations where tasks *must* be run sequentially; animation
 is a good example.
 
-We also provide `when(concurrently:)`, which lets you schedule more than
+> We also provide `when(concurrently:)`, which lets you schedule more than
 one promise at a time if you need to.
 
 ## Timeout
