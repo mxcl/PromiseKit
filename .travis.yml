@@ -1,6 +1,6 @@
 language: objective-c
 xcode_project: PromiseKit.xcodeproj
 xcode_scheme: PMKmacOS
-osx_image: xcode9.3
+osx_image: xcode10.1
 install: carthage bootstrap --platform Mac
 script: xcodebuild -scheme PMKmacOS build test
