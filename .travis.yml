@@ -2,6 +2,23 @@ matrix:
   include:
     - os: osx
       language: objective-c
+      osx_image: xcode10.1
+      env: SWFT=4.2 PLAT=macOS
+    - os: osx
+      language: objective-c
+      osx_image: xcode10.1
+      env: SWFT=4.2 PLAT=iOS
+    - os: osx
+      language: objective-c
+      osx_image: xcode10.1
+      env: SWFT=4.2 PLAT=tvOS
+    - os: osx
+      language: objective-c
+      osx_image: xcode10.1
+      env: SWFT=4.2 PLAT=watchOS
+      
+    - os: osx
+      language: objective-c
       osx_image: xcode9.3
       env: SWFT=4.1 PLAT=macOS
     - os: osx
