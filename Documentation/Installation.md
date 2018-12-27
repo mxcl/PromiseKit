@@ -58,8 +58,8 @@ PromiseKit contains Swift, so there have been rev-lock issues with Xcode:
 | PromiseKit | Swift                   | Xcode    |   CI Status  |   Release Notes   |
 | ---------- | ----------------------- | -------- | ------------ | ----------------- |
 |      6     | 3.1, 3.2, 3.3, 4.x      | 8.3, 9.x, 10.x | ![ci-master] | [2018/02][news-6] |
-|      5     | 3.1, 3.2, 3.3, 4.x      | 8.3, 9.x | *Deprecated* |       *n/a*       |
-|      4†    | 3.0, 3.1, 3.2, 3.3, 4.x | 8.x, 9.x | ![ci-master] | [2016/09][news-4] |
+|      5     | 3.1, 3.2, 3.3, 4.x      | 8.3, 9.x, 10.x | *Deprecated* |       *n/a*       |
+|      4†    | 3.0, 3.1, 3.2, 3.3, 4.x | 8.x, 9.x, 10.x | ![ci-master] | [2016/09][news-4] |
 |      3     | 2.x                     | 7.x, 8.0 | ![ci-swift2] | [2015/10][news-3] |
 |      2     | 1.x                     | 7.x      | *Deprecated* | [2015/10][news-3] |
 |      1‡    | *N/A*                   | *        | ![ci-legacy] |         –         |
