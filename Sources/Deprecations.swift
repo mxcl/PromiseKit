@@ -37,7 +37,7 @@ public func wrap<T>(_ body: (@escaping (T) -> Void) throws -> Void) -> Promise<T
 
 public extension Promise {
     @available(*, deprecated, message: "See `ensure`")
-    public func always(on q: DispatchQueue = .main, execute body: @escaping () -> Void) -> Promise {
+    func always(on q: DispatchQueue = .main, execute body: @escaping () -> Void) -> Promise {
         return ensure(on: q, body)
     }
 }
@@ -45,7 +45,7 @@ public extension Promise {
 public extension Thenable {
 #if PMKFullDeprecations
     /// disabled due to ambiguity with the other `.flatMap`
-    @available(*, deprecated: 6.1, message: "See: `compactMap`")
+    @available(*, deprecated, message: "See: `compactMap`")
     func flatMap<U>(on: DispatchQueue? = conf.Q.map, _ transform: @escaping(T) throws -> U?) -> Promise<U> {
         return compactMap(on: on, transform)
     }

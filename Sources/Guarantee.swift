@@ -114,7 +114,7 @@ public extension Guarantee {
         return rg
     }
 
-    public func asVoid() -> Guarantee<Void> {
+    func asVoid() -> Guarantee<Void> {
         return map(on: nil) { _ in }
     }
     
@@ -122,7 +122,7 @@ public extension Guarantee {
      Blocks this thread, so you know, don’t call this on a serial thread that
      any part of your chain may use. Like the main thread for example.
      */
-    public func wait() -> T {
+    func wait() -> T {
 
         if Thread.isMainThread {
             conf.logHandler(.waitOnMainThread)
