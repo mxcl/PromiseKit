@@ -59,10 +59,24 @@ For Carthage, SwiftPM, etc., or for instructions when using older Swifts or
 Xcodes, see our [Installation Guide]. We 
 recommend [Carthage](https://github.com/Carthage/Carthage).
 
+# Professionally Supported PromiseKit is Now Available
+
+Tidelift gives software development teams a single source for purchasing
+and maintaining their software, with professional grade assurances from
+the experts who know it best, while seamlessly integrating with existing
+tools.
+
+[Get professional support for PromiseKit with TideLift](https://tidelift.com/subscription/pkg/cocoapods-promisekit?utm_source=cocoapods-promisekit&utm_medium=referral&utm_campaign=readme).
+
 # PromiseKit is Thousands of Hours of Work
 
-This project is a labor of love: to the pursuit of making quality, reusable, compartmentalized software that has general use
-to the wider development community. It is a widely used project where every change, fix and plan can have serious repercussions to its users and thus must be carefully considered. If you use PromiseKit in your apps, please consider supporting its development with a donation to [my patreon](https://www.patreon.com/mxcl). Thank you.
+This project is a labor of love: to the pursuit of making quality,
+reusable, compartmentalized software that has general use to the wider
+development community. It is a widely used project where every change,
+fix and plan can have serious repercussions to its users and thus must
+be carefully considered. If you use PromiseKit in your apps, please
+consider supporting its development with a donation to
+[my patreon](https://www.patreon.com/mxcl). Thank you.
 
 # Documentation
 
