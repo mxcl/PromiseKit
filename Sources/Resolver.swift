@@ -8,7 +8,7 @@ public final class Resolver<T> {
 
     deinit {
         if case .pending = box.inspect() {
-            conf.logHandler(.waitOnMainThread)
+            conf.logHandler(.pendingPromiseDeallocated)
         }
     }
 }
@@ -25,12 +25,12 @@ public extension Resolver {
     }
 
     /// Resolves the promise with the provided result
-    public func resolve(_ result: Result<T>) {
+    func resolve(_ result: Result<T>) {
         box.seal(result)
     }
 
     /// Resolves the promise with the provided value or error
-    public func resolve(_ obj: T?, _ error: Error?) {
+    func resolve(_ obj: T?, _ error: Error?) {
         if let error = error {
             reject(error)
         } else if let obj = obj {
@@ -41,7 +41,7 @@ public extension Resolver {
     }
 
     /// Fulfills the promise with the provided value unless the provided error is non-nil
-    public func resolve(_ obj: T, _ error: Error?) {
+    func resolve(_ obj: T, _ error: Error?) {
         if let error = error {
             reject(error)
         } else {
@@ -50,7 +50,7 @@ public extension Resolver {
     }
 
     /// Resolves the promise, provided for non-conventional value-error ordered completion handlers.
-    public func resolve(_ error: Error?, _ obj: T?) {
+    func resolve(_ error: Error?, _ obj: T?) {
         resolve(obj, error)
     }
 }
