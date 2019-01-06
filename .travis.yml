@@ -9,6 +9,7 @@ addons:
       # but skip the Promises/A+ products because there are a lot. Also omit some larger binaries.
       - $(find /var/folders -name '*carthage-xcodebuild*' -print 2>/dev/null | tr "\n" ":")
       - $(if [ `git ls-files -o | grep build.js | wc -l` -eq 0 ]; then git ls-files -o | grep -v x86_64- | tr "\n" ":" ; fi)
+
 stages:
   - name: lint
     if: branch = master OR branch =~ ^\d+\.\d+\.\d+$ OR branch =~ concat("^(",env(TRAVIS_BRANCHES),")$")
@@ -21,6 +22,20 @@ stages:
 
 jobs:
   include:
+
+    # Compile stage - Carthage macOS builds
+    - &carthage
+      stage: compile
+      osx_image: xcode10.1
+      name: Carthage / Xcode 10.1 (Swift 3.4)
+      env: SWIFT_VERSION=3.4
+      os: osx
+      language: objective-c
+      script: carthage build --no-skip-current --configuration Release
+    - <<: *carthage
+      osx_image: xcode10.1
+      env: SWIFT_VERSION=4.2
+      name: Carthage / Xcode 10.1 (Swift 4.2)
 
     # Lint stage
     - &pod
@@ -47,25 +62,11 @@ jobs:
       env: SWIFT=4.2
       name: pod lib lint --swift-version=4.2
 
-    # Compile stage - Carthage macOS builds
-    - &carthage
-      stage: compile
-      osx_image: xcode10.1
-      name: Carthage / Xcode 10.1 (Swift 3.4)
-      env: SWIFT_VERSION=3.4
-      os: osx
-      language: objective-c
-      script: carthage build --no-skip-current --configuration Release
-    - <<: *carthage
-      osx_image: xcode10.1
-      env: SWIFT_VERSION=4.2
-      name: Carthage / Xcode 10.1 (Swift 4.2)
-
     # Compile and test stages - Linux builds
     - &linux
       stage: compile
-      env: SWIFT_BUILD_VERSION=4 SWIFT_VERSION=4.2.1
-      name: Linux / Swift 4.2 (compile)
+      env: SWIFT_BUILD_VERSION=3 SWIFT_VERSION=4.2.1
+      name: Linux / Swift 3 on tools 4.2.1 (compile)
       os: linux
       dist: trusty
       sudo: required
@@ -74,44 +75,34 @@ jobs:
       install: swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION
       script: "true"
     - <<: *linux
+      env: SWIFT_BUILD_VERSION=4 SWIFT_VERSION=4.0.3
+      name: Linux / Swift 4.0 (test)
+      stage: test
+      script: swift test -Xswiftc -swift-version -Xswiftc 4
+    - <<: *linux
+      env: SWIFT_BUILD_VERSION=4 SWIFT_VERSION=4.1.2
+      name: Linux / Swift 4.1 (compile)
+    - <<: *linux
+      env: SWIFT_BUILD_VERSION=4 SWIFT_VERSION=4.2.1
       name: Linux / Swift 4.2 (test)
       stage: test
-      script: swift test -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION
-    - <<: *linux
-      name: Linux / Swift 4.1 (compile)
-      env: SWIFT_BUILD_VERSION=4 SWIFT_VERSION=4.1.2
+      script: swift test -Xswiftc -swift-version -Xswiftc 4
     - <<: *linux
       stage: test
       name: Linux / Swift 4.1 (test)
       env: SWIFT_BUILD_VERSION=4 SWIFT_VERSION=4.1.2
-      script: swift test -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION
+      script: swift test -Xswiftc -swift-version -Xswiftc 4
     - <<: *linux
       name: Linux / Swift 4.0 (compile)
       env: SWIFT_BUILD_VERSION=4 SWIFT_VERSION=4.0.3
     - <<: *linux
-      stage: test
-      name: Linux / Swift 4.0 (test)
-      env: SWIFT_BUILD_VERSION=4 SWIFT_VERSION=4.0.3
-      script: swift test -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION
-    - <<: *linux
-      name: Linux / Swift 3 on tools 4.2.1 (compile)
-      env: SWIFT_BUILD_VERSION=3 SWIFT_VERSION=4.2.1
+      env: SWIFT_BUILD_VERSION=4 SWIFT_VERSION=4.2.1
+      name: Linux / Swift 4.2 (compile)
     - <<: *linux
       stage: test
       name: Linux / Swift 3 on tools 4.2.1 (test)
       env: SWIFT_BUILD_VERSION=3 SWIFT_VERSION=4.2.1
-      script: swift test -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION
-
-    # Compile stage - SwiftPM builds
-    - &swiftpm
-      stage: compile
-      name: SwiftPM / macOS / Xcode 9.4
-      os: osx
-      osx_image: xcode9.4
-      script: swift build
-    - <<: *swiftpm
-      osx_image: xcode10.1
-      name: SwiftPM / macOS / Xcode 10.1
+      script: swift test -Xswiftc -swift-version -Xswiftc 3
 
     # Test stage - macOS, iOS, and tvOS
     - &test
@@ -164,6 +155,17 @@ jobs:
         directories:
           - Tests/JS-A+/build
           - Tests/JS-A+/node_modules
+
+    # Compile stage - SwiftPM builds
+    - &swiftpm
+      stage: compile
+      name: SwiftPM / macOS / Xcode 9.4
+      os: osx
+      osx_image: xcode9.4
+      script: swift build
+    - <<: *swiftpm
+      osx_image: xcode10.1
+      name: SwiftPM / macOS / Xcode 10.1
 
     # Deployment stage 
     - stage: deploy
