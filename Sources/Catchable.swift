@@ -54,7 +54,7 @@ public extension CatchMixin {
      - Note: Since this method handles only specific errors, supplying a `CatchPolicy` is unsupported. You can instead specify e.g. your cancellable error.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func catchOnly<E: Swift.Error>(_ only: E, on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, _ body: @escaping() -> Void) -> PMKCascadingFinalizer where E: Equatable {
+    func `catch`<E: Swift.Error>(_ only: E, on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, _ body: @escaping() -> Void) -> PMKCascadingFinalizer where E: Equatable {
         let finalizer = PMKCascadingFinalizer()
         pipe {
             switch $0 {
@@ -85,7 +85,7 @@ public extension CatchMixin {
      - Parameter execute: The handler to execute if this promise is rejected with the provided error type.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func catchOnly<E: Swift.Error>(_ only: E.Type, on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) -> Void) -> PMKCascadingFinalizer {
+    func `catch`<E: Swift.Error>(_ only: E.Type, on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) -> Void) -> PMKCascadingFinalizer {
         let finalizer = PMKCascadingFinalizer()
         pipe {
             switch $0 {
@@ -156,8 +156,8 @@ public class PMKCascadingFinalizer {
      - Note: Since this method handles only specific errors, supplying a `CatchPolicy` is unsupported. You can instead specify e.g. your cancellable error.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    public func catchOnly<E: Swift.Error>(_ only: E, on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, _ body: @escaping() -> Void) -> PMKCascadingFinalizer where E: Equatable {
-        return pending.promise.catchOnly(only, on: on, flags: flags) {
+    public func `catch`<E: Swift.Error>(_ only: E, on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, _ body: @escaping() -> Void) -> PMKCascadingFinalizer where E: Equatable {
+        return pending.promise.catch(only, on: on, flags: flags) {
             body()
         }
     }
@@ -175,8 +175,8 @@ public class PMKCascadingFinalizer {
      - Parameter execute: The handler to execute if this promise is rejected with the provided error type.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    public func catchOnly<E: Swift.Error>(_ only: E.Type, on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) -> Void) -> PMKCascadingFinalizer {
-        return pending.promise.catchOnly(only, on: on, flags: flags, policy: policy) {
+    public func `catch`<E: Swift.Error>(_ only: E.Type, on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) -> Void) -> PMKCascadingFinalizer {
+        return pending.promise.catch(only, on: on, flags: flags, policy: policy) {
             body($0)
         }
     }
@@ -234,7 +234,7 @@ public extension CatchMixin {
 
          firstly {
              CLLocationManager.requestLocation()
-         }.recoverOnly(CLError.unknownLocation) {
+         }.recover(CLError.unknownLocation) {
              return .value(CLLocation.chicago)
          }
 
@@ -244,7 +244,7 @@ public extension CatchMixin {
      - Note: Since this method recovers only specific errors, supplying a `CatchPolicy` is unsupported. You can instead specify e.g. your cancellable error.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func recoverOnly<U: Thenable, E: Swift.Error>(_ only: E, on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping() -> U) -> Promise<T> where U.T == T, E: Equatable {
+    func recover<U: Thenable, E: Swift.Error>(_ only: E, on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping() -> U) -> Promise<T> where U.T == T, E: Equatable {
         let rp = Promise<U.T>(.pending)
         pipe {
             switch $0 {
@@ -275,7 +275,7 @@ public extension CatchMixin {
 
          firstly {
              API.fetchData()
-         }.recoverOnly(FetchError.self) { error in
+         }.recover(FetchError.self) { error in
              guard case .missingImage(let partialData) = error else { throw error }
              //…
              return .value(dataWithDefaultImage)
@@ -286,7 +286,7 @@ public extension CatchMixin {
      - Parameter body: The handler to execute if this promise is rejected with the provided error type.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func recoverOnly<U: Thenable, E: Swift.Error>(_ only: E.Type, on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) throws -> U) -> Promise<T> where U.T == T {
+    func recover<U: Thenable, E: Swift.Error>(_ only: E.Type, on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) throws -> U) -> Promise<T> where U.T == T {
         let rp = Promise<U.T>(.pending)
         pipe {
             switch $0 {
@@ -482,7 +482,7 @@ public extension CatchMixin where T == Void {
      - Note: Since this method recovers only specific errors, supplying a `CatchPolicy` is unsupported. You can instead specify e.g. your cancellable error.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func recoverOnly<E: Swift.Error>(_ only: E, on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping() -> Void) -> Promise<Void> where E: Equatable {
+    func recover<E: Swift.Error>(_ only: E, on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping() -> Void) -> Promise<Void> where E: Equatable {
         let rp = Promise<Void>(.pending)
         pipe {
             switch $0 {
@@ -511,7 +511,7 @@ public extension CatchMixin where T == Void {
      - Parameter body: The handler to execute if this promise is rejected with the provided error type.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func recoverOnly<E: Swift.Error>(_ only: E.Type, on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) throws -> Void) -> Promise<Void> {
+    func recover<E: Swift.Error>(_ only: E.Type, on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) throws -> Void) -> Promise<Void> {
         let rp = Promise<Void>(.pending)
         pipe {
             switch $0 {
