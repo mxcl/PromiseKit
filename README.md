@@ -52,8 +52,9 @@ end
 > The above gives an Xcode warning? See our [Installation Guide].
 
 PromiseKit 6, 5 and 4 support Xcode 8.3, 9.x and 10.0; Swift 3.1,
-3.2, 3.3, 3.4, 4.0, 4.1 and 4.2; iOS, macOS, tvOS, watchOS, Linux and Android; CocoaPods,
-Carthage and SwiftPM; ([CI Matrix](https://travis-ci.org/mxcl/PromiseKit)).
+3.2, 3.3, 3.4, 4.0, 4.1, 4.2 and 5.0 (development snapshots); iOS, macOS, tvOS,
+watchOS, Linux and Android; CocoaPods, Carthage and SwiftPM;
+([CI Matrix](https://travis-ci.org/mxcl/PromiseKit)).
 
 For Carthage, SwiftPM, etc., or for instructions when using older Swifts or
 Xcodes, see our [Installation Guide]. We 
@@ -66,7 +67,7 @@ and maintaining their software, with professional grade assurances from
 the experts who know it best, while seamlessly integrating with existing
 tools.
 
-[Get professional support for PromiseKit with TideLift](https://tidelift.com/subscription/pkg/cocoapods-promisekit?utm_source=cocoapods-promisekit&utm_medium=referral&utm_campaign=readme).
+[Get Professional Support for PromiseKit with TideLift](https://tidelift.com/subscription/pkg/cocoapods-promisekit?utm_source=cocoapods-promisekit&utm_medium=referral&utm_campaign=readme).
 
 # PromiseKit is Thousands of Hours of Work
 
