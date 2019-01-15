@@ -146,7 +146,7 @@ func buttonPressed() {
     }
 }
 
-func refresh() {
+func refresh() -> Promise {
     // ensure only one fetch operation happens at a time
 
     if fetch.isResolved {
