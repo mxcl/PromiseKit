@@ -10,4 +10,5 @@
   * [Objective-C Guide](ObjectiveC.md)
   * [Troubleshooting](Troubleshooting.md)
   * [Appendix](Appendix.md)
+* [Examples](Examples)
 * [API Reference](https://promisekit.org/reference/)
