@@ -82,7 +82,7 @@ jobs:
       name: Linux / Swift 3.2
       os: linux
       dist: trusty
-      sudo: required
+      sudo: false
       language: generic
       before_install: eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
       install: swift build -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION
@@ -106,6 +106,9 @@ jobs:
       name: Linux / Swift 4.2
       stage: test
       script: swift test -Xswiftc -swift-version -Xswiftc 4
+    - <<: *linux
+      env: SWIFT_BUILD_VERSION=5 SWIFT_VERSION=5.0-DEVELOPMENT-SNAPSHOT-2019-01-22-a
+      name: Linux / Swift 5.0
 
     - &test
       stage: test
