@@ -39,9 +39,9 @@ github "mxcl/PromiseKit" ~> 6.0
 
 ## SwiftPM
 
-```ruby
+```swift
 package.dependencies.append(
-    .Package(url: "https://github.com/mxcl/PromiseKit", majorVersion: 6)
+    .package(url: "https://github.com/mxcl/PromiseKit", from: "6.0.0")
 )
 ```
 
