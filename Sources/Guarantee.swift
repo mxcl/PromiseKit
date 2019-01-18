@@ -165,10 +165,11 @@ public extension Guarantee where T == Void {
 
 
 public extension DispatchQueue {
+
     /**
      Asynchronously executes the provided closure on a dispatch queue.
 
-         DispatchQueue.global().async(.promise) {
+         DispatchQueue.global().async(.promise) { () -> Int in
              md5(input)
          }.done { md5 in
              //…
@@ -185,6 +186,60 @@ public extension DispatchQueue {
             rg.box.seal(body())
         }
         return rg
+    }
+
+    /**
+     Asynchronously executes the provided closure on a dispatch queue.
+
+     DispatchQueue.global().asyncGuarantee { () -> Int in
+         md5(input)
+     }.done { md5 in
+         //…
+     }
+
+     - Parameter ofType: The type of the guarantee to return.
+     - Parameter body: The closure that resolves this promise.
+     - Returns: A new `Guarantee` resolved by the result of the provided closure.
+     */
+    @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
+    final func asyncGuarantee<T>(_ ofType:T.Type, group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], execute body: @escaping () -> T) -> Guarantee<T> {
+        let rg = Guarantee<T>(.pending)
+        async(group: group, qos: qos, flags: flags) {
+            rg.box.seal(body())
+        }
+        return rg
+    }
+
+    /**
+     Asynchronously executes the provided closure on a dispatch queue.
+
+     This version passes a resolver to the closure as per the Guarantee<T> { seal in ... } initializer. This makes it useful for creating Guarantees based on closures
+     that don't resolve immediately when called.
+
+     For example, when creating a guarantee that wraps an animation which must be run on the main queue regardless of the
+     current queue:
+
+     DispatchQueue.main.async(.guarantee) { (seal:() -> Void) in
+        UIView.animate(withDuration: 1.0,
+           animations { ... },
+           completion { _ in
+              seal(())
+          })
+     }.done { md5 in
+        //…
+     }
+
+     - Parameter ofType: The type of the guarantee to return.
+     - Parameter body: The closure that resolves this promise.
+     - Returns: A new `Guarantee` resolved using the seal passed to the provided closure.
+     */
+    @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
+    final func asyncGuarantee<T>(_ ofType:T.Type, group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], resolver body: @escaping (@escaping(T) -> Void) -> Void) -> Guarantee<T> {
+        return Guarantee<T> { seal in
+            async(group: group, qos: qos, flags: flags) {
+                body(seal)
+            }
+        }
     }
 }
 

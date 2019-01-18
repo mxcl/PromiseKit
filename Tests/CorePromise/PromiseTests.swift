@@ -27,35 +27,120 @@ class PromiseTests: XCTestCase {
         XCTAssertFalse(Promise().isRejected)
     }
 
+    // MARK: - Dispatching to queues
+
     @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
     func testDispatchQueueAsyncExtensionReturnsPromise() {
         let ex = expectation(description: "")
 
-        DispatchQueue.global().async(.promise) { () -> Int in
+        DispatchQueue.global().async(.promise) { () throws -> Int in
             XCTAssertFalse(Thread.isMainThread)
             return 1
         }.done { one in
             XCTAssertEqual(one, 1)
             ex.fulfill()
+        }.catch { error in
+                XCTFail()
         }
 
         waitForExpectations(timeout: 1)
     }
 
     @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
-    func testDispatchQueueAsyncExtensionCanThrowInBody() {
+    func testDispatchQueueAsyncExtensionReturnsPromiseWithError() {
         let ex = expectation(description: "")
 
-        DispatchQueue.global().async(.promise) { () -> Int in
+        DispatchQueue.global().async(.promise) { () throws -> Int in
+            XCTAssertFalse(Thread.isMainThread)
             throw Error.dummy
-        }.done { _ in
-            XCTFail()
-        }.catch { _ in
-            ex.fulfill()
+            }.done { _ in
+                XCTFail()
+            }.catch { error in
+                if case Error.dummy = error {
+                    ex.fulfill()
+                    return
+                }
+                XCTFail()
         }
 
         waitForExpectations(timeout: 1)
     }
+
+    @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
+    func testDispatchQueueAsyncPromiseExtensionReturnsPromise() {
+        let ex = expectation(description: "")
+
+        DispatchQueue.global().asyncPromise(Int.self) {
+            XCTAssertFalse(Thread.isMainThread)
+            return 1
+            }.done { one in
+                XCTAssertEqual(one, 1)
+                ex.fulfill()
+            }.catch { error in
+                XCTFail()
+        }
+
+        waitForExpectations(timeout: 1)
+    }
+
+    @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
+    func testDispatchQueueAsyncPromiseExtensionReturnsPromiseWithError() {
+        let ex = expectation(description: "")
+
+        DispatchQueue.global().asyncPromise(Int.self) {
+            XCTAssertFalse(Thread.isMainThread)
+            throw Error.dummy
+            }.done { _ in
+                XCTFail()
+            }.catch { error in
+                if case Error.dummy = error {
+                    ex.fulfill()
+                    return
+                }
+                XCTFail()
+        }
+
+        waitForExpectations(timeout: 1)
+    }
+
+    @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
+    func testDispatchQueueAsyncSealablePromiseExtensionReturnsPromise() {
+        let ex = expectation(description: "")
+
+        DispatchQueue.global().asyncPromise(Int.self) { seal in
+            XCTAssertFalse(Thread.isMainThread)
+            seal.fulfill(1)
+            }.done { one in
+                XCTAssertEqual(one, 1)
+                ex.fulfill()
+            }.catch { error in
+                XCTFail()
+        }
+
+        waitForExpectations(timeout: 1)
+    }
+
+    @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
+    func testDispatchQueueAsyncSealablePromiseExtensionReturnsPromiseWithError() {
+        let ex = expectation(description: "")
+
+        DispatchQueue.global().asyncPromise(Int.self) { seal in
+            XCTAssertFalse(Thread.isMainThread)
+            seal.reject(Error.dummy)
+            }.done { _ in
+                XCTFail()
+            }.catch { error in
+                if case Error.dummy = error {
+                    ex.fulfill()
+                    return
+                }
+                XCTFail()
+        }
+
+        waitForExpectations(timeout: 1)
+    }
+
+    // MARK: - CustomStringConvertable
 
     func testCustomStringConvertible() {
         XCTAssertEqual(Promise<Int>.pending().promise.debugDescription, "Promise<Int>.pending(handlers: 0)")
@@ -66,6 +151,8 @@ class PromiseTests: XCTestCase {
         XCTAssertEqual("\(Promise.value(3))", "Promise(3)")
         XCTAssertEqual("\(Promise<Void>(error: Error.dummy))", "Promise(dummy)")
     }
+
+    // MARK: -
 
     func testCannotFulfillWithError() {
 

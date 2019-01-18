@@ -144,7 +144,7 @@ public extension DispatchQueue {
     /**
      Asynchronously executes the provided closure on a dispatch queue.
 
-         DispatchQueue.global().async(.promise) {
+         DispatchQueue.global().async(.promise) { () -> Int in
              try md5(input)
          }.done { md5 in
              //…
@@ -166,10 +166,71 @@ public extension DispatchQueue {
         }
         return promise
     }
+
+    /**
+     Asynchronously executes the provided closure on a dispatch queue.
+
+     DispatchQueue.global().asyncPromise { () -> Int in
+        try md5(input)
+     }.done { md5 in
+        //…
+     }
+
+     - Parameter ofType: The type of the promise to return.
+     - Parameter body: The closure that resolves this promise.
+     - Returns: A new `Promise` resolved by the result of the provided closure.
+     - Note: There is no Promise/Thenable version of this due to Swift compiler ambiguity issues.
+     */
+    @available(macOS 10.10, iOS 8.0, tvOS 9.0, watchOS 2.0, *)
+    final func asyncPromise<T>(_ ofType:T.Type, group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], execute body: @escaping () throws -> T) -> Promise<T> {
+        let promise = Promise<T>(.pending)
+        async(group: group, qos: qos, flags: flags) {
+            do {
+                promise.box.seal(.fulfilled(try body()))
+            } catch {
+                promise.box.seal(.rejected(error))
+            }
+        }
+        return promise
+    }
+
+    /**
+     Asynchronously executes the provided closure on a dispatch queue.
+
+     This version passes a resolver to the closure as per the Promise<T> { seal in ... } initializer. This makes it useful for creating promises based on closures
+     that don't resolve immediately when called.
+
+     For example, when creating a promise that wraps an animation which must be run on the main queue regardless of the
+     current queue:
+
+     DispatchQueue.main.asyncPromise { (seal: Resolver<Int>) in
+        UIView.animate(withDuration: 1.0,
+            animations { ... },
+        completion { _ in
+           seal(())
+        }
+     )
+     }.done { md5 in
+        //…
+     }
+
+     - Parameter ofType: The type of the promise to return.
+     - Parameter body: The closure that resolves this promise.
+     - Returns: A new `Promise` resolved using the seal passed to the provided closure.
+     */
+    @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
+    final func asyncPromise<T>(_ ofType:T.Type, group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], resolver body: @escaping (Resolver<T>) -> Void) -> Promise<T> {
+        return Promise<T> { seal in
+            async(group: group, qos: qos, flags: flags) {
+                body(seal)
+            }
+        }
+    }
 }
 
 
-/// used by our extensions to provide unambiguous functions with the same name as the original function
+/// Used by our extensions to provide unambiguous functions with the same name as the original function.
+/// The values are not actually used.
 public enum PMKNamespacer {
     case promise
 }

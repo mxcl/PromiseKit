@@ -30,4 +30,52 @@ class GuaranteeTests: XCTestCase {
 
         wait(for: [ex], timeout: 10)
     }
+
+    // MARK: - Dispatching to queues
+
+    @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
+    func testDispatchQueueAsyncExtensionReturnsGuarantee() {
+        let ex = expectation(description: "")
+
+        DispatchQueue.global().async(.promise) { () -> Int in
+            XCTAssertFalse(Thread.isMainThread)
+            return 1
+            }.done { one in
+                XCTAssertEqual(one, 1)
+                ex.fulfill()
+        }
+
+        waitForExpectations(timeout: 1)
+    }
+
+    @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
+    func testDispatchQueueAsyncGuaranteeExtensionReturnsGuarantee() {
+        let ex = expectation(description: "")
+
+        DispatchQueue.global().asyncGuarantee(Int.self) {
+            XCTAssertFalse(Thread.isMainThread)
+            return 1
+            }.done { one in
+                XCTAssertEqual(one, 1)
+                ex.fulfill()
+        }
+
+        waitForExpectations(timeout: 1)
+    }
+
+    @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
+    func testDispatchQueueAsyncSealableGuaranteeWithSealExtensionReturnsGuarantee() {
+        let ex = expectation(description: "")
+
+        DispatchQueue.global().asyncGuarantee(Int.self) { seal in
+            XCTAssertFalse(Thread.isMainThread)
+            seal(1)
+            }.done { one in
+                XCTAssertEqual(one, 1)
+                ex.fulfill()
+        }
+
+        waitForExpectations(timeout: 1)
+    }
+
 }

@@ -168,30 +168,65 @@ will deadlock.
 can be found in the ticket tracker.
 
 So, if you want to start a chain by dispatching to the background, you have to use
-`DispatchQueue.async`:
+`DispatchQueue.async` like this for guarantees:
 
 ```swift
-DispatchQueue.global().async(.promise) {
-    return value  
+DispatchQueue.global().async(.promise) { () -> String in
+    return "abc"  
 }.done { value in
     //…
 }
 ```
 
-However, this function cannot return a promise because of Swift compiler ambiguity
-issues. Thus, if you must start a promise on a background queue, you need to
-do something like this:
-
+And this to return promises:
 
 ```swift
-Promise { seal in
-    DispatchQueue.global().async {
-        seal(value)
-    }  
+DispatchQueue.global().async(.promise) { () -> String in
+    return "abc"  
+}.done { value in
+    //…
+}.catch { error in
+    //… 
+}
+```
+
+Alternatively there are a set of extensions that are more explicity and don't require you to add the closure argumnet types. They look like this:
+
+```swift
+DispatchQueue.global().asyncGuarantee(String.self) {
+    return "abc"  
 }.done { value in
     //…
 }
+
+DispatchQueue.global().asyncPromise(String.self) {
+    return "abc"  
+}.done { value in
+   //…
+}.catch { error in
+   //… 
+}
 ```
+
+All these four functions work well as long as your closures don't contain asynchronous code. If they do, then you'll need to use these varients which pass in resolvers:
+
+```swift
+DispatchQueue.global().asyncGuarantee(String.self) { seal in
+    seal.fulfill("abc")  
+}.done { value in
+    //…
+}
+
+DispatchQueue.global().asyncPromise(String.self) { seal in
+    seal.fulfill("abc")  
+}.done { value in
+    //…
+}.catch { error in
+    //… 
+}
+```
+
+
 
 Or more simply (though with caveats; see the documentation for `wait`):
 
