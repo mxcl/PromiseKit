@@ -2,7 +2,7 @@ import struct Foundation.TimeInterval
 import Dispatch
 
 /**
-     after(.seconds(2)).then {
+     after(seconds: 1.5).then {
          //…
      }
 
@@ -20,7 +20,7 @@ public func after(seconds: TimeInterval) -> Guarantee<Void> {
 }
 
 /**
-     after(seconds: 1.5).then {
+     after(.seconds(2)).then {
          //…
      }
 
