@@ -33,7 +33,7 @@ class PromiseTests: XCTestCase {
     func testDispatchQueueAsyncExtensionReturnsPromise() {
         let ex = expectation(description: "")
 
-        DispatchQueue.global().async(.promise) { () throws -> Int in
+        DispatchQueue.global().async { () throws -> Int in
             XCTAssertFalse(Thread.isMainThread)
             return 1
         }.done { one in
@@ -50,7 +50,7 @@ class PromiseTests: XCTestCase {
     func testDispatchQueueAsyncExtensionReturnsPromiseWithError() {
         let ex = expectation(description: "")
 
-        DispatchQueue.global().async(.promise) { () throws -> Int in
+        DispatchQueue.global().async { () throws -> Int in
             XCTAssertFalse(Thread.isMainThread)
             throw Error.dummy
             }.done { _ in
@@ -67,47 +67,10 @@ class PromiseTests: XCTestCase {
     }
 
     @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
-    func testDispatchQueueAsyncPromiseExtensionReturnsPromise() {
+    func testDispatchQueueAsyncExtensionWithResolverReturnsPromise() {
         let ex = expectation(description: "")
 
-        DispatchQueue.global().asyncPromise(Int.self) {
-            XCTAssertFalse(Thread.isMainThread)
-            return 1
-            }.done { one in
-                XCTAssertEqual(one, 1)
-                ex.fulfill()
-            }.catch { error in
-                XCTFail()
-        }
-
-        waitForExpectations(timeout: 1)
-    }
-
-    @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
-    func testDispatchQueueAsyncPromiseExtensionReturnsPromiseWithError() {
-        let ex = expectation(description: "")
-
-        DispatchQueue.global().asyncPromise(Int.self) {
-            XCTAssertFalse(Thread.isMainThread)
-            throw Error.dummy
-            }.done { _ in
-                XCTFail()
-            }.catch { error in
-                if case Error.dummy = error {
-                    ex.fulfill()
-                    return
-                }
-                XCTFail()
-        }
-
-        waitForExpectations(timeout: 1)
-    }
-
-    @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
-    func testDispatchQueueAsyncSealablePromiseExtensionReturnsPromise() {
-        let ex = expectation(description: "")
-
-        DispatchQueue.global().asyncPromise(Int.self) { seal in
+        DispatchQueue.global().async { (seal: Resolver<Int>) in
             XCTAssertFalse(Thread.isMainThread)
             seal.fulfill(1)
             }.done { one in
@@ -121,10 +84,10 @@ class PromiseTests: XCTestCase {
     }
 
     @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
-    func testDispatchQueueAsyncSealablePromiseExtensionReturnsPromiseWithError() {
+    func testDispatchQueueAsyncExtensionWithResolverReturnsPromiseWithError() {
         let ex = expectation(description: "")
 
-        DispatchQueue.global().asyncPromise(Int.self) { seal in
+        DispatchQueue.global().async { (seal: Resolver<Int>) in
             XCTAssertFalse(Thread.isMainThread)
             seal.reject(Error.dummy)
             }.done { _ in

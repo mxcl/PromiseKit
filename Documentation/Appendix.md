@@ -79,7 +79,7 @@ return firstly {
 
 ```swift
 class MyViewController: UIViewController {
-    private let ambience: Promise<AVAudioPlayer> = DispatchQueue.global().async(.promise) {
+    private let ambience: Promise<AVAudioPlayer> = DispatchQueue.global().async(.promise) { () -> AVAudioPlayer in
         guard let asset = NSDataAsset(name: "CreepyPad") else { throw PMKError.badInput }
         let player =  try AVAudioPlayer(data: asset.data)
         player.prepareToPlay()
@@ -168,65 +168,37 @@ will deadlock.
 can be found in the ticket tracker.
 
 So, if you want to start a chain by dispatching to the background, you have to use
-`DispatchQueue.async` like this for guarantees:
+`DispatchQueue.async`. This function matches the iOS `DispatchQueue.async` functions except that the passed closure contains arguments so that it matches PromiseKit implementations and can return either promises or guarantees:
 
 ```swift
-DispatchQueue.global().async(.promise) { () -> String in
+// Simple guarantee
+DispatchQueue.global().async { () -> String in
     return "abc"  
-}.done { value in
-    //…
 }
-```
 
-And this to return promises:
-
-```swift
-DispatchQueue.global().async(.promise) { () -> String in
-    return "abc"  
-}.done { value in
-    //…
-}.catch { error in
-    //… 
-}
-```
-
-Alternatively there are a set of extensions that are more explicity and don't require you to add the closure argumnet types. They look like this:
-
-```swift
-DispatchQueue.global().asyncGuarantee(String.self) {
+// Simple romise
+DispatchQueue.global().async { () -> String in
     return "abc"  
 }.done { value in
     //…
 }
 
-DispatchQueue.global().asyncPromise(String.self) {
-    return "abc"  
+// Sealable guarantee for when the closure doesn't resolve immediately.
+DispatchQueue.global().async { (seal: (String) -> Void) in
+    DispatchQueue.main.async { 
+        seal("abc")  
+    }
+}
+
+// Simple promise
+DispatchQueue.global().async { (seal: Resolver<String>) in
+    DispatchQueue.main.async { 
+        seal("abc")  
+    }
 }.done { value in
-   //…
-}.catch { error in
-   //… 
+//…
 }
 ```
-
-All these four functions work well as long as your closures don't contain asynchronous code. If they do, then you'll need to use these varients which pass in resolvers:
-
-```swift
-DispatchQueue.global().asyncGuarantee(String.self) { seal in
-    seal.fulfill("abc")  
-}.done { value in
-    //…
-}
-
-DispatchQueue.global().asyncPromise(String.self) { seal in
-    seal.fulfill("abc")  
-}.done { value in
-    //…
-}.catch { error in
-    //… 
-}
-```
-
-
 
 Or more simply (though with caveats; see the documentation for `wait`):
 
