@@ -70,16 +70,15 @@ tools.
 
 # PromiseKit is Thousands of Hours of Work
 
-This project is a labor of love: to the pursuit of making quality,
-reusable, compartmentalized software that has general use to the wider
-development community. It is a widely used project where every change,
-fix and plan can have serious repercussions to its users and thus must
-be carefully considered. If you use PromiseKit in your apps, please
-consider supporting its development with a donation. Thank you.
+Hi, I’m Max Howell and I have written a lot of open source software, and
+probably you already use some of it (Homebrew anyone?). Please help me so I
+can continue to make tools and software you need and love. I appreciate it x.
 
 <a href="https://www.patreon.com/mxcl">
 	<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
 </a>
+
+[Other donation/tipping options](http://mxcl.github.io/donate/)
 
 # Documentation
 
