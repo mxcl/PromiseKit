@@ -79,7 +79,7 @@ return firstly {
 
 ```swift
 class MyViewController: UIViewController {
-    private let ambience: Promise<AVAudioPlayer> = DispatchQueue.global().async(.promise) { () -> AVAudioPlayer in
+    private let ambience: Promise<AVAudioPlayer> = DispatchQueue.global().async { () -> AVAudioPlayer in
         guard let asset = NSDataAsset(name: "CreepyPad") else { throw PMKError.badInput }
         let player =  try AVAudioPlayer(data: asset.data)
         player.prepareToPlay()
@@ -203,7 +203,7 @@ DispatchQueue.global().async { (seal: Resolver<String>) in
 Or more simply (though with caveats; see the documentation for `wait`):
 
 ```swift
-DispatchQueue.global().async(.promise) {
+DispatchQueue.global().async {
     return try fetch().wait()
 }.done { value in
     //…
