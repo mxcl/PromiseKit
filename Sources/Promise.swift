@@ -144,7 +144,7 @@ public extension DispatchQueue {
     /**
      Asynchronously executes the provided closure on a dispatch queue.
 
-         DispatchQueue.global().async(.promise) { () -> Int in
+         DispatchQueue.global().async { () -> Int in
              try md5(input)
          }.done { md5 in
              //…
@@ -175,7 +175,7 @@ public extension DispatchQueue {
 
      For example, if your code passes on to another queue:
 
-     DispatchQueue.main.async(.promise) { (seal: Resolver<Int>) in
+     DispatchQueue.main.async { (seal: Resolver<Int>) in
         DispatchQueue.main.async {
            seal(md5)
         }
