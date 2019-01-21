@@ -63,4 +63,11 @@ class GuaranteeTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
+    func testAppleAsyncFunctionsStillWork() {
+        let exp = self.expectation(description: "Check apple")
+        DispatchQueue.global().async {
+            exp.fulfill()
+        }
+        waitForExpectations(timeout: 2.0)
+    }
 }
