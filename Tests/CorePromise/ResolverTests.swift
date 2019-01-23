@@ -159,6 +159,25 @@ class WrapTests: XCTestCase {
         }
         wait(for: [ex], timeout: 10)
     }
+
+    func testVoidResolverFulfillAmbiguity() {
+
+        // reference: https://github.com/mxcl/PromiseKit/issues/990
+
+        func foo(success: () -> Void, failure: (Error) -> Void) {
+            success()
+        }
+
+        func bar() -> Promise<Void> {
+            return Promise<Void> { (seal: Resolver<Void>) in
+                foo(success: seal.fulfill, failure: seal.reject)
+            }
+        }
+
+        let ex = expectation(description: "")
+        bar().done(ex.fulfill).cauterize()
+        wait(for: [ex], timeout: 10)
+    }
 }
 
 private enum Error: Swift.Error {
