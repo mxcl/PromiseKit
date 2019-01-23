@@ -62,14 +62,23 @@ extension Resolver where T == Void {
         if let error = error {
             reject(error)
         } else {
-            fulfill()
+            fulfill(())
         }
     }
+#if false
+    // disabled ∵ https://github.com/mxcl/PromiseKit/issues/990
 
     /// Fulfills the promise
     public func fulfill() {
         self.fulfill(())
     }
+#else
+    /// Fulfills the promise
+    /// - Note: underscore is present due to: https://github.com/mxcl/PromiseKit/issues/990
+    public func fulfill_() {
+        self.fulfill(())
+    }
+#endif
 }
 #endif
 
