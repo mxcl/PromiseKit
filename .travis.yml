@@ -7,6 +7,7 @@ branches:
     - /^\d+\.\d+\.\d+$/
 stages:
   - name: pretest
+    if: type != push OR branch =~ /^\d+\.\d+\.\d+$/
   - name: lint
     if: NOT branch =~ ^\d+\.\d+\.\d+$
   - name: compile
@@ -197,3 +198,30 @@ jobs:
       os: osx
       osx_image: xcode10.0 # 10.0 or CocoaPods barfs
       language: objective-c
+
+    - stage: deploy
+      name: Generate Documentation
+      os: osx
+      osx_image: xcode10.1
+      language: swift
+      install: gem install jazzy
+      script: |
+        set -exo pipefail
+        jazzy \
+          --theme fullwidth \
+          --output foo \
+          --documentation=Documentation/*.md \
+          --readme Documentation/README.md \
+          --github_url https://github.com/mxcl/PromiseKit \
+          --xcodebuild-arguments UseModernBuildSystem=NO \
+          --module PromiseKit
+          --module-version "$TRAVIS_TAG"
+        git checkout gh-pages
+        rm -rf reference
+        mv foo reference
+        git add reference
+        git config user.name  "Travis"
+        git config user.email "bot@travis-ci.com"
+        git commit -m "Updated docs for v$TRAVIS_TAG"
+        git remote add secure-origin https://${GITHUB_TOKEN}@github.com/mxcl/PromiseKit.git
+        git push secure-origin gh-pages
