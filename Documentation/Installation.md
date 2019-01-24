@@ -8,7 +8,7 @@ We recommend Carthage over CocoaPods, but both installation methods are supporte
 use_frameworks!
 
 target "Change Me!" do
-  pod "PromiseKit", "~> 6.0"
+  pod "PromiseKit", "~> 6.8"
 end
 ```
 
@@ -34,14 +34,14 @@ CocoaPods are aware of this [issue](https://github.com/CocoaPods/CocoaPods/issue
 ## Carthage
 
 ```ruby
-github "mxcl/PromiseKit" ~> 6.0
+github "mxcl/PromiseKit" ~> 6.8
 ```
 
 ## SwiftPM
 
 ```swift
 package.dependencies.append(
-    .package(url: "https://github.com/mxcl/PromiseKit", from: "6.0.0")
+    .package(url: "https://github.com/mxcl/PromiseKit", from: "6.8.0")
 )
 ```
 

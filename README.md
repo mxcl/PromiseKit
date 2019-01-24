@@ -45,7 +45,7 @@ In your [Podfile]:
 use_frameworks!
 
 target "Change Me!" do
-  pod "PromiseKit", "~> 6.0"
+  pod "PromiseKit", "~> 6.8"
 end
 ```
 
@@ -113,7 +113,7 @@ All our extensions are separate repositories at the [PromiseKit organization].
 Then don’t have them:
 
 ```ruby
-pod "PromiseKit/CorePromise", "~> 6.0"
+pod "PromiseKit/CorePromise", "~> 6.8"
 ```
 
 > *Note:* Carthage installations come with no extensions by default.
