@@ -1,11 +1,16 @@
+branches:
+  only:
+    - master
+    - v4
+    - v7
+    - legacy-1.x
 stages:
   - name: pretest
   - name: lint
-    if: branch = master OR branch =~ ^\d+\.\d+\.\d+$
   - name: compile
-    if: branch = master OR branch =~ ^\d+\.\d+\.\d+$
+    if: type != push OR branch =~ /^\d+\.\d+\.\d+$/
   - name: test
-    if: branch = master OR branch =~ ^\d+\.\d+\.\d+$
+    if: type != push OR branch =~ /^\d+\.\d+\.\d+$/
   - name: deploy
     if: branch =~ ^\d+\.\d+\.\d+$
 jobs:
