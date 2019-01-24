@@ -1,4 +1,5 @@
 stages:
+  - name: pretest
   - name: lint
     if: branch = master OR branch =~ ^\d+\.\d+\.\d+$
   - name: compile
@@ -9,6 +10,14 @@ stages:
     if: branch =~ ^\d+\.\d+\.\d+$
 jobs:
   include:
+    - stage: pretest
+      name: Validate Linux has complete test coverage
+      install: swift test --generate-linuxmain -Xswiftc -target -Xswiftc x86_64-apple-macosx10.12
+      script: git diff --exit-code
+      os: osx
+      osx_image: xcode10.1
+      language: swift
+
     - &carthage
       stage: compile
       osx_image: xcode8.3
