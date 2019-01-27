@@ -121,35 +121,35 @@ jobs:
         set -eo pipefail
         gem install xcpretty
       install:
-        xcodebuild -scheme PromiseKit -target PromiseKit -destination="$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build | xcpretty
+        xcodebuild -scheme PromiseKit -target PromiseKit -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build | xcpretty
       script:
-        xcodebuild -scheme PromiseKit -destination="$DST" -enableCodeCoverage YES SWIFT_VERSION=3 test | xcpretty
+        xcodebuild -scheme PromiseKit -destination "$DST" -enableCodeCoverage YES SWIFT_VERSION=3 test | xcpretty
       after_success:
         bash <(curl -s https://codecov.io/bash)
     - <<: *test
       name: macOS / Xcode 9.2
       osx_image: xcode9.2
       script:
-        xcodebuild -scheme PromiseKit -destination="$DST" -enableCodeCoverage YES SWIFT_VERSION=4 test | xcpretty
+        xcodebuild -scheme PromiseKit -destination "$DST" -enableCodeCoverage YES SWIFT_VERSION=4 test | xcpretty
     - <<: *test
       name: macOS / Xcode 9.4
       osx_image: xcode9.4
       script:
-        xcodebuild -scheme PromiseKit -destination="$DST" -enableCodeCoverage YES SWIFT_VERSION=4 test | xcpretty
+        xcodebuild -scheme PromiseKit -destination "$DST" -enableCodeCoverage YES SWIFT_VERSION=4 test | xcpretty
     - <<: *test
       name: macOS / Xcode 10.0
       osx_image: xcode10.1
       script:
-        xcodebuild -scheme PromiseKit -destination="$DST" -enableCodeCoverage YES SWIFT_VERSION=4 test | xcpretty
+        xcodebuild -scheme PromiseKit -destination "$DST" -enableCodeCoverage YES SWIFT_VERSION=4 test | xcpretty
 
     - <<: *test
-      name: iOS / Xcode 10.0
+      name: iOS / Xcode 10.1
       osx_image: xcode10.1
-      env: DST='OS=12.0,name=iPhone SE'
+      env: DST='OS=12.1,name=iPhone SE'
 
     - <<: *test
-      name: tvOS / Xcode 10.0
-      env: DST='OS=12.0,name=Apple TV'
+      name: tvOS / Xcode 10.1
+      env: DST='OS=12.1,name=Apple TV'
       osx_image: xcode10.1
 
     - stage: test
