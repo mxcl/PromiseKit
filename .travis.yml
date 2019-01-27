@@ -161,7 +161,7 @@ jobs:
       script: |
         set -o
         xcodebuild -scheme PromiseKit -target PMKJSA+Tests -enableCodeCoverage NO -only-testing:PMKJSA+Tests test | xcpretty
-      #FIXME ^^ still builds *all* the tests
+      #FIXME ^^ still _builds_ *all* the tests
       cache:
         directories:
           - Tests/JS-A+/build
@@ -169,13 +169,13 @@ jobs:
 
     - &swiftpm
       stage: compile
-      name: SwiftPM / macOS / Xcode 9.4
+      name: SwiftPM / macOS / Xcode 9.4 / Swift 3.3
       os: osx
       osx_image: xcode9.4
       script: swift build
     - <<: *swiftpm
       osx_image: xcode10.1
-      name: SwiftPM / macOS / Xcode 10.0
+      name: SwiftPM / macOS / Xcode 10.1 / Swift 4.2
 
     - stage: deploy
       script: |
