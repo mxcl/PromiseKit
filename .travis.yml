@@ -108,7 +108,9 @@ jobs:
       script: swift test -Xswiftc -swift-version -Xswiftc 4
     - <<: *linux
       env: SWIFT_BUILD_VERSION=5 SWIFT_VERSION=5.0-DEVELOPMENT-SNAPSHOT-2019-01-22-a
-      name: Linux / Swift 5.0
+      name: Linux / Swift 5.0 (2019-01-22)
+      stage: test
+      script: swift test -Xswiftc -swift-version -Xswiftc 5
 
     - &test
       stage: test
