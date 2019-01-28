@@ -8,6 +8,7 @@ branches:
 stages:
   - name: pretest
   - name: lint
+    if: NOT branch =~ ^\d+\.\d+\.\d+$
   - name: compile
     if: type != push OR branch =~ /^\d+\.\d+\.\d+$/
   - name: test
@@ -194,5 +195,5 @@ jobs:
       # BUT `--verbose` generates so much output that Travis kills our script due to *too much* output!
       # --allow-warnings because Bolts generates warnings and CocoaPods fails you even if your deps emit warnings
       os: osx
-      osx_image: xcode10.1
+      osx_image: xcode10.0 # 10.0 or CocoaPods barfs
       language: objective-c
