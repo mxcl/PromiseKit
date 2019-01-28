@@ -29,7 +29,7 @@ final class SealedBox<T>: Box<T> {
     }
 }
 
-final class EmptyBox<T>: Box<T> {
+class EmptyBox<T>: Box<T> {
     private var sealant = Sealant<T>.pending(.init())
     private let barrier = DispatchQueue(label: "org.promisekit.barrier", attributes: .concurrent)
 
