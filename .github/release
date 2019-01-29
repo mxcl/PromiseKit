@@ -1,0 +1,17 @@
+#!/bin/sh
+
+set -euxo pipefail
+
+if [ -z "$1" ]; then
+  echo "No argument supplied"
+  exit 1
+fi
+
+Vn=$1
+Vo=$(git tag | tail -1)
+sed -i "" "s/CURRENT_PROJECT_VERSION = $Vo;/CURRENT_PROJECT_VERSION = $Vn;/" PromiseKit.xcodeproj/project.pbxproj
+git add PromiseKit.xcodeproj/project.pbxproj
+git commit -m "Tag $Vn"
+git tag $Vn
+git push origin $Vn
+open "https://github.com/mxcl/PromiseKit/releases/tag/$Vn"
