@@ -165,7 +165,7 @@ jobs:
       install:
         bash -c "cd Tests/JS-A+; npm ci &>/dev/null && npm run --hide-modules build"
       script: |
-        set -o
+        set -exo pipefail
         xcodebuild -scheme PromiseKit -target PMKJSA+Tests -enableCodeCoverage NO -only-testing:PMKJSA+Tests test | xcpretty
       #FIXME ^^ still _builds_ *all* the tests
       cache:

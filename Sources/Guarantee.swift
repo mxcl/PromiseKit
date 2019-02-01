@@ -161,7 +161,7 @@ public extension Guarantee where T: Sequence {
             when(fulfilled: $0.map(transform))
         }.recover {
             // if happens then is bug inside PromiseKit
-            fatalError(String(describing: $0))
+            fatalError("\($0)")
         }
     }
 }
