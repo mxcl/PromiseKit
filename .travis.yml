@@ -190,7 +190,7 @@ jobs:
       # BUT `--verbose` generates so much output that Travis kills our script due to *too much* output!
       # --allow-warnings because Bolts generates warnings and CocoaPods fails you even if your deps emit warnings
       os: osx
-      osx_image: xcode10.0 # 10.0 or CocoaPods barfs
+      osx_image: xcode10.1
       language: objective-c
 
     - stage: deploy
@@ -208,7 +208,7 @@ jobs:
           --readme Documentation/README.md \
           --github_url https://github.com/mxcl/PromiseKit \
           --xcodebuild-arguments UseModernBuildSystem=NO \
-          --module PromiseKit
+          --module PromiseKit \
           --module-version "$TRAVIS_TAG"
         git checkout gh-pages
         rm -rf reference
