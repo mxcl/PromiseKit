@@ -7,6 +7,7 @@ branches:
     - /^\d+\.\d+\.\d+$/
 stages:
   - name: pretest
+    if: type != push OR branch =~ /^\d+\.\d+\.\d+$/
   - name: lint
     if: NOT branch =~ ^\d+\.\d+\.\d+$
   - name: compile
@@ -27,14 +28,11 @@ jobs:
 
     - &carthage
       stage: compile
-      osx_image: xcode8.3
-      name: Carthage / Xcode 8.3
+      osx_image: xcode9.2
+      name: Carthage / Xcode 9.2
       os: osx
       language: objective-c
       script: carthage build --no-skip-current --configuration Release
-    - <<: *carthage
-      osx_image: xcode9.2
-      name: Carthage / Xcode 9.2
     - <<: *carthage
       osx_image: xcode9.4
       name: Carthage / Xcode 9.4
@@ -110,12 +108,14 @@ jobs:
       script: swift test -Xswiftc -swift-version -Xswiftc 4
     - <<: *linux
       env: SWIFT_BUILD_VERSION=5 SWIFT_VERSION=5.0-DEVELOPMENT-SNAPSHOT-2019-01-22-a
-      name: Linux / Swift 5.0
+      name: Linux / Swift 5.0 (2019-01-22)
+      stage: test
+      script: swift test -Xswiftc -swift-version -Xswiftc 5
 
     - &test
       stage: test
-      osx_image: xcode8.3
-      name: macOS / Xcode 8.3
+      name: macOS / Xcode 9.2 / Swift 4.0.3
+      osx_image: xcode9.2
       os: osx
       language: objective-c
       env: DST='platform=OS X,arch=x86_64'
@@ -125,21 +125,16 @@ jobs:
       install:
         xcodebuild -scheme PromiseKit -target PromiseKit -destination "$DST" SWIFT_TREAT_WARNINGS_AS_ERRORS=YES build | xcpretty
       script:
-        xcodebuild -scheme PromiseKit -destination "$DST" -enableCodeCoverage YES SWIFT_VERSION=3 test | xcpretty
+        xcodebuild -scheme PromiseKit -destination="$DST" -enableCodeCoverage YES SWIFT_VERSION=4 test | xcpretty
       after_success:
         bash <(curl -s https://codecov.io/bash)
     - <<: *test
-      name: macOS / Xcode 9.2
-      osx_image: xcode9.2
-      script:
-        xcodebuild -scheme PromiseKit -destination "$DST" -enableCodeCoverage YES SWIFT_VERSION=4 test | xcpretty
-    - <<: *test
-      name: macOS / Xcode 9.4
+      name: macOS / Xcode 9.4 / Swift 4.1.2
       osx_image: xcode9.4
       script:
         xcodebuild -scheme PromiseKit -destination "$DST" -enableCodeCoverage YES SWIFT_VERSION=4 test | xcpretty
     - <<: *test
-      name: macOS / Xcode 10.0
+      name: macOS / Xcode 10.1 / Swift 4.2.1
       osx_image: xcode10.1
       script:
         xcodebuild -scheme PromiseKit -destination "$DST" -enableCodeCoverage YES SWIFT_VERSION=4 test | xcpretty
@@ -166,9 +161,9 @@ jobs:
       install:
         bash -c "cd Tests/JS-A+; npm ci &>/dev/null && npm run --hide-modules build"
       script: |
-        set -o
+        set -exo pipefail
         xcodebuild -scheme PromiseKit -target PMKJSA+Tests -enableCodeCoverage NO -only-testing:PMKJSA+Tests test | xcpretty
-      #FIXME ^^ still builds *all* the tests
+      #FIXME ^^ still _builds_ *all* the tests
       cache:
         directories:
           - Tests/JS-A+/build
@@ -176,13 +171,13 @@ jobs:
 
     - &swiftpm
       stage: compile
-      name: SwiftPM / macOS / Xcode 9.4
+      name: SwiftPM / macOS / Xcode 9.4 / Swift 3.3
       os: osx
       osx_image: xcode9.4
       script: swift build
     - <<: *swiftpm
       osx_image: xcode10.1
-      name: SwiftPM / macOS / Xcode 10.0
+      name: SwiftPM / macOS / Xcode 10.1 / Swift 4.2
 
     - stage: deploy
       script: |
@@ -197,3 +192,30 @@ jobs:
       os: osx
       osx_image: xcode10.0 # 10.0 or CocoaPods barfs
       language: objective-c
+
+    - stage: deploy
+      name: Generate Documentation
+      os: osx
+      osx_image: xcode10.1
+      language: swift
+      install: gem install jazzy
+      script: |
+        set -exo pipefail
+        jazzy \
+          --theme fullwidth \
+          --output foo \
+          --documentation=Documentation/*.md \
+          --readme Documentation/README.md \
+          --github_url https://github.com/mxcl/PromiseKit \
+          --xcodebuild-arguments UseModernBuildSystem=NO \
+          --module PromiseKit
+          --module-version "$TRAVIS_TAG"
+        git checkout gh-pages
+        rm -rf reference
+        mv foo reference
+        git add reference
+        git config user.name  "Travis"
+        git config user.email "bot@travis-ci.com"
+        git commit -m "Updated docs for v$TRAVIS_TAG"
+        git remote add secure-origin https://${GITHUB_TOKEN}@github.com/mxcl/PromiseKit.git
+        git push secure-origin gh-pages

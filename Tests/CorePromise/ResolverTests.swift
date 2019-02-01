@@ -161,8 +161,10 @@ class WrapTests: XCTestCase {
     }
 
     func testVoidResolverFulfillAmbiguity() {
-    #if swift(>=4.1) || swift(>=3.3) && !swift(>=4.0)
+    #if !swift(>=5) && swift(>=4.1) || swift(>=3.3) && !swift(>=4.0)
     // ^^ this doesn’t work with Swift < 3.3 for some reason
+    // ^^ this doesn’t work with Swift 5.0-beta1 for some reason
+
         // reference: https://github.com/mxcl/PromiseKit/issues/990
 
         func foo(success: () -> Void, failure: (Error) -> Void) {
