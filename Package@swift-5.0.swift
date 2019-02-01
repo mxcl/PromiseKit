@@ -4,7 +4,7 @@ import PackageDescription
 
 let pkg = Package(name: "PromiseKit")
 pkg.platforms = [
-   .macOS(.v10_12), .iOS(.v10), .tvOS(.v10), .watchOS(.v2)
+   .macOS(.v10_10), .iOS(.v8), .tvOS(.v9), .watchOS(.v2)
 ]
 pkg.products = [
     .library(name: "PromiseKit", targets: ["PromiseKit"]),
