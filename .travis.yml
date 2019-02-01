@@ -180,22 +180,24 @@ jobs:
       name: SwiftPM / macOS / Xcode 10.1 / Swift 4.2
 
     - stage: deploy
+      install: gem install cocoapods --prerelease --version 1.6.0.rc.2
+      before_script: mv .github/PromiseKit.podspec .
       script: |
         set -exo pipefail
-        gem install cocoapods --prerelease --version 1.6.0.rc.2
-        mv .github/PromiseKit.podspec .
-        pod trunk push --verbose --allow-warnings --swift-version=4.2 | ruby -e 'ARGF.each{ print "." }'
+        pod trunk push --verbose --allow-warnings --swift-version=4.2 | tee pod.log | ruby -e 'ARGF.each{ print "." }'
       # ^^ pipe because Travis times us out if there is no output
       # AND `pod` defaults to hardly any output
       # BUT `--verbose` generates so much output that Travis kills our script due to *too much* output!
       # --allow-warnings because Bolts generates warnings and CocoaPods fails you even if your deps emit warnings
       os: osx
       osx_image: xcode10.1
-      language: objective-c
+      language: swift
+      after_failure: cat pod.log | grep error
 
     - stage: deploy
       name: Generate Documentation
       os: osx
+      git.depth: false
       osx_image: xcode10.1
       language: swift
       install: gem install jazzy
@@ -211,11 +213,11 @@ jobs:
           --module PromiseKit \
           --module-version "$TRAVIS_TAG"
         git checkout gh-pages
-        rm -rf reference
-        mv foo reference
-        git add reference
+        rm -rf reference/v6
+        mv foo reference/v6
+        git add reference/v6
         git config user.name  "Travis"
-        git config user.email "bot@travis-ci.com"
+        git config user.email "jazzy@travis-ci.com"
         git commit -m "Updated docs for v$TRAVIS_TAG"
         git remote add secure-origin https://${GITHUB_TOKEN}@github.com/mxcl/PromiseKit.git
         git push secure-origin gh-pages

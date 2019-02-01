@@ -1,6 +1,6 @@
 ![PromiseKit](http://promisekit.org/public/img/logo-tight.png)
 
-![badge-pod] ![badge-languages] ![badge-pms] ![badge-platforms] [![Build Status](https://travis-ci.org/mxcl/PromiseKit.svg?branch=master)](https://travis-ci.org/mxcl/PromiseKit)
+[![badge-pod][]][cocoapods] ![badge-languages][] ![badge-pms][] ![badge-platforms][] [![badge-travis][]][travis]
 
 ---
 
@@ -194,3 +194,6 @@ if after that you still have a question, ask at our [Gitter chat channel] or on 
 [Podfile]: https://guides.cocoapods.org/syntax/podfile.html
 [PMK6]: http://promisekit.org/news/2018/02/PromiseKit-6.0-Released/
 [Installation Guide]: Documentation/Installation.md
+[badge-travis]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=master
+[travis]: https://travis-ci.org/mxcl/PromiseKit
+[cocoapods]: https://cocoapods.org/pods/PromiseKit
