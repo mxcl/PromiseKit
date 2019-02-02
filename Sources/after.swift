@@ -11,11 +11,7 @@ import Dispatch
 public func after(seconds: TimeInterval) -> Guarantee<Void> {
     let (rg, seal) = Guarantee<Void>.pending()
     let when = DispatchTime.now() + seconds
-#if swift(>=4.0)
-    q.asyncAfter(deadline: when) { seal(()) }
-#else
-    q.asyncAfter(deadline: when, execute: seal)
-#endif
+    q.asyncAfter(deadline: when, execute: { seal(()) })
     return rg
 }
 
@@ -29,11 +25,7 @@ public func after(seconds: TimeInterval) -> Guarantee<Void> {
 public func after(_ interval: DispatchTimeInterval) -> Guarantee<Void> {
     let (rg, seal) = Guarantee<Void>.pending()
     let when = DispatchTime.now() + interval
-#if swift(>=4.0)
-    q.asyncAfter(deadline: when) { seal(()) }
-#else
-    q.asyncAfter(deadline: when, execute: seal)
-#endif
+    q.asyncAfter(deadline: when, execute: { seal(()) })
     return rg
 }
 
