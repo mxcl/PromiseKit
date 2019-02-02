@@ -320,11 +320,7 @@ public extension Thenable where T: Sequence {
      */
     func compactMapValues<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(T.Iterator.Element) throws -> U?) -> Promise<[U]> {
         return map(on: on, flags: flags) { foo -> [U] in
-          #if !swift(>=3.3) || (swift(>=4) && !swift(>=4.1))
-            return try foo.flatMap(transform)
-          #else
             return try foo.compactMap(transform)
-          #endif
         }
     }
 

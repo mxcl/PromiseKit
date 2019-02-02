@@ -130,15 +130,12 @@ public extension Promise {
     }
 }
 
-#if swift(>=3.1)
 extension Promise where T == Void {
     /// Initializes a new promise fulfilled with `Void`
     public convenience init() {
         self.init(box: SealedBox(value: .fulfilled(Void())))
     }
 }
-#endif
-
 
 public extension DispatchQueue {
     /**
@@ -167,7 +164,6 @@ public extension DispatchQueue {
         return promise
     }
 }
-
 
 /// used by our extensions to provide unambiguous functions with the same name as the original function
 public enum PMKNamespacer {
