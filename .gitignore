@@ -1,9 +1,6 @@
-*.xcodeproj/**/xcuserdata/
-*.xcscmblueprint
+/PromiseKit.xcodeproj
 /Carthage
 /.build
 .DS_Store
-DerivedData
-/PromiseKit.podspec
-/Extensions/Carthage
-/Tests/JS-A+/build
+/build
+/Tests/A+/JavaScript/build
