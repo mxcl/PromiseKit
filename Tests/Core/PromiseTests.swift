@@ -83,12 +83,10 @@ class PromiseTests: XCTestCase {
         _ = Promise().map { Error.dummy }
     }
 
-#if swift(>=3.1)
     func testCanMakeVoidPromise() {
         _ = Promise()
         _ = Guarantee()
     }
-#endif
 
     enum Error: Swift.Error {
         case dummy

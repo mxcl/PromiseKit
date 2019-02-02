@@ -166,14 +166,22 @@ public extension Guarantee where T: Sequence {
     }
 }
 
-#if swift(>=3.1)
 public extension Guarantee where T == Void {
     convenience init() {
         self.init(box: SealedBox(value: Void()))
     }
-}
-#endif
 
+#if swift(>=5.1)
+    // ^^ ambiguous in Swift 5.0, testing again in next version
+    convenience init(resolver body: (@escaping() -> Void) -> Void) {
+        self.init(resolver: { seal in
+            body {
+                seal(())
+            }
+        })
+    }
+#endif
+}
 
 public extension DispatchQueue {
     /**
@@ -198,7 +206,6 @@ public extension DispatchQueue {
         return rg
     }
 }
-
 
 #if os(Linux)
 import func CoreFoundation._CFIsMainThread

@@ -29,13 +29,13 @@ class JoinTests: XCTestCase {
         when(resolved: promise1, promise2, promise3).done(on: nil) { _ in finished = true }
         XCTAssertFalse(finished, "Not all promises have resolved")
         
-        seal1.fulfill_()
+        seal1.fulfill()
         XCTAssertFalse(finished, "Not all promises have resolved")
         
-        seal2.fulfill_()
+        seal2.fulfill()
         XCTAssertFalse(finished, "Not all promises have resolved")
         
-        seal3.fulfill_()
+        seal3.fulfill()
         XCTAssert(finished, "All promises have resolved")
     }
 }

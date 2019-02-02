@@ -5,8 +5,6 @@
 //  Created by Lois Di Qual on 2/28/18.
 //
 
-#if swift(>=3.2)
-
 import XCTest
 import PromiseKit
 import JavaScriptCore
@@ -17,7 +15,7 @@ class AllTests: XCTestCase {
         
         let scriptPath = URL(fileURLWithPath: #file).deletingLastPathComponent().appendingPathComponent("build/build.js")
         guard FileManager.default.fileExists(atPath: scriptPath.path) else {
-            return print("Skipping JS-A+: see README for instructions on how to build")
+            return print("Skipping A+.js: see README for instructions on how to build")
         }
         
         guard let script = try? String(contentsOf: scriptPath) else {
@@ -80,5 +78,3 @@ class AllTests: XCTestCase {
         self.wait(for: [expectation], timeout: 60)
     }
 }
-
-#endif
