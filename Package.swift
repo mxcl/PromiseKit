@@ -1,30 +1,21 @@
-// swift-tools-version:4.0
+// swift-tools-version:5.0
 
 import PackageDescription
 
 let pkg = Package(name: "PromiseKit")
+pkg.platforms = [
+    .macOS(.v10_12), .iOS(.v8), .tvOS(.v9), .watchOS(.v2)
+    //FIXME ^^^^^^ strictly only our tests require 10.12, PMK itself will work with 10.10
+]
 pkg.products = [
     .library(name: "PromiseKit", targets: ["PromiseKit"]),
 ]
-
-let pmk: Target = .target(name: "PromiseKit")
-pmk.path = "Sources"
-pmk.exclude = [
-    "AnyPromise.swift",
-    "AnyPromise.m",
-    "PMKCallVariadicBlock.m",
-    "dispatch_promise.m",
-    "join.m",
-    "when.m",
-    "NSMethodSignatureForBlock.m",
-    "after.m",
-    "hang.m",
-    "race.m",
-    "Deprecations.swift"
+pkg.swiftLanguageVersions = [
+    .v5  // grab PromiseKit-6.x if you want Swift 3.1‒4.2
 ]
-pkg.swiftLanguageVersions = [3, 4]
 pkg.targets = [
-    pmk,
-    .testTarget(name: "A+", dependencies: ["PromiseKit"]),
-    .testTarget(name: "CorePromise", dependencies: ["PromiseKit"], path: "Tests/CorePromise"),
+    .target(name: "PromiseKit", path: "Sources"),
+    .testTarget(name: "A+.swift", dependencies: ["PromiseKit"], path: "Tests/A+/Swift"),
+    .testTarget(name: "A+.js", dependencies: ["PromiseKit"], path: "Tests/A+/JavaScript"),
+    .testTarget(name: "Core", dependencies: ["PromiseKit"], path: "Tests/Core"),
 ]

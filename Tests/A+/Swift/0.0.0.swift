@@ -26,7 +26,7 @@ extension XCTestCase {
         let (pending, seal) = Promise<Void>.pending()
 
         do {
-            try body((pending, seal.fulfill_, seal.reject), expectation)
+            try body((pending, seal.fulfill, seal.reject), expectation)
             waitForExpectations(timeout: timeout) { err in
                 if let _ = err {
                     XCTFail("wait failed: \(description)", file: file, line: line)
@@ -176,9 +176,6 @@ extension XCTestExpectation {
 
 extension XCTestCase {
     func wait(for: [XCTestExpectation], timeout: TimeInterval, file: StaticString = #file, line: UInt = #line) {
-    #if !(swift(>=4.0) && !swift(>=4.1))
-        let line = Int(line)
-    #endif
         waitForExpectations(timeout: timeout, file: file, line: line)
     }
 }

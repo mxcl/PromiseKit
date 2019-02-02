@@ -114,7 +114,6 @@ class WrapTests: XCTestCase {
         wait(for: [ex1, ex2] ,timeout: 1)
     }
 
-#if swift(>=3.1)
     func testVoidCompletionValue() {
         let ex1 = expectation(description: "")
         let kf1 = KittenFetcher(value: nil, error: nil)
@@ -130,7 +129,6 @@ class WrapTests: XCTestCase {
 
         wait(for: [ex1, ex2], timeout: 1)
     }
-#endif
 
     func testIsFulfilled() {
         XCTAssertTrue(Promise.value(()).result?.isFulfilled ?? false)
@@ -161,10 +159,6 @@ class WrapTests: XCTestCase {
     }
 
     func testVoidResolverFulfillAmbiguity() {
-    #if !swift(>=5) && swift(>=4.1) || swift(>=3.3) && !swift(>=4.0)
-    // ^^ this doesn’t work with Swift < 3.3 for some reason
-    // ^^ this doesn’t work with Swift 5.0-beta1 for some reason
-
         // reference: https://github.com/mxcl/PromiseKit/issues/990
 
         func foo(success: () -> Void, failure: (Error) -> Void) {
@@ -180,6 +174,14 @@ class WrapTests: XCTestCase {
         let ex = expectation(description: "")
         bar().done(ex.fulfill).cauterize()
         wait(for: [ex], timeout: 10)
+
+    #if swift(>=5.1)
+        // ^^ ambiguous in Swift 5.0, testing again in next version
+        let ex2 = expectation(description: "")
+        Guarantee<Void> { seal in
+            after(.microseconds(10)).done(seal)
+        }.done(ex2.fulfill)
+        wait(for: [ex2], timeout: 10)
     #endif
     }
 }

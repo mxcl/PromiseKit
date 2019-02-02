@@ -10,12 +10,6 @@ class AfterTests: XCTestCase {
         let ex3 = expectation(description: "")
         after(.seconds(0)).done(ex3.fulfill)
         waitForExpectations(timeout: 2, handler: nil)
-
-    #if !SWIFT_PACKAGE
-        let ex4 = expectation(description: "")
-        __PMKAfter(0).done{ _ in ex4.fulfill() }.silenceWarning()
-        waitForExpectations(timeout: 2, handler: nil)
-    #endif
     }
 
     func testNegative() {
@@ -26,12 +20,6 @@ class AfterTests: XCTestCase {
         let ex3 = expectation(description: "")
         after(.seconds(-1)).done(ex3.fulfill)
         waitForExpectations(timeout: 2, handler: nil)
-
-    #if !SWIFT_PACKAGE
-        let ex4 = expectation(description: "")
-        __PMKAfter(-1).done{ _ in ex4.fulfill() }.silenceWarning()
-        waitForExpectations(timeout: 2, handler: nil)
-    #endif
     }
 
     func testPositive() {
@@ -42,11 +30,5 @@ class AfterTests: XCTestCase {
         let ex3 = expectation(description: "")
         after(.seconds(1)).done(ex3.fulfill)
         waitForExpectations(timeout: 2, handler: nil)
-
-    #if !SWIFT_PACKAGE
-        let ex4 = expectation(description: "")
-        __PMKAfter(1).done{ _ in ex4.fulfill() }.silenceWarning()
-        waitForExpectations(timeout: 2, handler: nil)
-    #endif
     }
 }

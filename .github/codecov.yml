@@ -1,7 +1,7 @@
 ignore:
   - "Tests"
   - "README.md"
-  - "Documentation"
+  - "Documents"
   - ".travis.yml"
 
 codecov:
