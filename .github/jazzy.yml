@@ -13,6 +13,6 @@ output:
   ../output
   # output directory is relative to config file… ugh
 readme:
-  Documentation/README.md
+  Documents/README.md
 theme:
   fullwidth
