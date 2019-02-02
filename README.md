@@ -35,8 +35,7 @@ pod used in many of the most popular apps in the world.
 
 # PromiseKit 7 Alpha
 
-We are testing PromiseKit 7 alpha, it is Swift 5 only. It is tagged and thus
-importable in all package managers.
+PromiseKit 7 is pre-release, if you’re using it: beware!
 
 # PromiseKit 6
 
@@ -50,20 +49,18 @@ In your [Podfile]:
 use_frameworks!
 
 target "Change Me!" do
-  pod "PromiseKit", "~> 6.8"
+  pod "PromiseKit", :git => 'https://github.com/mxcl/PromiseKit.git', :branch => 'v7'
 end
 ```
 
-> The above gives an Xcode warning? See our [Installation Guide].
+PromiseKit 7 supports Swift 5.x; Xcode >= 10.2; iOS, macOS, tvOS, watchOS, Linux
+and Android; SwiftPM.
 
-PromiseKit 6, 5 and 4 support Xcode 8.3, 9.x and 10.0; Swift 3.1,
-3.2, 3.3, 3.4, 4.0, 4.1, 4.2, 4.3 and 5.0 (development snapshots); iOS, macOS,
-tvOS, watchOS, Linux and Android; CocoaPods, Carthage and SwiftPM;
-([CI Matrix](https://travis-ci.org/mxcl/PromiseKit)).
+PromiseKits 6 and 4 support Xcode 8.3, 9.x and 10.0; Swift 3.1, 3.2, 3.3, 3.4,
+4.0, 4.1, 4.2 and 5.0; iOS, macOS, tvOS, watchOS, Linux and Android; CocoaPods,
+Carthage and SwiftPM; ([CI Matrix](https://travis-ci.org/mxcl/PromiseKit)).
 
-For Carthage, SwiftPM, Accio, etc., or for instructions when using older Swifts or Xcodes, see our [Installation Guide]. We recommend
-[Carthage](https://github.com/Carthage/Carthage) or
-[Accio](https://github.com/JamitLabs/Accio).
+For Carthage, SwiftPM, Accio, etc., or for instructions when using older Swifts or Xcodes, see our [Installation Guide].
 
 # Professionally Supported PromiseKit is Now Available
 
@@ -100,7 +97,7 @@ help me continue my work, I appreciate it 🙏🏻
   * [Objective-C Guide](Documentation/ObjectiveC.md)
   * [Troubleshooting](Documentation/Troubleshooting.md) (e.g., solutions to common compile errors)
   * [Appendix](Documentation/Appendix.md)
-* [API Reference](https://mxcl.dev/PromiseKit/reference/v6/Classes/Promise.html)
+* [API Reference](https://mxcl.dev/PromiseKit/reference/v7/Classes/Promise.html)
 
 # Extensions
 
@@ -111,21 +108,11 @@ extensions are available by specifying additional subspecs in your `Podfile`,
 e.g.:
 
 ```ruby
-pod "PromiseKit/MapKit"          # MKDirections().calculate().then { /*…*/ }
-pod "PromiseKit/CoreLocation"    # CLLocationManager.requestLocation().then { /*…*/ }
+pod "PMKMapKit"          # MKDirections().calculate().then { /*…*/ }
+pod "PMKCoreLocation"    # CLLocationManager.requestLocation().then { /*…*/ }
 ```
 
 All our extensions are separate repositories at the [PromiseKit organization].
-
-## I don't want the extensions!
-
-Then don’t have them:
-
-```ruby
-pod "PromiseKit/CorePromise", "~> 6.8"
-```
-
-> *Note:* Carthage installations come with no extensions by default.
 
 ## Choose Your Networking Library
 
@@ -133,7 +120,7 @@ Promise chains commonly start with a network operation. Thus, we offer
 extensions for `URLSession`:
 
 ```swift
-// pod 'PromiseKit/Foundation'  # https://github.com/PromiseKit/Foundation
+// pod 'PMKFoundation'  # https://github.com/PromiseKit/PMKFoundation
 
 firstly {
     URLSession.shared.dataTask(.promise, with: try makeUrlRequest()).validate()
@@ -159,7 +146,7 @@ func makeUrlRequest() throws -> URLRequest {
 And [Alamofire]:
 
 ```swift
-// pod 'PromiseKit/Alamofire'  # https://github.com/PromiseKit/Alamofire-
+// pod 'PMKAlamofire'  # https://github.com/PromiseKit/PMKAlamofire
 
 firstly {
     Alamofire
@@ -187,6 +174,12 @@ became true, but nowadays it isn’t really necessary.
 
 Please check our [Troubleshooting Guide](Documentation/Troubleshooting.md), and
 if after that you still have a question, ask at our [Gitter chat channel] or on [our bug tracker].
+
+# Contributing
+
+Generate the Xcode project:
+
+    swift package generate-xcodeproj
 
 
 [badge-pod]: https://img.shields.io/cocoapods/v/PromiseKit.svg?label=version

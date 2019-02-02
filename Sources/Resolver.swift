@@ -55,7 +55,6 @@ public extension Resolver {
     }
 }
 
-#if swift(>=3.1)
 extension Resolver where T == Void {
     /// Fulfills the promise unless error is non-nil
     public func resolve(_ error: Error?) {
@@ -65,22 +64,13 @@ extension Resolver where T == Void {
             fulfill(())
         }
     }
-#if false
-    // disabled ∵ https://github.com/mxcl/PromiseKit/issues/990
 
     /// Fulfills the promise
+    /// - Note: underscore is present due to: https://github.com/mxcl/PromiseKit/issues/990
     public func fulfill() {
         self.fulfill(())
     }
-#else
-    /// Fulfills the promise
-    /// - Note: underscore is present due to: https://github.com/mxcl/PromiseKit/issues/990
-    public func fulfill_() {
-        self.fulfill(())
-    }
-#endif
 }
-#endif
 
 public enum Result<T> {
     case fulfilled(T)
