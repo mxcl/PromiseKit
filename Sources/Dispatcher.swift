@@ -460,7 +460,7 @@ public extension CatchMixin {
 
 public extension PMKFinalizer {
     /// `finally` is the same as `ensure`, but it is not chainable
-    public func finally(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping () -> Void) {
+    func finally(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping () -> Void) {
         let dispatcher = selectDispatcher(given: on, configured: conf.D.return, flags: flags)
         return finally(on: dispatcher, body)
     }
