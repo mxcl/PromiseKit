@@ -57,6 +57,7 @@ public extension DispatchQueue {
 /// as long as the configured default is actually some kind of DispatchQueue.
 ///
 /// TODO: should conf.D = nil turn off dispatching even if explicit dispatch arguments are given?
+/// TODO: Move log prints into LogError enum if they are kept
 
 fileprivate func selectDispatcher(given: DispatchQueue?, configured: Dispatcher, flags: DispatchWorkItemFlags?) -> Dispatcher {
     guard let given = given else {
