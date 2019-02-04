@@ -1,0 +1,3 @@
+merges:
+  - action: delete_branch
+  - action: tag

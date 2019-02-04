@@ -22,6 +22,9 @@ public enum LogEvent {
     /// A promise has been deallocated without being fulfilled
     case pendingPromiseDeallocated
     
+    /// A guarantee has been deallocated without being fulfilled
+    case pendingGuaranteeDeallocated
+    
     /// An error which occurred while fulfilling a promise was swallowed
     case cauterized(Error)
 }

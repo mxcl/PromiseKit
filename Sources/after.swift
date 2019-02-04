@@ -2,7 +2,7 @@ import struct Foundation.TimeInterval
 import Dispatch
 
 /**
-     after(.seconds(2)).then {
+     after(seconds: 1.5).then {
          //…
      }
 
@@ -11,16 +11,12 @@ import Dispatch
 public func after(seconds: TimeInterval) -> Guarantee<Void> {
     let (rg, seal) = Guarantee<Void>.pending()
     let when = DispatchTime.now() + seconds
-#if swift(>=4.0)
-    q.asyncAfter(deadline: when) { seal(()) }
-#else
-    q.asyncAfter(deadline: when, execute: seal)
-#endif
+    q.asyncAfter(deadline: when, execute: { seal(()) })
     return rg
 }
 
 /**
-     after(seconds: 1.5).then {
+     after(.seconds(2)).then {
          //…
      }
 
@@ -29,11 +25,7 @@ public func after(seconds: TimeInterval) -> Guarantee<Void> {
 public func after(_ interval: DispatchTimeInterval) -> Guarantee<Void> {
     let (rg, seal) = Guarantee<Void>.pending()
     let when = DispatchTime.now() + interval
-#if swift(>=4.0)
-    q.asyncAfter(deadline: when) { seal(()) }
-#else
-    q.asyncAfter(deadline: when, execute: seal)
-#endif
+    q.asyncAfter(deadline: when, execute: { seal(()) })
     return rg
 }
 

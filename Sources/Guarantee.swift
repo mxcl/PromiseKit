@@ -6,7 +6,7 @@ import Dispatch
  - See: `Thenable`
 */
 public final class Guarantee<T>: Thenable {
-    let box: Box<T>
+    let box: PromiseKit.Box<T>
 
     fileprivate init(box: SealedBox<T>) {
         self.box = box
@@ -19,7 +19,7 @@ public final class Guarantee<T>: Thenable {
 
     /// Returns a pending `Guarantee` that can be resolved with the provided closure’s parameter.
     public init(resolver body: (@escaping(T) -> Void) -> Void) {
-        box = EmptyBox()
+        box = Box()
         body(box.seal)
     }
 
@@ -54,8 +54,19 @@ public final class Guarantee<T>: Thenable {
         }
     }
 
+    final private class Box<T>: EmptyBox<T> {
+        deinit {
+            switch inspect() {
+            case .pending:
+                PromiseKit.conf.logHandler(.pendingGuaranteeDeallocated)
+            case .resolved:
+                break
+            }
+        }
+    }
+
     init(_: PMKUnambiguousInitializer) {
-        box = EmptyBox()
+        box = Box()
     }
 
     /// Returns a tuple of a pending `Guarantee` and a function that resolves it.
@@ -155,14 +166,22 @@ public extension Guarantee where T: Sequence {
     }
 }
 
-#if swift(>=3.1)
 public extension Guarantee where T == Void {
     convenience init() {
         self.init(box: SealedBox(value: Void()))
     }
-}
-#endif
 
+#if swift(>=5.1)
+    // ^^ ambiguous in Swift 5.0, testing again in next version
+    convenience init(resolver body: (@escaping() -> Void) -> Void) {
+        self.init(resolver: { seal in
+            body {
+                seal(())
+            }
+        })
+    }
+#endif
+}
 
 public extension DispatchQueue {
     /**

@@ -9,7 +9,7 @@ private func _when<U: Thenable>(_ thenables: [U]) -> Promise<Void> {
 
     let rp = Promise<Void>(.pending)
 
-#if PMKDisableProgress || os(Linux)
+#if PMKDisableProgress || os(Linux) || os(Android)
     var progress: (completedUnitCount: Int, totalUnitCount: Int) = (0, 0)
 #else
     let progress = Progress(totalUnitCount: Int64(thenables.count))
@@ -170,11 +170,7 @@ public func when<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrent
         func testDone() {
             barrier.sync {
                 if pendingPromises == 0 {
-                  #if !swift(>=3.3) || (swift(>=4) && !swift(>=4.1))
-                    root.resolver.fulfill(promises.flatMap{ $0.value })
-                  #else
                     root.resolver.fulfill(promises.compactMap{ $0.value })
-                  #endif
                 }
             }
         }

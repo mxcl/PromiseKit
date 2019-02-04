@@ -318,13 +318,10 @@ public extension Thenable where T: Sequence {
              // $0 => [1,2,3]
          }
      */
+
     func compactMapValues<U>(on: Dispatcher = conf.D.map, _ transform: @escaping(T.Iterator.Element) throws -> U?) -> Promise<[U]> {
         return map(on: on) { foo -> [U] in
-          #if !swift(>=3.3) || (swift(>=4) && !swift(>=4.1))
-            return try foo.flatMap(transform)
-          #else
             return try foo.compactMap(transform)
-          #endif
         }
     }
 

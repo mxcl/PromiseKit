@@ -29,6 +29,8 @@ public struct PMKConfiguration {
             print("PromiseKit: warning: `wait()` called on main thread!")
         case .pendingPromiseDeallocated:
             print("PromiseKit: warning: pending promise deallocated")
+        case .pendingGuaranteeDeallocated:
+            print("PromiseKit: warning: pending guarantee deallocated")
         case .cauterized (let error):
             print("PromiseKit:cauterized-error: \(error)")
         }
