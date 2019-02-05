@@ -11,4 +11,4 @@
   * [Troubleshooting](Troubleshooting.md)
   * [Appendix](Appendix.md)
 * [Examples](Examples)
-* [API Reference](https://promisekit.org/reference/)
+* [API Reference](https://promisekit.org/reference/v6/)

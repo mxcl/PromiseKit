@@ -92,7 +92,7 @@ can continue to make tools and software you need and love. I appreciate it x.
   * [Objective-C Guide](Documentation/ObjectiveC.md)
   * [Troubleshooting](Documentation/Troubleshooting.md) (e.g., solutions to common compile errors)
   * [Appendix](Documentation/Appendix.md)
-* [API Reference](https://promisekit.org/reference/)
+* [API Reference](https://promisekit.org/reference/v6/)
 
 # Extensions
 
