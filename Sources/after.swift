@@ -11,6 +11,8 @@ extension DispatchWorkItem: CancellableTask { }
      }
 
 - Returns: A guarantee that resolves after the specified duration.
+- Note: cancelling this guarantee will cancel the underlying timer task
+- SeeAlso: [Cancellation](http://promisekit.org/docs/)
 */
 public func after(seconds: TimeInterval) -> Guarantee<Void> {
     let (rg, seal) = Guarantee<Void>.pending()
@@ -27,6 +29,8 @@ public func after(seconds: TimeInterval) -> Guarantee<Void> {
      }
 
  - Returns: A guarantee that resolves after the specified duration.
+ - Note: cancelling this guarantee will cancel the underlying timer task
+ - SeeAlso: [Cancellation](http://promisekit.org/docs/)
 */
 public func after(_ interval: DispatchTimeInterval) -> Guarantee<Void> {
     let (rg, seal) = Guarantee<Void>.pending()

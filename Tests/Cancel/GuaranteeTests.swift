@@ -65,6 +65,40 @@ class GuaranteeTests: XCTestCase {
 
         let ex = expectation(description: "")
         firstly {
+            CancellablePromise(g)
+        }.done {
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail("\($0)")
+        } .cancel()
+
+        wait(for: [ex], timeout: 1)
+    }
+
+    func testSetCancellableTask() {
+#if swift(>=4.0)
+        var resolver: ((()) -> Void)!
+#else
+        var resolver: ((Void) -> Void)!
+#endif
+
+        let task = DispatchWorkItem {
+#if swift(>=4.0)
+            resolver(())
+#else
+            resolver()
+#endif
+        }
+        
+        q.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: task)
+
+        let g = Guarantee<Void> { seal in
+            resolver = seal
+        }
+        g.setCancellableTask(task)
+        
+        let ex = expectation(description: "")
+        firstly {
             cancellable(g)
         }.done {
             XCTFail()

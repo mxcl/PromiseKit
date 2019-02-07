@@ -7,14 +7,14 @@ class WhenTests: XCTestCase {
     func testEmpty() {
         let e1 = expectation(description: "")
         let promises: [CancellablePromise<Void>] = []
-        when(fulfilled: promises).done { _ in
+        cancellableWhen(fulfilled: promises).done { _ in
             XCTFail()
         }.catch(policy: .allErrors) {
             $0.isCancelled ? e1.fulfill() : XCTFail()
         }.cancel()
 
         let e2 = expectation(description: "")
-        when(resolved: promises).done { _ in
+        cancellableWhen(resolved: promises).done { _ in
             XCTFail()
             e2.fulfill()
         }.catch(policy: .allErrors) {
@@ -31,7 +31,7 @@ class WhenTests: XCTestCase {
         let p3 = cancellable(Promise.value(3))
         let p4 = cancellable(Promise.value(4))
 
-        when(fulfilled: [p1, p2, p3, p4]).done { _ in
+        cancellableWhen(fulfilled: [p1, p2, p3, p4]).done { _ in
             XCTFail()
         }.catch(policy: .allErrors) {
             $0.isCancelled ? e1.fulfill() : XCTFail()
@@ -112,7 +112,7 @@ class WhenTests: XCTestCase {
         let p3 = cancellable(Promise.value(3)).done { _ in }
         let p4 = cancellable(Promise.value(4)).done { _ in }
 
-        when(fulfilled: p1, p2, p3, p4).done {
+        cancellableWhen(fulfilled: p1, p2, p3, p4).done {
             XCTFail()
         }.catch(policy: .allErrors) {
             $0.isCancelled ? e1.fulfill() : XCTFail()
@@ -149,7 +149,7 @@ class WhenTests: XCTestCase {
         let progress = Progress(totalUnitCount: 1)
         progress.becomeCurrent(withPendingUnitCount: 1)
 
-        when(fulfilled: p1, p2, p3, p4).done { _ in
+        cancellableWhen(fulfilled: p1, p2, p3, p4).done { _ in
             XCTAssertEqual(progress.completedUnitCount, 1)
             ex.fulfill()
         }.catch(policy: .allErrors) {
@@ -175,7 +175,7 @@ class WhenTests: XCTestCase {
         let progress = Progress(totalUnitCount: 1)
         progress.becomeCurrent(withPendingUnitCount: 1)
 
-        let promise = when(fulfilled: p1, p2, p3, p4)
+        let promise = cancellableWhen(fulfilled: p1, p2, p3, p4)
 
         progress.resignCurrent()
 
@@ -217,7 +217,7 @@ class WhenTests: XCTestCase {
         let progress = Progress(totalUnitCount: 1)
         progress.becomeCurrent(withPendingUnitCount: 1)
 
-        let promise = when(fulfilled: p1, p2, p3, p4)
+        let promise = cancellableWhen(fulfilled: p1, p2, p3, p4)
 
         progress.resignCurrent()
 
@@ -261,7 +261,7 @@ class WhenTests: XCTestCase {
         }
 
         let ex = expectation(description: "")
-        let p1 = CancellablePromise<Void>(error: Error.test)
+        let p1 = CancellablePromise<Int>(error: Error.test)
         let p2 = cancellable(after(.milliseconds(100)))
         cancellableWhen(fulfilled: p1, p2).done{ _ in XCTFail() }.catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail()
@@ -284,7 +284,7 @@ class WhenTests: XCTestCase {
         let p2 = cancellable(after(.milliseconds(100))).done { throw Error.straggler }
         let p3 = cancellable(after(.milliseconds(200))).done { throw Error.straggler }
 
-        when(fulfilled: p1, p2, p3).catch(policy: .allErrors) {
+        cancellableWhen(fulfilled: p1, p2, p3).catch(policy: .allErrors) {
             $0.isCancelled ? ex1.fulfill() : XCTFail()
         }.cancel()
 
@@ -306,7 +306,7 @@ class WhenTests: XCTestCase {
         let p2 = CancellablePromise<Void>(error: Error.test2)
         let p3 = CancellablePromise<Void>(error: Error.test3)
 
-        when(fulfilled: p1, p2, p3).catch(policy: .allErrors) {
+        cancellableWhen(fulfilled: p1, p2, p3).catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
 
@@ -315,14 +315,14 @@ class WhenTests: XCTestCase {
 
     func testGuaranteeWhen() {
         let ex1 = expectation(description: "")
-        when(resolved: cancellable(Guarantee()), cancellable(Guarantee())).done { _ in
+        cancellableWhen(resolved: cancellable(Guarantee()), cancellable(Guarantee())).done { _ in
             XCTFail()
         }.catch(policy: .allErrors) {
             $0.isCancelled ? ex1.fulfill() : XCTFail()
         }.cancel()
 
         let ex2 = expectation(description: "")
-        when(resolved: [cancellable(Guarantee()), cancellable(Guarantee())]).done { _ in 
+        cancellableWhen(resolved: [cancellable(Guarantee()), cancellable(Guarantee())]).done { _ in 
             XCTFail()
         }.catch(policy: .allErrors) {
             $0.isCancelled ? ex2.fulfill() : XCTFail()

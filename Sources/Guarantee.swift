@@ -71,6 +71,17 @@ public final class Guarantee<T>: Thenable {
         }
     }
 
+    final private class Box<T>: EmptyBox<T> {
+        deinit {
+            switch inspect() {
+            case .pending:
+                PromiseKit.conf.logHandler(.pendingGuaranteeDeallocated)
+            case .resolved:
+                break
+            }
+        }
+    }
+
     init(_: PMKUnambiguousInitializer) {
         box = Box()
     }

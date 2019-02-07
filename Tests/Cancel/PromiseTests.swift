@@ -166,6 +166,38 @@ class PromiseTests: XCTestCase {
         let p = Promise<Void>(cancellableTask: task) { seal in
             resolver = seal
         }
+        
+        let ex = expectation(description: "")
+        firstly {
+            CancellablePromise(p)
+        }.done {
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail("\($0)")
+        }.cancel()
+
+        wait(for: [ex], timeout: 1)
+    }
+    
+    func testSetCancellableTask() {
+        var resolver: Resolver<Void>!
+
+        let task = DispatchWorkItem {
+#if swift(>=4.0)
+            resolver.fulfill(())
+#else
+            resolver.fulfill()
+#endif
+        }
+        
+        q.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: task)
+
+        var reject: ((Swift.Error) -> Void)?
+        let p = Promise<Void>(cancellableTask: task) { seal in
+            resolver = seal
+            reject = seal.reject
+        }
+        p.setCancellableTask(task, reject: reject)
 
         let ex = expectation(description: "")
         firstly {
@@ -174,6 +206,71 @@ class PromiseTests: XCTestCase {
             XCTFail()
         }.catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail("\($0)")
+        }.cancel()
+
+        wait(for: [ex], timeout: 1)
+    }
+    
+    func testInitCancellableTask() {
+        var resolver: Resolver<Void>!
+
+        let task = DispatchWorkItem {
+#if swift(>=4.0)
+            resolver.fulfill(())
+#else
+            resolver.fulfill()
+#endif
+        }
+        
+        q.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: task)
+
+        let p = Promise<Void> { seal in
+            resolver = seal
+        }
+        
+        let ex = expectation(description: "")
+        firstly {
+            CancellablePromise(task: task, promise: p, resolver: resolver)
+        }.done {
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail("\($0)")
+        }.cancel()
+
+        wait(for: [ex], timeout: 1)
+    }
+    
+    func testInitVoidCancellableTask() {
+        let task = DispatchWorkItem { }
+        q.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: task)
+
+        let ex = expectation(description: "")
+        firstly {
+            CancellablePromise(task: task)
+        }.done {
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail("\($0)")
+        }.cancel()
+
+        wait(for: [ex], timeout: 1)
+    }
+    
+    func testBodyThrowsError() {
+        let task = DispatchWorkItem { }
+        q.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: task)
+
+        let p = Promise<Void>(cancellableTask: task) { seal in
+            throw PMKError.badInput
+        }
+        
+        let ex = expectation(description: "")
+        firstly {
+            CancellablePromise(p)
+        }.done {
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? XCTFail("\($0)") : ex.fulfill()
         }.cancel()
 
         wait(for: [ex], timeout: 1)

@@ -1,6 +1,6 @@
 # Cancelling Promises
 
-PromiseKit 7 adds clear and concise cancellation abilities to promises and to the [PromiseKit extensions](#extensions-pane).  Cancelling promises and their associated tasks is now simple and straightforward.
+PromiseKit 7 adds clear and concise cancellation abilities to promises and to the [PromiseKit extensions](#extensions-pane).  Cancelling promises and their associated tasks is now simple and straightforward.  Promises and promise chains can safely and efficiently be cancelled from any thread at any time.
 
 ```swift
 UIApplication.shared.isNetworkActivityIndicatorVisible = true
@@ -8,7 +8,7 @@ UIApplication.shared.isNetworkActivityIndicatorVisible = true
 let fetchImage = cancellable(URLSession.shared.dataTask(.promise, with: url)).compactMap{ UIImage(data: $0.data) }
 let fetchLocation = cancellable(CLLocationManager.requestLocation()).lastValue
 
-let context = firstly {
+let promise = firstly {
     when(fulfilled: fetchImage, fetchLocation)
 }.done { image, location in
     self.imageView.image = image
@@ -19,24 +19,31 @@ let context = firstly {
     /* 'catch' will be invoked with 'PMKError.cancelled' when cancel is called on the context.
        Use the default policy of '.allErrorsExceptCancellation' to ignore cancellation errors. */
     self.show(UIAlertController(for: error), sender: self)
-}.cancelContext
+}
 
 //…
 
-// Cancel currently active tasks and reject all cancellable promises with 'PMKError.cancelled'
-context.cancel()
+// Cancel currently active tasks and reject all cancellable promises with 'PMKError.cancelled'.
+// 'cancel()' can be called from any thread at any time.
+promise.cancel()
 
-/* Note: Cancellable promises can be cancelled directly using the 'CancellablePromise.cancel()'
-   method.  However by holding on to the 'CancelContext' rather than a cancellable promise, each
-   promise in the chain can be deallocated by ARC as it is resolved. */
+/* 'promise' here refers to the last promise in the chain.  Calling 'cancel' on
+   any promise in the chain cancels the entire chain.  Therefore cancelling the
+   last promise in the chain cancels everything. */
 ```
 
 # Cancel Chains
 
-Promises can be cancelled using a `CancellablePromise`.  The global `cancellable(_:)` function is used to convert a `Promise` into a `CancellablePromise`.  If a promise chain is initiazed with a `CancellablePromise`, then the entire chain is cancellable.  Calling `cancel()` on any promise in a promise chain cancels the entire chain.  For example:
+Promises can be cancelled using a `CancellablePromise`.  The global `cancellable(_:)` function is used to convert a standard `Promise` into a `CancellablePromise`.  If a promise chain is initiazed with a `CancellablePromise`, then the entire chain is cancellable.  Calling `cancel()` on any promise in the chain cancels the entire chain.  
+
+Creating a chain where the entire chain can be cancelleed is the recommended usage for cancellable promises.
+
+The `CancellablePromise` contains a `CancelContext` that keeps track of the tasks and promises for the chain.  Promise chains can be cancelled either by calling the `cancel()` method on any `CancellablePromise` in the chainm, or by calling `cancel()` on the `CancelContext` for the chain. It may be desirable to hold on to the `CancelContext` directly rather than a promise so that the promise can be deallocated by ARC when it is resolved.
+
+For example:
 
 ```swift
-let promise = firstly {
+let context = firstly {
     /* The 'cancellable' function initiates a cancellable promise chain by
        returning a 'CancellablePromise'. */
     cancellable(login())
@@ -48,28 +55,25 @@ let promise = firstly {
     if error.isCancelled {
         // the chain has been cancelled!
     }
-}
+}.cancelContext
 
 // …
 
-/* 'promise' here refers to the last promise in the chain.  Calling 'cancel' on
-   any promise in the chain cancels the entire chain.  Therefore cancelling the
-   last promise in the chain cancels everything.
-   
-   Note: It may be desirable to hold on to the 'CancelContext' directly rather than a
+/* Note: Promises can be cancelled using the 'cancel()' method on the 'CancellablePromise'.
+   However, it may be desirable to hold on to the 'CancelContext' directly rather than a
    promise so that the promise can be deallocated by ARC when it is resolved. */
-promise.cancel()
+context.cancel()
 ```
 
 ### Creating a partially cancellable chain
 
-A `CancellablePromise` cannot be used directly in the middle of a standard (non-cancellable) promise chain.  However, it <b>is</b> possible to create a partially cancellable promise chain.
+A `CancellablePromise` can be placed at the start of a chain, but it cannot be embedded directly in the middle of a standard (non-cancellable) promise chain.  Instead, a partially cancellable promise chain can be used.  A partially cancellable chain is not the recommended way to use cancellable promises, although there may be cases where this is useful.
+
+**Convert a cancellable chain to a standard chain**
 
 `CancellablePromise` wraps a delegate `Promise`, which can be accessed with the `promise` property.  The above example can be modified as follows so that once `login()` completes, the chain can no longer be cancelled:
 
 ```swift
-/// Convert a cancellable chain to a standard chain
-
 /* Here, by calling 'promise.then' rather than 'then' the chain is converted from a cancellable
    promise chain to a standard promise chain. In this example, calling 'cancel()' during 'login'
    will cancel the chain but calling 'cancel()' during the 'fetch' operation will have no effect: */
@@ -93,11 +97,11 @@ cancellablePromise.promise.then {
 cancellablePromise.cancel()
 ```
 
+**Convert a standard chain to a cancellable chain**
+
 A non-cancellable chain can be converted to a cancellable chain in the middle of the chain as follows:
 
 ```swift
-/// Convert a standard chain to a cancellable chain
-
 /* In this example, calling 'cancel()' during 'login' will not cancel the login.  However,
    the chain will be cancelled immediately, and the 'fetch' will not be executed.  If 'cancel()'
    is called during the 'fetch' then both the 'fetch' itself and the promise chain will be
@@ -119,7 +123,108 @@ let promise = cancellable(firstly {
 promise.cancel()
 ```
 
-# Core API
+# Troubleshooting
+
+At the time of this writing, the swift compiler error messages are usually misleading if there is a compile-time error in a cancellable promise chain.  In general, a good way to troubleshoot is to explicitly declare the signatures for all the closures and then prune them back down if possible.  Here are a few examples where the compiler error is not helpful.
+
+**Cancellable promise embedded in the middle of a standard promise chain**
+
+Error: ***Ambiguous reference to member `firstly(execute:)`***.  Fixed by adding `cancellable` to `login()`.
+
+```swift
+let promise = firstly {  /// <-- ERROR: Ambiguous reference to member 'firstly(execute:)'
+    /* The 'cancellable' function initiates a cancellable promise chain by
+       returning a 'CancellablePromise'. */
+    login() /// CHANGE TO: "cancellable(login())"
+}.then { creds in
+    cancellable(fetch(avatar: creds.user))
+}.done { image in
+    self.imageView = image
+}.catch(policy: .allErrors) { error in
+    if error.isCancelled {
+        // the chain has been cancelled!
+    }
+}
+
+// ...
+
+promise.cancel()
+```
+
+**The return type for a multi-line closure returning `CancellablePromise` is not explicitly stated**
+
+The Swift compiler cannot (yet) determine the return type of a multi-line closure.  
+
+The following example gives the unhelpful error: ***Enum element `allErrors` cannot be referenced as an instance member***.  This is fixed by explicitly declaring the return type as a CancellablePromise.
+
+```swift
+let promise = firstly {
+    cancellable(login())
+}.then { creds in /// CHANGE TO: "}.then { creds -> CancellablePromise<UIImage> in"
+    let f = fetch(avatar: creds.user)
+    return cancellable(f)
+}.done { image in
+    self.imageView = image
+}.catch(policy: .allErrors) { error in  /// <-- ERROR: Enum element 'allErrors' cannot be referenced as an instance member
+    if error.isCancelled {
+        // the chain has been cancelled!
+    }
+}
+
+// ...
+
+promise.cancel()
+```
+
+**Declaring a `Promise` return type instead of `CancellablePromise`**
+
+You'll get a very misleading error message if you declare a return type of `Promise` where it should be `CancellablePromise`.  This example yields the obtuse error: ***Ambiguous reference to member `firstly(execute:)`***.  This is fixed by declaring the return type as a `CancellablePromise` rather than a `Promise`.
+
+```swift
+let promise = firstly {  /// <-- ERROR: Ambiguous reference to member 'firstly(execute:)'
+    /* The 'cancellable' function initiates a cancellable promise chain by
+       returning a 'CancellablePromise'. */
+    cancellable(login())
+}.then { creds -> Promise<UIImage> in /// CHANGE TO: "}.then { creds -> CancellablePromise<UIImage> in"
+    let f = fetch(avatar: creds.user)
+    return cancellable(f)
+}.done { image in
+    self.imageView = image
+}.catch(policy: .allErrors) { error in
+    if error.isCancelled {
+        // the chain has been cancelled!
+    }
+}
+
+// ...
+
+promise.cancel()
+```
+
+**Trying to cancel a standard promise chain**
+
+Error: ***Value of type `PMKFinalizer` has no member `cancel`***.  Fixed by adding `cancellable` to both `login()` and `fetch()`.
+
+```swift
+let promise = firstly {
+    login() /// CHANGE TO: "cancellable(login())"
+}.then { creds in
+    fetch(avatar: creds.user) /// CHANGE TO: cancellable(fetch(avatar: creds.user))
+}.done { image in
+    self.imageView = image
+}.catch(policy: .allErrors) { error in
+    if error.isCancelled {
+        // the chain has been cancelled!
+    }
+}
+
+// ...
+
+promise.cancel()  /// <-- ERROR: Value of type 'PMKFinalizer' has no member 'cancel'
+```
+
+
+# Core Cancellable PromiseKit API
 
 The following classes, methods and functions have been added to PromiseKit to support cancellation. Existing functions or methods with underlying tasks that can be cancelled are indicated by being wrapped with 'cancellable()'.
 
@@ -127,8 +232,8 @@ The following classes, methods and functions have been added to PromiseKit to su
     cancellable(_:)                 - Accepts a Promise or Guarantee and returns a CancellablePromise,
                                       which is a cancellable variant of the given Promise or Guarantee
     
-    cancellable(after(seconds:))    - 'after' with seconds can be cancelled
-    cancellable(after(_:))          - 'after' with interval can be cancelled
+    <mark><b>cancellable</b></mark>(after(seconds:))    - 'after' with seconds can be cancelled
+    <mark><b>cancellable</b></mark>(after(_:))          - 'after' with interval can be cancelled
 
     firstly(execute:)               - Accepts body returning CancellablePromise
     hang(_:)                        - Accepts CancellablePromise
@@ -212,8 +317,6 @@ Cancellation support has been added to the PromiseKit extensions, but only where
 
 <pre><code>pod "PromiseKit/Alamofire"
 # <mark><b>cancellable</b></mark>(Alamofire.request("http://example.com", method: .get).responseDecodable(DecodableObject.self))
-#     is equivalent to
-# Alamofire.request("http://example.com", method: .get).<mark><b>cancellable</b></mark>ResponseDecodable(DecodableObject.self)
 
 pod "PromiseKit/Bolts"
 # CancellablePromise(…).then() { _ -> BFTask<NSString> in /*…*/ }  // Returns <mark><b>CancellablePromise</b></mark>
@@ -252,25 +355,16 @@ Here is a complete list of PromiseKit extension methods that support cancellatio
     <mark><b>cancellable</b></mark>(responsePropertyList(<span style="color:gray;"><i>queue</i>:</span><span style="color:gray;"><i>options</i>:</span>))
     <mark><b>cancellable</b></mark>(responseDecodable<T>(<span style="color:gray;"><i>queue</i>:</span>:<span style="color:gray;"><i>decoder</i>:</span>))
     <mark><b>cancellable</b></mark>(responseDecodable<T>(_ type:<span style="color:gray;"><i>queue</i>:</span><span style="color:gray;"><i>decoder</i>:</span>))
-    cancellableResponse(_:<span style="color:gray;"><i>queue</i>:</span>)
-    cancellableResponseData(<span style="color:gray;"><i>queue</i>:</span>)
-    cancellableResponseString(<span style="color:gray;"><i>queue</i>:</span>)
-    cancellableResponseJSON(<span style="color:gray;"><i>queue</i>:</span><span style="color:gray;"><i>options</i>:</span>)
-    cancellableResponsePropertyList(<span style="color:gray;"><i>queue</i>:</span><span style="color:gray;"><i>options</i>:</span>)
-    cancellableResponseDecodable<T>(<span style="color:gray;"><i>queue</i>:</span>:<span style="color:gray;"><i>decoder</i>:</span>)
-    cancellableResponseDecodable<T>(_ type:<span style="color:gray;"><i>queue</i>:</span><span style="color:gray;"><i>decoder</i>:</span>)
 
 Alamofire.DownloadRequest
     <mark><b>cancellable</b></mark>(response(_:<span style="color:gray;"><i>queue</i>:</span>))
     <mark><b>cancellable</b></mark>(responseData(<span style="color:gray;"><i>queue</i>:</span>))
-    cancellableResponse(_:<span style="color:gray;"><i>queue</i>:</span>)
-    cancellableResponseData(<span style="color:gray;"><i>queue</i>:</span>)
 </code></pre>
 
 [Bolts](http://github.com/PromiseKit/Bolts)
 
-<pre><code>CancellablePromise&lt;T&gt;
-    then&lt;U&gt;(<span style="color:gray;"><i>on: DispatchQueue?</i></span>, body: (T) -> BFTask&lt;U&gt;) -> CancellablePromise<U?> 
+<pre><code><mark><b>CancellablePromise</b></mark>&lt;T&gt;
+    then&lt;U&gt;(<span style="color:gray;"><i>on: DispatchQueue?</i></span>, body: (T) -> BFTask&lt;U&gt;) -> <mark><b>CancellablePromise</b></mark><U?> 
 </code></pre>
 
 [CoreLocation](http://github.com/PromiseKit/CoreLocation)
@@ -278,35 +372,26 @@ Alamofire.DownloadRequest
 <pre><code>CLLocationManager
     <mark><b>cancellable</b></mark>(requestLocation(<span style="color:gray;"><i>authorizationType</i>:</span><span style="color:gray;"><i>satisfying</i>:</span>))
     <mark><b>cancellable</b></mark>(requestAuthorization(<span style="color:gray;"><i>type requestedAuthorizationType</i>:</span>))
-    cancellableRequestLocation(<span style="color:gray;"><i>authorizationType</i>:</span><span style="color:gray;"><i>satisfying</i>:</span>)
-    cancellableRequestAuthorization(<span style="color:gray;"><i>type requestedAuthorizationType</i>:</span>)
 </code></pre>
 
 [Foundation](http://github.com/PromiseKit/Foundation)
 
 <pre><code>NotificationCenter:
     <mark><b>cancellable</b></mark>(observe(<span style="color:gray;"><i>once:object:</i></span>))
-    cancellableObserve(<span style="color:gray;"><i>once:object:</i></span>)
 
 NSObject
     <mark><b>cancellable</b></mark>(observe(_:keyPath:))
-    cancellableObserve(_:keyPath:)
 
 Process
     <mark><b>cancellable</b></mark>(launch(_:))
-    cancellableLaunch(_:)
 
 URLSession
     <mark><b>cancellable</b></mark>(dataTask(_:with:))
     <mark><b>cancellable</b></mark>(uploadTask(_:with:from:))
     <mark><b>cancellable</b></mark>(uploadTask(_:with:fromFile:))
     <mark><b>cancellable</b></mark>(downloadTask(_:with:to:))
-    cancellableDataTask(_:with:)
-    cancellableUploadTask(_:with:from:)
-    cancellableUploadTask(_:with:fromFile:)
-    cancellableDownloadTask(_:with:to:)
 
-CancellablePromise
+<mark><b>CancellablePromise</b></mark>
     validate()
 </code></pre>
 
@@ -314,11 +399,9 @@ CancellablePromise
 
 <pre><code>HMPromiseAccessoryBrowser
     <mark><b>cancellable</b></mark>(start(scanInterval:))
-    cancellableStart(scanInterval:)
 
 HMHomeManager
     <mark><b>cancellable</b></mark>(homes())
-    cancellableHomes()
 </code></pre>
 
 [MapKit](http://github.com/PromiseKit/MapKit)  
@@ -326,37 +409,30 @@ HMHomeManager
 <pre><code>MKDirections
     <mark><b>cancellable</b></mark>(calculate())
     <mark><b>cancellable</b></mark>(calculateETA())
-    cancellableCalculate()
-    cancellableCalculateETA()
     
 MKMapSnapshotter
     <mark><b>cancellable</b></mark>(start())
-    cancellableStart()
 </code></pre>
 
 [StoreKit](http://github.com/PromiseKit/StoreKit)  
 
 <pre><code>SKProductsRequest
     <mark><b>cancellable</b></mark>(start(_:))
-    cancellableStart(_:)
     
 SKReceiptRefreshRequest
     <mark><b>cancellable</b></mark>(promise())
-    cancellablePromise()
 </code></pre>
 
 [SystemConfiguration](http://github.com/PromiseKit/SystemConfiguration)
 
 <pre><code>SCNetworkReachability
     <mark><b>cancellable</b></mark>(promise())
-    cancellablePromise()
 </code></pre>
 
 [UIKit](http://github.com/PromiseKit/UIKit)  
 
 <pre><code>UIViewPropertyAnimator
     <mark><b>cancellable</b></mark>(startAnimation(_:))
-    cancellableStartAnimation(_:)
 </code></pre>
 
 ## Choose Your Networking Library
@@ -436,9 +512,9 @@ promise.cancel()
 
 * Ensure that subsequent code blocks in a promise chain are _never_ called after the chain has been cancelled
 
-* Fully support concurrecy, where all code is thead-safe
+* Fully support concurrecy, where all code is thead-safe.  Cancellable promises and promise chains can safely and efficiently be cancelled from any thread at any time.
 
-* Provide cancellable support for all PromiseKit extensions whose native tasks can be cancelled (e.g. Foundation, CoreLocation, Alamofire, etc.)
+* Provide cancellable support for all PromiseKit extensions whose native tasks can be cancelled (e.g. Alamofire, Bolts, CoreLocation, Foundation, HealthKit, HomeKit, MapKit, StoreKit, SystemConfiguration, UIKit)
 
 * Support cancellation for all PromiseKit primitives such as 'after', 'firstly', 'when', 'race'
 
@@ -467,8 +543,8 @@ func updateWeather(forCity searchName: String) {
 
     /* **** Cancels EVERYTHING (except... the 'ensure' block always executes regardless)    
        Note: non-cancellable tasks cannot be interrupted.  For example: if 'cancel()' is
-       called in the middle of 'updateUI()', then the chain will immediately be rejected.
-       However, the 'updateUI' call will complete normally because it is not cancellable.
+       called in the middle of 'updateUI()' then the chain will immediately be rejected,
+       however the 'updateUI' call will complete normally because it is not cancellable.
        Its return value (if any) will be discarded. */
     context.cancel()
 }

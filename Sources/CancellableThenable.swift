@@ -401,7 +401,7 @@ public extension CancellableThenable where U.T: Sequence {
      */
     func thenMap<V: CancellableThenable>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V.U.T]> {
         return then(on: on, flags: flags) {
-            when(fulfilled: try $0.map(transform))
+            cancellableWhen(fulfilled: try $0.map(transform))
         }
     }
 
@@ -435,7 +435,7 @@ public extension CancellableThenable where U.T: Sequence {
      */
     func thenFlatMap<V: CancellableThenable>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V.U.T.Iterator.Element]> where V.U.T: Sequence {
         return then(on: on, flags: flags) {
-            when(fulfilled: try $0.map(transform))
+            cancellableWhen(fulfilled: try $0.map(transform))
         }.map(on: nil) {
             $0.flatMap { $0 }
         }

@@ -18,7 +18,10 @@ public enum PMKError: Error {
 
     /// The operation was cancelled
     case cancelled
-
+    
+    /// The operation timed out and was cancelled
+    case timeout
+    
     /// `nil` was returned from `flatMap`
     @available(*, deprecated, message: "See: `compactMap`")
     case flatMap(Any, Any.Type)
@@ -49,6 +52,8 @@ extension PMKError: CustomDebugStringConvertible {
             return "Bad input was provided to a PromiseKit function"
         case .cancelled:
             return "The asynchronous sequence was cancelled"
+        case .timeout:
+            return "The asynchronous sequence timed out"
         case .emptySequence:
             return "The first or last element was requested for an empty sequence"
         }
@@ -75,6 +80,8 @@ extension Error {
         do {
             throw self
         } catch PMKError.cancelled {
+            return true
+        } catch PMKError.timeout {
             return true
         } catch let error as CancellableError {
             return error.isCancelled

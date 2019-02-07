@@ -19,7 +19,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             }
         }
 
-        when(fulfilled: generator, concurrently: 5).done { numbers in
+        cancellableWhen(fulfilled: generator, concurrently: 5).done { numbers in
             if numbers == squareNumbers {
                 e.fulfill()
             }
@@ -45,7 +45,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             }
         }
 
-        when(fulfilled: generator, concurrently: 5).done { numbers in
+        cancellableWhen(fulfilled: generator, concurrently: 5).done { numbers in
             XCTFail()
             if numbers == squareNumbers {
                 e.fulfill()
@@ -64,7 +64,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             return nil
         }
 
-        when(fulfilled: generator, concurrently: 5).done { numbers in
+        cancellableWhen(fulfilled: generator, concurrently: 5).done { numbers in
             if numbers.count == 0 {
                 e.fulfill()
             }
@@ -80,7 +80,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             return nil
         }
         
-        when(fulfilled: generator, concurrently: 5).done { numbers in
+        cancellableWhen(fulfilled: generator, concurrently: 5).done { numbers in
             if numbers.count == 0 {
                 e.fulfill()
             }
@@ -118,7 +118,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             }
         }
 
-        when(fulfilled: generator, concurrently: 3).catch { error in
+        cancellableWhen(fulfilled: generator, concurrently: 3).catch { error in
             guard let error = error as? LocalError else {
                 return
             }
@@ -158,7 +158,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             }
         }
 
-        when(fulfilled: generator, concurrently: 3).catch(policy: .allErrors) { error in
+        cancellableWhen(fulfilled: generator, concurrently: 3).catch(policy: .allErrors) { error in
             error.isCancelled ? e.fulfill() : XCTFail()
         }.cancel()
 
@@ -188,7 +188,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             }
         }
 
-        when(fulfilled: generator, concurrently: expectedConcurrently).done { _ in
+        cancellableWhen(fulfilled: generator, concurrently: expectedConcurrently).done { _ in
             XCTAssertEqual(expectedConcurrently, maxConcurrently)
             e.fulfill()
         }.silenceWarning()
@@ -219,7 +219,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             }
         }
 
-        when(fulfilled: generator, concurrently: expectedConcurrently).done { _ in
+        cancellableWhen(fulfilled: generator, concurrently: expectedConcurrently).done { _ in
             XCTFail()
             XCTAssertEqual(expectedConcurrently, maxConcurrently)
             e.fulfill()
@@ -233,8 +233,8 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
    func testWhenConcurrencyLessThanZero() {
         let generator = AnyIterator<CancellablePromise<Int>> { XCTFail(); return nil }
 
-        let p1 = when(fulfilled: generator, concurrently: 0)
-        let p2 = when(fulfilled: generator, concurrently: -1)
+        let p1 = cancellableWhen(fulfilled: generator, concurrently: 0)
+        let p2 = cancellableWhen(fulfilled: generator, concurrently: -1)
         p1.cancel()
         p2.cancel()
 
@@ -264,7 +264,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             }
         }
 
-        when(fulfilled: generator, concurrently: 1).done {
+        cancellableWhen(fulfilled: generator, concurrently: 1).done {
             XCTFail("\($0)")
         }.catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail()

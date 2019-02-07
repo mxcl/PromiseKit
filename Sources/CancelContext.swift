@@ -1,4 +1,5 @@
 import Dispatch
+import Foundation
 
 /**
  Keeps track of all promises in a promise chain with pending or currently running tasks, and cancels them all when `cancel` is called.
@@ -18,6 +19,7 @@ public class CancelContext: Hashable {
     
     private var cancelItems = [CancelItem]()
     private var cancelItemSet = Set<CancelItem>()
+    private var timeoutWorkItem: DispatchWorkItem?
     
     init() {
         self.hashValueInternal = ObjectIdentifier(self).hashValue
@@ -42,6 +44,8 @@ public class CancelContext: Hashable {
         barrier.sync(flags: .barrier) {
             internalCancelledError = error
             items = cancelItems
+            timeoutWorkItem?.cancel()
+            timeoutWorkItem = nil
         }
         
         for item in items {
@@ -90,6 +94,26 @@ public class CancelContext: Hashable {
                 internalCancelledError = newValue
             }
         }
+    }
+    
+    /**
+     Set a timeout in seconds after which 'cancel' will be called with the error PMKError.timeout.  Any previous timeout is overwritten.
+     
+     - Parameter after: Specifies the number of seconds to wait before calling 'cancel' on the context.
+     */
+    public func timeout(after: TimeInterval, on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil) {
+        var oldItem: DispatchWorkItem?
+        let newItem: DispatchWorkItem = DispatchWorkItem {
+            self.cancel(error: PMKError.timeout)
+        }
+
+        barrier.sync(flags: .barrier) {
+            oldItem = self.timeoutWorkItem
+            self.timeoutWorkItem = newItem
+        }
+        
+        oldItem?.cancel()
+        on?.asyncAfter(deadline: .now() + after, execute: newItem)
     }
     
     func append<Z: CancellableThenable>(task: CancellableTask?, reject: ((Error) -> Void)?, thenable: Z) {
