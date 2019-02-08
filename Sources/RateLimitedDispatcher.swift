@@ -1,7 +1,18 @@
 import Foundation
 
-/// A `PromiseKit` `Dispatcher` that executes no more than X executions every Y
-/// seconds. This is a sliding window, so executions occur as rapidly as
+/// A `PromiseKit` `Dispatcher` that executes, on average, no more than X
+/// executions every Y seconds.
+///
+/// This implementation uses a token bucket, so the transient burst rate may be
+/// up to 2X in a Y-second period. If you need an ironclad guarantee of
+/// conformance to the rate limit, you can specify an X that's half the true
+/// value; however, this will halve the average throughput as well.
+///
+/// For a completely accurate rate limiter that dispatches as rapidly as
+/// possible, see `StrictRateLimitedDispatcher`. But note that this variant
+/// incurs a 
+
+a sliding window, so executions occur as rapidly as
 /// possible without exceeding X in any Y-second period.
 ///
 /// This version implements perfectly accurate timing, so it must keep
@@ -9,7 +20,7 @@ import Foundation
 /// so an idle scheduler does not incur this storage cost.
 ///
 /// For a "pretty good" approach to rate limiting that does not consume
-/// additional storage, see `RateLimitedDispatcher`.
+/// additional storage, see RateLimitedDispatcher.
 ///
 /// Executions are limited by start time, not completion, so it's possible to
 /// end up with more than X closures running concurrently in some circumstances.
@@ -25,9 +36,9 @@ public class StrictRateLimitedDispatcher: Dispatcher {
     let maxDispatches: Int
     let interval: TimeInterval
     let queue: Dispatcher
-
+    
     private let serializer = DispatchQueue(label: "SRLD serializer")
-
+    
     private var nScheduled = 0
     private var unscheduled = Queue<() -> Void>()
     internal var startTimeHistory: Queue<DispatchTime>
@@ -36,7 +47,7 @@ public class StrictRateLimitedDispatcher: Dispatcher {
     private var cleanupNonce: Int64 = 0
     private var cleanupWorkItem: DispatchWorkItem? { willSet { cleanupWorkItem?.cancel() }}
     
-    /// A `PromiseKit` `Dispatcher` that executes no more than X executions every Y
+    /// A `PromiseKit` Dispatcher that executes no more than X executions every Y
     /// seconds. This is a sliding window, so executions occur as rapidly as
     /// possible without exceeding X in any Y-second period.
     ///
@@ -53,7 +64,7 @@ public class StrictRateLimitedDispatcher: Dispatcher {
         self.queue = queue
         startTimeHistory = Queue<DispatchTime>(maxDepth: maxDispatches)
     }
-
+    
     public func dispatch(_ body: @escaping () -> Void) {
         serializer.async {
             self.unscheduled.enqueue(body)
