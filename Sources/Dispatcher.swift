@@ -236,7 +236,7 @@ public extension Thenable {
      
      promise.tap{ print($0) }.then{ /*…*/ }
      */
-    func tap(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(Result<T>) -> Void) -> Promise<T> {
+    func tap(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(Result<T, Error>) -> Void) -> Promise<T> {
         let dispatcher = selectDispatcher(given: on, configured: conf.D.map, flags: flags)
         return tap(on: dispatcher, body)
     }

@@ -143,9 +143,9 @@ extension Promise {
     func test(onFulfilled: @escaping () -> Void, onRejected: @escaping () -> Void) {
         tap { result in
             switch result {
-            case .fulfilled:
+            case .success:
                 onFulfilled()
-            case .rejected:
+            case .failure:
                 onRejected()
             }
         }.silenceWarning()

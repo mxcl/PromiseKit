@@ -6,9 +6,9 @@ import Dispatch
  - See: `Thenable`
  */
 public final class Promise<T>: Thenable, CatchMixin {
-    let box: Box<Result<T>>
+    let box: Box<Result<T, Error>>
 
-    fileprivate init(box: SealedBox<Result<T>>) {
+    fileprivate init(box: SealedBox<Result<T, Error>>) {
         self.box = box
     }
 
@@ -39,12 +39,12 @@ public final class Promise<T>: Thenable, CatchMixin {
           }
      */
     public class func value(_ value: T) -> Promise<T> {
-        return Promise(box: SealedBox(value: .fulfilled(value)))
+        return Promise(box: SealedBox(value: .success(value)))
     }
 
     /// Initialize a new rejected promise.
     public init(error: Error) {
-        box = SealedBox(value: .rejected(error))
+        box = SealedBox(value: .failure(error))
     }
 
     /// Initialize a new promise bound to the provided `Thenable`.
@@ -70,7 +70,7 @@ public final class Promise<T>: Thenable, CatchMixin {
     }
 
     /// - See: `Thenable.pipe`
-    public func pipe(to: @escaping(Result<T>) -> Void) {
+    public func pipe(to: @escaping(Result<T, Error>) -> Void) {
         switch box.inspect() {
         case .pending:
             box.inspect {
@@ -87,7 +87,7 @@ public final class Promise<T>: Thenable, CatchMixin {
     }
 
     /// - See: `Thenable.result`
-    public var result: Result<T>? {
+    public var result: Result<T, Error>? {
         switch box.inspect() {
         case .pending:
             return nil
@@ -121,19 +121,14 @@ public extension Promise {
             group.wait()
         }
 
-        switch result! {
-        case .rejected(let error):
-            throw error
-        case .fulfilled(let value):
-            return value
-        }
+        return try result!.get()
     }
 }
 
 extension Promise where T == Void {
     /// Initializes a new promise fulfilled with `Void`
     public convenience init() {
-        self.init(box: SealedBox(value: .fulfilled(Void())))
+        self.init(box: SealedBox(value: .success(Void())))
     }
 }
 
@@ -156,9 +151,9 @@ public extension DispatchQueue {
         let promise = Promise<T>(.pending)
         async(group: group, qos: qos, flags: flags) {
             do {
-                promise.box.seal(.fulfilled(try body()))
+                promise.box.seal(.success(try body()))
             } catch {
-                promise.box.seal(.rejected(error))
+                promise.box.seal(.failure(error))
             }
         }
         return promise
@@ -183,9 +178,9 @@ public extension Dispatcher {
         let promise = Promise<T>(.pending)
         dispatch {
             do {
-                promise.box.seal(.fulfilled(try body()))
+                promise.box.seal(.success(try body()))
             } catch {
-                promise.box.seal(.rejected(error))
+                promise.box.seal(.failure(error))
             }
         }
         return promise
