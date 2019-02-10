@@ -24,8 +24,8 @@ public final class Guarantee<T>: Thenable {
     }
 
     /// - See: `Thenable.pipe`
-    public func pipe(to: @escaping(Result<T>) -> Void) {
-        pipe{ to(.fulfilled($0)) }
+    public func pipe(to: @escaping(Result<T, Error>) -> Void) {
+        pipe{ to(.success($0)) }
     }
 
     func pipe(to: @escaping(T) -> Void) {
@@ -45,12 +45,12 @@ public final class Guarantee<T>: Thenable {
     }
 
     /// - See: `Thenable.result`
-    public var result: Result<T>? {
+    public var result: Result<T, Error>? {
         switch box.inspect() {
         case .pending:
             return nil
         case .resolved(let value):
-            return .fulfilled(value)
+            return .success(value)
         }
     }
 

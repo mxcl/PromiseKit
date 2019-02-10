@@ -81,12 +81,12 @@ class JSPromise: NSObject, JSPromiseProtocol {
             }
         }
         
-        let newPromise = Promise<Result<JSValue>> { resolver in
+        let newPromise = Promise<Result<JSValue, Error>> { resolver in
             _ = promise.tap(resolver.fulfill)
         }.then(on: nil) { result -> Promise<JSValue> in
             switch result {
-            case .fulfilled: return afterFulfill
-            case .rejected: return afterReject
+            case .success: return afterFulfill
+            case .failure: return afterReject
             }
         }
         returnedPromiseRef = newPromise

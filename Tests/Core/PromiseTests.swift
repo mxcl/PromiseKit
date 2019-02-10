@@ -59,8 +59,8 @@ class PromiseTests: XCTestCase {
 
     func testCustomStringConvertible() {
         XCTAssertEqual(Promise<Int>.pending().promise.debugDescription, "Promise<Int>.pending(handlers: 0)")
-        XCTAssertEqual(Promise().debugDescription, "Promise<()>.fulfilled(())")
-        XCTAssertEqual(Promise<String>(error: Error.dummy).debugDescription, "Promise<String>.rejected(Error.dummy)")
+        XCTAssertEqual(Promise().debugDescription, "Promise<()>.success(())")
+        XCTAssertEqual(Promise<String>(error: Error.dummy).debugDescription, "Promise<String>.failure(Error.dummy)")
 
         XCTAssertEqual("\(Promise<Int>.pending().promise)", "Promise(…Int)")
         XCTAssertEqual("\(Promise.value(3))", "Promise(3)")

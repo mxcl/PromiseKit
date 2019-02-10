@@ -5,9 +5,9 @@ extension Promise: CustomStringConvertible {
         switch result {
         case nil:
             return "Promise(…\(T.self))"
-        case .rejected(let error)?:
+        case .failure(let error)?:
             return "Promise(\(error))"
-        case .fulfilled(let value)?:
+        case .success(let value)?:
             return "Promise(\(value))"
         }
     }
@@ -19,10 +19,10 @@ extension Promise: CustomDebugStringConvertible {
         switch box.inspect() {
         case .pending(let handlers):
             return "Promise<\(T.self)>.pending(handlers: \(handlers.bodies.count))"
-        case .resolved(.rejected(let error)):
-            return "Promise<\(T.self)>.rejected(\(type(of: error)).\(error))"
-        case .resolved(.fulfilled(let value)):
-            return "Promise<\(T.self)>.fulfilled(\(value))"
+        case .resolved(.failure(let error)):
+            return "Promise<\(T.self)>.failure(\(type(of: error)).\(error))"
+        case .resolved(.success(let value)):
+            return "Promise<\(T.self)>.success(\(value))"
         }
     }
 }

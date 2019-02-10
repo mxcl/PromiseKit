@@ -481,7 +481,7 @@ Use `when(resolved:)`:
 
 ```swift
 when(resolved: a, b).done { (results: [Result<T>]) in
-    // `Result` is an enum of `.fulfilled` or `.rejected`
+    //…
 }
 
 // ^^ cannot call `catch` as `when(resolved:)` returns a `Guarantee`
