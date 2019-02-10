@@ -6,10 +6,10 @@ public protocol Thenable: class {
     associatedtype T
 
     /// `pipe` is immediately executed when this `Thenable` is resolved
-    func pipe(to: @escaping(Result<T>) -> Void)
+    func pipe(to: @escaping(Result<T, Error>) -> Void)
 
     /// The resolved result or nil if pending.
-    var result: Result<T>? { get }
+    var result: Result<T, Error>? { get }
 }
 
 public extension Thenable {
@@ -34,18 +34,18 @@ public extension Thenable {
         let rp = Promise<U.T>(.pending)
         pipe {
             switch $0 {
-            case .fulfilled(let value):
+            case .success(let value):
                 on.dispatch {
                     do {
                         let rv = try body(value)
                         guard rv !== rp else { throw PMKError.returnedSelf }
                         rv.pipe(to: rp.box.seal)
                     } catch {
-                        rp.box.seal(.rejected(error))
+                        rp.box.seal(.failure(error))
                     }
                 }
-            case .rejected(let error):
-                rp.box.seal(.rejected(error))
+            case .failure(let error):
+                rp.box.seal(.failure(error))
             }
         }
         return rp
@@ -72,16 +72,16 @@ public extension Thenable {
         let rp = Promise<U>(.pending)
         pipe {
             switch $0 {
-            case .fulfilled(let value):
+            case .success(let value):
                 on.dispatch {
                     do {
-                        rp.box.seal(.fulfilled(try transform(value)))
+                        rp.box.seal(.success(try transform(value)))
                     } catch {
-                        rp.box.seal(.rejected(error))
+                        rp.box.seal(.failure(error))
                     }
                 }
-            case .rejected(let error):
-                rp.box.seal(.rejected(error))
+            case .failure(let error):
+                rp.box.seal(.failure(error))
             }
         }
         return rp
@@ -106,20 +106,20 @@ public extension Thenable {
         let rp = Promise<U>(.pending)
         pipe {
             switch $0 {
-            case .fulfilled(let value):
+            case .success(let value):
                 on.dispatch {
                     do {
                         if let rv = try transform(value) {
-                            rp.box.seal(.fulfilled(rv))
+                            rp.box.seal(.success(rv))
                         } else {
                             throw PMKError.compactMap(value, U.self)
                         }
                     } catch {
-                        rp.box.seal(.rejected(error))
+                        rp.box.seal(.failure(error))
                     }
                 }
-            case .rejected(let error):
-                rp.box.seal(.rejected(error))
+            case .failure(let error):
+                rp.box.seal(.failure(error))
             }
         }
         return rp
@@ -145,17 +145,17 @@ public extension Thenable {
         let rp = Promise<Void>(.pending)
         pipe {
             switch $0 {
-            case .fulfilled(let value):
+            case .success(let value):
                 on.dispatch {
                     do {
                         try body(value)
-                        rp.box.seal(.fulfilled(()))
+                        rp.box.seal(.success(()))
                     } catch {
-                        rp.box.seal(.rejected(error))
+                        rp.box.seal(.failure(error))
                     }
                 }
-            case .rejected(let error):
-                rp.box.seal(.rejected(error))
+            case .failure(let error):
+                rp.box.seal(.failure(error))
             }
         }
         return rp
@@ -199,7 +199,7 @@ public extension Thenable {
 
      promise.tap{ print($0) }.then{ /*…*/ }
      */
-    func tap(on: Dispatcher = conf.D.map, _ body: @escaping(Result<T>) -> Void) -> Promise<T> {
+    func tap(on: Dispatcher = conf.D.map, _ body: @escaping(Result<T, Error>) -> Void) -> Promise<T> {
         return Promise { seal in
             pipe { result in
                 on.dispatch {
@@ -224,9 +224,9 @@ public extension Thenable {
         switch result {
         case .none:
             return nil
-        case .some(.fulfilled):
+        case .some(.success):
             return nil
-        case .some(.rejected(let error)):
+        case .some(.failure(let error)):
             return error
         }
     }
@@ -266,9 +266,9 @@ public extension Thenable {
         switch result {
         case .none:
             return nil
-        case .some(.fulfilled(let value)):
+        case .some(.success(let value)):
             return value
-        case .some(.rejected):
+        case .some(.failure):
             return nil
         }
     }
