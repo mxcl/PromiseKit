@@ -82,20 +82,3 @@ class EmptyBox<T>: Box<T> {
         }
     }
 }
-
-
-extension Optional where Wrapped: DispatchQueue {
-    @inline(__always)
-    func async(flags: DispatchWorkItemFlags?, _ body: @escaping() -> Void) {
-        switch self {
-        case .none:
-            body()
-        case .some(let q):
-            if let flags = flags {
-                q.async(flags: flags, execute: body)
-            } else {
-                q.async(execute: body)
-            }
-        }
-    }
-}
