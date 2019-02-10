@@ -131,8 +131,8 @@ class WrapTests: XCTestCase {
     }
 
     func testIsFulfilled() {
-        XCTAssertTrue(Promise.value(()).result?.isFulfilled ?? false)
-        XCTAssertFalse(Promise<Int>(error: Error.test).result?.isFulfilled ?? true)
+        XCTAssertNotNil(try? Promise.value(()).result?.get())
+        XCTAssertNil(try? Promise<Int>(error: Error.test).result?.get())
     }
 
     func testPendingPromiseDeallocated() {

@@ -23,17 +23,17 @@ private func _when<U: Thenable>(_ thenables: [U]) -> Promise<Void> {
         promise.pipe { result in
             barrier.sync(flags: .barrier) {
                 switch result {
-                case .rejected(let error):
+                case .failure(let error):
                     if rp.isPending {
                         progress.completedUnitCount = progress.totalUnitCount
-                        rp.box.seal(.rejected(error))
+                        rp.box.seal(.failure(error))
                     }
-                case .fulfilled:
+                case .success:
                     guard rp.isPending else { return }
                     progress.completedUnitCount += 1
                     countdown -= 1
                     if countdown == 0 {
-                        rp.box.seal(.fulfilled(()))
+                        rp.box.seal(.success(()))
                     }
                 }
             }
@@ -185,10 +185,10 @@ public func when<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrent
             }
 
             switch resolution {
-            case .fulfilled:
+            case .success:
                 dequeue()
                 testDone()
-            case .rejected(let error):
+            case .failure(let error):
                 root.resolver.reject(error)
             }
         }
@@ -207,7 +207,7 @@ public func when<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrent
  `when(fulfilled:)` rejects as soon as one of the provided promises rejects. `when(resolved:)` waits on all provided promises whatever their result, and then provides an array of `Result<T>` so you can individually inspect the results. As a consequence this function returns a `Guarantee`, ie. errors are lifted from the individual promises into the results array of the returned `Guarantee`.
 
      when(resolved: promise1, promise2, promise3).then { results in
-         for result in results where case .fulfilled(let value) {
+         for result in results where case .success(let value) {
             //…
          }
      }.catch { error in
@@ -218,12 +218,12 @@ public func when<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrent
  - Note: we do not provide tuple variants for `when(resolved:)` but will accept a pull-request
  - Remark: Doesn't take Thenable due to protocol `associatedtype` paradox
 */
-public func when<T>(resolved promises: Promise<T>...) -> Guarantee<[Result<T>]> {
+public func when<T>(resolved promises: Promise<T>...) -> Guarantee<[Result<T, Error>]> {
     return when(resolved: promises)
 }
 
 /// - See: `when(resolved: Promise<T>...)`
-public func when<T>(resolved promises: [Promise<T>]) -> Guarantee<[Result<T>]> {
+public func when<T>(resolved promises: [Promise<T>]) -> Guarantee<[Result<T, Error>]> {
     guard !promises.isEmpty else {
         return .value([])
     }
@@ -231,7 +231,7 @@ public func when<T>(resolved promises: [Promise<T>]) -> Guarantee<[Result<T>]> {
     var countdown = promises.count
     let barrier = DispatchQueue(label: "org.promisekit.barrier.join", attributes: .concurrent)
 
-    let rg = Guarantee<[Result<T>]>(.pending)
+    let rg = Guarantee<[Result<T, Error>]>(.pending)
     for promise in promises {
         promise.pipe { result in
             barrier.sync(flags: .barrier) {

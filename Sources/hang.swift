@@ -47,9 +47,9 @@ public func hang<T>(_ promise: Promise<T>) throws -> T {
     }
 
     switch promise.result! {
-    case .rejected(let error):
+    case .failure(let error):
         throw error
-    case .fulfilled(let value):
+    case .success(let value):
         return value
     }
 }
