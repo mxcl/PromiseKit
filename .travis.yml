@@ -38,7 +38,7 @@ jobs:
       name: Carthage / Xcode 9.4
     - <<: *carthage
       osx_image: xcode10.1
-      name: Carthage / Xcode 10.0
+      name: Carthage / Xcode 10.1
 
     - &pod
       stage: lint
