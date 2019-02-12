@@ -8,7 +8,7 @@ public class RateLimitedDispatcherBase: Dispatcher {
     
     internal let serializer = DispatchQueue(label: "RLD serializer")
     
-    internal var nScheduled = 0
+    internal var nDispatched = 0
     internal var undispatched = Queue<() -> Void>()
     
     internal var cleanupNonce: Int64 = 0
@@ -32,9 +32,9 @@ public class RateLimitedDispatcherBase: Dispatcher {
     }
     
     internal func recordActualStart() {
-        nScheduled -= 1
+        nDispatched -= 1
         dispatchFromQueue()
-        if nScheduled == 0 && undispatched.isEmpty {
+        if nDispatched == 0 && undispatched.isEmpty {
             scheduleCleanup()
         }
     }
@@ -43,14 +43,12 @@ public class RateLimitedDispatcherBase: Dispatcher {
         cleanupWorkItem = DispatchWorkItem { [ weak self, nonce = self.cleanupNonce ] in
             self?.cleanup(nonce)
         }
-        print("cleanup sched", (DispatchTime.now() + interval).rawValue)
         serializer.asyncAfter(deadline: DispatchTime.now() + interval, execute: cleanupWorkItem!)
     }
     
     internal func cleanup(_ nonce: Int64) {
         // Calls to cleanup() have to go through the serializer queue, so by by the time
         // we get here, more activity may have occurred. Ergo, verify nonce.
-        print("cleanup run at", DispatchTime.now().rawValue, "nonce OK:", nonce == cleanupNonce)
         guard nonce == cleanupNonce else { return }
         undispatched.compactStorage()
         cleanupWorkItem = nil
