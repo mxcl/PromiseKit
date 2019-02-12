@@ -4,21 +4,120 @@ import XCTest
 
 class DispatcherTypeTests: XCTestCase {
     
-    func testStrictRateLimiter() {
-        
-        var rng = Xoroshiro(0xBAD_DEFACED_FACADE, 0xDEAD_BEEF_CAFE_BABE)
-        
-        // Hiatus = longer pause in inflow (on the order of the interval)
-        for hiatusLikelihoodPerInterval in [ 0.0, 0.3, 0.7 ] {
-            for noDelayLikelihood in [ 0.0, 0.2, 0.75 ] {
-                for interval in [ 0.025, 0.1 ] {
-                    for most in [ 10, 30 ] {
+    lazy var scenarios = generateRateLimitScenarios()
+    var rng = Xoroshiro(0x80D0082B8A9651BA, 0x49A8092CFD464A11) // Arbitrary seed
+    let debug = false
+    
+    struct RateLimitScenario {
+        let maxDispatches: Int
+        let interval: Double
+        let hiatusLikelihood: Double
+        let nHiatuses: Int
+        let noDelayLikelihood: Double
+        let delays: [UInt32]
+    }
+    
+    func testRateLimitedDispatcher() {
+        for scenario in scenarios {
+            printScenarioDetails(scenario)
+            let dispatcher = RateLimitedDispatcher(maxDispatches: scenario.maxDispatches, perInterval: scenario.interval)
+            let (deltaT, mostConcurrent) = rateLimitTest(dispatcher, delays: scenario.delays, interval: scenario.interval)
+            // For the nonstrict RateLimitedDispatcher, burst rate may be up to 2X the goal.
+            XCTAssertLessThanOrEqual(mostConcurrent, scenario.maxDispatches * 2)
+            // Significantly under the goal rate is also a concern
+            XCTAssertGreaterThan(mostConcurrent, (scenario.maxDispatches * 3) / 4)
+            printTestResults(deltaT, mostConcurrent, scenario)
+        }
+    }
+    
+    func printScenarioDetails(_ scenario: RateLimitScenario) {
+        guard debug else { return }
+        print("\nNew run: n = \(scenario.delays.count), most = \(scenario.maxDispatches),",
+            "interval = \(scenario.interval), pNoDelay = \(scenario.noDelayLikelihood),",
+            "pHiatus = \(scenario.hiatusLikelihood), nHiatuses = \(scenario.nHiatuses)\n")
+    }
+    
+    func printTestResults(_ deltaT: TimeInterval, _ concurrent: Int, _ scenario: RateLimitScenario) {
+        guard debug else { return }
+        let rateAvg = Double(scenario.delays.count) * scenario.interval / deltaT
+        print("result actual max = \(concurrent), target max = \(scenario.maxDispatches), average rate = \(rateAvg)")
+    }
 
-        let n = most * 10
-        let avgSlice = UInt32(interval * 1_000_000 * 0.9 / Double(most))
+    func testStrictRateLimitedDispatcher() {
+        for scenario in scenarios {
+            printScenarioDetails(scenario)
+            let dispatcher = StrictRateLimitedDispatcher(maxDispatches: scenario.maxDispatches, perInterval: scenario.interval)
+            let (deltaT, mostConcurrent) = rateLimitTest(dispatcher, delays: scenario.delays, interval: scenario.interval)
+            XCTAssertLessThanOrEqual(mostConcurrent, scenario.maxDispatches)
+            // Significantly under the goal rate is also a concern
+            XCTAssertGreaterThan(mostConcurrent, (scenario.maxDispatches * 3) / 4)
+            printTestResults(deltaT, mostConcurrent, scenario)
+            // print("tail wait start", DispatchTime.now().rawValue)
+            usleep(UInt32(scenario.interval * 1_000_000 * 1.25))
+            // print("tail wait end", DispatchTime.now().rawValue)
+            XCTAssert(dispatcher.startTimeHistory.count == 0, "Dispatcher did not clean up properly")
+        }
+    }
+    
+    func testConcurrencyLimitedDispatcher() {
+        
+        for scenario in scenarios {
+            
+            printScenarioDetails(scenario)
+            let dispatcher = ConcurrencyLimitedDispatcher(limit: scenario.maxDispatches)
+            
+            var nConcurrent = 0
+            var maxNConcurrent = 0
+            var nRun = 0
+            let lock = NSLock()
+            let ex = expectation(description: "Concurrency limit")
+            
+            for delay in scenario.delays {
+                usleep(delay)
+                Guarantee.value(42).done(on: dispatcher) { _ in
+                    lock.lock()
+                    nConcurrent += 1
+                    maxNConcurrent = max(maxNConcurrent, nConcurrent)
+                    lock.unlock()
+                    usleep(UInt32.random(in: 10_000...100_000, using: &self.rng))
+                    lock.lock()
+                    nConcurrent -= 1
+                    nRun += 1
+                    if nRun == scenario.delays.count {
+                        ex.fulfill()
+                    }
+                    lock.unlock()
+                }
+            }
+            
+            waitForExpectations(timeout: Double(scenario.delays.count) * 0.1)
+            XCTAssertEqual(maxNConcurrent, scenario.maxDispatches)
+            
+        }
+    }
+    
+    func generateRateLimitScenarios() -> [RateLimitScenario] {
+        
+        var rng = Xoroshiro(0x80D0082B8A9651BA, 0x49A8092CFD464A11) // Arbitrary seed
+        var scenarios: [RateLimitScenario] = []
+        
+        // for hiatusLikelihoodPerInterval in [ 0.0, 0.3, 0.7 ] {
+        //     for noDelayLikelihood in [ 0.0, 0.2, 0.75 ] {
+        //         for interval in [ 0.02, 0.1, 1.0 ] {
+        //             for maxDispatches in [ 1, 2, 5, 20 ] {
+
+        for hiatusLikelihoodPerInterval in [ 0.3 ] {
+            for noDelayLikelihood in [ 0.75 ] {
+                for interval in [ 0.02, 0.1 ] {
+                    for maxDispatches in [ 20 ] {
+
+        // <------------
+        
+        let n = maxDispatches * 10
+        let avgSlice = UInt32(interval * 1_000_000 * 0.9 / Double(maxDispatches))
         let normalDelayRange = 0...avgSlice
-        let hiatusRange = UInt32(interval * 0.5 * 1_000_000)...UInt32(interval * 2 * 1_000_000)
-        let hiatusLikelihoodPerDispatch = 1 - pow(1 - hiatusLikelihoodPerInterval, 1 / Double(most))
+        let hiatusRange = UInt32(interval * 0.5 * 1_000_000)...UInt32(interval * 2.5 * 1_000_000)
+        let hiatusLikelihoodPerDispatch = 1 - pow(1 - hiatusLikelihoodPerInterval, 1 / Double(maxDispatches))
         
         var delays: [UInt32] = []
         for _ in 1...n {
@@ -33,29 +132,22 @@ class DispatcherTypeTests: XCTestCase {
         }
         
         let nHiatuses = delays.count { $0 > avgSlice }
-        print("\nNew run: n = \(n), most = \(most), interval = \(interval), pHiatus = \(hiatusLikelihoodPerInterval), nHiatuses = \(nHiatuses)\n")
+            
+        scenarios.append(RateLimitScenario(maxDispatches: maxDispatches, interval: interval,
+            hiatusLikelihood: hiatusLikelihoodPerInterval, nHiatuses: nHiatuses,
+            noDelayLikelihood: noDelayLikelihood, delays: delays))
         
-        let dispatcher = StrictRateLimitedDispatcher(maxDispatches: most, perInterval: interval)
-        let mostConcurrent = rateLimitTest(dispatcher, delays: delays, interval: interval)
+        // <-------------
         
-        // Significantly less than the goal rate is also a potential concern
-        XCTAssertGreaterThan(mostConcurrent, (most * 3) / 4)
-        XCTAssertLessThanOrEqual(mostConcurrent, most)
-        
-        print("tail wait start", DispatchTime.now().rawValue)
-        usleep(UInt32(interval * 1_000_000 * 1.25)) // FIXME
-        print("tail wait end", DispatchTime.now().rawValue)
-        XCTAssert(dispatcher.startTimeHistory.count == 0, "Dispatcher did not clean up properly")
-
-                    }
-                }
-            }
-        }
+        }}}}
+            
+        return scenarios
     }
-    
-    func rateLimitTest(_ dispatcher: Dispatcher, delays: [UInt32], interval: TimeInterval) -> Int {
+
+    func rateLimitTest(_ dispatcher: Dispatcher, delays: [UInt32], interval: TimeInterval) -> (TimeInterval, Int) {
         
-        var startTimes: [DispatchTime] = []
+        let testStart = DispatchTime.now()
+        var closureStartTimes: [DispatchTime] = []
         let lock = NSLock()
         let ex = expectation(description: "Rate limit")
 
@@ -64,8 +156,8 @@ class DispatcherTypeTests: XCTestCase {
             Guarantee.value(42).done(on: dispatcher) { _ in
                 lock.lock()
                 let now = DispatchTime.now()
-                startTimes.append(now)
-                if startTimes.count == delays.count {
+                closureStartTimes.append(now)
+                if closureStartTimes.count == delays.count {
                     ex.fulfill()
                 }
                 lock.unlock()
@@ -77,8 +169,10 @@ class DispatcherTypeTests: XCTestCase {
         let adequateTime = max(expectedDuration, totalDelay) * 1.5
         waitForExpectations(timeout: adequateTime)
         
-        return mostAtOnce(startTimes, interval: interval)
+        let most = mostAtOnce(closureStartTimes, interval: interval)
+        let duration = DispatchTime.now() - testStart
         
+        return (duration, most)
     }
 
     func mostAtOnce(_ times: [DispatchTime], interval: TimeInterval) -> Int {
@@ -90,7 +184,7 @@ class DispatcherTypeTests: XCTestCase {
         }
         return most
     }
-    
+
 }
 
 // Reproducible, seedable RNG
