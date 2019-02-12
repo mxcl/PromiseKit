@@ -1,20 +1,19 @@
 import Foundation
 
-/// A `PromiseKit` `Dispatcher` that executes no more than X executions every Y
+/// A `PromiseKit` `Dispatcher` that dispatches no more than X closures every Y
 /// seconds. This is a sliding window, so executions occur as rapidly as
 /// possible without exceeding X in any Y-second period.
 ///
-/// This version implements perfectly accurate timing, so it must keep
-/// track of up to X previous execution times. Records are freed when they expire,
-/// so an idle scheduler does not incur this storage cost.
+/// This version implements perfectly accurate timing, so it must (temporarily)
+/// keep track of up to X previous execution times.
 ///
 /// For a "pretty good" approach to rate limiting that does not consume
 /// additional storage, see `RateLimitedDispatcher`.
 ///
-/// Executions are limited by start time, not completion, so it's possible to
+/// Executions are paced by start time, not by completion, so it's possible to
 /// end up with more than X closures running concurrently in some circumstances.
 ///
-/// There is no guarantee that you will reach the given dispatch rate. There are not
+/// There is no guarantee that you will reach a given dispatch rate. There are not
 /// an infinite number of threads available, and GCD scheduling has limited accuracy.
 /// The only guarantee is that dispatching will never exceed the requested rate.
 ///
@@ -26,7 +25,7 @@ public class StrictRateLimitedDispatcher: RateLimitedDispatcherBase {
     private var immediateDispatchesAvailable: Int
     private var latestDeadline = DispatchTime(uptimeNanoseconds: 0)
     
-    /// A `PromiseKit` `Dispatcher` that executes no more than X executions every Y
+    /// A `PromiseKit` `Dispatcher` that dispatches no more than X executions every Y
     /// seconds. This is a sliding window, so executions occur as rapidly as
     /// possible without exceeding X in any Y-second period.
     ///
@@ -47,10 +46,10 @@ public class StrictRateLimitedDispatcher: RateLimitedDispatcherBase {
         
         cleanupNonce += 1
         
-        guard nScheduled < maxDispatches else { return }
+        guard nDispatched < maxDispatches else { return }
         guard !undispatched.isEmpty else { return }
         
-        let accountedFor = nScheduled + startTimeHistory.count + immediateDispatchesAvailable
+        let accountedFor = nDispatched + startTimeHistory.count + immediateDispatchesAvailable
         assert(accountedFor == maxDispatches, "Dispatcher bookkeeping problem")
 
         var deadline = DispatchTime.now()
@@ -72,7 +71,6 @@ public class StrictRateLimitedDispatcher: RateLimitedDispatcherBase {
         
         let body = undispatched.dequeue()
         // A Dispatcher has no asyncAfter; use the serializer queue for timing
-        print("body sched", deadline.rawValue)
         serializer.asyncAfter(deadline: deadline) {
             self.queue.dispatch {
                 let now = DispatchTime.now()
@@ -84,13 +82,11 @@ public class StrictRateLimitedDispatcher: RateLimitedDispatcherBase {
         }
         
         latestDeadline = deadline
-        nScheduled += 1
+        nDispatched += 1
         
     }
     
     private func recordActualStartTime(_ time: DispatchTime) {
-        print("body runat", time.rawValue)
-        print("body reportedat", DispatchTime.now().rawValue)
         startTimeHistory.enqueue(time)
         super.recordActualStart()
     }

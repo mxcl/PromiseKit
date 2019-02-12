@@ -1,7 +1,7 @@
 import Foundation
 
-// A PromiseKit Dispatcher that runs no more than X simultaneous
-// executions at once.
+/// A PromiseKit Dispatcher that allows no more than X simultaneous
+/// executions at once.
 
 class ConcurrencyLimitedDispatcher: Dispatcher {
     
@@ -10,12 +10,12 @@ class ConcurrencyLimitedDispatcher: Dispatcher {
     
     private let semaphore: DispatchSemaphore
     
-    // A PromiseKit Dispatcher that runs no more than X simultaneous
-    // executions at once.
-    //
-    // - Parameter limit: The number of executions that may run at once.
-    // - Parameter queue: The DispatchQueue or Dispatcher on which to perform executions.
-    //     Should be some form of concurrent queue.
+    /// A `PromiseKit` `Dispatcher` that allows no more than X simultaneous
+    /// executions at once.
+    ///
+    /// - Parameter limit: The number of executions that may run at once.
+    /// - Parameter queue: The DispatchQueue or Dispatcher on which to perform executions.
+    ///     Should be some form of concurrent queue.
 
     public init(limit: Int, queue: Dispatcher = DispatchQueue.global(qos: .background)) {
         self.queue = queue
