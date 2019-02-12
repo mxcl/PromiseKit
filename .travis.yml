@@ -38,7 +38,7 @@ jobs:
       name: Carthage / Xcode 9.4
     - <<: *carthage
       osx_image: xcode10.1
-      name: Carthage / Xcode 10.0
+      name: Carthage / Xcode 10.1
 
     - &pod
       stage: lint
@@ -75,6 +75,10 @@ jobs:
       osx_image: xcode10.1
       env: SWIFT=4.2
       name: pod lib lint --swift-version=4.2
+    - <<: *pod
+      osx_image: xcode10.2
+      env: SWIFT=4.2
+      name: pod lib lint --swift-version=5.0
 
     - &linux
       stage: compile
