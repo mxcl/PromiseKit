@@ -1,62 +1,67 @@
 import Foundation
 
-/// A `PromiseKit` `Dispatcher` that executes, on average, no more than X
-/// executions every Y seconds.
+/// A `PromiseKit` `Dispatcher` that dispatches X closures every Y seconds,
+/// on average.
 ///
-/// This implementation uses a token bucket, so the transient burst rate may be
-/// up to 2X in a Y-second period. If you need an ironclad guarantee of
-/// conformance to the rate limit, you can specify an X that's half the true
-/// value; however, this will halve the average throughput as well.
+/// This implementation is O(1) in both space and time, but it uses approximate
+/// time accounting. Over the long term, the rate converges to a rate of X/Y,
+/// but the transient burst rate will be up to 2X/Y in some situations.
 ///
 /// For a completely accurate rate limiter that dispatches as rapidly as
-/// possible, see `StrictRateLimitedDispatcher`. But note that this variant
-/// incurs a 
+/// possible, see `StrictRateLimitedDispatcher`. That implementation requires
+/// additional storage.
 ///
-/// a sliding window, so executions occur as rapidly as
-/// possible without exceeding X in any Y-second period.
-///
-/// This version implements perfectly accurate timing, so it must keep
-/// track of up to X previous execution times. Records are freed when they expire,
-/// so an idle scheduler does not incur this storage cost.
-///
-/// For a "pretty good" approach to rate limiting that does not consume
-/// additional storage, see RateLimitedDispatcher.
-///
-/// Executions are limited by start time, not completion, so it's possible to
+/// Executions are paced by start time, not by completion, so it's possible to
 /// end up with more than X closures running concurrently in some circumstances.
 ///
-/// There is no guarantee that you will reach the given dispatch rate. There are not
+/// There is no guarantee that you will reach a given dispatch rate. There are not
 /// an infinite number of threads available, and GCD scheduling has limited accuracy.
-/// The only guarantee is that dispatching will never exceed the requested rate.
 ///
 /// 100% thread safe.
 
 public class RateLimitedDispatcher: RateLimitedDispatcherBase {
     
     private var tokensInBucket: Double = 0
-    private var lastAccrual: DispatchTime = DispatchTime.now()
+    private var latestAccrual: DispatchTime = DispatchTime.now()
     private var retryWorkItem: DispatchWorkItem? { willSet { retryWorkItem?.cancel() }}
     
+    private var tokensPerSecond: Double { return Double(maxDispatches) / interval }
+    
+    /// A `PromiseKit` `Dispatcher` that dispatches X executions every Y
+    /// seconds, on average.
+    ///
+    /// This version is O(1) in space and time but uses an approximate algorithm with
+    /// burst rates up to 2X per Y seconds. For a more accurate implementation, use
+    /// `StrictRateLimitedDispatcher`.
+    ///
+    /// - Parameter maxDispatches: The number of executions that may be dispatched within a given interval.
+    /// - Parameter perInterval: The length of the reference interval, in seconds.
+    /// - Parameter queue: The DispatchQueue or Dispatcher on which to perform executions. May be serial or concurrent.
+
     override init(maxDispatches: Int, perInterval interval: TimeInterval, queue: Dispatcher = DispatchQueue.global()) {
-        lastAccrual = DispatchTime.now()
+        latestAccrual = DispatchTime.now()
         super.init(maxDispatches: maxDispatches, perInterval: interval, queue: queue)
         tokensInBucket = Double(maxDispatches)
     }
     
     override func dispatchFromQueue() {
     
-        let now = DispatchTime.now()
-        let tokensPerSecond = Double(maxDispatches) / interval
-        let tokensToAdd = (now - lastAccrual) * tokensPerSecond
-        tokensInBucket = min(Double(maxDispatches), tokensInBucket + tokensToAdd)
-        lastAccrual = now
+        guard undispatched.count > 0 else { return }
+        cleanupNonce += 1
         
+        let now = DispatchTime.now()
+        let tokensToAdd = (now - latestAccrual) * tokensPerSecond
+        tokensInBucket = min(Double(maxDispatches - nDispatched), tokensInBucket + tokensToAdd)
+        latestAccrual = now
+
+        // print("runqueue \(now.rawValue), nDispatched = \(nDispatched), tokens = \(tokensInBucket), undispatched = \(undispatched.count)")
+
         var didDispatch = false
-        while tokensInBucket >= 1.0 && !undispatched.isEmpty && nScheduled < maxDispatches {
+        while tokensInBucket >= 1.0 && !undispatched.isEmpty && nDispatched < maxDispatches {
             didDispatch = true
             tokensInBucket -= 1.0
-            nScheduled += 1
-            let body = unscheduled.dequeue()
+            nDispatched += 1
+            let body = undispatched.dequeue()
             queue.dispatch {
                 self.serializer.async {
                     self.recordActualStart()
@@ -65,25 +70,36 @@ public class RateLimitedDispatcher: RateLimitedDispatcherBase {
             }
         }
 
-        if didDispatch {
-            cleanupNonce += 1
-        } else {
+        if !didDispatch {
             scheduleRetry()
         }
 
     }
     
     private func scheduleRetry() {
-        guard nScheduled == 0 && retryWorkItem == nil else { return }
-        let tokensPerSecond = Double(maxDispatches) / interval
-        let tokenDeficit = 1.0 - tokensInBucket
+        guard retryWorkItem == nil && !undispatched.isEmpty && nDispatched < maxDispatches else { return }
+        let tokenDeficit = 1 - tokensInBucket
         let secondsToGo = tokenDeficit / tokensPerSecond
-        let deadline = lastAccrual + secondsToGo + 1.0E-6
-        let retryWorkItem = DispatchWorkItem {
+        let deadline = latestAccrual + secondsToGo + 1.0E-6
+        retryWorkItem = DispatchWorkItem { [weak self] in
             self?.retryWorkItem = nil
             self?.dispatchFromQueue()
         }
         serializer.asyncAfter(deadline: deadline, execute: retryWorkItem!)
     }
+    
+    override func cleanup(_ nonce: Int64) {
+        super.cleanup(nonce)
+        guard nonce == cleanupNonce else { return }
+        tokensInBucket = Double(maxDispatches) // Avoid accumulating roundoff errors
+    }
 
 }
+
+internal extension DispatchTime {
+    static func -(a: DispatchTime, b: DispatchTime) -> TimeInterval {
+        let delta = a.uptimeNanoseconds - b.uptimeNanoseconds
+        return TimeInterval(delta) / 1_000_000_000
+    }
+}
+
