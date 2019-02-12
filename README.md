@@ -1,4 +1,4 @@
-![PromiseKit](http://promisekit.org/public/img/logo-tight.png)
+![PromiseKit](../gh-pages/public/img/logo-tight.png)
 
 [![badge-pod][]][cocoapods] ![badge-languages][] ![badge-pms][] ![badge-platforms][] [![badge-travis][]][travis]
 
@@ -92,7 +92,7 @@ can continue to make tools and software you need and love. I appreciate it x.
   * [Objective-C Guide](Documentation/ObjectiveC.md)
   * [Troubleshooting](Documentation/Troubleshooting.md) (e.g., solutions to common compile errors)
   * [Appendix](Documentation/Appendix.md)
-* [API Reference](https://promisekit.org/reference/v6/)
+* [API Reference](https://mxcl.github.io/PromiseKit/reference/v6/)
 
 # Extensions
 
@@ -192,7 +192,7 @@ if after that you still have a question, ask at our [Gitter chat channel] or on 
 [Gitter chat channel]: https://gitter.im/mxcl/PromiseKit
 [our bug tracker]: https://github.com/mxcl/PromiseKit/issues/new
 [Podfile]: https://guides.cocoapods.org/syntax/podfile.html
-[PMK6]: http://promisekit.org/news/2018/02/PromiseKit-6.0-Released/
+[PMK6]: http://mxcl.github.io/PromiseKit/news/2018/02/PromiseKit-6.0-Released/
 [Installation Guide]: Documentation/Installation.md
 [badge-travis]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=master
 [travis]: https://travis-ci.org/mxcl/PromiseKit

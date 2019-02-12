@@ -28,8 +28,8 @@ typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
  - Parameter block: The provided block is immediately executed, inside the block call `resolve` to resolve this promise and cause any attached handlers to execute. If you are wrapping a delegate-based system, we recommend instead to use: initWithResolver:
  - Returns: A new promise.
  - Warning: Resolving a promise with `nil` fulfills it.
- - SeeAlso: http://promisekit.org/sealing-your-own-promises/
- - SeeAlso: http://promisekit.org/wrapping-delegation/
+ - SeeAlso: https://github.com/mxcl/PromiseKit/blob/master/Documentation/GettingStarted.md#making-promises
+ - SeeAlso: https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#wrapping-delegate-systems
  */
 + (instancetype __nonnull)promiseWithResolverBlock:(void (^ __nonnull)(__nonnull PMKResolver))resolveBlock NS_REFINED_FOR_SWIFT;
 
@@ -232,7 +232,7 @@ typedef void (^PMKBooleanAdapter)(BOOL, NSError * __nullable) NS_REFINED_FOR_SWI
  @warning *Important* If both parameters are nil, the promise fulfills,
  if both are non-nil the promise rejects. This is per the convention.
 
- @see http://promisekit.org/sealing-your-own-promises/
+ @see https://github.com/mxcl/PromiseKit/blob/master/Documentation/GettingStarted.md#making-promises
  */
 + (instancetype __nonnull)promiseWithAdapterBlock:(void (^ __nonnull)(PMKAdapter __nonnull adapter))block NS_REFINED_FOR_SWIFT;
 

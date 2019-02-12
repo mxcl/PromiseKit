@@ -109,10 +109,10 @@ github "mxcl/PromiseKit" ~> 3.5
 [ci-23]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-2.3-minimal-changes
 [ci-22]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-2.2-minimal-changes
 [ci-20]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-2.0-minimal-changes
-[news-2]: http://promisekit.org/news/2015/05/PromiseKit-2.0-Released/
+[news-2]: http://mxcl.github.io/PromiseKit/news/2015/05/PromiseKit-2.0-Released/
 [news-3]: https://github.com/mxcl/PromiseKit/blob/master/CHANGELOG.markdown#300-oct-1st-2015
-[news-4]: http://promisekit.org/news/2016/09/PromiseKit-4.0-Released/
-[news-6]: http://promisekit.org/news/2018/02/PromiseKit-6.0-Released/
+[news-4]: http://mxcl.github.io/PromiseKit/news/2016/09/PromiseKit-4.0-Released/
+[news-6]: http://mxcl.github.io/PromiseKit/news/2018/02/PromiseKit-6.0-Released/
 [swift-2.3-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.3-minimal-changes
 [swift-2.2-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.2-minimal-changes
 [swift-2.0-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.0-minimal-changes
@@ -192,7 +192,7 @@ If you still are using Xcode 6 and Swift 1.2 then use PromiseKit 2.
 
 ## [2.0](https://github.com/mxcl/PromiseKit/releases/tag/2.0.0) May 14th, 2015
 
-[PromiseKit 2 announcement post](http://promisekit.org/news/2015/05/PromiseKit-2.0-Released/).
+[PromiseKit 2 announcement post](http://mxcl.github.io/PromiseKit/news/2015/05/PromiseKit-2.0-Released/).
 
 ## [1.5](https://github.com/mxcl/PromiseKit/releases/tag/1.5.0)
 
