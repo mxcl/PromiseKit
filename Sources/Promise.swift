@@ -165,6 +165,33 @@ public extension DispatchQueue {
     }
 }
 
+public extension Dispatcher {
+    /**
+     Asynchronously executes the provided closure on a Dispatcher.
+     
+         dispatcher.promise {
+            try md5(input)
+         }.done { md5 in
+            //…
+         }
+     
+     - Parameter body: The closure that resolves this promise.
+     - Returns: A new `Promise` resolved by the result of the provided closure.
+     - Note: There is no Promise/Thenable version of this due to Swift compiler ambiguity issues.
+     */
+    func dispatch<T>(_: PMKNamespacer, _ body: @escaping () throws -> T) -> Promise<T> {
+        let promise = Promise<T>(.pending)
+        dispatch {
+            do {
+                promise.box.seal(.fulfilled(try body()))
+            } catch {
+                promise.box.seal(.rejected(error))
+            }
+        }
+        return promise
+    }
+}
+
 /// used by our extensions to provide unambiguous functions with the same name as the original function
 public enum PMKNamespacer {
     case promise
