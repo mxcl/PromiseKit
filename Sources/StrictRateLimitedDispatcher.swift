@@ -5,7 +5,7 @@ import Foundation
 /// possible without exceeding X in any Y-second period.
 ///
 /// This version implements perfectly accurate timing, so it must (temporarily)
-/// keep track of up to X previous execution times.
+/// track up to X previous execution times and is thus O(X) in space.
 ///
 /// For a "pretty good" approach to rate limiting that does not consume
 /// additional storage, see `RateLimitedDispatcher`.
@@ -27,14 +27,15 @@ public class StrictRateLimitedDispatcher: RateLimitedDispatcherBase {
     
     /// A `PromiseKit` `Dispatcher` that dispatches no more than X executions every Y
     /// seconds. This is a sliding window, so executions occur as rapidly as
-    /// possible without exceeding X in any Y-second period.
+    /// possible without exceeding X in any Y-second period. O(X) in space.
     ///
     /// For a "pretty good" approach to rate limiting that does not consume
     /// additional storage, see `RateLimitedDispatcher`.
     ///
-    /// - Parameter maxDispatches: The number of executions that may be dispatched within a given interval.
-    /// - Parameter perInterval: The length of the reference interval, in seconds.
-    /// - Parameter queue: The DispatchQueue or Dispatcher on which to perform executions. May be serial or concurrent.
+    /// - Parameters:
+    ///   - maxDispatches: The number of executions that may be dispatched within a given interval.
+    ///   - perInterval: The length of the reference interval, in seconds.
+    ///   - queue: The DispatchQueue or Dispatcher on which to perform executions. May be serial or concurrent.
     
     override init(maxDispatches: Int, perInterval interval: TimeInterval, queue: Dispatcher = DispatchQueue.global()) {
         startTimeHistory = Queue<DispatchTime>(maxDepth: maxDispatches)
