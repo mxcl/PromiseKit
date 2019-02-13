@@ -34,9 +34,10 @@ public class RateLimitedDispatcher: RateLimitedDispatcherBase {
     /// burst rates up to 2X per Y seconds. For a more accurate implementation, use
     /// `StrictRateLimitedDispatcher`.
     ///
-    /// - Parameter maxDispatches: The number of executions that may be dispatched within a given interval.
-    /// - Parameter perInterval: The length of the reference interval, in seconds.
-    /// - Parameter queue: The DispatchQueue or Dispatcher on which to perform executions. May be serial or concurrent.
+    /// - Parameters:
+    ///   - maxDispatches: The number of executions that may be dispatched within a given interval.
+    ///   - perInterval: The length of the reference interval, in seconds.
+    ///   - queue: The DispatchQueue or Dispatcher on which to perform executions. May be serial or concurrent.
 
     override init(maxDispatches: Int, perInterval interval: TimeInterval, queue: Dispatcher = DispatchQueue.global()) {
         latestAccrual = DispatchTime.now()

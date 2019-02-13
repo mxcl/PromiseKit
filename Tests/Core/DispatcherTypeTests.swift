@@ -69,24 +69,24 @@ class DispatcherTypeTests: XCTestCase {
             var nConcurrent = 0
             var maxNConcurrent = 0
             var nRun = 0
-            let lock = NSLock()
+            let serializer = DispatchQueue(label: "Concurrency test")
             let ex = expectation(description: "Concurrency limit")
             
             for delay in scenario.delays {
                 usleep(delay)
                 Guarantee.value(42).done(on: dispatcher) { _ in
-                    lock.lock()
-                    nConcurrent += 1
-                    maxNConcurrent = max(maxNConcurrent, nConcurrent)
-                    lock.unlock()
-                    usleep(UInt32.random(in: 10_000...100_000, using: &self.rng))
-                    lock.lock()
-                    nConcurrent -= 1
-                    nRun += 1
-                    if nRun == scenario.delays.count {
-                        ex.fulfill()
+                    serializer.sync {
+                        nConcurrent += 1
+                        maxNConcurrent = max(maxNConcurrent, nConcurrent)
                     }
-                    lock.unlock()
+                    usleep(UInt32.random(in: 10_000...100_000, using: &self.rng))
+                    serializer.sync {
+                        nConcurrent -= 1
+                        nRun += 1
+                        if nRun == scenario.delays.count {
+                            ex.fulfill()
+                        }
+                    }
                 }
             }
             
@@ -148,19 +148,19 @@ class DispatcherTypeTests: XCTestCase {
         
         let testStart = DispatchTime.now()
         var closureStartTimes: [DispatchTime] = []
-        let lock = NSLock()
+        let serializer = DispatchQueue(label: "Rate limit")
         let ex = expectation(description: "Rate limit")
 
         for delay in delays {
             usleep(delay)
             Guarantee.value(42).done(on: dispatcher) { _ in
-                lock.lock()
-                let now = DispatchTime.now()
-                closureStartTimes.append(now)
-                if closureStartTimes.count == delays.count {
-                    ex.fulfill()
+                serializer.sync {
+                    let now = DispatchTime.now()
+                    closureStartTimes.append(now)
+                    if closureStartTimes.count == delays.count {
+                        ex.fulfill()
+                    }
                 }
-                lock.unlock()
             }
         }
         
