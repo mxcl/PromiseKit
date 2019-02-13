@@ -184,7 +184,6 @@ jobs:
       name: SwiftPM / macOS / Xcode 10.1 / Swift 4.2
 
     - stage: deploy
-      install: gem install cocoapods
       before_script: mv .github/PromiseKit.podspec .
       script: |
         set -exo pipefail
@@ -194,12 +193,11 @@ jobs:
       # BUT `--verbose` generates so much output that Travis kills our script due to *too much* output!
       # --allow-warnings because Bolts generates warnings and CocoaPods fails you even if your deps emit warnings
       os: osx
-      osx_image: xcode10.1
+      osx_image: xcode10.2
       language: swift
       after_failure: cat pod.log | grep error
 
-    - stage: deploy
-      name: Generate Documentation
+    - name: Generate Documentation
       os: osx
       git.depth: false
       osx_image: xcode10.1
@@ -207,15 +205,9 @@ jobs:
       install: gem install jazzy
       script: |
         set -exo pipefail
-        jazzy \
-          --theme fullwidth \
-          --output foo \
-          --documentation=Documentation/*.md \
-          --readme Documentation/README.md \
-          --github_url https://github.com/mxcl/PromiseKit \
-          --xcodebuild-arguments UseModernBuildSystem=NO \
-          --module PromiseKit \
-          --module-version "$TRAVIS_TAG"
+        jazzy --config .github/jazzy.yml \
+              --github_url "https://github.com/$TRAVIS_REPO_SLUG" \
+              --module-version "$TRAVIS_TAG"
         git checkout gh-pages
         rm -rf reference/v6
         mv foo reference/v6
@@ -223,5 +215,5 @@ jobs:
         git config user.name  "Travis"
         git config user.email "jazzy@travis-ci.com"
         git commit -m "Updated docs for v$TRAVIS_TAG"
-        git remote add secure-origin https://${GITHUB_TOKEN}@github.com/mxcl/PromiseKit.git
+        git remote add secure-origin https://${GITHUB_TOKEN}@github.com/$TRAVIS_REPO_SLUG.git
         git push secure-origin gh-pages
