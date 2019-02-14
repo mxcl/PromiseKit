@@ -162,7 +162,7 @@ public extension DispatchQueue {
 
 public extension Dispatcher {
     /**
-     Asynchronously executes the provided closure on a Dispatcher.
+     Executes the provided value-returning closure on a Dispatcher, yielding a Promise.
      
          dispatcher.promise {
             try md5(input)
@@ -174,7 +174,7 @@ public extension Dispatcher {
      - Returns: A new `Promise` resolved by the result of the provided closure.
      - Note: There is no Promise/Thenable version of this due to Swift compiler ambiguity issues.
      */
-    func dispatch<T>(_: PMKNamespacer, _ body: @escaping () throws -> T) -> Promise<T> {
+    func dispatch<T>(_ body: @escaping () throws -> T) -> Promise<T> {
         let promise = Promise<T>(.pending)
         dispatch {
             do {

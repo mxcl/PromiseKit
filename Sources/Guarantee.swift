@@ -209,7 +209,7 @@ public extension DispatchQueue {
 
 public extension Dispatcher {
     /**
-     Asynchronously executes the provided closure on a Dispatcher.
+     Executes the provided value-returning closure on a Dispatcher, yielding a Guarantee.
      
          dispatcher.guarantee {
             md5(input)
@@ -221,7 +221,7 @@ public extension Dispatcher {
      - Returns: A new `Guarantee` resolved by the result of the provided closure.
      - Note: There is no Promise/Thenable version of this due to Swift compiler ambiguity issues.
      */
-    func dispatch<T>(_: PMKNamespacer, _ body: @escaping () -> T) -> Guarantee<T> {
+    func dispatch<T>(_ body: @escaping () -> T) -> Guarantee<T> {
         let rg = Guarantee<T>(.pending)
         dispatch {
             rg.box.seal(body())
