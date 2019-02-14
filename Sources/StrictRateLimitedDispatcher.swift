@@ -20,21 +20,11 @@ import Foundation
 ///
 /// 100% thread safe.
 
-public class StrictRateLimitedDispatcher: Dispatcher {
+public class StrictRateLimitedDispatcher: RateLimitedDispatcherBase {
     
-    let maxDispatches: Int
-    let interval: TimeInterval
-    let queue: Dispatcher
-
-    private let serializer = DispatchQueue(label: "SRLD serializer")
-
-    private var nScheduled = 0
-    private var unscheduled = Queue<() -> Void>()
     internal var startTimeHistory: Queue<DispatchTime>
+    private var immediateDispatchesAvailable: Int
     private var latestDeadline = DispatchTime(uptimeNanoseconds: 0)
-    
-    private var cleanupNonce: Int64 = 0
-    private var cleanupWorkItem: DispatchWorkItem? { willSet { cleanupWorkItem?.cancel() }}
     
     /// A `PromiseKit` `Dispatcher` that executes no more than X executions every Y
     /// seconds. This is a sliding window, so executions occur as rapidly as
@@ -47,29 +37,26 @@ public class StrictRateLimitedDispatcher: Dispatcher {
     /// - Parameter perInterval: The length of the reference interval, in seconds.
     /// - Parameter queue: The DispatchQueue or Dispatcher on which to perform executions. May be serial or concurrent.
     
-    public init(maxDispatches: Int, perInterval interval: TimeInterval, queue: Dispatcher = DispatchQueue.global()) {
-        self.maxDispatches = maxDispatches
-        self.interval = interval
-        self.queue = queue
+    override init(maxDispatches: Int, perInterval interval: TimeInterval, queue: Dispatcher = DispatchQueue.global()) {
         startTimeHistory = Queue<DispatchTime>(maxDepth: maxDispatches)
-    }
-
-    public func dispatch(_ body: @escaping () -> Void) {
-        serializer.async {
-            self.unscheduled.enqueue(body)
-            self.scheduleNext()
-        }
+        immediateDispatchesAvailable = maxDispatches
+        super.init(maxDispatches: maxDispatches, perInterval: interval, queue: queue)
     }
     
-    private func scheduleNext() {
+    override func dispatchFromQueue() {
         
         cleanupNonce += 1
         
         guard nScheduled < maxDispatches else { return }
-        guard !unscheduled.isEmpty else { return }
+        guard !undispatched.isEmpty else { return }
         
+        let accountedFor = nScheduled + startTimeHistory.count + immediateDispatchesAvailable
+        assert(accountedFor == maxDispatches, "Dispatcher bookkeeping problem")
+
         var deadline = DispatchTime.now()
-        if !startTimeHistory.isEmpty {
+        if immediateDispatchesAvailable > 0 {
+            immediateDispatchesAvailable -= 1
+        } else {
             // Use the start time of a previous closure as a time reference. In practice,
             // past start times will normally be reported and recorded in monotonically
             // increasing sequence, which yields optimal scheduling. However, this is all
@@ -83,8 +70,9 @@ public class StrictRateLimitedDispatcher: Dispatcher {
             deadline = DispatchTime(uptimeNanoseconds: latestDeadline.uptimeNanoseconds + 1)
         }
         
-        let body = unscheduled.dequeue()
+        let body = undispatched.dequeue()
         // A Dispatcher has no asyncAfter; use the serializer queue for timing
+        print("body sched", deadline.rawValue)
         serializer.asyncAfter(deadline: deadline) {
             self.queue.dispatch {
                 let now = DispatchTime.now()
@@ -101,28 +89,17 @@ public class StrictRateLimitedDispatcher: Dispatcher {
     }
     
     private func recordActualStartTime(_ time: DispatchTime) {
-        nScheduled -= 1
+        print("body runat", time.rawValue)
+        print("body reportedat", DispatchTime.now().rawValue)
         startTimeHistory.enqueue(time)
-        scheduleNext()
-        if nScheduled == 0 && unscheduled.isEmpty {
-            scheduleCleanup()
-        }
+        super.recordActualStart()
     }
     
-    private func scheduleCleanup() {
-        cleanupWorkItem = DispatchWorkItem { [ weak self, nonce = self.cleanupNonce ] in
-            self?.cleanup(nonce)
-        }
-        serializer.asyncAfter(deadline: DispatchTime.now() + interval, execute: cleanupWorkItem!)
-    }
-    
-    private func cleanup(_ nonce: Int64) {
-        // Calls to cleanup() have to go through the serializer queue, so by by the time
-        // we get here, more activity may have occurred. Ergo, verify nonce.
+    override func cleanup(_ nonce: Int64) {
+        super.cleanup(nonce)
         guard nonce == cleanupNonce else { return }
         startTimeHistory.purge() // We're at least an interval past last start
-        unscheduled.compactStorage()
-        cleanupWorkItem = nil
+        immediateDispatchesAvailable = maxDispatches
     }
     
 }
