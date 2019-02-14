@@ -1,10 +1,31 @@
 import Dispatch
 
+/// A `PromiseKit` abstraction of a `DispatchQueue` that allows for a more
+/// flexible variety of implementations. (For technical reasons,
+/// `DispatchQueue` itself cannot be subclassed.)
+///
+/// `Dispatcher`s define a `dispatch` method that executes a supplied closure.
+/// Execution may be synchronous or asynchronous, serial
+/// or concurrent.
+///
+/// All `DispatchQueue`s are also valid `Dispatcher`s.
+///
+/// - SeeAlso:
+///   - `RateLimitedDispatcher`
+///   - `StrictRateLimitedDispatcher`
+///   - `ConcurrencyLimitedDispatcher`
+///   - `DispatchQueueDispatcher`
+///   - `CurrentThreadDispatcher`
+
 public protocol Dispatcher {
     func dispatch(_ body: @escaping () -> Void)
 }
 
-public class DispatchQueueDispatcher: Dispatcher {
+/// A `Dispatcher` class that bundles a `DispatchQueue` with
+/// a set of `DispatchWorkItemFlags`. Closures dispatched
+/// through this `Dispatcher` will use the specified flags.
+
+public struct DispatchQueueDispatcher: Dispatcher {
     
     let queue: DispatchQueue
     let flags: DispatchWorkItemFlags
@@ -20,6 +41,17 @@ public class DispatchQueueDispatcher: Dispatcher {
 
 }
 
+/// A `Dispatcher` class that executes all closures synchronously on
+/// the current thread.
+///
+/// Useful for temporarily disabling asynchrony and
+/// multithreading while debugging `PromiseKit` chains.
+///
+/// You can set `PromiseKit`'s default dispatching behavior to this mode
+/// by setting `conf.Q.map` and/or `conf.Q.return` to `nil`. (This is the
+/// same as assigning an instance of `CurrentThreadDispatcher` to these
+/// variables.)
+
 public struct CurrentThreadDispatcher: Dispatcher {
     public func dispatch(_ body: @escaping () -> Void) {
         body()
@@ -27,16 +59,15 @@ public struct CurrentThreadDispatcher: Dispatcher {
 }
 
 extension DispatchQueue: Dispatcher {
-    /// Explicit declaration required; actual function signature is not identical to protocol
     public func dispatch(_ body: @escaping () -> Void) {
         async(execute: body)
     }
 }
 
-/// Used as default parameter for backward compatibility since clients may explicitly
-/// specify "nil" to turn off dispatching. We need to distinguish three cases: explicit
-/// queue, explicit nil, and no value specified. Dispatchers from conf.D cannot directly
-/// be used as default parameter values because they are not necessarily DispatchQueues.
+// Used as default parameter for backward compatibility since clients may explicitly
+// specify "nil" to turn off dispatching. We need to distinguish three cases: explicit
+// queue, explicit nil, and no value specified. Dispatchers from conf.D cannot directly
+// be used as default parameter values because they are not necessarily DispatchQueues.
 
 public extension DispatchQueue {
     static var pmkDefault = DispatchQueue(label: "org.promisekit.sentinel")
@@ -51,13 +82,13 @@ public extension DispatchQueue {
     }
 }
 
-/// This hairball disambiguates all the various combinations of explicit arguments, default
-/// arguments, and configured defaults. In particular, a method that is given explicit work item
-/// flags but no DispatchQueue should still work (that is, the dispatcher should use those flags)
-/// as long as the configured default is actually some kind of DispatchQueue.
-///
-/// TODO: should conf.D = nil turn off dispatching even if explicit dispatch arguments are given?
-/// TODO: Move log prints into LogError enum if they are kept
+// This hairball disambiguates all the various combinations of explicit arguments, default
+// arguments, and configured defaults. In particular, a method that is given explicit work item
+// flags but no DispatchQueue should still work (that is, the dispatcher should use those flags)
+// as long as the configured default is actually some kind of DispatchQueue.
+//
+// TODO: should conf.D = nil turn off dispatching even if explicit dispatch arguments are given?
+// TODO: Move log prints into LogError enum if they are kept
 
 fileprivate func selectDispatcher(given: DispatchQueue?, configured: Dispatcher, flags: DispatchWorkItemFlags?) -> Dispatcher {
     guard let given = given else {
@@ -71,12 +102,12 @@ fileprivate func selectDispatcher(given: DispatchQueue?, configured: Dispatcher,
     } else if let flags = flags, let configured = configured as? DispatchQueue {
         return configured.asDispatcher(withFlags: flags)
     } else if flags != nil {
-        print("PromiseKit: warning: DispatchWorkItemFlags flags specified, but default dispatcher is not a DispatchQueue (ignored)")
+        print("PromiseKit: warning: DispatchWorkItemFlags flags specified, but default Dispatcher is not a DispatchQueue (ignored)")
     }
     return configured
 }
 
-/// Backward compatibility for DispatchQueues in public API
+// Backward compatibility for DispatchQueues in public API
 
 public extension Guarantee {
     
