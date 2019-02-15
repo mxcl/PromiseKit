@@ -21,22 +21,28 @@ public protocol Dispatcher {
     func dispatch(_ body: @escaping () -> Void)
 }
 
-/// A `Dispatcher` class that bundles a `DispatchQueue` with
-/// a set of `DispatchWorkItemFlags`. Closures dispatched
-/// through this `Dispatcher` will use the specified flags.
+/// A `Dispatcher` that bundles a `DispatchQueue` with
+/// a `DispatchGroup`, a set of `DispatchWorkItemFlags`, and a
+/// quality-of-service level. Closures dispatched through this
+/// `Dispatcher` will be submitted to the underlying `DispatchQueue`
+/// with the supplied components.
 
 public struct DispatchQueueDispatcher: Dispatcher {
     
     let queue: DispatchQueue
+    let group: DispatchGroup?
+    let qos: DispatchQoS
     let flags: DispatchWorkItemFlags
     
-    init(queue: DispatchQueue, flags: DispatchWorkItemFlags) {
+    init(queue: DispatchQueue, group: DispatchGroup? = nil, qos: DispatchQoS = .unspecified, flags: DispatchWorkItemFlags = []) {
         self.queue = queue
+        self.group = group
+        self.qos = qos
         self.flags = flags
     }
 
     public func dispatch(_ body: @escaping () -> Void) {
-        queue.async(flags: flags, execute: body)
+        queue.async(group: group, qos: qos, flags: flags, execute: body)
     }
 
 }
