@@ -93,7 +93,7 @@ public extension DispatchQueue {
 fileprivate func selectDispatcher(given: DispatchQueue?, configured: Dispatcher, flags: DispatchWorkItemFlags?) -> Dispatcher {
     guard let given = given else {
         if flags != nil {
-            print("PromiseKit: warning: nil DispatchQueue specified, but DispatchWorkItemFlags were also supplied (ignored)")
+            conf.logHandler(.nilDispatchQueueWithFlags)
         }
         return CurrentThreadDispatcher()
     }
@@ -102,7 +102,7 @@ fileprivate func selectDispatcher(given: DispatchQueue?, configured: Dispatcher,
     } else if let flags = flags, let configured = configured as? DispatchQueue {
         return configured.asDispatcher(withFlags: flags)
     } else if flags != nil {
-        print("PromiseKit: warning: DispatchWorkItemFlags flags specified, but default Dispatcher is not a DispatchQueue (ignored)")
+        conf.logHandler(.extraneousFlagsSpecified)
     }
     return configured
 }
