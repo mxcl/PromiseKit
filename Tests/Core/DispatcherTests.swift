@@ -59,6 +59,11 @@ class DispatcherTests: XCTestCase {
         PromiseKit.conf.D = oldConf
     }
     
+    func testPMKDefaultIdentity() {
+        // If this identity does not hold, the DispatchQueue wrapper API will not behave correctly
+        XCTAssert(DispatchQueue.pmkDefault === DispatchQueue.pmkDefault, "DispatchQueues are not object-identity-preserving on this platform")
+    }
+    
     func testDispatcherWithThrow() {
         let ex = expectation(description: "Dispatcher with throw")
         Promise { seal in
