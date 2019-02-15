@@ -74,7 +74,7 @@ public extension DispatchQueue {
 /// variables.)
 
 public struct CurrentThreadDispatcher: Dispatcher {
-    public func dispatch(_ body: @escaping () -> Void) {
+    public func dispatch(_ body: () -> Void) {
         body()
     }
 }
