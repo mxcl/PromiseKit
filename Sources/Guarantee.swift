@@ -201,9 +201,9 @@ public extension DispatchQueue {
      - Returns: A new `Guarantee` resolved by the result of the provided closure.
      */
     @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
-    final func async<T>(_: PMKNamespacer, group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], execute body: @escaping () -> T) -> Guarantee<T> {
+    final func async<T>(_: PMKNamespacer, group: DispatchGroup? = nil, qos: DispatchQoS? = nil, flags: DispatchWorkItemFlags? = nil, execute body: @escaping () -> T) -> Guarantee<T> {
         let rg = Guarantee<T>(.pending)
-        async(group: group, qos: qos, flags: flags) {
+        asyncD(group: group, qos: qos, flags: flags) {
             rg.box.seal(body())
         }
         return rg

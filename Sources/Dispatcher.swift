@@ -31,10 +31,10 @@ public struct DispatchQueueDispatcher: Dispatcher {
     
     let queue: DispatchQueue
     let group: DispatchGroup?
-    let qos: DispatchQoS
-    let flags: DispatchWorkItemFlags
+    let qos: DispatchQoS?
+    let flags: DispatchWorkItemFlags?
     
-    init(queue: DispatchQueue, group: DispatchGroup? = nil, qos: DispatchQoS = .unspecified, flags: DispatchWorkItemFlags = []) {
+    init(queue: DispatchQueue, group: DispatchGroup? = nil, qos: DispatchQoS? = nil, flags: DispatchWorkItemFlags? = nil) {
         self.queue = queue
         self.group = group
         self.qos = qos
@@ -42,9 +42,24 @@ public struct DispatchQueueDispatcher: Dispatcher {
     }
 
     public func dispatch(_ body: @escaping () -> Void) {
-        queue.async(group: group, qos: qos, flags: flags, execute: body)
+        queue.asyncD(group: group, qos: qos, flags: flags, execute: body)
     }
+}
 
+// Avoid having to hard-code any particular defaults for qos or flags
+public extension DispatchQueue {
+    final func asyncD(group: DispatchGroup? = nil, qos: DispatchQoS? = nil, flags: DispatchWorkItemFlags? = nil, execute body: @escaping () -> Void) {
+        switch (qos, flags) {
+        case (nil, nil):
+            async(group: group, execute: body)
+        case (nil, let flags?):
+            async(group: group, flags: flags, execute: body)
+        case (let qos?, nil):
+            async(group: group, qos: qos, execute: body)
+        case (let qos?, let flags?):
+            async(group: group, qos: qos, flags: flags, execute: body)
+        }
+    }
 }
 
 /// A `Dispatcher` class that executes all closures synchronously on
@@ -80,11 +95,12 @@ public extension DispatchQueue {
 }
 
 public extension DispatchQueue {
-    func asDispatcher(withFlags flags: DispatchWorkItemFlags? = nil) -> Dispatcher {
-        if let flags = flags {
-            return DispatchQueueDispatcher(queue: self, flags: flags)
+    /// Converts a `DispatchQueue` with given dispatching parameters into a `Dispatcher`
+    func asDispatcher(group: DispatchGroup? = nil, qos: DispatchQoS? = nil, flags: DispatchWorkItemFlags? = nil) -> Dispatcher {
+        if group == nil && qos == nil && flags == nil {
+            return self
         }
-        return self
+        return DispatchQueueDispatcher(queue: self, group: group, qos: qos, flags: flags)
     }
 }
 
@@ -92,9 +108,6 @@ public extension DispatchQueue {
 // arguments, and configured defaults. In particular, a method that is given explicit work item
 // flags but no DispatchQueue should still work (that is, the dispatcher should use those flags)
 // as long as the configured default is actually some kind of DispatchQueue.
-//
-// TODO: should conf.D = nil turn off dispatching even if explicit dispatch arguments are given?
-// TODO: Move log prints into LogError enum if they are kept
 
 fileprivate func selectDispatcher(given: DispatchQueue?, configured: Dispatcher, flags: DispatchWorkItemFlags?) -> Dispatcher {
     guard let given = given else {
@@ -104,9 +117,9 @@ fileprivate func selectDispatcher(given: DispatchQueue?, configured: Dispatcher,
         return CurrentThreadDispatcher()
     }
     if given !== DispatchQueue.pmkDefault {
-        return given.asDispatcher(withFlags: flags)
+        return given.asDispatcher(flags: flags)
     } else if let flags = flags, let configured = configured as? DispatchQueue {
-        return configured.asDispatcher(withFlags: flags)
+        return configured.asDispatcher(flags: flags)
     } else if flags != nil {
         conf.logHandler(.extraneousFlagsSpecified)
     }
