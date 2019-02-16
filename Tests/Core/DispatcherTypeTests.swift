@@ -2,7 +2,7 @@ import Dispatch
 @testable import PromiseKit
 import XCTest
 
-class DispatcherTypeTests: XCTestCase {
+class DispatcherTestBase: XCTestCase {
     
     lazy var scenarios = generateRateLimitScenarios()
     var rng = Xoroshiro(0x80D0082B8A9651BA, 0x49A8092CFD464A11) // Arbitrary seed
@@ -17,19 +17,6 @@ class DispatcherTypeTests: XCTestCase {
         let delays: [UInt32]
     }
     
-    func testRateLimitedDispatcher() {
-        for scenario in scenarios {
-            printScenarioDetails(scenario)
-            let dispatcher = RateLimitedDispatcher(maxDispatches: scenario.maxDispatches, perInterval: scenario.interval)
-            let (deltaT, mostConcurrent) = rateLimitTest(dispatcher, delays: scenario.delays, interval: scenario.interval)
-            // For the nonstrict RateLimitedDispatcher, burst rate may be up to 2X the goal.
-            XCTAssertLessThanOrEqual(mostConcurrent, scenario.maxDispatches * 2)
-            // Significantly under the goal rate is also a concern
-            XCTAssertGreaterThan(mostConcurrent, (scenario.maxDispatches * 3) / 4)
-            printTestResults(deltaT, mostConcurrent, scenario)
-        }
-    }
-    
     func printScenarioDetails(_ scenario: RateLimitScenario) {
         guard debug else { return }
         print("\nNew run: n = \(scenario.delays.count), most = \(scenario.maxDispatches),",
@@ -41,59 +28,6 @@ class DispatcherTypeTests: XCTestCase {
         guard debug else { return }
         let rateAvg = Double(scenario.delays.count) * scenario.interval / deltaT
         print("result actual max = \(concurrent), target max = \(scenario.maxDispatches), average rate = \(rateAvg)")
-    }
-
-    func testStrictRateLimitedDispatcher() {
-        for scenario in scenarios {
-            printScenarioDetails(scenario)
-            let dispatcher = StrictRateLimitedDispatcher(maxDispatches: scenario.maxDispatches, perInterval: scenario.interval)
-            let (deltaT, mostConcurrent) = rateLimitTest(dispatcher, delays: scenario.delays, interval: scenario.interval)
-            XCTAssertLessThanOrEqual(mostConcurrent, scenario.maxDispatches)
-            // Significantly under the goal rate is also a concern
-            XCTAssertGreaterThan(mostConcurrent, (scenario.maxDispatches * 3) / 4)
-            printTestResults(deltaT, mostConcurrent, scenario)
-            // print("tail wait start", DispatchTime.now().rawValue)
-            usleep(UInt32(scenario.interval * 1_000_000 * 1.25))
-            // print("tail wait end", DispatchTime.now().rawValue)
-            XCTAssert(dispatcher.startTimeHistory.count == 0, "Dispatcher did not clean up properly")
-        }
-    }
-    
-    func testConcurrencyLimitedDispatcher() {
-        
-        for scenario in scenarios {
-            
-            printScenarioDetails(scenario)
-            let dispatcher = ConcurrencyLimitedDispatcher(limit: scenario.maxDispatches)
-            
-            var nConcurrent = 0
-            var maxNConcurrent = 0
-            var nRun = 0
-            let serializer = DispatchQueue(label: "Concurrency test")
-            let ex = expectation(description: "Concurrency limit")
-            
-            for delay in scenario.delays {
-                usleep(delay)
-                Guarantee.value(42).done(on: dispatcher) { _ in
-                    serializer.sync {
-                        nConcurrent += 1
-                        maxNConcurrent = max(maxNConcurrent, nConcurrent)
-                    }
-                    usleep(UInt32.random(in: 10_000...100_000, using: &self.rng))
-                    serializer.sync {
-                        nConcurrent -= 1
-                        nRun += 1
-                        if nRun == scenario.delays.count {
-                            ex.fulfill()
-                        }
-                    }
-                }
-            }
-            
-            waitForExpectations(timeout: Double(scenario.delays.count) * 0.1)
-            XCTAssertEqual(maxNConcurrent, scenario.maxDispatches)
-            
-        }
     }
     
     func generateRateLimitScenarios() -> [RateLimitScenario] {
@@ -186,6 +120,85 @@ class DispatcherTypeTests: XCTestCase {
     }
 
 }
+
+class RateLimitTests: DispatcherTestBase {
+    
+    func testRateLimitedDispatcher() {
+        for scenario in scenarios {
+            printScenarioDetails(scenario)
+            let dispatcher = RateLimitedDispatcher(maxDispatches: scenario.maxDispatches, perInterval: scenario.interval)
+            let (deltaT, mostConcurrent) = rateLimitTest(dispatcher, delays: scenario.delays, interval: scenario.interval)
+            // For the nonstrict RateLimitedDispatcher, burst rate may be up to 2X the goal.
+            XCTAssertLessThanOrEqual(mostConcurrent, scenario.maxDispatches * 2)
+            // Significantly under the goal rate is also a concern
+            XCTAssertGreaterThan(mostConcurrent, (scenario.maxDispatches * 3) / 4)
+            printTestResults(deltaT, mostConcurrent, scenario)
+        }
+    }
+    
+}
+
+class StrictRateLimitTests: DispatcherTestBase {
+
+    func testStrictRateLimitedDispatcher() {
+        for scenario in scenarios {
+            printScenarioDetails(scenario)
+            let dispatcher = StrictRateLimitedDispatcher(maxDispatches: scenario.maxDispatches, perInterval: scenario.interval)
+            let (deltaT, mostConcurrent) = rateLimitTest(dispatcher, delays: scenario.delays, interval: scenario.interval)
+            XCTAssertLessThanOrEqual(mostConcurrent, scenario.maxDispatches)
+            // Significantly under the goal rate is also a concern
+            XCTAssertGreaterThan(mostConcurrent, (scenario.maxDispatches * 3) / 4)
+            printTestResults(deltaT, mostConcurrent, scenario)
+            // print("tail wait start", DispatchTime.now().rawValue)
+            usleep(UInt32(scenario.interval * 1_000_000 * 1.25))
+            // print("tail wait end", DispatchTime.now().rawValue)
+            XCTAssert(dispatcher.startTimeHistory.count == 0, "Dispatcher did not clean up properly")
+        }
+    }
+    
+}
+
+class ConcurrencyLimitTests: DispatcherTestBase {
+
+    func testConcurrencyLimitedDispatcher() {
+        
+        for scenario in scenarios {
+            
+            printScenarioDetails(scenario)
+            let dispatcher = ConcurrencyLimitedDispatcher(limit: scenario.maxDispatches)
+            
+            var nConcurrent = 0
+            var maxNConcurrent = 0
+            var nRun = 0
+            let serializer = DispatchQueue(label: "Concurrency test")
+            let ex = expectation(description: "Concurrency limit")
+            
+            for delay in scenario.delays {
+                usleep(delay)
+                Guarantee.value(42).done(on: dispatcher) { _ in
+                    serializer.sync {
+                        nConcurrent += 1
+                        maxNConcurrent = max(maxNConcurrent, nConcurrent)
+                    }
+                    usleep(UInt32.random(in: 10_000...100_000, using: &self.rng))
+                    serializer.sync {
+                        nConcurrent -= 1
+                        nRun += 1
+                        if nRun == scenario.delays.count {
+                            ex.fulfill()
+                        }
+                    }
+                }
+            }
+            
+            waitForExpectations(timeout: Double(scenario.delays.count) * 0.1)
+            XCTAssertEqual(maxNConcurrent, scenario.maxDispatches)
+            
+        }
+    }
+
+}
+
 
 // Reproducible, seedable RNG
 
