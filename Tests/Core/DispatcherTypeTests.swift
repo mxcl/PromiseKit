@@ -88,8 +88,8 @@ class DispatcherTestBase: XCTestCase {
         for delay in delays {
             usleep(delay)
             Guarantee.value(42).done(on: dispatcher) { _ in
+                let now = DispatchTime.now()
                 serializer.sync {
-                    let now = DispatchTime.now()
                     closureStartTimes.append(now)
                     if closureStartTimes.count == delays.count {
                         ex.fulfill()
