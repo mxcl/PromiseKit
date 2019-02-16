@@ -59,9 +59,11 @@ public extension CancellableThenable {
     }
     
     /**
-     The provided closure executes when this cancellable promise resolves.  This allows chaining cancellable promises.
+     The provided closure executes when this cancellable promise resolves.
      
-     - Parameter on: The queue to which the provided closure dispatches.
+     This allows chaining promises. The cancellable promise returned by the provided closure is resolved before the cancellable promise returned by this closure resolves.
+     
+     - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The closure that executes when this cancellable promise fulfills. It must return a cancellable promise.
      - Returns: A new cancellable promise that resolves when the cancellable promise returned from the provided closure resolves. For example:
 
@@ -77,7 +79,7 @@ public extension CancellableThenable {
      
            context.cancel()
      */
-    func then<V: CancellableThenable>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.U.T> {
+    func then<V: CancellableThenable>(on: Dispatcher = conf.D.map, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.U.T> {
 
         let cancelItemList = CancelItemList()
         
@@ -91,20 +93,22 @@ public extension CancellableThenable {
             }
         }
         
-        let promise = self.thenable.then(on: on, flags: flags, cancelBody)
+        let promise = self.thenable.then(on: on, cancelBody)
         return CancellablePromise(promise: promise, context: self.cancelContext, cancelItemList: cancelItemList)
     }
     
     /**
-     The provided closure executes when this cancellable promise resolves.  This allows chaining  promises and cancellable promises.
+     The provided closure executes when this cancellable promise resolves.
      
-     - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter body: The closure that executes when this cancellable promise fulfills. It must return a promise (not a cancellable promise).
+     This allows chaining promises. The promise returned by the provided closure is resolved before the cancellable promise returned by this closure resolves.
+     
+     - Parameter on: The dispatcher that executes the provided closure.
+     - Parameter body: The closure that executes when this promise fulfills. It must return a promise (not a cancellable promise).
      - Returns: A new cancellable promise that resolves when the promise returned from the provided closure resolves. For example:
 
            let context = firstly {
                URLSession.shared.cancellableDataTask(.promise, with: url1)
-           }.then { response in
+           }.cancellableThen { response in
                transform(data: response.data) // returns a Promise
            }.done { transformation in
                //…
@@ -114,7 +118,7 @@ public extension CancellableThenable {
      
            context.cancel()
      */
-    func cancellableThen<V: Thenable>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.T> {
+    func cancellableThen<V: Thenable>(on: Dispatcher = conf.D.map, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.T> {
         let cancelBody = { (value: U.T) throws -> V in
             if let error = self.cancelContext.removeItems(self.cancelItemList, clearList: true) {
                 throw error
@@ -123,7 +127,7 @@ public extension CancellableThenable {
             }
         }
         
-        let promise = self.thenable.then(on: on, flags: flags, cancelBody)
+        let promise = self.thenable.then(on: on, cancelBody)
         return CancellablePromise(promise, cancelContext: self.cancelContext)
     }
     
@@ -148,7 +152,7 @@ public extension CancellableThenable {
      
            context.cancel()
      */
-    func map<V>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping (U.T) throws -> V) -> CancellablePromise<V> {
+    func map<V>(on: Dispatcher = conf.D.map, _ transform: @escaping (U.T) throws -> V) -> CancellablePromise<V> {
         let cancelTransform = { (value: U.T) throws -> V in
             if let error = self.cancelContext.removeItems(self.cancelItemList, clearList: true) {
                 throw error
@@ -157,7 +161,7 @@ public extension CancellableThenable {
             }
         }
         
-        let promise = self.thenable.map(on: on, flags: flags, cancelTransform)
+        let promise = self.thenable.map(on: on, cancelTransform)
         return CancellablePromise(promise: promise, context: self.cancelContext)
     }
     
@@ -180,7 +184,7 @@ public extension CancellableThenable {
      
            context.cancel()
      */
-    func compactMap<V>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping (U.T) throws -> V?) -> CancellablePromise<V> {
+    func compactMap<V>(on: Dispatcher = conf.D.map, _ transform: @escaping (U.T) throws -> V?) -> CancellablePromise<V> {
         let cancelTransform = { (value: U.T) throws -> V? in
             if let error = self.cancelContext.removeItems(self.cancelItemList, clearList: true) {
                 throw error
@@ -189,7 +193,7 @@ public extension CancellableThenable {
             }
         }
         
-        let promise = self.thenable.compactMap(on: on, flags: flags, cancelTransform)
+        let promise = self.thenable.compactMap(on: on, cancelTransform)
         return CancellablePromise(promise: promise, context: self.cancelContext)
     }
     
@@ -199,8 +203,8 @@ public extension CancellableThenable {
      Equivalent to `map { x -> Void in`, but since we force the `Void` return Swift
      is happier and gives you less hassle about your closure’s qualification.
      
-     - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter body: The closure that is executed when this CancellablePromise is fulfilled.
+     - Parameter on: The dispatcher that executes the provided closure.
+     - Parameter body: The closure that is executed when this promise is fulfilled.
      - Returns: A new cancellable promise fulfilled as `Void`.
      
            let context = firstly {
@@ -213,7 +217,7 @@ public extension CancellableThenable {
      
            context.cancel()
      */
-    func done(on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, _ body: @escaping (U.T) throws -> Void) -> CancellablePromise<Void> {
+    func done(on: Dispatcher = conf.D.return, _ body: @escaping (U.T) throws -> Void) -> CancellablePromise<Void> {
         let cancelBody = { (value: U.T) throws -> Void in
             if let error = self.cancelContext.removeItems(self.cancelItemList, clearList: true) {
                 throw error
@@ -222,7 +226,7 @@ public extension CancellableThenable {
             }
         }
         
-        let promise = self.thenable.done(on: on, flags: flags, cancelBody)
+        let promise = self.thenable.done(on: on, cancelBody)
         return CancellablePromise(promise: promise, context: self.cancelContext)
     }
     
@@ -232,8 +236,8 @@ public extension CancellableThenable {
      This is like `done` but it returns the same value that the handler is fed.
      `get` immutably accesses the fulfilled value; the returned CancellablePromise maintains that value.
      
-     - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter body: The closure that is executed when this CancellablePromise is fulfilled.
+     - Parameter on: The dispatcher that executes the provided closure.
+     - Parameter body: The closure that is executed when this promise is fulfilled.
      - Returns: A new cancellable promise that is resolved with the value that the handler is fed. For example:
      
            let context = firstly {
@@ -250,8 +254,8 @@ public extension CancellableThenable {
      
            context.cancel()
      */
-    func get(on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, _ body: @escaping (U.T) throws -> Void) -> CancellablePromise<U.T> {
-        return map(on: on, flags: flags) {
+    func get(on: Dispatcher = conf.D.return, _ body: @escaping (U.T) throws -> Void) -> CancellablePromise<U.T> {
+        return map(on: on) {
             try body($0)
             return $0
         }
@@ -260,19 +264,19 @@ public extension CancellableThenable {
     /**
      The provided closure is executed with cancellable promise result.
 
-     This is like `get` but provides the Result<T> of the CancellablePromise so you can inspect the value of the chain at this point without causing any side effects.
+     This is like `get` but provides the Result<U.T> of the CancellablePromise so you can inspect the value of the chain at this point without causing any side effects.
 
-     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The closure that is executed with Result of CancellablePromise.
      - Returns: A new cancellable promise that is resolved with the result that the handler is fed. For example:
 
      promise.tap{ print($0) }.then{ /*…*/ }
      */
-    func tap(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(Result<U.T>) -> Void) -> CancellablePromise<U.T> {
+    func tap(on: Dispatcher = conf.D.map, _ body: @escaping(Result<U.T, Error>) -> Void) -> CancellablePromise<U.T> {
         let rp = CancellablePromise<U.T>.pending()
         rp.promise.cancelContext = self.cancelContext
         self.thenable.pipe { result in
-            on.async(flags: flags) {
+            on.dispatch {
                 if let error = self.cancelContext.removeItems(self.cancelItemList, clearList: true) {
                     rp.resolver.reject(error)
                 } else {
@@ -346,8 +350,8 @@ public extension CancellableThenable where U.T: Sequence {
              // $0 => [2,4,6]
          }
      */
-    func mapValues<V>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V]> {
-        return map(on: on, flags: flags) { try $0.map(transform) }
+    func mapValues<V>(on: Dispatcher = conf.D.map, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V]> {
+        return map(on: on) { try $0.map(transform) }
     }
 
     /**
@@ -361,8 +365,8 @@ public extension CancellableThenable where U.T: Sequence {
              // $0 => [1,1,2,2,3,3]
          }
      */
-    func flatMapValues<V: Sequence>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V.Iterator.Element]> {
-        return map(on: on, flags: flags) { (foo: U.T) in
+    func flatMapValues<V: Sequence>(on: Dispatcher = conf.D.map, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V.Iterator.Element]> {
+        return map(on: on) { (foo: U.T) in
             try foo.flatMap { try transform($0) }
         }
     }
@@ -378,13 +382,9 @@ public extension CancellableThenable where U.T: Sequence {
              // $0 => [1,2,3]
          }
      */
-    func compactMapValues<V>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(U.T.Iterator.Element) throws -> V?) -> CancellablePromise<[V]> {
-        return map(on: on, flags: flags) { foo -> [V] in
-          #if !swift(>=3.3) || (swift(>=4) && !swift(>=4.1))
-            return try foo.flatMap(transform)
-          #else
+    func compactMapValues<V>(on: Dispatcher = conf.D.map, _ transform: @escaping(U.T.Iterator.Element) throws -> V?) -> CancellablePromise<[V]> {
+        return map(on: on) { foo -> [V] in
             return try foo.compactMap(transform)
-          #endif
         }
     }
 
@@ -399,8 +399,8 @@ public extension CancellableThenable where U.T: Sequence {
              // $0 => [2,4,6]
          }
      */
-    func thenMap<V: CancellableThenable>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V.U.T]> {
-        return then(on: on, flags: flags) {
+    func thenMap<V: CancellableThenable>(on: Dispatcher = conf.D.map, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V.U.T]> {
+        return then(on: on) {
             cancellableWhen(fulfilled: try $0.map(transform))
         }
     }
@@ -416,8 +416,8 @@ public extension CancellableThenable where U.T: Sequence {
              // $0 => [2,4,6]
          }
      */
-    func cancellableThenMap<V: Thenable>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V.T]> {
-        return cancellableThen(on: on, flags: flags) {
+    func cancellableThenMap<V: Thenable>(on: Dispatcher = conf.D.map, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V.T]> {
+        return cancellableThen(on: on) {
             when(fulfilled: try $0.map(transform))
         }
     }
@@ -433,8 +433,8 @@ public extension CancellableThenable where U.T: Sequence {
              // $0 => [1,1,2,2,3,3]
          }
      */
-    func thenFlatMap<V: CancellableThenable>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V.U.T.Iterator.Element]> where V.U.T: Sequence {
-        return then(on: on, flags: flags) {
+    func thenFlatMap<V: CancellableThenable>(on: Dispatcher = conf.D.map, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V.U.T.Iterator.Element]> where V.U.T: Sequence {
+        return then(on: on) {
             cancellableWhen(fulfilled: try $0.map(transform))
         }.map(on: nil) {
             $0.flatMap { $0 }
@@ -452,8 +452,8 @@ public extension CancellableThenable where U.T: Sequence {
              // $0 => [1,1,2,2,3,3]
          }
      */
-    func cancellableThenFlatMap<V: Thenable>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V.T.Iterator.Element]> where V.T: Sequence {
-        return cancellableThen(on: on, flags: flags) {
+    func cancellableThenFlatMap<V: Thenable>(on: Dispatcher = conf.D.map, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V.T.Iterator.Element]> where V.T: Sequence {
+        return cancellableThen(on: on) {
             when(fulfilled: try $0.map(transform))
         }.map(on: nil) {
             $0.flatMap { $0 }
@@ -471,8 +471,8 @@ public extension CancellableThenable where U.T: Sequence {
              // $0 => [2,3]
          }
      */
-    func filterValues(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ isIncluded: @escaping (U.T.Iterator.Element) -> Bool) -> CancellablePromise<[U.T.Iterator.Element]> {
-        return map(on: on, flags: flags) {
+    func filterValues(on: Dispatcher = conf.D.map, _ isIncluded: @escaping (U.T.Iterator.Element) -> Bool) -> CancellablePromise<[U.T.Iterator.Element]> {
+        return map(on: on) {
             $0.filter(isIncluded)
         }
     }
@@ -490,8 +490,8 @@ public extension CancellableThenable where U.T: Collection {
         }
     }
 
-    func firstValue(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, where test: @escaping (U.T.Iterator.Element) -> Bool) -> CancellablePromise<U.T.Iterator.Element> {
-        return map(on: on, flags: flags) {
+    func firstValue(on: Dispatcher = conf.D.map, where test: @escaping (U.T.Iterator.Element) -> Bool) -> CancellablePromise<U.T.Iterator.Element> {
+        return map(on: on) {
             for x in $0 where test(x) {
                 return x
             }
@@ -514,7 +514,7 @@ public extension CancellableThenable where U.T: Collection {
 
 public extension CancellableThenable where U.T: Sequence, U.T.Iterator.Element: Comparable {
     /// - Returns: a cancellable promise fulfilled with the sorted values of this `Sequence`.
-    func sortedValues(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil) -> CancellablePromise<[U.T.Iterator.Element]> {
-        return map(on: on, flags: flags) { $0.sorted() }
+    func sortedValues(on: Dispatcher = conf.D.map) -> CancellablePromise<[U.T.Iterator.Element]> {
+        return map(on: on) { $0.sorted() }
     }
 }

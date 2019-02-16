@@ -18,15 +18,15 @@ public extension CancellableCatchMixin {
      of a chain. Often utility promises will not have a catch, instead
      delegating the error handling to the caller.
      
-     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter on: The dispatcher that executes the provided closure.
      - Parameter policy: The default policy does not execute your handler for cancellation errors.
-     - Parameter body: The handler to execute if this promise is rejected.
+     - Parameter execute: The handler to execute if this promise is rejected.
      - Returns: A promise finalizer.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
     @discardableResult
-    func `catch`(on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) -> Void) -> CancellableFinalizer {
-        return CancellableFinalizer(self.catchable.catch(on: on, flags: flags, policy: policy, body), cancel: self.cancelContext)
+    func `catch`(on: Dispatcher = conf.D.return, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) -> Void) -> CancellableFinalizer {
+        return CancellableFinalizer(self.catchable.catch(on: on, policy: policy, body), cancel: self.cancelContext)
     }
 }
 
@@ -46,8 +46,8 @@ public class CancellableFinalizer {
     
     /// `finally` is the same as `ensure`, but it is not chainable
     @discardableResult
-    public func finally(on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, _ body: @escaping () -> Void) -> CancelContext {
-        pmkFinalizer.finally(on: on, flags: flags, body)
+    public func finally(on: Dispatcher = conf.D.return, _ body: @escaping () -> Void) -> CancelContext {
+        pmkFinalizer.finally(on: on, body)
         return cancelContext
     }
     
@@ -83,7 +83,7 @@ public class CancellableFinalizer {
 }
 
 public extension CancellableCatchMixin {
-     /**
+    /**
      The provided closure executes when this cancellable promise rejects.
      
      Unlike `catch`, `recover` continues the chain.
@@ -100,12 +100,11 @@ public extension CancellableCatchMixin {
      
          context.cancel()
      
-     - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter policy: The default policy does not execute your handler for cancellation errors.
+     - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The handler to execute if this promise is rejected.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
-    func recover<V: CancellableThenable>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> V) -> CancellablePromise<M.T> where V.U.T == M.T {
+    func recover<V: CancellableThenable>(on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> V) -> CancellablePromise<M.T> where V.U.T == M.T {
         
         let cancelItemList = CancelItemList()
 
@@ -119,14 +118,14 @@ public extension CancellableCatchMixin {
             return rval.thenable
         }
         
-        let promise = self.catchable.recover(on: on, flags: flags, policy: policy, cancelBody)
+        let promise = self.catchable.recover(on: on, policy: policy, cancelBody)
         if thenable.result != nil && policy == .allErrors {
             self.cancelContext.recover()
         }
         return CancellablePromise(promise: promise, context: self.cancelContext, cancelItemList: cancelItemList)
     }
     
-     /**
+    /**
      The provided closure executes when this cancellable promise rejects.
      
      Unlike `catch`, `recover` continues the chain.
@@ -143,13 +142,12 @@ public extension CancellableCatchMixin {
      
          context.cancel()
      
-     - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter policy: The default policy does not execute your handler for cancellation errors.
+     - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The handler to execute if this promise is rejected.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      - Note: Methods with the `cancellable` prefix create a new CancellablePromise, and those without the `cancellable` prefix accept an existing CancellablePromise.
      */
-    func cancellableRecover<V: Thenable>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> V) -> CancellablePromise<M.T> where V.T == M.T {
+    func cancellableRecover<V: Thenable>(on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> V) -> CancellablePromise<M.T> where V.T == M.T {
         
         let cancelBody = { (error: Error) throws -> V in
             _ = self.cancelContext.removeItems(self.cancelItemList, clearList: true)
@@ -160,7 +158,7 @@ public extension CancellableCatchMixin {
             return rval
         }
         
-        let promise = self.catchable.recover(on: on, flags: flags, policy: policy, cancelBody)
+        let promise = self.catchable.recover(on: on, policy: policy, cancelBody)
         if thenable.result != nil && policy == .allErrors {
             self.cancelContext.recover()
         }
@@ -189,24 +187,24 @@ public extension CancellableCatchMixin {
      
          context.cancel()
 
-     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The closure that executes when this promise resolves.
      - Returns: A new promise, resolved with this promise’s resolution.
      */
-    func ensure(on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, _ body: @escaping () -> Void) -> CancellablePromise<M.T> {
+    func ensure(on: Dispatcher = conf.D.return, _ body: @escaping () -> Void) -> CancellablePromise<M.T> {
         let rp = CancellablePromise<M.T>.pending()
         rp.promise.cancelContext = self.cancelContext
         self.catchable.pipe { result in
-            on.async(flags: flags) {
+            on.dispatch {
                 body()
                 switch result {
-                case .fulfilled(let value):
+                case .success(let value):
                     if let error = self.cancelContext.cancelledError {
                         rp.resolver.reject(error)
                     } else {
                         rp.resolver.fulfill(value)
                     }
-                case .rejected(let error):
+                case .failure(let error):
                     rp.resolver.reject(error)
                 }
             }
@@ -232,27 +230,27 @@ public extension CancellableCatchMixin {
      
          context.cancel()
 
-     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The closure that executes when this promise resolves.
-     - Returns: A new cancellable promise, resolved with this promise’s resolution.
+     - Returns: A new promise, resolved with this promise’s resolution.
      */
-    func ensureThen(on: DispatchQueue? = conf.Q.return, flags: DispatchWorkItemFlags? = nil, _ body: @escaping () -> CancellablePromise<Void>) -> CancellablePromise<M.T> {
+    func ensureThen(on: Dispatcher = conf.D.return, _ body: @escaping () -> CancellablePromise<Void>) -> CancellablePromise<M.T> {
         let rp = CancellablePromise<M.T>.pending()
         rp.promise.cancelContext = cancelContext
         self.catchable.pipe { result in
-            on.async(flags: flags) {
+            on.dispatch {
                 let rv = body()
                 rp.promise.appendCancelContext(from: rv)
                 
                 rv.done {
                     switch result {
-                    case .fulfilled(let value):
+                    case .success(let value):
                         if let error = self.cancelContext.cancelledError {
                             rp.resolver.reject(error)
                         } else {
                             rp.resolver.fulfill(value)
                         }
-                    case .rejected(let error):
+                    case .failure(let error):
                         rp.resolver.reject(error)
                     }
                 }.catch(policy: .allErrors) {
@@ -281,12 +279,11 @@ public extension CancellableCatchMixin where M.T == Void {
      
      This variant of `recover` ensures that no error is thrown from the handler and allows specifying a catch policy.
      
-     - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter policy: The default policy does not execute your handler for cancellation errors.
+     - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The handler to execute if this promise is rejected.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
-    func recover(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> Void) -> CancellablePromise<Void> {
+    func recover(on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> Void) -> CancellablePromise<Void> {
         let cancelBody = { (error: Error) throws -> Void in
             _ = self.cancelContext.removeItems(self.cancelItemList, clearList: true)
             try body(error)
@@ -295,7 +292,7 @@ public extension CancellableCatchMixin where M.T == Void {
             }
         }
         
-        let promise = self.catchable.recover(on: on, flags: flags, policy: policy, cancelBody)
+        let promise = self.catchable.recover(on: on, policy: policy, cancelBody)
         if thenable.result != nil && policy == .allErrors {
             self.cancelContext.recover()
         }

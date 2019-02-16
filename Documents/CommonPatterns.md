@@ -250,54 +250,15 @@ for whatever remains of the 0.3 seconds before continuing the chain.
 
 ## Cancellation
 
-Promises don’t have a `cancel` function, but they do support cancellation through a
-special error type that conforms to the `CancellableError` protocol.
+Starting with version 7, PromiseKit explicitly supports cancellation of promises and
+promise chains. There is a new class called `CancellablePromise` that defines a `cancel`
+method.  Use the `cancellable` global function to obtain a `CancellablePromise` from a
+`Promise`.
 
-```swift
-func foo() -> (Promise<Void>, cancel: () -> Void) {
-    let task = Task(…)
-    var cancelme = false
+Invoking `cancel` will both reject the promise with `PMKError.cancelled` and cancel any
+underlying asynchronous task(s).
 
-    let promise = Promise<Void> { seal in
-        task.completion = { value in
-            guard !cancelme else { return reject(PMKError.cancelled) }
-            seal.fulfill(value)
-        }
-        task.start()
-    }
-
-    let cancel = {
-        cancelme = true
-        task.cancel()
-    }
-
-    return (promise, cancel)
-}
-```
-
-Promises don’t have a `cancel` function because you don’t want code outside of
-your control to be able to cancel your operations--*unless*, of course, you explicitly
-want to enable that behavior. In cases where you do want cancellation, the exact way 
-that it should work will vary depending on how the underlying task supports cancellation.
-PromiseKit provides cancellation primitives but no concrete API.
-
-Cancelled chains do not call `catch` handlers by default. However you can
-intercept cancellation if you like:
-
-```swift
-foo.then {
-    //…
-}.catch(policy: .allErrors) {
-    // cancelled errors are handled *as well*
-}
-```
-
-**Important**: Canceling a promise chain is *not* the same as canceling the underlying
-asynchronous task. Promises are wrappers around asynchronicity, but they have no
-control over the underlying tasks. If you need to cancel an underlying task, you
-need to cancel the underlying task!
-
-> The library [CancellablePromiseKit](https://github.com/johannesd/CancellablePromiseKit) extends the concept of Promises to fully cover cancellable tasks.
+For full details see [Cancelling Promises](Cancel.md).
 
 ## Retry / Polling
 

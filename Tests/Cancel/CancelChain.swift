@@ -182,7 +182,7 @@ class CancelChain: XCTestCase {
     
     func isFulfilled<T>(_ p: CancellablePromise<T>) -> Bool {
         if let result = p.promise.result {
-            if case .fulfilled = result {
+            if case .success = result {
                 return true
             } else {
                 return false

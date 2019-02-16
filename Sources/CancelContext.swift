@@ -9,8 +9,9 @@ public class CancelContext: Hashable {
         return lhs === rhs
     }
     
-    public var hashValue: Int { return hashValueInternal! }
-    private var hashValueInternal: Int?
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(ObjectIdentifier(self))
+    }
 
     // Create a barrier queue that is used as a read/write lock for the CancelContext
     //   For reads:  barrier.sync { }
@@ -20,10 +21,6 @@ public class CancelContext: Hashable {
     private var cancelItems = [CancelItem]()
     private var cancelItemSet = Set<CancelItem>()
     private var timeoutWorkItem: DispatchWorkItem?
-    
-    init() {
-        self.hashValueInternal = ObjectIdentifier(self).hashValue
-    }
     
     /**
      Cancel all members of the promise chain and their associated asynchronous operations.
@@ -197,7 +194,7 @@ public class CancelContext: Hashable {
                 // The `list` parameter should match a block of items in the cancelItemList, remove them from the cancelItemList
                 // in one operation for efficiency
                 if cancelItemSet.remove(list.items[0]) != nil {
-                    let removeIndex = cancelItems.index(of: list.items[0])!
+                    let removeIndex = cancelItems.firstIndex(of: list.items[0])!
                     while currentIndex < list.items.count {
                         let item = list.items[currentIndex]
                         if item != cancelItems[removeIndex + currentIndex] {
@@ -213,7 +210,7 @@ public class CancelContext: Hashable {
                 while currentIndex < list.items.count {
                     let item = list.items[currentIndex]
                     if cancelItemSet.remove(item) != nil {
-                        cancelItems.remove(at: cancelItems.index(of: item)!)
+                        cancelItems.remove(at: cancelItems.firstIndex(of: item)!)
                     }
                     currentIndex += 1
                 }
@@ -256,8 +253,9 @@ fileprivate class CancelItem: Hashable {
         return lhs === rhs
     }
     
-    var hashValue: Int { return hashValueInternal! }
-    var hashValueInternal: Int?
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(ObjectIdentifier(self))
+    }
     
     let task: CancellableTask?
     var reject: ((Error) -> Void)?
@@ -267,13 +265,11 @@ fileprivate class CancelItem: Hashable {
     init(task: CancellableTask?, reject: ((Error) -> Void)?) {
         self.task = task
         self.reject = reject
-        self.hashValueInternal = ObjectIdentifier(self).hashValue
     }
     
     init(context: CancelContext) {
         self.task = nil
         self.context = context
-        self.hashValueInternal = ObjectIdentifier(self).hashValue
     }
     
     func cancel(error: Error, visited: Set<CancelContext>? = nil) {

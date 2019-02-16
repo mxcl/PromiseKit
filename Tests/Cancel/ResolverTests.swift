@@ -289,12 +289,25 @@ class WrapTests: XCTestCase {
     func testIsFulfilled() {
         let p1 = cancellable(Promise.value(()))
         p1.cancel()
-        XCTAssertTrue(p1.result?.isFulfilled ?? false)
+        
+        var success1 = false
+        if let r1 = p1.result, case .success = r1 {
+            success1 = true
+        }
+        XCTAssertTrue(success1)
         XCTAssertTrue(p1.isCancelled)
         
         let p2 = CancellablePromise<Int>(error: Error.test)
         p2.cancel()
-        XCTAssertFalse(p2.result?.isFulfilled ?? true)
+        var success2 = true
+        if let r2 = p2.result {
+            if case .success = r2 {
+                success2 = true
+            } else {
+                success2 = false
+            }
+        }
+        XCTAssertFalse(success2)
         XCTAssertTrue(p2.isCancelled)
     }
 

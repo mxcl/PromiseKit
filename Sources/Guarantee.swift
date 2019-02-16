@@ -26,7 +26,7 @@ public final class Guarantee<T>: Thenable {
     /// Returns a pending `Guarantee` that can be resolved with the provided closure’s parameter.
     public convenience init(cancellableTask: CancellableTask, resolver body: (@escaping(T) -> Void) -> Void) {
         self.init(resolver: body)
-        self.cancellableTask = cancellableTask
+        setCancellableTask(cancellableTask)
     }
     
     /// - See: `Thenable.pipe`
@@ -61,21 +61,13 @@ public final class Guarantee<T>: Thenable {
     }
 
     final private class Box<T>: EmptyBox<T> {
+        var cancelled = false
         deinit {
             switch inspect() {
             case .pending:
-                PromiseKit.conf.logHandler(.pendingGuaranteeDeallocated)
-            case .resolved:
-                break
-            }
-        }
-    }
-
-    final private class Box<T>: EmptyBox<T> {
-        deinit {
-            switch inspect() {
-            case .pending:
-                PromiseKit.conf.logHandler(.pendingGuaranteeDeallocated)
+                if !cancelled {
+                    PromiseKit.conf.logHandler(.pendingGuaranteeDeallocated)
+                }
             case .resolved:
                 break
             }
@@ -94,7 +86,30 @@ public final class Guarantee<T>: Thenable {
     var cancellableTask: CancellableTask?
     
     public func setCancellableTask(_ task: CancellableTask) {
-        cancellableTask = task
+        if let gb = (box as? Guarantee<T>.Box<T>) {
+            cancellableTask = CancellableWrapper(box: gb, task: task)
+        } else {
+            cancellableTask = task
+        }
+    }
+
+    final private class CancellableWrapper: CancellableTask {
+        let box: Guarantee<T>.Box<T>
+        let task: CancellableTask
+
+        init(box: Guarantee<T>.Box<T>, task: CancellableTask) {
+            self.box = box
+            self.task = task
+        }
+
+        func cancel() {
+            box.cancelled = true
+            task.cancel()
+        }
+
+        var isCancelled: Bool {
+            return task.isCancelled
+        }
     }
 }
 

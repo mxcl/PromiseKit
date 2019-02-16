@@ -450,13 +450,13 @@ public func cancellableWhen<It: IteratorProtocol>(fulfilled promiseIterator: It,
  - Note: Any promises that error are implicitly consumed.
  - Remark: Doesn't take CancellableThenable due to protocol associatedtype paradox
 */
-public func cancellableWhen<T>(resolved promises: CancellablePromise<T>...) -> CancellablePromise<[Result<T>]> {
+public func cancellableWhen<T>(resolved promises: CancellablePromise<T>...) -> CancellablePromise<[Result<T, Error>]> {
     return cancellableWhen(resolved: promises)
 }
 
 /// Waits on all provided cancellable promises.
 /// - SeeAlso: `cancellableWhen(resolved:)`
-public func cancellableWhen<T>(resolved promises: [CancellablePromise<T>]) -> CancellablePromise<[Result<T>]> {
+public func cancellableWhen<T>(resolved promises: [CancellablePromise<T>]) -> CancellablePromise<[Result<T, Error>]> {
     let rp = CancellablePromise(when(resolved: asPromises(promises)))
     for p in promises {
         rp.appendCancelContext(from: p)
