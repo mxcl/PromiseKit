@@ -74,15 +74,16 @@ tools.
 
 # PromiseKit is Thousands of Hours of Work
 
-Hi, I’m Max Howell and I have written a lot of open source software, and
-probably you already use some of it (Homebrew anyone?). Please help me so I
-can continue to make tools and software you need and love. I appreciate it x.
+Hey there, I’m Max Howell. I’m a prolific producer of open source software and
+probably you already use some of it (for example, I created [`brew`]). I work
+full-time on open source and it’s hard; currently *I earn less than minimum
+wage*. Please help me continue my work, I appreciate it 🙏🏻
 
 <a href="https://www.patreon.com/mxcl">
 	<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
 </a>
 
-[Other donation/tipping options](http://mxcl.github.io/donate/)
+[Other ways to say thanks](http://mxcl.github.io/#donate).
 
 # Documentation
 
@@ -96,7 +97,7 @@ can continue to make tools and software you need and love. I appreciate it x.
   * [Objective-C Guide](Documents/ObjectiveC.md)
   * [Troubleshooting](Documents/Troubleshooting.md) (e.g., solutions to common compile errors)
   * [Appendix](Documents/Appendix.md)
-* [API Reference](https://mxcl.github.io/PromiseKit/reference/v6/)
+* [API Reference](https://mxcl.github.io/PromiseKit/reference/v7/Classes/Promise.html)
 
 # Extensions
 

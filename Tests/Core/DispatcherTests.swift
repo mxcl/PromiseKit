@@ -38,23 +38,24 @@ class DispatcherTests: XCTestCase {
         let oldConf = PromiseKit.conf.D
         PromiseKit.conf.D.map = dispatcher
         PromiseKit.conf.D.return = dispatcherB
-        XCTAssertNil(PromiseKit.conf.Q.map)    // Not representable as DispatchQueues
-        XCTAssertNil(PromiseKit.conf.Q.return)
+        XCTAssertNil(PromiseKit.conf.Q.map, "conf.Q.map not nil")    // Not representable as DispatchQueues
+        XCTAssertNil(PromiseKit.conf.Q.return, "conf.Q.return not nil")
         Promise { seal in
             seal.fulfill(42)
         }.map {
             $0 + 10
         }.done() {
-            XCTAssertEqual($0, 52)
-            XCTAssertEqual(self.dispatcher.dispatchCount, 1)
-            XCTAssertEqual(self.dispatcherB.dispatchCount, 1)
+            XCTAssertEqual($0, 52, "summation result != 52")
+            XCTAssertEqual(self.dispatcher.dispatchCount, 1, "map dispatcher count != 1")
+            XCTAssertEqual(self.dispatcherB.dispatchCount, 1, "return dispatcher count != 1")
             ex.fulfill()
         }.cauterize()
         waitForExpectations(timeout: 1)
-        PromiseKit.conf.D.map = DispatchQueue.main
-        PromiseKit.conf.Q.return = .main
-        XCTAssert(PromiseKit.conf.Q.map === DispatchQueue.main)
-        XCTAssert((PromiseKit.conf.D.return as? DispatchQueue)! === DispatchQueue.main)
+        let testQueue = DispatchQueue(label: "test queue")
+        PromiseKit.conf.D.map = testQueue  // Assign DispatchQueue to Dispatcher variable
+        PromiseKit.conf.Q.return = testQueue   // Assign DispatchQueue to DispatchQueue variable
+        XCTAssert(PromiseKit.conf.Q.map === testQueue, "did not get main DispatchQueue back from map")
+        XCTAssert((PromiseKit.conf.D.return as? DispatchQueue)! === testQueue, "did not get main DispatchQueue back from return")
         PromiseKit.conf.D = oldConf
     }
     

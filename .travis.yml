@@ -83,19 +83,13 @@ jobs:
       script: pod trunk push --allow-warnings
 
     - name: Generate Documentation
-      git.depth: false
+      os: osx
       install: gem install jazzy
       script: |
         set -exo pipefail
-        jazzy \
-          --theme fullwidth \
-          --output foo \
-          --documentation=Documentation/*.md \
-          --readme Documentation/README.md \
-          --github_url https://github.com/mxcl/PromiseKit \
-          --xcodebuild-arguments UseModernBuildSystem=NO \
-          --module PromiseKit \
-          --module-version "$TRAVIS_TAG"
+        jazzy --config .github/jazzy.yml \
+              --github_url "https://github.com/$TRAVIS_REPO_SLUG" \
+              --module-version "$TRAVIS_TAG"
         git checkout gh-pages
         rm -rf reference/v7
         mv foo reference/v7
@@ -103,5 +97,5 @@ jobs:
         git config user.name  "Travis"
         git config user.email "jazzy@travis-ci.com"
         git commit -m "Updated docs for v$TRAVIS_TAG"
-        git remote add secure-origin https://${GITHUB_TOKEN}@github.com/mxcl/PromiseKit.git
+        git remote add secure-origin https://${GITHUB_TOKEN}@github.com/$TRAVIS_REPO_SLUG.git
         git push secure-origin gh-pages

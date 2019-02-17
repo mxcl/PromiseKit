@@ -1,0 +1,18 @@
+module: PromiseKit
+custom_categories:
+  - name: Core Components
+    children:
+      - Promise
+      - Guarantee
+      - Thenable
+      - CatchMixin
+      - Resolver
+xcodebuild_arguments:
+  - UseModernBuildSystem=NO
+output:
+  ../output
+  # output directory is relative to config file… ugh
+readme:
+  Documentation/README.md
+theme:
+  fullwidth
