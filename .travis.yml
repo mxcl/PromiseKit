@@ -49,7 +49,7 @@ jobs:
       cache: cocoapods
       language: objective-c
       before_install: mv .github/PromiseKit.podspec .
-      install: gem install cocoapods
+      install: gem install cocoapods --pre -v 1.7.0.beta.1
       script: pod lib lint --subspec=PromiseKit/CorePromise --fail-fast --swift-version=$SWIFT
     - <<: *pod
       osx_image: xcode9.2
@@ -106,7 +106,7 @@ jobs:
       env: SWIFT_BUILD_VERSION=4 SWIFT_VERSION=4.1.2
       name: Linux / Swift 4.1
     - <<: *linux
-      env: SWIFT_BUILD_VERSION=4 SWIFT_VERSION=4.2.1
+      env: SWIFT_BUILD_VERSION=4 SWIFT_VERSION=4.2.2
       name: Linux / Swift 4.2
       stage: test
       script: swift test -Xswiftc -swift-version -Xswiftc 4
@@ -184,10 +184,11 @@ jobs:
       name: SwiftPM / macOS / Xcode 10.1 / Swift 4.2
 
     - stage: deploy
+      install: gem install cocoapods --pre 1.7.0-beta.1
       before_script: mv .github/PromiseKit.podspec .
       script: |
         set -exo pipefail
-        pod trunk push --verbose --allow-warnings --swift-version=4.2 | tee pod.log | ruby -e 'ARGF.each{ print "." }'
+        pod trunk push --verbose --allow-warnings | tee pod.log | ruby -e 'ARGF.each{ print "." }'
       # ^^ pipe because Travis times us out if there is no output
       # AND `pod` defaults to hardly any output
       # BUT `--verbose` generates so much output that Travis kills our script due to *too much* output!
