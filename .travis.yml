@@ -2,7 +2,7 @@ branches:
   only:
     - master
     - v4
-    - v7
+    - /^v7/
     - legacy-1.x
     - /^\d+\.\d+\.\d+$/
 
