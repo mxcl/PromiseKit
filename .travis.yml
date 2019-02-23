@@ -4,7 +4,7 @@ osx_image: xcode10.2
 
 branches:
   only:
-    - v7
+    - /^v7/
     - master
     - v6
     - v4
