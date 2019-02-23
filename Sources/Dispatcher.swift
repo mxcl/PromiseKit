@@ -6,16 +6,9 @@ import Dispatch
 ///
 /// `Dispatcher`s define a `dispatch` method that executes a supplied closure.
 /// Execution may be synchronous or asynchronous, serial
-/// or concurrent.
+/// or concurrent, and can occur on any thread.
 ///
 /// All `DispatchQueue`s are also valid `Dispatcher`s.
-///
-/// - SeeAlso:
-///   - `RateLimitedDispatcher`
-///   - `StrictRateLimitedDispatcher`
-///   - `ConcurrencyLimitedDispatcher`
-///   - `DispatchQueueDispatcher`
-///   - `CurrentThreadDispatcher`
 
 public protocol Dispatcher {
     func dispatch(_ body: @escaping () -> Void)
@@ -419,7 +412,7 @@ public extension CatchMixin {
      - Parameter policy: The default policy does not execute your handler for cancellation errors.
      - Parameter execute: The handler to execute if this promise is rejected.
      - Returns: A promise finalizer.
-     - SeeAlso: [Cancellation](http://https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation/docs/)
+     - SeeAlso: [Cancellation](http://https://github.com/mxcl/PromiseKit/blob/master/Documents/CommonPatterns.md#cancellation/docs/)
      */
     @discardableResult
     func `catch`(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) -> Void) -> PMKFinalizer {
@@ -442,7 +435,7 @@ public extension CatchMixin {
      
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter body: The handler to execute if this promise is rejected.
-     - SeeAlso: [Cancellation](http://https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation/docs/)
+     - SeeAlso: [Cancellation](http://https://github.com/mxcl/PromiseKit/blob/master/Documents/CommonPatterns.md#cancellation/docs/)
      */
     func recover<U: Thenable>(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> U) -> Promise<T> where U.T == T {
         let dispatcher = selectDispatcher(given: on, configured: conf.D.map, flags: flags)
@@ -455,7 +448,7 @@ public extension CatchMixin {
      - Note it is logically impossible for this to take a `catchPolicy`, thus `allErrors` are handled.
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter body: The handler to execute if this promise is rejected.
-     - SeeAlso: [Cancellation](http://https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation/docs/)
+     - SeeAlso: [Cancellation](http://https://github.com/mxcl/PromiseKit/blob/master/Documents/CommonPatterns.md#cancellation/docs/)
      */
     @discardableResult
     func recover(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(Error) -> Guarantee<T>) -> Guarantee<T> {
@@ -526,7 +519,7 @@ public extension CatchMixin where T == Void {
      
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter body: The handler to execute if this promise is rejected.
-     - SeeAlso: [Cancellation](http://https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation/docs/)
+     - SeeAlso: [Cancellation](http://https://github.com/mxcl/PromiseKit/blob/master/Documents/CommonPatterns.md#cancellation/docs/)
      */
     @discardableResult
     func recover(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(Error) -> Void) -> Guarantee<Void> {
@@ -541,7 +534,7 @@ public extension CatchMixin where T == Void {
      
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter body: The handler to execute if this promise is rejected.
-     - SeeAlso: [Cancellation](http://https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation/docs/)
+     - SeeAlso: [Cancellation](http://https://github.com/mxcl/PromiseKit/blob/master/Documents/CommonPatterns.md#cancellation/docs/)
      */
     func recover(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> Void) -> Promise<Void> {
         let dispatcher = selectDispatcher(given: on, configured: conf.D.map, flags: flags)

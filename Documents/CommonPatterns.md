@@ -82,8 +82,10 @@ class MyRestAPI {
 }
 ```
 
-All PromiseKit handlers take an `on` parameter that lets you designate the dispatch queue
-on which to run the handler. The default is always the main queue.
+All PromiseKit handlers take an `on` parameter that lets you designate a `Dispatcher` that
+will run the handler. Usually, the dispatcher is just a plain-vanilla `DispatchQueue`, but you
+can write your own if you like. The default is always `DispatchQueue.main`, which is a
+serial (nonconcurrent) queue.
 
 PromiseKit is *entirely* thread safe.
 
