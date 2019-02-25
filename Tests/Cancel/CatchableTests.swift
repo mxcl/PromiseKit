@@ -25,7 +25,7 @@ class CatchableTests: XCTestCase {
                 ex.1.fulfill()
             }
 
-            p.cancel(error: error)
+            p.cancel(with: error)
 
             wait(for: [ex.0, ex.1], timeout: 10)
         }
@@ -48,7 +48,7 @@ class CatchableTests: XCTestCase {
             ex.fulfill()
         }
 
-        p.cancel(error: Error.dummy)
+        p.cancel(with: Error.dummy)
 
         wait(for: [ex], timeout: 1)
     }
@@ -340,6 +340,48 @@ extension CatchableTests {
         }
 
         wait(for: [ex], timeout: 1)
+    }
+    
+    func testCancellableFinalizerHelpers() {
+        let ex = expectation(description: "")
+
+        let f = cancellable(Promise.value(1)).done { _ in
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
+        }
+        f.cancel()
+
+        XCTAssertEqual(f.isCancelled, true)
+        XCTAssertEqual(f.cancelAttempted, true)
+        XCTAssert(f.cancelledError?.isCancelled ?? false)
+
+        wait(for: [ex], timeout: 1)
+    }
+
+    func testCancellableRecoverFromError() {
+        let ex = expectation(description: "")
+
+        let p = cancellable(Promise(error: PMKError.emptySequence)).cancellableRecover(policy: .allErrors) { _ in
+            Promise.value(1)
+        }.done {
+            XCTAssertEqual($0, 1)
+            ex.fulfill()
+        }
+        let f = p.catch(policy: .allErrors) { _ in
+            XCTFail()
+        }
+        
+        XCTAssertEqual(f.isCancelled, false)
+        XCTAssertEqual(f.cancelAttempted, false)
+        XCTAssert(f.cancelledError == nil)
+        XCTAssert(p.cancelledError == nil)
+        
+        wait(for: [ex], timeout: 1)
+
+        XCTAssertEqual(p.isPending, false)
+        XCTAssertEqual(p.isResolved, true)
+        XCTAssertEqual(p.isFulfilled, true)        
     }
 }
 

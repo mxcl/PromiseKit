@@ -1,3 +1,5 @@
+import struct Foundation.TimeInterval
+
 @inline(__always)
 private func _race<U: Thenable>(_ thenables: [U]) -> Promise<U.T> {
     let rp = Promise<U.T>(.pending)
@@ -59,8 +61,9 @@ public func race<T>(_ guarantees: Guarantee<T>...) -> Guarantee<T> {
 //////////////////////////////////////////////////////////// Cancellation
 
 /**
- Resolves with the first resolving cancellable promise from a set of cancellable promises. Calling `cancel` on the
- race promise cancels all pending promises.
+ Resolves with the first resolving cancellable promise from a set of cancellable promises. Calling
+ `cancel` on the race promise cancels all pending promises. All promises will be cancelled if any
+ promise rejects.
 
      let racePromise = race(promise1, promise2, promise3).then { winner in
          //…
@@ -79,8 +82,8 @@ public func race<V: CancellableThenable>(_ thenables: V...) -> CancellablePromis
 }
 
 /**
- Resolves with the first resolving promise from a set of promises. Calling `cancel` on the
- race promise cancels all pending promises.
+ Resolves with the first resolving promise from a set of promises. Calling `cancel` on the race
+ promise cancels all pending promises. All promises will be cancelled if any promise rejects.
 
      let racePromise = race(promise1, promise2, promise3).then { winner in
          //…
@@ -99,9 +102,43 @@ public func race<V: CancellableThenable>(_ thenables: [V]) -> CancellablePromise
         return CancellablePromise(error: PMKError.badInput)
     }
     
+    let cancelThenables: (Result<V.U.T, Error>) -> Void = { result in
+        if case .failure = result {
+            for t in thenables {
+                if !t.cancelAttempted {
+                    t.cancel()
+                }
+            }
+        }
+    }
+    
     let promise = CancellablePromise(race(asThenables(thenables)))
     for t in thenables {
+        t.thenable.pipe(to: cancelThenables)
         promise.appendCancelContext(from: t)
     }
     return promise
+}
+
+/**
+ Returns a promise that can be used to set a timeout for `race`.
+ 
+     let promise1, promise2: Promise<Void>
+     race(promise1, promise2, timeout(seconds: 1.0)).done { winner in
+         //…
+     }.catch(policy: .allErrors) {
+         // Rejects with `PMKError.timedOut` if the timeout is exceeded before either `promise1` or
+         // `promise2` succeeds.
+     }
+ 
+ When used with cancellable promises, all promises will be cancelled if the timeout is
+ exceeded or any promise rejects:
+ 
+     let promise1, promise2: CancellablePromise<Void>
+     race(promise1, promise2, cancellable(timeout(seconds: 1.0))).done { winner in
+         //…
+     }
+ */
+public func timeout(seconds: TimeInterval) -> Promise<Void> {
+    return after(seconds: seconds).done { throw PMKError.timedOut }
 }

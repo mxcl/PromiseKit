@@ -51,7 +51,7 @@ public func firstly<T>(execute body: () -> Guarantee<T>) -> Guarantee<T> {
          URLSession.shared.cancellableDataTask(url: url3)
      }.cancelContext
  
-     // ...
+     // …
  
      context.cancel()
 
@@ -65,7 +65,7 @@ public func firstly<T>(execute body: () -> Guarantee<T>) -> Guarantee<T> {
          URLSession.shared.cancellableDataTask(url: url3)
      }.cancelContext
  
-     // ...
+     // …
  
      context.cancel()
 

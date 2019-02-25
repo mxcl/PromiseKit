@@ -8,7 +8,7 @@ UIApplication.shared.isNetworkActivityIndicatorVisible = true
 let fetchImage = cancellable(URLSession.shared.dataTask(.promise, with: url)).compactMap{ UIImage(data: $0.data) }
 let fetchLocation = cancellable(CLLocationManager.requestLocation()).lastValue
 
-let promise = firstly {
+let finalizer = firstly {
     when(fulfilled: fetchImage, fetchLocation)
 }.done { image, location in
     self.imageView.image = image
@@ -25,20 +25,20 @@ let promise = firstly {
 
 // Cancel currently active tasks and reject all cancellable promises with 'PMKError.cancelled'.
 // 'cancel()' can be called from any thread at any time.
-promise.cancel()
+finalizer.cancel()
 
-/* 'promise' here refers to the last promise in the chain.  Calling 'cancel' on
-   any promise in the chain cancels the entire chain.  Therefore cancelling the
-   last promise in the chain cancels everything. */
+/* 'finalizer' here refers to the 'CancellableFinalizer' for the chain.  Calling 'cancel' on
+   any promise in the chain or on the finalizer cancels the entire chain.  Therefore
+   calling 'cancel' on the finalizer cancels everything. */
 ```
 
 # Cancel Chains
 
-Promises can be cancelled using a `CancellablePromise`.  The global `cancellable(_:)` function is used to convert a standard `Promise` into a `CancellablePromise`.  If a promise chain is initiazed with a `CancellablePromise`, then the entire chain is cancellable.  Calling `cancel()` on any promise in the chain cancels the entire chain.  
+Promises can be cancelled using a `CancellablePromise`.  The global `cancellable(_:)` function is used to convert a standard `Promise` into a `CancellablePromise`.  If a promise chain is initialized with a `CancellablePromise`, then the entire chain is cancellable.  Calling `cancel()` on any promise in the chain cancels the entire chain.  
 
-Creating a chain where the entire chain can be cancelleed is the recommended usage for cancellable promises.
+Creating a chain where the entire chain can be cancelled is the recommended usage for cancellable promises.
 
-The `CancellablePromise` contains a `CancelContext` that keeps track of the tasks and promises for the chain.  Promise chains can be cancelled either by calling the `cancel()` method on any `CancellablePromise` in the chainm, or by calling `cancel()` on the `CancelContext` for the chain. It may be desirable to hold on to the `CancelContext` directly rather than a promise so that the promise can be deallocated by ARC when it is resolved.
+The `CancellablePromise` contains a `CancelContext` that keeps track of the tasks and promises for the chain.  Promise chains can be cancelled either by calling the `cancel()` method on any `CancellablePromise` in the chain, or by calling `cancel()` on the `CancelContext` for the chain. It may be desirable to hold on to the `CancelContext` directly rather than a promise so that the promise can be deallocated by ARC when it is resolved.
 
 For example:
 
@@ -122,107 +122,6 @@ let promise = cancellable(firstly {
 
 promise.cancel()
 ```
-
-# Troubleshooting
-
-At the time of this writing, the swift compiler error messages are usually misleading if there is a compile-time error in a cancellable promise chain.  In general, a good way to troubleshoot is to explicitly declare the signatures for all the closures and then prune them back down if possible.  Here are a few examples where the compiler error is not helpful.
-
-**Cancellable promise embedded in the middle of a standard promise chain**
-
-Error: ***Ambiguous reference to member `firstly(execute:)`***.  Fixed by adding `cancellable` to `login()`.
-
-```swift
-let promise = firstly {  /// <-- ERROR: Ambiguous reference to member 'firstly(execute:)'
-    /* The 'cancellable' function initiates a cancellable promise chain by
-       returning a 'CancellablePromise'. */
-    login() /// CHANGE TO: "cancellable(login())"
-}.then { creds in
-    cancellable(fetch(avatar: creds.user))
-}.done { image in
-    self.imageView = image
-}.catch(policy: .allErrors) { error in
-    if error.isCancelled {
-        // the chain has been cancelled!
-    }
-}
-
-// ...
-
-promise.cancel()
-```
-
-**The return type for a multi-line closure returning `CancellablePromise` is not explicitly stated**
-
-The Swift compiler cannot (yet) determine the return type of a multi-line closure.  
-
-The following example gives the unhelpful error: ***Enum element `allErrors` cannot be referenced as an instance member***.  This is fixed by explicitly declaring the return type as a CancellablePromise.
-
-```swift
-let promise = firstly {
-    cancellable(login())
-}.then { creds in /// CHANGE TO: "}.then { creds -> CancellablePromise<UIImage> in"
-    let f = fetch(avatar: creds.user)
-    return cancellable(f)
-}.done { image in
-    self.imageView = image
-}.catch(policy: .allErrors) { error in  /// <-- ERROR: Enum element 'allErrors' cannot be referenced as an instance member
-    if error.isCancelled {
-        // the chain has been cancelled!
-    }
-}
-
-// ...
-
-promise.cancel()
-```
-
-**Declaring a `Promise` return type instead of `CancellablePromise`**
-
-You'll get a very misleading error message if you declare a return type of `Promise` where it should be `CancellablePromise`.  This example yields the obtuse error: ***Ambiguous reference to member `firstly(execute:)`***.  This is fixed by declaring the return type as a `CancellablePromise` rather than a `Promise`.
-
-```swift
-let promise = firstly {  /// <-- ERROR: Ambiguous reference to member 'firstly(execute:)'
-    /* The 'cancellable' function initiates a cancellable promise chain by
-       returning a 'CancellablePromise'. */
-    cancellable(login())
-}.then { creds -> Promise<UIImage> in /// CHANGE TO: "}.then { creds -> CancellablePromise<UIImage> in"
-    let f = fetch(avatar: creds.user)
-    return cancellable(f)
-}.done { image in
-    self.imageView = image
-}.catch(policy: .allErrors) { error in
-    if error.isCancelled {
-        // the chain has been cancelled!
-    }
-}
-
-// ...
-
-promise.cancel()
-```
-
-**Trying to cancel a standard promise chain**
-
-Error: ***Value of type `PMKFinalizer` has no member `cancel`***.  Fixed by adding `cancellable` to both `login()` and `fetch()`.
-
-```swift
-let promise = firstly {
-    login() /// CHANGE TO: "cancellable(login())"
-}.then { creds in
-    fetch(avatar: creds.user) /// CHANGE TO: cancellable(fetch(avatar: creds.user))
-}.done { image in
-    self.imageView = image
-}.catch(policy: .allErrors) { error in
-    if error.isCancelled {
-        // the chain has been cancelled!
-    }
-}
-
-// ...
-
-promise.cancel()  /// <-- ERROR: Value of type 'PMKFinalizer' has no member 'cancel'
-```
-
 
 # Core Cancellable PromiseKit API
 
@@ -561,4 +460,3 @@ func getForecast(forCity name: String) -> CancellablePromise<WeatherInfo> {
     }
 }
 ```
-

@@ -17,7 +17,7 @@ class CancellationTests: XCTestCase {
             ex1.fulfill()
         }
         
-        p.cancel(error: LocalError.cancel)
+        p.cancel(with: LocalError.cancel)
 
         waitForExpectations(timeout: 1)
     }
@@ -32,7 +32,7 @@ class CancellationTests: XCTestCase {
             expect.fulfill()
         }
         
-        cc.cancel(error: LocalError.notCancel)
+        cc.cancel(with: LocalError.notCancel)
 
         waitForExpectations(timeout: 1)
     }
@@ -58,7 +58,7 @@ class CancellationTests: XCTestCase {
             ex2.fulfill()
         }
         
-        p.cancel(error: CocoaError.cancelled)
+        p.cancel(with: CocoaError.cancelled)
 
         waitForExpectations(timeout: 1)
     }
@@ -77,7 +77,7 @@ class CancellationTests: XCTestCase {
             ex.fulfill()
         }
 
-        p.cancel(error: CocoaError.cancelled)
+        p.cancel(with: CocoaError.cancelled)
         
         waitForExpectations(timeout: 1)
     }
@@ -96,7 +96,7 @@ class CancellationTests: XCTestCase {
             ex.fulfill()
         }
         
-        p.cancel(error: URLError.cancelled)
+        p.cancel(with: URLError.cancelled)
 
         waitForExpectations(timeout: 1)
     }

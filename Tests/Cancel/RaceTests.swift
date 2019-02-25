@@ -78,4 +78,30 @@ class RaceTests: XCTestCase {
         }
         wait(for: [ex], timeout: 1)
     }
+
+    func testReject() {
+        let ex = expectation(description: "")
+        race(CancellablePromise<Int>(error: PMKError.timedOut), cancellable(after(.milliseconds(10)).map{ 2 })).done { index in
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
+        }
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+
+    func testCancelInner() {
+        let ex = expectation(description: "")
+
+        let after1 = cancellable(after(.milliseconds(10)))
+        let after2 = cancellable(after(seconds: 1))
+        let r = race(after1.then{ cancellable(Promise.value(1)) }, after2.map { 2 })
+
+        r.done { index in
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
+        }
+        after1.cancel()
+        waitForExpectations(timeout: 1, handler: nil)
+    }
 }

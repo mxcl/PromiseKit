@@ -20,33 +20,25 @@ public class CancelContext: Hashable {
     
     private var cancelItems = [CancelItem]()
     private var cancelItemSet = Set<CancelItem>()
-    private var timeoutWorkItem: DispatchWorkItem?
     
     /**
      Cancel all members of the promise chain and their associated asynchronous operations.
      
      - Parameter error: Specifies the cancellation error to use for the cancel operation, defaults to `PMKError.cancelled`
      */
-    public func cancel(error: Error? = nil) {
-        self.cancel(error: error, visited: Set<CancelContext>())
+    public func cancel(with error: Error = PMKError.cancelled) {
+        self.cancel(with: error, visited: Set<CancelContext>())
     }
     
-    func cancel(error: Error? = nil, visited: Set<CancelContext>) {
-        var error = error
-        if error == nil {
-            error = PMKError.cancelled
-        }
-
+    func cancel(with error: Error = PMKError.cancelled, visited: Set<CancelContext>) {
         var items: [CancelItem]!
         barrier.sync(flags: .barrier) {
             internalCancelledError = error
             items = cancelItems
-            timeoutWorkItem?.cancel()
-            timeoutWorkItem = nil
         }
         
         for item in items {
-            item.cancel(error: error!, visited: visited)
+            item.cancel(with: error, visited: visited)
         }
     }
     
@@ -93,26 +85,6 @@ public class CancelContext: Hashable {
         }
     }
     
-    /**
-     Set a timeout in seconds after which 'cancel' will be called with the error PMKError.timeout.  Any previous timeout is overwritten.
-     
-     - Parameter after: Specifies the number of seconds to wait before calling 'cancel' on the context.
-     */
-    public func timeout(after: TimeInterval, on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil) {
-        var oldItem: DispatchWorkItem?
-        let newItem: DispatchWorkItem = DispatchWorkItem {
-            self.cancel(error: PMKError.timeout)
-        }
-
-        barrier.sync(flags: .barrier) {
-            oldItem = self.timeoutWorkItem
-            self.timeoutWorkItem = newItem
-        }
-        
-        oldItem?.cancel()
-        on?.asyncAfter(deadline: .now() + after, execute: newItem)
-    }
-    
     func append<Z: CancellableThenable>(task: CancellableTask?, reject: ((Error) -> Void)?, thenable: Z) {
         if task == nil && reject == nil {
             return
@@ -128,7 +100,7 @@ public class CancelContext: Hashable {
         }
 
         if error != nil {
-            item.cancel(error: error!)
+            item.cancel(with: error!)
         }
     }
     
@@ -172,11 +144,11 @@ public class CancelContext: Hashable {
         
         if parentError != nil {
             if childError == nil {
-                childContext.cancel(error: parentError)
+                childContext.cancel(with: parentError!)
             }
         } else if childError != nil {
             if parentError == nil {
-                cancel(error: childError)
+                cancel(with: childError!)
             }
         }
     }
@@ -236,13 +208,6 @@ public class CancelItemList {
         items.append(item)
     }
     
-    fileprivate func append(contentsOf list: CancelItemList, clearList: Bool) {
-        items.append(contentsOf: list.items)
-        if clearList {
-            list.removeAll()
-        }
-    }
-    
     fileprivate func removeAll() {
         items.removeAll()
     }
@@ -272,7 +237,7 @@ fileprivate class CancelItem: Hashable {
         self.context = context
     }
     
-    func cancel(error: Error, visited: Set<CancelContext>? = nil) {
+    func cancel(with error: Error, visited: Set<CancelContext>? = nil) {
         cancelAttempted = true
 
         task?.cancel()
@@ -281,7 +246,7 @@ fileprivate class CancelItem: Hashable {
         if var v = visited, let c = context {
             if !v.contains(c) {
                 v.insert(c)
-                c.cancel(error: error, visited: v)
+                c.cancel(with: error, visited: v)
             }
         }
     }

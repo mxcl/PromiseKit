@@ -3,10 +3,10 @@ import Dispatch
 /// Provides `catch` and `recover` to your object that conforms to `CancellableThenable`
 public protocol CancellableCatchMixin: CancellableThenable {
     /// Type of the delegate `catchable`
-    associatedtype M: CatchMixin
+    associatedtype C: CatchMixin
 
     /// Delegate `catchable` for this CancellablePromise
-    var catchable: M { get }
+    var catchable: C { get }
 }
 
 public extension CancellableCatchMixin {
@@ -56,8 +56,8 @@ public class CancellableFinalizer {
 
      - Parameter error: Specifies the cancellation error to use for the cancel operation, defaults to `PMKError.cancelled`
      */
-    public func cancel(error: Error? = nil) {
-        cancelContext.cancel(error: error)
+    public func cancel(with error: Error = PMKError.cancelled) {
+        cancelContext.cancel(with: error)
     }
     
     /**
@@ -104,7 +104,7 @@ public extension CancellableCatchMixin {
      - Parameter body: The handler to execute if this promise is rejected.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
-    func recover<V: CancellableThenable>(on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> V) -> CancellablePromise<M.T> where V.U.T == M.T {
+    func recover<V: CancellableThenable>(on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> V) -> CancellablePromise<C.T> where V.U.T == C.T {
         
         let cancelItemList = CancelItemList()
 
@@ -147,7 +147,7 @@ public extension CancellableCatchMixin {
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      - Note: Methods with the `cancellable` prefix create a new CancellablePromise, and those without the `cancellable` prefix accept an existing CancellablePromise.
      */
-    func cancellableRecover<V: Thenable>(on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> V) -> CancellablePromise<M.T> where V.T == M.T {
+    func cancellableRecover<V: Thenable>(on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> V) -> CancellablePromise<C.T> where V.T == C.T {
         
         let cancelBody = { (error: Error) throws -> V in
             _ = self.cancelContext.removeItems(self.cancelItemList, clearList: true)
@@ -191,8 +191,8 @@ public extension CancellableCatchMixin {
      - Parameter body: The closure that executes when this promise resolves.
      - Returns: A new promise, resolved with this promise’s resolution.
      */
-    func ensure(on: Dispatcher = conf.D.return, _ body: @escaping () -> Void) -> CancellablePromise<M.T> {
-        let rp = CancellablePromise<M.T>.pending()
+    func ensure(on: Dispatcher = conf.D.return, _ body: @escaping () -> Void) -> CancellablePromise<C.T> {
+        let rp = CancellablePromise<C.T>.pending()
         rp.promise.cancelContext = self.cancelContext
         self.catchable.pipe { result in
             on.dispatch {
@@ -234,8 +234,8 @@ public extension CancellableCatchMixin {
      - Parameter body: The closure that executes when this promise resolves.
      - Returns: A new promise, resolved with this promise’s resolution.
      */
-    func ensureThen(on: Dispatcher = conf.D.return, _ body: @escaping () -> CancellablePromise<Void>) -> CancellablePromise<M.T> {
-        let rp = CancellablePromise<M.T>.pending()
+    func ensureThen(on: Dispatcher = conf.D.return, _ body: @escaping () -> CancellablePromise<Void>) -> CancellablePromise<C.T> {
+        let rp = CancellablePromise<C.T>.pending()
         rp.promise.cancelContext = cancelContext
         self.catchable.pipe { result in
             on.dispatch {
@@ -273,7 +273,7 @@ public extension CancellableCatchMixin {
     }
 }
 
-public extension CancellableCatchMixin where M.T == Void {
+public extension CancellableCatchMixin where C.T == Void {
     /**
      The provided closure executes when this cancellable promise rejects.
      

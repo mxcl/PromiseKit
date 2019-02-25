@@ -98,7 +98,6 @@ class CancelChain: XCTestCase {
     func cancelChainSetup(ex: exABCDE) {
         {
             let c = cancelChainPromises()
-            let exCancelCalled = expectation(description: "cancel called")
 
             c.pA.then { (_: A) -> CancellablePromise<A> in
                 self.trace("pA.then")
@@ -112,7 +111,6 @@ class CancelChain: XCTestCase {
                         if ex.cancelB {
                             self.trace("CANCEL")
                             c.pA.cancel()
-                            exCancelCalled.fulfill()
                         }
                         ex.b?.fulfill() ?? XCTFail("pB.then")
                         return c.pC
@@ -121,7 +119,6 @@ class CancelChain: XCTestCase {
                         if ex.cancelC {
                             self.trace("CANCEL")
                             c.pA.cancel()
-                            exCancelCalled.fulfill()
                         }
                         self.trace("pC.then")
                         return c.pD
@@ -131,7 +128,6 @@ class CancelChain: XCTestCase {
                     if ex.cancelD {
                         self.trace("CANCEL")
                         c.pA.cancel()
-                        exCancelCalled.fulfill()
                     }
                     return c.pA  // Intentional reuse of pA -- causes a loop that CancelContext must detect
                 }
@@ -141,7 +137,6 @@ class CancelChain: XCTestCase {
                 if ex.cancelA {
                     self.trace("CANCEL")
                     c.pA.cancel()
-                    exCancelCalled.fulfill()
                 }
                 return c.pE
             }.done { _ in
@@ -149,7 +144,6 @@ class CancelChain: XCTestCase {
                 if ex.cancelE {
                     self.trace("CANCEL")
                     c.pA.cancel()
-                    exCancelCalled.fulfill()
                 }
                 self.trace("pE.done")
             }.catch(policy: .allErrors) {
@@ -171,8 +165,6 @@ class CancelChain: XCTestCase {
             XCTAssert(ex.b == nil || isFulfilled(c.pC) || c.pC.cancelContext.cancelAttempted)
             XCTAssert(ex.c == nil || isFulfilled(c.pD) || c.pD.cancelContext.cancelAttempted)
             XCTAssert(ex.d == nil || isFulfilled(c.pE) || c.pE.cancelContext.cancelAttempted)
-            
-            wait(for: [exCancelCalled], timeout: 1)
         }()
         
         self.trace("DONE")

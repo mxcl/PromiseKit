@@ -21,10 +21,10 @@ public class CancellablePromise<T>: CancellableThenable, CancellableCatchMixin {
     }
 
     /// Type of the delegate `catchable`
-    public typealias M = Promise<T>
+    public typealias C = Promise<T>
     
     /// Delegate `catchable` for this CancellablePromise
-    public var catchable: M {
+    public var catchable: C {
         return promise
     }
     
@@ -74,7 +74,7 @@ public class CancellablePromise<T>: CancellableThenable, CancellableCatchMixin {
                 reject = seal.reject
                 bridge.done(on: nil) {
                     seal.fulfill($0)
-                }.catch {
+                }.catch(policy: .allErrors) {
                     seal.reject($0)
                 }
             }

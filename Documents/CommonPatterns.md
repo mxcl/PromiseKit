@@ -210,22 +210,42 @@ one promise at a time if you need to.
 
 ```swift
 let fetches: [Promise<T>] = makeFetches()
-let timeout = after(seconds: 4)
 
-race(when(fulfilled: fetches).asVoid(), timeout).then {
+race(when(fulfilled: fetches).asVoid(), timeout(seconds: 4)).then {
     //…
+}.catch(policy: .allErrors) {
+    // Rejects with 'PMKError.timedOut' if the timeout is exceeded
 }
 ```
 
 `race` continues as soon as one of the promises it is watching finishes.
+
+`timeout(seconds: TimeInterval)` returns a promise that throws
+`PMKError.timedOut` when the time interval is exceeded.  Note that `PMKError.timedOut`
+is a cancellation error therefore the `.allErrors` catch policy must be specified
+to handle this exception.
 
 Make sure the promises you pass to `race` are all of the same type. The easiest way
 to ensure this is to use `asVoid()`.
 
 Note that if any component promise rejects, the `race` will reject, too.
 
+When used with cancellable promises, all promises will be cancelled if either the timeout is
+exceeded or if any promise rejects.
 
-# Minimum Duration
+```swift
+let fetches: [Promise<T>] = makeFetches()
+let cancellableFetches: [CancellablePromise<T>] = fetches.map { return cancellable($0) }
+
+// All promises are automatically cancelled if any of them reject.
+race(when(fulfilled: cancellableFetches).asVoid(), cancellable(timeout(seconds: 4))).then {
+    //…
+}.catch(policy: .allErrors) {
+    // Rejects with 'PMKError.timedOut' if the timeout is exceeded.
+}
+```
+
+## Minimum Duration
 
 Sometimes you need a task to take *at least* a certain amount of time. (For example,
 you want to show a progress spinner, but if it shows for less than 0.3 seconds, the UI

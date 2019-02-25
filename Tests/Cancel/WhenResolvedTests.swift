@@ -9,14 +9,14 @@ class JoinTests: XCTestCase {
         let successPromise = CancellablePromise()
 
         var joinFinished = false
-        cancellableWhen(resolved: successPromise).done(on: nil) { _ in joinFinished = true }.cancel()
+        when(resolved: successPromise).done(on: nil) { _ in joinFinished = true }.cancel()
         XCTAssert(joinFinished, "Join immediately finishes on fulfilled promise")
         
         let promise2 = Promise.value(2)
         let promise3: CancellablePromise = cancellable(Promise.value(3))
         let promise4 = Promise.value(4)
         var join2Finished = false
-        cancellableWhen(resolved: CancellablePromise(promise2), promise3, CancellablePromise(promise4)).done(on: nil) { _ in join2Finished = true }.cancel()
+        when(resolved: CancellablePromise(promise2), promise3, CancellablePromise(promise4)).done(on: nil) { _ in join2Finished = true }.cancel()
         XCTAssert(join2Finished, "Join immediately finishes on fulfilled promises")
     }
 
@@ -26,7 +26,7 @@ class JoinTests: XCTestCase {
         let (promise3, seal3) = CancellablePromise<Void>.pending()
         
         var finished = false
-        let promise = cancellableWhen(resolved: promise1, CancellablePromise(promise2), promise3).done(on: nil) { _ in finished = true }
+        let promise = when(resolved: promise1, CancellablePromise(promise2), promise3).done(on: nil) { _ in finished = true }
         XCTAssertFalse(finished, "Not all promises have resolved")
         
         seal1.fulfill(())
@@ -48,7 +48,7 @@ class JoinTests: XCTestCase {
         var cancelled = false
         let ex = expectation(description: "")
         let cp2 = CancellablePromise(promise2)
-        cancellableWhen(resolved: promise1, cp2, promise3).done(on: nil) { _ in
+        when(resolved: promise1, cp2, promise3).done(on: nil) { _ in
             XCTFail()
         }.catch(policy: .allErrors) {
             cancelled = $0.isCancelled

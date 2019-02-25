@@ -33,8 +33,8 @@ public extension CancellableThenable {
 
      - Parameter error: Specifies the cancellation error to use for the cancel operation, defaults to `PMKError.cancelled`
      */
-    func cancel(error: Error? = nil) {
-        self.cancelContext.cancel(error: error)
+    func cancel(with error: Error = PMKError.cancelled) {
+        self.cancelContext.cancel(with: error)
     }
     
     /**
@@ -401,7 +401,7 @@ public extension CancellableThenable where U.T: Sequence {
      */
     func thenMap<V: CancellableThenable>(on: Dispatcher = conf.D.map, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V.U.T]> {
         return then(on: on) {
-            cancellableWhen(fulfilled: try $0.map(transform))
+            when(fulfilled: try $0.map(transform))
         }
     }
 
@@ -435,7 +435,7 @@ public extension CancellableThenable where U.T: Sequence {
      */
     func thenFlatMap<V: CancellableThenable>(on: Dispatcher = conf.D.map, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V.U.T.Iterator.Element]> where V.U.T: Sequence {
         return then(on: on) {
-            cancellableWhen(fulfilled: try $0.map(transform))
+            when(fulfilled: try $0.map(transform))
         }.map(on: nil) {
             $0.flatMap { $0 }
         }
