@@ -377,7 +377,7 @@ By default PromiseKit emits console messages when certain events occur.  These e
 - A promise has been deallocated without being fulfilled
 - An error which occurred while fulfilling a promise was swallowed using cauterize
 
-You may turn off or redirect this output by setting a thread safe closure in [PMKCOnfiguration](https://github.com/mxcl/PromiseKit/blob/master/Sources/Configuration.swift) **before** processing any promises. For example, to turn off console output:
+You may turn off or redirect this output by setting a thread safe closure in [PMKConfiguration](https://github.com/mxcl/PromiseKit/blob/master/Sources/Configuration.swift) **before** processing any promises. For example, to turn off console output:
 
 ```swift
 conf.logHandler = { event in }
