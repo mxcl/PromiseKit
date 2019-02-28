@@ -60,6 +60,7 @@ extension DispatcherTests {
         ("testDispatcherExtensionReturnsGuarantee", testDispatcherExtensionReturnsGuarantee),
         ("testDispatcherWithThrow", testDispatcherWithThrow),
         ("testDispatchQueueSelection", testDispatchQueueSelection),
+        ("testPMKDefaultIdentity", testPMKDefaultIdentity),
     ]
 }
 
@@ -100,8 +101,10 @@ extension LoggingTests {
     // to regenerate.
     static let __allTests__LoggingTests = [
         ("testCauterizeIsLogged", testCauterizeIsLogged),
+        ("testExtraneousFlagsSpecified", testExtraneousFlagsSpecified),
         ("testGuaranteeWaitOnMainThreadLogged", testGuaranteeWaitOnMainThreadLogged),
         ("testLogging", testLogging),
+        ("testNilDispatchQueueWithFlags", testNilDispatchQueueWithFlags),
         ("testPendingGuaranteeDeallocatedIsLogged", testPendingGuaranteeDeallocatedIsLogged),
         ("testPendingPromiseDeallocatedIsLogged", testPendingPromiseDeallocatedIsLogged),
         ("testPromiseWaitOnMainThreadLogged", testPromiseWaitOnMainThreadLogged),
@@ -137,8 +140,11 @@ extension PromiseTests {
         ("testCanMakeVoidPromise", testCanMakeVoidPromise),
         ("testCannotFulfillWithError", testCannotFulfillWithError),
         ("testCustomStringConvertible", testCustomStringConvertible),
+        ("testDispatcherDispatchExtensionCanThrowInBody", testDispatcherDispatchExtensionCanThrowInBody),
+        ("testDispatcherDispatchExtensionDoesNotInterfereWithRegularDispatch", testDispatcherDispatchExtensionDoesNotInterfereWithRegularDispatch),
+        ("testDispatcherDispatchExtensionReturnsGuarantee", testDispatcherDispatchExtensionReturnsGuarantee),
         ("testDispatchQueueAsyncExtensionCanThrowInBody", testDispatchQueueAsyncExtensionCanThrowInBody),
-        ("testDispatchQueueAsyncExtensionReturnsPromise", testDispatchQueueAsyncExtensionReturnsPromise),
+        ("testDispatchQueueAsyncExtensionReturnsGuarantee", testDispatchQueueAsyncExtensionReturnsGuarantee),
         ("testIsFulfilled", testIsFulfilled),
         ("testIsPending", testIsPending),
         ("testIsRejected", testIsRejected),
