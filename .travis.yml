@@ -63,20 +63,15 @@ jobs:
         - Tests/JS-A+/build
         - Tests/JS-A+/node_modules
 
-    - name: '`pod trunk push`'
-      stage: deploy
-      install: gem install cocoapods --pre -v 1.7.0.beta.3
-      before_script: |
-        mv .github/PromiseKit.podspec .
-        sed -i '' "s/s.version = '0.0.1'/s.version = '$TRAVIS_TAG'/g" PromiseKit.podspec
-      script: |
-        set -exo pipefail
-        pod trunk push --verbose --allow-warnings | tee pod.log | ruby -e 'ARGF.each{ print "." }'
-      # ^^ pipe because Travis times us out if there is no output
-      # AND `pod` defaults to hardly any output
-      # BUT `--verbose` generates so much output that Travis kills our script due to *too much* output!
-      # --allow-warnings because Bolts generates warnings and CocoaPods fails you even if your deps emit warnings
-      after_failure: cat pod.log | grep error
+    - stage: deploy
+      before_install: |
+        curl -O https://raw.githubusercontent.com/mxcl/Path.swift/master/.github/deploy
+        chmod u+x deploy
+      install: brew install mxcl/made/swift-sh
+      before_script: ./deploy generate-podspec
+      script: pod trunk push --allow-warnings
+      after_success: |
+        ./deploy publish-release
 
     - name: Generate Documentation
       git.depth: false
