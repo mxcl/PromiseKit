@@ -109,7 +109,7 @@ public extension Promise {
     func wait() throws -> T {
 
         if Thread.isMainThread {
-            conf.logHandler(LogEvent.waitOnMainThread)
+            conf.logHandler(.waitOnMainThread)
         }
 
         var result = self.result
@@ -134,7 +134,7 @@ extension Promise where T == Void {
 
 public extension DispatchQueue {
     /**
-     Asynchronously executes the provided closure on a dispatch queue.
+     Asynchronously executes the provided closure on a dispatch queue, yielding a `Promise`.
 
          DispatchQueue.global().async(.promise) {
              try md5(input)
@@ -142,14 +142,18 @@ public extension DispatchQueue {
              //…
          }
 
-     - Parameter body: The closure that resolves this promise.
+     - Parameters:
+       - _: Must be `.promise` to distinguish from standard `DispatchQueue.async`
+       - group: A `DispatchGroup`, as for standard `DispatchQueue.async`
+       - qos: A quality-of-service grade, as for standard `DispatchQueue.async`
+       - flags: Work item flags, as for standard `DispatchQueue.async`
+       - body: A closure that yields a value to resolve the promise.
      - Returns: A new `Promise` resolved by the result of the provided closure.
-     - Note: There is no Promise/Thenable version of this due to Swift compiler ambiguity issues.
      */
     @available(macOS 10.10, iOS 8.0, tvOS 9.0, watchOS 2.0, *)
-    final func async<T>(_: PMKNamespacer, group: DispatchGroup? = nil, qos: DispatchQoS = .default, flags: DispatchWorkItemFlags = [], execute body: @escaping () throws -> T) -> Promise<T> {
+    final func async<T>(_: PMKNamespacer, group: DispatchGroup? = nil, qos: DispatchQoS? = nil, flags: DispatchWorkItemFlags? = nil, execute body: @escaping () throws -> T) -> Promise<T> {
         let promise = Promise<T>(.pending)
-        async(group: group, qos: qos, flags: flags) {
+        asyncD(group: group, qos: qos, flags: flags) {
             do {
                 promise.box.seal(.success(try body()))
             } catch {
@@ -162,19 +166,19 @@ public extension DispatchQueue {
 
 public extension Dispatcher {
     /**
-     Asynchronously executes the provided closure on a Dispatcher.
+     Executes the provided closure on a `Dispatcher`, yielding a `Promise`
+     that represents the value ultimately returned by the closure.
      
-         dispatcher.promise {
+         dispatcher.dispatch {
             try md5(input)
          }.done { md5 in
             //…
          }
      
-     - Parameter body: The closure that resolves this promise.
+     - Parameter body: A closure that yields a value to resolve the promise.
      - Returns: A new `Promise` resolved by the result of the provided closure.
-     - Note: There is no Promise/Thenable version of this due to Swift compiler ambiguity issues.
      */
-    func dispatch<T>(_: PMKNamespacer, _ body: @escaping () throws -> T) -> Promise<T> {
+    func dispatch<T>(_ body: @escaping () throws -> T) -> Promise<T> {
         let promise = Promise<T>(.pending)
         dispatch {
             do {

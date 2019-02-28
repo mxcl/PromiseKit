@@ -59,6 +59,11 @@ class DispatcherTests: XCTestCase {
         PromiseKit.conf.D = oldConf
     }
     
+    func testPMKDefaultIdentity() {
+        // If this identity does not hold, the DispatchQueue wrapper API will not behave correctly
+        XCTAssert(DispatchQueue.pmkDefault === DispatchQueue.pmkDefault, "DispatchQueues are not object-identity-preserving on this platform")
+    }
+    
     func testDispatcherWithThrow() {
         let ex = expectation(description: "Dispatcher with throw")
         Promise { seal in
@@ -122,10 +127,12 @@ class DispatcherTests: XCTestCase {
     @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
     func testDispatcherExtensionReturnsGuarantee() {
         let ex = expectation(description: "Dispatcher.promise")
-        dispatcher.dispatch(.promise) { () -> Int in
+        let object: Any = dispatcher.dispatch() { () -> Int in
             XCTAssertFalse(Thread.isMainThread)
             return 1
-        }.done { one in
+        }
+        XCTAssert(object is Guarantee<Int>, "Guarantee not returned from Dispatcher.dispatch { () -> Int }")
+        (object as? Guarantee<Int>)?.done { one in
             XCTAssertEqual(one, 1)
             ex.fulfill()
         }
@@ -135,9 +142,11 @@ class DispatcherTests: XCTestCase {
     @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
     func testDispatcherExtensionCanThrowInBody() {
         let ex = expectation(description: "Dispatcher.promise")
-        dispatcher.dispatch(.promise) { () -> Int in
+        let object: Any = dispatcher.dispatch() { () -> Int in
             throw PMKError.badInput
-        }.done { _ in
+        }
+        XCTAssert(object is Promise<Int>, "Promise not returned from Dispatcher.dispatch { () throws -> Int }")
+        (object as? Promise<Int>)?.done { _ in
             XCTFail()
         }.catch { _ in
             ex.fulfill()

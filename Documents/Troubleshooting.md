@@ -68,7 +68,7 @@ return firstly {
 }
 ```
 
-We have made great effort to reduce the need for explicit typing in PromiseKit 6, 
+We have made great effort to reduce the need for explicit typing in PromiseKit, 
 but as with all Swift functions that return a generic type (e.g., `Array.map`),
 you may need to explicitly tell Swift what a closure returns if the closure's body is
 longer than one line.
@@ -175,17 +175,17 @@ All PromiseKit functions are documented and provide examples.
 
 You have a `then`; you want a `done`.
 
-## "Missing argument for parameter #1 in call"
+## "Missing argument for parameter #1 in call" "Unable to infer closure type in the current context"
 
 This is part of Swift 4’s “tuplegate”.
 
-You must specify your `Void` parameter:
+You must fulfill a `Promise<Void>` with an explicit `Void` parameter:
 
 ```swift
 seal.fulfill(())
 ```
 
-Yes: we hope they revert this change in Swift 5 too.
+This wart remains in Swift 5, too. It's probably not going to change.
 
 ## "Ambiguous reference to 'firstly(execute:)'"
 

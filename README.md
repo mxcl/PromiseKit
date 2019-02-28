@@ -39,6 +39,10 @@ PromiseKit 7 is pre-release, if you’re using it: beware!
 
 PromiseKit 7 uses Swift 5’s `Result`, PromiseKit <7 use our own `Result` type.
 
+PromiseKit 7 generalizes `DispatchQueue`s to a `Dispatcher` protocol. However,
+`DispatchQueue`s are `Dispatcher`-conformant, so existing code should not need
+to change. Please report any issues related to this transition.
+
 # PromiseKit 6
 
 [Release notes and migration guide][PMK6].
@@ -91,14 +95,14 @@ help me continue my work, I appreciate it 🙏🏻
 # Documentation
 
 * Handbook
-  * [Getting Started](Documentation/GettingStarted.md)
-  * [Promises: Common Patterns](Documentation/CommonPatterns.md)
-  * [Frequently Asked Questions](Documentation/FAQ.md)
+  * [Getting Started](Documents/GettingStarted.md)
+  * [Promises: Common Patterns](Documents/CommonPatterns.md)
+  * [Frequently Asked Questions](Documents/FAQ.md)
 * Manual
-  * [Installation Guide](Documentation/Installation.md)
-  * [Objective-C Guide](Documentation/ObjectiveC.md)
-  * [Troubleshooting](Documentation/Troubleshooting.md) (e.g., solutions to common compile errors)
-  * [Appendix](Documentation/Appendix.md)
+  * [Installation Guide](Documents/Installation.md)
+  * [Objective-C Guide](Documents/ObjectiveC.md)
+  * [Troubleshooting](Documents/Troubleshooting.md) (e.g., solutions to common compile errors)
+  * [Appendix](Documents/Appendix.md)
 * [API Reference](https://mxcl.dev/PromiseKit/reference/v7/Classes/Promise.html)
 
 # Extensions
@@ -174,7 +178,7 @@ became true, but nowadays it isn’t really necessary.
 
 # Support
 
-Please check our [Troubleshooting Guide](Documentation/Troubleshooting.md), and
+Please check our [Troubleshooting Guide](Documents/Troubleshooting.md), and
 if after that you still have a question, ask at our [Gitter chat channel] or on [our bug tracker].
 
 # Contributing
@@ -196,7 +200,7 @@ Generate the Xcode project:
 [our bug tracker]: https://github.com/mxcl/PromiseKit/issues/new
 [Podfile]: https://guides.cocoapods.org/syntax/podfile.html
 [PMK6]: http://mxcl.dev/PromiseKit/news/2018/02/PromiseKit-6.0-Released/
-[Installation Guide]: Documentation/Installation.md
+[Installation Guide]: Documents/Installation.md
 [badge-travis]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=master
 [travis]: https://travis-ci.org/mxcl/PromiseKit
 [cocoapods]: https://cocoapods.org/pods/PromiseKit
