@@ -18,7 +18,7 @@ public extension CatchMixin {
      - Parameter policy: The default policy does not execute your handler for cancellation errors.
      - Parameter execute: The handler to execute if this promise is rejected.
      - Returns: A promise finalizer.
-     - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
+     - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documents/CommonPatterns.md#cancellation)
      */
     @discardableResult
     func `catch`(on: Dispatcher = conf.D.return, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) -> Void) -> PMKFinalizer {
@@ -70,7 +70,7 @@ public extension CatchMixin {
      
      - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The handler to execute if this promise is rejected.
-     - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
+     - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documents/CommonPatterns.md#cancellation)
      */
     func recover<U: Thenable>(on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> U) -> Promise<T> where U.T == T {
         let rp = Promise<U.T>(.pending)
@@ -103,7 +103,7 @@ public extension CatchMixin {
      - Note it is logically impossible for this to take a `catchPolicy`, thus `allErrors` are handled.
      - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The handler to execute if this promise is rejected.
-     - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
+     - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documents/CommonPatterns.md#cancellation)
      */
     @discardableResult
     func recover(on: Dispatcher = conf.D.map, _ body: @escaping(Error) -> Guarantee<T>) -> Guarantee<T> {
@@ -202,7 +202,7 @@ public extension CatchMixin where T == Void {
      
      - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The handler to execute if this promise is rejected.
-     - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
+     - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documents/CommonPatterns.md#cancellation)
      */
     @discardableResult
     func recover(on: Dispatcher = conf.D.map, _ body: @escaping(Error) -> Void) -> Guarantee<Void> {
@@ -228,7 +228,7 @@ public extension CatchMixin where T == Void {
      
      - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The handler to execute if this promise is rejected.
-     - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
+     - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documents/CommonPatterns.md#cancellation)
      */
     func recover(on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> Void) -> Promise<Void> {
         let rg = Promise<Void>(.pending)
