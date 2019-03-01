@@ -532,4 +532,4 @@ different API (sorry about that, but Swift has changed a lot over the years and 
 we had to too).
 
 
-[API Reference]: https://mxcl.github.io/PromiseKit/reference/v6/Classes/Promise.html
+[API Reference]: https://mxcl.dev/PromiseKit/reference/v6/Classes/Promise.html

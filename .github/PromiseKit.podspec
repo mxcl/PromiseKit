@@ -13,11 +13,11 @@ Pod::Spec.new do |s|
 
   s.license = 'MIT'
   s.summary = 'Promises for Swift & ObjC.'
-  s.homepage = 'http://promisekit.org'
+  s.homepage = 'http://mxcl.dev/PromiseKit/'
   s.description = 'A thoughtful and complete implementation of promises for iOS, macOS, watchOS and tvOS with first-class support for both Objective-C and Swift.'
   s.social_media_url = 'https://twitter.com/mxcl'
   s.authors  = { 'Max Howell' => 'mxcl@me.com' }
-  s.documentation_url = 'http://promisekit.org/docs/'
+  s.documentation_url = 'http://mxcl.dev/PromiseKit/reference/v6/Classes/Promise.html'
   s.default_subspecs = 'CorePromise', 'UIKit', 'Foundation'
   s.requires_arc = true
   

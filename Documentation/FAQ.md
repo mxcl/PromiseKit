@@ -54,11 +54,11 @@ use `weak self` (and check for `self == nil`) to prevent any such side effects.
 should be protected against are in fact *not* side effects.
 
 Side effects include changes to global application state. They *do not* include
-changing the display state of a viewController. So, protect against setting UserDefaults or
+changing the display state of a view-controller. So, protect against setting `UserDefaults` or
 modifying the application database, and don't bother protecting against changing
 the text in a `UILabel`.
 
-[This stackoverflow question](https://stackoverflow.com/questions/39281214/should-i-use-weak-self-in-promisekit-blocks)
+[This StackOverflow question](https://stackoverflow.com/questions/39281214/should-i-use-weak-self-in-promisekit-blocks)
 has some good discussion on this topic.
 
 ## Do I need to retain my promises?
@@ -211,12 +211,12 @@ to a suitable problem, RxSwift can yield great benefits in robustness and simpli
 But not all applications are suitable for RxSwift. 
 
 By contrast, PromiseKit selectively applies the best parts of reactive programming
-to the hardest part of pure Swift development, the management of asynchrony. It's a broadly 
+to the hardest part of pure Swift development, the management of asynchronicity. It's a broadly 
 applicable tool. Most asynchronous code can be clarified, simplified and made more robust
 just by converting it to use promises. (And the conversion process is easy.)
 
 Promises make for code that is clear to most developers. RxSwift, perhaps not. Take a look at this 
-[signup panel](https://github.com/ReactiveX/RxSwift/tree/master/RxExample/RxExample/Examples/GitHubSignup)
+[sign-up panel](https://github.com/ReactiveX/RxSwift/tree/master/RxExample/RxExample/Examples/GitHubSignup)
 implemented in RxSwift and see what you think. (Note that this is one of RxSwift's own examples.)
 
 Even where PromiseKit and RxSwift are broadly similar, there are many differences in implementation:
@@ -244,7 +244,7 @@ deallocated. All promises yield a single value, terminate and then automatically
 
 You can find some additional discussion in [this ticket](https://github.com/mxcl/PromiseKit/issues/484).
 
-## Why can’t I return from a catch like I can in Javascript?
+## Why can’t I return from a catch like I can in JavaScript?
 
 Swift demands that functions have one purpose. Thus, we have two error handlers:
 

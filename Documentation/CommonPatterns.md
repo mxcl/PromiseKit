@@ -129,7 +129,7 @@ avoiding throwing an error because you couldn't be bothered to define a good glo
 `Error` `enum`.
 
 
-## Abstracting Away Asychronicity
+## Abstracting Away Asynchronicity
 
 ```swift
 var fetch = API.fetch()

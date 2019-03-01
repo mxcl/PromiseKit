@@ -122,7 +122,7 @@ closure entirely and giving you an error message that makes no sense at all.
 When faced with this kind of enigmatic complaint, a good rule of thumb is to
 double-check your argument and return types carefully. If everything looks OK, 
 temporarily add explicit type information as shown above, just to rule
-out mis-inference as a possible cause.
+out misinference as a possible cause.
 
 ### Try moving code to a temporary inline function
 
@@ -189,7 +189,7 @@ Yes: we hope they revert this change in Swift 5 too.
 
 ## "Ambiguous reference to 'firstly(execute:)'"
 
-Remove the firstly, eg:
+Remove the firstly, e.g.:
 
 ```swift
 firstly {
