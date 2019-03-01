@@ -342,7 +342,7 @@ is more thorough at the source.
 In Xcode don’t forget to `⌥` click on PromiseKit functions to get at this
 documentation while you are developing.
 
-Otherwise return to our [contents page](/Documentation).
+Otherwise return to our [contents page](..).
 
 
 [sources]: https://github.com/mxcl/PromiseKit/tree/master/Sources

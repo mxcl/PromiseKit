@@ -46,7 +46,7 @@ PromiseKit contains Swift, so there have been rev-lock issues with Xcode:
 
 | PromiseKit | Swift    | Xcode    |   CI Status  |   Release Notes   |
 | ---------- | -------- | -------- | ------------ | ----------------- |
-|      4     | 3.x, 4.x | 8.x, 9.x, 10.x | ![ci-master] | [2016/09][news-4] |
+|      4     | 3.x, 4.x | 8.x, 9.x, 10.1 | ![ci-master] | [2016/09][news-4] |
 |      3     | 2.x      | 7.x, 8.0 | ![ci-swift2] | [2015/10][news-3] |
 |      2     | 1.x      | 7.x      | Unsupported  | [2015/10][news-3] |
 |      1†    | *N/A*    | *        | ![ci-legacy] |         –         |
@@ -81,12 +81,6 @@ pod "PromiseKit", "~> 3.5"
 github "mxcl/PromiseKit" ~> 3.5
 ```
 
-
-# PromiseKit 5
-
-[PromiseKit 5 is experimental and under active development](https://github.com/mxcl/PromiseKit/tree/experimental-5.x).
-
-
 [travis]: https://travis-ci.org/mxcl/PromiseKit
 [ci-master]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=master
 [ci-legacy]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=legacy-1.x
@@ -95,7 +89,7 @@ github "mxcl/PromiseKit" ~> 3.5
 [ci-22]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-2.2-minimal-changes
 [ci-20]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-2.0-minimal-changes
 [news-2]: http://promisekit.org/news/2015/05/PromiseKit-2.0-Released/
-[news-3]: https://github.com/mxcl/PromiseKit/blob/master/CHANGELOG.markdown#300-oct-1st-2015
+[news-3]: https://github.com/mxcl/PromiseKit/blob/212f31f41864d1e3ec54f5dd529bd8e1e5697024/CHANGELOG.markdown#300-oct-1st-2015
 [news-4]: http://promisekit.org/news/2016/09/PromiseKit-4.0-Released/
 [swift-2.3-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.3-minimal-changes
 [swift-2.2-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.2-minimal-changes
