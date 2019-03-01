@@ -35,7 +35,7 @@ pod used in many of the most popular apps in the world.
 
 # PromiseKit 7 Alpha
 
-PromiseKit 7 is pre-release, if you’re using it: beware!
+PromiseKit 7 is prerelease, if you’re using it: beware!
 
 PromiseKit 7 uses Swift 5’s `Result`, PromiseKit <7 use our own `Result` type.
 
