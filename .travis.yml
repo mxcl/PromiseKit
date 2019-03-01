@@ -8,6 +8,7 @@ branches:
 
 stages:
   - name: pretest
+  - name: lint
   - name: test
   - name: deploy
     if: branch =~ ^\d+\.\d+\.\d+$
@@ -56,6 +57,14 @@ jobs:
       cache.directories:
         - Tests/JS-A+/build
         - Tests/JS-A+/node_modules
+
+    - stage: lint
+      name: Spell Check Markdown
+      install: npm install markdown-spellcheck --global
+      before_script: mv .github/spelling-skip-words .spelling
+      script: mdspell -r -n -a --en-us *.md **/*.md
+      os: linux
+      language: generic
 
     - stage: deploy
       before_install: |
