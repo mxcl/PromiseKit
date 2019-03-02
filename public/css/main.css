@@ -1,0 +1,102 @@
+html, body {
+  margin: 0;
+  font-family: "PT Serif", Georgia, "Times New Roman", serif;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.5;
+  color: #515151;
+  background: white;
+}
+
+#masthead * {
+  margin: 0;
+  vertical-align: middle;
+}
+
+#masthead nav {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+#masthead a.active {
+  background-color: rgba(38, 139, 210, 0.15);
+  color: rgba(38, 139, 210, 1);
+  border-radius: 0.23rem;
+  line-height: 1em;
+}
+
+#masthead nav a {
+  display: inline-block;
+}
+
+ins {
+  margin-top: -1.5rem;
+}
+#masthead {
+  margin-top: 1rem;
+}
+
+#contents {
+    float: right;
+    padding: 1rem;
+    top: 160px;
+    font-size: 0.7rem;
+    text-align: right;
+}
+
+#contents ol, #contents p {
+  margin: 0;
+}
+
+#contents ol {
+  margin-bottom: 1.5rem;
+}
+
+#contents, #contents h3, #contents code {
+  font-size: 0.7rem;
+  margin: 0;
+}
+
+#contents h3 {
+  font-size: 0.75rem;
+}
+
+#contents code {
+  padding: 1px;
+  font-size: 0.6rem;
+}
+
+#contents ol, #contents ol li {
+  margin-left: 0;
+  padding-left: 0;
+  list-style-type: none;
+}
+
+#contents p {
+  color: gray;
+  line-height: 1.2;
+  margin-top: -2px;
+  margin-bottom: 2px;
+  font-size: 0.55rem;
+}
+
+#tagline {
+    font-size: 1.4rem;
+    margin-top: 1rem;
+    text-align: justify;
+}
+#pitch div {
+    display: inline-block;
+    width: 30%;
+    margin-bottom: 2rem;
+    box-sizing: border-box;
+    vertical-align: top;
+    margin-right: 2%;
+}
+
+#bottomline {
+  font-size: 1.2rem;
+  padding: 1.5rem;
+  background: rgba(0,0,0,0.04);
+  border-radius: 1rem;
+  box-sizing: border-box;
+}

@@ -1,0 +1,204 @@
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: "PT Sans", Helvetica, Arial, sans-serif;
+  margin-bottom: .5rem;
+  font-weight: 400;
+  color: #313131;
+  letter-spacing: -.025rem;
+  line-height: 1.25;
+  text-rendering: optimizeLegibility;
+}
+h1 {
+  font-size: 2.5rem;
+}
+h2 {
+  margin-top: 2rem;
+  font-size: 1.8rem;
+}
+h3 {
+  margin-top: 2rem;
+  font-size: 1.45rem;
+}
+h4, h5, h6 {
+  margin-top: 1rem;
+  font-size: 1rem;
+}
+
+h1 code, h2 code, h3 code {
+  font-size: inherit;
+}
+
+p {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+a {
+  color: #268bd2;
+  text-decoration: none;
+}
+a:hover, a:focus {
+  text-decoration: underline;
+}
+
+strong {
+  color: #303030;
+}
+
+ul, ol, dl {
+  margin-top: 0;
+  margin-bottom: 1rem;
+}
+
+dt {
+  font-weight: bold;
+}
+dd {
+  margin-bottom: .5rem;
+}
+
+hr {
+  position: relative;
+  margin: 1.5rem 0;
+  border: 0;
+  border-top: 1px solid #eee;
+  border-bottom: 1px solid #fff;
+}
+
+abbr {
+  font-size: 85%;
+  font-weight: bold;
+  color: #555;
+  text-transform: uppercase;
+}
+abbr[title] {
+  cursor: help;
+  border-bottom: 1px dotted #e5e5e5;
+}
+
+
+.page-title, .post-title, .post-title a {
+  color: #303030;
+}
+.page-title, .post-title {
+  margin-top: 0;
+}
+.post-date {
+  display: block;
+  margin-top: -.5rem;
+  margin-bottom: 1rem;
+  color: #9a9a9a;
+}
+
+blockquote {
+  padding: .5rem 1rem;
+  margin: .8rem 0;
+  color: #7a7a7a;
+  border-left: .25rem solid #e5e5e5;
+}
+blockquote p:last-child {
+  margin-bottom: 0;
+}
+@media (min-width: 30rem) {
+  blockquote {
+    padding-right: 5rem;
+    padding-left: 1.25rem;
+  }
+}
+
+img {
+  display: block;
+  margin: 0 0 1rem;
+  border-radius: 5px;
+}
+
+/* Tables */
+table {
+  margin-bottom: 1rem;
+  width: 100%;
+  border: 1px solid #e5e5e5;
+  border-collapse: collapse;
+}
+td,
+th {
+  padding: .25em .5em;
+  border: 1px solid #e5e5e5;
+}
+tbody tr:nth-child(odd) td,
+tbody tr:nth-child(odd) th {
+  background-color: #f9f9f9;
+}
+
+ol, ul {
+  box-sizing: border-box;
+}
+
+nav a {
+  text-decoration: none;
+  font-family: "PT Sans", Helvetica, Arial, sans-serif;
+}
+
+nav a:hover {
+  text-decoration: underline;
+}
+
+code, pre {
+  font-family: "San Francisco Mono", "Hack", Menlo, Monaco, "Courier New", monospace;
+}
+code {
+  padding: .25em .5em;
+  color: #bf616a;
+}
+code, pre {
+  background-color: #f5f5f5;
+}
+pre, aside {
+  margin: 0;
+}
+pre, code {
+  font-size: 0.8rem;
+}
+pre code {
+  padding: 0;
+  color: inherit;
+  background-color: transparent;
+}
+.highlighter-rouge {
+  margin-bottom: 1rem;
+}
+
+aside {
+  background: #f9f9f9;
+  border: 10px solid rgba(0,0,0,0.2);
+  border-width: 0 1rem;
+  color: rgba(0,0,0,0.66);;
+  font-size: 0.9rem;
+  padding: 1rem;
+  display: block;
+  text-align: justify;
+  text-justify: inter-word;
+}
+aside:before {
+  content: "Oh! BTW…";
+  color: rgba(0,0,0,0.66);;
+  display: block;
+  font-weight: bold;
+}
+
+.big {
+  font-size: 2rem;
+  font-style: normal;
+  padding: 1em;
+  margin: 2rem 0;
+  background: rgba(0,0,0,0.07);
+  border-style: solid;
+  border-color: rgba(0,0,0,0.2);
+  border-width: 1px;
+  font-family: "PT Sans", Helvetica, Arial, sans-serif;
+}
+
+.big code {
+    background: transparent;
+    font-size: inherit;
+    padding: 0;
+}

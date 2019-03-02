@@ -1,0 +1,23 @@
+    <div id="masthead">
+      <a id="logo" href="/"><img src="/PromiseKit/public/img/logo.png" width=200 height=100 alt="PromiseKit" title="PromiseKit"></a>
+      <nav>
+          {% assign sorted_pages = site.pages | sort: "order" %}
+          {% assign parts = page.url | split: '/' %}
+          {% if parts.size == 0 %}
+            {% assign prefix = '/' %}
+          {% else %}
+            {% assign prefix = parts[1] | prepend: '/' | append: '/' %}
+          {% endif %}
+          {% for node in sorted_pages %}
+          {% if node.nav %}
+          {% if prefix == node.url %}
+          <a href="{{node.url | relative_url}}" class="active">{{node.nav}}</a>
+          {% else %}
+          <a href="{{node.url | relative_url}}">{{node.nav}}</a>
+          {% endif %}
+          {% endif %}
+          {% endfor %}
+          <a href="https://gitter.im/mxcl/PromiseKit">Help</a>
+          <a href="https://github.com/mxcl/PromiseKit">GitHub</a>
+      </nav>
+    </div>

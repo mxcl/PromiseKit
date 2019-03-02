@@ -1,0 +1,2079 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Thenable Protocol Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Protocol/Thenable" class="dashAnchor"></a>
+
+    <a title="Thenable Protocol Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="../index.html">
+          PromiseKit Docs
+        </a>
+         (83% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/mxcl/PromiseKit">
+            <img class="header-icon" src="../img/gh.png"/>
+            View on GitHub
+          </a>
+        </p>
+    
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="../index.html">PromiseKit Reference</a>
+      <img class="carat" src="../img/carat.png" />
+      Thenable Protocol Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Core Components.html">Core Components</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Promise.html">Promise</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Guarantee.html">Guarantee</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/Thenable.html">Thenable</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CatchMixin.html">CatchMixin</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Resolver.html">Resolver</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Other Classes.html">Other Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/PMKFinalizer.html">PMKFinalizer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other Classes.html#/s:10PromiseKit21RateLimitedDispatcherC">RateLimitedDispatcher</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/RateLimitedDispatcherBase.html">RateLimitedDispatcherBase</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other Classes.html#/s:10PromiseKit27StrictRateLimitedDispatcherC">StrictRateLimitedDispatcher</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Other Global Variables.html">Other Global Variables</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Other Enums.html">Other Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/CatchPolicy.html">CatchPolicy</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/LogEvent.html">LogEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/PMKError.html">PMKError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/PMKNamespacer.html">PMKNamespacer</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Other Extensions.html">Other Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/DispatchQueue.html">DispatchQueue</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/Error.html">Error</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/NSManagedObjectContext.html">NSManagedObjectContext</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Other Functions.html">Other Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:10PromiseKit5afteryAA9GuaranteeCyytG8Dispatch0E12TimeIntervalOF">after(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:10PromiseKit5after7secondsAA9GuaranteeCyytGSd_tF">after(seconds:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:10PromiseKit7firstly7executeAA0A0Cy1TQzGxyKXE_tAA8ThenableRzlF">firstly(execute:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:10PromiseKit7firstly7executeAA9GuaranteeCyxGAFyXE_tlF">firstly(execute:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:10PromiseKit4hangyxAA0A0CyxGKlF">hang(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:10PromiseKit4raceyAA0A0Cy1TQzGSayxGAA8ThenableRzlF">race(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:10PromiseKit4raceyAA0A0Cy1TQzGxd_tAA8ThenableRzlF">race(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:10PromiseKit4raceyAA9GuaranteeCyxGAEd_tlF">race(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:10PromiseKit4whenyAA9GuaranteeCyytGAEd_tF">when(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:10PromiseKit4when9fulfilledAA0A0CySay1TQzGGSayxG_tAA8ThenableRzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:10PromiseKit4when9fulfilledAA0A0CyytGSayxG_tAA8ThenableRzyt1TRtzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:10PromiseKit4when9fulfilledAA0A0CyytGxd_tAA8ThenableRzyt1TRtzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:10PromiseKit4when9fulfilled_AA0A0Cy1TQz_AFQy_tGx_q_tAA8ThenableRzAaJR_r0_lF">when(fulfilled:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:10PromiseKit4when9fulfilled__AA0A0Cy1TQz_AFQy_AFQy0_tGx_q_q0_tAA8ThenableRzAaKR_AaKR0_r1_lF">when(fulfilled:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:10PromiseKit4when9fulfilled___AA0A0Cy1TQz_AFQy_AFQy0_AFQy1_tGx_q_q0_q1_tAA8ThenableRzAaLR_AaLR0_AaLR1_r2_lF">when(fulfilled:_:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:10PromiseKit4when9fulfilled____AA0A0Cy1TQz_AFQy_AFQy0_AFQy1_AFQy2_tGx_q_q0_q1_q2_tAA8ThenableRzAaMR_AaMR0_AaMR1_AaMR2_r3_lF">when(fulfilled:_:_:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:10PromiseKit4when9fulfilled12concurrentlyAA0A0CySay7Element_1TQZGGx_SitStRzAA8ThenableAGRpzlF">when(fulfilled:concurrently:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:10PromiseKit4when10guaranteesAA9GuaranteeCyytGSayAFG_tF">when(guarantees:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:10PromiseKit4when8resolvedAA9GuaranteeCySays6ResultOyxs5Error_pGGGAA0A0CyxGd_tlF">when(resolved:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other Functions.html#/s:10PromiseKit4when8resolvedAA9GuaranteeCySays6ResultOyxs5Error_pGGGSayAA0A0CyxGG_tlF">when(resolved:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Other Protocols.html">Other Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CancellableError.html">CancellableError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/Dispatcher.html">Dispatcher</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Other Structs.html">Other Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/CoreDataDispatcher.html">CoreDataDispatcher</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/CurrentThreadDispatcher.html">CurrentThreadDispatcher</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/DispatchQueueDispatcher.html">DispatchQueueDispatcher</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/PMKConfiguration.html">PMKConfiguration</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content">
+            <h1>Thenable</h1>
+              <div class="declaration">
+                <div class="language">
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">protocol</span> <span class="kt">Thenable</span> <span class="p">:</span> <span class="kt">AnyObject</span></code></pre>
+
+                </div>
+              </div>
+            <p>Thenable represents an asynchronous operation that can be chained.</p>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenableP1TQa"></a>
+                    <a name="//apple_ref/swift/Alias/T" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenableP1TQa">T</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The type of the wrapped value</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">associatedtype</span> <span class="kt">T</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenableP4pipe2toyys6ResultOy1TQzs5Error_pGc_tF"></a>
+                    <a name="//apple_ref/swift/Method/pipe(to:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenableP4pipe2toyys6ResultOy1TQzs5Error_pGc_tF">pipe(to:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>pipe</code> is immediately executed when this <code>Thenable</code> is resolved</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">pipe</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="kd">@escaping(Result&lt;T, Error&gt;)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenableP6results6ResultOy1TQzs5Error_pGSgvp"></a>
+                    <a name="//apple_ref/swift/Property/result" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenableP6results6ResultOy1TQzs5Error_pGSgvp">result</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The resolved result or nil if pending.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">result</span><span class="p">:</span> <span class="kt">Result</span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="p">,</span> <span class="kt">Error</span><span class="o">&gt;</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAE4then2on5flags_AA0A0Cy1TQyd__GSo17OS_dispatch_queueCSg_8Dispatch0J13WorkItemFlagsVSgqd__AIQzKctAaBRd__lF"></a>
+                    <a name="//apple_ref/swift/Method/then(on:flags:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAE4then2on5flags_AA0A0Cy1TQyd__GSo17OS_dispatch_queueCSg_8Dispatch0J13WorkItemFlagsVSgqd__AIQzKctAaBRd__lF">then(on:flags:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The provided closure executes when this promise resolves.</p>
+
+<p>This allows chaining promises. The promise returned by the provided closure is resolved before the promise returned by this closure resolves.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">then</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">:</span> <span class="kt">Thenable</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="o">.</span><span class="n">pmkDefault</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping(T)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">U</span><span class="o">.</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue to which the provided closure dispatches.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>body</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The closure that executes when this promise fulfills. It must return a promise.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new promise that resolves when the promise returned from the provided closure resolves. For example:</p>
+
+<p>firstly {
+   URLSession.shared.dataTask(.promise, with: url1)
+}.then { response in
+   transform(data: response.data)
+}.done { transformation in
+   //…
+}</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAE3map2on5flags_AA0A0Cyqd__GSo17OS_dispatch_queueCSg_8Dispatch0J13WorkItemFlagsVSgqd__1TQzKctlF"></a>
+                    <a name="//apple_ref/swift/Method/map(on:flags:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAE3map2on5flags_AA0A0Cyqd__GSo17OS_dispatch_queueCSg_8Dispatch0J13WorkItemFlagsVSgqd__1TQzKctlF">map(on:flags:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The provided closure is executed when this promise is resolved.</p>
+
+<p>This is like <code>then</code> but it requires the closure to return a non-promise.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">map</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="o">.</span><span class="n">pmkDefault</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue to which the provided closure dispatches.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>transform</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The closure that is executed when this Promise is fulfilled. It must return a non-promise.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new promise that is resolved with the value returned from the provided closure. For example:</p>
+
+<p>firstly {
+   URLSession.shared.dataTask(.promise, with: url1)
+}.map { response in
+   response.data.length
+}.done { length in
+   //…
+}</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAE10compactMap2on5flags_AA0A0Cyqd__GSo17OS_dispatch_queueCSg_8Dispatch0K13WorkItemFlagsVSgqd__Sg1TQzKctlF"></a>
+                    <a name="//apple_ref/swift/Method/compactMap(on:flags:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAE10compactMap2on5flags_AA0A0Cyqd__GSo17OS_dispatch_queueCSg_8Dispatch0K13WorkItemFlagsVSgqd__Sg1TQzKctlF">compactMap(on:flags:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The provided closure is executed when this promise is resolved.</p>
+
+<p>In your closure return an <code>Optional</code>, if you return <code>nil</code> the resulting promise is rejected with <code>PMKError.compactMap</code>, otherwise the promise is fulfilled with the unwrapped value.</p>
+<pre class="highlight swift"><code><span class="n">firstly</span> <span class="p">{</span>
+   <span class="kt">URLSession</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">dataTask</span><span class="p">(</span><span class="o">.</span><span class="n">promise</span><span class="p">,</span> <span class="nv">with</span><span class="p">:</span> <span class="n">url</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">compactMap</span> <span class="p">{</span>
+   <span class="k">try</span> <span class="kt">JSONSerialization</span><span class="o">.</span><span class="nf">jsonObject</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="nv">$0</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="k">as?</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">String</span><span class="p">]</span>
+<span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span> <span class="n">dictionary</span> <span class="k">in</span>
+   <span class="c1">//…</span>
+<span class="p">}</span><span class="o">.</span><span class="k">catch</span> <span class="p">{</span>
+   <span class="c1">// either `PMKError.compactMap` or a `JSONError`</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">compactMap</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="o">.</span><span class="n">pmkDefault</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAE4done2on5flags_AA0A0CyytGSo17OS_dispatch_queueCSg_8Dispatch0J13WorkItemFlagsVSgy1TQzKctF"></a>
+                    <a name="//apple_ref/swift/Method/done(on:flags:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAE4done2on5flags_AA0A0CyytGSo17OS_dispatch_queueCSg_8Dispatch0J13WorkItemFlagsVSgy1TQzKctF">done(on:flags:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The provided closure is executed when this promise is resolved.</p>
+
+<p>Equivalent to <code>map { x -&gt; Void in</code>, but since we force the <code>Void</code> return Swift
+is happier and gives you less hassle about your closure’s qualification.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">done</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="o">.</span><span class="n">pmkDefault</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping(T)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue to which the provided closure dispatches.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>body</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The closure that is executed when this Promise is fulfilled.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new promise fulfilled as <code>Void</code>.</p>
+
+<p>firstly {
+   URLSession.shared.dataTask(.promise, with: url)
+}.done { response in
+   print(response.data)
+}</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAE3get2on5flags_AA0A0Cy1TQzGSo17OS_dispatch_queueCSg_8Dispatch0J13WorkItemFlagsVSgyAJKctF"></a>
+                    <a name="//apple_ref/swift/Method/get(on:flags:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAE3get2on5flags_AA0A0Cy1TQzGSo17OS_dispatch_queueCSg_8Dispatch0J13WorkItemFlagsVSgyAJKctF">get(on:flags:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The provided closure is executed when this promise is resolved.</p>
+
+<p>This is like <code>done</code> but it returns the same value that the handler is fed.
+<code>get</code> immutably accesses the fulfilled value; the returned Promise maintains that value.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">get</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="o">.</span><span class="n">pmkDefault</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue to which the provided closure dispatches.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>body</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The closure that is executed when this Promise is fulfilled.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new promise that is resolved with the value that the handler is fed. For example:</p>
+
+<p>firstly {
+   .value(1)
+}.get { foo in
+   print(foo, <q>is 1</q>)
+}.done { foo in
+   print(foo, <q>is 1</q>)
+}.done { foo in
+   print(foo, <q>is Void</q>)
+}</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAE3tap2on5flags_AA0A0Cy1TQzGSo17OS_dispatch_queueCSg_8Dispatch0J13WorkItemFlagsVSgys6ResultOyAJs5Error_pGctF"></a>
+                    <a name="//apple_ref/swift/Method/tap(on:flags:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAE3tap2on5flags_AA0A0Cy1TQzGSo17OS_dispatch_queueCSg_8Dispatch0J13WorkItemFlagsVSgys6ResultOyAJs5Error_pGctF">tap(on:flags:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The provided closure is executed with promise result.</p>
+
+<p>This is like <code>get</code> but provides the Result<T> of the Promise so you can inspect the value of the chain at this point without causing any side effects.</p>
+
+<p>promise.tap{ print($0) }.then{ /*…</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">tap</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="o">.</span><span class="n">pmkDefault</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping(Result&lt;T, Error&gt;)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue to which the provided closure dispatches.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>body</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The closure that is executed with Result of Promise.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new promise that is resolved with the result that the handler is fed. For example:</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAST1TRpzrlE9mapValues2on5flags_AA0A0CySayqd__GGSo17OS_dispatch_queueCSg_8Dispatch0K13WorkItemFlagsVSgqd__AD_7ElementQZKctlF"></a>
+                    <a name="//apple_ref/swift/Method/mapValues(on:flags:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAST1TRpzrlE9mapValues2on5flags_AA0A0CySayqd__GGSo17OS_dispatch_queueCSg_8Dispatch0K13WorkItemFlagsVSgqd__AD_7ElementQZKctlF">mapValues(on:flags:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code><a href="../Classes/Promise.html">Promise&lt;[T]&gt;</a></code> =&gt; <code><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></code> -&gt; <code>U</code> =&gt; <code><a href="../Classes/Promise.html">Promise&lt;[U]&gt;</a></code></p>
+<pre class="highlight swift"><code><span class="n">firstly</span> <span class="p">{</span>
+   <span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="p">}</span><span class="o">.</span><span class="n">mapValues</span> <span class="p">{</span> <span class="n">integer</span> <span class="k">in</span>
+   <span class="n">integer</span> <span class="o">*</span> <span class="mi">2</span>
+<span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+   <span class="c1">// $0 =&gt; [2,4,6]</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">mapValues</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="o">.</span><span class="n">pmkDefault</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T.Iterator.Element)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAST1TRpzrlE13flatMapValues2on5flags_AA0A0CySay7ElementQyd__GGSo17OS_dispatch_queueCSg_8Dispatch0M13WorkItemFlagsVSgqd__AD_AKQZKctSTRd__lF"></a>
+                    <a name="//apple_ref/swift/Method/flatMapValues(on:flags:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAST1TRpzrlE13flatMapValues2on5flags_AA0A0CySay7ElementQyd__GGSo17OS_dispatch_queueCSg_8Dispatch0M13WorkItemFlagsVSgqd__AD_AKQZKctSTRd__lF">flatMapValues(on:flags:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code><a href="../Classes/Promise.html">Promise&lt;[T]&gt;</a></code> =&gt; <code><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></code> -&gt; <code>[U]</code> =&gt; <code><a href="../Classes/Promise.html">Promise&lt;[U]&gt;</a></code></p>
+<pre class="highlight swift"><code><span class="n">firstly</span> <span class="p">{</span>
+   <span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="p">}</span><span class="o">.</span><span class="n">flatMapValues</span> <span class="p">{</span> <span class="n">integer</span> <span class="k">in</span>
+   <span class="p">[</span><span class="n">integer</span><span class="p">,</span> <span class="n">integer</span><span class="p">]</span>
+<span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+   <span class="c1">// $0 =&gt; [1,1,2,2,3,3]</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">flatMapValues</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">:</span> <span class="kt">Sequence</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="o">.</span><span class="n">pmkDefault</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T.Iterator.Element)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAST1TRpzrlE16compactMapValues2on5flags_AA0A0CySayqd__GGSo17OS_dispatch_queueCSg_8Dispatch0L13WorkItemFlagsVSgqd__SgAD_7ElementQZKctlF"></a>
+                    <a name="//apple_ref/swift/Method/compactMapValues(on:flags:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAST1TRpzrlE16compactMapValues2on5flags_AA0A0CySayqd__GGSo17OS_dispatch_queueCSg_8Dispatch0L13WorkItemFlagsVSgqd__SgAD_7ElementQZKctlF">compactMapValues(on:flags:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code><a href="../Classes/Promise.html">Promise&lt;[T]&gt;</a></code> =&gt; <code><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></code> -&gt; <code>U?</code> =&gt; <code><a href="../Classes/Promise.html">Promise&lt;[U]&gt;</a></code></p>
+<pre class="highlight swift"><code><span class="n">firstly</span> <span class="p">{</span>
+   <span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="s">"1"</span><span class="p">,</span><span class="s">"2"</span><span class="p">,</span><span class="s">"a"</span><span class="p">,</span><span class="s">"3"</span><span class="p">])</span>
+<span class="p">}</span><span class="o">.</span><span class="n">compactMapValues</span> <span class="p">{</span>
+   <span class="kt">Int</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+   <span class="c1">// $0 =&gt; [1,2,3]</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">compactMapValues</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="o">.</span><span class="n">pmkDefault</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T.Iterator.Element)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAST1TRpzrlE7thenMap2on5flags_AA0A0CySayADQyd__GGSo17OS_dispatch_queueCSg_8Dispatch0K13WorkItemFlagsVSgqd__AD_7ElementQZKctAaBRd__lF"></a>
+                    <a name="//apple_ref/swift/Method/thenMap(on:flags:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAST1TRpzrlE7thenMap2on5flags_AA0A0CySayADQyd__GGSo17OS_dispatch_queueCSg_8Dispatch0K13WorkItemFlagsVSgqd__AD_7ElementQZKctAaBRd__lF">thenMap(on:flags:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code><a href="../Classes/Promise.html">Promise&lt;[T]&gt;</a></code> =&gt; <code><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></code> -&gt; <code><a href="../Classes/Promise.html">Promise&lt;U&gt;</a></code> =&gt; <code><a href="../Classes/Promise.html">Promise&lt;[U]&gt;</a></code></p>
+<pre class="highlight swift"><code><span class="n">firstly</span> <span class="p">{</span>
+   <span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="p">}</span><span class="o">.</span><span class="n">thenMap</span> <span class="p">{</span> <span class="n">integer</span> <span class="k">in</span>
+   <span class="o">.</span><span class="nf">value</span><span class="p">(</span><span class="n">integer</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+   <span class="c1">// $0 =&gt; [2,4,6]</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">thenMap</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">:</span> <span class="kt">Thenable</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="o">.</span><span class="n">pmkDefault</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T.Iterator.Element)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="o">.</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAST1TRpzrlE11thenFlatMap2on5flags_AA0A0CySayAD_7ElementQYd__GGSo17OS_dispatch_queueCSg_8Dispatch0M13WorkItemFlagsVSgqd__AD_AKQZKctAaBRd__STADRpd__lF"></a>
+                    <a name="//apple_ref/swift/Method/thenFlatMap(on:flags:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAST1TRpzrlE11thenFlatMap2on5flags_AA0A0CySayAD_7ElementQYd__GGSo17OS_dispatch_queueCSg_8Dispatch0M13WorkItemFlagsVSgqd__AD_AKQZKctAaBRd__STADRpd__lF">thenFlatMap(on:flags:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code><a href="../Classes/Promise.html">Promise&lt;[T]&gt;</a></code> =&gt; <code><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></code> -&gt; <code><a href="../Classes/Promise.html">Promise&lt;[U]&gt;</a></code> =&gt; <code><a href="../Classes/Promise.html">Promise&lt;[U]&gt;</a></code></p>
+<pre class="highlight swift"><code><span class="n">firstly</span> <span class="p">{</span>
+   <span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="p">}</span><span class="o">.</span><span class="n">thenFlatMap</span> <span class="p">{</span> <span class="n">integer</span> <span class="k">in</span>
+   <span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="n">integer</span><span class="p">,</span> <span class="n">integer</span><span class="p">])</span>
+<span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+   <span class="c1">// $0 =&gt; [1,1,2,2,3,3]</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">thenFlatMap</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">:</span> <span class="kt">Thenable</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="o">.</span><span class="n">pmkDefault</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T.Iterator.Element)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="o">.</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">]</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span><span class="o">.</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="p">:</span> <span class="kt">Sequence</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAST1TRpzrlE12filterValues2on5flags_AA0A0CySayAD_7ElementQZGGSo17OS_dispatch_queueCSg_8Dispatch0L13WorkItemFlagsVSgSbALctF"></a>
+                    <a name="//apple_ref/swift/Method/filterValues(on:flags:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAST1TRpzrlE12filterValues2on5flags_AA0A0CySayAD_7ElementQZGGSo17OS_dispatch_queueCSg_8Dispatch0L13WorkItemFlagsVSgSbALctF">filterValues(on:flags:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code><a href="../Classes/Promise.html">Promise&lt;[T]&gt;</a></code> =&gt; <code><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></code> -&gt; Bool =&gt; <code><a href="../Classes/Promise.html">Promise&lt;[U]&gt;</a></code></p>
+<pre class="highlight swift"><code><span class="n">firstly</span> <span class="p">{</span>
+   <span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="p">}</span><span class="o">.</span><span class="n">filterValues</span> <span class="p">{</span>
+   <span class="nv">$0</span> <span class="o">&gt;</span> <span class="mi">1</span>
+<span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+   <span class="c1">// $0 =&gt; [2,3]</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">filterValues</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="o">.</span><span class="n">pmkDefault</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">isIncluded</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAASl1TRpzrlE10firstValue2on5flags5whereAA0A0CyAD_7ElementQZGSo17OS_dispatch_queueCSg_8Dispatch0M13WorkItemFlagsVSgSbAMctF"></a>
+                    <a name="//apple_ref/swift/Method/firstValue(on:flags:where:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAASl1TRpzrlE10firstValue2on5flags5whereAA0A0CyAD_7ElementQZGSo17OS_dispatch_queueCSg_8Dispatch0M13WorkItemFlagsVSgSbAMctF">firstValue(on:flags:where:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">firstValue</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="o">.</span><span class="n">pmkDefault</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="k">where</span> <span class="nv">test</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAST1TRpzSLAD_7ElementRPzrlE12sortedValues2on5flagsAA0A0CySayAGGGSo17OS_dispatch_queueCSg_8Dispatch0L13WorkItemFlagsVSgtF"></a>
+                    <a name="//apple_ref/swift/Method/sortedValues(on:flags:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAST1TRpzSLAD_7ElementRPzrlE12sortedValues2on5flagsAA0A0CySayAGGGSo17OS_dispatch_queueCSg_8Dispatch0L13WorkItemFlagsVSgtF">sortedValues(on:flags:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">sortedValues</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="o">.</span><span class="n">pmkDefault</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>a promise fulfilled with the sorted values of this <code>Sequence</code>.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAE4then2on_AA0A0Cy1TQyd__GAA10Dispatcher_p_qd__AHQzKctAaBRd__lF"></a>
+                    <a name="//apple_ref/swift/Method/then(on:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAE4then2on_AA0A0Cy1TQyd__GAA10Dispatcher_p_qd__AHQzKctAaBRd__lF">then(on:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The provided closure executes when this promise resolves.</p>
+
+<p>This allows chaining promises. The promise returned by the provided closure is resolved before the promise returned by this closure resolves.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">then</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">:</span> <span class="kt">Thenable</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Dispatcher.html">Dispatcher</a></span> <span class="o">=</span> <span class="n"><a href="../Other Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">D</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping(T)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">U</span><span class="o">.</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The dispatcher that executes the provided closure.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>body</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The closure that executes when this promise fulfills. It must return a promise.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new promise that resolves when the promise returned from the provided closure resolves. For example:</p>
+
+<p>firstly {
+      URLSession.shared.dataTask(.promise, with: url1)
+  }.then { response in
+      transform(data: response.data)
+  }.done { transformation in
+      //…
+  }</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAE3map2on_AA0A0Cyqd__GAA10Dispatcher_p_qd__1TQzKctlF"></a>
+                    <a name="//apple_ref/swift/Method/map(on:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAE3map2on_AA0A0Cyqd__GAA10Dispatcher_p_qd__1TQzKctlF">map(on:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The provided closure is executed when this promise is resolved.</p>
+
+<p>This is like <code>then</code> but it requires the closure to return a non-promise.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">map</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Dispatcher.html">Dispatcher</a></span> <span class="o">=</span> <span class="n"><a href="../Other Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">D</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The dispatcher that executes the provided closure.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>transform</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The closure that is executed when this Promise is fulfilled. It must return a non-promise.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new promise that is resolved with the value returned from the provided closure. For example:</p>
+
+<p>firstly {
+      URLSession.shared.dataTask(.promise, with: url1)
+  }.map { response in
+      response.data.length
+  }.done { length in
+      //…
+  }</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAE10compactMap2on_AA0A0Cyqd__GAA10Dispatcher_p_qd__Sg1TQzKctlF"></a>
+                    <a name="//apple_ref/swift/Method/compactMap(on:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAE10compactMap2on_AA0A0Cyqd__GAA10Dispatcher_p_qd__Sg1TQzKctlF">compactMap(on:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The provided closure is executed when this promise is resolved.</p>
+
+<p>In your closure return an <code>Optional</code>, if you return <code>nil</code> the resulting promise is rejected with <code>PMKError.compactMap</code>, otherwise the promise is fulfilled with the unwrapped value.</p>
+<pre class="highlight swift"><code> <span class="n">firstly</span> <span class="p">{</span>
+     <span class="kt">URLSession</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">dataTask</span><span class="p">(</span><span class="o">.</span><span class="n">promise</span><span class="p">,</span> <span class="nv">with</span><span class="p">:</span> <span class="n">url</span><span class="p">)</span>
+ <span class="p">}</span><span class="o">.</span><span class="n">compactMap</span> <span class="p">{</span>
+     <span class="k">try</span> <span class="kt">JSONSerialization</span><span class="o">.</span><span class="nf">jsonObject</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="nv">$0</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="k">as?</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">String</span><span class="p">]</span>
+ <span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span> <span class="n">dictionary</span> <span class="k">in</span>
+     <span class="c1">//…</span>
+ <span class="p">}</span><span class="o">.</span><span class="k">catch</span> <span class="p">{</span>
+     <span class="c1">// either `PMKError.compactMap` or a `JSONError`</span>
+ <span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">compactMap</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Dispatcher.html">Dispatcher</a></span> <span class="o">=</span> <span class="n"><a href="../Other Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">D</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAE4done2on_AA0A0CyytGAA10Dispatcher_p_y1TQzKctF"></a>
+                    <a name="//apple_ref/swift/Method/done(on:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAE4done2on_AA0A0CyytGAA10Dispatcher_p_y1TQzKctF">done(on:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The provided closure is executed when this promise is resolved.</p>
+
+<p>Equivalent to <code>map { x -&gt; Void in</code>, but since we force the <code>Void</code> return Swift
+is happier and gives you less hassle about your closure’s qualification.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">done</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Dispatcher.html">Dispatcher</a></span> <span class="o">=</span> <span class="n"><a href="../Other Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">D</span><span class="o">.</span><span class="k">return</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping(T)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The dispatcher that executes the provided closure.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>body</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The closure that is executed when this Promise is fulfilled.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new promise fulfilled as <code>Void</code>.</p>
+
+<p>firstly {
+      URLSession.shared.dataTask(.promise, with: url)
+  }.done { response in
+      print(response.data)
+  }</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAE3get2on_AA0A0Cy1TQzGAA10Dispatcher_p_yAIKctF"></a>
+                    <a name="//apple_ref/swift/Method/get(on:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAE3get2on_AA0A0Cy1TQzGAA10Dispatcher_p_yAIKctF">get(on:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The provided closure is executed when this promise is resolved.</p>
+
+<p>This is like <code>done</code> but it returns the same value that the handler is fed.
+<code>get</code> immutably accesses the fulfilled value; the returned Promise maintains that value.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">get</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Dispatcher.html">Dispatcher</a></span> <span class="o">=</span> <span class="n"><a href="../Other Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">D</span><span class="o">.</span><span class="k">return</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The dispatcher that executes the provided closure.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>body</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The closure that is executed when this Promise is fulfilled.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new promise that is resolved with the value that the handler is fed. For example:</p>
+
+<p>firstly {
+      .value(1)
+  }.get { foo in
+      print(foo, <q>is 1</q>)
+  }.done { foo in
+      print(foo, <q>is 1</q>)
+  }.done { foo in
+      print(foo, <q>is Void</q>)
+  }</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAE3tap2on_AA0A0Cy1TQzGAA10Dispatcher_p_ys6ResultOyAIs5Error_pGctF"></a>
+                    <a name="//apple_ref/swift/Method/tap(on:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAE3tap2on_AA0A0Cy1TQzGAA10Dispatcher_p_ys6ResultOyAIs5Error_pGctF">tap(on:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The provided closure is executed with promise result.</p>
+
+<p>This is like <code>get</code> but provides the Result<T> of the Promise so you can inspect the value of the chain at this point without causing any side effects.</p>
+
+<p>promise.tap{ print($0) }.then{ /*…</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">tap</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Dispatcher.html">Dispatcher</a></span> <span class="o">=</span> <span class="n"><a href="../Other Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">D</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping(Result&lt;T, Error&gt;)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The dispatcher that executes the provided closure.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>body</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The closure that is executed with Result of Promise.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new promise that is resolved with the result that the handler is fed. For example:</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAE6asVoidAA0A0CyytGyF"></a>
+                    <a name="//apple_ref/swift/Method/asVoid()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAE6asVoidAA0A0CyytGyF">asVoid()</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">asVoid</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>a new promise chained off this promise but with its value discarded.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAE5errors5Error_pSgvp"></a>
+                    <a name="//apple_ref/swift/Property/error" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAE5errors5Error_pSgvp">error</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">Error</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The error with which this promise was rejected; <code>nil</code> if this promise is not rejected.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAE9isPendingSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isPending" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAE9isPendingSbvp">isPending</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">isPending</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><code>true</code> if the promise has not yet resolved.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAE10isResolvedSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isResolved" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAE10isResolvedSbvp">isResolved</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">isResolved</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><code>true</code> if the promise has resolved.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAE11isFulfilledSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isFulfilled" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAE11isFulfilledSbvp">isFulfilled</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">isFulfilled</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><code>true</code> if the promise was fulfilled.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAE10isRejectedSbvp"></a>
+                    <a name="//apple_ref/swift/Property/isRejected" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAE10isRejectedSbvp">isRejected</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">isRejected</span><span class="p">:</span> <span class="kt">Bool</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p><code>true</code> if the promise was rejected.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAE5value1TQzSgvp"></a>
+                    <a name="//apple_ref/swift/Property/value" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAE5value1TQzSgvp">value</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">value</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The value with which this promise was fulfilled or <code>nil</code> if this promise is pending or rejected.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAST1TRpzrlE9mapValues2on_AA0A0CySayqd__GGAA10Dispatcher_p_qd__AD_7ElementQZKctlF"></a>
+                    <a name="//apple_ref/swift/Method/mapValues(on:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAST1TRpzrlE9mapValues2on_AA0A0CySayqd__GGAA10Dispatcher_p_qd__AD_7ElementQZKctlF">mapValues(on:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code><a href="../Classes/Promise.html">Promise&lt;[T]&gt;</a></code> =&gt; <code><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></code> -&gt; <code>U</code> =&gt; <code><a href="../Classes/Promise.html">Promise&lt;[U]&gt;</a></code></p>
+<pre class="highlight swift"><code><span class="n">firstly</span> <span class="p">{</span>
+    <span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="p">}</span><span class="o">.</span><span class="n">mapValues</span> <span class="p">{</span> <span class="n">integer</span> <span class="k">in</span>
+    <span class="n">integer</span> <span class="o">*</span> <span class="mi">2</span>
+<span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+    <span class="c1">// $0 =&gt; [2,4,6]</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">mapValues</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Dispatcher.html">Dispatcher</a></span> <span class="o">=</span> <span class="n"><a href="../Other Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">D</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T.Iterator.Element)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAST1TRpzrlE13flatMapValues2on_AA0A0CySay7ElementQyd__GGAA10Dispatcher_p_qd__AD_AJQZKctSTRd__lF"></a>
+                    <a name="//apple_ref/swift/Method/flatMapValues(on:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAST1TRpzrlE13flatMapValues2on_AA0A0CySay7ElementQyd__GGAA10Dispatcher_p_qd__AD_AJQZKctSTRd__lF">flatMapValues(on:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code><a href="../Classes/Promise.html">Promise&lt;[T]&gt;</a></code> =&gt; <code><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></code> -&gt; <code>[U]</code> =&gt; <code><a href="../Classes/Promise.html">Promise&lt;[U]&gt;</a></code></p>
+<pre class="highlight swift"><code><span class="n">firstly</span> <span class="p">{</span>
+    <span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="p">}</span><span class="o">.</span><span class="n">flatMapValues</span> <span class="p">{</span> <span class="n">integer</span> <span class="k">in</span>
+    <span class="p">[</span><span class="n">integer</span><span class="p">,</span> <span class="n">integer</span><span class="p">]</span>
+<span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+    <span class="c1">// $0 =&gt; [1,1,2,2,3,3]</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">flatMapValues</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">:</span> <span class="kt">Sequence</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Dispatcher.html">Dispatcher</a></span> <span class="o">=</span> <span class="n"><a href="../Other Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">D</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T.Iterator.Element)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAST1TRpzrlE16compactMapValues2on_AA0A0CySayqd__GGAA10Dispatcher_p_qd__SgAD_7ElementQZKctlF"></a>
+                    <a name="//apple_ref/swift/Method/compactMapValues(on:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAST1TRpzrlE16compactMapValues2on_AA0A0CySayqd__GGAA10Dispatcher_p_qd__SgAD_7ElementQZKctlF">compactMapValues(on:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code><a href="../Classes/Promise.html">Promise&lt;[T]&gt;</a></code> =&gt; <code><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></code> -&gt; <code>U?</code> =&gt; <code><a href="../Classes/Promise.html">Promise&lt;[U]&gt;</a></code></p>
+<pre class="highlight swift"><code><span class="n">firstly</span> <span class="p">{</span>
+    <span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="s">"1"</span><span class="p">,</span><span class="s">"2"</span><span class="p">,</span><span class="s">"a"</span><span class="p">,</span><span class="s">"3"</span><span class="p">])</span>
+<span class="p">}</span><span class="o">.</span><span class="n">compactMapValues</span> <span class="p">{</span>
+    <span class="kt">Int</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+    <span class="c1">// $0 =&gt; [1,2,3]</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">compactMapValues</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Dispatcher.html">Dispatcher</a></span> <span class="o">=</span> <span class="n"><a href="../Other Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">D</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T.Iterator.Element)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAST1TRpzrlE7thenMap2on_AA0A0CySayADQyd__GGAA10Dispatcher_p_qd__AD_7ElementQZKctAaBRd__lF"></a>
+                    <a name="//apple_ref/swift/Method/thenMap(on:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAST1TRpzrlE7thenMap2on_AA0A0CySayADQyd__GGAA10Dispatcher_p_qd__AD_7ElementQZKctAaBRd__lF">thenMap(on:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code><a href="../Classes/Promise.html">Promise&lt;[T]&gt;</a></code> =&gt; <code><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></code> -&gt; <code><a href="../Classes/Promise.html">Promise&lt;U&gt;</a></code> =&gt; <code><a href="../Classes/Promise.html">Promise&lt;[U]&gt;</a></code></p>
+<pre class="highlight swift"><code><span class="n">firstly</span> <span class="p">{</span>
+    <span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="p">}</span><span class="o">.</span><span class="n">thenMap</span> <span class="p">{</span> <span class="n">integer</span> <span class="k">in</span>
+    <span class="o">.</span><span class="nf">value</span><span class="p">(</span><span class="n">integer</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+    <span class="c1">// $0 =&gt; [2,4,6]</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">thenMap</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">:</span> <span class="kt">Thenable</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Dispatcher.html">Dispatcher</a></span> <span class="o">=</span> <span class="n"><a href="../Other Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">D</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T.Iterator.Element)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="o">.</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAST1TRpzrlE11thenFlatMap2on_AA0A0CySayAD_7ElementQYd__GGAA10Dispatcher_p_qd__AD_AJQZKctAaBRd__STADRpd__lF"></a>
+                    <a name="//apple_ref/swift/Method/thenFlatMap(on:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAST1TRpzrlE11thenFlatMap2on_AA0A0CySayAD_7ElementQYd__GGAA10Dispatcher_p_qd__AD_AJQZKctAaBRd__STADRpd__lF">thenFlatMap(on:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code><a href="../Classes/Promise.html">Promise&lt;[T]&gt;</a></code> =&gt; <code><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></code> -&gt; <code><a href="../Classes/Promise.html">Promise&lt;[U]&gt;</a></code> =&gt; <code><a href="../Classes/Promise.html">Promise&lt;[U]&gt;</a></code></p>
+<pre class="highlight swift"><code><span class="n">firstly</span> <span class="p">{</span>
+    <span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="p">}</span><span class="o">.</span><span class="n">thenFlatMap</span> <span class="p">{</span> <span class="n">integer</span> <span class="k">in</span>
+    <span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="n">integer</span><span class="p">,</span> <span class="n">integer</span><span class="p">])</span>
+<span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+    <span class="c1">// $0 =&gt; [1,1,2,2,3,3]</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">thenFlatMap</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">:</span> <span class="kt">Thenable</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Dispatcher.html">Dispatcher</a></span> <span class="o">=</span> <span class="n"><a href="../Other Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">D</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T.Iterator.Element)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="o">.</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">]</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span><span class="o">.</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="p">:</span> <span class="kt">Sequence</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAST1TRpzrlE12filterValues2on_AA0A0CySayAD_7ElementQZGGAA10Dispatcher_p_SbAKctF"></a>
+                    <a name="//apple_ref/swift/Method/filterValues(on:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAST1TRpzrlE12filterValues2on_AA0A0CySayAD_7ElementQZGGAA10Dispatcher_p_SbAKctF">filterValues(on:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code><a href="../Classes/Promise.html">Promise&lt;[T]&gt;</a></code> =&gt; <code><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></code> -&gt; Bool =&gt; <code><a href="../Classes/Promise.html">Promise&lt;[U]&gt;</a></code></p>
+<pre class="highlight swift"><code><span class="n">firstly</span> <span class="p">{</span>
+    <span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+<span class="p">}</span><span class="o">.</span><span class="n">filterValues</span> <span class="p">{</span>
+    <span class="nv">$0</span> <span class="o">&gt;</span> <span class="mi">1</span>
+<span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+    <span class="c1">// $0 =&gt; [2,3]</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">filterValues</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Dispatcher.html">Dispatcher</a></span> <span class="o">=</span> <span class="n"><a href="../Other Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">D</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="n">_</span> <span class="nv">isIncluded</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAASl1TRpzrlE10firstValueAA0A0CyAD_7ElementQZGvp"></a>
+                    <a name="//apple_ref/swift/Property/firstValue" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAASl1TRpzrlE10firstValueAA0A0CyAD_7ElementQZGvp">firstValue</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">firstValue</span><span class="p">:</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>a promise fulfilled with the first value of this <code>Collection</code> or, if empty, a promise rejected with PMKError.emptySequence.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAASl1TRpzrlE10firstValue2on5whereAA0A0CyAD_7ElementQZGAA10Dispatcher_p_SbALctF"></a>
+                    <a name="//apple_ref/swift/Method/firstValue(on:where:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAASl1TRpzrlE10firstValue2on5whereAA0A0CyAD_7ElementQZGAA10Dispatcher_p_SbALctF">firstValue(on:where:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">firstValue</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Dispatcher.html">Dispatcher</a></span> <span class="o">=</span> <span class="n"><a href="../Other Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">D</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="k">where</span> <span class="nv">test</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAASl1TRpzrlE9lastValueAA0A0CyAD_7ElementQZGvp"></a>
+                    <a name="//apple_ref/swift/Property/lastValue" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAASl1TRpzrlE9lastValueAA0A0CyAD_7ElementQZGvp">lastValue</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">lastValue</span><span class="p">:</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>a promise fulfilled with the last value of this <code>Collection</code> or, if empty, a promise rejected with PMKError.emptySequence.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAST1TRpzSLAD_7ElementRPzrlE12sortedValues2onAA0A0CySayAGGGAA10Dispatcher_p_tF"></a>
+                    <a name="//apple_ref/swift/Method/sortedValues(on:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAST1TRpzSLAD_7ElementRPzrlE12sortedValues2onAA0A0CySayAGGGAA10Dispatcher_p_tF">sortedValues(on:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">sortedValues</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Dispatcher.html">Dispatcher</a></span> <span class="o">=</span> <span class="n"><a href="../Other Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">D</span><span class="o">.</span><span class="n">map</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>a promise fulfilled with the sorted values of this <code>Sequence</code>.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2019-03-02)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

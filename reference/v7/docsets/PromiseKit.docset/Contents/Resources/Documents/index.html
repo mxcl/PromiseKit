@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>PromiseKit  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+    <script src="js/lunr.min.js" defer></script>
+    <script src="js/typeahead.jquery.js" defer></script>
+    <script src="js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+
+    <a title="PromiseKit  Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="index.html">
+          PromiseKit Docs
+        </a>
+         (83% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/mxcl/PromiseKit">
+            <img class="header-icon" src="img/gh.png"/>
+            View on GitHub
+          </a>
+        </p>
+    
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="index.html">PromiseKit Reference</a>
+      <img class="carat" src="img/carat.png" />
+      PromiseKit  Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Core Components.html">Core Components</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Promise.html">Promise</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Guarantee.html">Guarantee</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/Thenable.html">Thenable</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/CatchMixin.html">CatchMixin</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Resolver.html">Resolver</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Other Classes.html">Other Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/PMKFinalizer.html">PMKFinalizer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other Classes.html#/s:10PromiseKit21RateLimitedDispatcherC">RateLimitedDispatcher</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/RateLimitedDispatcherBase.html">RateLimitedDispatcherBase</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other Classes.html#/s:10PromiseKit27StrictRateLimitedDispatcherC">StrictRateLimitedDispatcher</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Other Global Variables.html">Other Global Variables</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Other Enums.html">Other Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/CatchPolicy.html">CatchPolicy</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/LogEvent.html">LogEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/PMKError.html">PMKError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/PMKNamespacer.html">PMKNamespacer</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Other Extensions.html">Other Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/DispatchQueue.html">DispatchQueue</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/Error.html">Error</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/NSManagedObjectContext.html">NSManagedObjectContext</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Other Functions.html">Other Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other Functions.html#/s:10PromiseKit5afteryAA9GuaranteeCyytG8Dispatch0E12TimeIntervalOF">after(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other Functions.html#/s:10PromiseKit5after7secondsAA9GuaranteeCyytGSd_tF">after(seconds:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other Functions.html#/s:10PromiseKit7firstly7executeAA0A0Cy1TQzGxyKXE_tAA8ThenableRzlF">firstly(execute:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other Functions.html#/s:10PromiseKit7firstly7executeAA9GuaranteeCyxGAFyXE_tlF">firstly(execute:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other Functions.html#/s:10PromiseKit4hangyxAA0A0CyxGKlF">hang(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other Functions.html#/s:10PromiseKit4raceyAA0A0Cy1TQzGSayxGAA8ThenableRzlF">race(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other Functions.html#/s:10PromiseKit4raceyAA0A0Cy1TQzGxd_tAA8ThenableRzlF">race(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other Functions.html#/s:10PromiseKit4raceyAA9GuaranteeCyxGAEd_tlF">race(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other Functions.html#/s:10PromiseKit4whenyAA9GuaranteeCyytGAEd_tF">when(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other Functions.html#/s:10PromiseKit4when9fulfilledAA0A0CySay1TQzGGSayxG_tAA8ThenableRzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other Functions.html#/s:10PromiseKit4when9fulfilledAA0A0CyytGSayxG_tAA8ThenableRzyt1TRtzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other Functions.html#/s:10PromiseKit4when9fulfilledAA0A0CyytGxd_tAA8ThenableRzyt1TRtzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other Functions.html#/s:10PromiseKit4when9fulfilled_AA0A0Cy1TQz_AFQy_tGx_q_tAA8ThenableRzAaJR_r0_lF">when(fulfilled:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other Functions.html#/s:10PromiseKit4when9fulfilled__AA0A0Cy1TQz_AFQy_AFQy0_tGx_q_q0_tAA8ThenableRzAaKR_AaKR0_r1_lF">when(fulfilled:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other Functions.html#/s:10PromiseKit4when9fulfilled___AA0A0Cy1TQz_AFQy_AFQy0_AFQy1_tGx_q_q0_q1_tAA8ThenableRzAaLR_AaLR0_AaLR1_r2_lF">when(fulfilled:_:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other Functions.html#/s:10PromiseKit4when9fulfilled____AA0A0Cy1TQz_AFQy_AFQy0_AFQy1_AFQy2_tGx_q_q0_q1_q2_tAA8ThenableRzAaMR_AaMR0_AaMR1_AaMR2_r3_lF">when(fulfilled:_:_:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other Functions.html#/s:10PromiseKit4when9fulfilled12concurrentlyAA0A0CySay7Element_1TQZGGx_SitStRzAA8ThenableAGRpzlF">when(fulfilled:concurrently:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other Functions.html#/s:10PromiseKit4when10guaranteesAA9GuaranteeCyytGSayAFG_tF">when(guarantees:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other Functions.html#/s:10PromiseKit4when8resolvedAA9GuaranteeCySays6ResultOyxs5Error_pGGGAA0A0CyxGd_tlF">when(resolved:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other Functions.html#/s:10PromiseKit4when8resolvedAA9GuaranteeCySays6ResultOyxs5Error_pGGGSayAA0A0CyxGG_tlF">when(resolved:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Other Protocols.html">Other Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/CancellableError.html">CancellableError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/Dispatcher.html">Dispatcher</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Other Structs.html">Other Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/CoreDataDispatcher.html">CoreDataDispatcher</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/CurrentThreadDispatcher.html">CurrentThreadDispatcher</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/DispatchQueueDispatcher.html">DispatchQueueDispatcher</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/PMKConfiguration.html">PMKConfiguration</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content">
+            
+            <p><img src="../gh-pages/public/img/logo-tight.png" alt="PromiseKit"></p>
+
+<p><a href="https://cocoapods.org/pods/PromiseKit"><img src="https://img.shields.io/cocoapods/v/PromiseKit.svg?label=version" alt="badge-pod"></a> <img src="https://img.shields.io/badge/languages-Swift%20%7C%20ObjC-orange.svg" alt="badge-languages"> <img src="https://img.shields.io/badge/supports-CocoaPods%20%7C%20Carthage%20%7C%20SwiftPM-green.svg" alt="badge-pms"> <img src="https://img.shields.io/badge/platforms-macOS%20%7C%20iOS%20%7C%20watchOS%20%7C%20tvOS%20%7C%20Linux-lightgrey.svg" alt="badge-platforms"> <a href="https://travis-ci.org/mxcl/PromiseKit"><img src="https://travis-ci.org/mxcl/PromiseKit.svg?branch=master" alt="badge-travis"></a></p>
+
+<hr>
+
+<p>Promises simplify asynchronous programming, freeing you up to focus on the more
+important things. They are easy to learn, easy to master and result in clearer,
+more readable code. Your co-workers will thank you.</p>
+<pre class="highlight swift"><code><span class="kt">UIApplication</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">isNetworkActivityIndicatorVisible</span> <span class="o">=</span> <span class="kc">true</span>
+
+<span class="k">let</span> <span class="nv">fetchImage</span> <span class="o">=</span> <span class="kt">URLSession</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">dataTask</span><span class="p">(</span><span class="o">.</span><span class="n">promise</span><span class="p">,</span> <span class="nv">with</span><span class="p">:</span> <span class="n">url</span><span class="p">)</span><span class="o">.</span><span class="n">compactMap</span><span class="p">{</span> <span class="kt">UIImage</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="nv">$0</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="p">}</span>
+<span class="k">let</span> <span class="nv">fetchLocation</span> <span class="o">=</span> <span class="kt">CLLocationManager</span><span class="o">.</span><span class="nf">requestLocation</span><span class="p">()</span><span class="o">.</span><span class="n">lastValue</span>
+
+<span class="n">firstly</span> <span class="p">{</span>
+    <span class="nf">when</span><span class="p">(</span><span class="nv">fulfilled</span><span class="p">:</span> <span class="n">fetchImage</span><span class="p">,</span> <span class="n">fetchLocation</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span> <span class="n">image</span><span class="p">,</span> <span class="n">location</span> <span class="k">in</span>
+    <span class="k">self</span><span class="o">.</span><span class="n">imageView</span><span class="o">.</span><span class="n">image</span> <span class="o">=</span> <span class="n">image</span>
+    <span class="k">self</span><span class="o">.</span><span class="n">label</span><span class="o">.</span><span class="n">text</span> <span class="o">=</span> <span class="s">"</span><span class="se">\(</span><span class="n">location</span><span class="se">)</span><span class="s">"</span>
+<span class="p">}</span><span class="o">.</span><span class="n">ensure</span> <span class="p">{</span>
+    <span class="kt">UIApplication</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="n">isNetworkActivityIndicatorVisible</span> <span class="o">=</span> <span class="kc">false</span>
+<span class="p">}</span><span class="o">.</span><span class="k">catch</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+    <span class="k">self</span><span class="o">.</span><span class="nf">show</span><span class="p">(</span><span class="kt">UIAlertController</span><span class="p">(</span><span class="nv">for</span><span class="p">:</span> <span class="n">error</span><span class="p">),</span> <span class="nv">sender</span><span class="p">:</span> <span class="k">self</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>PromiseKit is a thoughtful and complete implementation of promises for any
+platform that has a <code>swiftc</code>. It has <em>excellent</em> Objective-C bridging and
+<em>delightful</em> specializations for iOS, macOS, tvOS and watchOS. It is a top-100
+pod used in many of the most popular apps in the world.</p>
+
+<p><a href="https://codecov.io/gh/mxcl/PromiseKit"><img src="https://codecov.io/gh/mxcl/PromiseKit/branch/master/graph/badge.svg" alt="codecov"></a></p>
+<h1 id='promisekit-7-alpha' class='heading'>PromiseKit 7 Alpha</h1>
+
+<p>PromiseKit 7 is prerelease, if you’re using it: beware!</p>
+
+<p>PromiseKit 7 uses Swift 5’s <code>Result</code>, PromiseKit &lt;7 use our own <code>Result</code> type.</p>
+
+<p>PromiseKit 7 generalizes <code>DispatchQueue</code>s to a <code><a href="Protocols/Dispatcher.html">Dispatcher</a></code> protocol. However, <code>DispatchQueue</code>s are <code><a href="Protocols/Dispatcher.html">Dispatcher</a></code>-conformant,
+so existing code should not need to change. Please report any issues related to this transition.  </p>
+<h1 id='quick-start' class='heading'>Quick Start</h1>
+
+<p>In your <a href="https://guides.cocoapods.org/syntax/podfile.html">Podfile</a>:</p>
+<pre class="highlight ruby"><code><span class="n">use_frameworks!</span>
+
+<span class="n">target</span> <span class="s2">"Change Me!"</span> <span class="k">do</span>
+  <span class="n">pod</span> <span class="s2">"PromiseKit"</span><span class="p">,</span> <span class="ss">:git</span> <span class="o">=&gt;</span> <span class="s1">'https://github.com/mxcl/PromiseKit.git'</span><span class="p">,</span> <span class="ss">:branch</span> <span class="o">=&gt;</span> <span class="s1">'v7'</span>
+<span class="k">end</span>
+</code></pre>
+
+<p>PromiseKit 7 supports Swift 5.x; Xcode &gt;= 10.2; iOS, macOS, tvOS, watchOS, Linux
+and Android; SwiftPM.</p>
+
+<p>PromiseKits 6, 5 and 4 support Xcode 8.3, 9.x and 10.0; Swift 3.1,
+3.2, 3.3, 3.4, 4.0, 4.1, 4.2 and 5.0 (development snapshots); iOS, macOS, tvOS,
+watchOS, Linux and Android; CocoaPods, Carthage and SwiftPM;
+(<a href="https://travis-ci.org/mxcl/PromiseKit">CI Matrix</a>).</p>
+
+<p>For Carthage, SwiftPM, etc., or for instructions when using older Swifts or
+Xcodes, see our <a href="Documents/Installation.md">Installation Guide</a>. We 
+recommend <a href="https://github.com/Carthage/Carthage">Carthage</a>.</p>
+<h1 id='professionally-supported-promisekit-is-now-available' class='heading'>Professionally Supported PromiseKit is Now Available</h1>
+
+<p>TideLift gives software development teams a single source for purchasing
+and maintaining their software, with professional grade assurances from
+the experts who know it best, while seamlessly integrating with existing
+tools.</p>
+
+<p><a href="https://tidelift.com/subscription/pkg/cocoapods-promisekit?utm_source=cocoapods-promisekit&utm_medium=referral&utm_campaign=readme">Get Professional Support for PromiseKit with TideLift</a>.</p>
+<h1 id='promisekit-is-thousands-of-hours-of-work' class='heading'>PromiseKit is Thousands of Hours of Work</h1>
+
+<p>Hey there, I’m Max Howell. I’m a prolific producer of open source software and
+probably you already use some of it (I created <a href="https://brew.sh"><code>brew</code></a>). I work full-time on
+open source and it’s hard; currently <em>I earn less than minimum wage</em>. Please
+help me continue my work, I appreciate it 🙏🏻</p>
+
+<p><a href="https://www.patreon.com/mxcl">
+    <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
+</a></p>
+
+<p><a href="http://mxcl.dev/#donate">Other ways to say thanks</a>.</p>
+<h1 id='documentation' class='heading'>Documentation</h1>
+
+<ul>
+<li>Handbook
+
+<ul>
+<li><a href="Documents/GettingStarted.md">Getting Started</a></li>
+<li><a href="Documents/CommonPatterns.md">Promises: Common Patterns</a></li>
+<li><a href="Documents/FAQ.md">Frequently Asked Questions</a></li>
+</ul></li>
+<li>Manual
+
+<ul>
+<li><a href="Documents/Installation.md">Installation Guide</a></li>
+<li><a href="Documents/ObjectiveC.md">Objective-C Guide</a></li>
+<li><a href="Documents/Troubleshooting.md">Troubleshooting</a> (e.g., solutions to common compile errors)</li>
+<li><a href="Documents/Appendix.md">Appendix</a></li>
+</ul></li>
+<li><a href="https://mxcl.dev/PromiseKit/reference/v7/Classes/Promise.html">API Reference</a></li>
+</ul>
+<h1 id='extensions' class='heading'>Extensions</h1>
+
+<p>Promises are only as useful as the asynchronous tasks they represent. Thus, we
+have converted (almost) all of Apple’s APIs to promises. The default CocoaPod
+provides Promises and the extensions for Foundation and UIKit. The other
+extensions are available by specifying additional subspecs in your <code>Podfile</code>,
+e.g.:</p>
+<pre class="highlight ruby"><code><span class="n">pod</span> <span class="s2">"PMKMapKit"</span>          <span class="c1"># MKDirections().calculate().then { /*…*/ }</span>
+<span class="n">pod</span> <span class="s2">"PMKCoreLocation"</span>    <span class="c1"># CLLocationManager.requestLocation().then { /*…*/ }</span>
+</code></pre>
+
+<p>All our extensions are separate repositories at the <a href="https://github.com/PromiseKit">PromiseKit organization</a>.</p>
+<h2 id='choose-your-networking-library' class='heading'>Choose Your Networking Library</h2>
+
+<p>Promise chains commonly start with a network operation. Thus, we offer
+extensions for <code>URLSession</code>:</p>
+<pre class="highlight swift"><code><span class="c1">// pod 'PMKFoundation'  # https://github.com/PromiseKit/PMKFoundation</span>
+
+<span class="n">firstly</span> <span class="p">{</span>
+    <span class="kt">URLSession</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">dataTask</span><span class="p">(</span><span class="o">.</span><span class="n">promise</span><span class="p">,</span> <span class="nv">with</span><span class="p">:</span> <span class="k">try</span> <span class="nf">makeUrlRequest</span><span class="p">())</span><span class="o">.</span><span class="nf">validate</span><span class="p">()</span>
+    <span class="c1">// ^^ we provide `.validate()` so that eg. 404s get converted to errors</span>
+<span class="p">}</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span>
+    <span class="k">try</span> <span class="kt">JSONDecoder</span><span class="p">()</span><span class="o">.</span><span class="nf">decode</span><span class="p">(</span><span class="kt">Foo</span><span class="o">.</span><span class="k">self</span><span class="p">,</span> <span class="nv">with</span><span class="p">:</span> <span class="nv">$0</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span> <span class="n">foo</span> <span class="k">in</span>
+    <span class="c1">//…</span>
+<span class="p">}</span><span class="o">.</span><span class="k">catch</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+    <span class="c1">//…</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">makeUrlRequest</span><span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">URLRequest</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">rq</span> <span class="o">=</span> <span class="kt">URLRequest</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="n">url</span><span class="p">)</span>
+    <span class="n">rq</span><span class="o">.</span><span class="n">httpMethod</span> <span class="o">=</span> <span class="s">"POST"</span>
+    <span class="n">rq</span><span class="o">.</span><span class="nf">addValue</span><span class="p">(</span><span class="s">"application/json"</span><span class="p">,</span> <span class="nv">forHTTPHeaderField</span><span class="p">:</span> <span class="s">"Content-Type"</span><span class="p">)</span>
+    <span class="n">rq</span><span class="o">.</span><span class="nf">addValue</span><span class="p">(</span><span class="s">"application/json"</span><span class="p">,</span> <span class="nv">forHTTPHeaderField</span><span class="p">:</span> <span class="s">"Accept"</span><span class="p">)</span>
+    <span class="n">rq</span><span class="o">.</span><span class="n">httpBody</span> <span class="o">=</span> <span class="k">try</span> <span class="kt">JSONEncoder</span><span class="p">()</span><span class="o">.</span><span class="nf">encode</span><span class="p">(</span><span class="n">obj</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">rq</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>And <a href="http://github.com/PromiseKit/Alamofire-">Alamofire</a>:</p>
+<pre class="highlight swift"><code><span class="c1">// pod 'PMKAlamofire'  # https://github.com/PromiseKit/PMKAlamofire</span>
+
+<span class="n">firstly</span> <span class="p">{</span>
+    <span class="kt">Alamofire</span>
+        <span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="s">"http://example.com"</span><span class="p">,</span> <span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="n">post</span><span class="p">,</span> <span class="nv">parameters</span><span class="p">:</span> <span class="n">params</span><span class="p">)</span>
+        <span class="o">.</span><span class="nf">responseDecodable</span><span class="p">(</span><span class="kt">Foo</span><span class="o">.</span><span class="k">self</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span> <span class="n">foo</span> <span class="k">in</span>
+    <span class="c1">//…</span>
+<span class="p">}</span><span class="o">.</span><span class="k">catch</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+    <span class="c1">//…</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>Nowadays, considering that:</p>
+
+<ul>
+<li>We almost always POST JSON</li>
+<li>We now have <code>JSONDecoder</code></li>
+<li>PromiseKit now has <code>map</code> and other functional primitives</li>
+<li>PromiseKit (like Alamofire, but not raw-<code>URLSession</code>) also defaults to having callbacks go to the main thread</li>
+</ul>
+
+<p>We recommend vanilla <code>URLSession</code>. It uses fewer black boxes and sticks closer to the
+metal. Alamofire was essential until the three bullet points above became true,
+but nowadays it isn’t really necessary.</p>
+<h1 id='support' class='heading'>Support</h1>
+
+<p>Please check our <a href="Documents/Troubleshooting.md">Troubleshooting Guide</a>, and
+if after that you still have a question, ask at our <a href="https://gitter.im/mxcl/PromiseKit">Gitter chat channel</a> or on <a href="https://github.com/mxcl/PromiseKit/issues/new">our bug tracker</a>.</p>
+<h1 id='contributing' class='heading'>Contributing</h1>
+
+<p>Generate the Xcode project:</p>
+<pre class="highlight plaintext"><code>swift package generate-xcodeproj
+</code></pre>
+
+          </div>
+        </section>
+
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2019-03-02)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.5</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

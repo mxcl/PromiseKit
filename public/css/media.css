@@ -1,0 +1,113 @@
+html {
+  font-size: 12px;
+}
+body {
+  padding: 2.5rem 0;
+}
+p, h1, h2, h3, ol, ul, aside, .indent, #masthead, blockquote {
+  margin-left: 16px;
+  margin-right: 16px;
+}
+#tagline {
+  padding: 1rem;
+}
+pre {
+  overflow-x: scroll;
+  padding: 16px;
+}
+.contents {
+  font-size: 0.6rem;
+}
+#masthead > * {
+  display: inline-block;
+}
+#masthead nav a {
+  display: inline-block;
+}
+#masthead nav a {
+  padding: 0.5rem;
+}
+#masthead {
+  position: relative;
+}
+#masthead nav {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  margin-top: -25px;
+}
+
+@media (max-width: 599px) {
+  #masthead > * {
+    display: block;
+    text-align: center;
+  }
+  #masthead img {
+    margin: auto;
+  }
+  #masthead nav {
+    margin-top: 1rem;
+    position: static;
+  }
+  #masthead nav a {
+    width: 15%;
+    padding: 0;
+  }
+  #masthead {
+    margin-bottom: 1rem;
+  }
+  #masthead a.active {
+    line-height: 1.5em;
+  }
+}
+
+@media (min-width: 320px) and (orientation: landscape) {
+  p, h1, h2, h3, ol, ul, aside, .indent, #masthead, blockquote {
+    margin-left: 20px;
+    margin-right: 20px;
+  }
+  pre {
+    padding: 20px;
+    line-height: 1.7;
+  }
+}
+@media (min-width: 640px) {
+  html {
+    font-size: 20px;
+  }
+  p, h1, h2, h3, ol, ul, aside, .indent, #masthead, blockquote {
+    max-width: 30rem;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  pre.highlight code {
+    min-width: 28rem;
+    display: inline-block;
+    text-align: left;
+    padding: 1rem;
+    line-height: 1.4;
+  }
+  pre.highlight {
+    text-align: center;
+  }
+}
+@media (min-width: 800px) {
+  #tagline {
+    text-align: left;
+  }
+  html {
+    font-size: 20px;
+  }
+  p, h1, h2, h3, ol, ul, .indent, #masthead {
+    max-width: 38rem;
+  }
+  pre {
+    min-width: 36rem;
+  }
+  aside, blockquote {
+    min-width: 34rem;
+  }
+  .contents {
+    font-size: 1rem;
+  }
+}

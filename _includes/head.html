@@ -1,0 +1,17 @@
+{% if page.url == '/' %}
+{%   assign title = "PromiseKit" %}
+{% elsif page.title contains 'PromiseKit' %}
+{%  assign title = page.title %}
+{% else %}
+{%  assign title = page.title | append: '&middot;PromiseKit' %}
+{% endif %}
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1">
+  <title>{{ title }}</title>
+  <link rel="stylesheet" href="/PromiseKit/public/css/main.css">
+  <link rel="stylesheet" href="/PromiseKit/public/css/misc.css">
+  <link rel="stylesheet" href="/PromiseKit/public/css/media.css">
+  <link rel="stylesheet" href="/PromiseKit/public/css/syntax.css">
+  <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=PT+Serif:400,400italic,700|PT+Sans:400">
+</head>

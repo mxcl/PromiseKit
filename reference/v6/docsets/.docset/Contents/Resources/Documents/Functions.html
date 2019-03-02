@@ -1,0 +1,1196 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>Functions  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+    <script src="js/lunr.min.js" defer></script>
+    <script src="js/typeahead.jquery.js" defer></script>
+    <script src="js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Section/Functions" class="dashAnchor"></a>
+
+    <a title="Functions  Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="index.html">
+           Docs
+        </a>
+         (68% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/mxcl/PromiseKit">
+            <img class="header-icon" src="img/gh.png"/>
+            View on GitHub
+          </a>
+        </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="dash-feed://https%3A%2F%2Fpromisekit%2Eorg%2Freference%2Fdocsets%2F%2Exml">
+            <img class="header-icon" src="img/dash.png"/>
+            Install in Dash
+          </a>
+        </p>
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="index.html"> Reference</a>
+      <img class="carat" src="img/carat.png" />
+      Functions  Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Guides.html">Guides</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="appendix.html">Appendix</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="commonpatterns.html">CommonPatterns</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="faq.html">FAQ</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="gettingstarted.html">GettingStarted</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="installation.html">Installation</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="objectivec.html">ObjectiveC</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="readme.html">README</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="troubleshooting.html">Troubleshooting</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Box.html">Box</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/EmptyBox.html">EmptyBox</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Guarantee.html">Guarantee</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Handlers.html">Handlers</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/PMKFinalizer.html">PMKFinalizer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Promise.html">Promise</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Resolver.html">Resolver</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/SealedBox.html">SealedBox</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/__AnyPromise.html">__AnyPromise</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Global Variables.html">Global Variables</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/CatchPolicy.html">CatchPolicy</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/LogEvent.html">LogEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/PMKError.html">PMKError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/PMKNamespacer.html">PMKNamespacer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/PMKUnambiguousInitializer.html">PMKUnambiguousInitializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/Result.html">Result</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/Sealant.html">Sealant</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/AnyPromise.html">AnyPromise</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/DispatchQueue.html">DispatchQueue</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/Error.html">Error</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/Optional.html">Optional</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/PromiseKit.html">PromiseKit</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/PromiseKit/Result.html">– Result</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/Thread.html">Thread</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit5afteryAA9GuaranteeCyytG8Dispatch0E12TimeIntervalOF">after(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit5after7secondsAA9GuaranteeCyytGSd_tF">after(seconds:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit7firstly7executeAA0A0Cy1TQzGxyKXE_tAA8ThenableRzlF">firstly(execute:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit7firstly7executeAA9GuaranteeCyxGAFyXE_tlF">firstly(execute:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4hangyxAA0A0CyxGKlF">hang(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4raceyAA0A0Cy1TQzGSayxGAA8ThenableRzlF">race(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4raceyAA0A0Cy1TQzGxd_tAA8ThenableRzlF">race(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4raceyAA9GuaranteeCyxGAEd_tlF">race(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4whenyAA9GuaranteeCyytGAEd_tF">when(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when9fulfilledAA0A0CySay1TQzGGSayxG_tAA8ThenableRzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when9fulfilledAA0A0CyytGSayxG_tAA8ThenableRzyt1TRtzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when9fulfilledAA0A0CyytGxd_tAA8ThenableRzyt1TRtzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when9fulfilled_AA0A0Cy1TQz_AFQy_tGx_q_tAA8ThenableRzAaJR_r0_lF">when(fulfilled:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when9fulfilled__AA0A0Cy1TQz_AFQy_AFQy0_tGx_q_q0_tAA8ThenableRzAaKR_AaKR0_r1_lF">when(fulfilled:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when9fulfilled___AA0A0Cy1TQz_AFQy_AFQy0_AFQy1_tGx_q_q0_q1_tAA8ThenableRzAaLR_AaLR0_AaLR1_r2_lF">when(fulfilled:_:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when9fulfilled____AA0A0Cy1TQz_AFQy_AFQy0_AFQy1_AFQy2_tGx_q_q0_q1_q2_tAA8ThenableRzAaMR_AaMR0_AaMR1_AaMR2_r3_lF">when(fulfilled:_:_:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when9fulfilled12concurrentlyAA0A0CySay7Element_1TQZGGx_SitStRzAA8ThenableAGRpzlF">when(fulfilled:concurrently:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when10guaranteesAA9GuaranteeCyytGSayAFG_tF">when(guarantees:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when8resolvedAA9GuaranteeCySayAA6ResultOyxGGGAA0A0CyxGd_tlF">when(resolved:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when8resolvedAA9GuaranteeCySayAA6ResultOyxGGGSayAA0A0CyxGG_tlF">when(resolved:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4wrapyAA0A0CyxGyys5Error_pSg_xSgtcKXElF">wrap(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4wrapyAA0A0CyxGyyxSg_s5Error_pSgtcKXElF">wrap(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4wrapyAA0A0CyxGyyx_s5Error_pSgtcKXElF">wrap(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4wrapyAA0A0CyxGyyxcKXElF">wrap(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4wrapyAA0A0CyytGyys5Error_pSgcKXEF">wrap(_:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/CancellableError.html">CancellableError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/CatchMixin.html">CatchMixin</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/Thenable.html">Thenable</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/PMKConfiguration.html">PMKConfiguration</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content">
+            <h1>Functions</h1>
+            <p>The following functions are available globally.</p>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit4wrapyAA0A0CyxGyyxSg_s5Error_pSgtcKXElF"></a>
+                    <a name="//apple_ref/swift/Function/wrap(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit4wrapyAA0A0CyxGyyxSg_s5Error_pSgtcKXElF">wrap(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">wrap</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="p">(</span><span class="kd">@escaping</span> <span class="p">(</span><span class="kt">T</span><span class="p">?,</span> <span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit4wrapyAA0A0CyxGyyx_s5Error_pSgtcKXElF"></a>
+                    <a name="//apple_ref/swift/Function/wrap(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit4wrapyAA0A0CyxGyyx_s5Error_pSgtcKXElF">wrap(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">wrap</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="p">(</span><span class="kd">@escaping</span> <span class="p">(</span><span class="kt">T</span><span class="p">,</span> <span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit4wrapyAA0A0CyxGyys5Error_pSg_xSgtcKXElF"></a>
+                    <a name="//apple_ref/swift/Function/wrap(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit4wrapyAA0A0CyxGyys5Error_pSg_xSgtcKXElF">wrap(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">wrap</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="p">(</span><span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Error</span><span class="p">?,</span> <span class="kt">T</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit4wrapyAA0A0CyytGyys5Error_pSgcKXEF"></a>
+                    <a name="//apple_ref/swift/Function/wrap(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit4wrapyAA0A0CyytGyys5Error_pSgcKXEF">wrap(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">wrap</span><span class="p">(</span><span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="p">(</span><span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Error</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit4wrapyAA0A0CyxGyyxcKXElF"></a>
+                    <a name="//apple_ref/swift/Function/wrap(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit4wrapyAA0A0CyxGyyxcKXElF">wrap(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">wrap</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="p">(</span><span class="kd">@escaping</span> <span class="p">(</span><span class="kt">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit5after7secondsAA9GuaranteeCyytGSd_tF"></a>
+                    <a name="//apple_ref/swift/Function/after(seconds:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit5after7secondsAA9GuaranteeCyytGSd_tF">after(seconds:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <pre class="highlight swift"><code> <span class="nf">after</span><span class="p">(</span><span class="o">.</span><span class="nf">seconds</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span>
+     <span class="c1">//…</span>
+ <span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">after</span><span class="p">(</span><span class="nv">seconds</span><span class="p">:</span> <span class="kt">TimeInterval</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A guarantee that resolves after the specified duration.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit5afteryAA9GuaranteeCyytG8Dispatch0E12TimeIntervalOF"></a>
+                    <a name="//apple_ref/swift/Function/after(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit5afteryAA9GuaranteeCyytG8Dispatch0E12TimeIntervalOF">after(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <pre class="highlight swift"><code><span class="nf">after</span><span class="p">(</span><span class="nv">seconds</span><span class="p">:</span> <span class="mf">1.5</span><span class="p">)</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span>
+    <span class="c1">//…</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">after</span><span class="p">(</span><span class="n">_</span> <span class="nv">interval</span><span class="p">:</span> <span class="kt">DispatchTimeInterval</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A guarantee that resolves after the specified duration.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit7firstly7executeAA0A0Cy1TQzGxyKXE_tAA8ThenableRzlF"></a>
+                    <a name="//apple_ref/swift/Function/firstly(execute:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit7firstly7executeAA0A0Cy1TQzGxyKXE_tAA8ThenableRzlF">firstly(execute:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Judicious use of <code>firstly</code> <em>may</em> make chains more readable.</p>
+
+<p>Compare:</p>
+<pre class="highlight swift"><code><span class="kt">URLSession</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">dataTask</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="n">url1</span><span class="p">)</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span>
+    <span class="kt">URLSession</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">dataTask</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="n">url2</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span>
+    <span class="kt">URLSession</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">dataTask</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="n">url3</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>With:</p>
+<pre class="highlight swift"><code><span class="n">firstly</span> <span class="p">{</span>
+    <span class="kt">URLSession</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">dataTask</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="n">url1</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span>
+    <span class="kt">URLSession</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">dataTask</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="n">url2</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span>
+    <span class="kt">URLSession</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">dataTask</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="n">url3</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    the block you pass excecutes immediately on the current thread/queue.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">firstly</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="n">execute</span> <span class="nv">body</span><span class="p">:</span> <span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Thenable.html">Thenable</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit7firstly7executeAA9GuaranteeCyxGAFyXE_tlF"></a>
+                    <a name="//apple_ref/swift/Function/firstly(execute:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit7firstly7executeAA9GuaranteeCyxGAFyXE_tlF">firstly(execute:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-see">
+    <p class="aside-title">See</p>
+    firstly()
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">firstly</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">execute</span> <span class="nv">body</span><span class="p">:</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit4hangyxAA0A0CyxGKlF"></a>
+                    <a name="//apple_ref/swift/Function/hang(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit4hangyxAA0A0CyxGKlF">hang(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Runs the active run-loop until the provided promise resolves.</p>
+
+<p>This is for debug and is not a generally safe function to use in your applications. We mostly provide it for use in testing environments.</p>
+
+<p>Still if you like, study how it works (by reading the sources!) and use at your own risk.</p>
+<div class="aside aside-throws">
+    <p class="aside-title">Throws</p>
+    An error, should the promise be rejected
+
+</div>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <code>wait()</code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">hang</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">promise</span><span class="p">:</span> <span class="kt"><a href="Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">T</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The value of the resolved promise</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit4raceyAA0A0Cy1TQzGxd_tAA8ThenableRzlF"></a>
+                    <a name="//apple_ref/swift/Function/race(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit4raceyAA0A0Cy1TQzGxd_tAA8ThenableRzlF">race(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Waits for one promise to resolve</p>
+<pre class="highlight swift"><code><span class="nf">race</span><span class="p">(</span><span class="n">promise1</span><span class="p">,</span> <span class="n">promise2</span><span class="p">,</span> <span class="n">promise3</span><span class="p">)</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">winner</span> <span class="k">in</span>
+    <span class="c1">//…</span>
+<span class="p">}</span>
+</code></pre>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    If the first resolution is a rejection, the returned promise is rejected
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">race</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">thenables</span><span class="p">:</span> <span class="kt">U</span><span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Thenable.html">Thenable</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The promise that resolves first</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit4raceyAA0A0Cy1TQzGSayxGAA8ThenableRzlF"></a>
+                    <a name="//apple_ref/swift/Function/race(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit4raceyAA0A0Cy1TQzGSayxGAA8ThenableRzlF">race(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Waits for one promise to resolve</p>
+<pre class="highlight swift"><code><span class="nf">race</span><span class="p">(</span><span class="n">promise1</span><span class="p">,</span> <span class="n">promise2</span><span class="p">,</span> <span class="n">promise3</span><span class="p">)</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">winner</span> <span class="k">in</span>
+    <span class="c1">//…</span>
+<span class="p">}</span>
+</code></pre>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    If the first resolution is a rejection, the returned promise is rejected
+
+</div>
+<div class="aside aside-remark">
+    <p class="aside-title">Remark</p>
+    If the provided array is empty the returned promise is rejected with PMKError.badInput
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">race</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">thenables</span><span class="p">:</span> <span class="p">[</span><span class="kt">U</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Thenable.html">Thenable</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The promise that resolves first</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit4raceyAA9GuaranteeCyxGAEd_tlF"></a>
+                    <a name="//apple_ref/swift/Function/race(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit4raceyAA9GuaranteeCyxGAEd_tlF">race(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Waits for one guarantee to resolve</p>
+<pre class="highlight swift"><code><span class="nf">race</span><span class="p">(</span><span class="n">promise1</span><span class="p">,</span> <span class="n">promise2</span><span class="p">,</span> <span class="n">promise3</span><span class="p">)</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">winner</span> <span class="k">in</span>
+    <span class="c1">//…</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">race</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">guarantees</span><span class="p">:</span> <span class="kt"><a href="Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The guarantee that resolves first</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit4when9fulfilledAA0A0CySay1TQzGGSayxG_tAA8ThenableRzlF"></a>
+                    <a name="//apple_ref/swift/Function/when(fulfilled:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit4when9fulfilledAA0A0CySay1TQzGGSayxG_tAA8ThenableRzlF">when(fulfilled:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Wait for all promises in a set to fulfill.</p>
+
+<p>For example:</p>
+<pre class="highlight swift"><code><span class="nf">when</span><span class="p">(</span><span class="nv">fulfilled</span><span class="p">:</span> <span class="n">promise1</span><span class="p">,</span> <span class="n">promise2</span><span class="p">)</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">results</span> <span class="k">in</span>
+    <span class="c1">//…</span>
+<span class="p">}</span><span class="o">.</span><span class="k">catch</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+    <span class="k">switch</span> <span class="n">error</span> <span class="p">{</span>
+    <span class="k">case</span> <span class="kt">URLError</span><span class="o">.</span><span class="nv">notConnectedToInternet</span><span class="p">:</span>
+        <span class="c1">//…</span>
+    <span class="k">case</span> <span class="kt">CLError</span><span class="o">.</span><span class="nv">denied</span><span class="p">:</span>
+        <span class="c1">//…</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    If <em>any</em> of the provided promises reject, the returned promise is immediately rejected with that error.
+
+</div>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    In the event of rejection the other promises will continue to resolve and, as per any other promise, will either fulfill or reject. This is the right pattern for <code>getter</code> style asynchronous tasks, but often for <code>setter</code> tasks (eg. storing data on a server), you most likely will need to wait on all tasks and then act based on which have succeeded and which have failed, in such situations use <code><a href="Functions.html#/s:10PromiseKit4when8resolvedAA9GuaranteeCySayAA6ResultOyxGGGAA0A0CyxGd_tlF">when(resolved:)</a></code>.
+
+</div>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    <code>when</code> provides <code>NSProgress</code>.
+
+</div>
+<div class="aside aside-see-also">
+    <p class="aside-title">See also</p>
+    <code><a href="Functions.html#/s:10PromiseKit4when8resolvedAA9GuaranteeCySayAA6ResultOyxGGGAA0A0CyxGd_tlF">when(resolved:)</a></code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">when</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">thenables</span><span class="p">:</span> <span class="p">[</span><span class="kt">U</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">]</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Thenable.html">Thenable</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>promises</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The promises upon which to wait before the returned promise resolves.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new promise that resolves when all the provided promises fulfill or one of the provided promises rejects.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit4when9fulfilledAA0A0CyytGxd_tAA8ThenableRzyt1TRtzlF"></a>
+                    <a name="//apple_ref/swift/Function/when(fulfilled:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit4when9fulfilledAA0A0CyytGxd_tAA8ThenableRzyt1TRtzlF">when(fulfilled:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Wait for all promises in a set to fulfill.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">when</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">promises</span><span class="p">:</span> <span class="kt">U</span><span class="o">...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Thenable.html">Thenable</a></span><span class="p">,</span> <span class="kt">U</span><span class="o">.</span><span class="kt">T</span> <span class="o">==</span> <span class="kt">Void</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit4when9fulfilledAA0A0CyytGSayxG_tAA8ThenableRzyt1TRtzlF"></a>
+                    <a name="//apple_ref/swift/Function/when(fulfilled:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit4when9fulfilledAA0A0CyytGSayxG_tAA8ThenableRzyt1TRtzlF">when(fulfilled:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Wait for all promises in a set to fulfill.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">when</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">promises</span><span class="p">:</span> <span class="p">[</span><span class="kt">U</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Thenable.html">Thenable</a></span><span class="p">,</span> <span class="kt">U</span><span class="o">.</span><span class="kt">T</span> <span class="o">==</span> <span class="kt">Void</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit4when9fulfilled_AA0A0Cy1TQz_AFQy_tGx_q_tAA8ThenableRzAaJR_r0_lF"></a>
+                    <a name="//apple_ref/swift/Function/when(fulfilled:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit4when9fulfilled_AA0A0Cy1TQz_AFQy_tGx_q_tAA8ThenableRzAaJR_r0_lF">when(fulfilled:_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Wait for all promises in a set to fulfill.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">when</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">,</span> <span class="kt">V</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">pu</span><span class="p">:</span> <span class="kt">U</span><span class="p">,</span> <span class="n">_</span> <span class="nv">pv</span><span class="p">:</span> <span class="kt">V</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">(</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">V</span><span class="o">.</span><span class="kt">T</span><span class="p">)</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Thenable.html">Thenable</a></span><span class="p">,</span> <span class="kt">V</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Thenable.html">Thenable</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit4when9fulfilled__AA0A0Cy1TQz_AFQy_AFQy0_tGx_q_q0_tAA8ThenableRzAaKR_AaKR0_r1_lF"></a>
+                    <a name="//apple_ref/swift/Function/when(fulfilled:_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit4when9fulfilled__AA0A0Cy1TQz_AFQy_AFQy0_tGx_q_q0_tAA8ThenableRzAaKR_AaKR0_r1_lF">when(fulfilled:_:_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Wait for all promises in a set to fulfill.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">when</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">,</span> <span class="kt">V</span><span class="p">,</span> <span class="kt">W</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">pu</span><span class="p">:</span> <span class="kt">U</span><span class="p">,</span> <span class="n">_</span> <span class="nv">pv</span><span class="p">:</span> <span class="kt">V</span><span class="p">,</span> <span class="n">_</span> <span class="nv">pw</span><span class="p">:</span> <span class="kt">W</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">(</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">V</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">W</span><span class="o">.</span><span class="kt">T</span><span class="p">)</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Thenable.html">Thenable</a></span><span class="p">,</span> <span class="kt">V</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Thenable.html">Thenable</a></span><span class="p">,</span> <span class="kt">W</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Thenable.html">Thenable</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit4when9fulfilled___AA0A0Cy1TQz_AFQy_AFQy0_AFQy1_tGx_q_q0_q1_tAA8ThenableRzAaLR_AaLR0_AaLR1_r2_lF"></a>
+                    <a name="//apple_ref/swift/Function/when(fulfilled:_:_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit4when9fulfilled___AA0A0Cy1TQz_AFQy_AFQy0_AFQy1_tGx_q_q0_q1_tAA8ThenableRzAaLR_AaLR0_AaLR1_r2_lF">when(fulfilled:_:_:_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Wait for all promises in a set to fulfill.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">when</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">,</span> <span class="kt">V</span><span class="p">,</span> <span class="kt">W</span><span class="p">,</span> <span class="kt">X</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">pu</span><span class="p">:</span> <span class="kt">U</span><span class="p">,</span> <span class="n">_</span> <span class="nv">pv</span><span class="p">:</span> <span class="kt">V</span><span class="p">,</span> <span class="n">_</span> <span class="nv">pw</span><span class="p">:</span> <span class="kt">W</span><span class="p">,</span> <span class="n">_</span> <span class="nv">px</span><span class="p">:</span> <span class="kt">X</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">(</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">V</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">W</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">X</span><span class="o">.</span><span class="kt">T</span><span class="p">)</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Thenable.html">Thenable</a></span><span class="p">,</span> <span class="kt">V</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Thenable.html">Thenable</a></span><span class="p">,</span> <span class="kt">W</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Thenable.html">Thenable</a></span><span class="p">,</span> <span class="kt">X</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Thenable.html">Thenable</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit4when9fulfilled____AA0A0Cy1TQz_AFQy_AFQy0_AFQy1_AFQy2_tGx_q_q0_q1_q2_tAA8ThenableRzAaMR_AaMR0_AaMR1_AaMR2_r3_lF"></a>
+                    <a name="//apple_ref/swift/Function/when(fulfilled:_:_:_:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit4when9fulfilled____AA0A0Cy1TQz_AFQy_AFQy0_AFQy1_AFQy2_tGx_q_q0_q1_q2_tAA8ThenableRzAaMR_AaMR0_AaMR1_AaMR2_r3_lF">when(fulfilled:_:_:_:_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Wait for all promises in a set to fulfill.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">when</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">,</span> <span class="kt">V</span><span class="p">,</span> <span class="kt">W</span><span class="p">,</span> <span class="kt">X</span><span class="p">,</span> <span class="kt">Y</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">pu</span><span class="p">:</span> <span class="kt">U</span><span class="p">,</span> <span class="n">_</span> <span class="nv">pv</span><span class="p">:</span> <span class="kt">V</span><span class="p">,</span> <span class="n">_</span> <span class="nv">pw</span><span class="p">:</span> <span class="kt">W</span><span class="p">,</span> <span class="n">_</span> <span class="nv">px</span><span class="p">:</span> <span class="kt">X</span><span class="p">,</span> <span class="n">_</span> <span class="nv">py</span><span class="p">:</span> <span class="kt">Y</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">(</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">V</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">W</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">X</span><span class="o">.</span><span class="kt">T</span><span class="p">,</span> <span class="kt">Y</span><span class="o">.</span><span class="kt">T</span><span class="p">)</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Thenable.html">Thenable</a></span><span class="p">,</span> <span class="kt">V</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Thenable.html">Thenable</a></span><span class="p">,</span> <span class="kt">W</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Thenable.html">Thenable</a></span><span class="p">,</span> <span class="kt">X</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Thenable.html">Thenable</a></span><span class="p">,</span> <span class="kt">Y</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Thenable.html">Thenable</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit4when9fulfilled12concurrentlyAA0A0CySay7Element_1TQZGGx_SitStRzAA8ThenableAGRpzlF"></a>
+                    <a name="//apple_ref/swift/Function/when(fulfilled:concurrently:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit4when9fulfilled12concurrentlyAA0A0CySay7Element_1TQZGGx_SitStRzAA8ThenableAGRpzlF">when(fulfilled:concurrently:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Generate promises at a limited rate and wait for all to fulfill.</p>
+
+<p>For example:</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">downloadFile</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Promise</span><span class="o">&lt;</span><span class="kt">Data</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+
+<span class="k">let</span> <span class="nv">urls</span><span class="p">:</span> <span class="p">[</span><span class="kt">URL</span><span class="p">]</span> <span class="o">=</span> <span class="cm">/*…
+</span></code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">when</span><span class="o">&lt;</span><span class="kt">It</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">promiseIterator</span><span class="p">:</span> <span class="kt">It</span><span class="p">,</span> <span class="nv">concurrently</span><span class="p">:</span> <span class="kt">Int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">It</span><span class="o">.</span><span class="kt">Element</span><span class="o">.</span><span class="kt">T</span><span class="p">]</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">It</span> <span class="p">:</span> <span class="kt">IteratorProtocol</span><span class="p">,</span> <span class="kt">It</span><span class="o">.</span><span class="kt">Element</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Thenable.html">Thenable</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit4when8resolvedAA9GuaranteeCySayAA6ResultOyxGGGAA0A0CyxGd_tlF"></a>
+                    <a name="//apple_ref/swift/Function/when(resolved:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit4when8resolvedAA9GuaranteeCySayAA6ResultOyxGGGAA0A0CyxGd_tlF">when(resolved:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Waits on all provided promises.</p>
+
+<p><code><a href="Functions.html#/s:10PromiseKit4when9fulfilledAA0A0CySay1TQzGGSayxG_tAA8ThenableRzlF">when(fulfilled:)</a></code> rejects as soon as one of the provided promises rejects. <code>when(resolved:)</code> waits on all provided promises whatever their result, and then provides an array of <code><a href="Enums/Result.html">Result&lt;T&gt;</a></code> so you can individually inspect the results. As a consequence this function returns a <code><a href="Classes/Guarantee.html">Guarantee</a></code>, ie. errors are lifted from the individual promises into the results array of the returned <code><a href="Classes/Guarantee.html">Guarantee</a></code>.</p>
+<pre class="highlight swift"><code><span class="nf">when</span><span class="p">(</span><span class="nv">resolved</span><span class="p">:</span> <span class="n">promise1</span><span class="p">,</span> <span class="n">promise2</span><span class="p">,</span> <span class="n">promise3</span><span class="p">)</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">results</span> <span class="k">in</span>
+    <span class="k">for</span> <span class="n">result</span> <span class="k">in</span> <span class="n">results</span> <span class="k">where</span> <span class="k">case</span> <span class="o">.</span><span class="nf">fulfilled</span><span class="p">(</span><span class="k">let</span> <span class="nv">value</span><span class="p">)</span> <span class="p">{</span>
+       <span class="c1">//…</span>
+    <span class="p">}</span>
+<span class="p">}</span><span class="o">.</span><span class="k">catch</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+    <span class="c1">// invalid! Never rejects</span>
+<span class="p">}</span>
+</code></pre>
+<div class="aside aside-note">
+    <p class="aside-title">Note</p>
+    we do not provide tuple variants for <code>when(resolved:)</code> but will accept a pull-request
+
+</div>
+<div class="aside aside-remark">
+    <p class="aside-title">Remark</p>
+    Doesn&rsquo;t take Thenable due to protocol <code>associatedtype</code> paradox
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">when</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">resolved</span> <span class="nv">promises</span><span class="p">:</span> <span class="kt"><a href="Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="Enums/Result.html">Result</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new promise that resolves once all the provided promises resolve. The array is ordered the same as the input, ie. the result order is <em>not</em> resolution order.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit4when8resolvedAA9GuaranteeCySayAA6ResultOyxGGGSayAA0A0CyxGG_tlF"></a>
+                    <a name="//apple_ref/swift/Function/when(resolved:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit4when8resolvedAA9GuaranteeCySayAA6ResultOyxGGGSayAA0A0CyxGG_tlF">when(resolved:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <code>when(resolved: Promise&lt;T&gt;...)</code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">when</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">resolved</span> <span class="nv">promises</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="Enums/Result.html">Result</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit4whenyAA9GuaranteeCyytGAEd_tF"></a>
+                    <a name="//apple_ref/swift/Function/when(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit4whenyAA9GuaranteeCyytGAEd_tF">when(_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Waits on all provided Guarantees.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">when</span><span class="p">(</span><span class="n">_</span> <span class="nv">guarantees</span><span class="p">:</span> <span class="kt"><a href="Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit4when10guaranteesAA9GuaranteeCyytGSayAFG_tF"></a>
+                    <a name="//apple_ref/swift/Function/when(guarantees:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit4when10guaranteesAA9GuaranteeCyytGSayAFG_tF">when(guarantees:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">when</span><span class="p">(</span><span class="nv">guarantees</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2019-01-15)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

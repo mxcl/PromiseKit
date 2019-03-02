@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>ObjectiveC  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+    <script src="js/lunr.min.js" defer></script>
+    <script src="js/typeahead.jquery.js" defer></script>
+    <script src="js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+
+    <a title="ObjectiveC  Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="index.html">
+           Docs
+        </a>
+         (68% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/mxcl/PromiseKit">
+            <img class="header-icon" src="img/gh.png"/>
+            View on GitHub
+          </a>
+        </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="dash-feed://https%3A%2F%2Fpromisekit%2Eorg%2Freference%2Fdocsets%2F%2Exml">
+            <img class="header-icon" src="img/dash.png"/>
+            Install in Dash
+          </a>
+        </p>
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="index.html"> Reference</a>
+      <img class="carat" src="img/carat.png" />
+      ObjectiveC  Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Guides.html">Guides</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="appendix.html">Appendix</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="commonpatterns.html">CommonPatterns</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="faq.html">FAQ</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="gettingstarted.html">GettingStarted</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="installation.html">Installation</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="objectivec.html">ObjectiveC</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="readme.html">README</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="troubleshooting.html">Troubleshooting</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Box.html">Box</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/EmptyBox.html">EmptyBox</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Guarantee.html">Guarantee</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Handlers.html">Handlers</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/PMKFinalizer.html">PMKFinalizer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Promise.html">Promise</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Resolver.html">Resolver</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/SealedBox.html">SealedBox</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/__AnyPromise.html">__AnyPromise</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Global Variables.html">Global Variables</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/CatchPolicy.html">CatchPolicy</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/LogEvent.html">LogEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/PMKError.html">PMKError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/PMKNamespacer.html">PMKNamespacer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/PMKUnambiguousInitializer.html">PMKUnambiguousInitializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/Result.html">Result</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/Sealant.html">Sealant</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/AnyPromise.html">AnyPromise</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/DispatchQueue.html">DispatchQueue</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/Error.html">Error</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/Optional.html">Optional</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/PromiseKit.html">PromiseKit</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/PromiseKit/Result.html">– Result</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/Thread.html">Thread</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit5afteryAA9GuaranteeCyytG8Dispatch0E12TimeIntervalOF">after(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit5after7secondsAA9GuaranteeCyytGSd_tF">after(seconds:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit7firstly7executeAA0A0Cy1TQzGxyKXE_tAA8ThenableRzlF">firstly(execute:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit7firstly7executeAA9GuaranteeCyxGAFyXE_tlF">firstly(execute:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4hangyxAA0A0CyxGKlF">hang(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4raceyAA0A0Cy1TQzGSayxGAA8ThenableRzlF">race(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4raceyAA0A0Cy1TQzGxd_tAA8ThenableRzlF">race(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4raceyAA9GuaranteeCyxGAEd_tlF">race(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4whenyAA9GuaranteeCyytGAEd_tF">when(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when9fulfilledAA0A0CySay1TQzGGSayxG_tAA8ThenableRzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when9fulfilledAA0A0CyytGSayxG_tAA8ThenableRzyt1TRtzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when9fulfilledAA0A0CyytGxd_tAA8ThenableRzyt1TRtzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when9fulfilled_AA0A0Cy1TQz_AFQy_tGx_q_tAA8ThenableRzAaJR_r0_lF">when(fulfilled:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when9fulfilled__AA0A0Cy1TQz_AFQy_AFQy0_tGx_q_q0_tAA8ThenableRzAaKR_AaKR0_r1_lF">when(fulfilled:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when9fulfilled___AA0A0Cy1TQz_AFQy_AFQy0_AFQy1_tGx_q_q0_q1_tAA8ThenableRzAaLR_AaLR0_AaLR1_r2_lF">when(fulfilled:_:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when9fulfilled____AA0A0Cy1TQz_AFQy_AFQy0_AFQy1_AFQy2_tGx_q_q0_q1_q2_tAA8ThenableRzAaMR_AaMR0_AaMR1_AaMR2_r3_lF">when(fulfilled:_:_:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when9fulfilled12concurrentlyAA0A0CySay7Element_1TQZGGx_SitStRzAA8ThenableAGRpzlF">when(fulfilled:concurrently:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when10guaranteesAA9GuaranteeCyytGSayAFG_tF">when(guarantees:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when8resolvedAA9GuaranteeCySayAA6ResultOyxGGGAA0A0CyxGd_tlF">when(resolved:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when8resolvedAA9GuaranteeCySayAA6ResultOyxGGGSayAA0A0CyxGG_tlF">when(resolved:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4wrapyAA0A0CyxGyys5Error_pSg_xSgtcKXElF">wrap(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4wrapyAA0A0CyxGyyxSg_s5Error_pSgtcKXElF">wrap(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4wrapyAA0A0CyxGyyx_s5Error_pSgtcKXElF">wrap(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4wrapyAA0A0CyxGyyxcKXElF">wrap(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4wrapyAA0A0CyytGyys5Error_pSgcKXEF">wrap(_:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/CancellableError.html">CancellableError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/CatchMixin.html">CatchMixin</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/Thenable.html">Thenable</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/PMKConfiguration.html">PMKConfiguration</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content">
+            
+            <h1 id='objective-c' class='heading'>Objective-C</h1>
+
+<p>PromiseKit has two promise classes:</p>
+
+<ul>
+<li><code><a href="Classes/Promise.html">Promise&lt;T&gt;</a></code> (Swift)</li>
+<li><code>AnyPromise</code> (Objective-C)</li>
+</ul>
+
+<p>Each is designed to be an appropriate promise implementation for the strong points of its language:</p>
+
+<ul>
+<li><code><a href="Classes/Promise.html">Promise&lt;T&gt;</a></code> is strict, defined and precise.</li>
+<li><code>AnyPromise</code> is loose and dynamic.</li>
+</ul>
+
+<p>Unlike most libraries, we have extensive bridging support, you can use PromiseKit
+in mixed projects with mixed language targets and mixed language libraries.</p>
+<h1 id='using-promisekit-with-objective-c' class='heading'>Using PromiseKit with Objective-C</h1>
+
+<p><code>AnyPromise</code> is our promise class for Objective-C. It behaves almost identically to <code><a href="Classes/Promise.html">Promise&lt;T&gt;</a></code>, our Swift promise class.</p>
+<pre class="highlight objective_c"><code><span class="n">myPromise</span><span class="p">.</span><span class="n">then</span><span class="p">(</span><span class="o">^</span><span class="p">(</span><span class="n">NSString</span> <span class="o">*</span><span class="n">bar</span><span class="p">){</span>
+    <span class="k">return</span> <span class="n">anotherPromise</span><span class="p">;</span>
+<span class="p">}).</span><span class="n">then</span><span class="p">(</span><span class="o">^</span><span class="p">{</span>
+    <span class="c1">//…
+</span><span class="p">}).</span><span class="n">catch</span><span class="p">(</span><span class="o">^</span><span class="p">(</span><span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">){</span>
+    <span class="c1">//…
+</span><span class="p">});</span>
+</code></pre>
+
+<p>You make new promises using <code>promiseWithResolverBlock</code>:</p>
+<pre class="highlight objective_c"><code><span class="k">-</span> <span class="p">(</span><span class="n">AnyPromise</span> <span class="o">*</span><span class="p">)</span><span class="n">myPromise</span> <span class="p">{</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">AnyPromise</span> <span class="nf">promiseWithResolverBlock</span><span class="p">:</span><span class="o">^</span><span class="p">(</span><span class="n">PMKResolver</span> <span class="n">resolve</span><span class="p">){</span>
+        <span class="n">resolve</span><span class="p">(</span><span class="n">foo</span><span class="p">);</span>  <span class="c1">// if foo is an NSError, rejects, else, resolves
+</span>    <span class="p">}];</span>
+<span class="p">}</span>
+</code></pre>
+
+<hr>
+
+<p>You reject promises by throwing errors:</p>
+<pre class="highlight objective_c"><code><span class="n">myPromise</span><span class="p">.</span><span class="n">then</span><span class="p">(</span><span class="o">^</span><span class="p">{</span>
+    <span class="k">@throw</span> <span class="p">[</span><span class="n">NSError</span> <span class="nf">errorWithDomain</span><span class="p">:</span><span class="n">domain</span> <span class="nf">code</span><span class="p">:</span><span class="n">code</span> <span class="n">userInfo</span><span class="o">:</span><span class="nb">nil</span><span class="p">];</span>
+<span class="p">}).</span><span class="n">catch</span><span class="p">(</span><span class="o">^</span><span class="p">(</span><span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">){</span>
+    <span class="c1">//…
+</span><span class="p">});</span>
+</code></pre>
+
+<p>One important feature is the syntactic flexability of your handlers:</p>
+<pre class="highlight objective_c"><code><span class="n">myPromise</span><span class="p">.</span><span class="n">then</span><span class="p">(</span><span class="o">^</span><span class="p">{</span>
+    <span class="c1">// no parameters is fine
+</span><span class="p">});</span>
+
+<span class="n">myPromise</span><span class="p">.</span><span class="n">then</span><span class="p">(</span><span class="o">^</span><span class="p">(</span><span class="n">id</span> <span class="n">foo</span><span class="p">){</span>
+    <span class="c1">// one parameter is fine
+</span><span class="p">});</span>
+
+<span class="n">myPromise</span><span class="p">.</span><span class="n">then</span><span class="p">(</span><span class="o">^</span><span class="p">(</span><span class="n">id</span> <span class="n">a</span><span class="p">,</span> <span class="n">id</span> <span class="n">b</span><span class="p">,</span> <span class="n">id</span> <span class="n">c</span><span class="p">){</span>
+    <span class="c1">// up to three parameter is fine, no crash!
+</span><span class="p">});</span>
+
+<span class="n">myPromise</span><span class="p">.</span><span class="n">then</span><span class="p">(</span><span class="o">^</span><span class="p">{</span>
+    <span class="k">return</span> <span class="mi">@1</span><span class="p">;</span> <span class="c1">// return anything or nothing, it's fine, no crash
+</span><span class="p">});</span>
+</code></pre>
+
+<p>We do runtime inspection of the block you pass to achieve this magic.</p>
+
+<hr>
+
+<p>Another important distinction is that the equivalent function to Swift’s <code>recover</code> is combined with <code>AnyPromise</code>’s <code>catch</code>. This is typical to other “dynamic” promise implementations and thus achieves our goal that <code>AnyPromise</code> is loose and dynamic while <code><a href="Classes/Promise.html">Promise&lt;T&gt;</a></code> is strict and specific.</p>
+
+<p>A sometimes unexpected consequence of this fact is that returning nothing from a <code>catch</code> <em>resolves</em> the returned promise:</p>
+<pre class="highlight objective_c"><code><span class="n">myPromise</span><span class="p">.</span><span class="n">catch</span><span class="p">(</span><span class="o">^</span><span class="p">{</span>
+    <span class="p">[</span><span class="n">UIAlertView</span> <span class="err">…</span><span class="p">];</span>
+<span class="p">}).</span><span class="n">then</span><span class="p">(</span><span class="o">^</span><span class="p">{</span>
+    <span class="c1">// always executes!
+</span><span class="p">});</span>
+</code></pre>
+
+<hr>
+
+<p>Another important distinction is that the <code>value</code> property returns even if the promise is rejected; in that case, it returns the <code>NSError</code> object with which the promise was rejected.</p>
+<h1 id='bridging-between-objective-c-amp-swift' class='heading'>Bridging Between Objective-C &amp; Swift</h1>
+
+<p>Let’s say you have:</p>
+<pre class="highlight objective_c"><code><span class="k">@interface</span> <span class="nc">Foo</span>
+<span class="k">-</span> <span class="p">(</span><span class="n">AnyPromise</span> <span class="o">*</span><span class="p">)</span><span class="n">myPromise</span><span class="p">;</span>
+<span class="k">@end</span>
+</code></pre>
+
+<p>Ensure that this interface is included in your bridging header. You can now use the 
+following pattern in your Swift code:</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">foo</span> <span class="o">=</span> <span class="kt">Foo</span><span class="p">()</span>
+<span class="n">foo</span><span class="o">.</span><span class="n">myPromise</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="p">(</span><span class="nv">obj</span><span class="p">:</span> <span class="kt">AnyObject</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Int</span> <span class="k">in</span>
+    <span class="c1">// it is not necessary to specify the type of `obj`</span>
+    <span class="c1">// we just do that for demonstrative purposes</span>
+<span class="p">}</span>
+</code></pre>
+
+<hr>
+
+<p>Let’s say you have:</p>
+<pre class="highlight swift"><code><span class="kd">@objc</span> <span class="kd">class</span> <span class="kt">Foo</span><span class="p">:</span> <span class="kt">NSObject</span> <span class="p">{</span>
+    <span class="kd">func</span> <span class="nf">stringPromise</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Promise</span><span class="o">&lt;</span><span class="kt">String</span><span class="o">&gt;</span>    
+    <span class="kd">func</span> <span class="nf">barPromise</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Promise</span><span class="o">&lt;</span><span class="kt">Bar</span><span class="o">&gt;</span>
+<span class="p">}</span>
+
+<span class="kd">@objc</span> <span class="kd">class</span> <span class="kt">Bar</span><span class="p">:</span> <span class="kt">NSObject</span> <span class="p">{</span> <span class="cm">/*…*/</span> <span class="p">}</span>
+</code></pre>
+
+<p>Ensure that your project is generating a <code>…-Swift.h</code> header so that Objective-C can see your Swift code.</p>
+
+<p>If you built this project and opened the <code>…-Swift.h</code> header, you would only see this:</p>
+<pre class="highlight objective_c"><code><span class="k">@interface</span> <span class="nc">Foo</span>
+<span class="k">@end</span>
+
+<span class="k">@interface</span> <span class="nc">Bar</span>
+<span class="k">@end</span>
+</code></pre>
+
+<p>That&rsquo;s because Objective-C cannot import Swift objects that are generic. So we need to write some stubs:</p>
+<pre class="highlight swift"><code><span class="kd">@objc</span> <span class="kd">class</span> <span class="kt">Foo</span><span class="p">:</span> <span class="kt">NSObject</span> <span class="p">{</span>
+    <span class="kd">@objc</span> <span class="kd">func</span> <span class="nf">stringPromise</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">AnyPromise</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kt">AnyPromise</span><span class="p">(</span><span class="nf">stringPromise</span><span class="p">())</span>
+    <span class="p">}</span>
+    <span class="kd">@objc</span> <span class="kd">func</span> <span class="nf">barPromise</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">AnyPromise</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kt">AnyPromise</span><span class="p">(</span><span class="nf">barPromise</span><span class="p">())</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>If we built this and opened our generated header, we would now see:</p>
+<pre class="highlight objective_c"><code><span class="k">@interface</span> <span class="nc">Foo</span>
+<span class="k">-</span> <span class="p">(</span><span class="n">AnyPromise</span> <span class="o">*</span><span class="p">)</span><span class="n">stringPromise</span><span class="p">;</span>
+<span class="k">-</span> <span class="p">(</span><span class="n">AnyPromise</span> <span class="o">*</span><span class="p">)</span><span class="n">barPromise</span><span class="p">;</span>
+<span class="k">@end</span>
+
+<span class="k">@interface</span> <span class="nc">Bar</span>
+<span class="k">@end</span>
+</code></pre>
+
+<p>Perfect.</p>
+
+<p>Note that AnyPromise can only bridge objects that conform to <code>AnyObject</code> or derive from <code>NSObject</code>. This is a limitation of Objective-C.</p>
+<h1 id='using-objc-anypromises-from-swift' class='heading'>Using ObjC AnyPromises from Swift</h1>
+
+<p>Simply use them, the type of your handler parameter is <code>Any</code>:</p>
+<pre class="highlight plaintext"><code>- (AnyPromise *)fetchThings {
+    return [AnyPromise promiseWithValue:@[@"a", @"b", @"c"]];
+}
+</code></pre>
+
+<p>Since ObjC is not type-safe and Swift is, you will (probably) need to cast the <code>Any</code> to whatever it is you actually are feeding:</p>
+<pre class="highlight swift"><code><span class="kt">Foo</span><span class="o">.</span><span class="nf">fetchThings</span><span class="p">()</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span> <span class="n">any</span> <span class="k">in</span>
+    <span class="k">let</span> <span class="nv">bar</span> <span class="o">=</span> <span class="n">any</span> <span class="k">as!</span> <span class="p">[</span><span class="kt">String</span><span class="p">]</span>
+<span class="p">}</span>
+</code></pre>
+<h2 id='warning-caution' class='heading'>:warning: Caution:</h2>
+
+<p>ARC in Objective-C, unlike in Objective-C++, is not exception-safe by default.
+So, throwing an error will result in keeping a strong reference to the closure 
+that contains the throw statement.
+This pattern will consequently result in memory leaks if you&rsquo;re not careful.</p>
+
+<blockquote>
+<p><em>Note:</em> Only having a strong reference to the closure would result in memory leaks.
+In our case, PromisKit automatically keeps a strong reference to the closure until it&rsquo;s released.</p>
+</blockquote>
+
+<p><strong>Workarounds:</strong></p>
+
+<ol>
+<li>Return a Promise with value NSError\
+Instead of throwing a normal error, you can return a Promise with value NSError instead.</li>
+</ol>
+<pre class="highlight objective_c"><code><span class="n">myPromise</span><span class="p">.</span><span class="n">then</span><span class="p">(</span><span class="o">^</span><span class="p">{</span>
+    <span class="k">return</span> <span class="p">[</span><span class="n">AnyPromise</span> <span class="nf">promiseWithValue</span><span class="p">:[</span><span class="n">NSError</span> <span class="nf">myCustomError</span><span class="p">]];</span>
+<span class="p">}).</span><span class="n">catch</span><span class="p">(</span><span class="o">^</span><span class="p">(</span><span class="n">NSError</span> <span class="o">*</span><span class="n">error</span><span class="p">){</span>
+    <span class="k">if</span> <span class="p">([</span><span class="n">error</span> <span class="nf">isEqual</span><span class="p">:[</span><span class="n">NSError</span> <span class="nf">myCustomError</span><span class="p">]])</span> <span class="p">{</span>
+        <span class="c1">// In case, same error as the one we thrown
+</span>        <span class="k">return</span><span class="p">;</span>
+    <span class="p">}</span>
+    <span class="c1">//…
+</span><span class="p">});</span>
+</code></pre>
+
+<ol>
+<li>Enable ARC for exceptions in Objective-C (not recomended)\
+You can add this  <code>-fobjc-arc-exceptions to your</code> to your compiler flags to enable ARC for exceptions.
+This is not recommended unless you&rsquo;ve read the Apple documentation and are comfortable with the caveats.</li>
+</ol>
+
+<p>For more details on ARC and exceptions:
+<a href="https://clang.llvm.org/docs/AutomaticReferenceCounting.html#exceptions">https://clang.llvm.org/docs/AutomaticReferenceCounting.html#exceptions</a></p>
+
+          </div>
+        </section>
+
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2019-01-15)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

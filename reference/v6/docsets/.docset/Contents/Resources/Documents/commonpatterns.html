@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>CommonPatterns  Reference</title>
+    <link rel="stylesheet" type="text/css" href="css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="js/jquery.min.js" defer></script>
+    <script src="js/jazzy.js" defer></script>
+    
+    <script src="js/lunr.min.js" defer></script>
+    <script src="js/typeahead.jquery.js" defer></script>
+    <script src="js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+
+    <a title="CommonPatterns  Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="index.html">
+           Docs
+        </a>
+         (68% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/mxcl/PromiseKit">
+            <img class="header-icon" src="img/gh.png"/>
+            View on GitHub
+          </a>
+        </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="dash-feed://https%3A%2F%2Fpromisekit%2Eorg%2Freference%2Fdocsets%2F%2Exml">
+            <img class="header-icon" src="img/dash.png"/>
+            Install in Dash
+          </a>
+        </p>
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="index.html"> Reference</a>
+      <img class="carat" src="img/carat.png" />
+      CommonPatterns  Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Guides.html">Guides</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="appendix.html">Appendix</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="commonpatterns.html">CommonPatterns</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="faq.html">FAQ</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="gettingstarted.html">GettingStarted</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="installation.html">Installation</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="objectivec.html">ObjectiveC</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="readme.html">README</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="troubleshooting.html">Troubleshooting</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Classes.html">Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Box.html">Box</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/EmptyBox.html">EmptyBox</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Guarantee.html">Guarantee</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Handlers.html">Handlers</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/PMKFinalizer.html">PMKFinalizer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Promise.html">Promise</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/Resolver.html">Resolver</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/SealedBox.html">SealedBox</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Classes/__AnyPromise.html">__AnyPromise</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Global Variables.html">Global Variables</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Enums.html">Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/CatchPolicy.html">CatchPolicy</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/LogEvent.html">LogEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/PMKError.html">PMKError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/PMKNamespacer.html">PMKNamespacer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/PMKUnambiguousInitializer.html">PMKUnambiguousInitializer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/Result.html">Result</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Enums/Sealant.html">Sealant</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Extensions.html">Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/AnyPromise.html">AnyPromise</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/DispatchQueue.html">DispatchQueue</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/Error.html">Error</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/Optional.html">Optional</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/PromiseKit.html">PromiseKit</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/PromiseKit/Result.html">– Result</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/Thread.html">Thread</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Functions.html">Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit5afteryAA9GuaranteeCyytG8Dispatch0E12TimeIntervalOF">after(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit5after7secondsAA9GuaranteeCyytGSd_tF">after(seconds:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit7firstly7executeAA0A0Cy1TQzGxyKXE_tAA8ThenableRzlF">firstly(execute:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit7firstly7executeAA9GuaranteeCyxGAFyXE_tlF">firstly(execute:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4hangyxAA0A0CyxGKlF">hang(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4raceyAA0A0Cy1TQzGSayxGAA8ThenableRzlF">race(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4raceyAA0A0Cy1TQzGxd_tAA8ThenableRzlF">race(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4raceyAA9GuaranteeCyxGAEd_tlF">race(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4whenyAA9GuaranteeCyytGAEd_tF">when(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when9fulfilledAA0A0CySay1TQzGGSayxG_tAA8ThenableRzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when9fulfilledAA0A0CyytGSayxG_tAA8ThenableRzyt1TRtzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when9fulfilledAA0A0CyytGxd_tAA8ThenableRzyt1TRtzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when9fulfilled_AA0A0Cy1TQz_AFQy_tGx_q_tAA8ThenableRzAaJR_r0_lF">when(fulfilled:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when9fulfilled__AA0A0Cy1TQz_AFQy_AFQy0_tGx_q_q0_tAA8ThenableRzAaKR_AaKR0_r1_lF">when(fulfilled:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when9fulfilled___AA0A0Cy1TQz_AFQy_AFQy0_AFQy1_tGx_q_q0_q1_tAA8ThenableRzAaLR_AaLR0_AaLR1_r2_lF">when(fulfilled:_:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when9fulfilled____AA0A0Cy1TQz_AFQy_AFQy0_AFQy1_AFQy2_tGx_q_q0_q1_q2_tAA8ThenableRzAaMR_AaMR0_AaMR1_AaMR2_r3_lF">when(fulfilled:_:_:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when9fulfilled12concurrentlyAA0A0CySay7Element_1TQZGGx_SitStRzAA8ThenableAGRpzlF">when(fulfilled:concurrently:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when10guaranteesAA9GuaranteeCyytGSayAFG_tF">when(guarantees:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when8resolvedAA9GuaranteeCySayAA6ResultOyxGGGAA0A0CyxGd_tlF">when(resolved:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4when8resolvedAA9GuaranteeCySayAA6ResultOyxGGGSayAA0A0CyxGG_tlF">when(resolved:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4wrapyAA0A0CyxGyys5Error_pSg_xSgtcKXElF">wrap(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4wrapyAA0A0CyxGyyxSg_s5Error_pSgtcKXElF">wrap(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4wrapyAA0A0CyxGyyx_s5Error_pSgtcKXElF">wrap(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4wrapyAA0A0CyxGyyxcKXElF">wrap(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Functions.html#/s:10PromiseKit4wrapyAA0A0CyytGyys5Error_pSgcKXEF">wrap(_:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Protocols.html">Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/CancellableError.html">CancellableError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/CatchMixin.html">CatchMixin</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Protocols/Thenable.html">Thenable</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="Structs.html">Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Structs/PMKConfiguration.html">PMKConfiguration</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content">
+            
+            <h1 id='common-patterns' class='heading'>Common Patterns</h1>
+
+<p>One feature of promises that makes them particularly useful is that they are composable.
+This fact enables complex, yet safe asynchronous patterns that would otherwise be quite
+intimidating when implemented with traditional methods.</p>
+<h2 id='chaining' class='heading'>Chaining</h2>
+
+<p>The most common pattern is chaining:</p>
+<pre class="highlight swift"><code><span class="n">firstly</span> <span class="p">{</span>
+    <span class="nf">fetch</span><span class="p">()</span>
+<span class="p">}</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span>
+    <span class="nf">map</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span>
+    <span class="nf">set</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span>
+    <span class="k">return</span> <span class="nf">animate</span><span class="p">()</span>
+<span class="p">}</span><span class="o">.</span><span class="n">ensure</span> <span class="p">{</span>
+    <span class="c1">// something that should happen whatever the outcome</span>
+<span class="p">}</span><span class="o">.</span><span class="k">catch</span> <span class="p">{</span>
+    <span class="nf">handle</span><span class="p">(</span><span class="nv">error</span><span class="p">:</span> <span class="nv">$0</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>If you return a promise in a <code>then</code>, the next <code>then</code> <em>waits</em> on that promise
+before continuing. This is the essence of promises.</p>
+
+<p>Promises are easy to compose, so they encourage you to develop highly asynchronous
+apps without fear of the spaghetti code (and associated refactoring pains) of
+asynchronous systems that use completion handlers.</p>
+<h2 id='apis-that-use-promises' class='heading'>APIs That Use Promises</h2>
+
+<p>Promises are composable, so return them instead of accepting completion blocks:</p>
+<pre class="highlight swift"><code><span class="kd">class</span> <span class="kt">MyRestAPI</span> <span class="p">{</span>
+    <span class="kd">func</span> <span class="nf">user</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Promise</span><span class="o">&lt;</span><span class="kt">User</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="n">firstly</span> <span class="p">{</span>
+            <span class="kt">URLSession</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">dataTask</span><span class="p">(</span><span class="o">.</span><span class="n">promise</span><span class="p">,</span> <span class="nv">with</span><span class="p">:</span> <span class="n">url</span><span class="p">)</span>
+        <span class="p">}</span><span class="o">.</span><span class="n">compactMap</span> <span class="p">{</span>
+            <span class="k">try</span> <span class="kt">JSONSerialization</span><span class="o">.</span><span class="nf">jsonObject</span><span class="p">(</span><span class="nv">with</span><span class="p">:</span> <span class="nv">$0</span><span class="o">.</span><span class="n">data</span><span class="p">)</span> <span class="k">as?</span> <span class="p">[</span><span class="kt">String</span><span class="p">:</span> <span class="kt">Any</span><span class="p">]</span>
+        <span class="p">}</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="n">dict</span> <span class="k">in</span>
+            <span class="kt">User</span><span class="p">(</span><span class="nv">dict</span><span class="p">:</span> <span class="n">dict</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">avatar</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Promise</span><span class="o">&lt;</span><span class="kt">UIImage</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="nf">user</span><span class="p">()</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">user</span> <span class="k">in</span>
+            <span class="kt">URLSession</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">dataTask</span><span class="p">(</span><span class="o">.</span><span class="n">promise</span><span class="p">,</span> <span class="nv">with</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">imageUrl</span><span class="p">)</span>
+        <span class="p">}</span><span class="o">.</span><span class="n">compactMap</span> <span class="p">{</span>
+            <span class="kt">UIImage</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="nv">$0</span><span class="o">.</span><span class="n">data</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>This way, asynchronous chains can cleanly and seamlessly incorporate code from all over
+your app without violating architectural boundaries.</p>
+
+<blockquote>
+<p><em>Note</em>: We provide <a href="https://github.com/PromiseKit/Alamofire-">promises for Alamofire</a> too!</p>
+</blockquote>
+<h2 id='background-work' class='heading'>Background Work</h2>
+<pre class="highlight swift"><code><span class="kd">class</span> <span class="kt">MyRestAPI</span> <span class="p">{</span>
+    <span class="kd">func</span> <span class="nf">avatar</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Promise</span><span class="o">&lt;</span><span class="kt">UIImage</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="k">let</span> <span class="nv">bgq</span> <span class="o">=</span> <span class="kt">DispatchQueue</span><span class="o">.</span><span class="nf">global</span><span class="p">(</span><span class="nv">qos</span><span class="p">:</span> <span class="o">.</span><span class="n">userInitiated</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">firstly</span> <span class="p">{</span>
+            <span class="nf">user</span><span class="p">()</span>
+        <span class="p">}</span><span class="o">.</span><span class="nf">then</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="n">bgq</span><span class="p">)</span> <span class="p">{</span> <span class="n">user</span> <span class="k">in</span>
+            <span class="kt">URLSession</span><span class="o">.</span><span class="n">shared</span><span class="o">.</span><span class="nf">dataTask</span><span class="p">(</span><span class="o">.</span><span class="n">promise</span><span class="p">,</span> <span class="nv">with</span><span class="p">:</span> <span class="n">user</span><span class="o">.</span><span class="n">imageUrl</span><span class="p">)</span>
+        <span class="p">}</span><span class="o">.</span><span class="nf">compactMap</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="n">bgq</span><span class="p">)</span> <span class="p">{</span>
+            <span class="kt">UIImage</span><span class="p">(</span><span class="nv">data</span><span class="p">:</span> <span class="nv">$0</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>All PromiseKit handlers take an <code>on</code> parameter that lets you designate the dispatch queue
+on which to run the handler. The default is always the main queue.</p>
+
+<p>PromiseKit is <em>entirely</em> thread safe.</p>
+
+<blockquote>
+<p><em>Tip</em>: With caution, you can have all <code>then</code>, <code>map</code>, <code>compactMap</code>, etc., run on
+a background queue. See <code>PromiseKit.conf</code>. Note that we suggest only changing
+the queue for the <code>map</code> suite of functions, so <code>done</code> and <code>catch</code> will
+continue to run on the main queue, which is <em>usually</em> what you want.</p>
+</blockquote>
+<h2 id='failing-chains' class='heading'>Failing Chains</h2>
+
+<p>If an error occurs mid-chain, simply throw an error:</p>
+<pre class="highlight swift"><code><span class="n">firstly</span> <span class="p">{</span>
+    <span class="nf">foo</span><span class="p">()</span>
+<span class="p">}</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">baz</span> <span class="k">in</span>
+    <span class="nf">bar</span><span class="p">(</span><span class="n">baz</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="k">guard</span> <span class="o">!</span><span class="n">result</span><span class="o">.</span><span class="n">isBad</span> <span class="k">else</span> <span class="p">{</span> <span class="k">throw</span> <span class="kt">MyError</span><span class="o">.</span><span class="n">myIssue</span> <span class="p">}</span>
+    <span class="c1">//…</span>
+    <span class="k">return</span> <span class="nf">doOtherThing</span><span class="p">()</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>The error will surface at the next <code>catch</code> handler.</p>
+
+<p>Since promises handle thrown errors, you don&rsquo;t have to wrap calls to throwing functions 
+in a <code>do</code> block unless you really want to handle the errors locally:</p>
+<pre class="highlight swift"><code><span class="nf">foo</span><span class="p">()</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">baz</span> <span class="k">in</span>
+    <span class="nf">bar</span><span class="p">(</span><span class="n">baz</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">result</span> <span class="k">in</span>
+    <span class="k">try</span> <span class="nf">doOtherThing</span><span class="p">()</span>
+<span class="p">}</span><span class="o">.</span><span class="k">catch</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+    <span class="c1">// if doOtherThing() throws, we end up here</span>
+<span class="p">}</span>
+</code></pre>
+
+<blockquote>
+<p><em>Tip</em>: Swift lets you define an inline <code>enum Error</code> inside the function you
+are working on. This isn’t <em>great</em> coding practice, but it&rsquo;s better than
+avoiding throwing an error because you couldn&rsquo;t be bothered to define a good global
+<code>Error</code> <code>enum</code>.</p>
+</blockquote>
+<h2 id='abstracting-away-asychronicity' class='heading'>Abstracting Away Asychronicity</h2>
+<pre class="highlight swift"><code><span class="k">var</span> <span class="nv">fetch</span> <span class="o">=</span> <span class="kt">API</span><span class="o">.</span><span class="nf">fetch</span><span class="p">()</span>
+
+<span class="k">override</span> <span class="kd">func</span> <span class="nf">viewDidAppear</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">fetch</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">items</span> <span class="k">in</span>
+        <span class="c1">//…</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">buttonPressed</span><span class="p">()</span> <span class="p">{</span>
+    <span class="n">fetch</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">items</span> <span class="k">in</span>
+        <span class="c1">//…</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">func</span> <span class="nf">refresh</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Promise</span> <span class="p">{</span>
+    <span class="c1">// ensure only one fetch operation happens at a time</span>
+
+    <span class="k">if</span> <span class="n">fetch</span><span class="o">.</span><span class="n">isResolved</span> <span class="p">{</span>
+        <span class="nf">startSpinner</span><span class="p">()</span>
+        <span class="n">fetch</span> <span class="o">=</span> <span class="kt">API</span><span class="o">.</span><span class="nf">fetch</span><span class="p">()</span><span class="o">.</span><span class="n">ensure</span> <span class="p">{</span>
+            <span class="nf">stopSpinner</span><span class="p">()</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="n">fetch</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>With promises, you don’t need to worry about <em>when</em> your asynchronous operation
+finishes. Just act like it already has.</p>
+
+<p>Above, we see that you can call <code>then</code> as many times on a promise as you
+like. All the blocks will be executed in the order they were added.</p>
+<h2 id='chaining-sequences' class='heading'>Chaining Sequences</h2>
+
+<p>When you have a series of tasks to perform on an array of data:</p>
+<pre class="highlight swift"><code><span class="c1">// fade all visible table cells one by one in a “cascading” effect</span>
+
+<span class="k">let</span> <span class="nv">fade</span> <span class="o">=</span> <span class="kt">Guarantee</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">cell</span> <span class="k">in</span> <span class="n">tableView</span><span class="o">.</span><span class="n">visibleCells</span> <span class="p">{</span>
+    <span class="n">fade</span> <span class="o">=</span> <span class="n">fade</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span>
+        <span class="kt">UIView</span><span class="o">.</span><span class="nf">animate</span><span class="p">(</span><span class="o">.</span><span class="n">promise</span><span class="p">,</span> <span class="nv">duration</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">)</span> <span class="p">{</span>
+            <span class="n">cell</span><span class="o">.</span><span class="n">alpha</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">fade</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+    <span class="c1">// finish</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>Or if you have an array of promises:</p>
+<pre class="highlight swift"><code><span class="k">var</span> <span class="nv">foo</span> <span class="o">=</span> <span class="kt">Promise</span><span class="p">()</span>
+<span class="k">for</span> <span class="n">nextPromise</span> <span class="k">in</span> <span class="n">arrayOfPromises</span> <span class="p">{</span>
+    <span class="n">foo</span> <span class="o">=</span> <span class="n">foo</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">nextPromise</span> <span class="p">}</span>
+<span class="p">}</span>
+<span class="n">foo</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+    <span class="c1">// finish</span>
+<span class="p">}</span>
+</code></pre>
+
+<blockquote>
+<p><em>Note</em>: You <em>usually</em> want <code>when()</code>, since <code>when</code> executes all of its
+component promises in parallel and so completes much faster. Use the pattern 
+shown above in situations where tasks <em>must</em> be run sequentially; animation
+is a good example.</p>
+
+<p>We also provide <code>when(concurrently:)</code>, which lets you schedule more than
+one promise at a time if you need to.</p>
+</blockquote>
+<h2 id='timeout' class='heading'>Timeout</h2>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">fetches</span><span class="p">:</span> <span class="p">[</span><span class="kt">Promise</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">]</span> <span class="o">=</span> <span class="nf">makeFetches</span><span class="p">()</span>
+<span class="k">let</span> <span class="nv">timeout</span> <span class="o">=</span> <span class="nf">after</span><span class="p">(</span><span class="nv">seconds</span><span class="p">:</span> <span class="mi">4</span><span class="p">)</span>
+
+<span class="nf">race</span><span class="p">(</span><span class="nf">when</span><span class="p">(</span><span class="nv">fulfilled</span><span class="p">:</span> <span class="n">fetches</span><span class="p">)</span><span class="o">.</span><span class="nf">asVoid</span><span class="p">(),</span> <span class="n">timeout</span><span class="p">)</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span>
+    <span class="c1">//…</span>
+<span class="p">}</span>
+</code></pre>
+
+<p><code>race</code> continues as soon as one of the promises it is watching finishes.</p>
+
+<p>Make sure the promises you pass to <code>race</code> are all of the same type. The easiest way
+to ensure this is to use <code>asVoid()</code>.</p>
+
+<p>Note that if any component promise rejects, the <code>race</code> will reject, too.</p>
+<h1 id='minimum-duration' class='heading'>Minimum Duration</h1>
+
+<p>Sometimes you need a task to take <em>at least</em> a certain amount of time. (For example,
+you want to show a progress spinner, but if it shows for less than 0.3 seconds, the UI
+appears broken to the user.)</p>
+<pre class="highlight swift"><code><span class="k">let</span> <span class="nv">waitAtLeast</span> <span class="o">=</span> <span class="nf">after</span><span class="p">(</span><span class="nv">seconds</span><span class="p">:</span> <span class="mf">0.3</span><span class="p">)</span>
+
+<span class="n">firstly</span> <span class="p">{</span>
+    <span class="nf">foo</span><span class="p">()</span>
+<span class="p">}</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span>
+    <span class="n">waitAtLeast</span>
+<span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+    <span class="c1">//…</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>The code above works because we create the delay <em>before</em> we do work in <code>foo()</code>. By the 
+time we get to waiting on that promise, either it will have already timed out or we will wait
+for whatever remains of the 0.3 seconds before continuing the chain.</p>
+<h2 id='cancellation' class='heading'>Cancellation</h2>
+
+<p>Promises don’t have a <code>cancel</code> function, but they do support cancellation through a
+special error type that conforms to the <code><a href="Protocols/CancellableError.html">CancellableError</a></code> protocol.</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">foo</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="kt">Promise</span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">cancel</span><span class="p">:</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="p">{</span>
+    <span class="k">let</span> <span class="nv">task</span> <span class="o">=</span> <span class="kt">Task</span><span class="p">(</span><span class="err">…</span><span class="p">)</span>
+    <span class="k">var</span> <span class="nv">cancelme</span> <span class="o">=</span> <span class="kc">false</span>
+
+    <span class="k">let</span> <span class="nv">promise</span> <span class="o">=</span> <span class="kt">Promise</span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span> <span class="p">{</span> <span class="n">seal</span> <span class="k">in</span>
+        <span class="n">task</span><span class="o">.</span><span class="n">completion</span> <span class="o">=</span> <span class="p">{</span> <span class="n">value</span> <span class="k">in</span>
+            <span class="k">guard</span> <span class="o">!</span><span class="n">cancelme</span> <span class="k">else</span> <span class="p">{</span> <span class="k">return</span> <span class="nf">reject</span><span class="p">(</span><span class="kt">PMKError</span><span class="o">.</span><span class="n">cancelled</span><span class="p">)</span> <span class="p">}</span>
+            <span class="n">seal</span><span class="o">.</span><span class="nf">fulfill</span><span class="p">(</span><span class="n">value</span><span class="p">)</span>
+        <span class="p">}</span>
+        <span class="n">task</span><span class="o">.</span><span class="nf">start</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="k">let</span> <span class="nv">cancel</span> <span class="o">=</span> <span class="p">{</span>
+        <span class="n">cancelme</span> <span class="o">=</span> <span class="kc">true</span>
+        <span class="n">task</span><span class="o">.</span><span class="nf">cancel</span><span class="p">()</span>
+    <span class="p">}</span>
+
+    <span class="nf">return</span> <span class="p">(</span><span class="n">promise</span><span class="p">,</span> <span class="n">cancel</span><span class="p">)</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>Promises don’t have a <code>cancel</code> function because you don’t want code outside of
+your control to be able to cancel your operations&ndash;<em>unless</em>, of course, you explicitly
+want to enable that behavior. In cases where you do want cancellation, the exact way 
+that it should work will vary depending on how the underlying task supports cancellation.
+PromiseKit provides cancellation primitives but no concrete API.</p>
+
+<p>Cancelled chains do not call <code>catch</code> handlers by default. However you can
+intercept cancellation if you like:</p>
+<pre class="highlight swift"><code><span class="n">foo</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span>
+    <span class="c1">//…</span>
+<span class="p">}</span><span class="o">.</span><span class="nf">catch</span><span class="p">(</span><span class="nv">policy</span><span class="p">:</span> <span class="o">.</span><span class="n">allErrors</span><span class="p">)</span> <span class="p">{</span>
+    <span class="c1">// cancelled errors are handled *as well*</span>
+<span class="p">}</span>
+</code></pre>
+
+<p><strong>Important</strong>: Canceling a promise chain is <em>not</em> the same as canceling the underlying
+asynchronous task. Promises are wrappers around asynchronicity, but they have no
+control over the underlying tasks. If you need to cancel an underlying task, you
+need to cancel the underlying task!</p>
+
+<blockquote>
+<p>The library <a href="https://github.com/johannesd/CancellablePromiseKit">CancellablePromiseKit</a> extends the concept of Promises to fully cover cancellable tasks.</p>
+</blockquote>
+<h2 id='retry-polling' class='heading'>Retry / Polling</h2>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="n">attempt</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">maximumRetryCount</span><span class="p">:</span> <span class="kt">Int</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="nv">delayBeforeRetry</span><span class="p">:</span> <span class="kt">DispatchTimeInterval</span> <span class="o">=</span> <span class="o">.</span><span class="nf">seconds</span><span class="p">(</span><span class="mi">2</span><span class="p">),</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Promise</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Promise</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="k">var</span> <span class="nv">attempts</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="kd">func</span> <span class="nf">attempt</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Promise</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="n">attempts</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="k">return</span> <span class="nf">body</span><span class="p">()</span><span class="o">.</span><span class="n">recover</span> <span class="p">{</span> <span class="n">error</span> <span class="o">-&gt;</span> <span class="kt">Promise</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span> <span class="k">in</span>
+            <span class="k">guard</span> <span class="n">attempts</span> <span class="o">&lt;</span> <span class="n">maximumRetryCount</span> <span class="k">else</span> <span class="p">{</span> <span class="k">throw</span> <span class="n">error</span> <span class="p">}</span>
+            <span class="k">return</span> <span class="nf">after</span><span class="p">(</span><span class="n">delayBeforeRetry</span><span class="p">)</span><span class="o">.</span><span class="nf">then</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">attempt</span><span class="p">)</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="nf">attempt</span><span class="p">()</span>
+<span class="p">}</span>
+
+<span class="nf">attempt</span><span class="p">(</span><span class="nv">maximumRetryCount</span><span class="p">:</span> <span class="mi">3</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nf">flakeyTask</span><span class="p">(</span><span class="nv">parameters</span><span class="p">:</span> <span class="n">foo</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span>
+    <span class="c1">//…</span>
+<span class="p">}</span><span class="o">.</span><span class="k">catch</span> <span class="p">{</span> <span class="n">_</span> <span class="k">in</span>
+    <span class="c1">// we attempted three times but still failed</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>In most cases, you should probably supplement the code above so that it re-attempts only for
+specific error conditions.</p>
+<h2 id='wrapping-delegate-systems' class='heading'>Wrapping Delegate Systems</h2>
+
+<p>Be careful with Promises and delegate systems, as they are not always compatible.
+Promises complete <em>once</em>, whereas most delegate systems may notify their delegate many
+times. This is why, for example, there is no PromiseKit extension for a
+<code>UIButton</code>.</p>
+
+<p>A good example of an appropriate time to wrap delegation is when you need a
+single <code>CLLocation</code> lookup:</p>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">CLLocationManager</span> <span class="p">{</span>
+    <span class="kd">static</span> <span class="kd">func</span> <span class="nf">promise</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">Promise</span><span class="o">&lt;</span><span class="kt">CLLocation</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="k">return</span> <span class="kt">PMKCLLocationManagerProxy</span><span class="p">()</span><span class="o">.</span><span class="n">promise</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="kd">class</span> <span class="kt">PMKCLLocationManagerProxy</span><span class="p">:</span> <span class="kt">NSObject</span><span class="p">,</span> <span class="kt">CLLocationManagerDelegate</span> <span class="p">{</span>
+    <span class="kd">private</span> <span class="nf">let</span> <span class="p">(</span><span class="n">promise</span><span class="p">,</span> <span class="n">seal</span><span class="p">)</span> <span class="o">=</span> <span class="kt">Promise</span><span class="o">&lt;</span><span class="p">[</span><span class="kt">CLLocation</span><span class="p">]</span><span class="o">&gt;.</span><span class="nf">pending</span><span class="p">()</span>
+    <span class="kd">private</span> <span class="k">var</span> <span class="nv">retainCycle</span><span class="p">:</span> <span class="kt">PMKCLLocationManagerProxy</span><span class="p">?</span>
+    <span class="kd">private</span> <span class="k">let</span> <span class="nv">manager</span> <span class="o">=</span> <span class="kt">CLLocationManager</span><span class="p">()</span>
+
+    <span class="nf">init</span><span class="p">()</span> <span class="p">{</span>
+        <span class="k">super</span><span class="o">.</span><span class="nf">init</span><span class="p">()</span>
+        <span class="n">retainCycle</span> <span class="o">=</span> <span class="k">self</span>
+        <span class="n">manager</span><span class="o">.</span><span class="n">delegate</span> <span class="o">=</span> <span class="k">self</span> <span class="c1">// does not retain hence the `retainCycle` property</span>
+
+        <span class="n">promise</span><span class="o">.</span><span class="n">ensure</span> <span class="p">{</span>
+            <span class="c1">// ensure we break the retain cycle</span>
+            <span class="k">self</span><span class="o">.</span><span class="n">retainCycle</span> <span class="o">=</span> <span class="kc">nil</span>
+        <span class="p">}</span>
+    <span class="p">}</span>
+
+    <span class="kd">@objc</span> <span class="kd">fileprivate</span> <span class="kd">func</span> <span class="nf">locationManager</span><span class="p">(</span><span class="nv">_</span><span class="p">:</span> <span class="kt">CLLocationManager</span><span class="p">,</span> <span class="n">didUpdateLocations</span> <span class="nv">locations</span><span class="p">:</span> <span class="p">[</span><span class="kt">CLLocation</span><span class="p">])</span> <span class="p">{</span>
+        <span class="n">seal</span><span class="o">.</span><span class="nf">fulfill</span><span class="p">(</span><span class="n">locations</span><span class="p">)</span>
+    <span class="p">}</span>
+
+    <span class="kd">@objc</span> <span class="kd">func</span> <span class="nf">locationManager</span><span class="p">(</span><span class="nv">_</span><span class="p">:</span> <span class="kt">CLLocationManager</span><span class="p">,</span> <span class="n">didFailWithError</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">Error</span><span class="p">)</span> <span class="p">{</span>
+        <span class="n">seal</span><span class="o">.</span><span class="nf">reject</span><span class="p">(</span><span class="n">error</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// use:</span>
+
+<span class="kt">CLLocationManager</span><span class="o">.</span><span class="nf">promise</span><span class="p">()</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">locations</span> <span class="k">in</span>
+    <span class="c1">//…</span>
+<span class="p">}</span><span class="o">.</span><span class="k">catch</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+    <span class="c1">//…</span>
+<span class="p">}</span>
+</code></pre>
+
+<blockquote>
+<p>Please note: we provide this promise with our CoreLocation extensions at
+<a href="https://github.com/PromiseKit/CoreLocation">https://github.com/PromiseKit/CoreLocation</a></p>
+</blockquote>
+<h2 id='recovery' class='heading'>Recovery</h2>
+
+<p>Sometimes you don’t want an error to cascade. Instead, you want to supply a default result:</p>
+<pre class="highlight swift"><code><span class="kt">CLLocationManager</span><span class="o">.</span><span class="nf">requestLocation</span><span class="p">()</span><span class="o">.</span><span class="n">recover</span> <span class="p">{</span> <span class="n">error</span> <span class="o">-&gt;</span> <span class="kt">Promise</span><span class="o">&lt;</span><span class="kt">CLLocation</span><span class="o">&gt;</span> <span class="k">in</span>
+    <span class="k">guard</span> <span class="n">error</span> <span class="o">==</span> <span class="kt">MyError</span><span class="o">.</span><span class="n">airplaneMode</span> <span class="k">else</span> <span class="p">{</span>
+        <span class="k">throw</span> <span class="n">error</span>
+    <span class="p">}</span>
+    <span class="k">return</span> <span class="o">.</span><span class="nf">value</span><span class="p">(</span><span class="kt">CLLocation</span><span class="o">.</span><span class="n">savannah</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span> <span class="n">location</span> <span class="k">in</span>
+    <span class="c1">//…</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>Be careful not to ignore all errors, though! Recover only those errors that make sense to recover.</p>
+<h2 id='promises-for-modal-view-controllers' class='heading'>Promises for Modal View Controllers</h2>
+<pre class="highlight swift"><code><span class="kd">class</span> <span class="kt">ViewController</span><span class="p">:</span> <span class="kt">UIViewController</span> <span class="p">{</span>
+
+    <span class="kd">private</span> <span class="nf">let</span> <span class="p">(</span><span class="n">promise</span><span class="p">,</span> <span class="n">seal</span><span class="p">)</span> <span class="o">=</span> <span class="kt">Guarantee</span><span class="o">&lt;</span><span class="err">…</span><span class="o">&gt;.</span><span class="nf">pending</span><span class="p">()</span>  <span class="c1">// use Promise if your flow can fail</span>
+
+    <span class="kd">func</span> <span class="nf">show</span><span class="p">(</span><span class="nv">in</span><span class="p">:</span> <span class="kt">UIViewController</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Promise</span><span class="o">&lt;</span><span class="err">…</span><span class="o">&gt;</span> <span class="p">{</span>
+        <span class="k">in</span><span class="o">.</span><span class="nf">show</span><span class="p">(</span><span class="k">self</span><span class="p">,</span> <span class="nv">sender</span><span class="p">:</span> <span class="k">in</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">promise</span>
+    <span class="p">}</span>
+
+    <span class="kd">func</span> <span class="nf">done</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nf">dismiss</span><span class="p">(</span><span class="nv">animated</span><span class="p">:</span> <span class="kc">true</span><span class="p">)</span>
+        <span class="n">seal</span><span class="o">.</span><span class="nf">fulfill</span><span class="p">(</span><span class="err">…</span><span class="p">)</span>
+    <span class="p">}</span>
+<span class="p">}</span>
+
+<span class="c1">// use:</span>
+
+<span class="kt">ViewController</span><span class="p">()</span><span class="o">.</span><span class="nf">show</span><span class="p">(</span><span class="nv">in</span><span class="p">:</span> <span class="k">self</span><span class="p">)</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+    <span class="c1">//…</span>
+<span class="p">}</span><span class="o">.</span><span class="k">catch</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
+    <span class="c1">//…</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>This is the best approach we have found, which is a pity as it requires the
+presentee to control the presentation and requires the presentee to dismiss itself
+explicitly.</p>
+
+<p>Nothing seems to beat storyboard segues for decoupling an app&rsquo;s controllers.</p>
+<h2 id='saving-previous-results' class='heading'>Saving Previous Results</h2>
+
+<p>Let’s say you have:</p>
+<pre class="highlight swift"><code><span class="nf">login</span><span class="p">()</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">username</span> <span class="k">in</span>
+    <span class="nf">fetch</span><span class="p">(</span><span class="nv">avatar</span><span class="p">:</span> <span class="n">username</span><span class="p">)</span>
+<span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span> <span class="n">image</span> <span class="k">in</span>
+    <span class="c1">//…</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>What if you want access to both <code>username</code> and <code>image</code> in your <code>done</code>?</p>
+
+<p>The most obvious way is to use nesting:</p>
+<pre class="highlight swift"><code><span class="nf">login</span><span class="p">()</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">username</span> <span class="k">in</span>
+    <span class="nf">fetch</span><span class="p">(</span><span class="nv">avatar</span><span class="p">:</span> <span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span> <span class="n">image</span> <span class="k">in</span>
+        <span class="c1">// we have access to both `image` and `username`</span>
+    <span class="p">}</span>
+<span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+    <span class="c1">// the chain still continues as you'd expect</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>However, such nesting reduces the clarity of the chain. Instead, we could use Swift
+tuples:</p>
+<pre class="highlight swift"><code><span class="nf">login</span><span class="p">()</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">username</span> <span class="k">in</span>
+    <span class="nf">fetch</span><span class="p">(</span><span class="nv">avatar</span><span class="p">:</span> <span class="n">username</span><span class="p">)</span><span class="o">.</span><span class="n">map</span> <span class="p">{</span> <span class="p">(</span><span class="nv">$0</span><span class="p">,</span> <span class="n">username</span><span class="p">)</span> <span class="p">}</span>
+<span class="p">}</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">image</span><span class="p">,</span> <span class="n">username</span> <span class="k">in</span>
+    <span class="c1">//…</span>
+<span class="p">}</span>
+</code></pre>
+
+<p>The code above simply maps <code><a href="Classes/Promise.html">Promise&lt;String&gt;</a></code> into <code>Promise&lt;(UIImage, String)&gt;</code>.</p>
+<h2 id='waiting-on-multiple-promises-whatever-their-result' class='heading'>Waiting on Multiple Promises, Whatever Their Result</h2>
+
+<p>Use <code><a href="Functions.html#/s:10PromiseKit4when8resolvedAA9GuaranteeCySayAA6ResultOyxGGGAA0A0CyxGd_tlF">when(resolved:)</a></code>:</p>
+<pre class="highlight swift"><code><span class="nf">when</span><span class="p">(</span><span class="nv">resolved</span><span class="p">:</span> <span class="n">a</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span> <span class="p">(</span><span class="nv">results</span><span class="p">:</span> <span class="p">[</span><span class="kt">Result</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">])</span> <span class="k">in</span>
+    <span class="c1">// `Result` is an enum of `.fulfilled` or `.rejected`</span>
+<span class="p">}</span>
+
+<span class="c1">// ^^ cannot call `catch` as `when(resolved:)` returns a `Guarantee`</span>
+</code></pre>
+
+<p>Generally, you don&rsquo;t want this! People ask for it a lot, but usually because
+they are trying to ignore errors. What they really need is to use <code>recover</code> on one of the
+promises. Errors happen, so they should be handled; you usually don&rsquo;t want to ignore them.</p>
+
+          </div>
+        </section>
+
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2019-01-15)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.4</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>

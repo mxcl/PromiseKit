@@ -1,0 +1,9 @@
+site.url: https://mxcl.dev/PromiseKit/
+permalink: news/:year/:month/:title/
+highlighter: rouge
+gems:
+  - jekyll-redirect-from
+  - jekyll-sitemap
+whitelist:
+  - jekyll-redirect-from
+  - jekyll-sitemap

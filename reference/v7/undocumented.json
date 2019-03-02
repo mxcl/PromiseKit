@@ -1,0 +1,250 @@
+{
+  "warnings": [
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Catchable.swift",
+      "line": null,
+      "symbol": "PMKFinalizer",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Catchable.swift",
+      "line": 44,
+      "symbol": "PMKFinalizer",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/CoreDataDispatcher.swift",
+      "line": 7,
+      "symbol": "NSManagedObjectContext.dispatcher",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/CoreDataDispatcher.swift",
+      "line": 20,
+      "symbol": "CoreDataDispatcher.init(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/CoreDataDispatcher.swift",
+      "line": 24,
+      "symbol": "CoreDataDispatcher.dispatch(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Dispatcher.swift",
+      "line": 14,
+      "symbol": "Dispatcher.dispatch(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Dispatcher.swift",
+      "line": 37,
+      "symbol": "DispatchQueueDispatcher.dispatch(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Dispatcher.swift",
+      "line": 44,
+      "symbol": "DispatchQueue.asyncD(group:qos:flags:execute:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Dispatcher.swift",
+      "line": 70,
+      "symbol": "CurrentThreadDispatcher.dispatch(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Dispatcher.swift",
+      "line": 76,
+      "symbol": "DispatchQueue.dispatch(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Dispatcher.swift",
+      "line": 87,
+      "symbol": "DispatchQueue.pmkDefault",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Dispatcher.swift",
+      "line": 127,
+      "symbol": "Guarantee.done(on:flags:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Dispatcher.swift",
+      "line": 132,
+      "symbol": "Guarantee.get(on:flags:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Dispatcher.swift",
+      "line": 137,
+      "symbol": "Guarantee.map(on:flags:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Dispatcher.swift",
+      "line": 143,
+      "symbol": "Guarantee.then(on:flags:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Dispatcher.swift",
+      "line": 152,
+      "symbol": "Guarantee.thenMap(on:flags:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Dispatcher.swift",
+      "line": 388,
+      "symbol": "Thenable.firstValue(on:flags:where:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Error.swift",
+      "line": null,
+      "symbol": "PMKError",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Error.swift",
+      "line": null,
+      "symbol": "PMKError",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Error.swift",
+      "line": 3,
+      "symbol": "PMKError",
+      "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Error.swift",
+      "line": 74,
+      "symbol": "Error.isCancelled",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Guarantee.swift",
+      "line": 80,
+      "symbol": "Guarantee.done(on:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Guarantee.swift",
+      "line": 91,
+      "symbol": "Guarantee.get(on:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Guarantee.swift",
+      "line": 98,
+      "symbol": "Guarantee.map(on:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Guarantee.swift",
+      "line": 109,
+      "symbol": "Guarantee.then(on:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Guarantee.swift",
+      "line": 119,
+      "symbol": "Guarantee.asVoid()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Guarantee.swift",
+      "line": 170,
+      "symbol": "Guarantee.init()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/LogEvent.swift",
+      "line": 37,
+      "symbol": "LogEvent.asString()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Promise.swift",
+      "line": 196,
+      "symbol": "PMKNamespacer.promise",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/RateLimitedDispatcherBase.swift",
+      "line": 3,
+      "symbol": "RateLimitedDispatcherBase",
+      "symbol_kind": "source.lang.swift.decl.class",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/RateLimitedDispatcherBase.swift",
+      "line": 17,
+      "symbol": "RateLimitedDispatcherBase.init(maxDispatches:perInterval:queue:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/RateLimitedDispatcherBase.swift",
+      "line": 23,
+      "symbol": "RateLimitedDispatcherBase.dispatch(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Resolver.swift",
+      "line": 9,
+      "symbol": "Resolver.deinit",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/Thenable.swift",
+      "line": 394,
+      "symbol": "Thenable.firstValue(on:where:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/mxcl/src/PromiseKit/Sources/when.swift",
+      "line": 256,
+      "symbol": "when(guarantees:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    }
+  ],
+  "source_directory": "/Users/mxcl/src/PromiseKit"
+}
