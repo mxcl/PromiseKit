@@ -1,4 +1,4 @@
-@import PromiseKit;
+@import PromiseKit6;
 @import XCTest;
 
 @interface HangTests: XCTestCase @end @implementation HangTests

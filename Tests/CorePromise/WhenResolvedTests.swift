@@ -1,7 +1,7 @@
 //  Created by Austin Feight on 3/19/16.
 //  Copyright © 2016 Max Howell. All rights reserved.
 
-import PromiseKit
+import PromiseKit6
 import XCTest
 
 class JoinTests: XCTestCase {

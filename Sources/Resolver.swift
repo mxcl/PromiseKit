@@ -87,7 +87,7 @@ public enum Result<T> {
     case rejected(Error)
 }
 
-public extension PromiseKit.Result {
+public extension PromiseKit6.Result {
     var isFulfilled: Bool {
         switch self {
         case .fulfilled:

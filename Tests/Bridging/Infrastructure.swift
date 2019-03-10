@@ -1,4 +1,4 @@
-import PromiseKit
+import PromiseKit6
 
 // for BridgingTests.m
 @objc(PMKPromiseBridgeHelper) class PromiseBridgeHelper: NSObject {

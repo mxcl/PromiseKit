@@ -7,7 +7,7 @@
 
 import Foundation
 import XCTest
-import PromiseKit
+import PromiseKit6
 import JavaScriptCore
 
 @objc protocol JSPromiseProtocol: JSExport {

@@ -4,7 +4,7 @@
 #import <libkern/OSAtomic.h>
 @import Foundation.NSError;
 @import Foundation.NSNull;
-#import "PromiseKit.h"
+#import "PromiseKit6.h"
 
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"

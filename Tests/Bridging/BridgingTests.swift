@@ -1,5 +1,5 @@
 import Foundation
-import PromiseKit
+import PromiseKit6
 import XCTest
 
 class BridgingTests: XCTestCase {

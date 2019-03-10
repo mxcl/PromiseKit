@@ -3,7 +3,7 @@ import PlaygroundSupport
 // Is this erroring? If so open the `.xcodeproj` and build the
 // framework for a macOS target (usually labeled: “My Mac”).
 // Then select `PromiseKit.playground` from inside Xcode.
-import PromiseKit
+import PromiseKit6
 
 
 func promise3() -> Promise<Int> {

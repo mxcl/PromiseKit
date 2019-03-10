@@ -1,4 +1,4 @@
-@import PromiseKit;
+@import PromiseKit6;
 @import XCTest;
 #import "Infrastructure.h"
 #define PMKTestErrorDomain @"PMKTestErrorDomain"

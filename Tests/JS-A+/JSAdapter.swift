@@ -7,7 +7,7 @@
 
 import Foundation
 import JavaScriptCore
-import PromiseKit
+import PromiseKit6
 
 enum JSAdapter {
     

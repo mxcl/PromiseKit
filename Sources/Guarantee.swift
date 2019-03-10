@@ -6,7 +6,7 @@ import Dispatch
  - See: `Thenable`
 */
 public final class Guarantee<T>: Thenable {
-    let box: PromiseKit.Box<T>
+    let box: PromiseKit6.Box<T>
 
     fileprivate init(box: SealedBox<T>) {
         self.box = box
@@ -58,7 +58,7 @@ public final class Guarantee<T>: Thenable {
         deinit {
             switch inspect() {
             case .pending:
-                PromiseKit.conf.logHandler(.pendingGuaranteeDeallocated)
+                PromiseKit6.conf.logHandler(.pendingGuaranteeDeallocated)
             case .resolved:
                 break
             }

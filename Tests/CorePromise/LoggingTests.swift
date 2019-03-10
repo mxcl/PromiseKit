@@ -1,4 +1,4 @@
-@testable import PromiseKit
+@testable import PromiseKit6
 import Dispatch
 import XCTest
 
@@ -178,7 +178,7 @@ class LoggingTests: XCTestCase {
     func testPendingGuaranteeDeallocatedIsLogged() {
         
         var logOutput: String? = nil
-        let loggingClosure: (PromiseKit.LogEvent) -> () = { event in
+        let loggingClosure: (PromiseKit6.LogEvent) -> () = { event in
             switch event {
             case .waitOnMainThread, .pendingPromiseDeallocated, .pendingGuaranteeDeallocated:
                 logOutput = "\(event)"
