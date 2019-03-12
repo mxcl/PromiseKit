@@ -8,7 +8,7 @@
 * Do you want a library that has been maintained continuously and passionately for 6 years? Then pick PromiseKit.
 * Do you want a library that the community has chosen to be their №1 Promises/Futures library? Then pick PromiseKit.
 * Do you want to be able to use Promises with Apple’s SDKs rather than having to do all the work of writing the Promise implementations yourself? Then pick PromiseKit.
-* Do you want to be able to use Promises with Swift 3.x, Swift 4.x, ObjC, iOS, tvOS, watchOS, macOS, Android & Linux? Then pick PromiseKit.
+* Do you want to be able to use Promises with Swift, ObjC, iOS, tvOS, watchOS, macOS, Android & Linux? Then pick PromiseKit.
 * PromiseKit verifies its correctness by testing against the entire [Promises/A+ test suite](https://github.com/promises-aplus/promises-tests).
 
 ## How do I create a fulfilled `Void` promise?
@@ -54,11 +54,11 @@ use `weak self` (and check for `self == nil`) to prevent any such side effects.
 should be protected against are in fact *not* side effects.
 
 Side effects include changes to global application state. They *do not* include
-changing the display state of a viewController. So, protect against setting UserDefaults or
+changing the display state of a view-controller. So, protect against setting `UserDefaults` or
 modifying the application database, and don't bother protecting against changing
 the text in a `UILabel`.
 
-[This stackoverflow question](https://stackoverflow.com/questions/39281214/should-i-use-weak-self-in-promisekit-blocks)
+[This StackOverflow question](https://stackoverflow.com/questions/39281214/should-i-use-weak-self-in-promisekit-blocks)
 has some good discussion on this topic.
 
 ## Do I need to retain my promises?
@@ -211,12 +211,12 @@ to a suitable problem, RxSwift can yield great benefits in robustness and simpli
 But not all applications are suitable for RxSwift. 
 
 By contrast, PromiseKit selectively applies the best parts of reactive programming
-to the hardest part of pure Swift development, the management of asynchrony. It's a broadly 
+to the hardest part of pure Swift development, the management of asynchronicity. It's a broadly 
 applicable tool. Most asynchronous code can be clarified, simplified and made more robust
 just by converting it to use promises. (And the conversion process is easy.)
 
 Promises make for code that is clear to most developers. RxSwift, perhaps not. Take a look at this 
-[signup panel](https://github.com/ReactiveX/RxSwift/tree/master/RxExample/RxExample/Examples/GitHubSignup)
+[sign-up panel](https://github.com/ReactiveX/RxSwift/tree/master/RxExample/RxExample/Examples/GitHubSignup)
 implemented in RxSwift and see what you think. (Note that this is one of RxSwift's own examples.)
 
 Even where PromiseKit and RxSwift are broadly similar, there are many differences in implementation:
@@ -229,8 +229,8 @@ So, RxSwift tries hard to supply every operator you might ever want to use right
 hundreds. PromiseKit supplies a few utilities to help with specific scenarios, but because it's trivial
 to write your own chain elements, there's no need for all this extra code in the library.
 
-* PromiseKit dispatches the execution of every block. RxSwift dispatches only when told to do so. Moreover, the 
-current dispatching state is an attribute of the chain, not the specific block, as it is in PromiseKit.
+* PromiseKit dispatches the execution of every block. RxSwift dispatches only when told to do so. Moreover, 
+in RxSwift, the current dispatching state is an attribute of the chain, not the specific block, as it is in PromiseKit.
 The RxSwift system is more powerful but more complex. PromiseKit is simple, predictable and safe.
 
 * In PromiseKit, both sides of a branched chain refer back to their shared common ancestors. In RxSwift, 
@@ -244,7 +244,7 @@ deallocated. All promises yield a single value, terminate and then automatically
 
 You can find some additional discussion in [this ticket](https://github.com/mxcl/PromiseKit/issues/484).
 
-## Why can’t I return from a catch like I can in Javascript?
+## Why can’t I return from a catch like I can in JavaScript?
 
 Swift demands that functions have one purpose. Thus, we have two error handlers:
 
@@ -307,36 +307,56 @@ feature because it gives you guarantees about the flow of your chains.
 
 ## How do I change the default queues that handlers run on?
 
-You can change the values of `PromiseKit.conf.Q`. There are two variables that
-change the default queues that the two kinds of handler run on. A typical
-pattern is to change all your `then`-type handlers to run on a background queue
+You can change the values of `PromiseKit.conf.Q` or `PromiseKit.conf.D`. These 
+variables both access the same underlying state. However,  `conf.Q` presents it in terms of 
+`DispatchQueue`s, while `conf.D` presents it in terms of the more general
+`Dispatcher`-protocol objects that PromiseKit uses internally. (`DispatchQueue`s are
+just one possible implementation of `Dispatcher`, although they are the ones that account
+for nearly all actual use.)
+
+Each of these configuration variables is a two-tuple that identifies two separate dispatchers named `map` and `return`.
+
+```swift
+public var Q: (map: DispatchQueue?, return: DispatchQueue?)
+public var D: (map: Dispatcher, return: Dispatcher)
+```
+
+The `return` dispatcher is the default for chain-finalizing methods such as `done`
+and `catch`. The `map` dispatcher is the default for everything else. A
+typical pattern is to change all your `then`-type handlers to run on a background queue
 and to have all your “finalizers” run on the main queue:
 
 ```
 PromiseKit.conf.Q.map = .global()
-PromiseKit.conf.Q.return = .main  //NOTE this is the default
+PromiseKit.conf.Q.return = .main
 ```
 
-Be very careful about setting either of these queues to `nil`.  It has the
-effect of running *immediately*, and this is not what you usually want to do in
-your application.  This is, however, useful when you are running specs and want
-your promises to resolve immediately. (This is basically the same idea as "stubbing"
-an HTTP request.)
+Note that `DispatchQueue.main` is the default for _both_ dispatchers.
+
+Be very careful about setting either part of `conf.Q` to `nil`.  It has the
+effect of running closures *immediately*, and this is not what you usually want to do in
+your application.  It is useful, however, when you are running specs and want
+your promises to resolve immediately. (It's basically the same idea as "stubbing"
+HTTP requests.)
 
 ```swift
 // in your test suite setup code
-PromiseKit.conf.Q.map = nil
-PromiseKit.conf.Q.return = nil
+PromiseKit.conf.Q = (map: nil, return: nil)
 ```
 
 ## How do I use PromiseKit on the server side?
 
 If your server framework requires that the main queue remain unused (e.g., Kitura),
-then you must use PromiseKit 6 and you must tell PromiseKit not to dispatch to the
-main queue by default. This is easy enough:
+then you must tell PromiseKit not to dispatch there by default. This is easy enough:
 
 ```swift
-PromiseKit.conf.Q = (map: DispatchQueue.global(), return: DispatchQueue.global())
+PromiseKit.conf.Q = (map: .global(), return: .global())
+```
+If you want to emulate the serializing behavior of `DispatchQueue.main`, just create and label
+a new `DispatchQueue`. It'll be serial by default.
+
+```swift
+PromiseKit.conf.Q.return = DispatchQueue(label: "virtual main queue")
 ```
 
 > Note, we recommend using your own queue rather than `.global()`, we've seen better performance this way.
@@ -372,12 +392,12 @@ Kitura.run()
 
 ## How do I control console output?
 
-By default PromiseKit emits console messages when certain events occur.  These events include:
+By default, PromiseKit emits warning messages on the console when certain events occur.  These events include:
 - A promise or guarantee has blocked the main thread
 - A promise has been deallocated without being fulfilled
 - An error which occurred while fulfilling a promise was swallowed using cauterize
 
-You may turn off or redirect this output by setting a thread safe closure in [PMKCOnfiguration](https://github.com/mxcl/PromiseKit/blob/master/Sources/Configuration.swift) **before** processing any promises. For example, to turn off console output:
+You may turn off or redirect this output by setting a thread-safe closure in [PMKConfiguration](https://github.com/mxcl/PromiseKit/blob/master/Sources/Configuration.swift) **before** processing any promises. For example, to turn off console output:
 
 ```swift
 conf.logHandler = { event in }

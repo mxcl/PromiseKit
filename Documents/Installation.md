@@ -63,16 +63,14 @@ PromiseKit contains Swift, so there have been rev-lock issues with Xcode:
 
 | PromiseKit | Swift                   | Xcode    |   CI Status  |   Release Notes   |
 | ---------- | ----------------------- | -------- | ------------ | ----------------- |
-|      6     | 3.1, 3.2, 3.3, 4.x      | 8.3, 9.x, 10.x | ![ci-master] | [2018/02][news-6] |
-|      5     | 3.1, 3.2, 3.3, 4.x      | 8.3, 9.x, 10.x | *Deprecated* |       *n/a*       |
-|      4†    | 3.0, 3.1, 3.2, 3.3, 4.x | 8.x, 9.x, 10.x | ![ci-master] | [2016/09][news-4] |
+|      6     | 3.1, 3.2, 3.3, 4.x, 5.x | 8.3, 9.x, 10.x | ![ci-master] | [2018/02][news-6] |
+|      5     | 3.1, 3.2, 3.3, 4.x      | 8.3, 9.x, 10.1 | *Deprecated* |       *n/a*       |
+|      4     | 3.0, 3.1, 3.2, 3.3, 4.x | 8.x, 9.x, 10.1 | ![ci-master] | [2016/09][news-4] |
 |      3     | 2.x                     | 7.x, 8.0 | ![ci-swift2] | [2015/10][news-3] |
 |      2     | 1.x                     | 7.x      | *Deprecated* | [2015/10][news-3] |
-|      1‡    | *N/A*                   | *        | ![ci-legacy] |         –         |
+|      1†    | *N/A*                   | *        | ![ci-legacy] |         –         |
                                      
-† Probably supports Xcode 10 and Swift 4.2, if not, PR welcome.
-
-‡ PromiseKit 1 is pure Objective-C and thus can be used with any Xcode, it is
+† PromiseKit 1 is pure Objective-C and thus can be used with any Xcode, it is
 also your only choice if you need to support iOS 7 or below.
 
 ---
@@ -109,10 +107,10 @@ github "mxcl/PromiseKit" ~> 3.5
 [ci-23]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-2.3-minimal-changes
 [ci-22]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-2.2-minimal-changes
 [ci-20]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=swift-2.0-minimal-changes
-[news-2]: http://mxcl.github.io/PromiseKit/news/2015/05/PromiseKit-2.0-Released/
-[news-3]: https://github.com/mxcl/PromiseKit/blob/master/CHANGELOG.markdown#300-oct-1st-2015
-[news-4]: http://mxcl.github.io/PromiseKit/news/2016/09/PromiseKit-4.0-Released/
-[news-6]: http://mxcl.github.io/PromiseKit/news/2018/02/PromiseKit-6.0-Released/
+[news-2]: http://mxcl.dev/PromiseKit/news/2015/05/PromiseKit-2.0-Released/
+[news-3]: https://github.com/mxcl/PromiseKit/blob/212f31f41864d1e3ec54f5dd529bd8e1e5697024/CHANGELOG.markdown#300-oct-1st-2015
+[news-4]: http://mxcl.dev/PromiseKit/news/2016/09/PromiseKit-4.0-Released/
+[news-6]: http://mxcl.dev/PromiseKit/news/2018/02/PromiseKit-6.0-Released/
 [swift-2.3-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.3-minimal-changes
 [swift-2.2-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.2-minimal-changes
 [swift-2.0-minimal-changes]: https://github.com/mxcl/PromiseKit/tree/swift-2.0-minimal-changes
@@ -192,7 +190,7 @@ If you still are using Xcode 6 and Swift 1.2 then use PromiseKit 2.
 
 ## [2.0](https://github.com/mxcl/PromiseKit/releases/tag/2.0.0) May 14th, 2015
 
-[PromiseKit 2 announcement post](http://mxcl.github.io/PromiseKit/news/2015/05/PromiseKit-2.0-Released/).
+[PromiseKit 2 announcement post](http://mxcl.dev/PromiseKit/news/2015/05/PromiseKit-2.0-Released/).
 
 ## [1.5](https://github.com/mxcl/PromiseKit/releases/tag/1.5.0)
 

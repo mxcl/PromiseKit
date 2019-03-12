@@ -58,7 +58,7 @@ that represents the type of object it wraps. For example, in the example above,
 `login` is a function that returns a `Promise` that *will* represent an instance
 of `Creds`.
 
-> *Note*: `done` is new to PromiseKit 5. We previously defined a variant of `then` that
+> *Note*: `done` was introduced in PromiseKit 5. We previously defined a variant of `then` that
 did not require you to return a promise. Unfortunately, this convention often confused
 Swift and led to odd and hard-to-debug error messages. It also made using PromiseKit 
 more painful. The introduction of `done` lets you type out promise chains that
@@ -311,10 +311,10 @@ extra disambiguation for the Swift compiler. Sorry; we tried.
 typically just pass completion handler parameters to `resolve` and let Swift figure
 out which variant to apply to your particular case (as shown in the example above).
 
-> *Note* `Guarantees` (below) have a slightly different initializer (since they
-cannot error) so the parameter to the initializer closure is just a closure. Not
-a `Resolver` object. Thus do `seal(value)` rather than `seal.fulfill(value)`. This
-is because there is no variations in what guarantees can be sealed with, they can
+> *Note*: `Guarantee`s (below) have a slightly different initializer since they
+cannot error, so the parameter to the initializer closure is just a closure. Not
+a `Resolver` object. Just do `seal(value)` rather than `seal.fulfill(value)`. It's
+different because there is only one way to seal guarantees; they can
 *only* fulfill.
 
 # `Guarantee<T>`
@@ -346,7 +346,7 @@ if you find an issue.
 
 ---
 
-If you are creating your own guarantees the syntax is simpler than that of promises;
+If you are creating your own guarantees the syntax is simpler than that of promises:
 
 ```swift
 func fetch() -> Promise<String> {
@@ -507,7 +507,7 @@ However, this shorthand is both a blessing and a curse. You may find that the Sw
 often fails to infer return types properly. See our [Troubleshooting Guide](Troubleshooting.md) if
 you require further assistance.
 
-> By adding `done` to PromiseKit 5, we have managed to avoid many of these common
+> By adding `done` to PromiseKit 5, we were able to blunt many of these common
 pain points in using PromiseKit and Swift.
 
 
@@ -527,9 +527,9 @@ Here are some recent articles that document PromiseKit 5+:
 
 * [Using Promises - Agostini.tech](https://agostini.tech/2018/10/08/using-promisekit)
 
-Careful with general online references, many of them refer to PMK < 5 which has a subtly
-different API (sorry about that, but Swift has changed a lot over the years and thus
-we had to too).
+Be careful when consulting general online references, as many of them refer to PMK < 5, which has a subtly
+different API. (Sorry about that, but Swift has changed a lot over the years and thus
+we had to as well.)
 
 
-[API Reference]: https://mxcl.github.io/PromiseKit/reference/v7/Classes/Promise.html
+[API Reference]: https://mxcl.dev/PromiseKit/reference/v7/Classes/Promise.html

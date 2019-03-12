@@ -3,21 +3,29 @@ import Dispatch
 import XCTest
 
 class LoggingTests: XCTestCase {
+
+    enum ForTesting: Error, CustomDebugStringConvertible {
+        case purposes
+        var debugDescription: String {
+            return "purposes"
+        }
+    }
+    
+    var logOutput: String? = nil
+    
+    func captureLogger(_ event: LogEvent) {
+        logOutput = "\(event)"
+    }
+    
     /**
      The test should emit the following log messages:
      
      PromiseKit: warning: `wait()` called on main thread!
      PromiseKit: warning: pending promise deallocated
+     PromiseKit: warning: pending guarantee deallocated
      PromiseKit:cauterized-error: purposes
-     This is an error message
     */
     func testLogging() {
-        
-        var logOutput: String? = nil
-        
-        enum ForTesting: Error {
-            case purposes
-        }
         
         // Test Logging to Console, the default behavior
         conf.logHandler(.waitOnMainThread)
@@ -33,16 +41,7 @@ class LoggingTests: XCTestCase {
         conf.logHandler(.cauterized(ForTesting.purposes))
         XCTAssertNil(logOutput)
 
-        conf.logHandler =  { event in
-            switch event {
-            case .waitOnMainThread, .pendingPromiseDeallocated, .pendingGuaranteeDeallocated:
-                logOutput = "\(event)"
-            case .cauterized:
-                // Using an enum with associated value does not convert to a string properly in
-                // earlier versions of swift
-                logOutput = "cauterized"
-            }
-        }
+        conf.logHandler = captureLogger
         conf.logHandler(.waitOnMainThread)
         XCTAssertEqual(logOutput!, "waitOnMainThread")
         logOutput = nil
@@ -50,20 +49,13 @@ class LoggingTests: XCTestCase {
         XCTAssertEqual(logOutput!, "pendingPromiseDeallocated")
         logOutput = nil
         conf.logHandler(.cauterized(ForTesting.purposes))
-        XCTAssertEqual(logOutput!, "cauterized")
+        XCTAssertEqual(logOutput!, "cauterized(purposes)")
     }
 
     // Verify waiting on main thread in Promise is logged
     func testPromiseWaitOnMainThreadLogged() throws {
         
-        enum ForTesting: Error {
-            case purposes
-        }
-        
-        var logOutput: String? = nil
-        conf.logHandler = { event in
-            logOutput = "\(event)"
-        }
+        conf.logHandler = captureLogger
         let promiseResolver = Promise<String>.pending()
         let workQueue = DispatchQueue(label: "worker")
         workQueue.async {
@@ -77,21 +69,7 @@ class LoggingTests: XCTestCase {
     // Verify Promise.cauterize() is logged
     func testCauterizeIsLogged() {
         
-        enum ForTesting: Error {
-            case purposes
-        }
-
-        var logOutput: String? = nil
-        conf.logHandler = { event in
-            switch event {
-            case .waitOnMainThread, .pendingPromiseDeallocated, .pendingGuaranteeDeallocated:
-                logOutput = "\(event)"
-            case .cauterized:
-                // Using an enum with associated value does not convert to a string properly in
-                // earlier versions of swift
-                logOutput = "cauterized"
-            }
-        }
+        conf.logHandler = captureLogger
         func createPromise() -> Promise<String> {
             let promiseResolver = Promise<String>.pending()
             
@@ -113,8 +91,8 @@ class LoggingTests: XCTestCase {
         readQueue.async {
             var outputSet = false
             while !outputSet {
-                if let logOutput = logOutput {
-                    XCTAssertEqual(logOutput, "cauterized")
+                if let logOutput = self.logOutput {
+                    XCTAssertEqual(logOutput, "cauterized(purposes)")
                     outputSet = true
                     ex.fulfill()
                 }
@@ -129,21 +107,7 @@ class LoggingTests: XCTestCase {
     // Verify waiting on main thread in Guarantee is logged
     func testGuaranteeWaitOnMainThreadLogged() {
         
-        enum ForTesting: Error {
-            case purposes
-        }
-        
-        var logOutput: String? = nil
-        conf.logHandler = { event in
-            switch event {
-            case .waitOnMainThread, .pendingPromiseDeallocated, .pendingGuaranteeDeallocated:
-                logOutput = "\(event)"
-            case .cauterized:
-                // Using an enum with associated value does not convert to a string properly in
-                // earlier versions of swift
-                logOutput = "cauterized"
-            }
-        }
+        conf.logHandler = captureLogger
         let guaranteeResolve = Guarantee<String>.pending()
         let workQueue = DispatchQueue(label: "worker")
         workQueue.async {
@@ -157,17 +121,7 @@ class LoggingTests: XCTestCase {
     // Verify pendingPromiseDeallocated is logged
     func testPendingPromiseDeallocatedIsLogged() {
         
-        var logOutput: String? = nil
-        conf.logHandler = { event in
-            switch event {
-            case .waitOnMainThread, .pendingPromiseDeallocated, .pendingGuaranteeDeallocated:
-                logOutput = "\(event)"
-            case .cauterized:
-                // Using an enum with associated value does not convert to a string properly in
-                // earlier versions of swift
-                logOutput = "cauterized"
-            }
-        }
+        conf.logHandler = captureLogger
         do {
             let _ = Promise<Int>.pending()
         }
@@ -177,23 +131,28 @@ class LoggingTests: XCTestCase {
     // Verify pendingGuaranteeDeallocated is logged
     func testPendingGuaranteeDeallocatedIsLogged() {
         
-        var logOutput: String? = nil
-        let loggingClosure: (PromiseKit.LogEvent) -> () = { event in
-            switch event {
-            case .waitOnMainThread, .pendingPromiseDeallocated, .pendingGuaranteeDeallocated:
-                logOutput = "\(event)"
-            case .cauterized:
-                // Using an enum with associated value does not convert to a string properly in
-                // earlier versions of swift
-                logOutput = "cauterized"
-            }
-        }
-        conf.logHandler = loggingClosure
+        conf.logHandler = captureLogger
         do {
             let _ = Guarantee<Int>.pending()
         }
         XCTAssertEqual ("pendingGuaranteeDeallocated", logOutput!)
     }
     
-    //TODO Verify pending promise deallocation is logged
+    // Verify nilDispatchQueueWithFlags is logged
+    func testNilDispatchQueueWithFlags() {
+        
+        conf.logHandler = captureLogger
+        Guarantee.value(42).done(on: nil, flags: .barrier) { _ in }
+        XCTAssertEqual ("nilDispatchQueueWithFlags", logOutput!)
+    }
+    
+    // Verify extraneousFlagsSpecified is logged
+    func testExtraneousFlagsSpecified() {
+        
+        conf.logHandler = captureLogger
+        conf.D.return = CurrentThreadDispatcher()
+        Guarantee.value(42).done(flags: .barrier) { _ in }
+        XCTAssertEqual ("extraneousFlagsSpecified", logOutput!)
+    }
+    
 }

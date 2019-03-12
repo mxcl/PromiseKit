@@ -35,9 +35,14 @@ pod used in many of the most popular apps in the world.
 
 # PromiseKit 7 Alpha
 
-PromiseKit 7 is pre-release, if you’re using it: beware!
+PromiseKit 7 is prerelease, if you’re using it: beware!
 
 PromiseKit 7 uses Swift 5’s `Result`, PromiseKit <7 use our own `Result` type.
+
+PromiseKit 7 generalizes `DispatchQueue`s to a `Dispatcher` protocol. However, `DispatchQueue`s are `Dispatcher`-conformant,
+so existing code should not need to change. Please report any issues related to this transition.
+
+PromiseKit 7 adds support for cancelling promises and promise chains.
 
 # Quick Start
 
@@ -65,7 +70,7 @@ recommend [Carthage](https://github.com/Carthage/Carthage).
 
 # Professionally Supported PromiseKit is Now Available
 
-Tidelift gives software development teams a single source for purchasing
+TideLift gives software development teams a single source for purchasing
 and maintaining their software, with professional grade assurances from
 the experts who know it best, while seamlessly integrating with existing
 tools.
@@ -75,15 +80,17 @@ tools.
 # PromiseKit is Thousands of Hours of Work
 
 Hey there, I’m Max Howell. I’m a prolific producer of open source software and
-probably you already use some of it (for example, I created [`brew`]). I work
-full-time on open source and it’s hard; currently *I earn less than minimum
-wage*. Please help me continue my work, I appreciate it 🙏🏻
+probably you already use some of it (I created [`brew`]). I work full-time on
+open source and it’s hard; currently *I earn less than minimum wage*. Please
+help me continue my work, I appreciate it 🙏🏻
 
 <a href="https://www.patreon.com/mxcl">
 	<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
 </a>
 
-[Other ways to say thanks](http://mxcl.github.io/#donate).
+[Other ways to say thanks](http://mxcl.dev/#donate).
+
+[`brew`]: https://brew.sh
 
 # Documentation
 
@@ -97,7 +104,7 @@ wage*. Please help me continue my work, I appreciate it 🙏🏻
   * [Objective-C Guide](Documents/ObjectiveC.md)
   * [Troubleshooting](Documents/Troubleshooting.md) (e.g., solutions to common compile errors)
   * [Appendix](Documents/Appendix.md)
-* [API Reference](https://mxcl.github.io/PromiseKit/reference/v7/Classes/Promise.html)
+* [API Reference](https://mxcl.dev/PromiseKit/reference/v7/Classes/Promise.html)
 
 # Extensions
 
@@ -164,10 +171,10 @@ Nowadays, considering that:
 * We almost always POST JSON
 * We now have `JSONDecoder`
 * PromiseKit now has `map` and other functional primitives
-* PromiseKit (like Alamofire, but not raw-URLSession) also defaults to having callbacks go to the main thread
+* PromiseKit (like Alamofire, but not raw-`URLSession`) also defaults to having callbacks go to the main thread
 
 We recommend vanilla `URLSession`. It uses fewer black boxes and sticks closer to the
-metal. Alamofire was essential until the three bulletpoints above became true,
+metal. Alamofire was essential until the three bullet points above became true,
 but nowadays it isn’t really necessary.
 
 # Support
@@ -193,7 +200,7 @@ Generate the Xcode project:
 [Gitter chat channel]: https://gitter.im/mxcl/PromiseKit
 [our bug tracker]: https://github.com/mxcl/PromiseKit/issues/new
 [Podfile]: https://guides.cocoapods.org/syntax/podfile.html
-[PMK6]: http://mxcl.github.io/PromiseKit/news/2018/02/PromiseKit-6.0-Released/
+[PMK6]: http://mxcl.dev/PromiseKit/news/2018/02/PromiseKit-6.0-Released/
 [Installation Guide]: Documents/Installation.md
 [badge-travis]: https://travis-ci.org/mxcl/PromiseKit.svg?branch=master
 [travis]: https://travis-ci.org/mxcl/PromiseKit

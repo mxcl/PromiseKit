@@ -50,7 +50,7 @@ myPromise.then(^{
 });
 ```
 
-One important feature is the syntactic flexability of your handlers:
+One important feature is the syntactic flexibility of your handlers:
 
 ```objc
 myPromise.then(^{
@@ -192,7 +192,7 @@ that contains the throw statement.
 This pattern will consequently result in memory leaks if you're not careful.
 
 > *Note:* Only having a strong reference to the closure would result in memory leaks.
-> In our case, PromisKit automatically keeps a strong reference to the closure until it's released.
+> In our case, PromiseKit automatically keeps a strong reference to the closure until it's released.
 
 __Workarounds:__
 
@@ -210,7 +210,7 @@ myPromise.then(^{
     //…
 });
 ```
-2. Enable ARC for exceptions in Objective-C (not recomended)\
+2. Enable ARC for exceptions in Objective-C (not recommended)\
 You can add this  ```-fobjc-arc-exceptions to your``` to your compiler flags to enable ARC for exceptions.
 This is not recommended unless you've read the Apple documentation and are comfortable with the caveats.
 

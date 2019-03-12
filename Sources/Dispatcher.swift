@@ -1,82 +1,125 @@
 import Dispatch
 
+/// A `PromiseKit` abstraction of a `DispatchQueue` that allows for a more
+/// flexible variety of implementations. (For technical reasons,
+/// `DispatchQueue` itself cannot be subclassed.)
+///
+/// `Dispatcher`s define a `dispatch` method that executes a supplied closure.
+/// Execution may be synchronous or asynchronous, serial
+/// or concurrent, and can occur on any thread.
+///
+/// All `DispatchQueue`s are also valid `Dispatcher`s.
+
 public protocol Dispatcher {
     func dispatch(_ body: @escaping () -> Void)
 }
 
-public class DispatchQueueDispatcher: Dispatcher {
+/// A `Dispatcher` that bundles a `DispatchQueue` with
+/// a `DispatchGroup`, a set of `DispatchWorkItemFlags`, and a
+/// quality-of-service level. Closures dispatched through this
+/// `Dispatcher` will be submitted to the underlying `DispatchQueue`
+/// with the supplied components.
+
+public struct DispatchQueueDispatcher: Dispatcher {
     
     let queue: DispatchQueue
-    let flags: DispatchWorkItemFlags
+    let group: DispatchGroup?
+    let qos: DispatchQoS?
+    let flags: DispatchWorkItemFlags?
     
-    init(queue: DispatchQueue, flags: DispatchWorkItemFlags) {
+    init(queue: DispatchQueue, group: DispatchGroup? = nil, qos: DispatchQoS? = nil, flags: DispatchWorkItemFlags? = nil) {
         self.queue = queue
+        self.group = group
+        self.qos = qos
         self.flags = flags
     }
 
     public func dispatch(_ body: @escaping () -> Void) {
-        queue.async(flags: flags, execute: body)
+        queue.asyncD(group: group, qos: qos, flags: flags, execute: body)
     }
-
 }
 
+// Avoid having to hard-code any particular defaults for qos or flags
+public extension DispatchQueue {
+    final func asyncD(group: DispatchGroup? = nil, qos: DispatchQoS? = nil, flags: DispatchWorkItemFlags? = nil, execute body: @escaping () -> Void) {
+        switch (qos, flags) {
+        case (nil, nil):
+            async(group: group, execute: body)
+        case (nil, let flags?):
+            async(group: group, flags: flags, execute: body)
+        case (let qos?, nil):
+            async(group: group, qos: qos, execute: body)
+        case (let qos?, let flags?):
+            async(group: group, qos: qos, flags: flags, execute: body)
+        }
+    }
+}
+
+/// A `Dispatcher` class that executes all closures synchronously on
+/// the current thread.
+///
+/// Useful for temporarily disabling asynchrony and
+/// multithreading while debugging `PromiseKit` chains.
+///
+/// You can set `PromiseKit`'s default dispatching behavior to this mode
+/// by setting `conf.Q.map` and/or `conf.Q.return` to `nil`. (This is the
+/// same as assigning an instance of `CurrentThreadDispatcher` to these
+/// variables.)
+
 public struct CurrentThreadDispatcher: Dispatcher {
-    public func dispatch(_ body: @escaping () -> Void) {
+    public func dispatch(_ body: () -> Void) {
         body()
     }
 }
 
 extension DispatchQueue: Dispatcher {
-    /// Explicit declaration required; actual function signature is not identical to protocol
     public func dispatch(_ body: @escaping () -> Void) {
         async(execute: body)
     }
 }
 
-/// Used as default parameter for backward compatibility since clients may explicitly
-/// specify "nil" to turn off dispatching. We need to distinguish three cases: explicit
-/// queue, explicit nil, and no value specified. Dispatchers from conf.D cannot directly
-/// be used as default parameter values because they are not necessarily DispatchQueues.
+// Used as default parameter for backward compatibility since clients may explicitly
+// specify "nil" to turn off dispatching. We need to distinguish three cases: explicit
+// queue, explicit nil, and no value specified. Dispatchers from conf.D cannot directly
+// be used as default parameter values because they are not necessarily DispatchQueues.
 
 public extension DispatchQueue {
     static var pmkDefault = DispatchQueue(label: "org.promisekit.sentinel")
 }
 
 public extension DispatchQueue {
-    func asDispatcher(withFlags flags: DispatchWorkItemFlags? = nil) -> Dispatcher {
-        if let flags = flags {
-            return DispatchQueueDispatcher(queue: self, flags: flags)
+    /// Converts a `DispatchQueue` with given dispatching parameters into a `Dispatcher`
+    func asDispatcher(group: DispatchGroup? = nil, qos: DispatchQoS? = nil, flags: DispatchWorkItemFlags? = nil) -> Dispatcher {
+        if group == nil && qos == nil && flags == nil {
+            return self
         }
-        return self
+        return DispatchQueueDispatcher(queue: self, group: group, qos: qos, flags: flags)
     }
 }
 
-/// This hairball disambiguates all the various combinations of explicit arguments, default
-/// arguments, and configured defaults. In particular, a method that is given explicit work item
-/// flags but no DispatchQueue should still work (that is, the dispatcher should use those flags)
-/// as long as the configured default is actually some kind of DispatchQueue.
-///
-/// TODO: should conf.D = nil turn off dispatching even if explicit dispatch arguments are given?
-/// TODO: Move log prints into LogError enum if they are kept
+// This hairball disambiguates all the various combinations of explicit arguments, default
+// arguments, and configured defaults. In particular, a method that is given explicit work item
+// flags but no DispatchQueue should still work (that is, the dispatcher should use those flags)
+// as long as the configured default is actually some kind of DispatchQueue.
 
 fileprivate func selectDispatcher(given: DispatchQueue?, configured: Dispatcher, flags: DispatchWorkItemFlags?) -> Dispatcher {
     guard let given = given else {
         if flags != nil {
-            print("PromiseKit: warning: nil DispatchQueue specified, but DispatchWorkItemFlags were also supplied (ignored)")
+            conf.logHandler(.nilDispatchQueueWithFlags)
         }
         return CurrentThreadDispatcher()
     }
     if given !== DispatchQueue.pmkDefault {
-        return given.asDispatcher(withFlags: flags)
+        return given.asDispatcher(flags: flags)
     } else if let flags = flags, let configured = configured as? DispatchQueue {
-        return configured.asDispatcher(withFlags: flags)
+        return configured.asDispatcher(flags: flags)
     } else if flags != nil {
-        print("PromiseKit: warning: DispatchWorkItemFlags flags specified, but default dispatcher is not a DispatchQueue (ignored)")
+        conf.logHandler(.extraneousFlagsSpecified)
     }
     return configured
 }
 
-/// Backward compatibility for DispatchQueues in public API
+// Backward compatibility for DispatchQueues in public API
 
 public extension Guarantee {
     
@@ -369,7 +412,7 @@ public extension CatchMixin {
      - Parameter policy: The default policy does not execute your handler for cancellation errors.
      - Parameter execute: The handler to execute if this promise is rejected.
      - Returns: A promise finalizer.
-     - SeeAlso: [Cancellation](http://https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation/docs/)
+     - SeeAlso: [Cancellation](http://https://github.com/mxcl/PromiseKit/blob/master/Documents/CommonPatterns.md#cancellation/docs/)
      */
     @discardableResult
     func `catch`(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) -> Void) -> PMKFinalizer {
@@ -392,7 +435,7 @@ public extension CatchMixin {
      
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter body: The handler to execute if this promise is rejected.
-     - SeeAlso: [Cancellation](http://https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation/docs/)
+     - SeeAlso: [Cancellation](http://https://github.com/mxcl/PromiseKit/blob/master/Documents/CommonPatterns.md#cancellation/docs/)
      */
     func recover<U: Thenable>(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> U) -> Promise<T> where U.T == T {
         let dispatcher = selectDispatcher(given: on, configured: conf.D.map, flags: flags)
@@ -405,7 +448,7 @@ public extension CatchMixin {
      - Note it is logically impossible for this to take a `catchPolicy`, thus `allErrors` are handled.
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter body: The handler to execute if this promise is rejected.
-     - SeeAlso: [Cancellation](http://https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation/docs/)
+     - SeeAlso: [Cancellation](http://https://github.com/mxcl/PromiseKit/blob/master/Documents/CommonPatterns.md#cancellation/docs/)
      */
     @discardableResult
     func recover(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(Error) -> Guarantee<T>) -> Guarantee<T> {
@@ -476,7 +519,7 @@ public extension CatchMixin where T == Void {
      
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter body: The handler to execute if this promise is rejected.
-     - SeeAlso: [Cancellation](http://https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation/docs/)
+     - SeeAlso: [Cancellation](http://https://github.com/mxcl/PromiseKit/blob/master/Documents/CommonPatterns.md#cancellation/docs/)
      */
     @discardableResult
     func recover(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(Error) -> Void) -> Guarantee<Void> {
@@ -491,7 +534,7 @@ public extension CatchMixin where T == Void {
      
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter body: The handler to execute if this promise is rejected.
-     - SeeAlso: [Cancellation](http://https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation/docs/)
+     - SeeAlso: [Cancellation](http://https://github.com/mxcl/PromiseKit/blob/master/Documents/CommonPatterns.md#cancellation/docs/)
      */
     func recover(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> Void) -> Promise<Void> {
         let dispatcher = selectDispatcher(given: on, configured: conf.D.map, flags: flags)

@@ -1,6 +1,6 @@
 # Contents
 
-* [README](/README.md)
+* [README](../README.md)
 * Handbook
   * [Getting Started](GettingStarted.md)
   * [Promises: Common Patterns](CommonPatterns.md)
@@ -12,4 +12,4 @@
   * [Troubleshooting](Troubleshooting.md)
   * [Appendix](Appendix.md)
 * [Examples](Examples)
-* [API Reference](https://mxcl.github.io/PromiseKit/reference/v7/Classes/Promise.html)
+* [API Reference](https://mxcl.dev/PromiseKit/reference/v7/Classes/Promise.html)

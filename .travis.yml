@@ -2,12 +2,13 @@ branches:
   only:
     - master
     - v4
-    - v7
+    - /^v7/
     - legacy-1.x
     - /^\d+\.\d+\.\d+$/
 
 stages:
   - name: pretest
+  - name: lint
   - name: test
   - name: deploy
     if: branch =~ ^\d+\.\d+\.\d+$
@@ -57,30 +58,23 @@ jobs:
         - Tests/JS-A+/build
         - Tests/JS-A+/node_modules
 
+    - stage: lint
+      name: Spell Check Markdown
+      install: npm install markdown-spellcheck --global
+      before_script: mv .github/spelling-skip-words .spelling
+      script: mdspell -r -n -a --en-us *.md **/*.md
+      os: linux
+      language: generic
+
     - stage: deploy
-      before_script: |
-        cat <<\ \ EOF> PromiseKit.podspec
-        Pod::Spec.new do |s|
-          s.name = "PromiseKit"
-          s.source = { git: "https://github.com/mxcl/#{s.name}.git", tag: s.version }
-          s.authors  = { 'Max Howell' => 'mxcl@me.com' }
-          s.license = 'MIT'
-          s.summary = 'Promises for Swift.'
-          s.version = ENV["TRAVIS_TAG"]
-          s.frameworks = 'Foundation'
-          s.description = 'A thoughtful and complete implementation of promises for iOS, macOS, watchOS and tvOS.'
-          s.requires_arc = true
-          s.source_files = 'Sources/*.swift'
-          s.swift_version = '5.0'
-          s.social_media_url = 'https://twitter.com/mxcl'
-          s.documentation_url = 'http://mxcl.github.io/PromiseKit/reference/'
-          s.ios.deployment_target = '8.0'
-          s.osx.deployment_target = '10.10'
-          s.tvos.deployment_target = '9.0'
-          s.watchos.deployment_target = '2.0'
-        end
-        EOF
+      before_install: |
+        curl -O https://raw.githubusercontent.com/mxcl/Path.swift/master/.github/deploy
+        chmod u+x deploy
+      install: brew install mxcl/made/swift-sh
+      before_script: ./deploy generate-podspec
       script: pod trunk push --allow-warnings
+      after_success: |
+        ./deploy publish-release
 
     - name: Generate Documentation
       os: osx
