@@ -177,7 +177,7 @@ class DispatcherTests: XCTestCase {
     @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
     func testDispatcherExtensionReturnsGuarantee() {
         let ex = expectation(description: "Dispatcher.promise")
-        cancellable(dispatcher.dispatch(.promise) { () -> Int in
+        cancellable(dispatcher.dispatch() { () -> Int in
             XCTAssertFalse(Thread.isMainThread)
             return 1
         }).done { one in
@@ -192,7 +192,7 @@ class DispatcherTests: XCTestCase {
     @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
     func testDispatcherExtensionCanThrowInBody() {
         let ex = expectation(description: "Dispatcher.promise")
-        cancellable(dispatcher.dispatch(.promise) { () -> Int in
+        cancellable(dispatcher.dispatch() { () -> Int in
             throw PMKError.badInput
         }).done { _ in
             XCTFail()
