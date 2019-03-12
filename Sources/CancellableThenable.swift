@@ -241,7 +241,7 @@ public extension CancellableThenable {
      - Returns: A new cancellable promise that is resolved with the value that the handler is fed. For example:
      
            let context = firstly {
-               cancellable(Promise.value(1))
+               cancellize(Promise.value(1))
            }.get { foo in
                print(foo, " is 1")
            }.done { foo in
@@ -343,7 +343,7 @@ public extension CancellableThenable where U.T: Sequence {
      `CancellablePromise<[U.T]>` => `U.T` -> `V` => `CancellablePromise<[V]>`
 
          firstly {
-             cancellable(Promise.value([1,2,3]))
+             cancellize(Promise.value([1,2,3]))
          }.mapValues { integer in
              integer * 2
          }.done {
@@ -358,7 +358,7 @@ public extension CancellableThenable where U.T: Sequence {
      `CancellablePromise<[U.T]>` => `U.T` -> `[V]` => `CancellablePromise<[V]>`
 
          firstly {
-             cancellable(Promise.value([1,2,3]))
+             cancellize(Promise.value([1,2,3]))
          }.flatMapValues { integer in
              [integer, integer]
          }.done {
@@ -375,7 +375,7 @@ public extension CancellableThenable where U.T: Sequence {
      `CancellablePromise<[U.T]>` => `U.T` -> `V?` => `CancellablePromise<[V]>`
 
          firstly {
-             cancellable(Promise.value(["1","2","a","3"]))
+             cancellize(Promise.value(["1","2","a","3"]))
          }.compactMapValues {
              Int($0)
          }.done {
@@ -392,9 +392,9 @@ public extension CancellableThenable where U.T: Sequence {
      `CancellablePromise<[U.T]>` => `U.T` -> `CancellablePromise<V>` => `CancellablePromise<[V]>`
 
          firstly {
-             cancellable(Promise.value([1,2,3]))
+             cancellize(Promise.value([1,2,3]))
          }.thenMap { integer in
-             cancellable(Promise.value(integer * 2))
+             cancellize(Promise.value(integer * 2))
          }.done {
              // $0 => [2,4,6]
          }
@@ -409,8 +409,8 @@ public extension CancellableThenable where U.T: Sequence {
      `CancellablePromise<[U.T]>` => `U.T` -> `Promise<V>` => `CancellablePromise<[V]>`
 
          firstly {
-             cancellable(Promise.value([1,2,3]))
-         }.thenMap { integer in
+             cancellize(Promise.value([1,2,3]))
+         }.cancellableThenMap { integer in
              .value(integer * 2)
          }.done {
              // $0 => [2,4,6]
@@ -426,9 +426,9 @@ public extension CancellableThenable where U.T: Sequence {
      `CancellablePromise<[T]>` => `T` -> `CancellablePromise<[U]>` => `CancellablePromise<[U]>`
 
          firstly {
-             cancellable(Promise.value([1,2,3]))
+             cancellize(Promise.value([1,2,3]))
          }.thenFlatMap { integer in
-             cancellable(Promise.value([integer, integer]))
+             cancellize(Promise.value([integer, integer]))
          }.done {
              // $0 => [1,1,2,2,3,3]
          }
@@ -445,8 +445,8 @@ public extension CancellableThenable where U.T: Sequence {
      `CancellablePromise<[T]>` => `T` -> `Promise<[U]>` => `CancellablePromise<[U]>`
 
          firstly {
-             cancellable(Promise.value([1,2,3]))
-         }.thenFlatMap { integer in
+             cancellize(Promise.value([1,2,3]))
+         }.cancellableThenFlatMap { integer in
              .value([integer, integer])
          }.done {
              // $0 => [1,1,2,2,3,3]
@@ -464,7 +464,7 @@ public extension CancellableThenable where U.T: Sequence {
      `CancellablePromise<[T]>` => `T` -> Bool => `CancellablePromise<[U]>`
 
          firstly {
-             cancellable(Promise.value([1,2,3]))
+             cancellize(Promise.value([1,2,3]))
          }.filterValues {
              $0 > 1
          }.done {

@@ -10,7 +10,7 @@ class CatchableTests: XCTestCase {
         func helper(error: Error, on queue: DispatchQueue = .main, flags: DispatchWorkItemFlags? = nil) {
             let ex = (expectation(description: ""), expectation(description: ""))
             var x = 0
-            let p = cancellable(after(seconds: 0.01)).catch(policy: .allErrors) { _ in
+            let p = cancellize(after(seconds: 0.01)).catch(policy: .allErrors) { _ in
                 XCTAssertEqual(x, 0)
                 x += 1
                 ex.0.fulfill()
@@ -38,7 +38,7 @@ class CatchableTests: XCTestCase {
 
     func testCauterize() {
         let ex = expectation(description: "")
-        let p = cancellable(after(seconds: 0.01))
+        let p = cancellize(after(seconds: 0.01))
 
         // cannot test specifically that this outputs to console,
         // but code-coverage will note that the line is run
@@ -177,7 +177,7 @@ extension CatchableTests {
         func helper(error: Swift.Error) {
             let ex = expectation(description: "")
             CancellablePromise<Int>(error: error).recover { _ in
-                return cancellable(Promise.value(2))
+                return cancellize(Promise.value(2))
             }.done { _ in
                 XCTFail()
             }.catch(policy: .allErrors, ex.fulfill).cancel()
@@ -190,9 +190,9 @@ extension CatchableTests {
 
     func test__full_recover__fulfilled_path() {
         let ex = expectation(description: "")
-        cancellable(Promise.value(1)).recover { _ -> CancellablePromise<Int> in
+        cancellize(Promise.value(1)).recover { _ -> CancellablePromise<Int> in
             XCTFail()
-            return cancellable(Promise.value(2))
+            return cancellize(Promise.value(2))
         }.done { _ in
             XCTFail()
         }.catch(policy: .allErrors) { error in
@@ -210,7 +210,7 @@ extension CatchableTests {
                     throw err
                 }
                 x += 1
-                return cancellable(Promise.value(x))
+                return cancellize(Promise.value(x))
             }.done { _ in
                 ex.fulfill()
             }.catch(policy: .allErrors) { error in
@@ -254,7 +254,7 @@ extension CatchableTests {
         let ex = expectation(description: "")
         CancellablePromise<Int>(error: Error.cancelled).recover(policy: .allErrorsExceptCancellation) { _ -> CancellablePromise<Int> in
             XCTFail()
-            return cancellable(Promise.value(1))
+            return cancellize(Promise.value(1))
         }.catch(policy: .allErrors) {
             XCTAssertEqual(Error.cancelled, $0 as? Error)
             ex.fulfill()
@@ -264,7 +264,7 @@ extension CatchableTests {
 
     func test__conditional_recover__fulfilled_path() {
         let ex = expectation(description: "")
-        cancellable(Promise.value(1)).recover { err -> CancellablePromise<Int> in
+        cancellize(Promise.value(1)).recover { err -> CancellablePromise<Int> in
             XCTFail()
             throw err
         }.done {
@@ -278,7 +278,7 @@ extension CatchableTests {
 
     func test__cancellable_conditional_recover__fulfilled_path() {
         let ex = expectation(description: "")
-        cancellable(Promise.value(1)).cancellableRecover { err -> Promise<Int> in
+        cancellize(Promise.value(1)).cancellableRecover { err -> Promise<Int> in
             XCTFail()
             throw err
         }.done {
@@ -293,11 +293,11 @@ extension CatchableTests {
     func testEnsureThen_Error() {
         let ex = expectation(description: "")
 
-        let p = cancellable(Promise.value(1)).done {
+        let p = cancellize(Promise.value(1)).done {
             XCTAssertEqual($0, 1)
             throw Error.dummy
         }.ensureThen {
-            return cancellable(after(seconds: 0.01))
+            return cancellize(after(seconds: 0.01))
         }.catch(policy: .allErrors) {
             XCTAssert(($0 as? PMKError)?.isCancelled ?? false)
         }.finally {
@@ -311,8 +311,8 @@ extension CatchableTests {
     func testEnsureThen_Value() {
         let ex = expectation(description: "")
 
-        cancellable(Promise.value(1)).ensureThen {
-            cancellable(after(seconds: 0.01))
+        cancellize(Promise.value(1)).ensureThen {
+            cancellize(after(seconds: 0.01))
         }.done { _ in
             XCTFail()
         }.catch(policy: .allErrors) {
@@ -329,8 +329,8 @@ extension CatchableTests {
     func testEnsureThen_Value_NotCancelled() {
         let ex = expectation(description: "")
 
-        cancellable(Promise.value(1)).ensureThen {
-            cancellable(after(seconds: 0.01))
+        cancellize(Promise.value(1)).ensureThen {
+            cancellize(after(seconds: 0.01))
         }.done {
             XCTAssertEqual($0, 1)
         }.catch(policy: .allErrors) { _ in
@@ -345,7 +345,7 @@ extension CatchableTests {
     func testCancellableFinalizerHelpers() {
         let ex = expectation(description: "")
 
-        let f = cancellable(Promise.value(1)).done { _ in
+        let f = cancellize(Promise.value(1)).done { _ in
             XCTFail()
         }.catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail()
@@ -362,7 +362,7 @@ extension CatchableTests {
     func testCancellableRecoverFromError() {
         let ex = expectation(description: "")
 
-        let p = cancellable(Promise(error: PMKError.emptySequence)).cancellableRecover(policy: .allErrors) { _ in
+        let p = cancellize(Promise(error: PMKError.emptySequence)).cancellableRecover(policy: .allErrors) { _ in
             Promise.value(1)
         }.done {
             XCTAssertEqual($0, 1)

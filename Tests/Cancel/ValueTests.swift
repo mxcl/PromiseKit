@@ -4,7 +4,7 @@ import PromiseKit
 class ValueTests: XCTestCase {
     func testValueContext() {
         let exComplete = expectation(description: "after completes")
-        cancellable(Promise.value("hi")).done { _ in
+        cancellize(Promise.value("hi")).done { _ in
             XCTFail("value not cancelled")
         }.catch(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
@@ -15,7 +15,7 @@ class ValueTests: XCTestCase {
     
     func testValueDone() {
         let exComplete = expectation(description: "after completes")
-        cancellable(Promise.value("hi")).done { _ in
+        cancellize(Promise.value("hi")).done { _ in
             XCTFail("value not cancelled")
         }.catch(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
@@ -27,9 +27,9 @@ class ValueTests: XCTestCase {
     func testValueThen() {
         let exComplete = expectation(description: "after completes")
         
-        cancellable(Promise.value("hi")).then { (_: String) -> CancellablePromise<String> in
+        cancellize(Promise.value("hi")).then { (_: String) -> CancellablePromise<String> in
             XCTFail("value not cancelled")
-            return cancellable(Promise.value("bye"))
+            return cancellize(Promise.value("bye"))
         }.done { _ in
             XCTFail("value not cancelled")
         }.catch(policy: .allErrors) { error in
@@ -43,7 +43,7 @@ class ValueTests: XCTestCase {
         let exComplete = expectation(description: "after completes")
         
         firstly {
-            cancellable(Promise.value("hi"))
+            cancellize(Promise.value("hi"))
         }.done { _ in
             XCTFail("value not cancelled")
         }.catch(policy: .allErrors) { error in
@@ -57,10 +57,10 @@ class ValueTests: XCTestCase {
         let exComplete = expectation(description: "after completes")
         
         firstly {
-            cancellable(Promise.value("hi"))
+            cancellize(Promise.value("hi"))
         }.then { (_: String) -> CancellablePromise<String> in
             XCTFail("'hi' not cancelled")
-            return cancellable(Promise.value("there"))
+            return cancellize(Promise.value("there"))
         }.done { _ in
             XCTFail("'there' not cancelled")
         }.catch(policy: .allErrors) { error in
@@ -74,7 +74,7 @@ class ValueTests: XCTestCase {
         let exComplete = expectation(description: "after completes")
         
         let p = firstly {
-            return cancellable(Promise.value("hi"))
+            return cancellize(Promise.value("hi"))
         }.done { _ in
             XCTFail("value not cancelled")
         }.catch(policy: .allErrors) { error in
@@ -89,7 +89,7 @@ class ValueTests: XCTestCase {
         let exComplete = expectation(description: "after completes")
         
         firstly {
-            cancellable(Promise.value("hi"))
+            cancellize(Promise.value("hi"))
         }.done { _ in
             XCTFail("value not cancelled")
         }.catch(policy: .allErrors) { error in
@@ -127,7 +127,7 @@ class ValueTests: XCTestCase {
         }
         promise.then { _ -> CancellablePromise<String> in
             XCTFail("then not cancelled")
-            return cancellable(Promise.value("x"))
+            return cancellize(Promise.value("x"))
         }.done { _ in
             XCTFail("done not cancelled")
         }.catch(policy: .allErrors) { error in

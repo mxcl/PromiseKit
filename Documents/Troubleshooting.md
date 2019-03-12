@@ -165,15 +165,15 @@ here because the closure is longer than one line.
 
 ### Cancellable promise embedded in the middle of a standard promise chain
 
-Error: ***Ambiguous reference to member `firstly(execute:)`***.  Fixed by adding `cancellable` to `login()`.
+Error: ***Ambiguous reference to member `firstly(execute:)`***.  Fixed by adding `cancellize` to `login()`.
 
 ```swift
 let promise = firstly {  /// <-- ERROR: Ambiguous reference to member 'firstly(execute:)'
-    /* The 'cancellable' function initiates a cancellable promise chain by
+    /* The 'cancellize' function initiates a cancellable promise chain by
        returning a 'CancellablePromise'. */
-    login() /// CHANGE TO: "cancellable(login())"
+    login() /// CHANGE TO: "cancellize(login())"
 }.then { creds in
-    cancellable(fetch(avatar: creds.user))
+    cancellize(fetch(avatar: creds.user))
 }.done { image in
     self.imageView = image
 }.catch(policy: .allErrors) { error in
@@ -195,10 +195,10 @@ The following example gives the unhelpful error: ***Enum element `allErrors` can
 
 ```swift
 let promise = firstly {
-    cancellable(login())
+    cancellize(login())
 }.then { creds in /// CHANGE TO: "}.then { creds -> CancellablePromise<UIImage> in"
     let f = fetch(avatar: creds.user)
-    return cancellable(f)
+    return cancellize(f)
 }.done { image in
     self.imageView = image
 }.catch(policy: .allErrors) { error in  /// <-- ERROR: Enum element 'allErrors' cannot be referenced as an instance member
@@ -218,12 +218,12 @@ You'll get a very misleading error message if you declare a return type of `Prom
 
 ```swift
 let promise = firstly {  /// <-- ERROR: Ambiguous reference to member 'firstly(execute:)'
-    /* The 'cancellable' function initiates a cancellable promise chain by
+    /* The 'cancellize' function initiates a cancellable promise chain by
        returning a 'CancellablePromise'. */
-    cancellable(login())
+    cancellize(login())
 }.then { creds -> Promise<UIImage> in /// CHANGE TO: "}.then { creds -> CancellablePromise<UIImage> in"
     let f = fetch(avatar: creds.user)
-    return cancellable(f)
+    return cancellize(f)
 }.done { image in
     self.imageView = image
 }.catch(policy: .allErrors) { error in
@@ -239,13 +239,13 @@ promise.cancel()
 
 ### Trying to cancel a standard promise chain
 
-Error: ***Value of type `PMKFinalizer` has no member `cancel`***.  Fixed by adding `cancellable` to both `login()` and `fetch()`.
+Error: ***Value of type `PMKFinalizer` has no member `cancel`***.  Fixed by adding `cancellize` to both `login()` and `fetch()`.
 
 ```swift
 let promise = firstly {
-    login() /// CHANGE TO: "cancellable(login())"
+    login() /// CHANGE TO: "cancellize(login())"
 }.then { creds in
-    fetch(avatar: creds.user) /// CHANGE TO: cancellable(fetch(avatar: creds.user))
+    fetch(avatar: creds.user) /// CHANGE TO: cancellize(fetch(avatar: creds.user))
 }.done { image in
     self.imageView = image
 }.catch(policy: .allErrors) { error in

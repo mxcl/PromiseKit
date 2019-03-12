@@ -188,7 +188,7 @@ class DispatcherTests: XCTestCase {
         
         let ex2 = expectation(description: "DispatchQueue CatchMixin Void recover")
         firstly {
-            cancellable(Promise.value(42).asVoid())
+            Promise.value(42).asVoid()
         }.recover(on: .global(qos: .background), flags: .barrier) { _ in
             throw PMKError.emptySequence
         }.recover(on: .global(qos: .background), flags: .barrier) { _ in

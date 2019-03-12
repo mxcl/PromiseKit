@@ -31,7 +31,7 @@ class PromiseTests: XCTestCase {
     func testDispatchQueueAsyncExtensionReturnsPromise() {
         let ex = expectation(description: "")
 
-        cancellable(DispatchQueue.global().async(.promise) { () -> Int in
+        cancellize(DispatchQueue.global().async(.promise) { () -> Int in
             usleep(100000)
             XCTAssertFalse(Thread.isMainThread)
             return 1
@@ -49,7 +49,7 @@ class PromiseTests: XCTestCase {
     func testDispatchQueueAsyncExtensionCanThrowInBody() {
         let ex = expectation(description: "")
 
-        cancellable(DispatchQueue.global().async(.promise) { () -> Int in
+        cancellize(DispatchQueue.global().async(.promise) { () -> Int in
             throw Error.dummy
         }).done { _ in
             XCTFail()
@@ -66,7 +66,7 @@ class PromiseTests: XCTestCase {
         XCTAssertEqual(CancellablePromise<String>(error: Error.dummy).promise.debugDescription, "Promise<String>.failure(Error.dummy)")
 
         XCTAssertEqual("\(CancellablePromise<Int>.pending().promise.promise)", "Promise(…Int)")
-        XCTAssertEqual("\(cancellable(Promise.value(3)).promise)", "Promise(3)")
+        XCTAssertEqual("\(cancellize(Promise.value(3)).promise)", "Promise(3)")
         XCTAssertEqual("\(CancellablePromise<Void>(error: Error.dummy).promise)", "Promise(dummy)")
     }
 
@@ -81,7 +81,7 @@ class PromiseTests: XCTestCase {
 
         _ = CancellablePromise<Error>.pending()
 
-        _ = cancellable(Promise.value(Error.dummy))
+        _ = cancellize(Promise.value(Error.dummy))
 
         _ = CancellablePromise().map { Error.dummy }
     }
@@ -120,7 +120,7 @@ class PromiseTests: XCTestCase {
     }
 
     func testWait() throws {
-        let p = cancellable(after(.milliseconds(100))).then(on: nil){ cancellable(Promise.value(1)) }
+        let p = cancellize(after(.milliseconds(100))).then(on: nil){ cancellize(Promise.value(1)) }
         p.cancel()
         do {
             _ = try p.wait()
@@ -130,7 +130,7 @@ class PromiseTests: XCTestCase {
         }
 
         do {
-            let p = cancellable(after(.milliseconds(100))).map(on: nil){ throw Error.dummy }
+            let p = cancellize(after(.milliseconds(100))).map(on: nil){ throw Error.dummy }
             p.cancel()
             try p.wait()
             XCTFail()
@@ -141,7 +141,7 @@ class PromiseTests: XCTestCase {
 
     func testPipeForResolved() {
         let ex = expectation(description: "")
-        cancellable(Promise.value(1)).done {
+        cancellize(Promise.value(1)).done {
             XCTFail()
             XCTAssertEqual(1, $0)
         }.catch(policy: .allErrors) {
@@ -201,7 +201,7 @@ class PromiseTests: XCTestCase {
 
         let ex = expectation(description: "")
         firstly {
-            cancellable(p)
+            cancellize(p)
         }.done {
             XCTFail()
         }.catch(policy: .allErrors) {

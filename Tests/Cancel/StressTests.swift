@@ -32,13 +32,13 @@ class StressTests: XCTestCase {
     func testThensAreSequentialForLongTime() {
         var values = [Int]()
         let ex = expectation(description: "")
-        var promise = cancellable(DispatchQueue.global().async(.promise){ 0 })
+        var promise = cancellize(DispatchQueue.global().async(.promise){ 0 })
         let N = 1000
         for x in 1..<N {
             promise = promise.then { y -> CancellablePromise<Int> in
                 values.append(y)
                 XCTFail()
-                return cancellable(DispatchQueue.global().async(.promise) { x })
+                return cancellize(DispatchQueue.global().async(.promise) { x })
             }
         }
         promise.done { x in

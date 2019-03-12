@@ -120,3 +120,4 @@ SCNetworkReachability
 Cancellability
 HealthKit
 enum
+cancellize

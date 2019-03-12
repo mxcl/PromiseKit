@@ -13,36 +13,36 @@ class AfterTests: XCTestCase {
     
     func testZero() {
         let ex2 = expectation(description: "")
-        let cc2 = cancellable(after(seconds: 0)).done(fail).catch(policy: .allErrors, ex2.fulfill)
+        let cc2 = cancellize(after(seconds: 0)).done(fail).catch(policy: .allErrors, ex2.fulfill)
         cc2.cancel()
         waitForExpectations(timeout: 2, handler: nil)
         
         let ex3 = expectation(description: "")
-        let cc3 = cancellable(after(.seconds(0))).done(fail).catch(policy: .allErrors, ex3.fulfill)
+        let cc3 = cancellize(after(.seconds(0))).done(fail).catch(policy: .allErrors, ex3.fulfill)
         cc3.cancel()
         waitForExpectations(timeout: 2, handler: nil)
     }
     
     func testNegative() {
         let ex2 = expectation(description: "")
-        let cc2 = cancellable(after(seconds: -1)).done(fail).catch(policy: .allErrors, ex2.fulfill)
+        let cc2 = cancellize(after(seconds: -1)).done(fail).catch(policy: .allErrors, ex2.fulfill)
         cc2.cancel()
         waitForExpectations(timeout: 2, handler: nil)
         
         let ex3 = expectation(description: "")
-        let cc3 = cancellable(after(.seconds(-1))).done(fail).catch(policy: .allErrors, ex3.fulfill)
+        let cc3 = cancellize(after(.seconds(-1))).done(fail).catch(policy: .allErrors, ex3.fulfill)
         cc3.cancel()
         waitForExpectations(timeout: 2, handler: nil)
     }
     
     func testPositive() {
         let ex2 = expectation(description: "")
-        let cc2 = cancellable(after(seconds: 1)).done(fail).catch(policy: .allErrors, ex2.fulfill)
+        let cc2 = cancellize(after(seconds: 1)).done(fail).catch(policy: .allErrors, ex2.fulfill)
         cc2.cancel()
         waitForExpectations(timeout: 2, handler: nil)
         
         let ex3 = expectation(description: "")
-        let cc3 = cancellable(after(.seconds(1))).done(fail).catch(policy: .allErrors, ex3.fulfill)
+        let cc3 = cancellize(after(.seconds(1))).done(fail).catch(policy: .allErrors, ex3.fulfill)
         cc3.cancel()
         waitForExpectations(timeout: 2, handler: nil)
     }
@@ -63,7 +63,7 @@ class AfterTests: XCTestCase {
         let exCancelComplete = expectation(description: "after completes")
         
         // Test  cancellable `after` to ensure it is fulfilled if not cancelled
-        let cancelIgnoreAfterPromise = cancellable(after(seconds: 0))
+        let cancelIgnoreAfterPromise = cancellize(after(seconds: 0))
         cancelIgnoreAfterPromise.done {
             exCancelComplete.fulfill()
         }.catch(policy: .allErrors) { error in
@@ -71,7 +71,7 @@ class AfterTests: XCTestCase {
         }
         
         // Test cancellable `after` to ensure it is cancelled
-        let cancellableAfterPromise = cancellable(after(seconds: 0))
+        let cancellableAfterPromise = cancellize(after(seconds: 0))
         cancellableAfterPromise.done {
             XCTFail("cancellableAfter not cancelled")
         }.catch(policy: .allErrorsExceptCancellation) { error in
@@ -80,7 +80,7 @@ class AfterTests: XCTestCase {
         
         // Test cancellable `after` to ensure it is cancelled and throws a `CancellableError`
         let exCancel = expectation(description: "after cancels")
-        let cancellableAfterPromiseWithError = cancellable(after(seconds: 0))
+        let cancellableAfterPromiseWithError = cancellize(after(seconds: 0))
         cancellableAfterPromiseWithError.done {
             XCTFail("cancellableAfterWithError not cancelled")
         }.catch(policy: .allErrors) { error in
@@ -110,7 +110,7 @@ class AfterTests: XCTestCase {
     func testCancelForGuarantee_Done() {
         let exComplete = expectation(description: "done is cancelled")
         
-        cancellable(after(seconds: 0)).done { _ in
+        cancellize(after(seconds: 0)).done { _ in
             XCTFail("done not cancelled")
         }.catch(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")

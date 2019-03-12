@@ -5,9 +5,9 @@ class HangTests: XCTestCase {
     func test() {
         let ex = expectation(description: "block executed")
         do {
-            let p = cancellable(after(seconds: 0.02)).then { _ -> CancellablePromise<Int> in
+            let p = cancellize(after(seconds: 0.02)).then { _ -> CancellablePromise<Int> in
                 XCTFail()
-                return cancellable(Promise.value(1))
+                return cancellize(Promise.value(1))
             }
             p.cancel()
             let value = try hang(p)
@@ -26,7 +26,7 @@ class HangTests: XCTestCase {
     func testError() {
         var value = 0
         do {
-            let p = cancellable(after(seconds: 0.02)).done {
+            let p = cancellize(after(seconds: 0.02)).done {
                 XCTFail()
                 value = 1
                 throw Error.test

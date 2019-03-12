@@ -6,7 +6,7 @@ class CancellationTests: XCTestCase {
     func testCancellation() {
         let ex1 = expectation(description: "")
 
-        let p = cancellable(after(seconds: 0)).done { _ in
+        let p = cancellize(after(seconds: 0)).done { _ in
             XCTFail()
         }
         p.catch { _ in
@@ -25,7 +25,7 @@ class CancellationTests: XCTestCase {
     func testThrowCancellableErrorThatIsNotCancelled() {
         let expect = expectation(description: "")
 
-        let cc = cancellable(after(seconds: 0)).done {
+        let cc = cancellize(after(seconds: 0)).done {
             XCTFail()
         }.catch {
             XCTAssertFalse($0.isCancelled)
@@ -41,7 +41,7 @@ class CancellationTests: XCTestCase {
         let ex1 = expectation(description: "")
         let ex2 = expectation(description: "")
 
-        let p = cancellable(after(seconds: 0)).done { _ in
+        let p = cancellize(after(seconds: 0)).done { _ in
             XCTFail()
         }.recover(policy: .allErrors) { err -> CancellablePromise<Void> in
             ex1.fulfill()
@@ -66,7 +66,7 @@ class CancellationTests: XCTestCase {
     func testFoundationBridging1() {
         let ex = expectation(description: "")
 
-        let p = cancellable(after(seconds: 0)).done { _ in
+        let p = cancellize(after(seconds: 0)).done { _ in
             XCTFail()
         }
         p.catch { _ in

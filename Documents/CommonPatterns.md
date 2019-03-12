@@ -237,10 +237,10 @@ exceeded or if any promise rejects.
 
 ```swift
 let fetches: [Promise<T>] = makeFetches()
-let cancellableFetches: [CancellablePromise<T>] = fetches.map { return cancellable($0) }
+let cancellableFetches: [CancellablePromise<T>] = fetches.map { return cancellize($0) }
 
 // All promises are automatically cancelled if any of them reject.
-race(when(fulfilled: cancellableFetches).asVoid(), cancellable(timeout(seconds: 4))).then {
+race(when(fulfilled: cancellableFetches).asVoid(), cancellize(timeout(seconds: 4))).then {
     //…
 }.catch(policy: .allErrors) {
     // Rejects with 'PMKError.timedOut' if the timeout is exceeded.
@@ -274,7 +274,7 @@ for whatever remains of the 0.3 seconds before continuing the chain.
 
 Starting with version 7, PromiseKit explicitly supports cancellation of promises and
 promise chains. There is a new class called `CancellablePromise` that defines a `cancel`
-method.  Use the `cancellable` global function to obtain a `CancellablePromise` from a
+method.  Use the `cancellize` global function to obtain a `CancellablePromise` from a
 `Promise`.
 
 Invoking `cancel` will both reject the promise with `PMKError.cancelled` and cancel any

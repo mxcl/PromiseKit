@@ -4,9 +4,9 @@ import PromiseKit
 class RaceTests: XCTestCase {
     func test1() {
         let ex = expectation(description: "")
-        let after1 = cancellable(after(.milliseconds(10)))
-        let after2 = cancellable(after(seconds: 1))
-        race(after1.then{ cancellable(Promise.value(1)) }, after2.map { 2 }).done { index in
+        let after1 = cancellize(after(.milliseconds(10)))
+        let after2 = cancellize(after(seconds: 1))
+        race(after1.then{ cancellize(Promise.value(1)) }, after2.map { 2 }).done { index in
             XCTFail()
             XCTAssertEqual(index, 1)
         }.catch(policy: .allErrors) {
@@ -21,8 +21,8 @@ class RaceTests: XCTestCase {
     
     func test2() {
         let ex = expectation(description: "")
-        let after1 = cancellable(after(seconds: 1)).map { 1 }
-        let after2 = cancellable(after(.milliseconds(10))).map { 2 }
+        let after1 = cancellize(after(seconds: 1)).map { 1 }
+        let after2 = cancellize(after(.milliseconds(10))).map { 2 }
         race(after1, after2).done { index in
             XCTFail()
             XCTAssertEqual(index, 2)
@@ -38,7 +38,7 @@ class RaceTests: XCTestCase {
 
     func test1Array() {
         let ex = expectation(description: "")
-        let promises = [cancellable(after(.milliseconds(10))).map { 1 }, cancellable(after(seconds: 1)).map { 2 }]
+        let promises = [cancellize(after(.milliseconds(10))).map { 1 }, cancellize(after(seconds: 1)).map { 2 }]
         race(promises).done { index in
             XCTAssertEqual(index, 1)
             ex.fulfill()
@@ -54,8 +54,8 @@ class RaceTests: XCTestCase {
     
     func test2Array() {
         let ex = expectation(description: "")
-        let after1 = cancellable(after(seconds: 1)).map { 1 }
-        let after2 = cancellable(after(.milliseconds(10))).map { 2 }
+        let after1 = cancellize(after(seconds: 1)).map { 1 }
+        let after2 = cancellize(after(.milliseconds(10))).map { 2 }
         race(after1, after2).done { index in
             XCTFail()
             XCTAssertEqual(index, 2)
@@ -81,7 +81,7 @@ class RaceTests: XCTestCase {
 
     func testReject() {
         let ex = expectation(description: "")
-        race(CancellablePromise<Int>(error: PMKError.timedOut), cancellable(after(.milliseconds(10)).map{ 2 })).done { index in
+        race(CancellablePromise<Int>(error: PMKError.timedOut), cancellize(after(.milliseconds(10)).map{ 2 })).done { index in
             XCTFail()
         }.catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail()
@@ -92,9 +92,9 @@ class RaceTests: XCTestCase {
     func testCancelInner() {
         let ex = expectation(description: "")
 
-        let after1 = cancellable(after(.milliseconds(10)))
-        let after2 = cancellable(after(seconds: 1))
-        let r = race(after1.then{ cancellable(Promise.value(1)) }, after2.map { 2 })
+        let after1 = cancellize(after(.milliseconds(10)))
+        let after2 = cancellize(after(seconds: 1))
+        let r = race(after1.then{ cancellize(Promise.value(1)) }, after2.map { 2 })
 
         r.done { index in
             XCTFail()

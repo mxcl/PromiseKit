@@ -135,7 +135,7 @@ public func race<V: CancellableThenable>(_ thenables: [V]) -> CancellablePromise
  exceeded or any promise rejects:
  
      let promise1, promise2: CancellablePromise<Void>
-     race(promise1, promise2, cancellable(timeout(seconds: 1.0))).done { winner in
+     race(promise1, promise2, cancellize(timeout(seconds: 1.0))).done { winner in
          //…
      }
  */

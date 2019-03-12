@@ -4,7 +4,7 @@ import XCTest
 class ThenableTests: XCTestCase {
     func testGet() {
         let ex1 = expectation(description: "")
-        cancellable(Promise.value(1)).get { _ in
+        cancellize(Promise.value(1)).get { _ in
             XCTFail()
         }.done { _ in
             XCTFail()
@@ -16,7 +16,7 @@ class ThenableTests: XCTestCase {
 
     func testCompactMap() {
         let ex = expectation(description: "")
-        cancellable(Promise.value(1.0)).compactMap { _ in
+        cancellize(Promise.value(1.0)).compactMap { _ in
             XCTFail()
         }.done { _ in
             XCTFail()
@@ -31,7 +31,7 @@ class ThenableTests: XCTestCase {
         enum E: Error { case dummy }
 
         let ex = expectation(description: "")
-        let promise = cancellable(Promise.value("a"))
+        let promise = cancellize(Promise.value("a"))
         promise.compactMap { _ -> Int in
             promise.cancel()
             throw E.dummy
@@ -62,7 +62,7 @@ class ThenableTests: XCTestCase {
 
     func testPMKErrorCompactMap() {
         let ex = expectation(description: "")
-        cancellable(Promise.value("a")).compactMap {
+        cancellize(Promise.value("a")).compactMap {
             Int($0)
         }.catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail()
@@ -72,7 +72,7 @@ class ThenableTests: XCTestCase {
 
     func testCompactMapValues() {
         let ex = expectation(description: "")
-        let promise = cancellable(Promise.value(["1","2","a","4"]))
+        let promise = cancellize(Promise.value(["1","2","a","4"]))
         promise.compactMapValues {
             Int($0)
         }.done {
@@ -87,7 +87,7 @@ class ThenableTests: XCTestCase {
 
     func testThenMap() {
         let ex = expectation(description: "")
-        let promise = cancellable(Promise.value([1,2,3,4]))
+        let promise = cancellize(Promise.value([1,2,3,4]))
         promise.cancellableThenMap { (x: Int) -> Promise<Int> in
             promise.cancel()
             return Promise.value(x) // Intentionally use `Promise` rather than `CancellablePromise`
@@ -101,9 +101,9 @@ class ThenableTests: XCTestCase {
 
     func testThenFlatMap() {
         let ex = expectation(description: "")
-        cancellable(Promise.value([1,2,3,4])).thenFlatMap { (x: Int) -> CancellablePromise<[Int]> in
+        cancellize(Promise.value([1,2,3,4])).thenFlatMap { (x: Int) -> CancellablePromise<[Int]> in
             XCTFail()
-            return cancellable(Promise.value([x, x]))
+            return cancellize(Promise.value([x, x]))
         }.done {
             XCTFail()
             XCTAssertEqual([1,1,2,2,3,3,4,4], $0)
@@ -115,11 +115,11 @@ class ThenableTests: XCTestCase {
     }
 
     func testLastValueForEmpty() {
-        XCTAssertTrue(cancellable(Promise.value([])).lastValue.isRejected)
+        XCTAssertTrue(cancellize(Promise.value([])).lastValue.isRejected)
     }
 
     func testFirstValueForEmpty() {
-        XCTAssertTrue(cancellable(Promise.value([])).firstValue.isRejected)
+        XCTAssertTrue(cancellize(Promise.value([])).firstValue.isRejected)
     }
 
     func testThenOffRejected() {
@@ -139,7 +139,7 @@ class ThenableTests: XCTestCase {
     func testBarrier() {
         let ex = expectation(description: "")
         let q = DispatchQueue(label: "\(#file):\(#line)", attributes: .concurrent)
-        cancellable(Promise.value(1)).done(on: q, flags: .barrier) {
+        cancellize(Promise.value(1)).done(on: q, flags: .barrier) {
             XCTAssertEqual($0, 1)
             dispatchPrecondition(condition: .onQueueAsBarrier(q))
             ex.fulfill()
@@ -152,7 +152,7 @@ class ThenableTests: XCTestCase {
     func testDispatchFlagsSyntax() {
         let ex = expectation(description: "")
         let q = DispatchQueue(label: "\(#file):\(#line)", attributes: .concurrent)
-        cancellable(Promise.value(1)).done(on: q, flags: [.barrier, .inheritQoS]) {
+        cancellize(Promise.value(1)).done(on: q, flags: [.barrier, .inheritQoS]) {
             XCTAssertEqual($0, 1)
             dispatchPrecondition(condition: .onQueueAsBarrier(q))
             ex.fulfill()

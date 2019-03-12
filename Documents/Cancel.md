@@ -5,8 +5,8 @@ PromiseKit 7 adds clear and concise cancellation abilities to promises and to th
 ```swift
 UIApplication.shared.isNetworkActivityIndicatorVisible = true
 
-let fetchImage = cancellable(URLSession.shared.dataTask(.promise, with: url)).compactMap{ UIImage(data: $0.data) }
-let fetchLocation = cancellable(CLLocationManager.requestLocation()).lastValue
+let fetchImage = cancellize(URLSession.shared.dataTask(.promise, with: url)).compactMap{ UIImage(data: $0.data) }
+let fetchLocation = cancellize(CLLocationManager.requestLocation()).lastValue
 
 let finalizer = firstly {
     when(fulfilled: fetchImage, fetchLocation)
@@ -34,7 +34,7 @@ finalizer.cancel()
 
 # Cancel Chains
 
-Promises can be cancelled using a `CancellablePromise`.  The global `cancellable(_:)` function is used to convert a standard `Promise` into a `CancellablePromise`.  If a promise chain is initialized with a `CancellablePromise`, then the entire chain is cancellable.  Calling `cancel()` on any promise in the chain cancels the entire chain.  
+Promises can be cancelled using a `CancellablePromise`.  The global `cancellize(_:)` function is used to convert a standard `Promise` into a `CancellablePromise`.  If a promise chain is initialized with a `CancellablePromise`, then the entire chain is cancellable.  Calling `cancel()` on any promise in the chain cancels the entire chain.  
 
 Creating a chain where the entire chain can be cancelled is the recommended usage for cancellable promises.
 
@@ -44,11 +44,11 @@ For example:
 
 ```swift
 let context = firstly {
-    /* The 'cancellable' function initiates a cancellable promise chain by
+    /* The 'cancellize' function initiates a cancellable promise chain by
        returning a 'CancellablePromise'. */
-    cancellable(login())
+    cancellize(login())
 }.then { creds in
-    cancellable(fetch(avatar: creds.user))
+    cancellize(fetch(avatar: creds.user))
 }.done { image in
     self.imageView = image
 }.catch(policy: .allErrors) { error in
@@ -78,7 +78,7 @@ A `CancellablePromise` can be placed at the start of a chain, but it cannot be e
    promise chain to a standard promise chain. In this example, calling 'cancel()' during 'login'
    will cancel the chain but calling 'cancel()' during the 'fetch' operation will have no effect: */
 let cancellablePromise = firstly {
-    promise = cancellable(login())
+    promise = cancellize(login())
 }
 cancellablePromise.promise.then {
     fetch(avatar: creds.user)      
@@ -106,10 +106,10 @@ A non-cancellable chain can be converted to a cancellable chain in the middle of
    the chain will be cancelled immediately, and the 'fetch' will not be executed.  If 'cancel()'
    is called during the 'fetch' then both the 'fetch' itself and the promise chain will be
    cancelled immediately. */
-let promise = cancellable(firstly {
+let promise = cancellize(firstly {
     login()
 }).then {
-    cancellable(fetch(avatar: creds.user))     
+    cancellize(fetch(avatar: creds.user))     
 }.done { image in
     self.imageView = image
 }.catch(policy: .allErrors) { error in
@@ -125,14 +125,14 @@ promise.cancel()
 
 # Core Cancellable PromiseKit API
 
-The following classes, methods and functions have been added to PromiseKit to support cancellation. Existing functions or methods with underlying tasks that can be cancelled are indicated by being wrapped with 'cancellable()'.
+The following classes, methods and functions have been added to PromiseKit to support cancellation. Existing functions or methods with underlying tasks that can be cancelled are indicated by being wrapped with 'cancellize()'.
 
 <pre><code><b>Global functions</b>
-    cancellable(_:)                 - Accepts a Promise or Guarantee and returns a CancellablePromise,
+    cancellize(_:)                 - Accepts a Promise or Guarantee and returns a CancellablePromise,
                                       which is a cancellable variant of the given Promise or Guarantee
     
-    <mark><b>cancellable</b></mark>(after(seconds:))    - 'after' with seconds can be cancelled
-    <mark><b>cancellable</b></mark>(after(_:))          - 'after' with interval can be cancelled
+    <mark><b>cancellize</b></mark>(after(seconds:))    - 'after' with seconds can be cancelled
+    <mark><b>cancellize</b></mark>(after(_:))          - 'after' with interval can be cancelled
 
     firstly(execute:)               - Accepts body returning CancellablePromise
     hang(_:)                        - Accepts CancellablePromise
@@ -215,31 +215,31 @@ The following classes, methods and functions have been added to PromiseKit to su
 Cancellation support has been added to the PromiseKit extensions, but only where the underlying asynchronous tasks can be cancelled. This example Podfile lists the PromiseKit extensions that support cancellation along with a usage example:
 
 <pre><code>pod "PromiseKit/Alamofire"
-# <mark><b>cancellable</b></mark>(Alamofire.request("http://example.com", method: .get).responseDecodable(DecodableObject.self))
+# <mark><b>cancellize</b></mark>(Alamofire.request("http://example.com", method: .get).responseDecodable(DecodableObject.self))
 
 pod "PromiseKit/Bolts"
 # CancellablePromise(…).then() { _ -> BFTask<NSString> in /*…*/ }  // Returns <mark><b>CancellablePromise</b></mark>
 
 pod "PromiseKit/CoreLocation"
-# <mark><b>cancellable</b></mark>(CLLocationManager.requestLocation()).then { /*…*/ }
+# <mark><b>cancellize</b></mark>(CLLocationManager.requestLocation()).then { /*…*/ }
 
 pod "PromiseKit/Foundation"
-# <mark><b>cancellable</b></mark>(URLSession.shared.dataTask())(.promise, with: request).then { /*…*/ }
+# <mark><b>cancellize</b></mark>(URLSession.shared.dataTask())(.promise, with: request).then { /*…*/ }
 
 pod "PromiseKit/MapKit"
-# <mark><b>cancellable</b></mark>(MKDirections(…).calculate()).then { /*…*/ }
+# <mark><b>cancellize</b></mark>(MKDirections(…).calculate()).then { /*…*/ }
 
 pod "PromiseKit/OMGHTTPURLRQ"
-# <mark><b>cancellable</b></mark>(URLSession.shared.GET("http://example.com")).then { /*…*/ }
+# <mark><b>cancellize</b></mark>(URLSession.shared.GET("http://example.com")).then { /*…*/ }
 
 pod "PromiseKit/StoreKit"
-# <mark><b>cancellable</b></mark>(SKProductsRequest(…).start(.promise)).then { /*…*/ }
+# <mark><b>cancellize</b></mark>(SKProductsRequest(…).start(.promise)).then { /*…*/ }
 
 pod "PromiseKit/SystemConfiguration"
-# <mark><b>cancellable</b></mark>(SCNetworkReachability.promise()).then { /*…*/ }
+# <mark><b>cancellize</b></mark>(SCNetworkReachability.promise()).then { /*…*/ }
 
 pod "PromiseKit/UIKit"
-# <mark><b>cancellable</b></mark>(UIViewPropertyAnimator(…).startAnimation(.promise)).then { /*…*/ }
+# <mark><b>cancellize</b></mark>(UIViewPropertyAnimator(…).startAnimation(.promise)).then { /*…*/ }
 </code></pre>
 
 Here is a complete list of PromiseKit extension methods that support cancellation:
@@ -247,17 +247,17 @@ Here is a complete list of PromiseKit extension methods that support cancellatio
 [Alamofire](http://github.com/PromiseKit/Alamofire-)
 
 <pre><code>Alamofire.DataRequest
-    <mark><b>cancellable</b></mark>(response(_:<span style="color:gray;"><i>queue</i>:</span>))
-    <mark><b>cancellable</b></mark>(responseData(<span style="color:gray;"><i>queue</i>:</span>))
-    <mark><b>cancellable</b></mark>(responseString(<span style="color:gray;"><i>queue</i>:</span>))
-    <mark><b>cancellable</b></mark>(responseJSON(<span style="color:gray;"><i>queue</i>:</span><span style="color:gray;"><i>options</i>:</span>))
-    <mark><b>cancellable</b></mark>(responsePropertyList(<span style="color:gray;"><i>queue</i>:</span><span style="color:gray;"><i>options</i>:</span>))
-    <mark><b>cancellable</b></mark>(responseDecodable<T>(<span style="color:gray;"><i>queue</i>:</span>:<span style="color:gray;"><i>decoder</i>:</span>))
-    <mark><b>cancellable</b></mark>(responseDecodable<T>(_ type:<span style="color:gray;"><i>queue</i>:</span><span style="color:gray;"><i>decoder</i>:</span>))
+    <mark><b>cancellize</b></mark>(response(_:<span style="color:gray;"><i>queue</i>:</span>))
+    <mark><b>cancellize</b></mark>(responseData(<span style="color:gray;"><i>queue</i>:</span>))
+    <mark><b>cancellize</b></mark>(responseString(<span style="color:gray;"><i>queue</i>:</span>))
+    <mark><b>cancellize</b></mark>(responseJSON(<span style="color:gray;"><i>queue</i>:</span><span style="color:gray;"><i>options</i>:</span>))
+    <mark><b>cancellize</b></mark>(responsePropertyList(<span style="color:gray;"><i>queue</i>:</span><span style="color:gray;"><i>options</i>:</span>))
+    <mark><b>cancellize</b></mark>(responseDecodable<T>(<span style="color:gray;"><i>queue</i>:</span>:<span style="color:gray;"><i>decoder</i>:</span>))
+    <mark><b>cancellize</b></mark>(responseDecodable<T>(_ type:<span style="color:gray;"><i>queue</i>:</span><span style="color:gray;"><i>decoder</i>:</span>))
 
 Alamofire.DownloadRequest
-    <mark><b>cancellable</b></mark>(response(_:<span style="color:gray;"><i>queue</i>:</span>))
-    <mark><b>cancellable</b></mark>(responseData(<span style="color:gray;"><i>queue</i>:</span>))
+    <mark><b>cancellize</b></mark>(response(_:<span style="color:gray;"><i>queue</i>:</span>))
+    <mark><b>cancellize</b></mark>(responseData(<span style="color:gray;"><i>queue</i>:</span>))
 </code></pre>
 
 [Bolts](http://github.com/PromiseKit/Bolts)
@@ -269,26 +269,26 @@ Alamofire.DownloadRequest
 [CoreLocation](http://github.com/PromiseKit/CoreLocation)
 
 <pre><code>CLLocationManager
-    <mark><b>cancellable</b></mark>(requestLocation(<span style="color:gray;"><i>authorizationType</i>:</span><span style="color:gray;"><i>satisfying</i>:</span>))
-    <mark><b>cancellable</b></mark>(requestAuthorization(<span style="color:gray;"><i>type requestedAuthorizationType</i>:</span>))
+    <mark><b>cancellize</b></mark>(requestLocation(<span style="color:gray;"><i>authorizationType</i>:</span><span style="color:gray;"><i>satisfying</i>:</span>))
+    <mark><b>cancellize</b></mark>(requestAuthorization(<span style="color:gray;"><i>type requestedAuthorizationType</i>:</span>))
 </code></pre>
 
 [Foundation](http://github.com/PromiseKit/Foundation)
 
 <pre><code>NotificationCenter:
-    <mark><b>cancellable</b></mark>(observe(<span style="color:gray;"><i>once:object:</i></span>))
+    <mark><b>cancellize</b></mark>(observe(<span style="color:gray;"><i>once:object:</i></span>))
 
 NSObject
-    <mark><b>cancellable</b></mark>(observe(_:keyPath:))
+    <mark><b>cancellize</b></mark>(observe(_:keyPath:))
 
 Process
-    <mark><b>cancellable</b></mark>(launch(_:))
+    <mark><b>cancellize</b></mark>(launch(_:))
 
 URLSession
-    <mark><b>cancellable</b></mark>(dataTask(_:with:))
-    <mark><b>cancellable</b></mark>(uploadTask(_:with:from:))
-    <mark><b>cancellable</b></mark>(uploadTask(_:with:fromFile:))
-    <mark><b>cancellable</b></mark>(downloadTask(_:with:to:))
+    <mark><b>cancellize</b></mark>(dataTask(_:with:))
+    <mark><b>cancellize</b></mark>(uploadTask(_:with:from:))
+    <mark><b>cancellize</b></mark>(uploadTask(_:with:fromFile:))
+    <mark><b>cancellize</b></mark>(downloadTask(_:with:to:))
 
 <mark><b>CancellablePromise</b></mark>
     validate()
@@ -297,41 +297,41 @@ URLSession
 [HomeKit](http://github.com/PromiseKit/HomeKit)  
 
 <pre><code>HMPromiseAccessoryBrowser
-    <mark><b>cancellable</b></mark>(start(scanInterval:))
+    <mark><b>cancellize</b></mark>(start(scanInterval:))
 
 HMHomeManager
-    <mark><b>cancellable</b></mark>(homes())
+    <mark><b>cancellize</b></mark>(homes())
 </code></pre>
 
 [MapKit](http://github.com/PromiseKit/MapKit)  
 
 <pre><code>MKDirections
-    <mark><b>cancellable</b></mark>(calculate())
-    <mark><b>cancellable</b></mark>(calculateETA())
+    <mark><b>cancellize</b></mark>(calculate())
+    <mark><b>cancellize</b></mark>(calculateETA())
     
 MKMapSnapshotter
-    <mark><b>cancellable</b></mark>(start())
+    <mark><b>cancellize</b></mark>(start())
 </code></pre>
 
 [StoreKit](http://github.com/PromiseKit/StoreKit)  
 
 <pre><code>SKProductsRequest
-    <mark><b>cancellable</b></mark>(start(_:))
+    <mark><b>cancellize</b></mark>(start(_:))
     
 SKReceiptRefreshRequest
-    <mark><b>cancellable</b></mark>(promise())
+    <mark><b>cancellize</b></mark>(promise())
 </code></pre>
 
 [SystemConfiguration](http://github.com/PromiseKit/SystemConfiguration)
 
 <pre><code>SCNetworkReachability
-    <mark><b>cancellable</b></mark>(promise())
+    <mark><b>cancellize</b></mark>(promise())
 </code></pre>
 
 [UIKit](http://github.com/PromiseKit/UIKit)  
 
 <pre><code>UIViewPropertyAnimator
-    <mark><b>cancellable</b></mark>(startAnimation(_:))
+    <mark><b>cancellize</b></mark>(startAnimation(_:))
 </code></pre>
 
 ## Choose Your Networking Library
@@ -345,7 +345,7 @@ All the networking library extensions supported by PromiseKit are now simple to 
 // # https://github.com/PromiseKit/Alamofire
 
 let context = firstly {
-    cancellable(Alamofire
+    cancellize(Alamofire
         .request("http://example.com", method: .post, parameters: params)
         .responseDecodable(Foo.self))
 }.done { foo in
@@ -366,7 +366,7 @@ And (of course) plain `URLSession` from [Foundation](http://github.com/PromiseKi
 // # https://github.com/PromiseKit/Foundation
 
 let context = firstly {
-    cancellable(URLSession.shared.dataTask(.promise, with: try makeUrlRequest()))
+    cancellize(URLSession.shared.dataTask(.promise, with: try makeUrlRequest()))
 }.map {
     try JSONDecoder().decode(Foo.self, with: $0.data)
 }.done { foo in
@@ -395,7 +395,7 @@ func makeUrlRequest() throws -> URLRequest {
 
 ```swift
 let promise = firstly {
-    cancellable(login()) // Use the 'cancellable' function to initiate a cancellable promise chain
+    cancellize(login()) // Use the 'cancellize' function to initiate a cancellable promise chain
 }.then { creds in
     fetch(avatar: creds.user)
 }.done { image in
@@ -428,7 +428,7 @@ import PromiseKit
 func updateWeather(forCity searchName: String) {
     refreshButton.startAnimating()
     let context = firstly {
-        cancellable(getForecast(forCity: searchName))
+        cancellize(getForecast(forCity: searchName))
     }.done { response in
         updateUI(forecast: response)
     }.ensure {
@@ -450,10 +450,10 @@ func updateWeather(forCity searchName: String) {
 
 func getForecast(forCity name: String) -> CancellablePromise<WeatherInfo> {
     return firstly {
-        cancellable(Alamofire.request("https://autocomplete.weather.com/\(name)")
+        cancellize(Alamofire.request("https://autocomplete.weather.com/\(name)")
             .responseDecodable(AutoCompleteCity.self))
     }.then { city in
-        cancellable(Alamofire.request("https://forecast.weather.com/\(city.name)")
+        cancellize(Alamofire.request("https://forecast.weather.com/\(city.name)")
             .responseDecodable(WeatherResponse.self)) 
     }.map { response in
         format(response)
