@@ -411,7 +411,7 @@ promise.cancel()
 
 * Ensure that subsequent code blocks in a promise chain are _never_ called after the chain has been cancelled
 
-* Fully support concurrecy, where all code is thead-safe.  Cancellable promises and promise chains can safely and efficiently be cancelled from any thread at any time.
+* Fully support concurrency, where all code is thread-safe.  Cancellable promises and promise chains can safely and efficiently be cancelled from any thread at any time.
 
 * Provide cancellable support for all PromiseKit extensions whose native tasks can be cancelled (e.g. Alamofire, Bolts, CoreLocation, Foundation, HealthKit, HomeKit, MapKit, StoreKit, SystemConfiguration, UIKit)
 
