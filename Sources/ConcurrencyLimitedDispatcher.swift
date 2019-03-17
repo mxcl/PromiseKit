@@ -23,6 +23,10 @@ public class ConcurrencyLimitedDispatcher: Dispatcher {
         semaphore = DispatchSemaphore(value: limit)
     }
 
+    public convenience init(limit: Int, queue: DispatchQueue) {
+        self.init(limit: limit, queue: queue as Dispatcher)
+    }
+
     public func dispatch(_ body: @escaping () -> Void) {
         serializer.async {
             self.semaphore.wait()
