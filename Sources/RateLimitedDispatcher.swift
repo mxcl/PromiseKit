@@ -45,6 +45,10 @@ public class RateLimitedDispatcher: RateLimitedDispatcherBase {
         tokensInBucket = Double(maxDispatches)
     }
     
+    public convenience init(maxDispatches: Int, perInterval interval: TimeInterval, queue: DispatchQueue) {
+        self.init(maxDispatches: maxDispatches, perInterval: interval, queue: queue as Dispatcher)
+    }
+    
     override func dispatchFromQueue() {
     
         guard undispatched.count > 0 else { return }
