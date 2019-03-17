@@ -91,7 +91,7 @@ class DispatcherTestBase: XCTestCase {
             }
         }
         
-        let nHiatuses = delays.count { $0 > avgSlice }
+        let nHiatuses = delays.lazy.filter { $0 > avgSlice }.count
             
         scenarios.append(RateLimitScenario(maxDispatches: maxDispatches, interval: interval,
             hiatusLikelihood: hiatusLikelihoodPerInterval, nHiatuses: nHiatuses,
