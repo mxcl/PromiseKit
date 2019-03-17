@@ -3,12 +3,12 @@ import Foundation
 /// A PromiseKit Dispatcher that allows no more than X simultaneous
 /// executions at once.
 
-class ConcurrencyLimitedDispatcher: Dispatcher {
+public class ConcurrencyLimitedDispatcher: Dispatcher {
     
     let queue: Dispatcher
     let serializer: DispatchQueue = DispatchQueue(label: "CLD serializer")
     
-    private let semaphore: DispatchSemaphore
+    let semaphore: DispatchSemaphore
     
     /// A `PromiseKit` `Dispatcher` that allows no more than X simultaneous
     /// executions at once.
