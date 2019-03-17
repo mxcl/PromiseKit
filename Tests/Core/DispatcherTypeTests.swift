@@ -2,7 +2,7 @@ import Dispatch
 @testable import PromiseKit
 import XCTest
 
-class DispatcherTestBase: XCTestCase {
+class DispatcherTypeTests: XCTestCase {
     
     struct ScenarioParameters {
         let hiatusLikelihoods: [Double]
@@ -10,7 +10,7 @@ class DispatcherTestBase: XCTestCase {
         let intervals: [Double]
         let dispatches: [Int]
     }
-    
+
     let standardParams = ScenarioParameters(
         hiatusLikelihoods: [ 0.3 ],
         noDelayLikelihoods: [ 0.75 ],
@@ -144,10 +144,6 @@ class DispatcherTestBase: XCTestCase {
         }
         return most
     }
-
-}
-
-class RateLimitTests: DispatcherTestBase {
     
     func testRateLimitedDispatcher() {
         for scenario in scenarios {
@@ -166,10 +162,6 @@ class RateLimitTests: DispatcherTestBase {
         }
     }
     
-}
-
-class StrictRateLimitTests: DispatcherTestBase {
-
     func testStrictRateLimitedDispatcher() {
         for scenario in scenarios {
             printScenarioDetails(scenario)
@@ -190,10 +182,6 @@ class StrictRateLimitTests: DispatcherTestBase {
         }
     }
     
-}
-
-class ConcurrencyLimitTests: DispatcherTestBase {
-
     func testConcurrencyLimitedDispatcher() {
         
         for scenario in scenarios {
@@ -233,8 +221,35 @@ class ConcurrencyLimitTests: DispatcherTestBase {
         }
     }
 
-}
+    // These aren't really "tests" per se; they just exercise all the various init types
+    // to verify that none of them produce ambiguity warnings or recurse indefinitely,
+    // and that DispatchQueue members are accessible.
 
+    func testRateLimitedDispatcherInit() {
+        XCTAssertNotNil(RateLimitedDispatcher(maxDispatches: 1, perInterval: 1))
+        XCTAssertNotNil(RateLimitedDispatcher(maxDispatches: 1, perInterval: 1, queue: DispatchQueue.main))
+        XCTAssertNotNil(RateLimitedDispatcher(maxDispatches: 1, perInterval: 1, queue: CurrentThreadDispatcher()))
+        XCTAssertNotNil(RateLimitedDispatcher(maxDispatches: 1, perInterval: 1, queue: .main))
+        XCTAssertNotNil(RateLimitedDispatcher(maxDispatches: 1, perInterval: 1, queue: .global(qos: .background)))
+    }
+    
+    func testStrictRateLimitedDispatcherInit() {
+        XCTAssertNotNil(StrictRateLimitedDispatcher(maxDispatches: 1, perInterval: 1))
+        XCTAssertNotNil(StrictRateLimitedDispatcher(maxDispatches: 1, perInterval: 1, queue: DispatchQueue.main))
+        XCTAssertNotNil(StrictRateLimitedDispatcher(maxDispatches: 1, perInterval: 1, queue: CurrentThreadDispatcher()))
+        XCTAssertNotNil(StrictRateLimitedDispatcher(maxDispatches: 1, perInterval: 1, queue: .main))
+        XCTAssertNotNil(StrictRateLimitedDispatcher(maxDispatches: 1, perInterval: 1, queue: .global(qos: .background)))
+    }
+
+    func testConcurrencyLimitedDispatcherInit() {
+        XCTAssertNotNil(ConcurrencyLimitedDispatcher(limit: 1))
+        XCTAssertNotNil(ConcurrencyLimitedDispatcher(limit: 1, queue: DispatchQueue.main))
+        XCTAssertNotNil(ConcurrencyLimitedDispatcher(limit: 1, queue: CurrentThreadDispatcher()))
+        XCTAssertNotNil(ConcurrencyLimitedDispatcher(limit: 1, queue: .main))
+        XCTAssertNotNil(ConcurrencyLimitedDispatcher(limit: 1, queue: .global(qos: .background)))
+    }
+    
+}
 
 // Reproducible, seedable RNG
 

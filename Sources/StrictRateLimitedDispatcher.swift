@@ -43,6 +43,10 @@ public class StrictRateLimitedDispatcher: RateLimitedDispatcherBase {
         super.init(maxDispatches: maxDispatches, perInterval: interval, queue: queue)
     }
     
+    public convenience init(maxDispatches: Int, perInterval interval: TimeInterval, queue: DispatchQueue) {
+        self.init(maxDispatches: maxDispatches, perInterval: interval, queue: queue as Dispatcher)
+    }
+
     override func dispatchFromQueue() {
         
         cleanupNonce += 1
