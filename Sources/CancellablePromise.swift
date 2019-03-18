@@ -41,31 +41,31 @@ public class CancellablePromise<T>: CancellableThenable, CancellableCatchMixin {
     }
     
     /// Initialize a new rejected cancellable promise.
-    public convenience init(task: CancellableTask? = nil, error: Error) {
+    public convenience init(cancellable: Cancellable? = nil, error: Error) {
         var reject: ((Error) -> Void)!
         self.init(promise: Promise { seal in
             reject = seal.reject
             seal.reject(error)
         })
-        self.appendCancellableTask(task, reject: reject)
+        self.appendCancellable(cancellable, reject: reject)
     }
     
     /// Initialize a new cancellable promise bound to the provided `Thenable`.
     public convenience init<U: Thenable>(_ bridge: U, cancelContext: CancelContext? = nil) where U.T == T {
         var promise: Promise<U.T>!
-        let task: CancellableTask!
+        let cancellable: Cancellable!
         var reject: ((Error) -> Void)!
 
         if let p = bridge as? Promise<U.T> {
-            task = p.cancellableTask
+            cancellable = p.cancellable
             if let r = p.rejectIfCancelled {
                 promise = p
                 reject = r
             }
         } else if let g = bridge as? Guarantee<U.T> {
-            task = g.cancellableTask
+            cancellable = g.cancellable
         } else {
-            task = nil
+            cancellable = nil
         }
         
         if promise == nil {
@@ -81,23 +81,23 @@ public class CancellablePromise<T>: CancellableThenable, CancellableCatchMixin {
         }
 
         self.init(promise: promise, context: cancelContext)
-        self.appendCancellableTask(task, reject: reject)
+        self.appendCancellable(cancellable, reject: reject)
     }
     
     /// Initialize a new cancellable promise that can be resolved with the provided `Resolver`.
-    public convenience init(task: CancellableTask? = nil, resolver body: (Resolver<T>) throws -> Void) {
+    public convenience init(cancellable: Cancellable? = nil, resolver body: (Resolver<T>) throws -> Void) {
         var reject: ((Error) -> Void)!
         self.init(promise: Promise { seal in
             reject = seal.reject
             try body(seal)
         })
-        self.appendCancellableTask(task, reject: reject)
+        self.appendCancellable(cancellable, reject: reject)
     }
     
     /// Initialize a new cancellable promise using the given Promise and its Resolver.
-    public convenience init(task: CancellableTask? = nil, promise: Promise<T>, resolver: Resolver<T>) {
+    public convenience init(cancellable: Cancellable? = nil, promise: Promise<T>, resolver: Resolver<T>) {
         self.init(promise: promise)
-        self.appendCancellableTask(task, reject: resolver.reject)
+        self.appendCancellable(cancellable, reject: resolver.reject)
     }
 
     /// - Returns: a tuple of a new cancellable pending promise and its `Resolver`.
@@ -134,10 +134,10 @@ extension CancellablePromise where T == Void {
         self.init(promise: Promise())
     }
 
-    /// Initializes a new cancellable promise fulfilled with `Void` and with the given `CancellableTask`
-    public convenience init(task: CancellableTask) {
+    /// Initializes a new cancellable promise fulfilled with `Void` and with the given ` Cancellable`
+    public convenience init(cancellable: Cancellable) {
         self.init()
-        self.appendCancellableTask(task, reject: nil)
+        self.appendCancellable(cancellable, reject: nil)
     }
 }
 #endif

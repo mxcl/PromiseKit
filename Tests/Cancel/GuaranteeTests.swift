@@ -42,7 +42,7 @@ class GuaranteeTests: XCTestCase {
         wait(for: [ex], timeout: 1)
     }
     
-    func testCancellableTask() {
+    func testCancellable() {
 #if swift(>=4.0)
         var resolver: ((()) -> Void)!
 #else
@@ -59,7 +59,7 @@ class GuaranteeTests: XCTestCase {
         
         q.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: task)
 
-        let g = Guarantee<Void>(cancellableTask: task) { seal in
+        let g = Guarantee<Void>(cancellable: task) { seal in
             resolver = seal
         }
 
@@ -75,7 +75,7 @@ class GuaranteeTests: XCTestCase {
         wait(for: [ex], timeout: 1)
     }
 
-    func testSetCancellableTask() {
+    func testSetCancellable() {
 #if swift(>=4.0)
         var resolver: ((()) -> Void)!
 #else
@@ -95,7 +95,7 @@ class GuaranteeTests: XCTestCase {
         let g = Guarantee<Void> { seal in
             resolver = seal
         }
-        g.setCancellableTask(task)
+        g.setCancellable(task)
         
         let ex = expectation(description: "")
         firstly {

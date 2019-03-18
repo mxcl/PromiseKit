@@ -150,7 +150,7 @@ class PromiseTests: XCTestCase {
         wait(for: [ex], timeout: 1)
     }
     
-    func testCancellableTask() {
+    func testCancellable() {
         var resolver: Resolver<Void>!
 
         let task = DispatchWorkItem {
@@ -163,7 +163,7 @@ class PromiseTests: XCTestCase {
         
         q.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: task)
 
-        let p = Promise<Void>(cancellableTask: task) { seal in
+        let p = Promise<Void>(cancellable: task) { seal in
             resolver = seal
         }
         
@@ -179,7 +179,7 @@ class PromiseTests: XCTestCase {
         wait(for: [ex], timeout: 1)
     }
     
-    func testSetCancellableTask() {
+    func testSetCancellable() {
         var resolver: Resolver<Void>!
 
         let task = DispatchWorkItem {
@@ -193,11 +193,11 @@ class PromiseTests: XCTestCase {
         q.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: task)
 
         var reject: ((Swift.Error) -> Void)?
-        let p = Promise<Void>(cancellableTask: task) { seal in
+        let p = Promise<Void>(cancellable: task) { seal in
             resolver = seal
             reject = seal.reject
         }
-        p.setCancellableTask(task, reject: reject)
+        p.setCancellable(task, reject: reject)
 
         let ex = expectation(description: "")
         firstly {
@@ -211,7 +211,7 @@ class PromiseTests: XCTestCase {
         wait(for: [ex], timeout: 1)
     }
     
-    func testInitCancellableTask() {
+    func testInitCancellable() {
         var resolver: Resolver<Void>!
 
         let task = DispatchWorkItem {
@@ -230,7 +230,7 @@ class PromiseTests: XCTestCase {
         
         let ex = expectation(description: "")
         firstly {
-            CancellablePromise(task: task, promise: p, resolver: resolver)
+            CancellablePromise(cancellable: task, promise: p, resolver: resolver)
         }.done {
             XCTFail()
         }.catch(policy: .allErrors) {
@@ -240,13 +240,13 @@ class PromiseTests: XCTestCase {
         wait(for: [ex], timeout: 1)
     }
     
-    func testInitVoidCancellableTask() {
+    func testInitVoidCancellable() {
         let task = DispatchWorkItem { }
         q.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: task)
 
         let ex = expectation(description: "")
         firstly {
-            CancellablePromise(task: task)
+            CancellablePromise(cancellable: task)
         }.done {
             XCTFail()
         }.catch(policy: .allErrors) {
@@ -260,7 +260,7 @@ class PromiseTests: XCTestCase {
         let task = DispatchWorkItem { }
         q.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: task)
 
-        let p = Promise<Void>(cancellableTask: task) { seal in
+        let p = Promise<Void>(cancellable: task) { seal in
             throw PMKError.badInput
         }
         

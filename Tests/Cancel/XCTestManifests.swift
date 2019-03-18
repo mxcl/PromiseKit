@@ -124,9 +124,9 @@ extension GuaranteeTests {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__GuaranteeTests = [
-        ("testCancellableTask", testCancellableTask),
+        ("testCancellable", testCancellable),
         ("testInit", testInit),
-        ("testSetCancellableTask", testSetCancellableTask),
+        ("testSetCancellable", testSetCancellable),
         ("testThenMap", testThenMap),
         ("testWait", testWait),
     ]
@@ -159,20 +159,20 @@ extension PromiseTests {
     // to regenerate.
     static let __allTests__PromiseTests = [
         ("testBodyThrowsError", testBodyThrowsError),
-        ("testCancellableTask", testCancellableTask),
+        ("testCancellable", testCancellable),
         ("testCanMakeVoidPromise", testCanMakeVoidPromise),
         ("testCannotFulfillWithError", testCannotFulfillWithError),
         ("testCustomStringConvertible", testCustomStringConvertible),
         ("testDispatchQueueAsyncExtensionCanThrowInBody", testDispatchQueueAsyncExtensionCanThrowInBody),
         ("testDispatchQueueAsyncExtensionReturnsPromise", testDispatchQueueAsyncExtensionReturnsPromise),
-        ("testInitCancellableTask", testInitCancellableTask),
-        ("testInitVoidCancellableTask", testInitVoidCancellableTask),
+        ("testInitCancellable", testInitCancellable),
+        ("testInitVoidCancellable", testInitVoidCancellable),
         ("testIsFulfilled", testIsFulfilled),
         ("testIsPending", testIsPending),
         ("testIsRejected", testIsRejected),
         ("testIsResolved", testIsResolved),
         ("testPipeForResolved", testPipeForResolved),
-        ("testSetCancellableTask", testSetCancellableTask),
+        ("testSetCancellable", testSetCancellable),
         ("testThrowInFirstly", testThrowInFirstly),
         ("testThrowInInitializer", testThrowInInitializer),
         ("testWait", testWait),

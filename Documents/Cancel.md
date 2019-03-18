@@ -146,12 +146,12 @@ The following classes, methods and functions have been added to PromiseKit to su
     result                          - The current Result
     
     init(_ bridge:<span style="color:gray;"><i>cancelContext</i>:</span>)   - Initialize a new cancellable promise bound to the provided Thenable
-    init(<span style="color:gray;"><i>task</i>:</span>resolver body:).      - Initialize a new cancellable promise that can be resolved with
+    init(<span style="color:gray;"><i>cancellable</i>:</span>resolver body:).      - Initialize a new cancellable promise that can be resolved with
                                        the provided '(Resolver) throws -> Void' body
-    init(<span style="color:gray;"><i>task</i>:</span>promise:resolver:)    - Initialize a new cancellable promise using the given Promise
+    init(<span style="color:gray;"><i>cancellable</i>:</span>promise:resolver:)    - Initialize a new cancellable promise using the given Promise
                                        and its Resolver
-    init(<span style="color:gray;"><i>task</i>:</span>error:)               - Initialize a new rejected cancellable promise
-    init(<span style="color:gray;"><i>task</i>:</span>)                     - Initializes a new cancellable promise fulfilled with Void
+    init(<span style="color:gray;"><i>cancellable</i>:</span>error:)               - Initialize a new rejected cancellable promise
+    init(<span style="color:gray;"><i>cancellable</i>:</span>)                     - Initializes a new cancellable promise fulfilled with Void
  
     pending() -> (promise:resolver:)  - Returns a tuple of a new cancellable pending promise and its
                                         Resolver
@@ -167,7 +167,7 @@ The following classes, methods and functions have been added to PromiseKit to su
     cancelAttempted                 - True if 'cancel' has been called on the promise chain associated
                                       with this CancellableThenable, false otherwise
     cancelledError                  - The error generated when the promise is cancelled
-    appendCancellableTask(_ task:<span style="color:gray;"><i>reject</i>:</span>)  - Append the CancellableTask to our cancel context
+    appendCancellable(cancellable:<span style="color:gray;"><i>reject</i>:</span>)  - Append the Cancellable task to our cancel context
     appendCancelContext(from:)      - Append the cancel context associated with 'from' to our
                                       CancelContext
 	

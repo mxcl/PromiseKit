@@ -19,8 +19,8 @@ public protocol CancellableThenable: class {
 
 public extension CancellableThenable {
     /// Append the `task` and `reject` function for a cancellable task to the cancel context
-    func appendCancellableTask(_ task: CancellableTask?, reject: ((Error) -> Void)?) {
-        self.cancelContext.append(task: task, reject: reject, thenable: self)
+    func appendCancellable(_ cancellable: Cancellable?, reject: ((Error) -> Void)?) {
+        self.cancelContext.append(cancellable: cancellable, reject: reject, thenable: self)
     }
     
     /// Append the cancel context associated with `from` to our cancel context.  Typically `from` is a branch of our chain.

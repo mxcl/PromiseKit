@@ -85,11 +85,11 @@ public class CancelContext: Hashable {
         }
     }
     
-    func append<Z: CancellableThenable>(task: CancellableTask?, reject: ((Error) -> Void)?, thenable: Z) {
-        if task == nil && reject == nil {
+    func append<Z: CancellableThenable>(cancellable: Cancellable?, reject: ((Error) -> Void)?, thenable: Z) {
+        if cancellable == nil && reject == nil {
             return
         }
-        let item = CancelItem(task: task, reject: reject)
+        let item = CancelItem(cancellable: cancellable, reject: reject)
 
         var error: Error?
         barrier.sync(flags: .barrier) {
@@ -222,25 +222,25 @@ fileprivate class CancelItem: Hashable {
         hasher.combine(ObjectIdentifier(self))
     }
     
-    let task: CancellableTask?
+    let cancellable: Cancellable?
     var reject: ((Error) -> Void)?
     weak var context: CancelContext?
     var cancelAttempted = false
     
-    init(task: CancellableTask?, reject: ((Error) -> Void)?) {
-        self.task = task
+    init(cancellable: Cancellable?, reject: ((Error) -> Void)?) {
+        self.cancellable = cancellable
         self.reject = reject
     }
     
     init(context: CancelContext) {
-        self.task = nil
+        self.cancellable = nil
         self.context = context
     }
     
     func cancel(with error: Error, visited: Set<CancelContext>? = nil) {
         cancelAttempted = true
 
-        task?.cancel()
+        cancellable?.cancel()
         reject?(error)
 
         if var v = visited, let c = context {
@@ -252,6 +252,6 @@ fileprivate class CancelItem: Hashable {
     }
     
     var isCancelled: Bool {
-        return task?.isCancelled ?? cancelAttempted
+        return cancellable?.isCancelled ?? cancelAttempted
     }
 }

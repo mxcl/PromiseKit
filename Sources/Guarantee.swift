@@ -24,9 +24,9 @@ public final class Guarantee<T>: Thenable {
     }
 
     /// Returns a pending `Guarantee` that can be resolved with the provided closure’s parameter.
-    public convenience init(cancellableTask: CancellableTask, resolver body: (@escaping(T) -> Void) -> Void) {
+    public convenience init(cancellable: Cancellable, resolver body: (@escaping(T) -> Void) -> Void) {
         self.init(resolver: body)
-        setCancellableTask(cancellableTask)
+       setCancellable(cancellable)
     }
     
     /// - See: `Thenable.pipe`
@@ -83,32 +83,32 @@ public final class Guarantee<T>: Thenable {
         return { ($0, $0.box.seal) }(Guarantee<T>(.pending))
     }
     
-    var cancellableTask: CancellableTask?
+    var cancellable: Cancellable?
     
-    public func setCancellableTask(_ task: CancellableTask) {
+    public func setCancellable(_ cancellable: Cancellable) {
         if let gb = (box as? Guarantee<T>.Box<T>) {
-            cancellableTask = CancellableWrapper(box: gb, task: task)
+            self.cancellable = CancellableWrapper(box: gb, cancellable: cancellable)
         } else {
-            cancellableTask = task
+            self.cancellable = cancellable
         }
     }
 
-    final private class CancellableWrapper: CancellableTask {
+    final private class CancellableWrapper: Cancellable {
         let box: Guarantee<T>.Box<T>
-        let task: CancellableTask
+        let cancellable: Cancellable
 
-        init(box: Guarantee<T>.Box<T>, task: CancellableTask) {
+        init(box: Guarantee<T>.Box<T>, cancellable: Cancellable) {
             self.box = box
-            self.task = task
+            self.cancellable = cancellable
         }
 
         func cancel() {
             box.cancelled = true
-            task.cancel()
+            cancellable.cancel()
         }
 
         var isCancelled: Bool {
-            return task.isCancelled
+            return cancellable.isCancelled
         }
     }
 }

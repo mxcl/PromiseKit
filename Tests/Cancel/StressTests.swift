@@ -76,7 +76,7 @@ class StressTests: XCTestCase {
         waitForExpectations(timeout: 10, handler: nil)
     }
     
-    class StressTask: CancellableTask {
+    class StressTask: Cancellable {
         init() {
             isCancelled = true
         }
@@ -108,9 +108,9 @@ class StressTests: XCTestCase {
         let task = StressTask()
         
         stressRace(expectation: e1, iterations: 1000, stressFactor: 100, stressFunction: {
-            context.append(task: task, reject: nil, thenable: promise)
+            context.append(cancellable: task, reject: nil, thenable: promise)
         }, fulfillFunction: {
-            context.append(task: task, reject: nil, thenable: promise)
+            context.append(cancellable: task, reject: nil, thenable: promise)
         })
         
         waitForExpectations(timeout: 10, handler: nil)
@@ -123,7 +123,7 @@ class StressTests: XCTestCase {
         let task = StressTask()
         
         stressRace(expectation: e1, iterations: 500, stressFactor: 10, stressFunction: {
-            context.append(task: task, reject: nil, thenable: promise)
+            context.append(cancellable: task, reject: nil, thenable: promise)
         }, fulfillFunction: {
             context.cancel()
         })

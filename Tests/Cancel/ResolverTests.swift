@@ -36,7 +36,7 @@ class WrapTests: XCTestCase {
         }
     }
 
-    fileprivate class CancellableKittenFetcher: CancellableTask {
+    fileprivate class CancellableKittenFetcher: Cancellable {
         func cancel() {
             finalizer?.cancel()
         }
@@ -133,7 +133,7 @@ class WrapTests: XCTestCase {
         let ex = expectation(description: "")
         
         let kittenFetcher = CancellableKittenFetcher(value: nil, error: Error.test)
-        CancellablePromise(task: kittenFetcher) { seal in
+        CancellablePromise(cancellable: kittenFetcher) { seal in
             kittenFetcher.fetchWithCompletionBlock(block: seal.resolve)
         }.catch(policy: .allErrors) { error in
             error.isCancelled ? ex.fulfill() : XCTFail()
@@ -159,7 +159,7 @@ class WrapTests: XCTestCase {
         let ex = expectation(description: "")
 
         let kittenFetcher = CancellableKittenFetcher(value: nil, error: nil)
-        CancellablePromise<Any>(task: kittenFetcher) { seal in
+        CancellablePromise<Any>(cancellable: kittenFetcher) { seal in
             kittenFetcher.fetchWithCompletionBlock(block: seal.resolve)
         }.catch(policy: .allErrors) { (error: Swift.Error) -> Void in
             error.isCancelled ? ex.fulfill() : XCTFail()
@@ -186,7 +186,7 @@ class WrapTests: XCTestCase {
     func testInvertedCallingConventionCancellableKitten() {
         let ex = expectation(description: "")
         let kittenFetcher = CancellableKittenFetcher(value: 2, error: nil)
-        CancellablePromise(task: kittenFetcher) { seal in
+        CancellablePromise(cancellable: kittenFetcher) { seal in
             kittenFetcher.fetchWithCompletionBlock2(block: seal.resolve)
         }.done {
             XCTFail()
@@ -224,7 +224,7 @@ class WrapTests: XCTestCase {
     func testNonOptionalFirstParameterCancellableKitten() {
         let ex1 = expectation(description: "")
         let kf1 = CancellableKittenFetcher(value: 2, error: nil)
-        CancellablePromise(task: kf1) { seal in
+        CancellablePromise(cancellable: kf1) { seal in
             kf1.fetchWithCompletionBlock3(block: seal.resolve)
         }.done {
             XCTAssertEqual($0, 2)
@@ -235,7 +235,7 @@ class WrapTests: XCTestCase {
 
         let ex2 = expectation(description: "")
         let kf2 = CancellableKittenFetcher(value: -100, error: Error.test)
-        CancellablePromise(task: kf2) { seal in
+        CancellablePromise(cancellable: kf2) { seal in
             kf2.fetchWithCompletionBlock3(block: seal.resolve)
         }.catch(policy: .allErrors) { error in
             error.isCancelled ? ex2.fulfill() : XCTFail()
@@ -268,7 +268,7 @@ class WrapTests: XCTestCase {
     func testVoidCompletionValueCancellableKitten() {
         let ex1 = expectation(description: "")
         let kf1 = CancellableKittenFetcher(value: nil, error: nil)
-        CancellablePromise(task: kf1) { seal in
+        CancellablePromise(cancellable: kf1) { seal in
             kf1.fetchWithCompletionBlock4(block: seal.resolve)
         }.done(ex1.fulfill).catch(policy: .allErrors) { error in
             error.isCancelled ? ex1.fulfill() : XCTFail()
@@ -276,7 +276,7 @@ class WrapTests: XCTestCase {
 
         let ex2 = expectation(description: "")
         let kf2 = CancellableKittenFetcher(value: nil, error: Error.test)
-        CancellablePromise(task: kf2) { seal in
+        CancellablePromise(cancellable: kf2) { seal in
             kf2.fetchWithCompletionBlock4(block: seal.resolve)
         }.catch(policy: .allErrors) { error in
             error.isCancelled ? ex2.fulfill() : XCTFail()

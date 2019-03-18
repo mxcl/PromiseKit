@@ -163,8 +163,8 @@ public extension CancellableCatchMixin {
             self.cancelContext.recover()
         }
         let cancellablePromise = CancellablePromise(promise: promise, context: self.cancelContext)
-        if let task = promise.cancellableTask {
-            self.cancelContext.append(task: task, reject: promise.rejectIfCancelled, thenable: cancellablePromise)
+        if let cancellable = promise.cancellable {
+            self.cancelContext.append(cancellable: cancellable, reject: promise.rejectIfCancelled, thenable: cancellablePromise)
         }
         return cancellablePromise
     }

@@ -65,10 +65,10 @@ public final class Promise<T>: Thenable, CatchMixin {
     }
 
     /// Initialize a new promise that can be resolved with the provided `Resolver`.
-    public init(cancellableTask: CancellableTask, resolver body: (Resolver<T>) throws -> Void) {
+    public init(cancellable: Cancellable, resolver body: (Resolver<T>) throws -> Void) {
         box = EmptyBox()
         let resolver = Resolver(box)
-        self.cancellableTask = cancellableTask
+        self.cancellable = cancellable
         self.rejectIfCancelled = resolver.reject
         do {
             try body(resolver)
@@ -113,11 +113,11 @@ public final class Promise<T>: Thenable, CatchMixin {
         box = EmptyBox()
     }
     
-    var cancellableTask: CancellableTask?
+    var cancellable: Cancellable?
     var rejectIfCancelled: ((Error) -> Void)?
     
-    public func setCancellableTask(_ task: CancellableTask?, reject: ((Error) -> Void)? = nil) {
-        cancellableTask = task
+    public func setCancellable(_ cancellable: Cancellable?, reject: ((Error) -> Void)? = nil) {
+        self.cancellable = cancellable
         rejectIfCancelled = reject
     }
 }

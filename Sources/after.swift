@@ -2,8 +2,8 @@ import struct Foundation.TimeInterval
 import Dispatch
 
 
-/// Extend DispatchWorkItem to be a CancellableTask
-extension DispatchWorkItem: CancellableTask { }
+/// Extend DispatchWorkItem to be cancellable
+extension DispatchWorkItem: Cancellable { }
 
 /**
      after(seconds: 1.5).then {
@@ -18,7 +18,7 @@ public func after(seconds: TimeInterval) -> Guarantee<Void> {
     let (rg, seal) = Guarantee<Void>.pending()
     let when = DispatchTime.now() + seconds
     let task = DispatchWorkItem { seal(()) }
-    rg.setCancellableTask(task)
+    rg.setCancellable(task)
     q.asyncAfter(deadline: when, execute: task)
     return rg
 }
@@ -36,7 +36,7 @@ public func after(_ interval: DispatchTimeInterval) -> Guarantee<Void> {
     let (rg, seal) = Guarantee<Void>.pending()
     let when = DispatchTime.now() + interval
     let task = DispatchWorkItem { seal(()) }
-    rg.setCancellableTask(task)
+    rg.setCancellable(task)
     q.asyncAfter(deadline: when, execute: task)
     return rg
 }
