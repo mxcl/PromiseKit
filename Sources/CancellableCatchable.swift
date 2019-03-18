@@ -133,7 +133,7 @@ public extension CancellableCatchMixin {
 
          let context = firstly {
              CLLocationManager.requestLocation()
-         }.recover { error in
+         }.cancellize().recover { error in
              guard error == CLError.unknownLocation else { throw error }
              return .value(CLLocation.chicago)
          }.cancelContext
@@ -147,7 +147,7 @@ public extension CancellableCatchMixin {
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      - Note: Methods with the `cancellable` prefix create a new CancellablePromise, and those without the `cancellable` prefix accept an existing CancellablePromise.
      */
-    func cancellableRecover<V: Thenable>(on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> V) -> CancellablePromise<C.T> where V.T == C.T {
+    func recover<V: Thenable>(on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> V) -> CancellablePromise<C.T> where V.T == C.T {
         
         let cancelBody = { (error: Error) throws -> V in
             _ = self.cancelContext.removeItems(self.cancelItemList, clearList: true)

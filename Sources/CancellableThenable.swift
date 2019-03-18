@@ -68,8 +68,8 @@ public extension CancellableThenable {
      - Returns: A new cancellable promise that resolves when the cancellable promise returned from the provided closure resolves. For example:
 
            let context = firstly {
-               URLSession.shared.cancellableDataTask(.promise, with: url1)
-           }.then { response in
+               URLSession.shared.dataTask(.promise, with: url1)
+           }.cancellize().then { response in
                transform(data: response.data) // returns a CancellablePromise
            }.done { transformation in
                //…
@@ -107,8 +107,8 @@ public extension CancellableThenable {
      - Returns: A new cancellable promise that resolves when the promise returned from the provided closure resolves. For example:
 
            let context = firstly {
-               URLSession.shared.cancellableDataTask(.promise, with: url1)
-           }.cancellableThen { response in
+               URLSession.shared.dataTask(.promise, with: url1)
+           }.cancellize().then { response in
                transform(data: response.data) // returns a Promise
            }.done { transformation in
                //…
@@ -118,7 +118,7 @@ public extension CancellableThenable {
      
            context.cancel()
      */
-    func cancellableThen<V: Thenable>(on: Dispatcher = conf.D.map, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.T> {
+    func then<V: Thenable>(on: Dispatcher = conf.D.map, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.T> {
         let cancelBody = { (value: U.T) throws -> V in
             if let error = self.cancelContext.removeItems(self.cancelItemList, clearList: true) {
                 throw error
@@ -141,8 +141,8 @@ public extension CancellableThenable {
      - Returns: A new cancellable promise that is resolved with the value returned from the provided closure. For example:
 
            let context = firstly {
-               URLSession.shared.cancellableDataTask(.promise, with: url1)
-           }.map { response in
+               URLSession.shared.dataTask(.promise, with: url1)
+           }.cancellize().map { response in
                response.data.length
            }.done { length in
                //…
@@ -171,8 +171,8 @@ public extension CancellableThenable {
       In your closure return an `Optional`, if you return `nil` the resulting cancellable promise is rejected with `PMKError.compactMap`, otherwise the cancellable promise is fulfilled with the unwrapped value.
 
            let context = firstly {
-               URLSession.shared.cancellableDataTask(.promise, with: url)
-           }.compactMap {
+               URLSession.shared.dataTask(.promise, with: url)
+           }.cancellize().compactMap {
                try JSONSerialization.jsonObject(with: $0.data) as? [String: String]
            }.done { dictionary in
                //…
@@ -208,8 +208,8 @@ public extension CancellableThenable {
      - Returns: A new cancellable promise fulfilled as `Void`.
      
            let context = firstly {
-               URLSession.shared.cancellableDataTask(.promise, with: url)
-           }.done { response in
+               URLSession.shared.dataTask(.promise, with: url)
+           }.cancellize().done { response in
                print(response.data)
            }.cancelContext
 
@@ -409,15 +409,15 @@ public extension CancellableThenable where U.T: Sequence {
      `CancellablePromise<[U.T]>` => `U.T` -> `Promise<V>` => `CancellablePromise<[V]>`
 
          firstly {
-             cancellize(Promise.value([1,2,3]))
-         }.cancellableThenMap { integer in
+             Promise.value([1,2,3])
+         }.cancellize().thenMap { integer in
              .value(integer * 2)
          }.done {
              // $0 => [2,4,6]
          }
      */
-    func cancellableThenMap<V: Thenable>(on: Dispatcher = conf.D.map, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V.T]> {
-        return cancellableThen(on: on) {
+    func thenMap<V: Thenable>(on: Dispatcher = conf.D.map, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V.T]> {
+        return then(on: on) {
             when(fulfilled: try $0.map(transform))
         }
     }
@@ -445,15 +445,15 @@ public extension CancellableThenable where U.T: Sequence {
      `CancellablePromise<[T]>` => `T` -> `Promise<[U]>` => `CancellablePromise<[U]>`
 
          firstly {
-             cancellize(Promise.value([1,2,3]))
-         }.cancellableThenFlatMap { integer in
+             Promise.value([1,2,3])
+         }.cancellize().thenFlatMap { integer in
              .value([integer, integer])
          }.done {
              // $0 => [1,1,2,2,3,3]
          }
      */
-    func cancellableThenFlatMap<V: Thenable>(on: Dispatcher = conf.D.map, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V.T.Iterator.Element]> where V.T: Sequence {
-        return cancellableThen(on: on) {
+    func thenFlatMap<V: Thenable>(on: Dispatcher = conf.D.map, _ transform: @escaping(U.T.Iterator.Element) throws -> V) -> CancellablePromise<[V.T.Iterator.Element]> where V.T: Sequence {
+        return then(on: on) {
             when(fulfilled: try $0.map(transform))
         }.map(on: nil) {
             $0.flatMap { $0 }

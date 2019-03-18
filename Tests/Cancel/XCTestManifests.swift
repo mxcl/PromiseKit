@@ -55,11 +55,14 @@ extension CancellablePromiseTests {
     static let __allTests__CancellablePromiseTests = [
         ("testBridge", testBridge),
         ("testCancel", testCancel),
+        ("testCancellablePromiseEmbeddedInStandardPromiseChain", testCancellablePromiseEmbeddedInStandardPromiseChain),
         ("testChain", testChain),
         ("testFirstly", testFirstly),
         ("testFirstlyWithPromise", testFirstlyWithPromise),
+        ("testReturnTypeForAMultiLineClosureIsNotExplicitlyStated", testReturnTypeForAMultiLineClosureIsNotExplicitlyStated),
         ("testThenMapCancel", testThenMapCancel),
         ("testThenMapSuccess", testThenMapSuccess),
+        ("testTryingToCancelAStandardPromiseChain", testTryingToCancelAStandardPromiseChain),
     ]
 }
 

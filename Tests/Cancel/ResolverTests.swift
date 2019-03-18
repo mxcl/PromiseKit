@@ -55,7 +55,7 @@ class WrapTests: XCTestCase {
         }
         
         func fetchWithCompletionBlock(block: @escaping(Int?, Swift.Error?) -> Void) {
-            finalizer = cancellize(after(.milliseconds(20))).done {_ in
+            finalizer = after(.milliseconds(20)).cancellize().done {_ in
                 block(self.value, self.error)
             }.catch(policy: .allErrors) {
                 block(nil, $0)
@@ -63,7 +63,7 @@ class WrapTests: XCTestCase {
         }
         
         func fetchWithCompletionBlock2(block: @escaping(Swift.Error?, Int?) -> Void) {
-            finalizer = cancellize(after(.milliseconds(20))).done {
+            finalizer = after(.milliseconds(20)).cancellize().done {
                 block(self.error, self.value)
             }.catch(policy: .allErrors) {
                 block($0, nil)
@@ -71,7 +71,7 @@ class WrapTests: XCTestCase {
         }
         
         func fetchWithCompletionBlock3(block: @escaping(Int, Swift.Error?) -> Void) {
-            finalizer = cancellize(after(.milliseconds(20))).done {
+            finalizer = after(.milliseconds(20)).cancellize().done {
                 block(self.value ?? -99, self.error)
             }.catch(policy: .allErrors) {
                 block(-99, $0)
@@ -79,7 +79,7 @@ class WrapTests: XCTestCase {
         }
         
         func fetchWithCompletionBlock4(block: @escaping(Swift.Error?) -> Void) {
-            finalizer = cancellize(after(.milliseconds(20))).done {
+            finalizer = after(.milliseconds(20)).cancellize().done {
                 block(self.error)
             }.catch(policy: .allErrors) {
                 block($0)
@@ -287,7 +287,7 @@ class WrapTests: XCTestCase {
 #endif
 
     func testIsFulfilled() {
-        let p1 = cancellize(Promise.value(()))
+        let p1 = Promise.value(()).cancellize()
         p1.cancel()
         
         var success1 = false

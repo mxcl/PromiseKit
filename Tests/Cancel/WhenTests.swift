@@ -26,10 +26,10 @@ class WhenTests: XCTestCase {
 
     func testInt() {
         let e1 = expectation(description: "")
-        let p1 = cancellize(Promise.value(1))
-        let p2 = cancellize(Promise.value(2))
-        let p3 = cancellize(Promise.value(3))
-        let p4 = cancellize(Promise.value(4))
+        let p1 = Promise.value(1).cancellize()
+        let p2 = Promise.value(2).cancellize()
+        let p3 = Promise.value(3).cancellize()
+        let p4 = Promise.value(4).cancellize()
 
         when(fulfilled: [p1, p2, p3, p4]).done { _ in
             XCTFail()
@@ -41,10 +41,10 @@ class WhenTests: XCTestCase {
 
     func testIntAlt() {
         let e1 = expectation(description: "")
-        let p1 = cancellize(Promise.value(1))
-        let p2 = cancellize(Promise.value(2))
-        let p3 = cancellize(Promise.value(3))
-        let p4 = cancellize(Promise.value(4))
+        let p1 = Promise.value(1).cancellize()
+        let p2 = Promise.value(2).cancellize()
+        let p3 = Promise.value(3).cancellize()
+        let p4 = Promise.value(4).cancellize()
 
         when(fulfilled: p1, p2, p3, p4).done { _ in
             XCTFail()
@@ -56,8 +56,8 @@ class WhenTests: XCTestCase {
 
     func testDoubleTupleSucceed() {
         let e1 = expectation(description: "")
-        let p1 = cancellize(Promise.value(1))
-        let p2 = cancellize(Promise.value("abc"))
+        let p1 = Promise.value(1).cancellize()
+        let p2 = Promise.value("abc").cancellize()
         cancellableWhen(fulfilled: p1, p2).done{ x, y in
             XCTAssertEqual(x, 1)
             XCTAssertEqual(y, "abc")
@@ -68,8 +68,8 @@ class WhenTests: XCTestCase {
 
     func testDoubleTupleCancel() {
         let e1 = expectation(description: "")
-        let p1 = cancellize(Promise.value(1))
-        let p2 = cancellize(Promise.value("abc"))
+        let p1 = Promise.value(1).cancellize()
+        let p2 = Promise.value("abc").cancellize()
         cancellableWhen(fulfilled: p1, p2).done{ _, _ in
             XCTFail()
         }.catch(policy: .allErrors) {
@@ -80,9 +80,9 @@ class WhenTests: XCTestCase {
 
     func testTripleTuple() {
         let e1 = expectation(description: "")
-        let p1 = cancellize(Promise.value(1))
-        let p2 = cancellize(Promise.value("abc"))
-        let p3 = cancellize(Promise.value(1.0))
+        let p1 = Promise.value(1).cancellize()
+        let p2 = Promise.value("abc").cancellize()
+        let p3 = Promise.value(1.0).cancellize()
         cancellableWhen(fulfilled: p1, p2, p3).done { _, _, _ in
             XCTFail()
         }.catch(policy: .allErrors) {
@@ -93,10 +93,10 @@ class WhenTests: XCTestCase {
 
     func testQuadrupleTuple() {
         let e1 = expectation(description: "")
-        let p1 = cancellize(Promise.value(1))
-        let p2 = cancellize(Promise.value("abc"))
-        let p3 = cancellize(Promise.value(1.0))
-        let p4 = cancellize(Promise.value(true))
+        let p1 = Promise.value(1).cancellize()
+        let p2 = Promise.value("abc").cancellize()
+        let p3 = Promise.value(1.0).cancellize()
+        let p4 = Promise.value(true).cancellize()
         cancellableWhen(fulfilled: p1, p2, p3, p4).done { _, _, _, _ in
             XCTFail()
         }.catch(policy: .allErrors) {
@@ -107,11 +107,11 @@ class WhenTests: XCTestCase {
 
     func testQuintupleTuple() {
         let e1 = expectation(description: "")
-        let p1 = cancellize(Promise.value(1))
-        let p2 = cancellize(Promise.value("abc"))
-        let p3 = cancellize(Promise.value(1.0))
-        let p4 = cancellize(Promise.value(true))
-        let p5 = cancellize(Promise.value("a" as Character))
+        let p1 = Promise.value(1).cancellize()
+        let p2 = Promise.value("abc").cancellize()
+        let p3 = Promise.value(1.0).cancellize()
+        let p4 = Promise.value(true).cancellize()
+        let p5 = Promise.value("a" as Character).cancellize()
         cancellableWhen(fulfilled: p1, p2, p3, p4, p5).done { _, _, _, _, _ in
             XCTFail()
         }.catch(policy: .allErrors) {
@@ -122,10 +122,10 @@ class WhenTests: XCTestCase {
 
     func testVoid() {
         let e1 = expectation(description: "")
-        let p1 = cancellize(Promise.value(1)).done { _ in }
-        let p2 = cancellize(Promise.value(2)).done { _ in }
-        let p3 = cancellize(Promise.value(3)).done { _ in }
-        let p4 = cancellize(Promise.value(4)).done { _ in }
+        let p1 = Promise.value(1).cancellize().done { _ in }
+        let p2 = Promise.value(2).cancellize().done { _ in }
+        let p3 = Promise.value(3).cancellize().done { _ in }
+        let p4 = Promise.value(4).cancellize().done { _ in }
 
         when(fulfilled: p1, p2, p3, p4).done {
             XCTFail()
@@ -140,9 +140,9 @@ class WhenTests: XCTestCase {
         enum Error: Swift.Error { case dummy }
 
         let e1 = expectation(description: "")
-        let p1 = cancellize(after(.milliseconds(100))).map{ true }
-        let p2: CancellablePromise<Bool> = cancellize(after(.milliseconds(200))).map{ throw Error.dummy }
-        let p3 = cancellize(Promise.value(false))
+        let p1 = after(.milliseconds(100)).cancellize().map{ true }
+        let p2: CancellablePromise<Bool> = after(.milliseconds(200)).cancellize().map{ throw Error.dummy }
+        let p3 = Promise.value(false).cancellize()
             
         cancellableWhen(fulfilled: p1, p2, p3).catch(policy: .allErrors) {
             $0.isCancelled ? e1.fulfill() : XCTFail()
@@ -156,10 +156,10 @@ class WhenTests: XCTestCase {
 
         XCTAssertNil(Progress.current())
 
-        let p1 = cancellize(after(.milliseconds(10)))
-        let p2 = cancellize(after(.milliseconds(20)))
-        let p3 = cancellize(after(.milliseconds(30)))
-        let p4 = cancellize(after(.milliseconds(40)))
+        let p1 = after(.milliseconds(10)).cancellize()
+        let p2 = after(.milliseconds(20)).cancellize()
+        let p3 = after(.milliseconds(30)).cancellize()
+        let p4 = after(.milliseconds(40)).cancellize()
 
         let progress = Progress(totalUnitCount: 1)
         progress.becomeCurrent(withPendingUnitCount: 1)
@@ -182,10 +182,10 @@ class WhenTests: XCTestCase {
 
         XCTAssertNil(Progress.current())
 
-        let p1 = cancellize(after(.milliseconds(10)))
-        let p2 = cancellize(after(.milliseconds(20))).done { throw NSError(domain: "a", code: 1, userInfo: nil) }
-        let p3 = cancellize(after(.milliseconds(30)))
-        let p4 = cancellize(after(.milliseconds(40)))
+        let p1 = after(.milliseconds(10)).cancellize()
+        let p2 = after(.milliseconds(20)).cancellize().done { throw NSError(domain: "a", code: 1, userInfo: nil) }
+        let p3 = after(.milliseconds(30)).cancellize()
+        let p4 = after(.milliseconds(40)).cancellize()
 
         let progress = Progress(totalUnitCount: 1)
         progress.becomeCurrent(withPendingUnitCount: 1)
@@ -224,10 +224,10 @@ class WhenTests: XCTestCase {
 
         XCTAssertNil(Progress.current())
 
-        let p1 = cancellize(after(.milliseconds(10)))
-        let p2 = cancellize(after(.milliseconds(20))).done { throw NSError(domain: "a", code: 1, userInfo: nil) }
-        let p3 = cancellize(after(.milliseconds(30)))
-        let p4 = cancellize(after(.milliseconds(40)))
+        let p1 = after(.milliseconds(10)).cancellize()
+        let p2 = after(.milliseconds(20)).cancellize().done { throw NSError(domain: "a", code: 1, userInfo: nil) }
+        let p3 = after(.milliseconds(30)).cancellize()
+        let p4 = after(.milliseconds(40)).cancellize()
 
         let progress = Progress(totalUnitCount: 1)
         progress.becomeCurrent(withPendingUnitCount: 1)
@@ -277,7 +277,7 @@ class WhenTests: XCTestCase {
 
         let ex = expectation(description: "")
         let p1 = CancellablePromise<Int>(error: Error.test)
-        let p2 = cancellize(after(.milliseconds(100)))
+        let p2 = after(.milliseconds(100)).cancellize()
         cancellableWhen(fulfilled: p1, p2).done{ _ in XCTFail() }.catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
@@ -296,8 +296,8 @@ class WhenTests: XCTestCase {
         let ex3 = expectation(description: "")
 
         let p1 = CancellablePromise<Void>(error: Error.test)
-        let p2 = cancellize(after(.milliseconds(100))).done { throw Error.straggler }
-        let p3 = cancellize(after(.milliseconds(200))).done { throw Error.straggler }
+        let p2 = after(.milliseconds(100)).cancellize().done { throw Error.straggler }
+        let p3 = after(.milliseconds(200)).cancellize().done { throw Error.straggler }
 
         cancellableWhen(fulfilled: p1, p2, p3).catch(policy: .allErrors) {
             $0.isCancelled ? ex1.fulfill() : XCTFail()
@@ -330,14 +330,14 @@ class WhenTests: XCTestCase {
 
     func testGuaranteeWhen() {
         let ex1 = expectation(description: "")
-        when(resolved: cancellize(Guarantee()), cancellize(Guarantee())).done { _ in
+        when(resolved: Guarantee().cancellize(), Guarantee().cancellize()).done { _ in
             XCTFail()
         }.catch(policy: .allErrors) {
             $0.isCancelled ? ex1.fulfill() : XCTFail()
         }.cancel()
 
         let ex2 = expectation(description: "")
-        when(resolved: [cancellize(Guarantee()), cancellize(Guarantee())]).done { _ in
+        when(resolved: [Guarantee().cancellize(), Guarantee().cancellize()]).done { _ in
             XCTFail()
         }.catch(policy: .allErrors) {
             $0.isCancelled ? ex2.fulfill() : XCTFail()

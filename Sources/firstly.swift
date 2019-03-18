@@ -45,10 +45,10 @@ public func firstly<T>(execute body: () -> Guarantee<T>) -> Guarantee<T> {
 
  Compare:
 
-     let context = URLSession.shared.cancellableDataTask(url: url1).then {
-         URLSession.shared.cancellableDataTask(url: url2)
+     let context = URLSession.shared.dataTask(url: url1).cancellize().then {
+         URLSession.shared.dataTask(url: url2)
      }.then {
-         URLSession.shared.cancellableDataTask(url: url3)
+         URLSession.shared.dataTask(url: url3)
      }.cancelContext
  
      // …
@@ -58,11 +58,11 @@ public func firstly<T>(execute body: () -> Guarantee<T>) -> Guarantee<T> {
  With:
 
      let context = firstly {
-         URLSession.shared.cancellableDataTask(url: url1)
+         URLSession.shared.dataTask(url: url1)
+     }.cancellize().then {
+         URLSession.shared.dataTask(url: url2)
      }.then {
-         URLSession.shared.cancellableDataTask(url: url2)
-     }.then {
-         URLSession.shared.cancellableDataTask(url: url3)
+         URLSession.shared.dataTask(url: url3)
      }.cancelContext
  
      // …

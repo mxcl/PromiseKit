@@ -4,7 +4,7 @@ import PromiseKit
 class ValueTests: XCTestCase {
     func testValueContext() {
         let exComplete = expectation(description: "after completes")
-        cancellize(Promise.value("hi")).done { _ in
+        Promise.value("hi").cancellize().done { _ in
             XCTFail("value not cancelled")
         }.catch(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
@@ -15,7 +15,7 @@ class ValueTests: XCTestCase {
     
     func testValueDone() {
         let exComplete = expectation(description: "after completes")
-        cancellize(Promise.value("hi")).done { _ in
+        Promise.value("hi").cancellize().done { _ in
             XCTFail("value not cancelled")
         }.catch(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
@@ -27,9 +27,9 @@ class ValueTests: XCTestCase {
     func testValueThen() {
         let exComplete = expectation(description: "after completes")
         
-        cancellize(Promise.value("hi")).then { (_: String) -> CancellablePromise<String> in
+        Promise.value("hi").cancellize().then { (_: String) -> Promise<String> in
             XCTFail("value not cancelled")
-            return cancellize(Promise.value("bye"))
+            return Promise.value("bye")
         }.done { _ in
             XCTFail("value not cancelled")
         }.catch(policy: .allErrors) { error in
@@ -43,8 +43,8 @@ class ValueTests: XCTestCase {
         let exComplete = expectation(description: "after completes")
         
         firstly {
-            cancellize(Promise.value("hi"))
-        }.done { _ in
+            Promise.value("hi")
+        }.cancellize().done { _ in
             XCTFail("value not cancelled")
         }.catch(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
@@ -57,10 +57,10 @@ class ValueTests: XCTestCase {
         let exComplete = expectation(description: "after completes")
         
         firstly {
-            cancellize(Promise.value("hi"))
+            Promise.value("hi").cancellize()
         }.then { (_: String) -> CancellablePromise<String> in
             XCTFail("'hi' not cancelled")
-            return cancellize(Promise.value("there"))
+            return Promise.value("there").cancellize()
         }.done { _ in
             XCTFail("'there' not cancelled")
         }.catch(policy: .allErrors) { error in
@@ -74,8 +74,8 @@ class ValueTests: XCTestCase {
         let exComplete = expectation(description: "after completes")
         
         let p = firstly {
-            return cancellize(Promise.value("hi"))
-        }.done { _ in
+            return Promise.value("hi")
+        }.cancellize().done { _ in
             XCTFail("value not cancelled")
         }.catch(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
@@ -89,8 +89,8 @@ class ValueTests: XCTestCase {
         let exComplete = expectation(description: "after completes")
         
         firstly {
-            cancellize(Promise.value("hi"))
-        }.done { _ in
+            Promise.value("hi")
+        }.cancellize().done { _ in
             XCTFail("value not cancelled")
         }.catch(policy: .allErrors) { error in
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
@@ -106,7 +106,7 @@ class ValueTests: XCTestCase {
             usleep(100000)
             seal.fulfill(())
         }
-        promise.cancellableThen { () throws -> Promise<String> in
+        promise.then { () throws -> Promise<String> in
             XCTFail("then not cancelled")
             return Promise.value("x")
         }.done { _ in
@@ -127,7 +127,7 @@ class ValueTests: XCTestCase {
         }
         promise.then { _ -> CancellablePromise<String> in
             XCTFail("then not cancelled")
-            return cancellize(Promise.value("x"))
+            return Promise.value("x").cancellize()
         }.done { _ in
             XCTFail("done not cancelled")
         }.catch(policy: .allErrors) { error in

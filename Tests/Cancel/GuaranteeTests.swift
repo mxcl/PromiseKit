@@ -4,9 +4,9 @@ import XCTest
 class GuaranteeTests: XCTestCase {
     func testInit() {
         let ex = expectation(description: "")
-        cancellize(Guarantee { seal in
+        Guarantee { seal in
             seal(1)
-        }).done {
+        }.cancellize().done {
             XCTFail()
             XCTAssertEqual(1, $0)
         }.catch(policy: .allErrors) {
@@ -18,7 +18,7 @@ class GuaranteeTests: XCTestCase {
     func testWait() {
         let ex = expectation(description: "")
         do {
-            let p = cancellize(after(.milliseconds(100))).map(on: nil) { 1 }
+            let p = after(.milliseconds(100)).cancellize().map(on: nil) { 1 }
             p.cancel()
             let value = try p.wait()
             XCTAssertEqual(value, 1)
@@ -31,7 +31,7 @@ class GuaranteeTests: XCTestCase {
     func testThenMap() {
         let ex = expectation(description: "")
 
-        cancellize(Guarantee.value([1, 2, 3])).thenMap { cancellize(Guarantee.value($0 * 2)) }
+        Guarantee.value([1, 2, 3]).cancellize().thenMap { Guarantee.value($0 * 2).cancellize() }
         .done { values in
             XCTAssertEqual([], values)
             XCTFail()
@@ -99,8 +99,8 @@ class GuaranteeTests: XCTestCase {
         
         let ex = expectation(description: "")
         firstly {
-            cancellize(g)
-        }.done {
+            g
+        }.cancellize().done {
             XCTFail()
         }.catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail("\($0)")

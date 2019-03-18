@@ -5,7 +5,7 @@ class TimeoutTests: XCTestCase {
     func testTimeout() {
         let ex = expectation(description: "")
         
-        race(cancellize(after(seconds: 0.5)), cancellize(timeout(seconds: 0.01))).done {
+        race(after(seconds: 0.5).cancellize(), timeout(seconds: 0.01).cancellize()).done {
         // race(cancellize(after(seconds: 0.5)), timeout(seconds: 0.01)).done {
             XCTFail()
         }.catch(policy: .allErrors) {
@@ -22,8 +22,8 @@ class TimeoutTests: XCTestCase {
 
     func testReset() {
         let ex = expectation(description: "")
-        let p = cancellize(after(seconds: 0.5))
-        race(p, cancellize(timeout(seconds: 2.0)), cancellize(timeout(seconds: 0.01))).done {
+        let p = after(seconds: 0.5).cancellize()
+        race(p, timeout(seconds: 2.0).cancellize(), timeout(seconds: 0.01).cancellize()).done {
             XCTFail()
         }.catch(policy: .allErrors) { err in
             do {
@@ -41,8 +41,8 @@ class TimeoutTests: XCTestCase {
     
     func testDoubleTimeout() {
         let ex = expectation(description: "")
-        let p = cancellize(after(seconds: 0.5))
-        race(p, cancellize(timeout(seconds: 0.01)), cancellize(timeout(seconds: 0.01))).done {
+        let p = after(seconds: 0.5).cancellize()
+        race(p, timeout(seconds: 0.01).cancellize(), timeout(seconds: 0.01).cancellize()).done {
             XCTFail()
             }.catch(policy: .allErrors) {
                 do {
@@ -59,9 +59,9 @@ class TimeoutTests: XCTestCase {
     
     func testNoTimeout() {
         let ex = expectation(description: "")
-        race(cancellize(after(seconds: 0.01)), cancellize(timeout(seconds: 0.5))).then { _ -> CancellablePromise<Int> in
+        race(after(seconds: 0.01).cancellize(), timeout(seconds: 0.5).cancellize()).then { _ -> Promise<Int> in
             ex.fulfill()
-            return cancellize(Promise.value(1))
+            return Promise.value(1)
         }.catch(policy: .allErrors) { _ in
             XCTFail()
         }
@@ -70,10 +70,10 @@ class TimeoutTests: XCTestCase {
 
     func testCancelBeforeTimeout() {
         let ex = expectation(description: "")
-        let p = cancellize(after(seconds: 0.5))
-        race(p, cancellize(timeout(seconds: 2))).then { _ -> CancellablePromise<Int> in
+        let p = after(seconds: 0.5).cancellize()
+        race(p, timeout(seconds: 2).cancellize()).then { _ -> Promise<Int> in
             XCTFail()
-            return cancellize(Promise.value(1))
+            return Promise.value(1)
         }.catch(policy: .allErrors) {
             do {
                 throw $0
@@ -89,9 +89,9 @@ class TimeoutTests: XCTestCase {
 
     func testCancelRaceBeforeTimeout() {
         let ex = expectation(description: "")
-        let ctxt = race(cancellize(after(seconds: 0.5)), cancellize(timeout(seconds: 2))).then { _ -> CancellablePromise<Int> in
+        let ctxt = race(after(seconds: 0.5).cancellize(), timeout(seconds: 2).cancellize()).then { _ -> Promise<Int> in
             XCTFail()
-            return cancellize(Promise.value(1))
+            return Promise.value(1)
         }.catch(policy: .allErrors) {
             do {
                 throw $0
@@ -108,15 +108,15 @@ class TimeoutTests: XCTestCase {
     func testMixTypes() {
         let ex = expectation(description: "")
         let promise1, promise2: CancellablePromise<Void>
-        promise1 = cancellize(Promise.value("string")).asVoid()
-        promise2 = cancellize(Promise.value(22)).asVoid()
+        promise1 = Promise.value("string").cancellize().asVoid()
+        promise2 = Promise.value(22).cancellize().asVoid()
         race(promise1, promise2,
-            cancellize(Promise.value("string")).asVoid(),
-            cancellize(Promise.value(22)).asVoid(),
-            cancellize(timeout(seconds: 2))).then { thisone -> CancellablePromise<Int> in
+            Promise.value("string").cancellize().asVoid(),
+            Promise.value(22).cancellize().asVoid(),
+            timeout(seconds: 2).cancellize()).then { thisone -> Promise<Int> in
                 print("\(thisone)")
             ex.fulfill()
-            return cancellize(Promise.value(1))
+            return Promise.value(1)
         }.catch(policy: .allErrors) { _ in
             XCTFail()
         }

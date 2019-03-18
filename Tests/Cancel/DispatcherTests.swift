@@ -56,7 +56,7 @@ class DispatcherTests: XCTestCase {
         DispatchQueue.main.setSpecific(key: queueIDKey, value: 102)
         dispatcher.queue.setSpecific(key: queueIDKey, value: 103)
 
-        cancellize(Promise.value(42)).map(on: .global(qos: .background), flags: .barrier) { (x: Int) -> Int in
+        Promise.value(42).cancellize().map(on: .global(qos: .background), flags: .barrier) { (x: Int) -> Int in
             let queueID = DispatchQueue.getSpecific(key: queueIDKey)
             XCTAssertNotNil(queueID)
             XCTAssertEqual(queueID!, 100)
@@ -68,7 +68,7 @@ class DispatcherTests: XCTestCase {
             let queueID = DispatchQueue.getSpecific(key: queueIDKey)
             XCTAssertNotNil(queueID)
             XCTAssertEqual(queueID!, 102)
-            return cancellize(Promise.value(50))
+            return Promise.value(50).cancellize()
         }.map(on: nil) { (x: Int) -> Int in
             let queueID = DispatchQueue.getSpecific(key: queueIDKey)
             XCTAssertNotNil(queueID)
@@ -95,8 +95,8 @@ class DispatcherTests: XCTestCase {
     
     func testMapValues() {
         let ex1 = expectation(description: "DispatchQueue MapValues compatibility")
-        cancellize(Promise.value([42, 52])).cancellableThen(on: .global(qos: .background), flags: .barrier) {
-            Promise.value($0)
+        Promise.value([42, 52]).cancellize().then(on: .global(qos: .background), flags: .barrier) { v -> Promise<[Int]> in
+            Promise.value(v)
         }.compactMap(on: .global(qos: .background), flags: .barrier) {
             $0
         }.mapValues(on: .global(qos: .background), flags: .barrier) {
@@ -105,14 +105,14 @@ class DispatcherTests: XCTestCase {
             [$0 + 10]
         }.compactMapValues(on: .global(qos: .background), flags: .barrier) {
             $0 + 10
-        }.thenMap(on: .global(qos: .background), flags: .barrier) {
-            cancellize(Promise.value($0 + 10))
-        }.cancellableThenMap(on: .global(qos: .background), flags: .barrier) {
-            Promise.value($0 + 10)
+        }.thenMap(on: .global(qos: .background), flags: .barrier) { v -> CancellablePromise<Int> in
+            Promise.value(v + 10).cancellize()
+        }.thenMap(on: .global(qos: .background), flags: .barrier) { v -> Promise<Int> in
+            Promise.value(v + 10)
         }.thenFlatMap(on: .global(qos: .background), flags: .barrier) {
-            cancellize(Promise.value([$0 + 10]))
-        }.cancellableThenFlatMap(on: .global(qos: .background), flags: .barrier) {
-            Promise.value([$0 + 10])
+            Promise.value([$0 + 10]).cancellize()
+        }.thenFlatMap(on: .global(qos: .background), flags: .barrier) { v -> Promise<[Int]> in
+            Promise.value([v + 10])
         }.filterValues(on: .global(qos: .background), flags: .barrier) { _ in
             true
         }.sortedValues(on: .global(qos: .background), flags: .barrier).firstValue(on: .global(qos: .background), flags: .barrier) { _ in
@@ -125,7 +125,7 @@ class DispatcherTests: XCTestCase {
         }
         
         let ex2 = expectation(description: "DispatchQueue firstValue property")
-        cancellize(Promise.value([42, 52])).firstValue.done(on: .global(qos: .background), flags: .barrier) {
+        Promise.value([42, 52]).cancellize().firstValue.done(on: .global(qos: .background), flags: .barrier) {
             XCTAssertEqual($0, 42)
             ex2.fulfill()
         }.catch(on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
@@ -133,7 +133,7 @@ class DispatcherTests: XCTestCase {
         }
         
          let ex3 = expectation(description: "DispatchQueue lastValue property")
-        cancellize(Promise.value([42, 52])).lastValue.done(on: .global(qos: .background), flags: .barrier) {
+        Promise.value([42, 52]).cancellize().lastValue.done(on: .global(qos: .background), flags: .barrier) {
             XCTAssertEqual($0, 52)
             ex3.fulfill()
         }.catch(on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
@@ -145,15 +145,15 @@ class DispatcherTests: XCTestCase {
     
     func testRecover() {
         let ex1 = expectation(description: "DispatchQueue CatchMixin compatibility")
-        cancellize(Promise.value(42)).recover(on: .global(qos: .background), flags: .barrier) { _ in
-            return cancellize(Promise.value(42))
+        Promise.value(42).cancellize().recover(on: .global(qos: .background), flags: .barrier) { _ in
+            Promise.value(42)
         }.ensure(on: .global(qos: .background), flags: .barrier) {
         }.ensureThen(on: .global(qos: .background), flags: .barrier) {
-            return cancellize(Promise.value(42).asVoid())
+            Promise.value(42).asVoid().cancellize()
         }.recover(on: .global(qos: .background), flags: .barrier) { _ in
-            return cancellize(Promise.value(42))
-        }.cancellableRecover(on: .global(qos: .background), flags: .barrier) { _ in
-            return Promise.value(42)
+            Promise.value(42).cancellize()
+        }.recover(on: .global(qos: .background), flags: .barrier) { _ in
+            Promise.value(42)
         }.done(on: .global(qos: .background), flags: .barrier) {
             XCTAssertEqual($0, 42)
             ex1.fulfill()
@@ -163,8 +163,8 @@ class DispatcherTests: XCTestCase {
 
         let ex2 = expectation(description: "DispatchQueue CatchMixin Void recover")
         firstly {
-            cancellize(Promise.value(42).asVoid())
-        }.recover(on: .global(qos: .background), flags: .barrier) { _ in
+            Promise.value(42).asVoid()
+        }.cancellize().recover(on: .global(qos: .background), flags: .barrier) { _ in
         }.done {
             ex2.fulfill()
         }.catch(on: .global(qos: .background), flags: .barrier) { _ in
@@ -177,10 +177,10 @@ class DispatcherTests: XCTestCase {
     @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
     func testDispatcherExtensionReturnsGuarantee() {
         let ex = expectation(description: "Dispatcher.promise")
-        cancellize(dispatcher.dispatch() { () -> Int in
+        dispatcher.dispatch() { () -> Int in
             XCTAssertFalse(Thread.isMainThread)
             return 1
-        }).done { one in
+        }.cancellize().done { one in
             XCTAssertEqual(one, 1)
             ex.fulfill()
         }.catch { _ in
@@ -192,9 +192,9 @@ class DispatcherTests: XCTestCase {
     @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
     func testDispatcherExtensionCanThrowInBody() {
         let ex = expectation(description: "Dispatcher.promise")
-        cancellize(dispatcher.dispatch() { () -> Int in
+        dispatcher.dispatch() { () -> Int in
             throw PMKError.badInput
-        }).done { _ in
+        }.cancellize().done { _ in
             XCTFail()
         }.catch { _ in
             ex.fulfill()

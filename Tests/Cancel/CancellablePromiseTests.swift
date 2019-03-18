@@ -3,11 +3,94 @@ import PromiseKit
 import XCTest
 
 class CancellablePromiseTests: XCTestCase {
+    func login() -> Promise<Int> {
+        return Promise.value(1)
+    }
+    
+    func fetch(avatar: Int) -> CancellablePromise<Int> {
+        return Promise.value(avatar + 2).cancellize()
+    }
+    
+    func testCancellablePromiseEmbeddedInStandardPromiseChain() {
+        let ex = expectation(description: "")
+        var imageView: Int?
+        let promise = firstly {  /// <-- ERROR: Ambiguous reference to member 'firstly(execute:)'
+            /* The 'cancellize' method initiates a cancellable promise chain by
+             returning a 'CancellablePromise'. */
+            login().cancellize() /// CHANGE TO: "login().cancellize()"
+        }.then { creds in
+            self.fetch(avatar: creds)
+        }.done { image in
+            imageView = image
+            XCTAssert(imageView == 3)
+            XCTFail()
+        }.catch(policy: .allErrors) { error in
+            if error.isCancelled {
+                // the chain has been cancelled!
+                ex.fulfill()
+            } else {
+                XCTFail()
+            }
+        }
+        
+        // …
+        
+        promise.cancel()
+        
+        waitForExpectations(timeout: 1)
+    }
+    
+    func testReturnTypeForAMultiLineClosureIsNotExplicitlyStated() {
+        let ex = expectation(description: "")
+        var imageView: Int?
+        firstly {
+            login()
+        }.cancellize().then { creds -> CancellablePromise<Int> in
+            let f = self.fetch(avatar: creds)
+            return f
+        }.done { image in
+            imageView = image
+            XCTAssert(imageView == 3)
+            ex.fulfill()
+        }.catch(policy: .allErrors) { error in
+            XCTFail()
+        }
+        
+        waitForExpectations(timeout: 1)
+    }
+    
+    func testTryingToCancelAStandardPromiseChain() {
+        let ex = expectation(description: "")
+        var imageView: Int?
+        let promise = firstly {
+            login()
+        }.cancellize().then { creds in
+            self.fetch(avatar: creds)
+        }.done { image in
+            imageView = image
+            XCTAssert(imageView == 3)
+            XCTFail()
+        }.catch(policy: .allErrors) { error in
+            if error.isCancelled {
+                // the chain has been cancelled!
+                ex.fulfill()
+            } else {
+                XCTFail()
+            }
+        }
+        
+        // …
+        
+        promise.cancel()  /// <-- ERROR: Value of type 'PMKFinalizer' has no member 'cancel'
+
+        waitForExpectations(timeout: 1)
+    }
+    
     func testCancel() {
         let ex = expectation(description: "")
         let p = CancellablePromise<Int>.pending()
-        p.promise.then { (val: Int) -> CancellablePromise<String> in
-            return cancellize(Promise.value("hi"))
+        p.promise.then { (val: Int) -> Promise<String> in
+            Promise.value("hi")
         }.done { _ in
             XCTFail()
             ex.fulfill()
@@ -23,10 +106,10 @@ class CancellablePromiseTests: XCTestCase {
     func testFirstly() {
         let ex = expectation(description: "")
         firstly {
-            return cancellize(Promise.value(3))
-        }.then { (_: Int) -> CancellablePromise<String> in
+            Promise.value(3)
+        }.cancellize().then { (_: Int) -> Promise<String> in
             XCTFail()
-            return cancellize(Promise.value("hi"))
+            return Promise.value("hi")
         }.done { _ in
             XCTFail()
         }.catch(policy: .allErrors) {
@@ -39,10 +122,10 @@ class CancellablePromiseTests: XCTestCase {
     func testFirstlyWithPromise() {
         let ex = expectation(description: "")
         firstly {
-            return cancellize(Promise.value(3))
-        }.then { (_: Int) -> CancellablePromise<String> in
+            return Promise.value(3)
+        }.cancellize().then { (_: Int) -> Promise<String> in
             XCTFail()
-            return cancellize(Promise.value("hi"))
+            return Promise.value("hi")
         }.done { _ in
             XCTFail()
         }.catch(policy: .allErrors) {
@@ -55,9 +138,9 @@ class CancellablePromiseTests: XCTestCase {
     func testThenMapSuccess() {
         let ex = expectation(description: "")
         firstly {
-            cancellize(Promise.value([1,2,3]))
-        }.thenMap { (integer: Int) -> CancellablePromise<Int> in
-            return cancellize(Promise.value(integer * 2))
+            Promise.value([1,2,3])
+        }.cancellize().thenMap { (integer: Int) -> Promise<Int> in
+            return Promise.value(integer * 2)
         }.done { _ in
             ex.fulfill()
             // $0 => [2,4,6]
@@ -70,10 +153,10 @@ class CancellablePromiseTests: XCTestCase {
     func testThenMapCancel() {
         let ex = expectation(description: "")
         firstly {
-            cancellize(Promise.value([1,2,3]))
-        }.thenMap { (integer: Int) -> CancellablePromise<Int> in
+            Promise.value([1,2,3])
+        }.cancellize().thenMap { (integer: Int) -> Promise<Int> in
             XCTFail()
-            return cancellize(Promise.value(integer * 2))
+            return Promise.value(integer * 2)
         }.done { _ in
             XCTFail()
             // $0 => [2,4,6]
@@ -86,10 +169,10 @@ class CancellablePromiseTests: XCTestCase {
     func testChain() {
         let ex = expectation(description: "")
         firstly {
-            cancellize(Promise.value(1))
-        }.then { (integer: Int) -> CancellablePromise<Int> in
+            Promise.value(1)
+        }.cancellize().then { (integer: Int) -> Promise<Int> in
             XCTFail()
-            return cancellize(Promise.value(integer * 2))
+            return Promise.value(integer * 2)
         }.done { _ in
             // $0 => [2,4,6]
         }.catch(policy: .allErrors) {

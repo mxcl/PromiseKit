@@ -165,15 +165,17 @@ here because the closure is longer than one line.
 
 ### Cancellable promise embedded in the middle of a standard promise chain
 
-Error: ***Ambiguous reference to member `firstly(execute:)`***.  Fixed by adding `cancellize` to `login()`.
+Error: ***Cannot convert value of type 'Promise<>' to closure result type 'Guarantee<>'***.  Fixed by adding `cancellize` to `firstly { login() }`.
 
 ```swift
-let promise = firstly {  /// <-- ERROR: Ambiguous reference to member 'firstly(execute:)'
-    /* The 'cancellize' function initiates a cancellable promise chain by
-       returning a 'CancellablePromise'. */
-    login() /// CHANGE TO: "cancellize(login())"
-}.then { creds in
-    cancellize(fetch(avatar: creds.user))
+/// 'login()' returns 'Promise<Creds>'
+/// 'fetch(avatar:)' returns 'CancellablePromise<UIImage>'
+
+let promise = firstly {
+    login()  /// <-- ERROR: Cannot convert value of type 'Promise<Creds>' to closure result type 'Guarantee<Creds>'
+}.then { creds in   /// CHANGE TO: "}.cancellize().then { creds in"
+    fetch(avatar: creds.user)  /// <-- ERROR:  Cannot convert value of type 'CancellablePromise<UIImage>' to
+                               ///             closure result type 'Guarantee<UIImage>'
 }.done { image in
     self.imageView = image
 }.catch(policy: .allErrors) { error in
@@ -191,41 +193,19 @@ promise.cancel()
 
 The Swift compiler cannot (yet) determine the return type of a multi-line closure.  
 
-The following example gives the unhelpful error: ***Enum element `allErrors` cannot be referenced as an instance member***.  This is fixed by explicitly declaring the return type as a CancellablePromise.
+The following example gives the unhelpful error: ***'()' is not convertible to 'UIImage'***. Many other strange errors can result from not explicitly declaring the return type of a multi-line closure. These kinds of errors are fixed by explicitly declaring the return type, which in the following example is a `CancellablePromise<UIImage>``.
 
 ```swift
+/// 'login()' returns 'Promise<Creds>'
+/// 'fetch(avatar:)' returns 'CancellablePromise<UIImage>'
+
 let promise = firstly {
-    cancellize(login())
-}.then { creds in /// CHANGE TO: "}.then { creds -> CancellablePromise<UIImage> in"
+    login()
+}.cancellize().then { creds in  /// CHANGE TO: "}.cancellize().then { creds -> CancellablePromise<UIImage> in"
     let f = fetch(avatar: creds.user)
-    return cancellize(f)
+    return f
 }.done { image in
-    self.imageView = image
-}.catch(policy: .allErrors) { error in  /// <-- ERROR: Enum element 'allErrors' cannot be referenced as an instance member
-    if error.isCancelled {
-        // the chain has been cancelled!
-    }
-}
-
-// …
-
-promise.cancel()
-```
-
-### Declaring a `Promise` return type instead of `CancellablePromise`
-
-You'll get a very misleading error message if you declare a return type of `Promise` where it should be `CancellablePromise`.  This example yields the obtuse error: ***Ambiguous reference to member `firstly(execute:)`***.  This is fixed by declaring the return type as a `CancellablePromise` rather than a `Promise`.
-
-```swift
-let promise = firstly {  /// <-- ERROR: Ambiguous reference to member 'firstly(execute:)'
-    /* The 'cancellize' function initiates a cancellable promise chain by
-       returning a 'CancellablePromise'. */
-    cancellize(login())
-}.then { creds -> Promise<UIImage> in /// CHANGE TO: "}.then { creds -> CancellablePromise<UIImage> in"
-    let f = fetch(avatar: creds.user)
-    return cancellize(f)
-}.done { image in
-    self.imageView = image
+    self.imageView = image  /// <-- ERROR: '()' is not convertible to 'UIImage'
 }.catch(policy: .allErrors) { error in
     if error.isCancelled {
         // the chain has been cancelled!
@@ -239,13 +219,16 @@ promise.cancel()
 
 ### Trying to cancel a standard promise chain
 
-Error: ***Value of type `PMKFinalizer` has no member `cancel`***.  Fixed by adding `cancellize` to both `login()` and `fetch()`.
+Error: ***Value of type `PMKFinalizer` has no member `cancel`***.  Fixed by using cancellable promises instead of standard promises.
 
 ```swift
+/// 'login()' returns 'Promise<Creds>'
+/// 'fetch(avatar:)' returns 'CancellablePromise<UIImage>'
+
 let promise = firstly {
-    login() /// CHANGE TO: "cancellize(login())"
-}.then { creds in
-    fetch(avatar: creds.user) /// CHANGE TO: cancellize(fetch(avatar: creds.user))
+    login()
+}.then { creds in  /// CHANGE TO: "}.cancellize().then { creds in"
+    fetch(avatar: creds.user).promise  /// CHANGE TO: fetch(avatar: creds.user)
 }.done { image in
     self.imageView = image
 }.catch(policy: .allErrors) { error in

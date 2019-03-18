@@ -14,7 +14,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
                 return nil
             }
 
-            return cancellize(after(.milliseconds(10))).map {
+            return after(.milliseconds(10)).cancellize().map {
                 return number * number
             }
         }
@@ -39,7 +39,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
                 return nil
             }
 
-            return cancellize(after(.milliseconds(10))).map {
+            return after(.milliseconds(10)).cancellize().map {
                 XCTFail()
                 return number * number
             }
@@ -109,11 +109,11 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
                 return nil
             }
 
-            return cancellize(after(.milliseconds(10))).then { _ -> CancellablePromise<Int> in
+            return after(.milliseconds(10)).cancellize().then { _ -> Promise<Int> in
                 if number != 0 {
-                    return CancellablePromise(error: expectedError)
+                    return Promise(error: expectedError)
                 } else {
-                    return cancellize(Promise.value(100500 / number))
+                    return Promise.value(100500 / number)
                 }
             }
         }
@@ -149,11 +149,11 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
                 return nil
             }
 
-            return cancellize(after(.milliseconds(10))).then { _ -> CancellablePromise<Int> in
+            return after(.milliseconds(10)).cancellize().then { _ -> CancellablePromise<Int> in
                 if number != 0 {
                     return CancellablePromise(error: expectedError)
                 } else {
-                    return cancellize(Promise.value(100500 / number))
+                    return Promise.value(100500 / number).cancellize()
                 }
             }
         }
@@ -182,9 +182,9 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
                 return nil
             }
 
-            return cancellize(after(.milliseconds(10))).then(on: .main) { _ -> CancellablePromise<Int> in
+            return after(.milliseconds(10)).cancellize().then(on: .main) { _ -> Promise<Int> in
                 currentConcurrently -= 1
-                return cancellize(Promise.value(number * number))
+                return Promise.value(number * number)
             }
         }
 
@@ -213,9 +213,9 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
                 return nil
             }
 
-            return cancellize(after(.milliseconds(10))).then(on: .main) { _ -> CancellablePromise<Int> in
+            return after(.milliseconds(10)).cancellize().then(on: .main) { _ -> Promise<Int> in
                 currentConcurrently -= 1
-                return cancellize(Promise.value(number * number))
+                return Promise.value(number * number)
             }
         }
 

@@ -4,7 +4,7 @@ import PromiseKit
 class ZalgoTests: XCTestCase {
     func test1() {
         var resolved = false
-        cancellize(Promise.value(1)).done(on: nil) { _ in
+        Promise.value(1).cancellize().done(on: nil) { _ in
             resolved = true
         }.catch(policy: .allErrors) { _ in
             resolved = false
@@ -13,7 +13,7 @@ class ZalgoTests: XCTestCase {
     }
 
     func test2() {
-        let p1 = cancellize(Promise.value(1)).map(on: nil) { _ in
+        let p1 = Promise.value(1).cancellize().map(on: nil) { _ in
             return 2
         }
         p1.cancel()
@@ -42,7 +42,7 @@ class ZalgoTests: XCTestCase {
         let ex = (expectation(description: ""), expectation(description: ""))
 
         var p1: CancellablePromise<Void>!
-        p1 = cancellize(after(.milliseconds(100))).then(on: nil) { _ -> CancellablePromise<Void> in
+        p1 = after(.milliseconds(100)).cancellize().then(on: nil) { _ -> CancellablePromise<Void> in
             p1.cancel()
             ex.0.fulfill()
             return p1
@@ -61,7 +61,7 @@ class ZalgoTests: XCTestCase {
         let ex = expectation(description: "")
 
         var p1: CancellablePromise<Void>!
-        p1 = cancellize(after(.milliseconds(100))).then(on: nil) { _ -> CancellablePromise<Void> in
+        p1 = after(.milliseconds(100)).cancellize().then(on: nil) { _ -> CancellablePromise<Void> in
             XCTFail()
             return p1
         }
@@ -77,7 +77,7 @@ class ZalgoTests: XCTestCase {
     // return a sealed promise from its own zalgo’d then handler doesn’t hang
     func test4() {
         let ex = expectation(description: "")
-        let p1 = cancellize(Promise.value(1))
+        let p1 = Promise.value(1).cancellize()
         p1.then(on: nil) { _ -> CancellablePromise<Int> in
             ex.fulfill()
             return p1
