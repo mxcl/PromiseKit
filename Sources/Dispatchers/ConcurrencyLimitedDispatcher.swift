@@ -3,12 +3,12 @@ import Foundation
 /// A PromiseKit Dispatcher that allows no more than X simultaneous
 /// executions at once.
 
-class ConcurrencyLimitedDispatcher: Dispatcher {
+public class ConcurrencyLimitedDispatcher: Dispatcher {
     
     let queue: Dispatcher
     let serializer: DispatchQueue = DispatchQueue(label: "CLD serializer")
     
-    private let semaphore: DispatchSemaphore
+    let semaphore: DispatchSemaphore
     
     /// A `PromiseKit` `Dispatcher` that allows no more than X simultaneous
     /// executions at once.
@@ -21,6 +21,10 @@ class ConcurrencyLimitedDispatcher: Dispatcher {
     public init(limit: Int, queue: Dispatcher = DispatchQueue.global(qos: .background)) {
         self.queue = queue
         semaphore = DispatchSemaphore(value: limit)
+    }
+
+    public convenience init(limit: Int, queue: DispatchQueue) {
+        self.init(limit: limit, queue: queue as Dispatcher)
     }
 
     public func dispatch(_ body: @escaping () -> Void) {
