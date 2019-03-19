@@ -39,10 +39,14 @@ public class RateLimitedDispatcher: RateLimitedDispatcherBase {
     ///   - perInterval: The length of the reference interval, in seconds.
     ///   - queue: The DispatchQueue or Dispatcher on which to perform executions. May be serial or concurrent.
 
-    override init(maxDispatches: Int, perInterval interval: TimeInterval, queue: Dispatcher = DispatchQueue.global()) {
+    override public init(maxDispatches: Int, perInterval interval: TimeInterval, queue: Dispatcher = DispatchQueue.global()) {
         latestAccrual = DispatchTime.now()
         super.init(maxDispatches: maxDispatches, perInterval: interval, queue: queue)
         tokensInBucket = Double(maxDispatches)
+    }
+    
+    public convenience init(maxDispatches: Int, perInterval interval: TimeInterval, queue: DispatchQueue) {
+        self.init(maxDispatches: maxDispatches, perInterval: interval, queue: queue as Dispatcher)
     }
     
     override func dispatchFromQueue() {
@@ -97,7 +101,7 @@ public class RateLimitedDispatcher: RateLimitedDispatcherBase {
 
 }
 
-internal extension DispatchTime {
+extension DispatchTime {
     static func -(a: DispatchTime, b: DispatchTime) -> TimeInterval {
         let delta = a.uptimeNanoseconds - b.uptimeNanoseconds
         return TimeInterval(delta) / 1_000_000_000

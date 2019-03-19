@@ -27,7 +27,7 @@ public struct DispatchQueueDispatcher: Dispatcher {
     let qos: DispatchQoS?
     let flags: DispatchWorkItemFlags?
     
-    init(queue: DispatchQueue, group: DispatchGroup? = nil, qos: DispatchQoS? = nil, flags: DispatchWorkItemFlags? = nil) {
+    public init(queue: DispatchQueue, group: DispatchGroup? = nil, qos: DispatchQoS? = nil, flags: DispatchWorkItemFlags? = nil) {
         self.queue = queue
         self.group = group
         self.qos = qos
@@ -40,7 +40,7 @@ public struct DispatchQueueDispatcher: Dispatcher {
 }
 
 // Avoid having to hard-code any particular defaults for qos or flags
-public extension DispatchQueue {
+internal extension DispatchQueue {
     final func asyncD(group: DispatchGroup? = nil, qos: DispatchQoS? = nil, flags: DispatchWorkItemFlags? = nil, execute body: @escaping () -> Void) {
         switch (qos, flags) {
         case (nil, nil):

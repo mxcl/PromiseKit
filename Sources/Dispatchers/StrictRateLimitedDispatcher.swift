@@ -37,12 +37,16 @@ public class StrictRateLimitedDispatcher: RateLimitedDispatcherBase {
     ///   - perInterval: The length of the reference interval, in seconds.
     ///   - queue: The DispatchQueue or Dispatcher on which to perform executions. May be serial or concurrent.
     
-    override init(maxDispatches: Int, perInterval interval: TimeInterval, queue: Dispatcher = DispatchQueue.global()) {
+    override public init(maxDispatches: Int, perInterval interval: TimeInterval, queue: Dispatcher = DispatchQueue.global()) {
         startTimeHistory = Queue<DispatchTime>(maxDepth: maxDispatches)
         immediateDispatchesAvailable = maxDispatches
         super.init(maxDispatches: maxDispatches, perInterval: interval, queue: queue)
     }
     
+    public convenience init(maxDispatches: Int, perInterval interval: TimeInterval, queue: DispatchQueue) {
+        self.init(maxDispatches: maxDispatches, perInterval: interval, queue: queue as Dispatcher)
+    }
+
     override func dispatchFromQueue() {
         
         cleanupNonce += 1
