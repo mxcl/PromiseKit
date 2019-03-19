@@ -40,7 +40,9 @@ PromiseKit 7 is prerelease, if you’re using it: beware!
 PromiseKit 7 uses Swift 5’s `Result`, PromiseKit <7 use our own `Result` type.
 
 PromiseKit 7 generalizes `DispatchQueue`s to a `Dispatcher` protocol. However, `DispatchQueue`s are `Dispatcher`-conformant,
-so existing code should not need to change. Please report any issues related to this transition.  
+so existing code should not need to change. Please report any issues related to this transition.
+
+PromiseKit 7 adds support for cancelling promises and promise chains.
 
 # Quick Start
 
@@ -95,6 +97,7 @@ help me continue my work, I appreciate it 🙏🏻
 * Handbook
   * [Getting Started](Documents/GettingStarted.md)
   * [Promises: Common Patterns](Documents/CommonPatterns.md)
+  * [Cancelling Promises](Documents/Cancel.md)
   * [Frequently Asked Questions](Documents/FAQ.md)
 * Manual
   * [Installation Guide](Documents/Installation.md)

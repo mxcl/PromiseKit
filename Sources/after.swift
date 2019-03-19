@@ -1,17 +1,25 @@
 import struct Foundation.TimeInterval
 import Dispatch
 
+
+/// Extend DispatchWorkItem to be cancellable
+extension DispatchWorkItem: Cancellable { }
+
 /**
      after(seconds: 1.5).then {
          //…
      }
 
 - Returns: A guarantee that resolves after the specified duration.
+- Note: cancelling this guarantee will cancel the underlying timer task
+- SeeAlso: [Cancellation](http://promisekit.org/docs/)
 */
 public func after(seconds: TimeInterval) -> Guarantee<Void> {
     let (rg, seal) = Guarantee<Void>.pending()
     let when = DispatchTime.now() + seconds
-    q.asyncAfter(deadline: when, execute: { seal(()) })
+    let task = DispatchWorkItem { seal(()) }
+    rg.setCancellable(task)
+    q.asyncAfter(deadline: when, execute: task)
     return rg
 }
 
@@ -21,11 +29,15 @@ public func after(seconds: TimeInterval) -> Guarantee<Void> {
      }
 
  - Returns: A guarantee that resolves after the specified duration.
+ - Note: cancelling this guarantee will cancel the underlying timer task
+ - SeeAlso: [Cancellation](http://promisekit.org/docs/)
 */
 public func after(_ interval: DispatchTimeInterval) -> Guarantee<Void> {
     let (rg, seal) = Guarantee<Void>.pending()
     let when = DispatchTime.now() + interval
-    q.asyncAfter(deadline: when, execute: { seal(()) })
+    let task = DispatchWorkItem { seal(()) }
+    rg.setCancellable(task)
+    q.asyncAfter(deadline: when, execute: task)
     return rg
 }
 
