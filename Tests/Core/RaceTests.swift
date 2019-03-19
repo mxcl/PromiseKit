@@ -48,4 +48,14 @@ class RaceTests: XCTestCase {
         }
         wait(for: [ex], timeout: 10)
     }
+
+    func testReject() {
+        let ex = expectation(description: "")
+        race(Promise<Int>(error: PMKError.timedOut), after(.milliseconds(10)).map{ 2 }).done { index in
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
+        }
+        waitForExpectations(timeout: 1, handler: nil)
+    }
 }

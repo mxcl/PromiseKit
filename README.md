@@ -43,6 +43,8 @@ PromiseKit 7 generalizes `DispatchQueue`s to a `Dispatcher` protocol. However,
 `DispatchQueue`s are `Dispatcher`-conformant, so existing code should not need
 to change. Please report any issues related to this transition.
 
+PromiseKit 7 adds support for cancelling promises and promise chains.
+
 # PromiseKit 6
 
 [Release notes and migration guide][PMK6].
@@ -97,6 +99,7 @@ help me continue my work, I appreciate it 🙏🏻
 * Handbook
   * [Getting Started](Documents/GettingStarted.md)
   * [Promises: Common Patterns](Documents/CommonPatterns.md)
+  * [Cancelling Promises](Documents/Cancel.md)
   * [Frequently Asked Questions](Documents/FAQ.md)
 * Manual
   * [Installation Guide](Documents/Installation.md)

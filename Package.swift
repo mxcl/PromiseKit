@@ -18,6 +18,7 @@ pkg.swiftLanguageVersions = [
 pkg.targets = [
     .target(name: "PromiseKit", path: "Sources"),
     .testTarget(name: "Core", dependencies: ["PromiseKit"], path: "Tests/Core"),
+    .testTarget(name: "Cancel", dependencies: ["PromiseKit"], path: "Tests/Cancel"),
     .testTarget(name: "A+.swift", dependencies: ["PromiseKit"], path: "Tests/A+/Swift"),
     .testTarget(name: "A+.js", dependencies: ["PromiseKit"], path: "Tests/A+/JavaScript"),
 ]

@@ -274,6 +274,18 @@ public extension Thenable {
     }
 }
 
+public extension Thenable {
+    /**
+     Converts a Promise or Guarantee into a promise that can be cancelled.
+     - Parameter thenable: The Thenable (Promise or Guarantee) to be made cancellable.
+     - Returns: A CancellablePromise that is a cancellable variant of the given Promise or Guarantee.
+     */
+    func cancellize(cancelContext: CancelContext? = nil) -> CancellablePromise<T> {
+        return CancellablePromise(self, cancelContext: cancelContext)
+     }
+}
+
+
 public extension Thenable where T: Sequence {
     /**
      `Promise<[T]>` => `T` -> `U` => `Promise<[U]>`
