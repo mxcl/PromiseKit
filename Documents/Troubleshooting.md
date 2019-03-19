@@ -163,6 +163,84 @@ An *inline* function like this is all you need. Here, the problem is that you
 forgot to mark the last line of the closure with an explicit `return`. It's required
 here because the closure is longer than one line.
 
+### Cancellable promise embedded in the middle of a standard promise chain
+
+Error: ***Cannot convert value of type 'Promise<>' to closure result type 'Guarantee<>'***.  Fixed by adding `cancellize` to `firstly { login() }`.
+
+```swift
+/// 'login()' returns 'Promise<Creds>'
+/// 'fetch(avatar:)' returns 'CancellablePromise<UIImage>'
+
+let promise = firstly {
+    login()  /// <-- ERROR: Cannot convert value of type 'Promise<Creds>' to closure result type 'Guarantee<Creds>'
+}.then { creds in   /// CHANGE TO: "}.cancellize().then { creds in"
+    fetch(avatar: creds.user)  /// <-- ERROR:  Cannot convert value of type 'CancellablePromise<UIImage>' to
+                               ///             closure result type 'Guarantee<UIImage>'
+}.done { image in
+    self.imageView = image
+}.catch(policy: .allErrors) { error in
+    if error.isCancelled {
+        // the chain has been cancelled!
+    }
+}
+
+// …
+
+promise.cancel()
+```
+
+### The return type for a multi-line closure returning `CancellablePromise` is not explicitly stated
+
+The Swift compiler cannot (yet) determine the return type of a multi-line closure.  
+
+The following example gives the unhelpful error: ***'()' is not convertible to 'UIImage'***. Many other strange errors can result from not explicitly declaring the return type of a multi-line closure. These kinds of errors are fixed by explicitly declaring the return type, which in the following example is a `CancellablePromise<UIImage>``.
+
+```swift
+/// 'login()' returns 'Promise<Creds>'
+/// 'fetch(avatar:)' returns 'CancellablePromise<UIImage>'
+
+let promise = firstly {
+    login()
+}.cancellize().then { creds in  /// CHANGE TO: "}.cancellize().then { creds -> CancellablePromise<UIImage> in"
+    let f = fetch(avatar: creds.user)
+    return f
+}.done { image in
+    self.imageView = image  /// <-- ERROR: '()' is not convertible to 'UIImage'
+}.catch(policy: .allErrors) { error in
+    if error.isCancelled {
+        // the chain has been cancelled!
+    }
+}
+
+// …
+
+promise.cancel()
+```
+
+### Trying to cancel a standard promise chain
+
+Error: ***Value of type `PMKFinalizer` has no member `cancel`***.  Fixed by using cancellable promises instead of standard promises.
+
+```swift
+/// 'login()' returns 'Promise<Creds>'
+/// 'fetch(avatar:)' returns 'CancellablePromise<UIImage>'
+
+let promise = firstly {
+    login()
+}.then { creds in  /// CHANGE TO: "}.cancellize().then { creds in"
+    fetch(avatar: creds.user).promise  /// CHANGE TO: fetch(avatar: creds.user)
+}.done { image in
+    self.imageView = image
+}.catch(policy: .allErrors) { error in
+    if error.isCancelled {
+        // the chain has been cancelled!
+    }
+}
+
+// …
+
+promise.cancel()  /// <-- ERROR: Value of type 'PMKFinalizer' has no member 'cancel'
+```
 
 ## You copied code off the Internet that doesn’t work
 

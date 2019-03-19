@@ -23,6 +23,12 @@ public final class Guarantee<T>: Thenable {
         body(box.seal)
     }
 
+    /// Returns a pending `Guarantee` that can be resolved with the provided closure’s parameter.
+    public convenience init(cancellable: Cancellable, resolver body: (@escaping(T) -> Void) -> Void) {
+        self.init(resolver: body)
+       setCancellable(cancellable)
+    }
+    
     /// - See: `Thenable.pipe`
     public func pipe(to: @escaping(Result<T, Error>) -> Void) {
         pipe{ to(.success($0)) }
@@ -55,10 +61,13 @@ public final class Guarantee<T>: Thenable {
     }
 
     final private class Box<T>: EmptyBox<T> {
+        var cancelled = false
         deinit {
             switch inspect() {
             case .pending:
-                PromiseKit.conf.logHandler(.pendingGuaranteeDeallocated)
+                if !cancelled {
+                    PromiseKit.conf.logHandler(.pendingGuaranteeDeallocated)
+                }
             case .resolved:
                 break
             }
@@ -72,6 +81,35 @@ public final class Guarantee<T>: Thenable {
     /// Returns a tuple of a pending `Guarantee` and a function that resolves it.
     public class func pending() -> (guarantee: Guarantee<T>, resolve: (T) -> Void) {
         return { ($0, $0.box.seal) }(Guarantee<T>(.pending))
+    }
+    
+    var cancellable: Cancellable?
+    
+    public func setCancellable(_ cancellable: Cancellable) {
+        if let gb = (box as? Guarantee<T>.Box<T>) {
+            self.cancellable = CancellableWrapper(box: gb, cancellable: cancellable)
+        } else {
+            self.cancellable = cancellable
+        }
+    }
+
+    final private class CancellableWrapper: Cancellable {
+        let box: Guarantee<T>.Box<T>
+        let cancellable: Cancellable
+
+        init(box: Guarantee<T>.Box<T>, cancellable: Cancellable) {
+            self.box = box
+            self.cancellable = cancellable
+        }
+
+        func cancel() {
+            box.cancelled = true
+            cancellable.cancel()
+        }
+
+        var isCancelled: Bool {
+            return cancellable.isCancelled
+        }
     }
 }
 
