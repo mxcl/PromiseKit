@@ -86,12 +86,10 @@ class PromiseTests: XCTestCase {
         _ = CancellablePromise().map { Error.dummy }
     }
 
-#if swift(>=3.1)
     func testCanMakeVoidPromise() {
         _ = CancellablePromise()
         _ = Guarantee()
     }
-#endif
 
     enum Error: Swift.Error {
         case dummy
@@ -154,11 +152,7 @@ class PromiseTests: XCTestCase {
         var resolver: Resolver<Void>!
 
         let task = DispatchWorkItem {
-#if swift(>=4.0)
             resolver.fulfill(())
-#else
-            resolver.fulfill()
-#endif
         }
         
         q.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: task)
@@ -183,11 +177,7 @@ class PromiseTests: XCTestCase {
         var resolver: Resolver<Void>!
 
         let task = DispatchWorkItem {
-#if swift(>=4.0)
             resolver.fulfill(())
-#else
-            resolver.fulfill()
-#endif
         }
         
         q.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: task)
@@ -215,11 +205,7 @@ class PromiseTests: XCTestCase {
         var resolver: Resolver<Void>!
 
         let task = DispatchWorkItem {
-#if swift(>=4.0)
             resolver.fulfill(())
-#else
-            resolver.fulfill()
-#endif
         }
         
         q.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: task)

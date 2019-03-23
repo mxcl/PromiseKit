@@ -109,8 +109,8 @@ class DispatcherTests: XCTestCase {
             Promise.value(v + 10).cancellize()
         }.thenMap(on: .global(qos: .background), flags: .barrier) { v -> Promise<Int> in
             Promise.value(v + 10)
-        }.thenFlatMap(on: .global(qos: .background), flags: .barrier) {
-            Promise.value([$0 + 10]).cancellize()
+        }.thenFlatMap(on: .global(qos: .background), flags: .barrier) { v -> CancellablePromise<[Int]> in
+            Promise.value([v + 10]).cancellize()
         }.thenFlatMap(on: .global(qos: .background), flags: .barrier) { v -> Promise<[Int]> in
             Promise.value([v + 10])
         }.filterValues(on: .global(qos: .background), flags: .barrier) { _ in
