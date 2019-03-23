@@ -43,18 +43,10 @@ class GuaranteeTests: XCTestCase {
     }
     
     func testCancellable() {
-#if swift(>=4.0)
         var resolver: ((()) -> Void)!
-#else
-        var resolver: ((Void) -> Void)!
-#endif
 
         let task = DispatchWorkItem {
-#if swift(>=4.0)
             resolver(())
-#else
-            resolver()
-#endif
         }
         
         q.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: task)
@@ -76,18 +68,10 @@ class GuaranteeTests: XCTestCase {
     }
 
     func testSetCancellable() {
-#if swift(>=4.0)
         var resolver: ((()) -> Void)!
-#else
-        var resolver: ((Void) -> Void)!
-#endif
 
         let task = DispatchWorkItem {
-#if swift(>=4.0)
             resolver(())
-#else
-            resolver()
-#endif
         }
         
         q.asyncAfter(deadline: DispatchTime.now() + 0.5, execute: task)

@@ -127,7 +127,6 @@ public class CancellablePromise<T>: CancellableThenable, CancellableCatchMixin {
     }
 }
 
-#if swift(>=3.1)
 extension CancellablePromise where T == Void {
     /// Initializes a new cancellable promise fulfilled with `Void`
     public convenience init() {
@@ -140,4 +139,3 @@ extension CancellablePromise where T == Void {
         self.appendCancellable(cancellable, reject: nil)
     }
 }
-#endif
