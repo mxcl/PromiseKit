@@ -153,11 +153,7 @@ class CancelChain: XCTestCase {
         
             self.trace("SETUP COMPLETE")
             
-#if swift(>=4.1)
             let expectations = [ex.a, ex.b, ex.c, ex.d, ex.e, ex.cancelled].compactMap { $0 }
-#else
-            let expectations = [ex.a, ex.b, ex.c, ex.d, ex.e, ex.cancelled].flatMap { $0 }
-#endif
             wait(for: expectations, timeout: 1)
             
             XCTAssert(c.pA.cancelContext.cancelAttempted)

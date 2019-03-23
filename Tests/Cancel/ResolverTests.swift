@@ -244,7 +244,6 @@ class WrapTests: XCTestCase {
         wait(for: [ex1, ex2] ,timeout: 1)
     }
 
-#if swift(>=3.1)
     func testVoidCompletionValue() {
         let ex1 = expectation(description: "")
         let kf1 = KittenFetcher(value: nil, error: nil)
@@ -284,7 +283,6 @@ class WrapTests: XCTestCase {
 
         wait(for: [ex1, ex2], timeout: 1)
     }
-#endif
 
     func testIsFulfilled() {
         let p1 = Promise.value(()).cancellize()
