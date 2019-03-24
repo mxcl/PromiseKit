@@ -79,6 +79,7 @@ jobs:
     - name: Generate Documentation
       os: osx
       install: gem install jazzy
+      before_script: swift package generate-xcodeproj
       script: |
         set -exo pipefail
         jazzy --config .github/jazzy.yml \
