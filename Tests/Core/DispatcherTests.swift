@@ -167,7 +167,7 @@ class DispatcherTests: XCTestCase {
             XCTFail()
         }
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testRecover() {
