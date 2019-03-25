@@ -140,20 +140,16 @@ class DispatcherTests: XCTestCase {
             XCTFail()
         }
         
-       waitForExpectations(timeout: 1)
+       waitForExpectations(timeout: 5)
     }
     
     func testRecover() {
-        let ex1 = expectation(description: "DispatchQueue CatchMixin compatibility")
-        Promise.value(42).cancellize().recover(on: .global(qos: .background), flags: .barrier) { _ in
-            Promise.value(42)
+        let ex1 = expectation(description: "DispatchQueue CatchMixin recover cancellable")
+        Promise(error: Error.dummy).cancellize().recover(on: .global(qos: .background), flags: .barrier) { _ in
+            Promise.value(42).cancellize()
         }.ensure(on: .global(qos: .background), flags: .barrier) {
         }.ensureThen(on: .global(qos: .background), flags: .barrier) {
             Promise.value(42).asVoid().cancellize()
-        }.recover(on: .global(qos: .background), flags: .barrier) { _ in
-            Promise.value(42).cancellize()
-        }.recover(on: .global(qos: .background), flags: .barrier) { _ in
-            Promise.value(42)
         }.done(on: .global(qos: .background), flags: .barrier) {
             XCTAssertEqual($0, 42)
             ex1.fulfill()
@@ -161,17 +157,286 @@ class DispatcherTests: XCTestCase {
             XCTFail()
         }
 
-        let ex2 = expectation(description: "DispatchQueue CatchMixin Void recover")
-        firstly {
-            Promise.value(42).asVoid()
-        }.cancellize().recover(on: .global(qos: .background), flags: .barrier) { _ in
-        }.done {
+        let ex2 = expectation(description: "DispatchQueue CatchMixin recover standard")
+        Promise(error: Error.dummy).cancellize().recover(on: .global(qos: .background), flags: .barrier) { _ in
+            Promise.value(42)
+        }.done(on: .global(qos: .background), flags: .barrier) {
+            XCTAssertEqual($0, 42)
             ex2.fulfill()
         }.catch(on: .global(qos: .background), flags: .barrier) { _ in
             XCTFail()
         }
-        
+
+        let ex3 = expectation(description: "DispatchQueue CatchMixin recover void standard")
+        Promise(error: Error.dummy).cancellize().recover(on: .global(qos: .background), flags: .barrier) { _ in
+        }.done(on: .global(qos: .background), flags: .barrier) {
+            ex3.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier) { _ in
+            XCTFail()
+        }
+
+       waitForExpectations(timeout: 1)
+    }
+    
+    func testRecoverIsCancelled() {
+        let ex1 = expectation(description: "DispatchQueue CatchMixin recover cancellable isCancelled")
+        Promise(error: Error.cancelled).cancellize().recover(on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
+            Promise.value(42).cancellize()
+        }.ensure(on: .global(qos: .background), flags: .barrier) {
+        }.ensureThen(on: .global(qos: .background), flags: .barrier) {
+            Promise.value(42).asVoid().cancellize()
+        }.done(on: .global(qos: .background), flags: .barrier) {
+            XCTAssertEqual($0, 42)
+            ex1.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
+            XCTFail()
+        }
+
+        let ex2 = expectation(description: "DispatchQueue CatchMixin recover standard isCancelled")
+        Promise(error: Error.cancelled).cancellize().recover(on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
+            Promise.value(42)
+        }.done(on: .global(qos: .background), flags: .barrier) {
+            XCTAssertEqual($0, 42)
+            ex2.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
+            XCTFail()
+        }
+
+        let ex3 = expectation(description: "DispatchQueue CatchMixin recover void standard isCancelled")
+        Promise(error: Error.cancelled).cancellize().recover(on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
+        }.done(on: .global(qos: .background), flags: .barrier) {
+            ex3.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
+            XCTFail()
+        }
+
+       waitForExpectations(timeout: 1)
+    }
+    
+    func testCatchOnly() {
+        let ex1 = expectation(description: "DispatchQueue CatchMixin catch-only")
+        Promise(error: Error.dummy).cancellize().done(on: .global(qos: .background), flags: .barrier) {
+            XCTFail()
+        }.catch(Error.dummy, on: .global(qos: .background), flags: .barrier) {
+            ex1.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier) { _ in
+            XCTFail()
+        }
+
+        let ex2 = expectation(description: "DispatchQueue CatchMixin catch-type")
+        Promise(error: Error.dummy).cancellize().done(on: .global(qos: .background), flags: .barrier) {
+            XCTFail()
+        }.catch(Error.self, on: .global(qos: .background), flags: .barrier) { _ in
+            ex2.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier) { _ in
+            XCTFail()
+        }
+
+        let ex3 = expectation(description: "DispatchQueue CascadingFinalizer catch")
+        Promise(error: Error.dummy).cancellize().done(on: .global(qos: .background), flags: .barrier) {
+            XCTFail()
+        }.catch(Error.cancelled, on: .global(qos: .background), flags: .barrier) {
+            XCTFail()
+        }.catch(on: .global(qos: .background), flags: .barrier) { _ in
+            ex3.fulfill()
+        }
+
+        let ex4 = expectation(description: "DispatchQueue CascadingFinalizer catch-only")
+        Promise(error: Error.dummy).cancellize().done(on: .global(qos: .background), flags: .barrier) {
+            XCTFail()
+        }.catch(Error.cancelled, on: .global(qos: .background), flags: .barrier) {
+            XCTFail()
+        }.catch(Error.dummy, on: .global(qos: .background), flags: .barrier) {
+            ex4.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier) { _ in
+            XCTFail()
+        }
+
+        let ex5 = expectation(description: "DispatchQueue CascadingFinalizer catch-type")
+        Promise(error: Error.dummy).cancellize().done(on: .global(qos: .background), flags: .barrier) {
+            XCTFail()
+        }.catch(Error.cancelled, on: .global(qos: .background), flags: .barrier) {
+            XCTFail()
+        }.catch(Error.self, on: .global(qos: .background), flags: .barrier) { _ in
+            ex5.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier) { _ in
+            XCTFail()
+        }
+
         waitForExpectations(timeout: 1)
+    }
+    
+     func testCatchOnlyIsCancelled() {
+        let ex1 = expectation(description: "DispatchQueue CatchMixin catch-only isCancelled")
+        Promise(error: Error.cancelled).cancellize().done(on: .global(qos: .background), flags: .barrier) {
+            XCTFail()
+        }.catch(Error.cancelled, on: .global(qos: .background), flags: .barrier) {
+            ex1.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
+            XCTFail()
+        }
+
+        let ex2 = expectation(description: "DispatchQueue CatchMixin catch-type isCancelled")
+        Promise(error: Error.cancelled).cancellize().done(on: .global(qos: .background), flags: .barrier) {
+            XCTFail()
+        }.catch(Error.self, on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
+            ex2.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
+            XCTFail()
+        }
+
+        let ex3 = expectation(description: "DispatchQueue CascadingFinalizer catch isCancelled")
+        Promise(error: Error.cancelled).cancellize().done(on: .global(qos: .background), flags: .barrier) {
+            XCTFail()
+        }.catch(Error.cancelled, on: .global(qos: .background), flags: .barrier) {
+            ex3.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
+            XCTFail()
+        }
+
+        let ex4 = expectation(description: "DispatchQueue CascadingFinalizer catch-only isCancelled")
+        Promise(error: Error.cancelled).cancellize().done(on: .global(qos: .background), flags: .barrier) {
+            XCTFail()
+        }.catch(Error.dummy, on: .global(qos: .background), flags: .barrier) {
+            XCTFail()
+        }.catch(Error.cancelled, on: .global(qos: .background), flags: .barrier) {
+            ex4.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
+            XCTFail()
+        }
+
+        let ex5 = expectation(description: "DispatchQueue CascadingFinalizer catch-type isCancelled")
+        Promise(error: Error.cancelled).cancellize().done(on: .global(qos: .background), flags: .barrier) {
+            XCTFail()
+        }.catch(Error.dummy, on: .global(qos: .background), flags: .barrier) {
+            XCTFail()
+        }.catch(Error.self, on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
+            ex5.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
+            XCTFail()
+        }
+
+        waitForExpectations(timeout: 1)
+    }
+    
+   func testRecoverOnly() {
+        let ex1 = expectation(description: "DispatchQueue CatchMixin recover-only cancellable")
+        Promise(error: Error.dummy).cancellize().recover(Error.dummy, on: .global(qos: .background), flags: .barrier) {
+            Promise.value(42).cancellize()
+        }.done(on: .global(qos: .background), flags: .barrier) {
+            XCTAssertEqual($0, 42)
+            ex1.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier) { _ in
+            XCTFail()
+        }
+
+        let ex2 = expectation(description: "DispatchQueue CatchMixin recover-only standard")
+        Promise(error: Error.dummy).cancellize().recover(Error.dummy, on: .global(qos: .background), flags: .barrier) {
+            Promise.value(42)
+        }.done(on: .global(qos: .background), flags: .barrier) {
+            XCTAssertEqual($0, 42)
+            ex2.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier) { _ in
+            XCTFail()
+        }
+
+        let ex3 = expectation(description: "DispatchQueue CatchMixin recover-type cancellable")
+        Promise(error: Error.dummy).cancellize().recover(Error.self, on: .global(qos: .background), flags: .barrier) { _ in
+            Promise.value(42).cancellize()
+        }.done(on: .global(qos: .background), flags: .barrier) {
+            XCTAssertEqual($0, 42)
+            ex3.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier) { _ in
+            XCTFail()
+        }
+
+        let ex4 = expectation(description: "DispatchQueue CatchMixin recover-type standard")
+        Promise(error: Error.dummy).cancellize().recover(Error.self, on: .global(qos: .background), flags: .barrier) { _ in
+            Promise.value(42)
+        }.done(on: .global(qos: .background), flags: .barrier) {
+            XCTAssertEqual($0, 42)
+            ex4.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier) { _ in
+            XCTFail()
+        }
+
+        let ex5 = expectation(description: "DispatchQueue CatchMixin recover-only-void cancellable")
+        Promise(error: Error.dummy).cancellize().recover(Error.dummy, on: .global(qos: .background), flags: .barrier) {
+        }.done(on: .global(qos: .background), flags: .barrier) {
+            ex5.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier) { _ in
+            XCTFail()
+        }
+
+        let ex6 = expectation(description: "DispatchQueue CatchMixin recover-type-void standard")
+        Promise(error: Error.dummy).cancellize().recover(Error.self, on: .global(qos: .background), flags: .barrier) { _ in
+        }.done(on: .global(qos: .background), flags: .barrier) {
+            ex6.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier) { _ in
+            XCTFail()
+        }
+
+        waitForExpectations(timeout: 1)
+    }
+
+   func testRecoverOnlyIsCancelled() {
+        let ex1 = expectation(description: "DispatchQueue CatchMixin recover-only cancellable isCancelled")
+        Promise(error: Error.cancelled).cancellize().recover(Error.cancelled, on: .global(qos: .background), flags: .barrier) {
+            Promise.value(42).cancellize()
+        }.done(on: .global(qos: .background), flags: .barrier) {
+            XCTAssertEqual($0, 42)
+            ex1.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier) { _ in
+            XCTFail()
+        }
+
+        let ex2 = expectation(description: "DispatchQueue CatchMixin recover-only standard isCancelled")
+        Promise(error: Error.cancelled).cancellize().recover(Error.cancelled, on: .global(qos: .background), flags: .barrier) {
+            Promise.value(42)
+        }.done(on: .global(qos: .background), flags: .barrier) {
+            XCTAssertEqual($0, 42)
+            ex2.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier) { _ in
+            XCTFail()
+        }
+
+        let ex3 = expectation(description: "DispatchQueue CatchMixin recover-type cancellable isCancelled")
+        Promise(error: Error.cancelled).cancellize().recover(Error.self, on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
+            Promise.value(42).cancellize()
+        }.done(on: .global(qos: .background), flags: .barrier) {
+            XCTAssertEqual($0, 42)
+            ex3.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier) { _ in
+            XCTFail()
+        }
+
+        let ex4 = expectation(description: "DispatchQueue CatchMixin recover-type standard isCancelled")
+        Promise(error: Error.cancelled).cancellize().recover(Error.self, on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
+            Promise.value(42)
+        }.done(on: .global(qos: .background), flags: .barrier) {
+            XCTAssertEqual($0, 42)
+            ex4.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier) { _ in
+            XCTFail()
+        }
+
+        let ex5 = expectation(description: "DispatchQueue CatchMixin recover-only-void cancellable isCancelled")
+        Promise(error: Error.cancelled).cancellize().recover(Error.cancelled, on: .global(qos: .background), flags: .barrier) {
+        }.done(on: .global(qos: .background), flags: .barrier) {
+            ex5.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier) { _ in
+            XCTFail()
+        }
+
+        let ex6 = expectation(description: "DispatchQueue CatchMixin recover-type-void standard isCancelled")
+        Promise(error: Error.cancelled).cancellize().recover(Error.self, on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
+        }.done(on: .global(qos: .background), flags: .barrier) {
+            ex6.fulfill()
+        }.catch(on: .global(qos: .background), flags: .barrier) { _ in
+            XCTFail()
+        }
+
+        waitForExpectations(timeout: 20)
     }
 
     @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
@@ -202,4 +467,13 @@ class DispatcherTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
+}
+
+private enum Error: CancellableError {
+    case dummy
+    case cancelled
+    
+    var isCancelled: Bool {
+        return self == Error.cancelled
+    }
 }
