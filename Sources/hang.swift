@@ -14,9 +14,13 @@ import CoreFoundation
 */
 public func hang<T>(_ promise: Promise<T>) throws -> T {
 #if os(Linux) || os(Android)
+#if swift(>=5)
+    let runLoopMode: CFRunLoopMode = kCFRunLoopDefaultMode
+#else
     // isMainThread is not yet implemented on Linux.
     let runLoopModeRaw = RunLoopMode.defaultRunLoopMode.rawValue._bridgeToObjectiveC()
     let runLoopMode: CFString = unsafeBitCast(runLoopModeRaw, to: CFString.self)
+#endif
 #else
     guard Thread.isMainThread else {
         // hang doesn't make sense on threads that aren't the main thread.
