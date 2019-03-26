@@ -49,7 +49,7 @@ jobs:
       cache: cocoapods
       language: objective-c
       before_install: mv .github/PromiseKit.podspec .
-      install: gem install cocoapods --pre -v 1.7.0.beta.1
+      install: gem install cocoapods --pre -v 1.7.0.beta.2
       script: pod lib lint --subspec=PromiseKit/CorePromise --fail-fast --swift-version=$SWIFT
     - <<: *pod
       osx_image: xcode9.2
@@ -184,7 +184,7 @@ jobs:
       name: SwiftPM / macOS / Xcode 10.1 / Swift 4.2
 
     - stage: deploy
-      install: gem install cocoapods --pre 1.7.0-beta.1
+      install: gem install cocoapods --pre -v 1.7.0.beta.2
       before_script: mv .github/PromiseKit.podspec .
       script: |
         set -exo pipefail
@@ -209,6 +209,7 @@ jobs:
         jazzy --config .github/jazzy.yml \
               --github_url "https://github.com/$TRAVIS_REPO_SLUG" \
               --module-version "$TRAVIS_TAG"
+        git fetch origin
         git checkout gh-pages
         rm -rf reference/v6
         mv foo reference/v6
