@@ -127,3 +127,4 @@ VoidPending
 PromiseURLSessionresumewait
 unusedResult
 discardableResultcatchreturncauterize
+PMKFinalizercancelthenMapthenFlatMapthendonePromise

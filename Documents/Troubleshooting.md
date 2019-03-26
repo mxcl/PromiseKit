@@ -242,6 +242,53 @@ let promise = firstly {
 promise.cancel()  /// <-- ERROR: Value of type 'PMKFinalizer' has no member 'cancel'
 ```
 
+### Compilation for long chains is very slow or times out, especially with cancellable promises
+
+If a cancellable promise chain has more than a few (> 3) calls to `thenMap` and
+`thenFlatMap` or has an extensive number of calls in the chain (> 6), you
+may need to specify the return types for all closures in the chain.  Standard
+(non-cancellable) promise chains typically only see this problem if they are
+extremely long (> 15 calls).
+
+And if compilation with promises is generally sluggish, the time may be greatly
+improved by specifying return types for all closures.
+
+For example:
+
+```swift
+/// Compilation timeout error:
+Promise.value([42, 52]).cancellize().then {
+    Promise.value($0)
+}.then {
+    Promise.value($0)
+}.thenMap {
+    Promise.value($0 + 10).cancellize()
+}.thenMap {
+    Promise.value($0 + 10)
+}.thenFlatMap {
+    Promise.value([$0 + 10]).cancellize()
+}.thenFlatMap { /// <-- Error: The compiler is unable to type-check this expression
+                ///            in reasonable time; try breaking up the expression
+                ///            into distinct sub-expressions
+    Promise.value([$0 + 10])
+}
+
+/// Compiles very quickly:
+Promise.value([42, 52]).cancellize().then { v -> Promise<[Int]> in
+    Promise.value(v)
+}.then { v -> Promise<[Int]> in
+    Promise.value(v)
+}.thenMap { v -> CancellablePromise<Int> in
+    Promise.value(v + 10).cancellize()
+}.thenMap { v -> Promise<Int> in
+    Promise.value(v + 10)
+}.thenFlatMap { v -> CancellablePromise<[Int]> in
+    Promise.value([v + 10]).cancellize()
+}.thenFlatMap { v -> Promise<[Int]> in
+    Promise.value([v + 10])
+}
+```
+
 ## You copied code off the Internet that doesn’t work
 
 Swift has changed a lot over the years and so PromiseKit has had to change to keep
