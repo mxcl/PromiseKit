@@ -40,7 +40,7 @@ jobs:
       xcode_destination: 'OS=12.2,name=Apple TV'
 
     - name: Linux
-      env: SWIFT_VERSION='5.0-DEVELOPMENT-SNAPSHOT-2019-01-22-a'
+      env: SWIFT_VERSION='5.0'
       os: linux
       language: generic
       install: eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
