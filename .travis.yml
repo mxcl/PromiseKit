@@ -49,7 +49,7 @@ jobs:
       cache: cocoapods
       language: objective-c
       before_install: mv .github/PromiseKit.podspec .
-      install: gem install cocoapods --pre -v 1.7.0.beta.1
+      install: gem install cocoapods --pre -v 1.7.0.beta.2
       script: pod lib lint --subspec=PromiseKit/CorePromise --fail-fast --swift-version=$SWIFT
     - <<: *pod
       osx_image: xcode9.2
@@ -184,8 +184,10 @@ jobs:
       name: SwiftPM / macOS / Xcode 10.1 / Swift 4.2
 
     - stage: deploy
-      install: gem install cocoapods --pre 1.7.0-beta.1
-      before_script: mv .github/PromiseKit.podspec .
+      install: gem install cocoapods --pre -v 1.7.0.beta.2
+      before_script: |
+        mv .github/PromiseKit.podspec .
+        sed -i '' "s/s.version = '0.0.1'/s.version = '$TRAVIS_TAG'/g" PromiseKit.podspec
       script: |
         set -exo pipefail
         pod trunk push --verbose --allow-warnings | tee pod.log | ruby -e 'ARGF.each{ print "." }'
@@ -194,7 +196,7 @@ jobs:
       # BUT `--verbose` generates so much output that Travis kills our script due to *too much* output!
       # --allow-warnings because Bolts generates warnings and CocoaPods fails you even if your deps emit warnings
       os: osx
-      osx_image: xcode10.2
+      osx_image: xcode10.1
       language: swift
       after_failure: cat pod.log | grep error
 
@@ -209,9 +211,11 @@ jobs:
         jazzy --config .github/jazzy.yml \
               --github_url "https://github.com/$TRAVIS_REPO_SLUG" \
               --module-version "$TRAVIS_TAG"
+        git remote update
+        git fetch origin gh-pages:gh-pages --depth 1
         git checkout gh-pages
         rm -rf reference/v6
-        mv foo reference/v6
+        mv output reference/v6
         git add reference/v6
         git config user.name  "Travis"
         git config user.email "jazzy@travis-ci.com"
