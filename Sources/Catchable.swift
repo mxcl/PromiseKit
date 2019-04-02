@@ -515,8 +515,7 @@ public extension CatchMixin where T == Void {
             case .failure(let error as E) where error == only:
                 on.dispatch {
                     do {
-                        try body()
-                        rp.box.seal(.success(()))
+                        rp.box.seal(.success(try body()))
                     } catch {
                         rp.box.seal(.failure(error))
                     }
