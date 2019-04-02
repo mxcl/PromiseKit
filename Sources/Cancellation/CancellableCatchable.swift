@@ -302,12 +302,12 @@ public extension CancellableCatchMixin {
      - Note: Since this method recovers only specific errors, supplying a `CatchPolicy` is unsupported.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
-    func recover<V: CancellableThenable, E: Swift.Error>(_ only: E, on: Dispatcher = conf.D.map, _ body: @escaping() -> V) -> CancellablePromise<C.T> where V.U.T == C.T, E: Equatable {
+    func recover<V: CancellableThenable, E: Swift.Error>(_ only: E, on: Dispatcher = conf.D.map, _ body: @escaping() throws -> V) -> CancellablePromise<C.T> where V.U.T == C.T, E: Equatable {
         let cancelItemList = CancelItemList()
 
-        let cancelBody = { () -> V.U in
+        let cancelBody = { () throws -> V.U in
             _ = self.cancelContext.removeItems(self.cancelItemList, clearList: true)
-            let rval = body()
+            let rval = try body()
             if only.isCancelled {
                 self.cancelContext.recover()
             }
@@ -340,10 +340,10 @@ public extension CancellableCatchMixin {
      - Note: Since this method recovers only specific errors, supplying a `CatchPolicy` is unsupported. You can instead specify e.g. your cancellable error.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
-    func recover<V: Thenable, E: Swift.Error>(_ only: E, on: Dispatcher = conf.D.map, _ body: @escaping() -> V) -> CancellablePromise<C.T> where V.T == C.T, E: Equatable {
-        let cancelBody = { () -> V in
+    func recover<V: Thenable, E: Swift.Error>(_ only: E, on: Dispatcher = conf.D.map, _ body: @escaping() throws -> V) -> CancellablePromise<C.T> where V.T == C.T, E: Equatable {
+        let cancelBody = { () throws -> V in
             _ = self.cancelContext.removeItems(self.cancelItemList, clearList: true)
-            let rval = body()
+            let rval = try body()
             if only.isCancelled {
                 self.cancelContext.recover()
             }
@@ -581,10 +581,12 @@ public extension CancellableCatchMixin where C.T == Void {
      - Note: Since this method recovers only specific errors, supplying a `CatchPolicy` is unsupported. You can instead specify e.g. your cancellable error.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
-    func recover<E: Swift.Error>(_ only: E, on: Dispatcher = conf.D.map, _ body: @escaping() -> Void) -> CancellablePromise<Void> where E: Equatable {
-        let cancelBody = { () -> Void in
+    func recover<E: Swift.Error>(_ only: E, on: Dispatcher = conf.D.map, _ body: @escaping() throws -> Void)
+        -> CancellablePromise<Void> where E: Equatable
+    {
+        let cancelBody = { () throws -> Void in
             _ = self.cancelContext.removeItems(self.cancelItemList, clearList: true)
-            body()
+            try body()
         }
         
         let promise = self.catchable.recover(only, on: on, cancelBody)

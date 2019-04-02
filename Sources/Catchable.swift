@@ -262,7 +262,7 @@ public extension CatchMixin {
      - Note: Since this method recovers only specific errors, supplying a `CatchPolicy` is unsupported.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func recover<U: Thenable, E: Swift.Error>(_ only: E, on: Dispatcher = conf.D.map, _ body: @escaping() -> U) -> Promise<T> where U.T == T, E: Equatable {
+    func recover<U: Thenable, E: Swift.Error>(_ only: E, on: Dispatcher = conf.D.map, _ body: @escaping() throws -> U) -> Promise<T> where U.T == T, E: Equatable {
         let rp = Promise<U.T>(.pending)
         pipe {
             switch $0 {
@@ -271,7 +271,7 @@ public extension CatchMixin {
             case .failure(let error as E) where error == only:
                 on.dispatch {
                     do {
-                        let rv = body()
+                        let rv = try body()
                         guard rv !== rp else { throw PMKError.returnedSelf }
                         rv.pipe(to: rp.box.seal)
                     } catch {
@@ -506,7 +506,7 @@ public extension CatchMixin where T == Void {
      - Note: Since this method recovers only specific errors, supplying a `CatchPolicy` is unsupported.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func recover<E: Swift.Error>(_ only: E, on: Dispatcher = conf.D.map, _ body: @escaping() -> Void) -> Promise<Void> where E: Equatable {
+    func recover<E: Swift.Error>(_ only: E, on: Dispatcher = conf.D.map, _ body: @escaping() throws -> Void) -> Promise<Void> where E: Equatable {
         let rp = Promise<Void>(.pending)
         pipe {
             switch $0 {
@@ -514,8 +514,12 @@ public extension CatchMixin where T == Void {
                 rp.box.seal(.success(()))
             case .failure(let error as E) where error == only:
                 on.dispatch {
-                    body()
-                    rp.box.seal(.success(()))
+                    do {
+                        try body()
+                        rp.box.seal(.success(()))
+                    } catch {
+                        rp.box.seal(.failure(error))
+                    }
                 }
             case .failure(let error):
                 rp.box.seal(.failure(error))
