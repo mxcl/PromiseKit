@@ -186,6 +186,17 @@ public class PMKCascadingFinalizer {
             body($0)
         }
     }
+    
+    /**
+     Consumes the Swift unused-result warning.
+     - Note: You should `catch`, but in situations where you know you don’t need a `catch`, `cauterize` makes your intentions clear.
+     */
+    @discardableResult
+    public func cauterize() -> PMKFinalizer {
+        return self.catch {
+            conf.logHandler(.cauterized($0))
+        }
+    }
 }
 
 public extension CatchMixin {

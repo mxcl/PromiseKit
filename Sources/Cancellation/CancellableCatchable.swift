@@ -186,6 +186,17 @@ public class CancellableCascadingFinalizer: CancelContextFinalizer {
     public func `catch`<E: Swift.Error>(_ only: E.Type, on: Dispatcher = conf.D.return, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) -> Void) -> CancellableCascadingFinalizer {
         return CancellableCascadingFinalizer(pmkCascadingFinalizer.catch(only, on: on, policy: policy, body), cancel: cancelContext)
     }
+    
+    /**
+     Consumes the Swift unused-result warning.
+     - Note: You should `catch`, but in situations where you know you don’t need a `catch`, `cauterize` makes your intentions clear.
+     */
+    @discardableResult
+    public func cauterize() -> CancellableFinalizer {
+        return self.catch(policy: .allErrors) {
+            conf.logHandler(.cauterized($0))
+        }
+    }
 }
 
 public extension CancellableCatchMixin {
@@ -526,7 +537,7 @@ public extension CancellableCatchMixin {
     @discardableResult
     func cauterize() -> CancellableFinalizer {
         return self.catch(policy: .allErrors) {
-            Swift.print("PromiseKit:cauterized-error:", $0)
+            conf.logHandler(.cauterized($0))
         }
     }
 }
