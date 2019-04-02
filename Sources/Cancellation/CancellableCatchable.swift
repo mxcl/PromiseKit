@@ -192,7 +192,7 @@ public extension CancellableCatchMixin {
     /**
      The provided closure executes when this cancellable promise rejects.
      
-     Unlike `catch`, `recover` continues the chain.
+     Unlike `catch`, `recover` continues the chain. It can return a replacement promise or rethrow.
      Use `recover` in circumstances where recovering the chain from certain errors is a possibility. For example:
 
          let context = firstly {
@@ -233,7 +233,7 @@ public extension CancellableCatchMixin {
     /**
      The provided closure executes when this cancellable promise rejects.
      
-     Unlike `catch`, `recover` continues the chain.
+     Unlike `catch`, `recover` continues the chain. It can return a replacement promise or rethrow.
      Use `recover` in circumstances where recovering the chain from certain errors is a possibility. For example:
 
          let context = firstly {
@@ -248,6 +248,7 @@ public extension CancellableCatchMixin {
          context.cancel()
      
      - Parameter on: The dispatcher that executes the provided closure.
+     - Parameter policy: The default policy does not execute your handler for cancellation errors.
      - Parameter body: The handler to execute if this promise is rejected.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
@@ -275,7 +276,7 @@ public extension CancellableCatchMixin {
     /**
      The provided closure executes when this cancellable promise rejects with the specific error passed in.
 
-     Unlike `catch`, `recover` continues the chain.
+     Unlike `catch`, `recover` continues the chain. It can return a replacement promise or rethrow.
      Use `recover` in circumstances where recovering the chain from certain errors is a possibility. For example:
 
          firstly {
@@ -284,10 +285,10 @@ public extension CancellableCatchMixin {
              return .value(CLLocation.chicago)
          }
 
-     - Parameter only: The specific error to be recovered.
-     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter only: The specific error to be recovered (e.g., `PMKError.emptySequence`)
+     - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The handler to execute if this promise is rejected with the provided error.
-     - Note: Since this method recovers only specific errors, supplying a `CatchPolicy` is unsupported. You can instead specify e.g. your cancellable error.
+     - Note: Since this method recovers only specific errors, supplying a `CatchPolicy` is unsupported.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
     func recover<V: CancellableThenable, E: Swift.Error>(_ only: E, on: Dispatcher = conf.D.map, _ body: @escaping() -> V) -> CancellablePromise<C.T> where V.U.T == C.T, E: Equatable {
@@ -313,7 +314,7 @@ public extension CancellableCatchMixin {
     /**
      The provided closure executes when this cancellable promise rejects with the specific error passed in.
 
-     Unlike `catch`, `recover` continues the chain.
+     Unlike `catch`, `recover` continues the chain. It can return a replacement promise or rethrow.
      Use `recover` in circumstances where recovering the chain from certain errors is a possibility. For example:
 
          firstly {
@@ -349,7 +350,7 @@ public extension CancellableCatchMixin {
     /**
      The provided closure executes when this cancellable promise rejects with an error of the type passed in.
 
-     Unlike `catch`, `recover` continues the chain.
+     Unlike `catch`, `recover` continues the chain. It can return a replacement promise or rethrow.
      Use `recover` in circumstances where recovering the chain from certain errors is a possibility. For example:
 
          firstly {
@@ -361,7 +362,8 @@ public extension CancellableCatchMixin {
          }
 
      - Parameter only: The error type to be recovered.
-     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter on: The dispatcher that executes the provided closure.
+     - Parameter policy: The default policy does not execute your handler for cancellation errors.
      - Parameter body: The handler to execute if this promise is rejected with the provided error type.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
@@ -388,7 +390,7 @@ public extension CancellableCatchMixin {
     /**
      The provided closure executes when this cancellable promise rejects with an error of the type passed in.
 
-     Unlike `catch`, `recover` continues the chain.
+     Unlike `catch`, `recover` continues the chain. It can return a replacement promise or rethrow.
      Use `recover` in circumstances where recovering the chain from certain errors is a possibility. For example:
 
          firstly {
@@ -559,7 +561,7 @@ public extension CancellableCatchMixin where C.T == Void {
     /**
      The provided closure executes when this cancellable promise rejects with the specific error passed in.
 
-     Unlike `catch`, `recover` continues the chain.
+     Unlike `catch`, `recover` continues the chain. It can return a replacement promise or rethrow.
      Use `recover` in circumstances where recovering the chain from certain errors is a possibility.
 
      - Parameter only: The specific error to be recovered.
@@ -584,7 +586,7 @@ public extension CancellableCatchMixin where C.T == Void {
     /**
      The provided closure executes when this cancellable promise rejects with an error of the type passed in.
 
-     Unlike `catch`, `recover` continues the chain.
+     Unlike `catch`, `recover` continues the chain. It can return a replacement promise or rethrow.
      Use `recover` in circumstances where recovering the chain from certain errors is a possibility.
 
      - Parameter only: The error type to be recovered.
