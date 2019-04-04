@@ -185,7 +185,7 @@ if after that you still have a question, ask at our [Gitter chat channel] or on 
 
 
 [badge-pod]: https://img.shields.io/cocoapods/v/PromiseKit.svg?label=version
-[badge-pms]: https://img.shields.io/badge/supports-CocoaPods%20%7C%20Carthage%20%7C%20SwiftPM-green.svg
+[badge-pms]: https://img.shields.io/badge/supports-CocoaPods%20%7C%20Carthage%20%7C%20Accio%20%7C%20SwiftPM-green.svg
 [badge-languages]: https://img.shields.io/badge/languages-Swift%20%7C%20ObjC-orange.svg
 [badge-platforms]: https://img.shields.io/badge/platforms-macOS%20%7C%20iOS%20%7C%20watchOS%20%7C%20tvOS%20%7C%20Linux-lightgrey.svg
 [badge-mit]: https://img.shields.io/badge/license-MIT-blue.svg
