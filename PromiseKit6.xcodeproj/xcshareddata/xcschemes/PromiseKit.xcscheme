@@ -17,7 +17,7 @@
                BlueprintIdentifier = "63B0AC561D595E1B00FA21D9"
                BuildableName = "PromiseKit6.framework"
                BlueprintName = "PromiseKit6"
-               ReferencedContainer = "container:PromiseKit.xcodeproj">
+               ReferencedContainer = "container:PromiseKit6.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -35,7 +35,7 @@
             BlueprintIdentifier = "63B0AC561D595E1B00FA21D9"
             BuildableName = "PromiseKit6.framework"
             BlueprintName = "PromiseKit6"
-            ReferencedContainer = "container:PromiseKit.xcodeproj">
+            ReferencedContainer = "container:PromiseKit6.xcodeproj">
          </BuildableReference>
       </CodeCoverageTargets>
       <Testables>
@@ -46,7 +46,7 @@
                BlueprintIdentifier = "630019011D596292003B4E30"
                BuildableName = "PMKCoreTests.xctest"
                BlueprintName = "PMKCoreTests"
-               ReferencedContainer = "container:PromiseKit.xcodeproj">
+               ReferencedContainer = "container:PromiseKit6.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -56,7 +56,7 @@
                BlueprintIdentifier = "6317518B1D59766500A9DDDC"
                BuildableName = "PMKA+Tests.xctest"
                BlueprintName = "PMKA+Tests"
-               ReferencedContainer = "container:PromiseKit.xcodeproj">
+               ReferencedContainer = "container:PromiseKit6.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -66,7 +66,7 @@
                BlueprintIdentifier = "631411321D59795700E24B9E"
                BuildableName = "PMKBridgeTests.xctest"
                BlueprintName = "PMKBridgeTests"
-               ReferencedContainer = "container:PromiseKit.xcodeproj">
+               ReferencedContainer = "container:PromiseKit6.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -76,7 +76,7 @@
                BlueprintIdentifier = "633027E0203CC0060037E136"
                BuildableName = "PMKDeprecatedTests.xctest"
                BlueprintName = "PMKDeprecatedTests"
-               ReferencedContainer = "container:PromiseKit.xcodeproj">
+               ReferencedContainer = "container:PromiseKit6.xcodeproj">
             </BuildableReference>
          </TestableReference>
          <TestableReference
@@ -86,7 +86,7 @@
                BlueprintIdentifier = "C0244E4E2047A6CB00ACB4AC"
                BuildableName = "PMKJSA+Tests.xctest"
                BlueprintName = "PMKJSA+Tests"
-               ReferencedContainer = "container:PromiseKit.xcodeproj">
+               ReferencedContainer = "container:PromiseKit6.xcodeproj">
             </BuildableReference>
          </TestableReference>
       </Testables>
@@ -96,7 +96,7 @@
             BlueprintIdentifier = "63B0AC561D595E1B00FA21D9"
             BuildableName = "PromiseKit6.framework"
             BlueprintName = "PromiseKit6"
-            ReferencedContainer = "container:PromiseKit.xcodeproj">
+            ReferencedContainer = "container:PromiseKit6.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -118,7 +118,7 @@
             BlueprintIdentifier = "63B0AC561D595E1B00FA21D9"
             BuildableName = "PromiseKit6.framework"
             BlueprintName = "PromiseKit6"
-            ReferencedContainer = "container:PromiseKit.xcodeproj">
+            ReferencedContainer = "container:PromiseKit6.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
       <AdditionalOptions>
@@ -136,7 +136,7 @@
             BlueprintIdentifier = "63B0AC561D595E1B00FA21D9"
             BuildableName = "PromiseKit6.framework"
             BlueprintName = "PromiseKit6"
-            ReferencedContainer = "container:PromiseKit.xcodeproj">
+            ReferencedContainer = "container:PromiseKit6.xcodeproj">
          </BuildableReference>
       </MacroExpansion>
    </ProfileAction>

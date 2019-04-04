@@ -1,4 +1,4 @@
-module: PromiseKit
+module: PromiseKit6
 custom_categories:
   - name: Core Components
     children:
@@ -12,7 +12,5 @@ xcodebuild_arguments:
 output:
   ../output
   # output directory is relative to config file… ugh
-readme:
-  Documentation/README.md
-theme:
-  fullwidth
+readme: Documentation/README.md
+theme: fullwidth
