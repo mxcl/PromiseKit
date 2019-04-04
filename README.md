@@ -56,9 +56,9 @@ PromiseKit 6, 5 and 4 support Xcode 8.3, 9.x and 10.0; Swift 3.1,
 watchOS, Linux and Android; CocoaPods, Carthage and SwiftPM;
 ([CI Matrix](https://travis-ci.org/mxcl/PromiseKit)).
 
-For Carthage, SwiftPM, etc., or for instructions when using older Swifts or
+For Carthage, SwiftPM, Accio, etc., or for instructions when using older Swifts or
 Xcodes, see our [Installation Guide]. We 
-recommend [Carthage](https://github.com/Carthage/Carthage).
+recommend [Carthage](https://github.com/Carthage/Carthage) or [Accio](https://github.com/JamitLabs/Accio).
 
 # Professionally Supported PromiseKit is Now Available
 
@@ -185,7 +185,7 @@ if after that you still have a question, ask at our [Gitter chat channel] or on 
 
 
 [badge-pod]: https://img.shields.io/cocoapods/v/PromiseKit.svg?label=version
-[badge-pms]: https://img.shields.io/badge/supports-CocoaPods%20%7C%20Carthage%20%7C%20SwiftPM-green.svg
+[badge-pms]: https://img.shields.io/badge/supports-CocoaPods%20%7C%20Carthage%20%7C%20Accio%20%7C%20SwiftPM-green.svg
 [badge-languages]: https://img.shields.io/badge/languages-Swift%20%7C%20ObjC-orange.svg
 [badge-platforms]: https://img.shields.io/badge/platforms-macOS%20%7C%20iOS%20%7C%20watchOS%20%7C%20tvOS%20%7C%20Linux-lightgrey.svg
 [badge-mit]: https://img.shields.io/badge/license-MIT-blue.svg
