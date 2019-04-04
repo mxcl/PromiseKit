@@ -43,6 +43,27 @@ and if you like you could edit the PromiseKit `project.pbxproj` file during
 `carthage bootstrap` to make this possible. This change was involuntary and due
 to Xcode 10.2 dropping support for Swift 3.
 
+## Accio
+
+Add the following to your Package.swift:
+
+```swift
+.package(url: "https://github.com/mxcl/PromiseKit.git", .upToNextMajor(from: "6.8.4")),
+```
+
+Next, add `PromiseKit` to your App targets dependencies like so:
+
+```swift
+.target(
+    name: "App",
+    dependencies: [
+        "PromiseKit",
+    ]
+),
+```
+
+Then run `accio update`.
+
 ## SwiftPM
 
 ```swift
