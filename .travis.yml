@@ -117,7 +117,7 @@ jobs:
       env: SWIFT_BUILD_VERSION=4.2 SWIFT_VERSION=4.2.4
       name: Linux / Swift 4.2.4
     - <<: *linux
-      env: SWIFT_BUILD_VERSION=4.3 SWIFT_VERSION=5.0
+      env: SWIFT_BUILD_VERSION=4.2 SWIFT_VERSION=5.0
       name: Linux / Swift 4.3
     - <<: *linux
       env: SWIFT_BUILD_VERSION=5 SWIFT_VERSION=5.0
