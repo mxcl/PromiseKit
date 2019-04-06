@@ -19,7 +19,7 @@ import Foundation
 ///
 /// 100% thread safe.
 
-public class StrictRateLimitedDispatcher: RateLimitedDispatcherBase {
+public final class StrictRateLimitedDispatcher: RateLimitedDispatcherBase {
     
     internal var startTimeHistory: Queue<DispatchTime>
     private var immediateDispatchesAvailable: Int
