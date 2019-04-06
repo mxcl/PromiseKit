@@ -57,13 +57,13 @@ end
 > The above gives an Xcode warning? See our [Installation Guide].
 
 PromiseKit 6, 5 and 4 support Xcode 8.3, 9.x and 10.0; Swift 3.1,
-3.2, 3.3, 3.4, 4.0, 4.1, 4.2 and 5.0 (development snapshots); iOS, macOS, tvOS,
-watchOS, Linux and Android; CocoaPods, Carthage and SwiftPM;
+3.2, 3.3, 3.4, 4.0, 4.1, 4.2, 4.3 and 5.0 (development snapshots); iOS, macOS,
+tvOS, watchOS, Linux and Android; CocoaPods, Carthage and SwiftPM;
 ([CI Matrix](https://travis-ci.org/mxcl/PromiseKit)).
 
-For Carthage, SwiftPM, Accio, etc., or for instructions when using older Swifts or
-Xcodes, see our [Installation Guide]. We 
-recommend [Carthage](https://github.com/Carthage/Carthage) or [Accio](https://github.com/JamitLabs/Accio).
+For Carthage, SwiftPM, Accio, etc., or for instructions when using older Swifts or Xcodes, see our [Installation Guide]. We recommend
+[Carthage](https://github.com/Carthage/Carthage) or
+[Accio](https://github.com/JamitLabs/Accio).
 
 # Professionally Supported PromiseKit is Now Available
 
@@ -177,11 +177,11 @@ Nowadays, considering that:
 * We almost always POST JSON
 * We now have `JSONDecoder`
 * PromiseKit now has `map` and other functional primitives
-* PromiseKit (like Alamofire, but not raw-`URLSession`) also defaults to having callbacks go to the main thread
+* PromiseKit (like Alamofire, but not raw-`URLSession`) also defaults to having
+    callbacks go to the main thread
 
-We recommend vanilla `URLSession`. It uses fewer black boxes and sticks closer to the
-metal. Alamofire was essential until the three bullet points above became true,
-but nowadays it isn’t really necessary.
+We recommend vanilla `URLSession`. It uses fewer black boxes and sticks closer to the metal. Alamofire was essential until the three bullet points above
+became true, but nowadays it isn’t really necessary.
 
 # Support
 
