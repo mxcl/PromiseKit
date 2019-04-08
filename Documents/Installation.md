@@ -45,7 +45,7 @@ to Xcode 10.2 dropping support for Swift 3.
 
 ## Accio
 
-Add the following to your Package.swift:
+Add the following to your `Package.swift`:
 
 ```swift
 .package(url: "https://github.com/mxcl/PromiseKit.git", .upToNextMajor(from: "6.8.4")),
