@@ -56,11 +56,11 @@ class DispatchWrapperTests: XCTestCase {
         Promise.value(42).cancellize().then { _ -> Promise<Int> in
             throw TestError.errorOne
         // Specific error
-        }.recover(TestError.errorOne, on: .global()) { () -> Promise<Int> in
+        }.recover(only: TestError.errorOne, on: .global()) { _ -> Promise<Int> in
             value += 1
             throw TestError.errorTwo
         // Error type
-        }.recover(TestError.self, on: .global()) { error -> Promise<Int> in
+        }.recover(only: TestError.self, on: .global()) { error -> Promise<Int> in
             XCTAssert(error == .errorTwo)
             value += 10
             throw TestError.errorThree
@@ -74,11 +74,11 @@ class DispatchWrapperTests: XCTestCase {
             value += 100
             throw TestError.errorFour
         // Specific error, cancellable
-        }.recover(TestError.errorFour, on: .global()) { () -> CancellablePromise<Int> in
+        }.recover(only: TestError.errorFour, on: .global()) { _ -> CancellablePromise<Int> in
             value += 1_000
             throw TestError.errorTwo
         // Error type, cancellable
-        }.recover(TestError.self, on: .global()) { error -> CancellablePromise<Int> in
+        }.recover(only: TestError.self, on: .global()) { error -> CancellablePromise<Int> in
             XCTAssert(error == .errorTwo)
             value += 10_000
             throw TestError.errorThree
@@ -94,16 +94,16 @@ class DispatchWrapperTests: XCTestCase {
         }.map(on: .global()) { _ -> Void in
             // NOP
         // Non-matching specific error
-        }.recover(TestError.errorThree, on: .global()) {
+        }.recover(only: TestError.errorThree, on: .global()) { _ in
             XCTFail()
         // Specific error, void return
-        }.recover(TestError.errorFour, on: .global()) { () -> Void in
+        }.recover(only: TestError.errorFour, on: .global()) { _ -> Void in
             value += 1_000_000
             throw OtherError.errorOne
         // Non-matching error class, void return
-        }.recover(TestError.self, on: .global()) { error -> Void in
+        }.recover(only: TestError.self, on: .global()) { error -> Void in
             XCTFail()
-        }.recover(OtherError.self, on: .global()) { error in
+        }.recover(only: OtherError.self, on: .global()) { error in
             value += 10_000_000
             throw TestError.errorFive
         }.ensure(on: .global()) {
@@ -133,11 +133,11 @@ class DispatchWrapperTests: XCTestCase {
         let ex = expectation(description: "DispatchQueue Promise catch API")
         Promise.value(42).cancellize().then(on: .global()) { _ -> Promise<Int> in
             throw TestError.errorOne
-        }.catch(OtherError.self, on: .global()) { error in
+        }.catch(only: OtherError.self, on: .global()) { error in
             XCTFail()
-        }.catch(TestError.errorTwo, on: .global()) {
+        }.catch(only: TestError.errorTwo, on: .global()) { _ in
             XCTFail()
-        }.catch(TestError.self, on: .global()) { error in
+        }.catch(only: TestError.self, on: .global()) { error in
             XCTAssert(error == .errorOne)
             ex.fulfill()
         }.cauterize()

@@ -257,7 +257,7 @@ extension CatchableTests {
     }
 }
 
-/// `Promise<T>.catch(_ only:)`
+/// `Promise<T>.catch(only:)`
 extension CatchableTests {
     func testCatchOnly() {
         let x = expectation(description: #file + #function)
@@ -427,7 +427,7 @@ extension CatchableTests {
     }
 }
 
-/// `Promise<T>.recover(_ only:)`
+/// `Promise<T>.recover(only:)`
 extension CatchableTests {
     func testRecoverOnly_Object() {
         let x = expectation(description: #file + #function)
@@ -618,7 +618,7 @@ extension CatchableTests {
     }
 }
 
-/// `Promise<Void>.recover(_ only:)`
+/// `Promise<Void>.recover(only:)`
 extension CatchableTests {
     func testRecoverOnly_Object_Void() {
         let x = expectation(description: #file + #function)

@@ -27,8 +27,8 @@ public protocol _PMKSharedWrappers {
     func tap(on: Dispatcher, _ body: @escaping(Result<T, Error>) -> Void) -> BaseOfT
 
     func recover<U: Thenable>(on: Dispatcher, policy: CatchPolicy, _ body: @escaping(Error) throws -> U) -> BaseOfT where U.T == T
-    func recover<U: Thenable, E: Swift.Error>(_ only: E, on: Dispatcher, _ body: @escaping() throws -> U) -> BaseOfT where U.T == T, E: Equatable
-    func recover<U: Thenable, E: Swift.Error>(_ only: E.Type, on: Dispatcher, policy: CatchPolicy, _ body: @escaping(E) throws -> U) -> BaseOfT where U.T == T
+    func recover<U: Thenable, E: Swift.Error>(only: E, on: Dispatcher, _ body: @escaping(E) throws -> U) -> BaseOfT where U.T == T, E: Equatable
+    func recover<U: Thenable, E: Swift.Error>(only: E.Type, on: Dispatcher, policy: CatchPolicy, _ body: @escaping(E) throws -> U) -> BaseOfT where U.T == T
 
     func ensure(on: Dispatcher, _ body: @escaping () -> Void) -> BaseOfT
     func ensureThen(on: Dispatcher, _ body: @escaping () -> VoidReturn) -> BaseOfT
@@ -49,8 +49,8 @@ public protocol _PMKSharedVoidWrappers {
     associatedtype BaseOfT
     
     func recover(on: Dispatcher, policy: CatchPolicy, _ body: @escaping(Error) throws -> Void) -> BaseOfT
-    func recover<E: Swift.Error>(_ only: E, on: Dispatcher, _ body: @escaping() throws -> Void) -> BaseOfT where E: Equatable
-    func recover<E: Swift.Error>(_ only: E.Type, on: Dispatcher, policy: CatchPolicy, _ body: @escaping(E) throws -> Void) -> BaseOfT
+    func recover<E: Swift.Error>(only: E, on: Dispatcher, _ body: @escaping(E) throws -> Void) -> BaseOfT where E: Equatable
+    func recover<E: Swift.Error>(only: E.Type, on: Dispatcher, policy: CatchPolicy, _ body: @escaping(E) throws -> Void) -> BaseOfT
 }
 
 extension Promise: _PMKSharedVoidWrappers where T == Void {}
@@ -62,8 +62,8 @@ public protocol _PMKCatchWrappers {
     associatedtype CascadingFinalizer
     
     func `catch`(on: Dispatcher, policy: CatchPolicy, _ body: @escaping(Error) -> Void) -> Finalizer
-    func `catch`<E: Swift.Error>(_ only: E, on: Dispatcher, _ body: @escaping() -> Void) -> CascadingFinalizer where E: Equatable
-    func `catch`<E: Swift.Error>(_ only: E.Type, on: Dispatcher, policy: CatchPolicy, _ body: @escaping(E) -> Void) -> CascadingFinalizer
+    func `catch`<E: Swift.Error>(only: E, on: Dispatcher, _ body: @escaping(E) -> Void) -> CascadingFinalizer where E: Equatable
+    func `catch`<E: Swift.Error>(only: E.Type, on: Dispatcher, policy: CatchPolicy, _ body: @escaping(E) -> Void) -> CascadingFinalizer
 }
 
 extension Promise: _PMKCatchWrappers {}
