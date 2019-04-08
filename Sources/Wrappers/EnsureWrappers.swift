@@ -21,7 +21,7 @@ public extension _PMKSharedWrappers {
      - Returns: A new promise, resolved with this promise’s resolution.
      */
     func ensure(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping () -> Void) -> BaseOfT {
-        let dispatcher = selectDispatcher(given: on, configured: conf.D.map, flags: flags)
+        let dispatcher = selectDispatcher(given: on, configured: conf.D.return, flags: flags)
         return ensure(on: dispatcher, body)
     }
 
@@ -45,7 +45,7 @@ public extension _PMKSharedWrappers {
      - Returns: A new promise, resolved with this promise’s resolution.
      */
     func ensureThen(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping () -> VoidReturn) -> BaseOfT {
-        let dispatcher = selectDispatcher(given: on, configured: conf.D.map, flags: flags)
+        let dispatcher = selectDispatcher(given: on, configured: conf.D.return, flags: flags)
         return ensureThen(on: dispatcher, body)
     }
 }
