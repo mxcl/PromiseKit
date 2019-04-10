@@ -60,7 +60,7 @@ jobs:
       env: SWIFT=3.1
       cache: cocoapods
       before_install: mv .github/PromiseKit.podspec .
-      install: gem install cocoapods --pre -v 1.7.0.beta.3
+      install: gem install cocoapods -v '~> 1.7.0'
       script: pod lib lint --subspec=PromiseKit/CorePromise --fail-fast --swift-version=$SWIFT
     - <<: *pod
       osx_image: xcode9.2
@@ -166,7 +166,7 @@ jobs:
 
     - name: '`pod trunk push`'
       stage: deploy
-      install: gem install cocoapods --pre -v 1.7.0.beta.3
+      install: gem install cocoapods -v '~> 1.7.0'
       before_script: |
         mv .github/PromiseKit.podspec .
         sed -i '' "s/s.version = '0.0.1'/s.version = '$TRAVIS_TAG'/g" PromiseKit.podspec
