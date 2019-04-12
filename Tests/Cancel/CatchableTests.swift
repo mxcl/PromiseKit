@@ -385,12 +385,12 @@ extension CatchableTests {
     }
 }
 
-/// `Promise<T>.catch(_ only:)`
+/// `Promise<T>.catch(only:)`
 extension CatchableTests {
     func testCatchOnly() {
         let x = expectation(description: #file + #function)
 
-        Promise<Int>(error: Error.dummy).cancellize().catch(Error.dummy) {
+        Promise<Int>(error: Error.dummy).cancellize().catch(only: Error.dummy) { _ in
             x.fulfill()
         }.catch(policy: .allErrors) {
             $0.isCancelled ? x.fulfill() : XCTFail()
@@ -402,9 +402,9 @@ extension CatchableTests {
     func testCatchOnly_PatternMatch_1() {
         let x = expectation(description: "Pattern match only Error.dummy")
 
-        Promise<Int>(error: Error.dummy).cancellize().catch(Error.dummy) {
+        Promise<Int>(error: Error.dummy).cancellize().catch(only: Error.dummy) { _ in
             x.fulfill()
-        }.catch(Error.cancelled) {
+        }.catch(only: Error.cancelled) { _ in
             XCTFail()
             x.fulfill()
         }.catch(policy: .allErrors) {
@@ -417,10 +417,10 @@ extension CatchableTests {
     func testCatchOnly_PatternMatch_2() {
         let x = expectation(description: "Pattern match only Error.dummy")
 
-        Promise<Int>(error: Error.dummy).cancellize().catch(Error.cancelled) {
+        Promise<Int>(error: Error.dummy).cancellize().catch(only: Error.cancelled) { _ in
             XCTFail()
             x.fulfill()
-        }.catch(Error.dummy) {
+        }.catch(only: Error.dummy) { _ in
             x.fulfill()
         }.catch(policy: .allErrors) {
             $0.isCancelled ? x.fulfill() : XCTFail()
@@ -432,7 +432,7 @@ extension CatchableTests {
     func testCatchOnly_BaseCatchIsNotCalledAfterCatchOnlyExecutes() {
         let x = expectation(description: #file + #function)
 
-        Promise<Int>(error: Error.dummy).cancellize().catch(Error.dummy) {
+        Promise<Int>(error: Error.dummy).cancellize().catch(only: Error.dummy) { _ in
             x.fulfill()
         }.catch { _ in
             XCTFail()
@@ -445,7 +445,7 @@ extension CatchableTests {
     func testCatchOnly_BaseCatchIsCalledWhenCatchOnlyDoesNotExecute() {
         let x = expectation(description: #file + #function)
 
-        Promise<Int>(error: Error.dummy).cancellize().catch(Error.cancelled) {
+        Promise<Int>(error: Error.dummy).cancellize().catch(only: Error.cancelled) { _ in
             XCTFail()
             x.fulfill()
         }.catch { _ in
@@ -458,7 +458,7 @@ extension CatchableTests {
     func testCatchOnly_Type() {
         let x = expectation(description: #file + #function)
 
-        Promise<Int>(error: Error.dummy).cancellize().catch(Error.self) { _ in
+        Promise<Int>(error: Error.dummy).cancellize().catch(only: Error.self) { _ in
             x.fulfill()
         }.catch(policy: .allErrors) {
             $0.isCancelled ? x.fulfill() : XCTFail()
@@ -472,7 +472,7 @@ extension CatchableTests {
 
         enum Foo: Swift.Error {}
 
-        Promise<Int>(error: Error.dummy).cancellize().catch(Foo.self) { _ in
+        Promise<Int>(error: Error.dummy).cancellize().catch(only: Foo.self) { _ in
             XCTFail()
             x.fulfill()
         }.catch { _ in
@@ -485,9 +485,9 @@ extension CatchableTests {
     func testCatchOnly_Type_PatternMatch_1() {
         let x = expectation(description: "Pattern match only Error.Type")
 
-        Promise<Int>(error: Error.dummy).cancellize().catch(Error.self) { _ in
+        Promise<Int>(error: Error.dummy).cancellize().catch(only: Error.self) { _ in
             x.fulfill()
-        }.catch(Error.dummy) {
+        }.catch(only: Error.dummy) { _ in
             XCTFail()
             x.fulfill()
         }.catch(policy: .allErrors) {
@@ -500,9 +500,9 @@ extension CatchableTests {
     func testCatchOnly_Type_PatternMatch_2() {
         let x = expectation(description: "Pattern match only Error.dummy")
 
-        Promise<Int>(error: Error.dummy).cancellize().catch(Error.dummy) {
+        Promise<Int>(error: Error.dummy).cancellize().catch(only: Error.dummy) { _ in
             x.fulfill()
-        }.catch(Error.self) { _ in
+        }.catch(only: Error.self) { _ in
             XCTFail()
             x.fulfill()
         }.catch(policy: .allErrors) {
@@ -515,7 +515,7 @@ extension CatchableTests {
     func testCatchOnly_Type_BaseCatchIsNotCalledAfterCatchOnlyExecutes() {
         let x = expectation(description: #file + #function)
 
-        Promise<Int>(error: Error.dummy).cancellize().catch(Error.self) { _ in
+        Promise<Int>(error: Error.dummy).cancellize().catch(only: Error.self) { _ in
             x.fulfill()
         }.catch { _ in
             XCTFail()
@@ -528,7 +528,7 @@ extension CatchableTests {
     func testCatchOnly_Type_Cancellation_Ignore() {
         let x = expectation(description: #file + #function)
 
-        Promise<Int>(error: Error.cancelled).cancellize().catch(Error.self) { _ in
+        Promise<Int>(error: Error.cancelled).cancellize().catch(only: Error.self) { _ in
             XCTFail()
             x.fulfill()
         }.catch(policy: .allErrors) { _ in
@@ -541,7 +541,7 @@ extension CatchableTests {
     func testCatchOnly_Type_Cancellation_Handle() {
         let x = expectation(description: #file + #function)
 
-        Promise<Int>(error: Error.cancelled).cancellize().catch(Error.self, policy: .allErrors) { _ in
+        Promise<Int>(error: Error.cancelled).cancellize().catch(only: Error.self, policy: .allErrors) { _ in
             x.fulfill()
         }.catch { _ in
             XCTFail()
@@ -556,10 +556,10 @@ extension CatchableTests {
 
         enum Foo: Swift.Error { case bar }
 
-        Promise<Int>(error: Foo.bar).cancellize().catch(Error.dummy) {
+        Promise<Int>(error: Foo.bar).cancellize().catch(only: Error.dummy) { _ in
             XCTFail()
             x.fulfill()
-        }.catch(Foo.self) { _ in
+        }.catch(only: Foo.self) { _ in
             x.fulfill()
         }.catch(policy: .allErrors) {
             $0.isCancelled ? x.fulfill() : XCTFail()
@@ -569,12 +569,12 @@ extension CatchableTests {
     }
 }
 
-/// `Promise<T>.recover(_ only:)`
+/// `Promise<T>.recover(only:)`
 extension CatchableTests {
     func testRecoverOnly_Object() {
         let x = expectation(description: #file + #function)
 
-        Promise<Int>(error: Error.dummy).cancellize().recover(Error.dummy) {
+        Promise<Int>(error: Error.dummy).cancellize().recover(only: Error.dummy) { _ in
             return Promise.value(1)
         }.done { _ in
             x.fulfill()
@@ -589,7 +589,7 @@ extension CatchableTests {
     func testRecoverOnly_Object_Ignored() {
         let x = expectation(description: #file + #function)
 
-        Promise.value(1).cancellize().recover(Error.dummy) {
+        Promise.value(1).cancellize().recover(only: Error.dummy) { _ in
             return Promise(error: Error.dummy)
         }.done { _ in
             x.fulfill()
@@ -603,7 +603,7 @@ extension CatchableTests {
     func testRecoverOnly_Object_PatternMatch() {
         let x = expectation(description: #file + #function)
 
-        Promise<Int>(error: Error.cancelled).cancellize().recover(Error.dummy) {
+        Promise<Int>(error: Error.cancelled).cancellize().recover(only: Error.dummy) { _ in
             return Promise.value(1)
         }.done { _ in
             XCTFail()
@@ -618,7 +618,7 @@ extension CatchableTests {
     func testRecoverOnly_Type() {
         let x = expectation(description: #file + #function)
 
-        Promise<Int>(error: Error.dummy).cancellize().recover(Error.self) { _ in
+        Promise<Int>(error: Error.dummy).cancellize().recover(only: Error.self) { _ in
             return Promise.value(1)
         }.done { _ in
             x.fulfill()
@@ -632,7 +632,7 @@ extension CatchableTests {
     func testRecoverOnly_Type_Ignored() {
         let x = expectation(description: #file + #function)
 
-        Promise.value(1).cancellize().recover(Error.self) { _ in
+        Promise.value(1).cancellize().recover(only: Error.self) { _ in
             return Promise(error: Error.dummy)
         }.done { _ in
             x.fulfill()
@@ -649,7 +649,7 @@ extension CatchableTests {
 
         enum Foo: Swift.Error {}
 
-        Promise<Int>(error: Error.dummy).cancellize().recover(Foo.self) { _ in
+        Promise<Int>(error: Error.dummy).cancellize().recover(only: Foo.self) { _ in
             return Promise.value(1)
         }.done { _ in
             XCTFail()
@@ -664,7 +664,7 @@ extension CatchableTests {
     func testRecoverOnly_Type_Cancellation_Ignore() {
         let x = expectation(description: #file + #function)
 
-        Promise<Int>(error: Error.cancelled).cancellize().recover(Error.self) { _ in
+        Promise<Int>(error: Error.cancelled).cancellize().recover(only: Error.self) { _ in
             return Promise.value(1)
         }.done { _ in
             XCTFail()
@@ -679,7 +679,7 @@ extension CatchableTests {
     func testRecoverOnly_Type_Cancellation_Handle() {
         let x = expectation(description: #file + #function)
 
-        Promise<Int>(error: Error.cancelled).cancellize().recover(Error.self, policy: .allErrors) { _ in
+        Promise<Int>(error: Error.cancelled).cancellize().recover(only: Error.self, policy: .allErrors) { _ in
             return Promise.value(1)
         }.done { _ in
             x.fulfill()
@@ -696,9 +696,9 @@ extension CatchableTests {
 
         enum Foo: Swift.Error { case bar }
 
-        Promise<Int>(error: Error.dummy).cancellize().recover(Foo.self) { _ in
+        Promise<Int>(error: Error.dummy).cancellize().recover(only: Foo.self) { _ in
             return Promise(error: Foo.bar)
-        }.recover(Error.dummy) {
+        }.recover(only: Error.dummy) { _ in
             return Promise.value(1)
         }.done { _ in
             x.fulfill()
@@ -713,7 +713,7 @@ extension CatchableTests {
     func testRecoverOnly_BaseRecoverIsNotCalledAfterRecoverOnlyExecutes() {
         let x = expectation(description: #file + #function)
 
-        Promise<Int>(error: Error.dummy).cancellize().recover(Error.dummy) {
+        Promise<Int>(error: Error.dummy).cancellize().recover(only: Error.dummy) { _ in
             return Promise.value(1)
         }.recover { _ in
             return Promise(error: Error.dummy)
@@ -730,7 +730,7 @@ extension CatchableTests {
     func testRecoverOnly_Object_DoesNotReturnSelf() {
         let x = expectation(description: #file + #function)
         var promise: CancellablePromise<Void>!
-        promise = Promise<Void>(error: Error.dummy).cancellize().recover(Error.dummy) { () -> CancellablePromise<Void> in
+        promise = Promise<Void>(error: Error.dummy).cancellize().recover(only: Error.dummy) { _ -> CancellablePromise<Void> in
             return promise
         }
         promise.catch { err in
@@ -745,7 +745,7 @@ extension CatchableTests {
     func testRecoverOnly_Type_DoesNotReturnSelf() {
         let x = expectation(description: #file + #function)
         var promise: CancellablePromise<Void>!
-        promise = Promise<Void>(error: Error.dummy).cancellize().recover(Error.self) { _ -> CancellablePromise<Void> in
+        promise = Promise<Void>(error: Error.dummy).cancellize().recover(only: Error.self) { _ -> CancellablePromise<Void> in
             return promise
         }
         promise.catch(policy: .allErrors) { err in
@@ -757,12 +757,12 @@ extension CatchableTests {
     }
 }
 
-/// `Promise<Void>.recover(_ only:)`
+/// `Promise<Void>.recover(only:)`
 extension CatchableTests {
     func testRecoverOnly_Object_Void() {
         let x = expectation(description: #file + #function)
 
-        Promise<Void>(error: Error.dummy).cancellize().recover(Error.dummy) {
+        Promise<Void>(error: Error.dummy).cancellize().recover(only: Error.dummy) { _ in
             return ()
         }.done {
             x.fulfill()
@@ -777,7 +777,7 @@ extension CatchableTests {
     func testRecoverOnly_Object_Void_Fufilled() {
         let x = expectation(description: #file + #function)
 
-        Promise<Void>.value(()).cancellize().recover(Error.dummy) {
+        Promise<Void>.value(()).cancellize().recover(only: Error.dummy) { _ in
             XCTFail()
             x.fulfill()
         }.done {
@@ -794,7 +794,7 @@ extension CatchableTests {
 
         enum Foo: Swift.Error { case bar }
 
-        Promise<Void>(error: Error.dummy).cancellize().recover(Foo.bar) {
+        Promise<Void>(error: Error.dummy).cancellize().recover(only: Foo.bar) { _ in
             XCTFail()
             x.fulfill()
         }.done {
@@ -810,7 +810,7 @@ extension CatchableTests {
     func testRecoverOnly_Type_Void() {
         let x = expectation(description: #file + #function)
 
-        Promise<Void>(error: Error.dummy).cancellize().recover(Error.self) { _ in }.done {
+        Promise<Void>(error: Error.dummy).cancellize().recover(only: Error.self) { _ in }.done {
             x.fulfill()
         }.catch { _ in
             XCTFail()
@@ -823,7 +823,7 @@ extension CatchableTests {
     func testRecoverOnly_Type_Void_Fufilled() {
         let x = expectation(description: #file + #function)
 
-        Promise<Void>.value(()).cancellize().recover(Error.self) { _ in
+        Promise<Void>.value(()).cancellize().recover(only: Error.self) { _ in
             XCTFail()
             x.fulfill()
         }.done {
@@ -840,7 +840,7 @@ extension CatchableTests {
 
         enum Foo: Swift.Error { case bar }
 
-        Promise<Void>(error: Error.dummy).cancellize().recover(Foo.self) { _ in
+        Promise<Void>(error: Error.dummy).cancellize().recover(only: Foo.self) { _ in
             XCTFail()
             x.fulfill()
         }.done {
@@ -856,7 +856,7 @@ extension CatchableTests {
     func testRecoverOnly_Type_Void_Rethrow() {
         let x = expectation(description: #file + #function)
 
-        Promise<Void>(error: Error.dummy).cancellize().recover(Error.self) { _ in
+        Promise<Void>(error: Error.dummy).cancellize().recover(only: Error.self) { _ in
             throw Error.dummy
         }.done {
             XCTFail()
@@ -871,7 +871,7 @@ extension CatchableTests {
     func testRecoverOnly_Type_Void_Cancellation_Ignore() {
         let x = expectation(description: #file + #function)
 
-        Promise<Void>(error: Error.cancelled).cancellize().recover(Error.self) { _ in }.done {
+        Promise<Void>(error: Error.cancelled).cancellize().recover(only: Error.self) { _ in }.done {
             XCTFail()
             x.fulfill()
         }.catch(policy: .allErrors) { _ in

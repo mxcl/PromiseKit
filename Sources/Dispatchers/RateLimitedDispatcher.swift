@@ -19,7 +19,7 @@ import Foundation
 ///
 /// 100% thread safe.
 
-public class RateLimitedDispatcher: RateLimitedDispatcherBase {
+public final class RateLimitedDispatcher: RateLimitedDispatcherBase {
     
     private var tokensInBucket: Double = 0
     private var latestAccrual: DispatchTime = DispatchTime.now()

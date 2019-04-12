@@ -217,7 +217,7 @@ class DispatcherTests: XCTestCase {
         let ex1 = expectation(description: "DispatchQueue CatchMixin catch-only")
         Promise(error: Error.dummy).cancellize().done(on: .global(qos: .background), flags: .barrier) {
             XCTFail()
-        }.catch(Error.dummy, on: .global(qos: .background), flags: .barrier) {
+        }.catch(only: Error.dummy, on: .global(qos: .background), flags: .barrier) { _ in
             ex1.fulfill()
         }.catch(on: .global(qos: .background), flags: .barrier) { _ in
             XCTFail()
@@ -226,7 +226,7 @@ class DispatcherTests: XCTestCase {
         let ex2 = expectation(description: "DispatchQueue CatchMixin catch-type")
         Promise(error: Error.dummy).cancellize().done(on: .global(qos: .background), flags: .barrier) {
             XCTFail()
-        }.catch(Error.self, on: .global(qos: .background), flags: .barrier) { _ in
+        }.catch(only: Error.self, on: .global(qos: .background), flags: .barrier) { _ in
             ex2.fulfill()
         }.catch(on: .global(qos: .background), flags: .barrier) { _ in
             XCTFail()
@@ -235,7 +235,7 @@ class DispatcherTests: XCTestCase {
         let ex3 = expectation(description: "DispatchQueue CascadingFinalizer catch")
         Promise(error: Error.dummy).cancellize().done(on: .global(qos: .background), flags: .barrier) {
             XCTFail()
-        }.catch(Error.cancelled, on: .global(qos: .background), flags: .barrier) {
+        }.catch(only: Error.cancelled, on: .global(qos: .background), flags: .barrier) { _ in
             XCTFail()
         }.catch(on: .global(qos: .background), flags: .barrier) { _ in
             ex3.fulfill()
@@ -244,9 +244,9 @@ class DispatcherTests: XCTestCase {
         let ex4 = expectation(description: "DispatchQueue CascadingFinalizer catch-only")
         Promise(error: Error.dummy).cancellize().done(on: .global(qos: .background), flags: .barrier) {
             XCTFail()
-        }.catch(Error.cancelled, on: .global(qos: .background), flags: .barrier) {
+        }.catch(only: Error.cancelled, on: .global(qos: .background), flags: .barrier) { _ in
             XCTFail()
-        }.catch(Error.dummy, on: .global(qos: .background), flags: .barrier) {
+        }.catch(only: Error.dummy, on: .global(qos: .background), flags: .barrier) { _ in
             ex4.fulfill()
         }.catch(on: .global(qos: .background), flags: .barrier) { _ in
             XCTFail()
@@ -255,9 +255,9 @@ class DispatcherTests: XCTestCase {
         let ex5 = expectation(description: "DispatchQueue CascadingFinalizer catch-type")
         Promise(error: Error.dummy).cancellize().done(on: .global(qos: .background), flags: .barrier) {
             XCTFail()
-        }.catch(Error.cancelled, on: .global(qos: .background), flags: .barrier) {
+        }.catch(only: Error.cancelled, on: .global(qos: .background), flags: .barrier) { _ in
             XCTFail()
-        }.catch(Error.self, on: .global(qos: .background), flags: .barrier) { _ in
+        }.catch(only: Error.self, on: .global(qos: .background), flags: .barrier) { _ in
             ex5.fulfill()
         }.catch(on: .global(qos: .background), flags: .barrier) { _ in
             XCTFail()
@@ -270,7 +270,7 @@ class DispatcherTests: XCTestCase {
         let ex1 = expectation(description: "DispatchQueue CatchMixin catch-only isCancelled")
         Promise(error: Error.cancelled).cancellize().done(on: .global(qos: .background), flags: .barrier) {
             XCTFail()
-        }.catch(Error.cancelled, on: .global(qos: .background), flags: .barrier) {
+        }.catch(only: Error.cancelled, on: .global(qos: .background), flags: .barrier) { _ in
             ex1.fulfill()
         }.catch(on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
             XCTFail()
@@ -279,7 +279,7 @@ class DispatcherTests: XCTestCase {
         let ex2 = expectation(description: "DispatchQueue CatchMixin catch-type isCancelled")
         Promise(error: Error.cancelled).cancellize().done(on: .global(qos: .background), flags: .barrier) {
             XCTFail()
-        }.catch(Error.self, on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
+        }.catch(only: Error.self, on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
             ex2.fulfill()
         }.catch(on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
             XCTFail()
@@ -288,7 +288,7 @@ class DispatcherTests: XCTestCase {
         let ex3 = expectation(description: "DispatchQueue CascadingFinalizer catch isCancelled")
         Promise(error: Error.cancelled).cancellize().done(on: .global(qos: .background), flags: .barrier) {
             XCTFail()
-        }.catch(Error.cancelled, on: .global(qos: .background), flags: .barrier) {
+        }.catch(only: Error.cancelled, on: .global(qos: .background), flags: .barrier) { _ in
             ex3.fulfill()
         }.catch(on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
             XCTFail()
@@ -297,9 +297,9 @@ class DispatcherTests: XCTestCase {
         let ex4 = expectation(description: "DispatchQueue CascadingFinalizer catch-only isCancelled")
         Promise(error: Error.cancelled).cancellize().done(on: .global(qos: .background), flags: .barrier) {
             XCTFail()
-        }.catch(Error.dummy, on: .global(qos: .background), flags: .barrier) {
+        }.catch(only: Error.dummy, on: .global(qos: .background), flags: .barrier) { _ in
             XCTFail()
-        }.catch(Error.cancelled, on: .global(qos: .background), flags: .barrier) {
+        }.catch(only: Error.cancelled, on: .global(qos: .background), flags: .barrier) { _ in
             ex4.fulfill()
         }.catch(on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
             XCTFail()
@@ -308,9 +308,9 @@ class DispatcherTests: XCTestCase {
         let ex5 = expectation(description: "DispatchQueue CascadingFinalizer catch-type isCancelled")
         Promise(error: Error.cancelled).cancellize().done(on: .global(qos: .background), flags: .barrier) {
             XCTFail()
-        }.catch(Error.dummy, on: .global(qos: .background), flags: .barrier) {
+        }.catch(only: Error.dummy, on: .global(qos: .background), flags: .barrier) { _ in
             XCTFail()
-        }.catch(Error.self, on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
+        }.catch(only: Error.self, on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
             ex5.fulfill()
         }.catch(on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
             XCTFail()
@@ -321,7 +321,7 @@ class DispatcherTests: XCTestCase {
     
    func testRecoverOnly() {
         let ex1 = expectation(description: "DispatchQueue CatchMixin recover-only cancellable")
-        Promise(error: Error.dummy).cancellize().recover(Error.dummy, on: .global(qos: .background), flags: .barrier) {
+        Promise(error: Error.dummy).cancellize().recover(only: Error.dummy, on: .global(qos: .background), flags: .barrier) { _ in
             Promise.value(42).cancellize()
         }.done(on: .global(qos: .background), flags: .barrier) {
             XCTAssertEqual($0, 42)
@@ -331,7 +331,7 @@ class DispatcherTests: XCTestCase {
         }
 
         let ex2 = expectation(description: "DispatchQueue CatchMixin recover-only standard")
-        Promise(error: Error.dummy).cancellize().recover(Error.dummy, on: .global(qos: .background), flags: .barrier) {
+        Promise(error: Error.dummy).cancellize().recover(only: Error.dummy, on: .global(qos: .background), flags: .barrier) { _ in
             Promise.value(42)
         }.done(on: .global(qos: .background), flags: .barrier) {
             XCTAssertEqual($0, 42)
@@ -341,7 +341,7 @@ class DispatcherTests: XCTestCase {
         }
 
         let ex3 = expectation(description: "DispatchQueue CatchMixin recover-type cancellable")
-        Promise(error: Error.dummy).cancellize().recover(Error.self, on: .global(qos: .background), flags: .barrier) { _ in
+        Promise(error: Error.dummy).cancellize().recover(only: Error.self, on: .global(qos: .background), flags: .barrier) { _ in
             Promise.value(42).cancellize()
         }.done(on: .global(qos: .background), flags: .barrier) {
             XCTAssertEqual($0, 42)
@@ -351,7 +351,7 @@ class DispatcherTests: XCTestCase {
         }
 
         let ex4 = expectation(description: "DispatchQueue CatchMixin recover-type standard")
-        Promise(error: Error.dummy).cancellize().recover(Error.self, on: .global(qos: .background), flags: .barrier) { _ in
+        Promise(error: Error.dummy).cancellize().recover(only: Error.self, on: .global(qos: .background), flags: .barrier) { _ in
             Promise.value(42)
         }.done(on: .global(qos: .background), flags: .barrier) {
             XCTAssertEqual($0, 42)
@@ -361,7 +361,7 @@ class DispatcherTests: XCTestCase {
         }
 
         let ex5 = expectation(description: "DispatchQueue CatchMixin recover-only-void cancellable")
-        Promise(error: Error.dummy).cancellize().recover(Error.dummy, on: .global(qos: .background), flags: .barrier) {
+        Promise(error: Error.dummy).cancellize().recover(only: Error.dummy, on: .global(qos: .background), flags: .barrier) { _ in
         }.done(on: .global(qos: .background), flags: .barrier) {
             ex5.fulfill()
         }.catch(on: .global(qos: .background), flags: .barrier) { _ in
@@ -369,7 +369,7 @@ class DispatcherTests: XCTestCase {
         }
 
         let ex6 = expectation(description: "DispatchQueue CatchMixin recover-type-void standard")
-        Promise(error: Error.dummy).cancellize().recover(Error.self, on: .global(qos: .background), flags: .barrier) { _ in
+        Promise(error: Error.dummy).cancellize().recover(only: Error.self, on: .global(qos: .background), flags: .barrier) { _ in
         }.done(on: .global(qos: .background), flags: .barrier) {
             ex6.fulfill()
         }.catch(on: .global(qos: .background), flags: .barrier) { _ in
@@ -381,7 +381,7 @@ class DispatcherTests: XCTestCase {
 
    func testRecoverOnlyIsCancelled() {
         let ex1 = expectation(description: "DispatchQueue CatchMixin recover-only cancellable isCancelled")
-        Promise(error: Error.cancelled).cancellize().recover(Error.cancelled, on: .global(qos: .background), flags: .barrier) {
+        Promise(error: Error.cancelled).cancellize().recover(only: Error.cancelled, on: .global(qos: .background), flags: .barrier) { _ in
             Promise.value(42).cancellize()
         }.done(on: .global(qos: .background), flags: .barrier) {
             XCTAssertEqual($0, 42)
@@ -391,7 +391,7 @@ class DispatcherTests: XCTestCase {
         }
 
         let ex2 = expectation(description: "DispatchQueue CatchMixin recover-only standard isCancelled")
-        Promise(error: Error.cancelled).cancellize().recover(Error.cancelled, on: .global(qos: .background), flags: .barrier) {
+        Promise(error: Error.cancelled).cancellize().recover(only: Error.cancelled, on: .global(qos: .background), flags: .barrier) { _ in
             Promise.value(42)
         }.done(on: .global(qos: .background), flags: .barrier) {
             XCTAssertEqual($0, 42)
@@ -401,7 +401,7 @@ class DispatcherTests: XCTestCase {
         }
 
         let ex3 = expectation(description: "DispatchQueue CatchMixin recover-type cancellable isCancelled")
-        Promise(error: Error.cancelled).cancellize().recover(Error.self, on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
+        Promise(error: Error.cancelled).cancellize().recover(only: Error.self, on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
             Promise.value(42).cancellize()
         }.done(on: .global(qos: .background), flags: .barrier) {
             XCTAssertEqual($0, 42)
@@ -411,7 +411,7 @@ class DispatcherTests: XCTestCase {
         }
 
         let ex4 = expectation(description: "DispatchQueue CatchMixin recover-type standard isCancelled")
-        Promise(error: Error.cancelled).cancellize().recover(Error.self, on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
+        Promise(error: Error.cancelled).cancellize().recover(only: Error.self, on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
             Promise.value(42)
         }.done(on: .global(qos: .background), flags: .barrier) {
             XCTAssertEqual($0, 42)
@@ -421,7 +421,7 @@ class DispatcherTests: XCTestCase {
         }
 
         let ex5 = expectation(description: "DispatchQueue CatchMixin recover-only-void cancellable isCancelled")
-        Promise(error: Error.cancelled).cancellize().recover(Error.cancelled, on: .global(qos: .background), flags: .barrier) {
+        Promise(error: Error.cancelled).cancellize().recover(only: Error.cancelled, on: .global(qos: .background), flags: .barrier) { _ in
         }.done(on: .global(qos: .background), flags: .barrier) {
             ex5.fulfill()
         }.catch(on: .global(qos: .background), flags: .barrier) { _ in
@@ -429,7 +429,7 @@ class DispatcherTests: XCTestCase {
         }
 
         let ex6 = expectation(description: "DispatchQueue CatchMixin recover-type-void standard isCancelled")
-        Promise(error: Error.cancelled).cancellize().recover(Error.self, on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
+        Promise(error: Error.cancelled).cancellize().recover(only: Error.self, on: .global(qos: .background), flags: .barrier, policy: .allErrors) { _ in
         }.done(on: .global(qos: .background), flags: .barrier) {
             ex6.fulfill()
         }.catch(on: .global(qos: .background), flags: .barrier) { _ in

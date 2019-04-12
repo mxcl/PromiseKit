@@ -16,7 +16,7 @@ public extension CatchMixin {
      
      - Parameter on: The dispatcher that executes the provided closure.
      - Parameter policy: The default policy does not execute your handler for cancellation errors.
-     - Parameter execute: The handler to execute if this promise is rejected.
+     - Parameter body: The handler to execute if this promise is rejected.
      - Returns: A promise finalizer.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documents/CommonPatterns.md#cancellation)
      */
@@ -48,19 +48,20 @@ public extension CatchMixin {
      of a chain. Often utility promises will not have a catch, instead
      delegating the error handling to the caller.
 
-     - Parameter only: The specific error to be caught and handled.
-     - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter execute: The handler to execute if this promise is rejected with the provided error.
-     - Note: Since this method handles only specific errors, supplying a `CatchPolicy` is unsupported. You can instead specify e.g. your cancellable error.
+     - Parameter only: The specific error to be caught and handled (e.g., `PMKError.emptySequence`).
+     - Parameter on: The dispatcher that executes the provided closure.
+     - Parameter body: The handler to execute if this promise is rejected with the provided error.
+     - Returns: A promise finalizer that accepts additional `catch` clauses.
+     - Note: Since this method handles only specific errors, supplying a `CatchPolicy` is unsupported.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func `catch`<E: Swift.Error>(_ only: E, on: Dispatcher = conf.D.return, _ body: @escaping() -> Void) -> PMKCascadingFinalizer where E: Equatable {
+    func `catch`<E: Swift.Error>(only: E, on: Dispatcher = conf.D.return, _ body: @escaping(E) -> Void) -> PMKCascadingFinalizer where E: Equatable {
         let finalizer = PMKCascadingFinalizer()
         pipe {
             switch $0 {
             case .failure(let error as E) where error == only:
                 on.dispatch {
-                    body()
+                    body(error)
                     finalizer.pending.resolver.fulfill(())
                 }
             case .failure(let error):
@@ -80,12 +81,15 @@ public extension CatchMixin {
      of a chain. Often utility promises will not have a catch, instead
      delegating the error handling to the caller.
 
-     - Parameter only: The error type to be caught and handled.
-     - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter execute: The handler to execute if this promise is rejected with the provided error type.
+     - Parameter only: The error type to be caught and handled (e.g., `PMKError`).
+     - Parameter on: The dispatcher that executes the provided closure.
+     - Parameter policy: A `CatchPolicy` that further constrains the errors this handler will see. E.g., if
+         you are receiving `PMKError` errors, do you want to see even those that result from cancellation?
+     - Parameter body: The handler to execute if this promise is rejected with the provided error type.
+     - Returns: A promise finalizer that accepts additional `catch` clauses.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func `catch`<E: Swift.Error>(_ only: E.Type, on: Dispatcher = conf.D.return, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) -> Void) -> PMKCascadingFinalizer {
+    func `catch`<E: Swift.Error>(only: E.Type, on: Dispatcher = conf.D.return, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) -> Void) -> PMKCascadingFinalizer {
         let finalizer = PMKCascadingFinalizer()
         pipe {
             switch $0 {
@@ -129,9 +133,9 @@ public class PMKCascadingFinalizer {
      of a chain. Often utility promises will not have a catch, instead
      delegating the error handling to the caller.
 
-     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter on: The dispatcher that executes the provided closure.
      - Parameter policy: The default policy does not execute your handler for cancellation errors.
-     - Parameter execute: The handler to execute if this promise is rejected.
+     - Parameter body: The handler to execute if this promise is rejected.
      - Returns: A promise finalizer.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
@@ -150,15 +154,16 @@ public class PMKCascadingFinalizer {
      of a chain. Often utility promises will not have a catch, instead
      delegating the error handling to the caller.
 
-     - Parameter only: The specific error to be caught and handled.
-     - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter execute: The handler to execute if this promise is rejected with the provided error.
-     - Note: Since this method handles only specific errors, supplying a `CatchPolicy` is unsupported. You can instead specify e.g. your cancellable error.
+     - Parameter only: The specific error to be caught and handled (e.g., `PMKError.emptySequence`).
+     - Parameter on: The dispatcher that executes the provided closure.
+     - Parameter body: The handler to execute if this promise is rejected with the provided error.
+     - Returns: A promise finalizer that accepts additional `catch` clauses.
+     - Note: Since this method handles only specific errors, supplying a `CatchPolicy` is unsupported.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    public func `catch`<E: Swift.Error>(_ only: E, on: Dispatcher = conf.D.return, _ body: @escaping() -> Void) -> PMKCascadingFinalizer where E: Equatable {
-        return pending.promise.catch(only, on: on) {
-            body()
+    public func `catch`<E: Swift.Error>(only: E, on: Dispatcher = conf.D.return, _ body: @escaping(E) -> Void) -> PMKCascadingFinalizer where E: Equatable {
+        return pending.promise.catch(only: only, on: on) {
+            body($0)
         }
     }
 
@@ -170,14 +175,26 @@ public class PMKCascadingFinalizer {
      of a chain. Often utility promises will not have a catch, instead
      delegating the error handling to the caller.
 
-     - Parameter only: The error type to be caught and handled.
-     - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter execute: The handler to execute if this promise is rejected with the provided error type.
+     - Parameter only: The error type to be caught and handled (e.g., `PMKError`).
+     - Parameter on: The dispatcher that executes the provided closure.
+     - Parameter body: The handler to execute if this promise is rejected with the provided error type.
+     - Returns: A promise finalizer that accepts additional `catch` clauses.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    public func `catch`<E: Swift.Error>(_ only: E.Type, on: Dispatcher = conf.D.return, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) -> Void) -> PMKCascadingFinalizer {
-        return pending.promise.catch(only, on: on, policy: policy) {
+    public func `catch`<E: Swift.Error>(only: E.Type, on: Dispatcher = conf.D.return, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) -> Void) -> PMKCascadingFinalizer {
+        return pending.promise.catch(only: only, on: on, policy: policy) {
             body($0)
+        }
+    }
+    
+    /**
+     Consumes the Swift unused-result warning.
+     - Note: You should `catch`, but in situations where you know you don’t need a `catch`, `cauterize` makes your intentions clear.
+     */
+    @discardableResult
+    public func cauterize() -> PMKFinalizer {
+        return self.catch {
+            conf.logHandler(.cauterized($0))
         }
     }
 }
@@ -187,7 +204,7 @@ public extension CatchMixin {
     /**
      The provided closure executes when this promise rejects.
      
-     Unlike `catch`, `recover` continues the chain.
+     Unlike `catch`, `recover` continues the chain. It can return a replacement promise or rethrow.
      Use `recover` in circumstances where recovering the chain from certain errors is a possibility. For example:
 
          firstly {
@@ -198,6 +215,7 @@ public extension CatchMixin {
          }
      
      - Parameter on: The dispatcher that executes the provided closure.
+     - Parameter policy: The default policy does not execute your handler for cancellation errors.
      - Parameter body: The handler to execute if this promise is rejected.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documents/CommonPatterns.md#cancellation)
      */
@@ -229,7 +247,7 @@ public extension CatchMixin {
     /**
      The provided closure executes when this promise rejects with the specific error passed in.
 
-     Unlike `catch`, `recover` continues the chain.
+     Unlike `catch`, `recover` continues the chain. It can return a replacement promise or rethrow.
      Use `recover` in circumstances where recovering the chain from certain errors is a possibility. For example:
 
          firstly {
@@ -238,13 +256,13 @@ public extension CatchMixin {
              return .value(CLLocation.chicago)
          }
 
-     - Parameter only: The specific error to be recovered.
-     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter only: The specific error to be recovered (e.g., `PMKError.emptySequence`)
+     - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The handler to execute if this promise is rejected with the provided error.
-     - Note: Since this method recovers only specific errors, supplying a `CatchPolicy` is unsupported. You can instead specify e.g. your cancellable error.
+     - Note: Since this method recovers only specific errors, supplying a `CatchPolicy` is unsupported.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func recover<U: Thenable, E: Swift.Error>(_ only: E, on: Dispatcher = conf.D.map, _ body: @escaping() -> U) -> Promise<T> where U.T == T, E: Equatable {
+    func recover<U: Thenable, E: Swift.Error>(only: E, on: Dispatcher = conf.D.map, _ body: @escaping(E) throws -> U) -> Promise<T> where U.T == T, E: Equatable {
         let rp = Promise<U.T>(.pending)
         pipe {
             switch $0 {
@@ -253,7 +271,7 @@ public extension CatchMixin {
             case .failure(let error as E) where error == only:
                 on.dispatch {
                     do {
-                        let rv = body()
+                        let rv = try body(error)
                         guard rv !== rp else { throw PMKError.returnedSelf }
                         rv.pipe(to: rp.box.seal)
                     } catch {
@@ -270,7 +288,7 @@ public extension CatchMixin {
     /**
      The provided closure executes when this promise rejects with an error of the type passed in.
 
-     Unlike `catch`, `recover` continues the chain.
+     Unlike `catch`, `recover` continues the chain. It can return a replacement promise or rethrow.
      Use `recover` in circumstances where recovering the chain from certain errors is a possibility. For example:
 
          firstly {
@@ -281,12 +299,13 @@ public extension CatchMixin {
              return .value(dataWithDefaultImage)
          }
 
-     - Parameter only: The error type to be recovered.
-     - Parameter on: The queue to which the provided closure dispatches.
+     - Parameter only: The error type to be recovered (e.g., `PMKError`).
+     - Parameter on: The dispatcher that executes the provided closure.
+     - Parameter policy: The default policy does not execute your handler for cancellation errors.
      - Parameter body: The handler to execute if this promise is rejected with the provided error type.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func recover<U: Thenable, E: Swift.Error>(_ only: E.Type, on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) throws -> U) -> Promise<T> where U.T == T {
+    func recover<U: Thenable, E: Swift.Error>(only: E.Type, on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) throws -> U) -> Promise<T> where U.T == T {
         let rp = Promise<U.T>(.pending)
         pipe {
             switch $0 {
@@ -315,8 +334,11 @@ public extension CatchMixin {
 
     /**
      The provided closure executes when this promise rejects.
-     This variant of `recover` requires the handler to return a Guarantee, thus it returns a Guarantee itself and your closure cannot `throw`.
-     - Note it is logically impossible for this to take a `catchPolicy`, thus `allErrors` are handled.
+     This variant of `recover` requires the handler to return a Guarantee; your closure cannot `throw`.
+     
+     It is logically impossible for this variant to accept a `catchPolicy`. All errors will be presented
+     to your closure for processing.
+     
      - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The handler to execute if this promise is rejected.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documents/CommonPatterns.md#cancellation)
@@ -414,7 +436,9 @@ public extension CatchMixin where T == Void {
     /**
      The provided closure executes when this promise rejects.
      
-     This variant of `recover` is specialized for `Void` promises and de-errors your chain returning a `Guarantee`, thus you cannot `throw` and you must handle all errors including cancellation.
+     This variant of `recover` is specialized for `Void` promises and de-errors your chain,
+     returning a `Guarantee`. Thus, you cannot `throw` and you must handle all error types,
+     including cancellation.
      
      - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The handler to execute if this promise is rejected.
@@ -440,7 +464,8 @@ public extension CatchMixin where T == Void {
     /**
      The provided closure executes when this promise rejects.
      
-     This variant of `recover` ensures that no error is thrown from the handler and allows specifying a catch policy.
+     This variant of `recover` ensures that no error is thrown from the handler
+     and allows you to specify a catch policy.
      
      - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The handler to execute if this promise is rejected.
@@ -471,17 +496,17 @@ public extension CatchMixin where T == Void {
 
     /**
      The provided closure executes when this promise rejects with the specific error passed in.
-
-     Unlike `catch`, `recover` continues the chain.
+    
+     Unlike `catch`, `recover` continues the chain. It can return a replacement promise or rethrow.
      Use `recover` in circumstances where recovering the chain from certain errors is a possibility.
-
-     - Parameter only: The specific error to be recovered.
-     - Parameter on: The queue to which the provided closure dispatches.
+ 
+     - Parameter only: The specific error to be recovered (e.g., `PMKError.emptySequence`)
+     - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The handler to execute if this promise is rejected with the provided error.
-     - Note: Since this method recovers only specific errors, supplying a `CatchPolicy` is unsupported. You can instead specify e.g. your cancellable error.
+     - Note: Since this method recovers only specific errors, supplying a `CatchPolicy` is unsupported.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func recover<E: Swift.Error>(_ only: E, on: Dispatcher = conf.D.map, _ body: @escaping() -> Void) -> Promise<Void> where E: Equatable {
+    func recover<E: Swift.Error>(only: E, on: Dispatcher = conf.D.map, _ body: @escaping(E) throws -> Void) -> Promise<Void> where E: Equatable {
         let rp = Promise<Void>(.pending)
         pipe {
             switch $0 {
@@ -489,8 +514,11 @@ public extension CatchMixin where T == Void {
                 rp.box.seal(.success(()))
             case .failure(let error as E) where error == only:
                 on.dispatch {
-                    body()
-                    rp.box.seal(.success(()))
+                    do {
+                        rp.box.seal(.success(try body(error)))
+                    } catch {
+                        rp.box.seal(.failure(error))
+                    }
                 }
             case .failure(let error):
                 rp.box.seal(.failure(error))
@@ -501,16 +529,17 @@ public extension CatchMixin where T == Void {
 
     /**
      The provided closure executes when this promise rejects with an error of the type passed in.
-
-     Unlike `catch`, `recover` continues the chain.
+     
+     Unlike `catch`, `recover` continues the chain. It can return a replacement promise or rethrow.
      Use `recover` in circumstances where recovering the chain from certain errors is a possibility.
-
-     - Parameter only: The error type to be recovered.
-     - Parameter on: The queue to which the provided closure dispatches.
+     
+     - Parameter only: The error type to be recovered (e.g., `PMKError`).
+     - Parameter on: The dispatcher that executes the provided closure.
+     - Parameter policy: The default policy does not execute your handler for cancellation errors.
      - Parameter body: The handler to execute if this promise is rejected with the provided error type.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func recover<E: Swift.Error>(_ only: E.Type, on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) throws -> Void) -> Promise<Void> {
+    func recover<E: Swift.Error>(only: E.Type, on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) throws -> Void) -> Promise<Void> {
         let rp = Promise<Void>(.pending)
         pipe {
             switch $0 {
