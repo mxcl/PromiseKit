@@ -5,8 +5,10 @@ import Dispatch
  A `Promise` is a functional abstraction around a failable asynchronous operation.
  - See: `Thenable`
  */
-public final class Promise<T>: Thenable, CatchMixin {
+public final class Promise<T>: Thenable, CatchMixin, HasDispatchState {
+    
     let box: Box<Result<T, Error>>
+    var dispatchState: DispatchState = DispatchState()
 
     fileprivate init(box: SealedBox<Result<T, Error>>) {
         self.box = box
@@ -119,6 +121,24 @@ public final class Promise<T>: Thenable, CatchMixin {
     public func setCancellable(_ cancellable: Cancellable?, reject: ((Error) -> Void)? = nil) {
         self.cancellable = cancellable
         rejectIfCancelled = reject
+    }
+    
+    /// Set a default Dispatcher for the chain. Within the chain, this Dispatcher will remain the
+    /// default until you change it, even if you dispatch individual closures to other Dispatchers.
+    ///
+    /// - Note: If you set a chain dispatcher within the body of a promise chain, you must
+    ///   "confirm" the chain dispatcher when it gets to the tail to avoid a warning from
+    ///   PromiseKit. To do this, just include `on: .chain` as an argument to the chain's
+    ///   first `done`, `catch`, or `finally`.
+    ///
+    /// - Parameters:
+    ///   - on: The new default Dispatcher. Use `.default` to return to normal dispatching.
+    
+    public func dispatch(on: Dispatcher) -> Promise<T> {
+        let (promise, seal) = Promise<T>.pending()
+        promise.dispatchState = dispatchState.dispatch(on: on)
+        pipe(to: seal.resolve)
+        return promise
     }
 }
 

@@ -5,8 +5,10 @@ import Dispatch
  A `Guarantee` is a functional abstraction around an asynchronous operation that cannot error.
  - See: `Thenable`
 */
-public final class Guarantee<T>: Thenable {
+public final class Guarantee<T>: Thenable, HasDispatchState {
+    
     let box: PromiseKit.Box<T>
+    var dispatchState: DispatchState = DispatchState()
 
     fileprivate init(box: SealedBox<T>) {
         self.box = box
@@ -115,10 +117,11 @@ public final class Guarantee<T>: Thenable {
 
 public extension Guarantee {
     @discardableResult
-    func done(on: Dispatcher = conf.D.return, _ body: @escaping(T) -> Void) -> Guarantee<Void> {
+    func done(on: Dispatcher = conf.dd, _ body: @escaping(T) -> Void) -> Guarantee<Void> {
         let rg = Guarantee<Void>(.pending)
+        rg.dispatchState = dispatchState.nextState(givenDispatcher: on, isTailFunction: true)
         pipe { (value: T) in
-            on.dispatch {
+            rg.dispatch {
                 body(value)
                 rg.box.seal(())
             }
@@ -126,17 +129,18 @@ public extension Guarantee {
         return rg
     }
     
-    func get(on: Dispatcher = conf.D.return, _ body: @escaping (T) -> Void) -> Guarantee<T> {
+    func get(on: Dispatcher = conf.dd, _ body: @escaping (T) -> Void) -> Guarantee<T> {
         return map(on: on) {
             body($0)
             return $0
         }
     }
 
-    func map<U>(on: Dispatcher = conf.D.map, _ body: @escaping(T) -> U) -> Guarantee<U> {
+    func map<U>(on: Dispatcher = conf.dd, _ body: @escaping(T) -> U) -> Guarantee<U> {
         let rg = Guarantee<U>(.pending)
+        rg.dispatchState = dispatchState.nextState(givenDispatcher: on)
         pipe { value in
-            on.dispatch {
+            rg.dispatch {
                 rg.box.seal(body(value))
             }
         }
@@ -144,14 +148,33 @@ public extension Guarantee {
     }
 
 	@discardableResult
-    func then<U>(on: Dispatcher = conf.D.map, _ body: @escaping(T) -> Guarantee<U>) -> Guarantee<U> {
+    func then<U>(on: Dispatcher = conf.dd, _ body: @escaping(T) -> Guarantee<U>) -> Guarantee<U> {
         let rg = Guarantee<U>(.pending)
+        rg.dispatchState = dispatchState.nextState(givenDispatcher: on)
         pipe { value in
-            on.dispatch {
+            rg.dispatch {
                 body(value).pipe(to: rg.box.seal)
             }
         }
         return rg
+    }
+
+    /// Set a default Dispatcher for the chain. Within the chain, this Dispatcher will remain the
+    /// default until you change it, even if you dispatch individual closures to other Dispatchers.
+    ///
+    /// - Note: If you set a chain dispatcher within the body of a promise chain, you must
+    ///   "confirm" the chain dispatcher when it gets to the tail to avoid a warning from
+    ///   PromiseKit. To do this, just include `on: .chain` as an argument to the chain's
+    ///   first `done`, `catch`, or `finally`.
+    ///
+    /// - Parameters:
+    ///   - on: The new default Dispatcher. Use `.default` to return to normal dispatching.
+    
+    func dispatch(on: Dispatcher) -> Guarantee<T> {
+        let (guarantee, seal) = Guarantee<T>.pending()
+        guarantee.dispatchState = dispatchState.dispatch(on: on)
+        pipe(to: seal)
+        return guarantee
     }
 
     func asVoid() -> Guarantee<Void> {
@@ -194,7 +217,7 @@ public extension Guarantee where T: Sequence {
              // $0 => [2,4,6]
          }
      */
-    func thenMap<U>(on: Dispatcher = conf.D.map, _ transform: @escaping(T.Iterator.Element) -> Guarantee<U>) -> Guarantee<[U]> {
+    func thenMap<U>(on: Dispatcher = conf.dd, _ transform: @escaping(T.Iterator.Element) -> Guarantee<U>) -> Guarantee<[U]> {
         return then(on: on) {
             when(fulfilled: $0.map(transform))
         }.recover {

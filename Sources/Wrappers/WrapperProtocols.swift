@@ -32,6 +32,8 @@ public protocol _PMKSharedWrappers {
 
     func ensure(on: Dispatcher, _ body: @escaping () -> Void) -> BaseOfT
     func ensureThen(on: Dispatcher, _ body: @escaping () -> VoidReturn) -> BaseOfT
+    
+    func dispatch(on: Dispatcher) -> BaseOfT
 }
 
 extension Promise: _PMKSharedWrappers {

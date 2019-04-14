@@ -18,8 +18,8 @@ public extension _PMKCatchWrappers {
      - SeeAlso: [Cancellation](http://https://github.com/mxcl/PromiseKit/blob/master/Documents/CommonPatterns.md#cancellation/docs/)
      */
     @discardableResult
-    func `catch`(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) -> Void) -> Finalizer {
-        let dispatcher = selectDispatcher(given: on, configured: conf.D.return, flags: flags)
+    func `catch`(on: DispatchQueue? = .unspecified, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) -> Void) -> Finalizer {
+        let dispatcher = on.convertToDispatcher(flags: flags)
         return `catch`(on: dispatcher, policy: policy, body)
     }
     
@@ -38,10 +38,10 @@ public extension _PMKCatchWrappers {
      - Note: Since this method handles only specific errors, supplying a `CatchPolicy` is unsupported.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func `catch`<E: Swift.Error>(only: E, on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(E) -> Void)
+    func `catch`<E: Swift.Error>(only: E, on: DispatchQueue? = .unspecified, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(E) -> Void)
         -> CascadingFinalizer where E: Equatable
     {
-        let dispatcher = selectDispatcher(given: on, configured: conf.D.return, flags: flags)
+        let dispatcher = on.convertToDispatcher(flags: flags)
         return `catch`(only: only, on: dispatcher, body)
     }
     
@@ -61,10 +61,10 @@ public extension _PMKCatchWrappers {
      - Parameter body: The handler to execute if this promise is rejected with the provided error type.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func `catch`<E: Swift.Error>(only: E.Type, on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil,
+    func `catch`<E: Swift.Error>(only: E.Type, on: DispatchQueue? = .unspecified, flags: DispatchWorkItemFlags? = nil,
         policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) -> Void) -> CascadingFinalizer
     {
-        let dispatcher = selectDispatcher(given: on, configured: conf.D.return, flags: flags)
+        let dispatcher = on.convertToDispatcher(flags: flags)
         return `catch`(only: only, on: dispatcher, policy: policy, body)
     }
     

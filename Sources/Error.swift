@@ -29,11 +29,8 @@ public enum PMKError: Error {
     /// `nil` was returned from `compactMap`
     case compactMap(Any, Any.Type)
 
-    /**
-     The lastValue or firstValue of a sequence was requested but the sequence was empty.
-
-     Also used if all values of this collection failed the test passed to `firstValue(where:)`.
-     */
+    /// The lastValue or firstValue of a sequence was requested but the sequence was empty.
+    /// Also used if all values of this collection failed the test passed to `firstValue(where:)`.
     case emptySequence
 }
 
