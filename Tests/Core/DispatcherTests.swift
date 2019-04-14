@@ -33,6 +33,7 @@ class DispatcherTests: XCTestCase {
         dispatcherB = RecordingDispatcher()
     }
     
+    @available(*, deprecated)
     func testConfQRepresentation() {
         let ex = expectation(description: "Default dispatchers")
         let oldConf = conf.D
