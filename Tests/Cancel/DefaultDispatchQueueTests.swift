@@ -1,5 +1,5 @@
 import class Foundation.Thread
-import PromiseKit
+@testable import PromiseKit
 import Dispatch
 import XCTest
 
@@ -10,13 +10,12 @@ class CancellableDefaultDispatchQueueTest: XCTestCase {
     let myQueue = DispatchQueue(label: "myQueue")
 
     override func setUp() {
-        // can actually only set the default queue once
-        // - See: PMKSetDefaultDispatchQueue
-        conf.Q = (myQueue, myQueue)
+        conf.testMode = true  // Allow free setting of default dispatchers
+        conf.setDefaultDispatchers(body: myQueue, tail: myQueue)
     }
 
     override func tearDown() {
-        conf.Q = (.main, .main)
+        conf.setDefaultDispatchers(body: .main, tail: .main)
     }
 
     func testOverrodeDefaultThenQueue() {

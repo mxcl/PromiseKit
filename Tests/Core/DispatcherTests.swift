@@ -1,5 +1,5 @@
 import Dispatch
-import PromiseKit
+@testable import PromiseKit
 import XCTest
 
 fileprivate let queueIDKey = DispatchSpecificKey<Int>()
@@ -33,13 +33,14 @@ class DispatcherTests: XCTestCase {
         dispatcherB = RecordingDispatcher()
     }
     
-    func testConfD() {
-        let ex = expectation(description: "conf.D")
-        let oldConf = PromiseKit.conf.D
-        PromiseKit.conf.D.map = dispatcher
-        PromiseKit.conf.D.return = dispatcherB
-        XCTAssertNil(PromiseKit.conf.Q.map, "conf.Q.map not nil")    // Not representable as DispatchQueues
-        XCTAssertNil(PromiseKit.conf.Q.return, "conf.Q.return not nil")
+    func testConfQRepresentation() {
+        let ex = expectation(description: "Default dispatchers")
+        let oldConf = conf.D
+        conf.testMode = true
+        conf.D.body = dispatcher
+        conf.D.tail = dispatcherB
+        XCTAssertNil(conf.Q.map, "conf.Q.map not nil")    // Not representable as DispatchQueues
+        XCTAssertNil(conf.Q.return, "conf.Q.return not nil")
         Promise { seal in
             seal.fulfill(42)
         }.map {
@@ -52,16 +53,16 @@ class DispatcherTests: XCTestCase {
         }.cauterize()
         waitForExpectations(timeout: 1)
         let testQueue = DispatchQueue(label: "test queue")
-        PromiseKit.conf.D.map = testQueue  // Assign DispatchQueue to Dispatcher variable
-        PromiseKit.conf.Q.return = testQueue   // Assign DispatchQueue to DispatchQueue variable
-        XCTAssert(PromiseKit.conf.Q.map === testQueue, "did not get main DispatchQueue back from map")
-        XCTAssert((PromiseKit.conf.D.return as? DispatchQueue)! === testQueue, "did not get main DispatchQueue back from return")
-        PromiseKit.conf.D = oldConf
+        conf.setDefaultDispatchers(body: testQueue)  // Assign DispatchQueue to Dispatcher variable
+        conf.Q.return = testQueue  // Assign DispatchQueue to DispatchQueue variable
+        XCTAssert(conf.Q.map === testQueue, "did not get main DispatchQueue back from map")
+        XCTAssert((conf.D.tail as? DispatchQueue)! === testQueue, "did not get main DispatchQueue back from return")
+        conf.D = oldConf
     }
     
     func testPMKDefaultIdentity() {
         // If this identity does not hold, the DispatchQueue wrapper API will not behave correctly
-        XCTAssert(DispatchQueue.pmkDefault === DispatchQueue.pmkDefault, "DispatchQueues are not object-identity-preserving on this platform")
+        XCTAssert(DispatchQueue.unspecified === DispatchQueue.unspecified, "DispatchQueues are not object-identity-preserving on this platform")
     }
     
     func testDispatcherWithThrow() {
@@ -81,8 +82,9 @@ class DispatcherTests: XCTestCase {
         
         let ex = expectation(description: "DispatchQueue compatibility")
         
-        let oldConf = PromiseKit.conf.D
-        PromiseKit.conf.D = (map: dispatcher, return: dispatcher)
+        let oldConf = conf.D
+        conf.testMode = true
+        conf.D = (body: dispatcher, tail: dispatcher)
         
         let background = DispatchQueue.global(qos: .background)
         background.setSpecific(key: queueIDKey, value: 100)

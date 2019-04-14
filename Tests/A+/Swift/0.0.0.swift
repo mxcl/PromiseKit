@@ -1,4 +1,4 @@
-import PromiseKit
+@testable import PromiseKit
 import Dispatch
 import XCTest
 
@@ -12,7 +12,8 @@ private let timeout: TimeInterval = 10
 extension XCTestCase {
     func describe(_ description: String, file: StaticString = #file, line: UInt = #line, body: () throws -> Void) {
 
-        PromiseKit.conf.Q.map = .main
+        conf.testMode = true  // Allow free setting of default dispatchers
+        conf.setDefaultDispatchers(body: .main)
 
         do {
             try body()
