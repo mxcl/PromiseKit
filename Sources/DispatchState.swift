@@ -125,6 +125,9 @@ struct DispatchState: Dispatcher {
                         // Does not change chain dispatcher, but does confirm if appropriate
                         state.location.confirm()
                     }
+                case .sticky:
+                    state.chainStrategy = StickyStrategy()
+                    state.location = .primed
             }
         } else {
             state.chainStrategy = StandardStrategy(dispatcher: state.dispatcher)
@@ -190,7 +193,11 @@ struct DispatchState: Dispatcher {
                 case .default:
                     return (dispatcher: defaultDispatcher, explicit: true)
                 case .chain:
+                    // ChainDispatchStrategy should have claimed this
                     fatalError("`on: .chain` used without a chain dispatcher")
+                case .sticky:
+                    // Repeat previous dispatcher
+                    return (dispatcher: self.dispatcher, explicit: true)
             }
         }
         
@@ -218,13 +225,16 @@ struct StandardStrategy: ChainDispatchStrategy {
         guard let sentinel = given as? SentinelDispatcher else { return nil }
         
         switch sentinel.type {
-        case .default:
-            // Explicit; punt
-            return nil
-        case .unspecified:
-            return (dispatcher: dispatcher, explicit: false)
-        case .chain:
-            return (dispatcher: dispatcher, explicit: true)
+            case .default:
+                // Explicit; punt
+                return nil
+            case .unspecified:
+                return (dispatcher: dispatcher, explicit: false)
+            case .chain:
+                return (dispatcher: dispatcher, explicit: true)
+            case .sticky:
+                return nil
+            
         }
     }
 }
@@ -234,17 +244,19 @@ struct StickyStrategy: ChainDispatchStrategy {
     
     func nextDispatcher(previous: DispatchState, givenDispatcher given: Dispatcher) -> SourcedDispatcher? {
         
-        // Chain dispatcher has nothing to say about explicitly specified dispatchers
-        guard let sentinel = given as? SentinelDispatcher else { return nil }
-        
-        switch sentinel.type {
-        case .default:
-            // Explicit; punt
-            return nil
-        case .unspecified:
-            return (dispatcher: previous.dispatcher, explicit: false)
-        case .chain:
-            return (dispatcher: previous.dispatcher, explicit: true)
+        if let sentinel = given as? SentinelDispatcher {
+            switch sentinel.type {
+                case .default:
+                    // Explicit; punt
+                    return nil
+                case .unspecified:
+                    return (dispatcher: previous.dispatcher, explicit: false)
+                case .chain, .sticky:
+                    return (dispatcher: previous.dispatcher, explicit: true)
+            }
+        } else {
+            // Claim an explicit dispatcher because we do want to ratify the chain dispatcher in this case
+            return (dispatcher: given, explicit: true)
         }
     }
 }

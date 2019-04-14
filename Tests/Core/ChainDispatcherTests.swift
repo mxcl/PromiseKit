@@ -237,5 +237,79 @@ class ChainDispatcherTests: XCTestCase {
         XCTAssert(log == "failedToConfirmChainDispatcher")
     }
 
+    func testStickyChainDispatcher() {
+        let ex = expectation(description: "Sticky chain dispatcher")
+        let dispatcher = RecordingDispatcher()
+        let log = captureLog {
+            Promise.value(42).dispatch(on: .sticky).then {
+                Promise.value($0 + 10)
+            }.map {
+                $0 + 20
+            }.done(on: dispatcher) {
+                XCTAssert($0 == 72)
+            }.map {
+                123  // Tail
+            }.catch { error in
+                // NOP - not dispatched
+            }.finally {
+                ex.fulfill()
+            }
+        }
+        waitForExpectations(timeout: 1)
+        XCTAssert(defaultBodyDispatcher.dispatchCount == 2)
+        XCTAssert(defaultTailDispatcher.dispatchCount == 0)
+        XCTAssert(dispatcher.dispatchCount == 3)
+        XCTAssert(log == nil)
+    }
+    
+    func testUnconfirmedStickyChainDispatcher() {
+        let ex = expectation(description: "Unconfirmed sticky chain dispatcher")
+        let dispatcher = RecordingDispatcher()
+        let log = captureLog {
+            Promise.value(42).dispatch(on: .sticky).then(on: dispatcher) {
+                Promise.value($0 + 10)
+            }.map {
+                $0 + 20
+            }.done {
+                XCTAssert($0 == 72)
+            }.map(on: defaultTailDispatcher) {
+                123  // Tail
+            }.catch { error in
+                // NOP - not dispatched
+            }.finally {
+                ex.fulfill()
+            }
+        }
+        waitForExpectations(timeout: 1)
+        XCTAssert(defaultBodyDispatcher.dispatchCount == 0)
+        XCTAssert(defaultTailDispatcher.dispatchCount == 2)
+        XCTAssert(dispatcher.dispatchCount == 3)
+        XCTAssert(log == "failedToConfirmChainDispatcher")
+    }
+
+    func testAdHocStickyDispatchers() {
+        let ex = expectation(description: "Ad hoc sticky dispatching")
+        let dispatcher = RecordingDispatcher()
+        let log = captureLog {
+            Promise.value(42).then(on: dispatcher) {
+                Promise.value($0 + 10)
+            }.map(on: .sticky) {
+                $0 + 20
+            }.done(on: .sticky) {
+                XCTAssert($0 == 72)
+            }.map(on: defaultBodyDispatcher) {
+                123  // Tail
+            }.catch(on: .sticky) { error in
+                // NOP - not dispatched
+            }.finally {
+                ex.fulfill()
+            }
+        }
+        waitForExpectations(timeout: 1)
+        XCTAssert(defaultBodyDispatcher.dispatchCount == 1)
+        XCTAssert(defaultTailDispatcher.dispatchCount == 1)
+        XCTAssert(dispatcher.dispatchCount == 3)
+        XCTAssert(log == nil)
+    }
 }
 

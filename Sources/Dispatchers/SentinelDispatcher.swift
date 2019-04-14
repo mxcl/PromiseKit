@@ -8,6 +8,7 @@ struct SentinelDispatcher: Dispatcher {
         case unspecified  // Parameter not provided
         case `default`    // Explicit request for global default
         case chain        // Explicit request to use the chain dispatcher
+        case sticky       // Continue using same dispatcher until changed
     }
     
     let type: SentinelType

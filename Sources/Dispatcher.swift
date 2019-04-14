@@ -73,6 +73,7 @@ public extension DispatchQueue {
     static let unspecified = DispatchQueue(label: "unspecified.promisekit.org") // Parameter not provided
     static let `default` = DispatchQueue(label: "default.promisekit.org")  // Explicit request for default behavior
     static let chain = DispatchQueue(label: "chain.promisekit.org")  // Execute on same Dispatcher as previous closure
+    static let sticky = DispatchQueue(label: "sticky.promisekit.org")  // Reuse the previous dispatcher if not explicitly specified
 }
 
 public extension DispatchQueue {
@@ -110,7 +111,8 @@ extension DispatchQueue {
             case .unspecified: return SentinelDispatcher(type: .unspecified, flags: flags)
             case .default:     return SentinelDispatcher(type: .default, flags: flags)
             case .chain:       return SentinelDispatcher(type: .chain, flags: flags)
-            default:
+            case .sticky:      return SentinelDispatcher(type: .sticky, flags: flags)
+           default:
                 if let flags = flags {
                     return self.asDispatcher(flags: flags)
                 }
