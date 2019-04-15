@@ -67,11 +67,11 @@ public struct PMKConfiguration {
         switch dispatcher {
             case nil:
                 return CurrentThreadDispatcher()
-            case DispatchQueue.unspecified:
+            case DispatchQueue.unspecified?:
                 return nil // Do nothing
-            case DispatchQueue.default:
+            case DispatchQueue.default?:
                 return `default`
-            case DispatchQueue.chain:
+            case DispatchQueue.chain?:
                 fatalError("PromiseKit: .chain is not meaningful in the context of setDefaultDispatchers")
             default:
                 return dispatcher!

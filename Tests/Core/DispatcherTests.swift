@@ -61,9 +61,14 @@ class DispatcherTests: XCTestCase {
         conf.D = oldConf
     }
     
-    func testPMKDefaultIdentity() {
-        // If this identity does not hold, the DispatchQueue wrapper API will not behave correctly
+    func testDispatchQueueIdentities() {
+        // If these identities does not hold, the DispatchQueue wrapper API will not behave correctly
         XCTAssert(DispatchQueue.unspecified === DispatchQueue.unspecified, "DispatchQueues are not object-identity-preserving on this platform")
+        XCTAssert(DispatchQueue.chain === DispatchQueue.chain, "DispatchQueues are not object-identity-preserving on this platform")
+        XCTAssert(DispatchQueue.default === DispatchQueue.default, "DispatchQueues are not object-identity-preserving on this platform")
+        XCTAssert(DispatchQueue.unspecified !== DispatchQueue.chain, "DispatchQueues are not object-identity-preserving on this platform")
+        XCTAssert(DispatchQueue.chain !== DispatchQueue.default, "DispatchQueues are not object-identity-preserving on this platform")
+        XCTAssert(DispatchQueue.default !== DispatchQueue.unspecified, "DispatchQueues are not object-identity-preserving on this platform")
     }
     
     func testDispatcherWithThrow() {

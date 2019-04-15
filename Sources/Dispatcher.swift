@@ -130,3 +130,9 @@ extension Optional where Wrapped: DispatchQueue {
         return CurrentThreadDispatcher()
     }
 }
+
+extension DispatchQueue {
+    static func ~=(_ a: DispatchQueue, _ b: DispatchQueue) -> Bool {
+        return a === b
+    }
+}
