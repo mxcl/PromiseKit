@@ -749,7 +749,7 @@ extension CatchableTests {
             return promise
         }
         promise.catch(policy: .allErrors) { err in
-            err.isCancelled ? x.fulfill() : XCTFail()
+            err.isCancelled ? XCTFail() : x.fulfill()
         }
         promise.cancel()
 

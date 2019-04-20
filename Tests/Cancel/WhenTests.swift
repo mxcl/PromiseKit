@@ -279,7 +279,7 @@ class WhenTests: XCTestCase {
         let p1 = CancellablePromise<Int>(error: Error.test)
         let p2 = after(.milliseconds(100)).cancellize()
         cancellableWhen(fulfilled: p1, p2).done{ _ in XCTFail() }.catch(policy: .allErrors) {
-            $0.isCancelled ? ex.fulfill() : XCTFail()
+            $0.isCancelled ? XCTFail() : ex.fulfill()
         }.cancel()
 
         waitForExpectations(timeout: 1, handler: nil)
@@ -300,7 +300,7 @@ class WhenTests: XCTestCase {
         let p3 = after(.milliseconds(200)).cancellize().done { throw Error.straggler }
 
         cancellableWhen(fulfilled: p1, p2, p3).catch(policy: .allErrors) {
-            $0.isCancelled ? ex1.fulfill() : XCTFail()
+            $0.isCancelled ? XCTFail() : ex1.fulfill()
         }.cancel()
 
         p2.ensure { after(.milliseconds(100)).done(ex2.fulfill) }.silenceWarning()
@@ -322,7 +322,7 @@ class WhenTests: XCTestCase {
         let p3 = CancellablePromise<Void>(error: Error.test3)
 
         when(fulfilled: p1, p2, p3).catch(policy: .allErrors) {
-            $0.isCancelled ? ex.fulfill() : XCTFail()
+            $0.isCancelled ? XCTFail() : ex.fulfill()
         }.cancel()
 
         waitForExpectations(timeout: 1)

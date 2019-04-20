@@ -131,7 +131,7 @@ class ThenableTests: XCTestCase {
             XCTFail()
             return .value(x)
         }.catch(policy: .allErrors) {
-            $0.isCancelled ? ex.fulfill() : XCTFail()
+            $0.isCancelled ? XCTFail() : ex.fulfill()
         }.cancel()
         wait(for: [ex], timeout: 1)
     }

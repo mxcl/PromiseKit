@@ -74,7 +74,7 @@ public class CancellablePromise<T>: CancellableThenable, CancellableCatchMixin {
                 reject = seal.reject
                 bridge.done(on: CurrentThreadDispatcher()) {
                     seal.fulfill($0)
-                }.catch(policy: .allErrors) {
+                }.catch(on: CurrentThreadDispatcher(), policy: .allErrors) {
                     seal.reject($0)
                 }
             }
