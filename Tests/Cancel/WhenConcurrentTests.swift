@@ -267,7 +267,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
         when(fulfilled: generator, concurrently: 1).done {
             XCTFail("\($0)")
         }.catch(policy: .allErrors) {
-            $0.isCancelled ? ex.fulfill() : XCTFail()
+            $0.isCancelled ? XCTFail() : ex.fulfill()
         }.cancel()
 
         waitForExpectations(timeout: 3)
