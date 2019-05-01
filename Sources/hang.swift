@@ -46,10 +46,5 @@ public func hang<T>(_ promise: Promise<T>) throws -> T {
         CFRunLoopRemoveSource(runLoop, runLoopSource, runLoopMode)
     }
 
-    switch promise.result! {
-    case .rejected(let error):
-        throw error
-    case .fulfilled(let value):
-        return value
-    }
+    return try promise.result!.get()
 }

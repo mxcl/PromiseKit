@@ -1,8 +1,8 @@
 /// An object for resolving promises
 public final class Resolver<T> {
-    let box: Box<Result<T>>
+    let box: Box<Result<T, Error>>
 
-    init(_ box: Box<Result<T>>) {
+    init(_ box: Box<Result<T, Error>>) {
         self.box = box
     }
 
@@ -16,16 +16,16 @@ public final class Resolver<T> {
 public extension Resolver {
     /// Fulfills the promise with the provided value
     func fulfill(_ value: T) {
-        box.seal(.fulfilled(value))
+        box.seal(.success(value))
     }
 
     /// Rejects the promise with the provided error
     func reject(_ error: Error) {
-        box.seal(.rejected(error))
+        box.seal(.failure(error))
     }
 
     /// Resolves the promise with the provided result
-    func resolve(_ result: Result<T>) {
+    func resolve(_ result: Result<T, Error>) {
         box.seal(result)
     }
 
@@ -82,17 +82,12 @@ extension Resolver where T == Void {
 }
 #endif
 
-public enum Result<T> {
-    case fulfilled(T)
-    case rejected(Error)
-}
-
-public extension PromiseKit.Result {
+public extension Result {
     var isFulfilled: Bool {
         switch self {
-        case .fulfilled:
+        case .success:
             return true
-        case .rejected:
+        case .failure:
             return false
         }
     }

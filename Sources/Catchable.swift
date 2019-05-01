@@ -25,7 +25,7 @@ public extension CatchMixin {
         let finalizer = PMKFinalizer()
         pipe {
             switch $0 {
-            case .rejected(let error):
+            case .failure(let error):
                 guard policy == .allErrors || !error.isCancelled else {
                     fallthrough
                 }
@@ -33,7 +33,7 @@ public extension CatchMixin {
                     body(error)
                     finalizer.pending.resolve(())
                 }
-            case .fulfilled:
+            case .success:
                 finalizer.pending.resolve(())
             }
         }
@@ -76,9 +76,9 @@ public extension CatchMixin {
         let rp = Promise<U.T>(.pending)
         pipe {
             switch $0 {
-            case .fulfilled(let value):
-                rp.box.seal(.fulfilled(value))
-            case .rejected(let error):
+            case .success(let value):
+                rp.box.seal(.success(value))
+            case .failure(let error):
                 if policy == .allErrors || !error.isCancelled {
                     on.async(flags: flags) {
                         do {
@@ -86,11 +86,11 @@ public extension CatchMixin {
                             guard rv !== rp else { throw PMKError.returnedSelf }
                             rv.pipe(to: rp.box.seal)
                         } catch {
-                            rp.box.seal(.rejected(error))
+                            rp.box.seal(.failure(error))
                         }
                     }
                 } else {
-                    rp.box.seal(.rejected(error))
+                    rp.box.seal(.failure(error))
                 }
             }
         }
@@ -110,9 +110,9 @@ public extension CatchMixin {
         let rg = Guarantee<T>(.pending)
         pipe {
             switch $0 {
-            case .fulfilled(let value):
+            case .success(let value):
                 rg.box.seal(value)
-            case .rejected(let error):
+            case .failure(let error):
                 on.async(flags: flags) {
                     body(error).pipe(to: rg.box.seal)
                 }
@@ -210,9 +210,9 @@ public extension CatchMixin where T == Void {
         let rg = Guarantee<Void>(.pending)
         pipe {
             switch $0 {
-            case .fulfilled:
+            case .success:
                 rg.box.seal(())
-            case .rejected(let error):
+            case .failure(let error):
                 on.async(flags: flags) {
                     body(error)
                     rg.box.seal(())
@@ -235,19 +235,19 @@ public extension CatchMixin where T == Void {
         let rg = Promise<Void>(.pending)
         pipe {
             switch $0 {
-            case .fulfilled:
-                rg.box.seal(.fulfilled(()))
-            case .rejected(let error):
+            case .success:
+                rg.box.seal(.success(()))
+            case .failure(let error):
                 if policy == .allErrors || !error.isCancelled {
                     on.async(flags: flags) {
                         do {
-                            rg.box.seal(.fulfilled(try body(error)))
+                            rg.box.seal(.success(try body(error)))
                         } catch {
-                            rg.box.seal(.rejected(error))
+                            rg.box.seal(.failure(error))
                         }
                     }
                 } else {
-                    rg.box.seal(.rejected(error))
+                    rg.box.seal(.failure(error))
                 }
             }
         }

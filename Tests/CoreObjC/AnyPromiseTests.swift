@@ -4,7 +4,7 @@ import XCTest
 class AnyPromiseTests: XCTestCase {
     func testFulfilledResult() {
         switch AnyPromise(Promise.value(true)).result {
-        case .fulfilled(let obj as Bool)? where obj:
+        case .success(let obj as Bool)? where obj:
             break
         default:
             XCTFail()
@@ -13,7 +13,7 @@ class AnyPromiseTests: XCTestCase {
 
     func testRejectedResult() {
         switch AnyPromise(Promise<Int>(error: PMKError.badInput)).result {
-        case .rejected(let err)?:
+        case .failure(let err)?:
             print(err)
             break
         default:

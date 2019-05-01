@@ -113,21 +113,21 @@ extension AnyPromise: Thenable, CatchMixin {
         self.init(__D: __AnyPromise(resolver: { resolve in
             bridge.pipe {
                 switch $0 {
-                case .rejected(let error):
+                case .failure(let error):
                     resolve(error as NSError)
-                case .fulfilled(let value):
+                case .success(let value):
                     resolve(value)
                 }
             }
         }))
     }
 
-    public func pipe(to body: @escaping (Result<Any?>) -> Void) {
+    public func pipe(to body: @escaping (Result<Any?, Error>) -> Void) {
 
         func fulfill() {
             // calling through to the ObjC `value` property unwraps (any) PMKManifold
             // and considering this is the Swift pipe; we want that.
-            body(.fulfilled(self.value(forKey: "value")))
+            body(.success(self.value(forKey: "value")))
         }
 
         switch box.inspect() {
@@ -137,19 +137,19 @@ extension AnyPromise: Thenable, CatchMixin {
                 case .pending(let handlers):
                     handlers.append {
                         if let error = $0 as? Error {
-                            body(.rejected(error))
+                            body(.failure(error))
                         } else {
                             fulfill()
                         }
                     }
                 case .resolved(let error as Error):
-                    body(.rejected(error))
+                    body(.failure(error))
                 case .resolved:
                     fulfill()
                 }
             }
         case .resolved(let error as Error):
-            body(.rejected(error))
+            body(.failure(error))
         case .resolved:
             fulfill()
         }
@@ -163,14 +163,14 @@ extension AnyPromise: Thenable, CatchMixin {
         return d.box
     }
 
-    public var result: Result<Any?>? {
+    public var result: Result<Any?, Error>? {
         guard let value = __value else {
             return nil
         }
         if let error = value as? Error {
-            return .rejected(error)
+            return .failure(error)
         } else {
-            return .fulfilled(value)
+            return .success(value)
         }
     }
 
