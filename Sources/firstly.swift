@@ -40,9 +40,9 @@ public func firstly<T>(execute body: () -> Guarantee<T>) -> Guarantee<T> {
 
 /// - See: firstly()
 /// - Note: the block you pass excecutes immediately on the specified thread/queue.
-public func firstly<U: Thenable>(on queue: DispatchQueue, execute body: @escaping () throws -> U) -> Promise<U.T> {
+public func firstly<U: Thenable>(on: DispatchQueue, flags: DispatchWorkItemFlags? = nil, execute body: @escaping () throws -> U) -> Promise<U.T> {
     return Promise { seal in
-        queue.async {
+        on.async(flags: flags) {
             firstly(execute: body).pipe(to: seal.resolve)
         }
     }
@@ -50,10 +50,23 @@ public func firstly<U: Thenable>(on queue: DispatchQueue, execute body: @escapin
 
 /// - See: firstly()
 /// - Note: the block you pass excecutes immediately on the specified thread/queue.
-public func firstly<T>(on queue: DispatchQueue, execute body: @escaping () -> Guarantee<T>) -> Guarantee<T> {
+public func firstly<T>(on: DispatchQueue, flags: DispatchWorkItemFlags? = nil, execute body: @escaping () -> Guarantee<T>) -> Guarantee<T> {
     return Guarantee { fulfilledResult in
-        queue.async {
+        on.async(flags: flags) {
             firstly(execute: body).pipe(to: fulfilledResult)
+        }
+    }
+}
+
+
+private extension DispatchQueue {
+    
+    @inline(__always)
+    func async(flags: DispatchWorkItemFlags?, _ body: @escaping() -> Void) {
+        if let flags = flags {
+            self.async(flags: flags, execute: body)
+        } else {
+            self.async(execute: body)
         }
     }
 }
