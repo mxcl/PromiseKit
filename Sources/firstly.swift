@@ -37,3 +37,23 @@ public func firstly<U: Thenable>(execute body: () throws -> U) -> Promise<U.T> {
 public func firstly<T>(execute body: () -> Guarantee<T>) -> Guarantee<T> {
     return body()
 }
+
+/// - See: firstly()
+/// - Note: the block you pass excecutes immediately on the specified thread/queue.
+public func firstly<U: Thenable>(on queue: DispatchQueue, execute body: @escaping () throws -> U) -> Promise<U.T> {
+    return Promise { seal in
+        queue.async {
+            firstly(execute: body).pipe(to: seal.resolve)
+        }
+    }
+}
+
+/// - See: firstly()
+/// - Note: the block you pass excecutes immediately on the specified thread/queue.
+public func firstly<T>(on queue: DispatchQueue, execute body: @escaping () -> Guarantee<T>) -> Guarantee<T> {
+    return Guarantee { fulfilledResult in
+        queue.async {
+            firstly(execute: body).pipe(to: fulfilledResult)
+        }
+    }
+}
