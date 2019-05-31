@@ -12,7 +12,7 @@ func toggleNetworkSpinnerWithPromise<T>(funcToCall: () -> Promise<T>) -> Promise
             return funcToCall()
         }.then { result in
             seal.fulfill(result)
-        }.always {
+        }.ensure {
             setNetworkActivityIndicatorVisible(false)
         }.catch { err in
             seal.reject(err)
@@ -28,7 +28,7 @@ func toggleNetworkSpinnerWithPromise<T>(funcToCall: () -> Promise<T>) -> Promise
     return firstly {
         setNetworkActivityIndicatorVisible(true)
         return funcToCall()
-    }.always {
+    }.ensure {
         setNetworkActivityIndicatorVisible(false)
     }
 }
