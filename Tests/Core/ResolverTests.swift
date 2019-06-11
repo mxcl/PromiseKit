@@ -175,8 +175,8 @@ class WrapTests: XCTestCase {
         bar().done(ex.fulfill).cauterize()
         wait(for: [ex], timeout: 10)
 
-    #if swift(>=5.1)
-        // ^^ ambiguous in Swift 5.0, testing again in next version
+    #if swift(>=5.2)
+        // ^^ ambiguous in Swift 5.0 & 5.1, testing again in next version
         let ex2 = expectation(description: "")
         Guarantee<Void> { seal in
             after(.microseconds(10)).done(seal)
