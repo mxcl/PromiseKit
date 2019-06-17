@@ -55,7 +55,14 @@ extension GuaranteeTests {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__GuaranteeTests = [
+        ("testCompactMapValues", testCompactMapValues),
+        ("testFilterValues", testFilterValues),
+        ("testFlatMapValues", testFlatMapValues),
         ("testInit", testInit),
+        ("testMapValues", testMapValues),
+        ("testSorted", testSorted),
+        ("testSortedBy", testSortedBy),
+        ("testThenFlatMap", testThenFlatMap),
         ("testThenMap", testThenMap),
         ("testWait", testWait),
     ]
