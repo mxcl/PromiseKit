@@ -23,7 +23,7 @@
         <a class="header-link" href="../index.html">
           PromiseKit Docs
         </a>
-         (79% documented)
+         (80% documented)
       </p>
     
       <p class="header-col--secondary">
@@ -574,6 +574,105 @@ any part of your chain may use. Like the main thread for example.</p>
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:10PromiseKit9GuaranteeCAASTRzlE9mapValues2on5flags_ACySayqd__GGSo17OS_dispatch_queueCSg_8Dispatch0K13WorkItemFlagsVSgqd__7ElementQzctlF"></a>
+                    <a name="//apple_ref/swift/Method/mapValues(on:flags:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit9GuaranteeCAASTRzlE9mapValues2on5flags_ACySayqd__GGSo17OS_dispatch_queueCSg_8Dispatch0K13WorkItemFlagsVSgqd__7ElementQzctlF">mapValues(on:flags:_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Guarantee&lt;[T]&gt;</code> =&gt; <code>T</code> -&gt; <code>U</code> =&gt; <code>Guarantee&lt;[U]&gt;</code></p>
+<pre class="highlight swift"><code><span class="kt">Guarantee</span><span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+   <span class="o">.</span><span class="n">mapValues</span> <span class="p">{</span> <span class="n">integer</span> <span class="k">in</span> <span class="n">integer</span> <span class="o">*</span> <span class="mi">2</span> <span class="p">}</span>
+   <span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+       <span class="c1">// $0 =&gt; [2,4,6]</span>
+   <span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">mapValues</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T.Iterator.Element)</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Guarantee</span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit9GuaranteeCAASTRzlE13flatMapValues2on5flags_ACySay7ElementQyd__GGSo17OS_dispatch_queueCSg_8Dispatch0M13WorkItemFlagsVSgqd__AGQzctSTRd__lF"></a>
+                    <a name="//apple_ref/swift/Method/flatMapValues(on:flags:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit9GuaranteeCAASTRzlE13flatMapValues2on5flags_ACySay7ElementQyd__GGSo17OS_dispatch_queueCSg_8Dispatch0M13WorkItemFlagsVSgqd__AGQzctSTRd__lF">flatMapValues(on:flags:_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Guarantee&lt;[T]&gt;</code> =&gt; <code>T</code> -&gt; <code>[U]</code> =&gt; <code>Guarantee&lt;[U]&gt;</code></p>
+<pre class="highlight swift"><code><span class="kt">Guarantee</span><span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+   <span class="o">.</span><span class="n">flatMapValues</span> <span class="p">{</span> <span class="n">integer</span> <span class="k">in</span> <span class="p">[</span><span class="n">integer</span><span class="p">,</span> <span class="n">integer</span><span class="p">]</span> <span class="p">}</span>
+   <span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+       <span class="c1">// $0 =&gt; [1,1,2,2,3,3]</span>
+   <span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">flatMapValues</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">:</span> <span class="kt">Sequence</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T.Iterator.Element)</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Guarantee</span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit9GuaranteeCAASTRzlE16compactMapValues2on5flags_ACySayqd__GGSo17OS_dispatch_queueCSg_8Dispatch0L13WorkItemFlagsVSgqd__Sg7ElementQzctlF"></a>
+                    <a name="//apple_ref/swift/Method/compactMapValues(on:flags:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit9GuaranteeCAASTRzlE16compactMapValues2on5flags_ACySayqd__GGSo17OS_dispatch_queueCSg_8Dispatch0L13WorkItemFlagsVSgqd__Sg7ElementQzctlF">compactMapValues(on:flags:_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Guarantee&lt;[T]&gt;</code> =&gt; <code>T</code> -&gt; <code>U?</code> =&gt; <code>Guarantee&lt;[U]&gt;</code></p>
+<pre class="highlight swift"><code><span class="kt">Guarantee</span><span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="s">"1"</span><span class="p">,</span><span class="s">"2"</span><span class="p">,</span><span class="s">"a"</span><span class="p">,</span><span class="s">"3"</span><span class="p">])</span>
+   <span class="o">.</span><span class="n">compactMapValues</span> <span class="p">{</span> <span class="kt">Int</span><span class="p">(</span><span class="nv">$0</span><span class="p">)</span> <span class="p">}</span>
+   <span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+       <span class="c1">// $0 =&gt; [1,2,3]</span>
+   <span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">compactMapValues</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T.Iterator.Element)</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt">Guarantee</span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:10PromiseKit9GuaranteeCAASTRzlE7thenMap2on5flags_ACySayqd__GGSo17OS_dispatch_queueCSg_8Dispatch0K13WorkItemFlagsVSgACyqd__G7ElementQzctlF"></a>
                     <a name="//apple_ref/swift/Method/thenMap(on:flags:_:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:10PromiseKit9GuaranteeCAASTRzlE7thenMap2on5flags_ACySayqd__GGSo17OS_dispatch_queueCSg_8Dispatch0K13WorkItemFlagsVSgACyqd__G7ElementQzctlF">thenMap(on:flags:_:)</a>
@@ -585,13 +684,11 @@ any part of your chain may use. Like the main thread for example.</p>
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p><code>Guarantee&lt;[T]&gt;</code> =&gt; <code>T</code> -&gt; <code>Guarantee&lt;U&gt;</code> =&gt; <code>Guaranetee&lt;[U]&gt;</code></p>
-<pre class="highlight swift"><code><span class="n">firstly</span> <span class="p">{</span>
-    <span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
-<span class="p">}</span><span class="o">.</span><span class="n">thenMap</span> <span class="p">{</span>
-    <span class="o">.</span><span class="nf">value</span><span class="p">(</span><span class="nv">$0</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
-<span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span>
-    <span class="c1">// $0 =&gt; [2,4,6]</span>
-<span class="p">}</span>
+<pre class="highlight swift"><code><span class="kt">Guarantee</span><span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+   <span class="o">.</span><span class="n">thenMap</span> <span class="p">{</span> <span class="o">.</span><span class="nf">value</span><span class="p">(</span><span class="nv">$0</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span> <span class="p">}</span>
+   <span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+       <span class="c1">// $0 =&gt; [2,4,6]</span>
+   <span class="p">}</span>
 </code></pre>
 
                       </div>
@@ -600,6 +697,142 @@ any part of your chain may use. Like the main thread for example.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">thenMap</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T.Iterator.Element)</span> <span class="o">-&gt;</span> <span class="kt">Guarantee</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Guarantee</span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit9GuaranteeCAASTRzlE11thenFlatMap2on5flags_ACySay1T_7ElementQYd__GGSo17OS_dispatch_queueCSg_8Dispatch0M13WorkItemFlagsVSgqd__AHQzctAA8ThenableRd__STAGRpd__lF"></a>
+                    <a name="//apple_ref/swift/Method/thenFlatMap(on:flags:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit9GuaranteeCAASTRzlE11thenFlatMap2on5flags_ACySay1T_7ElementQYd__GGSo17OS_dispatch_queueCSg_8Dispatch0M13WorkItemFlagsVSgqd__AHQzctAA8ThenableRd__STAGRpd__lF">thenFlatMap(on:flags:_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Guarantee&lt;[T]&gt;</code> =&gt; <code>T</code> -&gt; <code>Guarantee&lt;[U]&gt;</code> =&gt; <code>Guarantee&lt;[U]&gt;</code></p>
+<pre class="highlight swift"><code><span class="kt">Guarantee</span><span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+   <span class="o">.</span><span class="n">thenFlatMap</span> <span class="p">{</span> <span class="n">integer</span> <span class="k">in</span> <span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="n">integer</span><span class="p">,</span> <span class="n">integer</span><span class="p">])</span> <span class="p">}</span>
+   <span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+       <span class="c1">// $0 =&gt; [1,1,2,2,3,3]</span>
+   <span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">thenFlatMap</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Thenable.html">Thenable</a></span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T.Iterator.Element)</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Guarantee</span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">]</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="p">:</span> <span class="kt">Sequence</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit9GuaranteeCAASTRzlE12filterValues2on5flags_ACySay7ElementQzGGSo17OS_dispatch_queueCSg_8Dispatch0L13WorkItemFlagsVSgSbAHctF"></a>
+                    <a name="//apple_ref/swift/Method/filterValues(on:flags:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit9GuaranteeCAASTRzlE12filterValues2on5flags_ACySay7ElementQzGGSo17OS_dispatch_queueCSg_8Dispatch0L13WorkItemFlagsVSgSbAHctF">filterValues(on:flags:_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Guarantee&lt;[T]&gt;</code> =&gt; <code>T</code> -&gt; Bool =&gt; <code>Guarantee&lt;[T]&gt;</code></p>
+<pre class="highlight swift"><code><span class="kt">Guarantee</span><span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">,</span><span class="mi">3</span><span class="p">])</span>
+   <span class="o">.</span><span class="n">filterValues</span> <span class="p">{</span> <span class="nv">$0</span> <span class="o">&gt;</span> <span class="mi">1</span> <span class="p">}</span>
+   <span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+       <span class="c1">// $0 =&gt; [2,3]</span>
+   <span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">filterValues</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">isIncluded</span><span class="p">:</span> <span class="kd">@escaping(T.Iterator.Element)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Guarantee</span><span class="o">&lt;</span><span class="p">[</span><span class="kt">T</span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit9GuaranteeCAASTRzlE12sortedValues2on5flags_ACySay7ElementQzGGSo17OS_dispatch_queueCSg_8Dispatch0L13WorkItemFlagsVSgSbAH_AHtctF"></a>
+                    <a name="//apple_ref/swift/Method/sortedValues(on:flags:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit9GuaranteeCAASTRzlE12sortedValues2on5flags_ACySay7ElementQzGGSo17OS_dispatch_queueCSg_8Dispatch0L13WorkItemFlagsVSgSbAH_AHtctF">sortedValues(on:flags:_:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Guarantee&lt;[T]&gt;</code> =&gt; (<code>T</code>, <code>T</code>) -&gt; Bool =&gt; <code>Guarantee&lt;[T]&gt;</code></p>
+
+<p>Guarantee.value([5,2,3,4,1])
+   .sortedValues { $0 &gt; $1 }
+   .done {
+       // $0 =&gt; [5,4,3,2,1]
+   }</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">sortedValues</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">areInIncreasingOrder</span><span class="p">:</span> <span class="kd">@escaping(T.Iterator.Element, T.Iterator.Element)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Guarantee</span><span class="o">&lt;</span><span class="p">[</span><span class="kt">T</span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit9GuaranteeCAASTRzSL7ElementRpzlE12sortedValues2on5flagsACySayAEGGSo17OS_dispatch_queueCSg_8Dispatch0L13WorkItemFlagsVSgtF"></a>
+                    <a name="//apple_ref/swift/Method/sortedValues(on:flags:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit9GuaranteeCAASTRzSL7ElementRpzlE12sortedValues2on5flagsACySayAEGGSo17OS_dispatch_queueCSg_8Dispatch0L13WorkItemFlagsVSgtF">sortedValues(on:flags:)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code>Guarantee&lt;[T]&gt;</code> =&gt; <code>Guarantee&lt;[T]&gt;</code></p>
+
+<p>Guarantee.value([5,2,3,4,1])
+   .sortedValues()
+   .done {
+       // $0 =&gt; [1,2,3,4,5]
+   }</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">sortedValues</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other Global Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Guarantee</span><span class="o">&lt;</span><span class="p">[</span><span class="kt">T</span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -645,7 +878,7 @@ any part of your chain may use. Like the main thread for example.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2019-06-11)</p>
+      <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2019-06-18)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.9.6</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>

@@ -191,7 +191,7 @@
     },
     {
       "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Guarantee.swift",
-      "line": 171,
+      "line": 280,
       "symbol": "Guarantee.init()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
