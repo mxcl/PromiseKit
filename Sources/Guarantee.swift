@@ -144,17 +144,61 @@ public extension Guarantee {
 }
 
 public extension Guarantee where T: Sequence {
+    /**
+     `Guarantee<[T]>` => `T` -> `U` => `Guarantee<[U]>`
+
+         Guarantee.value([1,2,3])
+            .mapValues { integer in integer * 2 }
+            .done {
+                // $0 => [2,4,6]
+            }
+     */
+    func mapValues<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(T.Iterator.Element) -> U) -> Guarantee<[U]> {
+        return map(on: on, flags: flags) { $0.map(transform) }
+    }
+
+    /**
+     `Guarantee<[T]>` => `T` -> `[U]` => `Guarantee<[U]>`
+
+         Guarantee.value([1,2,3])
+            .flatMapValues { integer in [integer, integer] }
+            .done {
+                // $0 => [1,1,2,2,3,3]
+            }
+     */
+    func flatMapValues<U: Sequence>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(T.Iterator.Element) -> U) -> Guarantee<[U.Iterator.Element]> {
+        return map(on: on, flags: flags) { (foo: T) in
+            foo.flatMap { transform($0) }
+        }
+    }
+
+    /**
+     `Guarantee<[T]>` => `T` -> `U?` => `Guarantee<[U]>`
+
+         Guarantee.value(["1","2","a","3"])
+            .compactMapValues { Int($0) }
+            .done {
+                // $0 => [1,2,3]
+            }
+     */
+    func compactMapValues<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(T.Iterator.Element) -> U?) -> Guarantee<[U]> {
+        return map(on: on, flags: flags) { foo -> [U] in
+            #if !swift(>=3.3) || (swift(>=4) && !swift(>=4.1))
+            return foo.flatMap(transform)
+            #else
+            return foo.compactMap(transform)
+            #endif
+        }
+    }
 
     /**
      `Guarantee<[T]>` => `T` -> `Guarantee<U>` => `Guaranetee<[U]>`
 
-         firstly {
-             .value([1,2,3])
-         }.thenMap {
-             .value($0 * 2)
-         }.done {
-             // $0 => [2,4,6]
-         }
+         Guarantee.value([1,2,3])
+            .thenMap { .value($0 * 2) }
+            .done {
+                // $0 => [2,4,6]
+            }
      */
     func thenMap<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(T.Iterator.Element) -> Guarantee<U>) -> Guarantee<[U]> {
         return then(on: on, flags: flags) {
@@ -163,6 +207,71 @@ public extension Guarantee where T: Sequence {
             // if happens then is bug inside PromiseKit
             fatalError(String(describing: $0))
         }
+    }
+
+    /**
+     `Guarantee<[T]>` => `T` -> `Guarantee<[U]>` => `Guarantee<[U]>`
+
+         Guarantee.value([1,2,3])
+            .thenFlatMap { integer in .value([integer, integer]) }
+            .done {
+                // $0 => [1,1,2,2,3,3]
+            }
+     */
+    func thenFlatMap<U: Thenable>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(T.Iterator.Element) -> U) -> Guarantee<[U.T.Iterator.Element]> where U.T: Sequence {
+        return then(on: on, flags: flags) {
+            when(fulfilled: $0.map(transform))
+        }.map(on: nil) {
+            $0.flatMap { $0 }
+        }.recover {
+            // if happens then is bug inside PromiseKit
+            fatalError(String(describing: $0))
+        }
+    }
+
+    /**
+     `Guarantee<[T]>` => `T` -> Bool => `Guarantee<[T]>`
+
+         Guarantee.value([1,2,3])
+            .filterValues { $0 > 1 }
+            .done {
+                // $0 => [2,3]
+            }
+     */
+    func filterValues(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ isIncluded: @escaping(T.Iterator.Element) -> Bool) -> Guarantee<[T.Iterator.Element]> {
+        return map(on: on, flags: flags) {
+            $0.filter(isIncluded)
+        }
+    }
+
+    /**
+     `Guarantee<[T]>` => (`T`, `T`) -> Bool => `Guarantee<[T]>`
+
+     Guarantee.value([5,2,3,4,1])
+        .sortedValues { $0 > $1 }
+        .done {
+            // $0 => [5,4,3,2,1]
+        }
+     */
+    func sortedValues(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ areInIncreasingOrder: @escaping(T.Iterator.Element, T.Iterator.Element) -> Bool) -> Guarantee<[T.Iterator.Element]> {
+        return map(on: on, flags: flags) {
+            $0.sorted(by: areInIncreasingOrder)
+        }
+    }
+}
+
+public extension Guarantee where T: Sequence, T.Iterator.Element: Comparable {
+    /**
+     `Guarantee<[T]>` => `Guarantee<[T]>`
+
+     Guarantee.value([5,2,3,4,1])
+        .sortedValues()
+        .done {
+            // $0 => [1,2,3,4,5]
+        }
+     */
+    func sortedValues(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil) -> Guarantee<[T.Iterator.Element]> {
+        return map(on: on, flags: flags) { $0.sorted() }
     }
 }
 
