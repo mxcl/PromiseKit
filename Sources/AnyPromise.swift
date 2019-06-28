@@ -61,6 +61,26 @@ import Foundation
         }))
     }
 
+    @objc public func __wait() -> Any? {
+        if Thread.isMainThread {
+            conf.logHandler(.waitOnMainThread)
+        }
+        
+        var result = __value
+        
+        if result == nil {
+            let group = DispatchGroup()
+            group.enter()
+            self.__pipe { obj in
+                result = obj
+                group.leave()
+            }
+            group.wait()
+        }
+        
+        return result
+    }
+ 
     /// Internal, do not use! Some behaviors undefined.
     @objc public func __pipe(_ to: @escaping (Any?) -> Void) {
         let to = { (obj: Any?) -> Void in
