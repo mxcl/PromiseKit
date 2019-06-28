@@ -757,6 +757,30 @@ static inline AnyPromise *fulfillLater() {
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
+- (void)test_61_wait_for_value {
+    id ex1 = [self expectationWithDescription:@""];
+    
+    id o = [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
+        resolve(@1);
+    }].wait;
+    
+    XCTAssertEqualObjects(o, @1);
+    [ex1 fulfill];
+    [self waitForExpectationsWithTimeout:1 handler:nil];
+}
+
+- (void)test_62_wait_for_error {
+    id ex1 = [self expectationWithDescription:@""];
+    
+    NSError* err = [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
+        resolve([NSError errorWithDomain:@"a" code:123 userInfo:nil]);
+    }].wait;
+    
+    XCTAssertEqual(err.code, 123);
+    [ex1 fulfill];
+    [self waitForExpectationsWithTimeout:1 handler:nil];
+}
+
 - (void)test_properties {
     XCTAssertEqualObjects([AnyPromise promiseWithValue:@1].value, @1);
     XCTAssertEqualObjects([[AnyPromise promiseWithValue:dummyWithCode(2)].value localizedDescription], @"2");
