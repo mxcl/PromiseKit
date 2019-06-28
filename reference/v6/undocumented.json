@@ -30,21 +30,28 @@
     },
     {
       "file": "/Users/travis/build/mxcl/PromiseKit/Sources/AnyPromise.swift",
-      "line": 90,
+      "line": 64,
+      "symbol": "__AnyPromise.__wait()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/AnyPromise.swift",
+      "line": 110,
       "symbol": "__AnyPromise.__value",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/travis/build/mxcl/PromiseKit/Sources/AnyPromise.swift",
-      "line": 99,
+      "line": 119,
       "symbol": "__AnyPromise.__pending",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/travis/build/mxcl/PromiseKit/Sources/AnyPromise.swift",
-      "line": 183,
+      "line": 203,
       "symbol": "Promise.init(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
@@ -128,23 +135,23 @@
     },
     {
       "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Error.swift",
-      "line": null,
-      "symbol": "PMKError",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Error.swift",
-      "line": null,
-      "symbol": "PMKError",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Error.swift",
       "line": 3,
       "symbol": "PMKError",
       "symbol_kind": "source.lang.swift.decl.enum",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Error.swift",
+      "line": 37,
+      "symbol": "PMKError",
+      "symbol_kind": "source.lang.swift.decl.extension",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Error.swift",
+      "line": 58,
+      "symbol": "PMKError",
+      "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
@@ -205,13 +212,6 @@
     },
     {
       "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Resolver.swift",
-      "line": null,
-      "symbol": "PromiseKit.Result",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Resolver.swift",
       "line": 85,
       "symbol": "Result",
       "symbol_kind": "source.lang.swift.decl.enum",
@@ -229,6 +229,13 @@
       "line": 87,
       "symbol": "Result.rejected(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Resolver.swift",
+      "line": 90,
+      "symbol": "PromiseKit.Result",
+      "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {

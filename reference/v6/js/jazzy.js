@@ -8,30 +8,52 @@ if (navigator.userAgent.match(/xcode/i)) {
   window.jazzy.docset = true
 }
 
-// On doc load, toggle the URL hash discussion if present
-$(document).ready(function() {
-  if (!window.jazzy.docset) {
-    var linkToHash = $('a[href="' + window.location.hash +'"]');
-    linkToHash.trigger("click");
-  }
-});
+function toggleItem($link, $content) {
+  var animationDuration = 300;
+  $link.toggleClass('token-open');
+  $content.slideToggle(animationDuration);
+}
 
-// On token click, toggle its discussion and animate token.marginLeft
-$(".token").click(function(event) {
+function itemLinkToContent($link) {
+  return $link.parent().parent().next();
+}
+
+// On doc load + hash-change, open any targetted item
+function openCurrentItemIfClosed() {
   if (window.jazzy.docset) {
     return;
   }
-  var link = $(this);
-  var animationDuration = 300;
-  $content = link.parent().parent().next();
-  $content.slideToggle(animationDuration);
+  var $link = $(`.token[href="${location.hash}"]`);
+  $content = itemLinkToContent($link);
+  if ($content.is(':hidden')) {
+    toggleItem($link, $content);
+  }
+}
+
+$(openCurrentItemIfClosed);
+$(window).on('hashchange', openCurrentItemIfClosed);
+
+// On item link ('token') click, toggle its discussion
+$('.token').on('click', function(event) {
+  if (window.jazzy.docset) {
+    return;
+  }
+  var $link = $(this);
+  toggleItem($link, itemLinkToContent($link));
 
   // Keeps the document from jumping to the hash.
-  var href = $(this).attr('href');
+  var href = $link.attr('href');
   if (history.pushState) {
     history.pushState({}, '', href);
   } else {
     location.hash = href;
   }
   event.preventDefault();
+});
+
+// Clicks on links to the current, closed, item need to open the item
+$("a:not('.token')").on('click', function() {
+  if (location == this.href) {
+    openCurrentItemIfClosed();
+  }
 });
