@@ -183,6 +183,13 @@ typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
 - (AnyPromise * __nonnull(^ __nonnull)(dispatch_queue_t __nonnull, dispatch_block_t __nonnull))ensureOn NS_REFINED_FOR_SWIFT;
 
 /**
+ Wait until the promise is resolved.
+
+ @return Value if fulfilled or error if rejected.
+ */
+- (id __nullable)wait NS_REFINED_FOR_SWIFT;
+
+/**
  Create a new promise with an associated resolver.
 
  Use this method when wrapping asynchronous code that does *not* use
