@@ -112,6 +112,10 @@ NSString *const PMKErrorDomain = @"PMKErrorDomain";
     };
 }
 
+- (id)wait {
+    return [d __wait];
+}
+
 - (BOOL)pending {
     return [[d valueForKey:@"__pending"] boolValue];
 }
