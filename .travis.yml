@@ -13,7 +13,7 @@ branches:
 
 stages:
   - name: pretest
-  - name: lint
+  - name: permutations
   - name: test
   - name: deploy
     if: branch =~ ^\d+\.\d+\.\d+$
@@ -29,6 +29,14 @@ jobs:
       install: swift test --generate-linuxmain
       script: git diff --exit-code
 
+    - &swiftpm
+      name: macOS SwiftPM 5.0
+      stage: permutations
+      script: swift build
+    - <<: *swiftpm
+      name: macOS SwiftPM 5.1
+      osx_image: xcode11
+      
     - &test
       name: macOS
       stage: test
@@ -40,14 +48,20 @@ jobs:
     - <<: *test
       name: tvOS
       xcode_destination: 'OS=12.2,name=Apple TV'
+    - <<: *test
+      name: Xcode 11
+      osx_image: xcode11
 
-    - name: Linux
+    - &linux
+      name: Linux
       env: SWIFT_VERSION='5.0'
       os: linux
       language: generic
       osx_image: null
       install: eval "$(curl -sL https://swiftenv.fuller.li/install.sh)"
       script: swift test
+    - <<: *linux
+      env: SWIFT_VERSION=5.1-DEVELOPMENT-SNAPSHOT-2019-07-03-a
 
     - name: JavaScript Promises/A+
       install: |
