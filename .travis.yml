@@ -53,6 +53,9 @@ jobs:
     - <<: *carthage
       osx_image: xcode10.2
       name: Swift 4.1.51 / Xcode 10.2
+    - <<: *carthage
+      osx_image: xcode11
+      name: Swift 4.1.52 / Xcode 10.2
 
     - &pod
       stage: lint
@@ -86,6 +89,9 @@ jobs:
     - <<: *pod
       osx_image: xcode10.2
       env: SWIFT=5.0
+    - <<: *pod
+      osx_image: xcode11
+      env: SWIFT=5.1
 
     - &linux
       stage: swiftpm
@@ -124,6 +130,9 @@ jobs:
       env: SWIFT_BUILD_VERSION=5 SWIFT_VERSION=5.0
       name: 'Linux / Swift 5.0 / +Tests'
       script: swift test -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION
+    - <<: *linux
+      env: SWIFT_BUILD_VERSION=5 SWIFT_VERSION=5.1-DEVELOPMENT-SNAPSHOT-2019-07-03-a
+      name: Linux / Swift 5.1
 
     - &test
       stage: test
@@ -163,6 +172,9 @@ jobs:
     - <<: *swiftpm
       osx_image: xcode10.2
       name: 'macOS / swift-tools-version: 5.0 / Swift 5.0.0'
+    - <<: *swiftpm
+      osx_image: xcode11
+      name: 'macOS / swift-tools-version: 5.0 / Swift 5.1.0'
 
     - name: '`pod trunk push`'
       stage: deploy
