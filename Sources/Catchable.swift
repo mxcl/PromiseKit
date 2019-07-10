@@ -21,20 +21,21 @@ public extension CatchMixin {
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documents/CommonPatterns.md#cancellation)
      */
     @discardableResult
-    func `catch`(on: Dispatcher = conf.D.return, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) -> Void) -> PMKFinalizer {
+    func `catch`(on: Dispatcher = conf.dd, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) -> Void) -> PMKFinalizer {
         let finalizer = PMKFinalizer()
+        finalizer.dispatchState = dispatchState.nextState(givenDispatcher: on, isTailFunction: true)
         pipe {
             switch $0 {
             case .failure(let error):
                 guard policy == .allErrors || !error.isCancelled else {
                     fallthrough
                 }
-                on.dispatch {
+                finalizer.dispatch {
                     body(error)
-                    finalizer.pending.resolve(())
+                    finalizer.fulfill()
                 }
             case .success:
-                finalizer.pending.resolve(())
+                finalizer.fulfill()
             }
         }
         return finalizer
@@ -55,19 +56,20 @@ public extension CatchMixin {
      - Note: Since this method handles only specific errors, supplying a `CatchPolicy` is unsupported.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func `catch`<E: Swift.Error>(only: E, on: Dispatcher = conf.D.return, _ body: @escaping(E) -> Void) -> PMKCascadingFinalizer where E: Equatable {
+    func `catch`<E: Swift.Error>(only: E, on: Dispatcher = conf.dd, _ body: @escaping(E) -> Void) -> PMKCascadingFinalizer where E: Equatable {
         let finalizer = PMKCascadingFinalizer()
+        finalizer.dispatchState = dispatchState.nextState(givenDispatcher: on, isTailFunction: true)
         pipe {
             switch $0 {
             case .failure(let error as E) where error == only:
-                on.dispatch {
+                finalizer.dispatch {
                     body(error)
-                    finalizer.pending.resolver.fulfill(())
+                    finalizer.fulfill()
                 }
             case .failure(let error):
-                finalizer.pending.resolver.reject(error)
+                finalizer.reject(error)
             case .success:
-                finalizer.pending.resolver.fulfill(())
+                finalizer.fulfill()
             }
         }
         return finalizer
@@ -89,41 +91,65 @@ public extension CatchMixin {
      - Returns: A promise finalizer that accepts additional `catch` clauses.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func `catch`<E: Swift.Error>(only: E.Type, on: Dispatcher = conf.D.return, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) -> Void) -> PMKCascadingFinalizer {
+    func `catch`<E: Swift.Error>(only: E.Type, on: Dispatcher = conf.dd, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) -> Void) -> PMKCascadingFinalizer
+    {
         let finalizer = PMKCascadingFinalizer()
+        finalizer.dispatchState = dispatchState.nextState(givenDispatcher: on, isTailFunction: true)
         pipe {
             switch $0 {
             case .failure(let error as E):
                 guard policy == .allErrors || !error.isCancelled else {
-                    return finalizer.pending.resolver.reject(error)
+                    return finalizer.reject(error)
                 }
-                on.dispatch {
+                finalizer.dispatch {
                     body(error)
-                    finalizer.pending.resolver.fulfill(())
+                    finalizer.fulfill()
                 }
             case .failure(let error):
-                finalizer.pending.resolver.reject(error)
+                finalizer.reject(error)
             case .success:
-                finalizer.pending.resolver.fulfill(())
+                finalizer.fulfill()
             }
         }
         return finalizer
     }
 }
 
-public class PMKFinalizer {
-    let pending = Guarantee<Void>.pending()
+public class PMKFinalizer: HasDispatchState {
+    
+    private let pending = Guarantee<Void>.pending()
+    var dispatchState: DispatchState {
+        get { return pending.guarantee.dispatchState }
+        set { pending.guarantee.dispatchState = newValue }
+    }
 
     /// `finally` is the same as `ensure`, but it is not chainable
-    public func finally(on: Dispatcher = conf.D.return, _ body: @escaping () -> Void) {
+    public func finally(on: Dispatcher = conf.dd, _ body: @escaping () -> Void) {
         pending.guarantee.done(on: on) {
             body()
         }
     }
+    
+    func fulfill() {
+        pending.resolve(())
+    }
 }
 
-public class PMKCascadingFinalizer {
-    let pending = Promise<Void>.pending()
+public class PMKCascadingFinalizer: HasDispatchState {
+    
+    private let pending = Promise<Void>.pending()
+    var dispatchState: DispatchState {
+        get { return pending.promise.dispatchState }
+        set { pending.promise.dispatchState = newValue }
+    }
+    
+    func fulfill() {
+        pending.resolver.fulfill(())
+    }
+    
+    func reject(_ error: Error) {
+        pending.resolver.reject(error)
+    }
 
     /**
      The provided closure executes when this promise rejects.
@@ -140,7 +166,7 @@ public class PMKCascadingFinalizer {
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
     @discardableResult
-    public func `catch`(on: Dispatcher = conf.D.return, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) -> Void) -> PMKFinalizer {
+    public func `catch`(on: Dispatcher = conf.dd, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) -> Void) -> PMKFinalizer {
         return pending.promise.catch(on: on, policy: policy) {
             body($0)
         }
@@ -161,7 +187,7 @@ public class PMKCascadingFinalizer {
      - Note: Since this method handles only specific errors, supplying a `CatchPolicy` is unsupported.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    public func `catch`<E: Swift.Error>(only: E, on: Dispatcher = conf.D.return, _ body: @escaping(E) -> Void) -> PMKCascadingFinalizer where E: Equatable {
+    public func `catch`<E: Swift.Error>(only: E, on: Dispatcher = conf.dd, _ body: @escaping(E) -> Void) -> PMKCascadingFinalizer where E: Equatable {
         return pending.promise.catch(only: only, on: on) {
             body($0)
         }
@@ -181,12 +207,26 @@ public class PMKCascadingFinalizer {
      - Returns: A promise finalizer that accepts additional `catch` clauses.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    public func `catch`<E: Swift.Error>(only: E.Type, on: Dispatcher = conf.D.return, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) -> Void) -> PMKCascadingFinalizer {
+    public func `catch`<E: Swift.Error>(only: E.Type, on: Dispatcher = conf.dd, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) -> Void) -> PMKCascadingFinalizer
+    {
         return pending.promise.catch(only: only, on: on, policy: policy) {
             body($0)
         }
     }
     
+    /// Set a default Dispatcher for the chain. Within the chain, this Dispatcher will remain the
+    /// default until you change it, even if you dispatch individual closures to other Dispatchers.
+    ///
+    /// - Parameters:
+    ///   - on: The new default Dispatcher. Use `.default` to return to normal dispatching.
+    
+    public func dispatch(on: Dispatcher) -> PMKCascadingFinalizer {
+        let nextFinalizer = PMKCascadingFinalizer()
+        nextFinalizer.dispatchState = dispatchState.dispatch(on: on)
+        pending.promise.pipe(to: nextFinalizer.pending.resolver.resolve)
+        return nextFinalizer
+    }
+
     /**
      Consumes the Swift unused-result warning.
      - Note: You should `catch`, but in situations where you know you don’t need a `catch`, `cauterize` makes your intentions clear.
@@ -219,15 +259,16 @@ public extension CatchMixin {
      - Parameter body: The handler to execute if this promise is rejected.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documents/CommonPatterns.md#cancellation)
      */
-    func recover<U: Thenable>(on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> U) -> Promise<T> where U.T == T {
+    func recover<U: Thenable>(on: Dispatcher = conf.dd, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> U) -> Promise<T> where U.T == T {
         let rp = Promise<U.T>(.pending)
+        rp.dispatchState = dispatchState.nextState(givenDispatcher: on)
         pipe {
             switch $0 {
             case .success(let value):
                 rp.box.seal(.success(value))
             case .failure(let error):
                 if policy == .allErrors || !error.isCancelled {
-                    on.dispatch {
+                    rp.dispatch {
                         do {
                             let rv = try body(error)
                             guard rv !== rp else { throw PMKError.returnedSelf }
@@ -262,14 +303,15 @@ public extension CatchMixin {
      - Note: Since this method recovers only specific errors, supplying a `CatchPolicy` is unsupported.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func recover<U: Thenable, E: Swift.Error>(only: E, on: Dispatcher = conf.D.map, _ body: @escaping(E) throws -> U) -> Promise<T> where U.T == T, E: Equatable {
+    func recover<U: Thenable, E: Swift.Error>(only: E, on: Dispatcher = conf.dd, _ body: @escaping(E) throws -> U) -> Promise<T> where U.T == T, E: Equatable {
         let rp = Promise<U.T>(.pending)
+        rp.dispatchState = dispatchState.nextState(givenDispatcher: on)
         pipe {
             switch $0 {
             case .success(let value):
                 rp.box.seal(.success(value))
             case .failure(let error as E) where error == only:
-                on.dispatch {
+                rp.dispatch {
                     do {
                         let rv = try body(error)
                         guard rv !== rp else { throw PMKError.returnedSelf }
@@ -305,15 +347,17 @@ public extension CatchMixin {
      - Parameter body: The handler to execute if this promise is rejected with the provided error type.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func recover<U: Thenable, E: Swift.Error>(only: E.Type, on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) throws -> U) -> Promise<T> where U.T == T {
+    func recover<U: Thenable, E: Swift.Error>(only: E.Type, on: Dispatcher = conf.dd, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) throws -> U) -> Promise<T> where U.T == T
+    {
         let rp = Promise<U.T>(.pending)
+        rp.dispatchState = dispatchState.nextState(givenDispatcher: on)
         pipe {
             switch $0 {
             case .success(let value):
                 rp.box.seal(.success(value))
             case .failure(let error as E):
                 if policy == .allErrors || !error.isCancelled {
-                    on.dispatch {
+                    rp.dispatch {
                         do {
                             let rv = try body(error)
                             guard rv !== rp else { throw PMKError.returnedSelf }
@@ -344,14 +388,15 @@ public extension CatchMixin {
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documents/CommonPatterns.md#cancellation)
      */
     @discardableResult
-    func recover(on: Dispatcher = conf.D.map, _ body: @escaping(Error) -> Guarantee<T>) -> Guarantee<T> {
+    func recover(on: Dispatcher = conf.dd, _ body: @escaping(Error) -> Guarantee<T>) -> Guarantee<T> {
         let rg = Guarantee<T>(.pending)
+        rg.dispatchState = dispatchState.nextState(givenDispatcher: on)
         pipe {
             switch $0 {
             case .success(let value):
                 rg.box.seal(value)
             case .failure(let error):
-                on.dispatch {
+                rg.dispatch {
                     body(error).pipe(to: rg.box.seal)
                 }
             }
@@ -376,10 +421,11 @@ public extension CatchMixin {
      - Parameter body: The closure that executes when this promise resolves.
      - Returns: A new promise, resolved with this promise’s resolution.
      */
-    func ensure(on: Dispatcher = conf.D.return, _ body: @escaping () -> Void) -> Promise<T> {
+    func ensure(on: Dispatcher = conf.dd, _ body: @escaping () -> Void) -> Promise<T> {
         let rp = Promise<T>(.pending)
+        rp.dispatchState = dispatchState.nextState(givenDispatcher: on)
         pipe { result in
-            on.dispatch {
+            rp.dispatch {
                 body()
                 rp.box.seal(result)
             }
@@ -405,10 +451,11 @@ public extension CatchMixin {
      - Parameter body: The closure that executes when this promise resolves.
      - Returns: A new promise, resolved with this promise’s resolution.
      */
-    func ensureThen(on: Dispatcher = conf.D.return, _ body: @escaping () -> Guarantee<Void>) -> Promise<T> {
+    func ensureThen(on: Dispatcher = conf.dd, _ body: @escaping () -> Guarantee<Void>) -> Promise<T> {
         let rp = Promise<T>(.pending)
+        rp.dispatchState = dispatchState.nextState(givenDispatcher: on)
         pipe { result in
-            on.dispatch {
+            rp.dispatch {
                 body().done {
                     rp.box.seal(result)
                 }
@@ -416,7 +463,6 @@ public extension CatchMixin {
         }
         return rp
     }
-
 
     /**
      Consumes the Swift unused-result warning.
@@ -445,14 +491,15 @@ public extension CatchMixin where T == Void {
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documents/CommonPatterns.md#cancellation)
      */
     @discardableResult
-    func recover(on: Dispatcher = conf.D.map, _ body: @escaping(Error) -> Void) -> Guarantee<Void> {
+    func recover(on: Dispatcher = conf.dd, _ body: @escaping(Error) -> Void) -> Guarantee<Void> {
         let rg = Guarantee<Void>(.pending)
+        rg.dispatchState = dispatchState.nextState(givenDispatcher: on)
         pipe {
             switch $0 {
             case .success:
                 rg.box.seal(())
             case .failure(let error):
-                on.dispatch {
+                rg.dispatch {
                     body(error)
                     rg.box.seal(())
                 }
@@ -471,15 +518,16 @@ public extension CatchMixin where T == Void {
      - Parameter body: The handler to execute if this promise is rejected.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documents/CommonPatterns.md#cancellation)
      */
-    func recover(on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> Void) -> Promise<Void> {
+    func recover(on: Dispatcher = conf.dd, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> Void) -> Promise<Void> {
         let rg = Promise<Void>(.pending)
+        rg.dispatchState = dispatchState.nextState(givenDispatcher: on)
         pipe {
             switch $0 {
             case .success:
                 rg.box.seal(.success(()))
             case .failure(let error):
                 if policy == .allErrors || !error.isCancelled {
-                    on.dispatch {
+                    rg.dispatch {
                         do {
                             rg.box.seal(.success(try body(error)))
                         } catch {
@@ -506,14 +554,15 @@ public extension CatchMixin where T == Void {
      - Note: Since this method recovers only specific errors, supplying a `CatchPolicy` is unsupported.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func recover<E: Swift.Error>(only: E, on: Dispatcher = conf.D.map, _ body: @escaping(E) throws -> Void) -> Promise<Void> where E: Equatable {
+    func recover<E: Swift.Error>(only: E, on: Dispatcher = conf.dd, _ body: @escaping(E) throws -> Void) -> Promise<Void> where E: Equatable {
         let rp = Promise<Void>(.pending)
+        rp.dispatchState = dispatchState.nextState(givenDispatcher: on)
         pipe {
             switch $0 {
             case .success:
                 rp.box.seal(.success(()))
             case .failure(let error as E) where error == only:
-                on.dispatch {
+                rp.dispatch {
                     do {
                         rp.box.seal(.success(try body(error)))
                     } catch {
@@ -539,15 +588,16 @@ public extension CatchMixin where T == Void {
      - Parameter body: The handler to execute if this promise is rejected with the provided error type.
      - SeeAlso: [Cancellation](http://promisekit.org/docs/)
      */
-    func recover<E: Swift.Error>(only: E.Type, on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) throws -> Void) -> Promise<Void> {
+    func recover<E: Swift.Error>(only: E.Type, on: Dispatcher = conf.dd, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) throws -> Void) -> Promise<Void> {
         let rp = Promise<Void>(.pending)
+        rp.dispatchState = dispatchState.nextState(givenDispatcher: on)
         pipe {
             switch $0 {
             case .success:
                 rp.box.seal(.success(()))
             case .failure(let error as E):
                 if policy == .allErrors || !error.isCancelled {
-                    on.dispatch {
+                    rp.dispatch {
                         do {
                             rp.box.seal(.success(try body(error)))
                         } catch {

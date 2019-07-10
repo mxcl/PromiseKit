@@ -19,8 +19,8 @@ public extension _PMKSharedWrappers {
      - Parameter body: The closure that is executed when this Promise is fulfilled.
      - Returns: A new promise fulfilled as `Void`.
      */
-    func done(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(T) throws -> Void) -> BaseOfVoid {
-        let dispatcher = selectDispatcher(given: on, configured: conf.D.return, flags: flags)
+    func done(on: DispatchQueue? = .unspecified, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(T) throws -> Void) -> BaseOfVoid {
+        let dispatcher = on.convertToDispatcher(flags: flags)
         return done(on: dispatcher, body)
     }
 
@@ -45,8 +45,8 @@ public extension _PMKSharedWrappers {
      - Parameter body: The closure that is executed when this Promise is fulfilled.
      - Returns: A new promise that is resolved with the value that the handler is fed.
      */
-    func get(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping (T) throws -> Void) -> BaseOfT {
-        let dispatcher = selectDispatcher(given: on, configured: conf.D.return, flags: flags)
+    func get(on: DispatchQueue? = .unspecified, flags: DispatchWorkItemFlags? = nil, _ body: @escaping (T) throws -> Void) -> BaseOfT {
+        let dispatcher = on.convertToDispatcher(flags: flags)
         return get(on: dispatcher, body)
     }
 
@@ -62,10 +62,27 @@ public extension _PMKSharedWrappers {
      - Parameter body: The closure that is executed with Result of Promise.
      - Returns: A new promise that is resolved with the result that the handler is fed.
      */
-    func tap(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(Result<T, Error>) -> Void) -> BaseOfT {
-        let dispatcher = selectDispatcher(given: on, configured: conf.D.map, flags: flags)
+    func tap(on: DispatchQueue? = .unspecified, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(Result<T, Error>) -> Void) -> BaseOfT {
+        let dispatcher = on.convertToDispatcher(flags: flags)
         return tap(on: dispatcher, body)
     }
+
+    /// Set a default Dispatcher for the chain. Within the chain, this Dispatcher will remain the
+    /// default until you change it, even if you dispatch individual closures to other Dispatchers.
+    ///
+    /// - Note: If you set a chain dispatcher within the body of a promise chain, you must
+    ///   "confirm" the chain dispatcher when it gets to the tail to avoid a warning from
+    ///   PromiseKit. To do this, just include `on: .chain` as an argument to the chain's
+    ///   first `done`, `catch`, or `finally`.
+    ///
+    /// - Parameter on: The new default queue. Use `.default` to return to normal dispatching.
+    /// - Parameter flags: `DispatchWorkItemFlags` to be applied when dispatching.
+    
+    func dispatch(on: DispatchQueue?, flags: DispatchWorkItemFlags? = nil) -> BaseOfT {
+        let dispatcher = on.convertToDispatcher(flags: flags)
+        return dispatch(on: dispatcher)
+    }
+    
 }
 
 public extension Thenable {
@@ -88,8 +105,8 @@ public extension Thenable {
      - Parameter body: The closure that executes when this promise fulfills. It must return a promise.
      - Returns: A new promise that resolves when the promise returned from the provided closure resolves.
      */
-    func then<U: Thenable>(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(T) throws -> U) -> Promise<U.T> {
-        let dispatcher = selectDispatcher(given: on, configured: conf.D.map, flags: flags)
+    func then<U: Thenable>(on: DispatchQueue? = .unspecified, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(T) throws -> U) -> Promise<U.T> {
+        let dispatcher = on.convertToDispatcher(flags: flags)
         return then(on: dispatcher, body)
     }
     
@@ -111,8 +128,8 @@ public extension Thenable {
             //…
          }
      */
-    func map<U>(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(T) throws -> U) -> Promise<U> {
-        let dispatcher = selectDispatcher(given: on, configured: conf.D.map, flags: flags)
+    func map<U>(on: DispatchQueue? = .unspecified, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(T) throws -> U) -> Promise<U> {
+        let dispatcher = on.convertToDispatcher(flags: flags)
         return map(on: dispatcher, transform)
     }
 
@@ -131,8 +148,8 @@ public extension Thenable {
             // either `PMKError.compactMap` or a `JSONError`
          }
      */
-    func compactMap<U>(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(T) throws -> U?) -> Promise<U> {
-        let dispatcher = selectDispatcher(given: on, configured: conf.D.map, flags: flags)
+    func compactMap<U>(on: DispatchQueue? = .unspecified, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(T) throws -> U?) -> Promise<U> {
+        let dispatcher = on.convertToDispatcher(flags: flags)
         return compactMap(on: dispatcher, transform)
     }
 }
@@ -159,8 +176,8 @@ public extension CancellableThenable {
      - Parameter body: The closure that executes when this cancellable promise fulfills. It must return a cancellable promise.
      - Returns: A new cancellable promise that resolves when the promise returned from the provided closure resolves.
      */
-    func then<V: CancellableThenable>(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.U.T> {
-        let dispatcher = selectDispatcher(given: on, configured: conf.D.map, flags: flags)
+    func then<V: CancellableThenable>(on: DispatchQueue? = .unspecified, flags: DispatchWorkItemFlags? = nil, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.U.T> {
+        let dispatcher = on.convertToDispatcher(flags: flags)
         return then(on: dispatcher, body)
     }
     
@@ -184,8 +201,8 @@ public extension CancellableThenable {
      - Parameter body: The closure that executes when this cancellable promise fulfills. It must return a promise (not a cancellable promise).
      - Returns: A new cancellable promise that resolves when the promise returned from the provided closure resolves.
      */
-    func then<V: Thenable>(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.T> {
-        let dispatcher = selectDispatcher(given: on, configured: conf.D.map, flags: flags)
+    func then<V: Thenable>(on: DispatchQueue? = .unspecified, flags: DispatchWorkItemFlags? = nil, _ body: @escaping (U.T) throws -> V) -> CancellablePromise<V.T> {
+        let dispatcher = on.convertToDispatcher(flags: flags)
         return then(on: dispatcher, body)
     }
     
@@ -209,8 +226,8 @@ public extension CancellableThenable {
      - Parameter transform: The closure that is executed when this CancellablePromise is fulfilled. It must return a non-promise and non-cancellable-promise.
      - Returns: A new cancellable promise that is resolved with the value returned from the provided closure.
      */
-    func map<V>(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping (U.T) throws -> V) -> CancellablePromise<V> {
-        let dispatcher = selectDispatcher(given: on, configured: conf.D.map, flags: flags)
+    func map<V>(on: DispatchQueue? = .unspecified, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping (U.T) throws -> V) -> CancellablePromise<V> {
+        let dispatcher = on.convertToDispatcher(flags: flags)
         return map(on: dispatcher, transform)
     }
     
@@ -232,9 +249,10 @@ public extension CancellableThenable {
          //…
          context.cancel()
      */
-    func compactMap<V>(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping (U.T) throws -> V?) -> CancellablePromise<V> {
-        let dispatcher = selectDispatcher(given: on, configured: conf.D.map, flags: flags)
+    func compactMap<V>(on: DispatchQueue? = .unspecified, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping (U.T) throws -> V?) -> CancellablePromise<V> {
+        let dispatcher = on.convertToDispatcher(flags: flags)
         return compactMap(on: dispatcher, transform)
     }
+    
 }
 

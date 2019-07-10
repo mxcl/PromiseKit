@@ -28,12 +28,19 @@ public enum LogEvent {
     /// An error which occurred while resolving a promise was swallowed
     case cauterized(Error)
     
-    /// Odd arguments to DispatchQueue-compatibility layer
-    case nilDispatchQueueWithFlags
-    
     /// DispatchWorkItem flags specified for non-DispatchQueue Dispatcher
     case extraneousFlagsSpecified
+
+    /// Entered the tail of a chain with a chain dispatcher and without confirming the intent to use
+    /// the chain dispatcher within the tail.
+    case failedToConfirmChainDispatcher
     
+    /// Default dispatchers were modified after promises were created
+    case defaultDispatchersReset
+    
+    /// Used `on: .chain` when no chain dispatcher is set
+    case chainWithoutChainDispatcher
+
     public func asString() -> String {
         var message: String
         switch self {
@@ -45,10 +52,14 @@ public enum LogEvent {
                 message = " warning: pending guarantee deallocated"
             case .cauterized(let error):
                 message = "cauterized-error: \(error)"
-            case .nilDispatchQueueWithFlags:
-                message = " warning: nil DispatchQueue specified, but DispatchWorkItemFlags were also supplied (ignored)"
             case .extraneousFlagsSpecified:
                 message = " warning: DispatchWorkItemFlags flags specified, but default Dispatcher is not a DispatchQueue (ignored)"
+            case .failedToConfirmChainDispatcher:
+                return "Entered the tail of a promise chain with a chain-specific dispatcher (set by `dispatch(on:)`) without confirming the dispatcher. To confirm that it's the behavior you expect, and silence this warning, include an `on: .chain` parameter in the first call to `done`, `catch`, or `finally`."
+            case .defaultDispatchersReset:
+                return "Default dispatchers should not be modified after you have created promises. This restriction will be enforced in a future version of PromiseKit. Use `dispatch(on:)` to set local defaults."
+            case .chainWithoutChainDispatcher:
+                return "`on: .chain` was specified when no chain dispatcher is defined; ignoring"
         }
         return "PromiseKit:\(message)"
     }

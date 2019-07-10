@@ -8,9 +8,13 @@ import Dispatch
  
  - See: `CancellableThenable`
  */
-public class CancellablePromise<T>: CancellableThenable, CancellableCatchMixin {
+public class CancellablePromise<T>: CancellableThenable, CancellableCatchMixin, HasDispatchState {
     /// Delegate `promise` for this CancellablePromise
     public let promise: Promise<T>
+    var dispatchState: DispatchState {
+        get { return promise.dispatchState }
+        set { promise.dispatchState = newValue }
+    }
     
     /// Type of the delegate `thenable`
     public typealias U = Promise<T>
@@ -70,13 +74,11 @@ public class CancellablePromise<T>: CancellableThenable, CancellableCatchMixin {
         
         if promise == nil {
             // Wrapper promise
-            promise = Promise { seal in
-                reject = seal.reject
-                bridge.done(on: CurrentThreadDispatcher()) {
-                    seal.fulfill($0)
-                }.catch(on: CurrentThreadDispatcher(), policy: .allErrors) {
-                    seal.reject($0)
-                }
+            let pending = Promise<T>.pending()
+            (promise, reject) = (pending.promise, pending.resolver.reject)
+            promise.dispatchState = bridge.dispatchState
+            bridge.pipe { result in
+                pending.resolver.resolve(result)
             }
         }
 

@@ -6,32 +6,48 @@ import Dispatch
 public extension Guarantee {
     
     @discardableResult
-    func then<U>(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(T) -> Guarantee<U>) -> Guarantee<U> {
-        let dispatcher = selectDispatcher(given: on, configured: conf.D.map, flags: flags)
+    func then<U>(on: DispatchQueue? = .unspecified, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(T) -> Guarantee<U>) -> Guarantee<U> {
+        let dispatcher = on.convertToDispatcher(flags: flags)
         return then(on: dispatcher, body)
     }
     
-    func map<U>(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(T) -> U) -> Guarantee<U> {
-        let dispatcher = selectDispatcher(given: on, configured: conf.D.map, flags: flags)
+    func map<U>(on: DispatchQueue? = .unspecified, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(T) -> U) -> Guarantee<U> {
+        let dispatcher = on.convertToDispatcher(flags: flags)
         return map(on: dispatcher, body)
     }
     
     @discardableResult
-    func done(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(T) -> Void) -> Guarantee<Void> {
-        let dispatcher = selectDispatcher(given: on, configured: conf.D.return, flags: flags)
+    func done(on: DispatchQueue? = .unspecified, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(T) -> Void) -> Guarantee<Void> {
+        let dispatcher = on.convertToDispatcher(flags: flags)
         return done(on: dispatcher, body)
     }
     
-    func get(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping (T) -> Void) -> Guarantee<T> {
-        let dispatcher = selectDispatcher(given: on, configured: conf.D.return, flags: flags)
+    func get(on: DispatchQueue? = .unspecified, flags: DispatchWorkItemFlags? = nil, _ body: @escaping (T) -> Void) -> Guarantee<T> {
+        let dispatcher = on.convertToDispatcher(flags: flags)
         return get(on: dispatcher, body)
+    }
+
+    /// Set a default Dispatcher for the chain. Within the chain, this Dispatcher will remain the
+    /// default until you change it, even if you dispatch individual closures to other Dispatchers.
+    ///
+    /// - Note: If you set a chain dispatcher within the body of a promise chain, you must
+    ///   "confirm" the chain dispatcher when it gets to the tail to avoid a warning from
+    ///   PromiseKit. To do this, just include `on: .chain` as an argument to the chain's
+    ///   first `done`, `catch`, or `finally`.
+    ///
+    /// - Parameter on: The new default queue. Use `.default` to return to normal dispatching.
+    /// - Parameter flags: `DispatchWorkItemFlags` to be applied when dispatching.
+    
+    func dispatch(on: DispatchQueue?, flags: DispatchWorkItemFlags? = nil) -> Guarantee<T> {
+        let dispatcher = on.convertToDispatcher(flags: flags)
+        return dispatch(on: dispatcher)
     }
 }
 
 public extension Guarantee where T: Sequence {
     
-    func thenMap<U>(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(T.Iterator.Element) -> Guarantee<U>) -> Guarantee<[U]> {
-        let dispatcher = selectDispatcher(given: on, configured: conf.D.map, flags: flags)
+    func thenMap<U>(on: DispatchQueue? = .unspecified, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(T.Iterator.Element) -> Guarantee<U>) -> Guarantee<[U]> {
+        let dispatcher = on.convertToDispatcher(flags: flags)
         return thenMap(on: dispatcher, transform)
     }
     

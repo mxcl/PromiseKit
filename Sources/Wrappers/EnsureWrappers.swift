@@ -20,8 +20,8 @@ public extension _PMKSharedWrappers {
      - Parameter body: The closure that executes when this promise resolves.
      - Returns: A new promise, resolved with this promise’s resolution.
      */
-    func ensure(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping () -> Void) -> BaseOfT {
-        let dispatcher = selectDispatcher(given: on, configured: conf.D.return, flags: flags)
+    func ensure(on: DispatchQueue? = .unspecified, flags: DispatchWorkItemFlags? = nil, _ body: @escaping () -> Void) -> BaseOfT {
+        let dispatcher = on.convertToDispatcher(flags: flags)
         return ensure(on: dispatcher, body)
     }
 
@@ -44,8 +44,8 @@ public extension _PMKSharedWrappers {
      - Parameter body: The closure that executes when this promise resolves.
      - Returns: A new promise, resolved with this promise’s resolution.
      */
-    func ensureThen(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping () -> VoidReturn) -> BaseOfT {
-        let dispatcher = selectDispatcher(given: on, configured: conf.D.return, flags: flags)
+    func ensureThen(on: DispatchQueue? = .unspecified, flags: DispatchWorkItemFlags? = nil, _ body: @escaping () -> VoidReturn) -> BaseOfT {
+        let dispatcher = on.convertToDispatcher(flags: flags)
         return ensureThen(on: dispatcher, body)
     }
 }

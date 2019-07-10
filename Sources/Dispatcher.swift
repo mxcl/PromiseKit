@@ -25,12 +25,16 @@ public struct DispatchQueueDispatcher: Dispatcher {
     let queue: DispatchQueue
     let group: DispatchGroup?
     let qos: DispatchQoS?
-    let flags: DispatchWorkItemFlags?
+    var flags: DispatchWorkItemFlags?
     
     public init(queue: DispatchQueue, group: DispatchGroup? = nil, qos: DispatchQoS? = nil, flags: DispatchWorkItemFlags? = nil) {
         self.queue = queue
         self.group = group
         self.qos = qos
+        self.flags = flags
+    }
+    
+    mutating func replaceFlags(_ flags: DispatchWorkItemFlags) {
         self.flags = flags
     }
 
@@ -46,9 +50,8 @@ public struct DispatchQueueDispatcher: Dispatcher {
 /// multithreading while debugging `PromiseKit` chains.
 ///
 /// You can set `PromiseKit`'s default dispatching behavior to this mode
-/// by setting `conf.Q.map` and/or `conf.Q.return` to `nil`. (This is the
-/// same as assigning an instance of `CurrentThreadDispatcher` to these
-/// variables.)
+/// by calling conf.setDefaultDispatchers(body: nil, tail: nil) before
+/// you create any promises.
 
 public struct CurrentThreadDispatcher: Dispatcher {
     public func dispatch(_ body: () -> Void) {
@@ -62,13 +65,15 @@ extension DispatchQueue: Dispatcher {
     }
 }
 
-// Used as default parameter for backward compatibility since clients may explicitly
-// specify "nil" to turn off dispatching. We need to distinguish three cases: explicit
-// queue, explicit nil, and no value specified. Dispatchers from conf.D cannot directly
-// be used as default parameter values because they are not necessarily DispatchQueues.
+// Sentinel values used in the API. Since Dispatcher is a protocol and cannot
+// have static members, all sentinel values must go through the wrapper path.
+// These are converted as rapidly as possible into SentinelDispatcher structs.
 
 public extension DispatchQueue {
-    static var pmkDefault = DispatchQueue(label: "org.promisekit.sentinel")
+    static let unspecified = DispatchQueue(label: "unspecified.promisekit.org") // Parameter not provided
+    static let `default` = DispatchQueue(label: "default.promisekit.org")  // Explicit request for default behavior
+    static let chain = DispatchQueue(label: "chain.promisekit.org")  // Execute on same Dispatcher as previous closure
+    static let sticky = DispatchQueue(label: "sticky.promisekit.org")  // Reuse the previous dispatcher if not explicitly specified
 }
 
 public extension DispatchQueue {
@@ -97,24 +102,37 @@ internal extension DispatchQueue {
     }
 }
 
-// This hairball disambiguates all the various combinations of explicit arguments, default
-// arguments, and configured defaults. In particular, a method that is given explicit work item
-// flags but no DispatchQueue should still work (that is, the dispatcher should use those flags)
-// as long as the configured default is actually some kind of DispatchQueue.
+/// This function packages up a DispatchQueue and a DispatchWorkItemFlags? as a
+/// Dispatcher for submission to the nonwrapper API.
 
-internal func selectDispatcher(given: DispatchQueue?, configured: Dispatcher, flags: DispatchWorkItemFlags?) -> Dispatcher {
-    guard let given = given else {
+extension DispatchQueue {
+    func convertToDispatcher(flags: DispatchWorkItemFlags?) -> Dispatcher {
+        switch self {
+            case .unspecified: return SentinelDispatcher(type: .unspecified, flags: flags)
+            case .default:     return SentinelDispatcher(type: .default, flags: flags)
+            case .chain:       return SentinelDispatcher(type: .chain, flags: flags)
+            case .sticky:      return SentinelDispatcher(type: .sticky, flags: flags)
+           default:
+                if let flags = flags {
+                    return self.asDispatcher(flags: flags)
+                }
+                return self
+        }
+    }
+}
+
+extension Optional where Wrapped: DispatchQueue {
+    func convertToDispatcher(flags: DispatchWorkItemFlags?) -> Dispatcher {
+        if let mapped = map({ $0.convertToDispatcher(flags: flags) }) { return mapped }
         if flags != nil {
-            conf.logHandler(.nilDispatchQueueWithFlags)
+            conf.logHandler(.extraneousFlagsSpecified)
         }
         return CurrentThreadDispatcher()
     }
-    if given !== DispatchQueue.pmkDefault {
-        return given.asDispatcher(flags: flags)
-    } else if let flags = flags, let configured = configured as? DispatchQueue {
-        return configured.asDispatcher(flags: flags)
-    } else if flags != nil {
-        conf.logHandler(.extraneousFlagsSpecified)
+}
+
+extension DispatchQueue {
+    static func ~=(_ a: DispatchQueue, _ b: DispatchQueue) -> Bool {
+        return a === b
     }
-    return configured
 }

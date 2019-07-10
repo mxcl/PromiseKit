@@ -143,14 +143,15 @@ class LoggingTests: XCTestCase {
         
         conf.logHandler = captureLogger
         Guarantee.value(42).done(on: nil, flags: .barrier) { _ in }
-        XCTAssertEqual ("nilDispatchQueueWithFlags", logOutput!)
+        XCTAssertEqual ("extraneousFlagsSpecified", logOutput!)
     }
     
     // Verify extraneousFlagsSpecified is logged
     func testExtraneousFlagsSpecified() {
         
         conf.logHandler = captureLogger
-        conf.D.return = CurrentThreadDispatcher()
+        conf.testMode = true
+        conf.D.tail = CurrentThreadDispatcher()
         Guarantee.value(42).done(flags: .barrier) { _ in }
         XCTAssertEqual ("extraneousFlagsSpecified", logOutput!)
     }

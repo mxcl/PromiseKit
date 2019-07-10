@@ -25,7 +25,7 @@ public extension CancellableCatchMixin {
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
     @discardableResult
-    func `catch`(on: Dispatcher = conf.D.return, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) -> Void) -> CancellableFinalizer {
+    func `catch`(on: Dispatcher = conf.dd, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) -> Void) -> CancellableFinalizer {
         return CancellableFinalizer(self.catchable.catch(on: on, policy: policy, body), cancel: self.cancelContext)
     }
 
@@ -44,7 +44,7 @@ public extension CancellableCatchMixin {
      - Note: Since this method handles only specific errors, supplying a `CatchPolicy` is unsupported. You can instead specify e.g. your cancellable error.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
-    func `catch`<E: Swift.Error>(only: E, on: Dispatcher = conf.D.return, _ body: @escaping(E) -> Void) -> CancellableCascadingFinalizer where E: Equatable {
+    func `catch`<E: Swift.Error>(only: E, on: Dispatcher = conf.dd, _ body: @escaping(E) -> Void) -> CancellableCascadingFinalizer where E: Equatable {
         return CancellableCascadingFinalizer(self.catchable.catch(only: only, on: on, body), cancel: self.cancelContext)
     }
 
@@ -62,7 +62,7 @@ public extension CancellableCatchMixin {
      - Parameter execute: The handler to execute if this promise is rejected with the provided error type.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
-    func `catch`<E: Swift.Error>(only: E.Type, on: Dispatcher = conf.D.return, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) -> Void) -> CancellableCascadingFinalizer {
+    func `catch`<E: Swift.Error>(only: E.Type, on: Dispatcher = conf.dd, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) -> Void) -> CancellableCascadingFinalizer {
         return CancellableCascadingFinalizer(self.catchable.catch(only: only, on: on, policy: policy, body), cancel: self.cancelContext)
     }
 }
@@ -119,7 +119,7 @@ public class CancellableFinalizer: CancelContextFinalizer {
     
     /// `finally` is the same as `ensure`, but it is not chainable
     @discardableResult
-    public func finally(on: Dispatcher = conf.D.return, _ body: @escaping () -> Void) -> CancelContext {
+    public func finally(on: Dispatcher = conf.dd, _ body: @escaping () -> Void) -> CancelContext {
         pmkFinalizer.finally(on: on, body)
         return cancelContext
     }
@@ -148,7 +148,7 @@ public class CancellableCascadingFinalizer: CancelContextFinalizer {
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
     @discardableResult
-    public func `catch`(on: Dispatcher = conf.D.return, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) -> Void) -> CancellableFinalizer {
+    public func `catch`(on: Dispatcher = conf.dd, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) -> Void) -> CancellableFinalizer {
         return CancellableFinalizer(pmkCascadingFinalizer.catch(on: on, policy: policy, body), cancel: cancelContext)
     }
 
@@ -166,7 +166,7 @@ public class CancellableCascadingFinalizer: CancelContextFinalizer {
      - Note: Since this method handles only specific errors, supplying a `CatchPolicy` is unsupported. You can instead specify e.g. your cancellable error.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
-    public func `catch`<E: Swift.Error>(only: E, on: Dispatcher = conf.D.return, _ body: @escaping(E) -> Void) -> CancellableCascadingFinalizer where E: Equatable {
+    public func `catch`<E: Swift.Error>(only: E, on: Dispatcher = conf.dd, _ body: @escaping(E) -> Void) -> CancellableCascadingFinalizer where E: Equatable {
         return CancellableCascadingFinalizer(pmkCascadingFinalizer.catch(only: only, on: on, body), cancel: cancelContext)
     }
 
@@ -183,10 +183,20 @@ public class CancellableCascadingFinalizer: CancelContextFinalizer {
      - Parameter execute: The handler to execute if this promise is rejected with the provided error type.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
-    public func `catch`<E: Swift.Error>(only: E.Type, on: Dispatcher = conf.D.return, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) -> Void) -> CancellableCascadingFinalizer {
+    public func `catch`<E: Swift.Error>(only: E.Type, on: Dispatcher = conf.dd, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) -> Void) -> CancellableCascadingFinalizer {
         return CancellableCascadingFinalizer(pmkCascadingFinalizer.catch(only: only, on: on, policy: policy, body), cancel: cancelContext)
     }
     
+    /// Set a default Dispatcher for the chain. Within the chain, this Dispatcher will remain the
+    /// default until you change it, even if you dispatch individual closures to other Dispatchers.
+    ///
+    /// - Parameters:
+    ///   - on: The new default Dispatcher. Use `.default` to return to normal dispatching.
+    
+    public func dispatch(on: Dispatcher) -> CancellableCascadingFinalizer {
+        return CancellableCascadingFinalizer(pmkCascadingFinalizer.dispatch(on: on), cancel: cancelContext)
+    }
+
     /**
      Consumes the Swift unused-result warning.
      - Note: You should `catch`, but in situations where you know you don’t need a `catch`, `cauterize` makes your intentions clear.
@@ -221,7 +231,7 @@ public extension CancellableCatchMixin {
      - Parameter body: The handler to execute if this promise is rejected.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
-    func recover<V: CancellableThenable>(on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> V) -> CancellablePromise<C.T> where V.U.T == C.T {
+    func recover<V: CancellableThenable>(on: Dispatcher = conf.dd, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> V) -> CancellablePromise<C.T> where V.U.T == C.T {
         let cancelItemList = CancelItemList()
 
         let cancelBody = { (error: Error) throws -> V.U in
@@ -263,7 +273,7 @@ public extension CancellableCatchMixin {
      - Parameter body: The handler to execute if this promise is rejected.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
-    func recover<V: Thenable>(on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> V) -> CancellablePromise<C.T> where V.T == C.T {
+    func recover<V: Thenable>(on: Dispatcher = conf.dd, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> V) -> CancellablePromise<C.T> where V.T == C.T {
         let cancelBody = { (error: Error) throws -> V in
             _ = self.cancelContext.removeItems(self.cancelItemList, clearList: true)
             let rval = try body(error)
@@ -302,7 +312,7 @@ public extension CancellableCatchMixin {
      - Note: Since this method recovers only specific errors, supplying a `CatchPolicy` is unsupported.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
-    func recover<V: CancellableThenable, E: Swift.Error>(only: E, on: Dispatcher = conf.D.map, _ body: @escaping(E) throws -> V) -> CancellablePromise<C.T> where V.U.T == C.T, E: Equatable {
+    func recover<V: CancellableThenable, E: Swift.Error>(only: E, on: Dispatcher = conf.dd, _ body: @escaping(E) throws -> V) -> CancellablePromise<C.T> where V.U.T == C.T, E: Equatable {
         let cancelItemList = CancelItemList()
 
         let cancelBody = { (error: E) throws -> V.U in
@@ -340,7 +350,7 @@ public extension CancellableCatchMixin {
      - Note: Since this method recovers only specific errors, supplying a `CatchPolicy` is unsupported. You can instead specify e.g. your cancellable error.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
-    func recover<V: Thenable, E: Swift.Error>(only: E, on: Dispatcher = conf.D.map, _ body: @escaping(E) throws -> V) -> CancellablePromise<C.T> where V.T == C.T, E: Equatable {
+    func recover<V: Thenable, E: Swift.Error>(only: E, on: Dispatcher = conf.dd, _ body: @escaping(E) throws -> V) -> CancellablePromise<C.T> where V.T == C.T, E: Equatable {
         let cancelBody = { (error: E) throws -> V in
             _ = self.cancelContext.removeItems(self.cancelItemList, clearList: true)
             let rval = try body(error)
@@ -378,7 +388,7 @@ public extension CancellableCatchMixin {
      - Parameter body: The handler to execute if this promise is rejected with the provided error type.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
-    func recover<V: CancellableThenable, E: Swift.Error>(only: E.Type, on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) throws -> V) -> CancellablePromise<C.T> where V.U.T == C.T {
+    func recover<V: CancellableThenable, E: Swift.Error>(only: E.Type, on: Dispatcher = conf.dd, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) throws -> V) -> CancellablePromise<C.T> where V.U.T == C.T {
         let cancelItemList = CancelItemList()
 
         let cancelBody = { (error: E) throws -> V.U in
@@ -417,7 +427,7 @@ public extension CancellableCatchMixin {
      - Parameter body: The handler to execute if this promise is rejected with the provided error type.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
-    func recover<V: Thenable, E: Swift.Error>(only: E.Type, on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) throws -> V) -> CancellablePromise<C.T> where V.T == C.T {
+    func recover<V: Thenable, E: Swift.Error>(only: E.Type, on: Dispatcher = conf.dd, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) throws -> V) -> CancellablePromise<C.T> where V.T == C.T {
         let cancelBody = { (error: E) throws -> V in
             _ = self.cancelContext.removeItems(self.cancelItemList, clearList: true)
             let rval = try body(error)
@@ -460,11 +470,12 @@ public extension CancellableCatchMixin {
      - Parameter body: The closure that executes when this promise resolves.
      - Returns: A new promise, resolved with this promise’s resolution.
      */
-    func ensure(on: Dispatcher = conf.D.return, _ body: @escaping () -> Void) -> CancellablePromise<C.T> {
+    func ensure(on: Dispatcher = conf.dd, _ body: @escaping () -> Void) -> CancellablePromise<C.T> {
         let rp = CancellablePromise<C.T>.pending()
         rp.promise.cancelContext = self.cancelContext
+        rp.promise.dispatchState = self.catchable.dispatchState.nextState(givenDispatcher: on)
         self.catchable.pipe { result in
-            on.dispatch {
+            rp.promise.dispatch {
                 body()
                 switch result {
                 case .success(let value):
@@ -503,11 +514,12 @@ public extension CancellableCatchMixin {
      - Parameter body: The closure that executes when this promise resolves.
      - Returns: A new promise, resolved with this promise’s resolution.
      */
-    func ensureThen(on: Dispatcher = conf.D.return, _ body: @escaping () -> CancellablePromise<Void>) -> CancellablePromise<C.T> {
+    func ensureThen(on: Dispatcher = conf.dd, _ body: @escaping () -> CancellablePromise<Void>) -> CancellablePromise<C.T> {
         let rp = CancellablePromise<C.T>.pending()
         rp.promise.cancelContext = cancelContext
+        rp.promise.dispatchState = self.catchable.dispatchState.nextState(givenDispatcher: on)
         self.catchable.pipe { result in
-            on.dispatch {
+            rp.promise.dispatch {
                 let rv = body()
                 rp.promise.appendCancelContext(from: rv)
                 
@@ -552,7 +564,7 @@ public extension CancellableCatchMixin where C.T == Void {
      - Parameter body: The handler to execute if this promise is rejected.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
-    func recover(on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> Void) -> CancellablePromise<Void> {
+    func recover(on: Dispatcher = conf.dd, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) throws -> Void) -> CancellablePromise<Void> {
         let cancelBody = { (error: Error) throws -> Void in
             _ = self.cancelContext.removeItems(self.cancelItemList, clearList: true)
             try body(error)
@@ -581,7 +593,7 @@ public extension CancellableCatchMixin where C.T == Void {
      - Note: Since this method recovers only specific errors, supplying a `CatchPolicy` is unsupported. You can instead specify e.g. your cancellable error.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
-    func recover<E: Swift.Error>(only: E, on: Dispatcher = conf.D.map, _ body: @escaping(E) throws -> Void)
+    func recover<E: Swift.Error>(only: E, on: Dispatcher = conf.dd, _ body: @escaping(E) throws -> Void)
         -> CancellablePromise<Void> where E: Equatable
     {
         let cancelBody = { (error: E) throws -> Void in
@@ -610,7 +622,7 @@ public extension CancellableCatchMixin where C.T == Void {
      - Parameter body: The handler to execute if this promise is rejected with the provided error type.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
-    func recover<E: Swift.Error>(only: E.Type, on: Dispatcher = conf.D.map, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) throws -> Void) -> CancellablePromise<Void> {
+    func recover<E: Swift.Error>(only: E.Type, on: Dispatcher = conf.dd, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(E) throws -> Void) -> CancellablePromise<Void> {
         let cancelBody = { (error: E) throws -> Void in
             _ = self.cancelContext.removeItems(self.cancelItemList, clearList: true)
             try body(error)

@@ -1,5 +1,5 @@
 import Dispatch
-import PromiseKit
+@testable import PromiseKit
 import XCTest
 
 fileprivate let queueIDKey = DispatchSpecificKey<Int>()
@@ -48,8 +48,9 @@ class DispatcherTests: XCTestCase {
         
         let ex = expectation(description: "DispatchQueue compatibility")
         
-        let oldConf = PromiseKit.conf.D
-        PromiseKit.conf.D = (map: dispatcher, return: dispatcher)
+        let oldConf = conf.D
+        conf.testMode = true
+        conf.D = (body: dispatcher, tail: dispatcher)
         
         let background = DispatchQueue.global(qos: .background)
         background.setSpecific(key: queueIDKey, value: 100)
