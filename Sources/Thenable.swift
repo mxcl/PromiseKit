@@ -14,12 +14,12 @@ public protocol Thenable: class {
 
 public extension Thenable {
     /**
-     The provided closure executes when this promise resolves.
+     The provided closure executes when this promise is fulfilled.
      
      This allows chaining promises. The promise returned by the provided closure is resolved before the promise returned by this closure resolves.
      
      - Parameter on: The queue to which the provided closure dispatches.
-     - Parameter body: The closure that executes when this promise fulfills. It must return a promise.
+     - Parameter body: The closure that executes when this promise is fulfilled. It must return a promise.
      - Returns: A new promise that resolves when the promise returned from the provided closure resolves. For example:
 
            firstly {
@@ -52,13 +52,13 @@ public extension Thenable {
     }
 
     /**
-     The provided closure is executed when this promise is resolved.
+     The provided closure is executed when this promise is fulfilled.
      
      This is like `then` but it requires the closure to return a non-promise.
      
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter transform: The closure that is executed when this Promise is fulfilled. It must return a non-promise.
-     - Returns: A new promise that is resolved with the value returned from the provided closure. For example:
+     - Returns: A new promise that is fulfilled with the value returned from the provided closure or rejected if the provided closure throws. For example:
 
            firstly {
                URLSession.shared.dataTask(.promise, with: url1)
@@ -88,7 +88,7 @@ public extension Thenable {
     }
 
     /**
-      The provided closure is executed when this promise is resolved.
+      The provided closure is executed when this promise is fulfilled.
 
       In your closure return an `Optional`, if you return `nil` the resulting promise is rejected with `PMKError.compactMap`, otherwise the promise is fulfilled with the unwrapped value.
 
@@ -126,14 +126,14 @@ public extension Thenable {
     }
 
     /**
-     The provided closure is executed when this promise is resolved.
+     The provided closure is executed when this promise is fulfilled.
      
      Equivalent to `map { x -> Void in`, but since we force the `Void` return Swift
      is happier and gives you less hassle about your closure’s qualification.
      
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter body: The closure that is executed when this Promise is fulfilled.
-     - Returns: A new promise fulfilled as `Void`.
+     - Returns: A new promise fulfilled as `Void` or rejected if the provided closure throws.
      
            firstly {
                URLSession.shared.dataTask(.promise, with: url)
@@ -162,14 +162,14 @@ public extension Thenable {
     }
 
     /**
-     The provided closure is executed when this promise is resolved.
+     The provided closure is executed when this promise is fulfilled.
      
      This is like `done` but it returns the same value that the handler is fed.
      `get` immutably accesses the fulfilled value; the returned Promise maintains that value.
      
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter body: The closure that is executed when this Promise is fulfilled.
-     - Returns: A new promise that is resolved with the value that the handler is fed. For example:
+     - Returns: A new promise that is fulfilled with the value that the handler is fed or rejected if the provided closure throws. For example:
      
            firstly {
                .value(1)

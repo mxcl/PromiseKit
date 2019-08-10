@@ -71,7 +71,7 @@ typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
 
 
 /**
- The provided block is executed when its receiver is resolved.
+ The provided block is executed when its receiver is fulfilled.
 
  If you provide a block that takes a parameter, the value of the receiver will be passed as that parameter.
 
