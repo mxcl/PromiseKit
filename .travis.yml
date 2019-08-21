@@ -1,5 +1,5 @@
 os: osx
-osx_image: xcode10.2
+osx_image: xcode10.3
 language: swift
 
 branches:
@@ -51,7 +51,7 @@ jobs:
       osx_image: xcode10.1
       name: Swift 4.1.50 / Xcode 10.1
     - <<: *carthage
-      osx_image: xcode10.2
+      osx_image: xcode10.3
       name: Swift 4.1.51 / Xcode 10.2
     - <<: *carthage
       osx_image: xcode11
@@ -84,10 +84,10 @@ jobs:
       osx_image: xcode10.1
       env: SWIFT=4.2
     - <<: *pod
-      osx_image: xcode10.2
+      osx_image: xcode10.3
       env: SWIFT=4.3
     - <<: *pod
-      osx_image: xcode10.2
+      osx_image: xcode10.3
       env: SWIFT=5.0
     - <<: *pod
       osx_image: xcode11
@@ -170,7 +170,7 @@ jobs:
       osx_image: xcode10.1
       name: 'macOS / swift-tools-version: 4.2 / Swift 4.2.1'
     - <<: *swiftpm
-      osx_image: xcode10.2
+      osx_image: xcode10.3
       name: 'macOS / swift-tools-version: 5.0 / Swift 5.0.0'
     - <<: *swiftpm
       osx_image: xcode11
