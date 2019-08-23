@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          PromiseKit 6.10.0 Docs
+          PromiseKit 6.11.0 Docs
         </a>
          (80% documented)
       </p>
@@ -483,7 +483,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The provided closure executes when this promise resolves.</p>
+                        <p>The provided closure executes when this promise is fulfilled.</p>
 
 <p>This allows chaining promises. The promise returned by the provided closure is resolved before the promise returned by this closure resolves.</p>
 
@@ -520,7 +520,7 @@
                               </td>
                               <td>
                                 <div>
-                                  <p>The closure that executes when this promise fulfills. It must return a promise.</p>
+                                  <p>The closure that executes when this promise is fulfilled. It must return a promise.</p>
                                 </div>
                               </td>
                             </tr>
@@ -558,7 +558,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The provided closure is executed when this promise is resolved.</p>
+                        <p>The provided closure is executed when this promise is fulfilled.</p>
 
 <p>This is like <code>then</code> but it requires the closure to return a non-promise.</p>
 
@@ -604,7 +604,7 @@
                       </div>
                       <div>
                         <h4>Return Value</h4>
-                        <p>A new promise that is resolved with the value returned from the provided closure. For example:</p>
+                        <p>A new promise that is fulfilled with the value returned from the provided closure or rejected if the provided closure throws. For example:</p>
 
 <p>firstly {
       URLSession.shared.dataTask(.promise, with: url1)
@@ -633,7 +633,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The provided closure is executed when this promise is resolved.</p>
+                        <p>The provided closure is executed when this promise is fulfilled.</p>
 
 <p>In your closure return an <code>Optional</code>, if you return <code>nil</code> the resulting promise is rejected with <code>PMKError.compactMap</code>, otherwise the promise is fulfilled with the unwrapped value.</p>
 <pre class="highlight swift"><code> <span class="n">firstly</span> <span class="p">{</span>
@@ -675,7 +675,7 @@
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The provided closure is executed when this promise is resolved.</p>
+                        <p>The provided closure is executed when this promise is fulfilled.</p>
 
 <p>Equivalent to <code>map { x -&gt; Void in</code>, but since we force the <code>Void</code> return Swift
 is happier and gives you less hassle about your closure’s qualification.</p>
@@ -722,7 +722,7 @@ is happier and gives you less hassle about your closure’s qualification.</p>
                       </div>
                       <div>
                         <h4>Return Value</h4>
-                        <p>A new promise fulfilled as <code>Void</code>.</p>
+                        <p>A new promise fulfilled as <code>Void</code> or rejected if the provided closure throws.</p>
 
 <p>firstly {
       URLSession.shared.dataTask(.promise, with: url)
@@ -749,7 +749,7 @@ is happier and gives you less hassle about your closure’s qualification.</p>
                     <section class="section">
                       <div class="pointer"></div>
                       <div class="abstract">
-                        <p>The provided closure is executed when this promise is resolved.</p>
+                        <p>The provided closure is executed when this promise is fulfilled.</p>
 
 <p>This is like <code>done</code> but it returns the same value that the handler is fed.
 <code>get</code> immutably accesses the fulfilled value; the returned Promise maintains that value.</p>
@@ -796,7 +796,7 @@ is happier and gives you less hassle about your closure’s qualification.</p>
                       </div>
                       <div>
                         <h4>Return Value</h4>
-                        <p>A new promise that is resolved with the value that the handler is fed. For example:</p>
+                        <p>A new promise that is fulfilled with the value that the handler is fed or rejected if the provided closure throws. For example:</p>
 
 <p>firstly {
       .value(1)
@@ -1492,7 +1492,7 @@ is happier and gives you less hassle about your closure’s qualification.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2019-06-28)</p>
+      <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2019-08-23)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.10.0</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
