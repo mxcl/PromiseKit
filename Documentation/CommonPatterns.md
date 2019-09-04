@@ -186,12 +186,14 @@ fade.done {
 }
 ```
 
-Or if you have an array of promises:
+Or if you have an array of closures that return promises:
 
 ```swift
 var foo = Promise()
-for nextPromise in arrayOfPromises {
-    foo = foo.then { nextPromise }
+for nextPromise in arrayOfClosuresThatReturnPromises {
+    foo = foo.then(nextPromise)
+    // ^^ you rarely would want an array of promises instead, since then
+    // they have all already started, you may as well use `when()`
 }
 foo.done {
     // finish
