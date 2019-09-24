@@ -125,4 +125,17 @@ class GuaranteeTests: XCTestCase {
 
         wait(for: [ex], timeout: 10)
     }
+
+    #if swift(>=3.1)
+    func testNoAmbiguityForValue() {
+        let ex = expectation(description: "")
+        let a = Guarantee<Void>.value
+        let b = Guarantee<Void>.value(Void())
+        let c = Guarantee<Void>.value(())
+        when(fulfilled: a, b, c).done {
+            ex.fulfill()
+        }.cauterize()
+        wait(for: [ex], timeout: 10)
+    }
+    #endif
 }
