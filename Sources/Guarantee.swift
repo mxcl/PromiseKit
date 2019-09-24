@@ -282,7 +282,7 @@ public extension Guarantee where T == Void {
     }
 
     static var value: Guarantee<Void> {
-        return .init(box: SealedBox(value: ()))
+        return .value(Void())
     }
 }
 #endif
