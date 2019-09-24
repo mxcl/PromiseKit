@@ -38,7 +38,7 @@ public final class Promise<T>: Thenable, CatchMixin {
               return .value(bar)
           }
      */
-    public class func value(_ value: T) -> Promise<T> {
+    public static func value(_ value: T) -> Promise<T> {
         return Promise(box: SealedBox(value: .fulfilled(value)))
     }
 
@@ -137,7 +137,7 @@ extension Promise where T == Void {
         self.init(box: SealedBox(value: .fulfilled(Void())))
     }
 
-    public class var value: Promise<Void> {
+    public static var value: Promise<Void> {
         return .value(())
     }
 }
