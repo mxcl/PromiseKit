@@ -136,6 +136,10 @@ extension Promise where T == Void {
     public convenience init() {
         self.init(box: SealedBox(value: .fulfilled(Void())))
     }
+
+    public class var value: Promise<Void> {
+        return .value(())
+    }
 }
 #endif
 
