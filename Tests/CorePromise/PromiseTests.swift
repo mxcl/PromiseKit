@@ -136,4 +136,17 @@ class PromiseTests: XCTestCase {
         }.silenceWarning()
         wait(for: [ex], timeout: 10)
     }
+
+    #if swift(>=3.1)
+    func testNoAmbiguityForValue() {
+        let ex = expectation(description: "")
+        let a = Promise<Void>.value
+        let b = Promise<Void>.value(Void())
+        let c = Promise<Void>.value(())
+        when(fulfilled: a, b, c).done {
+            ex.fulfill()
+        }.cauterize()
+        wait(for: [ex], timeout: 10)
+    }
+    #endif
 }
