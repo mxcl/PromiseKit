@@ -137,8 +137,9 @@ extension Promise where T == Void {
         self.init(box: SealedBox(value: .fulfilled(Void())))
     }
 
+    /// Returns a new promise fulfilled with `Void`
     public static var value: Promise<Void> {
-        return .value(())
+        return .value(Void())
     }
 }
 #endif
