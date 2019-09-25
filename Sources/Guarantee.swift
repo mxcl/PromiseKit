@@ -280,6 +280,10 @@ public extension Guarantee where T == Void {
     convenience init() {
         self.init(box: SealedBox(value: Void()))
     }
+
+    static var value: Guarantee<Void> {
+        return .value(Void())
+    }
 }
 #endif
 
