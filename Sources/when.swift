@@ -67,36 +67,36 @@ private func _when<U: Thenable>(_ thenables: [U]) -> Promise<Void> {
  - SeeAlso: `when(resolved:)`
 */
 public func when<U: Thenable>(fulfilled thenables: [U]) -> Promise<[U.T]> {
-    return _when(thenables).map(on: nil) { thenables.map{ $0.value! } }
+    return _when(thenables).map(on: nil) { thenables.map { $0.value! } }
 }
 
 /// Wait for all promises in a set to fulfill.
-public func when<U: Thenable>(fulfilled promises: U...) -> Promise<Void> where U.T == Void {
-    return _when(promises)
+public func when<U: Thenable>(fulfilled thenables: U...) -> Promise<Void> where U.T == Void {
+    return _when(thenables)
 }
 
 /// Wait for all promises in a set to fulfill.
-public func when<U: Thenable>(fulfilled promises: [U]) -> Promise<Void> where U.T == Void {
-    return _when(promises)
+public func when<U: Thenable>(fulfilled thenables: [U]) -> Promise<Void> where U.T == Void {
+    return _when(thenables)
 }
 
 /// Wait for all promises in a set to fulfill.
-public func when<U: Thenable, V: Thenable>(fulfilled pu: U, _ pv: V) -> Promise<(U.T, V.T)> {
+public func when<U: Thenable, V: Thenable>(thenables pu: U, _ pv: V) -> Promise<(U.T, V.T)> {
     return _when([pu.asVoid(), pv.asVoid()]).map(on: nil) { (pu.value!, pv.value!) }
 }
 
 /// Wait for all promises in a set to fulfill.
-public func when<U: Thenable, V: Thenable, W: Thenable>(fulfilled pu: U, _ pv: V, _ pw: W) -> Promise<(U.T, V.T, W.T)> {
+public func when<U: Thenable, V: Thenable, W: Thenable>(thenables pu: U, _ pv: V, _ pw: W) -> Promise<(U.T, V.T, W.T)> {
     return _when([pu.asVoid(), pv.asVoid(), pw.asVoid()]).map(on: nil) { (pu.value!, pv.value!, pw.value!) }
 }
 
 /// Wait for all promises in a set to fulfill.
-public func when<U: Thenable, V: Thenable, W: Thenable, X: Thenable>(fulfilled pu: U, _ pv: V, _ pw: W, _ px: X) -> Promise<(U.T, V.T, W.T, X.T)> {
+public func when<U: Thenable, V: Thenable, W: Thenable, X: Thenable>(thenables pu: U, _ pv: V, _ pw: W, _ px: X) -> Promise<(U.T, V.T, W.T, X.T)> {
     return _when([pu.asVoid(), pv.asVoid(), pw.asVoid(), px.asVoid()]).map(on: nil) { (pu.value!, pv.value!, pw.value!, px.value!) }
 }
 
 /// Wait for all promises in a set to fulfill.
-public func when<U: Thenable, V: Thenable, W: Thenable, X: Thenable, Y: Thenable>(fulfilled pu: U, _ pv: V, _ pw: W, _ px: X, _ py: Y) -> Promise<(U.T, V.T, W.T, X.T, Y.T)> {
+public func when<U: Thenable, V: Thenable, W: Thenable, X: Thenable, Y: Thenable>(thenables pu: U, _ pv: V, _ pw: W, _ px: X, _ py: Y) -> Promise<(U.T, V.T, W.T, X.T, Y.T)> {
     return _when([pu.asVoid(), pv.asVoid(), pw.asVoid(), px.asVoid(), py.asVoid()]).map(on: nil) { (pu.value!, pv.value!, pw.value!, px.value!, py.value!) }
 }
 
@@ -170,7 +170,7 @@ public func when<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrent
         func testDone() {
             barrier.sync {
                 if pendingPromises == 0 {
-                    root.resolver.fulfill(promises.compactMap{ $0.value })
+                    root.resolver.fulfill(promises.compactMap { $0.value })
                 }
             }
         }
@@ -195,7 +195,7 @@ public func when<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrent
 
         dequeue()
     }
-        
+
     dequeue()
 
     return root.promise
@@ -239,7 +239,7 @@ public func when<T>(resolved promises: [Promise<T>]) -> Guarantee<[Result<T, Err
             }
             barrier.sync {
                 if countdown == 0 {
-                    rg.box.seal(promises.map{ $0.result! })
+                    rg.box.seal(promises.map { $0.result! })
                 }
             }
         }
@@ -254,7 +254,7 @@ public func when(_ guarantees: Guarantee<Void>...) -> Guarantee<Void> {
 
 // Waits on all provided Guarantees.
 public func when(guarantees: [Guarantee<Void>]) -> Guarantee<Void> {
-    return when(fulfilled: guarantees).recover{ _ in }.asVoid()
+    return when(fulfilled: guarantees).recover { _ in }.asVoid()
 }
 
 //////////////////////////////////////////////////////////// Cancellation
@@ -406,11 +406,11 @@ public func when<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrent
     guard concurrently > 0 else {
         return CancellablePromise(error: PMKError.badInput)
     }
-    
+
     var pi = promiseIterator
     var generatedPromises: [CancellablePromise<It.Element.U.T>] = []
     var rootPromise: CancellablePromise<[It.Element.U.T]>!
-    
+
     let generator = AnyIterator<Promise<It.Element.U.T>> {
         guard let promise = pi.next() as? CancellablePromise<It.Element.U.T> else {
             return nil
@@ -422,7 +422,7 @@ public func when<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrent
         }
         return promise.promise
     }
-    
+
     rootPromise = CancellablePromise(when(fulfilled: generator, concurrently: concurrently))
     for p in generatedPromises {
         rootPromise.appendCancelContext(from: p)
