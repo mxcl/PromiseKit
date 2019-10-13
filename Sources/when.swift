@@ -43,6 +43,40 @@ private func _when<U: Thenable>(_ thenables: [U]) -> Promise<Void> {
     return rp
 }
 
+private func _when<U>(_ guarantees: [Guarantee<U>]) -> Guarantee<Void> {
+    var countdown = guarantees.count
+    guard countdown > 0 else {
+        return .value(Void())
+    }
+
+    let rp = Guarantee<Void>(.pending)
+
+#if PMKDisableProgress || os(Linux)
+    var progress: (completedUnitCount: Int, totalUnitCount: Int) = (0, 0)
+#else
+    let progress = Progress(totalUnitCount: Int64(guarantees.count))
+    progress.isCancellable = false
+    progress.isPausable = false
+#endif
+
+    let barrier = DispatchQueue(label: "org.promisekit.barrier.when", attributes: .concurrent)
+
+    for guarantee in guarantees {
+        guarantee.pipe { (_: U) in
+            barrier.sync(flags: .barrier) {
+                guard rp.isPending else { return }
+                progress.completedUnitCount += 1
+                countdown -= 1
+                if countdown == 0 {
+                    rp.box.seal(())
+                }
+            }
+        }
+    }
+
+    return rp
+}
+
 /**
  Wait for all promises in a set to fulfill.
 
@@ -259,4 +293,24 @@ public func when(_ guarantees: Guarantee<Void>...) -> Guarantee<Void> {
 // Waits on all provided Guarantees.
 public func when(guarantees: [Guarantee<Void>]) -> Guarantee<Void> {
     return when(fulfilled: guarantees).recover { _ in }.asVoid()
+}
+
+// Waits on all provided Guarantees. Currently we cannot call it when(guarantees:)
+public func guaranteed<U, V>(_ pu: Guarantee<U>, _ pv: Guarantee<V>) -> Guarantee<(U, V)> {
+    return _when([pu.asVoid(), pv.asVoid()]).map(on: nil) { (pu.value!, pv.value!) }
+}
+
+// Waits on all provided Guarantees. Currently we cannot call it when(guarantees:)
+public func guaranteed<U, V, W>(_ pu: Guarantee<U>, _ pv: Guarantee<V>, _ pw: Guarantee<W>) -> Guarantee<(U, V, W)> {
+    return _when([pu.asVoid(), pv.asVoid(), pw.asVoid()]).map(on: nil) { (pu.value!, pv.value!, pw.value!) }
+}
+
+// Waits on all provided Guarantees. Currently we cannot call it when(guarantees:)
+public func guaranteed<U, V, W, X>(_ pu: Guarantee<U>, _ pv: Guarantee<V>, _ pw: Guarantee<W>, _ px: Guarantee<X>) -> Guarantee<(U, V, W, X)> {
+    return _when([pu.asVoid(), pv.asVoid(), pw.asVoid(), px.asVoid()]).map(on: nil) { (pu.value!, pv.value!, pw.value!, px.value!) }
+}
+
+// Waits on all provided Guarantees. Currently we cannot call it when(guarantees:)
+public func guaranteed<U, V, W, X, Y>(_ pu: Guarantee<U>, _ pv: Guarantee<V>, _ pw: Guarantee<W>, _ px: Guarantee<X>, _ py: Guarantee<Y>) -> Guarantee<(U, V, W, X, Y)> {
+    return _when([pu.asVoid(), pv.asVoid(), pw.asVoid(), px.asVoid(), py.asVoid()]).map(on: nil) { (pu.value!, pv.value!, pw.value!, px.value!, py.value!) }
 }
