@@ -41,7 +41,7 @@ class WhenTests: XCTestCase {
         let e1 = expectation(description: "")
         let p1 = Promise.value(1)
         let p2 = Promise.value("abc")
-        when(thenables: p1, p2).done { x, y in
+        when(fulfilled: p1, p2).done { x, y in
             XCTAssertEqual(x, 1)
             XCTAssertEqual(y, "abc")
             e1.fulfill()
@@ -54,7 +54,7 @@ class WhenTests: XCTestCase {
         let p1 = Promise.value(1)
         let p2 = Promise.value("abc")
         let p3 = Promise.value(     1.0)
-        when(thenables: p1, p2, p3).done { u, v, w in
+        when(fulfilled: p1, p2, p3).done { u, v, w in
             XCTAssertEqual(1, u)
             XCTAssertEqual("abc", v)
             XCTAssertEqual(1.0, w)
@@ -69,7 +69,7 @@ class WhenTests: XCTestCase {
         let p2 = Promise.value("abc")
         let p3 = Promise.value(1.0)
         let p4 = Promise.value(true)
-        when(thenables: p1, p2, p3, p4).done { u, v, w, x in
+        when(fulfilled: p1, p2, p3, p4).done { u, v, w, x in
             XCTAssertEqual(1, u)
             XCTAssertEqual("abc", v)
             XCTAssertEqual(1.0, w)
@@ -86,7 +86,7 @@ class WhenTests: XCTestCase {
         let p3 = Promise.value(1.0)
         let p4 = Promise.value(true)
         let p5 = Promise.value("a" as Character)
-        when(thenables: p1, p2, p3, p4, p5).done { u, v, w, x, y in
+        when(fulfilled: p1, p2, p3, p4, p5).done { u, v, w, x, y in
             XCTAssertEqual(1, u)
             XCTAssertEqual("abc", v)
             XCTAssertEqual(1.0, w)
@@ -117,7 +117,7 @@ class WhenTests: XCTestCase {
         let p2: Promise<Bool> = after(.milliseconds(200)).map { throw Error.dummy }
         let p3 = Promise.value(false)
 
-        when(thenables: p1, p2, p3).catch { _ in
+        when(fulfilled: p1, p2, p3).catch { _ in
             e1.fulfill()
         }
 
@@ -161,7 +161,7 @@ class WhenTests: XCTestCase {
         let progress = Progress(totalUnitCount: 1)
         progress.becomeCurrent(withPendingUnitCount: 1)
 
-        let promise = when(thenables: p1, p2, p3, p4)
+        let promise = when(fulfilled: p1, p2, p3, p4)
 
         progress.resignCurrent()
 
@@ -196,7 +196,7 @@ class WhenTests: XCTestCase {
         let ex = expectation(description: "")
         let p1 = Promise<Void>(error: Error.test)
         let p2 = after(.milliseconds(100))
-        when(thenables: p1, p2).done { _ in XCTFail() }.catch { error in
+        when(fulfilled: p1, p2).done { _ in XCTFail() }.catch { error in
             XCTAssertTrue(error as? Error == Error.test)
             ex.fulfill()
         }
