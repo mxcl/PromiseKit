@@ -295,22 +295,22 @@ public func when(guarantees: [Guarantee<Void>]) -> Guarantee<Void> {
     return when(fulfilled: guarantees).recover { _ in }.asVoid()
 }
 
-// Waits on all provided Guarantees. Currently we cannot call it when(guarantees:)
+// Waits on all provided Guarantees. Cannot name it when(guarantees:) because of https://bugs.swift.org/browse/SR-11572.
 public func guaranteed<U, V>(_ pu: Guarantee<U>, _ pv: Guarantee<V>) -> Guarantee<(U, V)> {
     return _when([pu.asVoid(), pv.asVoid()]).map(on: nil) { (pu.value!, pv.value!) }
 }
 
-// Waits on all provided Guarantees. Currently we cannot call it when(guarantees:)
+// Waits on all provided Guarantees. Cannot name it when(guarantees:) because of https://bugs.swift.org/browse/SR-11572.
 public func guaranteed<U, V, W>(_ pu: Guarantee<U>, _ pv: Guarantee<V>, _ pw: Guarantee<W>) -> Guarantee<(U, V, W)> {
     return _when([pu.asVoid(), pv.asVoid(), pw.asVoid()]).map(on: nil) { (pu.value!, pv.value!, pw.value!) }
 }
 
-// Waits on all provided Guarantees. Currently we cannot call it when(guarantees:)
+// Waits on all provided Guarantees. Cannot name it when(guarantees:) because of https://bugs.swift.org/browse/SR-11572.
 public func guaranteed<U, V, W, X>(_ pu: Guarantee<U>, _ pv: Guarantee<V>, _ pw: Guarantee<W>, _ px: Guarantee<X>) -> Guarantee<(U, V, W, X)> {
     return _when([pu.asVoid(), pv.asVoid(), pw.asVoid(), px.asVoid()]).map(on: nil) { (pu.value!, pv.value!, pw.value!, px.value!) }
 }
 
-// Waits on all provided Guarantees. Currently we cannot call it when(guarantees:)
+// Waits on all provided Guarantees. Cannot name it when(guarantees:) because of https://bugs.swift.org/browse/SR-11572.
 public func guaranteed<U, V, W, X, Y>(_ pu: Guarantee<U>, _ pv: Guarantee<V>, _ pw: Guarantee<W>, _ px: Guarantee<X>, _ py: Guarantee<Y>) -> Guarantee<(U, V, W, X, Y)> {
     return _when([pu.asVoid(), pv.asVoid(), pw.asVoid(), px.asVoid(), py.asVoid()]).map(on: nil) { (pu.value!, pv.value!, pw.value!, px.value!, py.value!) }
 }
