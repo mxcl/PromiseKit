@@ -71,32 +71,32 @@ public func when<U: Thenable>(fulfilled thenables: [U]) -> Promise<[U.T]> {
 }
 
 /// Wait for all promises in a set to fulfill.
-public func when<U: Thenable>(fulfilled thenables: U...) -> Promise<Void> where U.T == Void {
-    return _when(thenables)
+public func when<U: Thenable>(fulfilled promises: U...) -> Promise<Void> where U.T == Void {
+    return _when(promises)
 }
 
 /// Wait for all promises in a set to fulfill.
-public func when<U: Thenable>(fulfilled thenables: [U]) -> Promise<Void> where U.T == Void {
-    return _when(thenables)
+public func when<U: Thenable>(fulfilled promises: [U]) -> Promise<Void> where U.T == Void {
+    return _when(promises)
 }
 
 /// Wait for all promises in a set to fulfill.
-public func when<U: Thenable, V: Thenable>(thenables pu: U, _ pv: V) -> Promise<(U.T, V.T)> {
+public func when<U: Thenable, V: Thenable>(fulfilled pu: U, _ pv: V) -> Promise<(U.T, V.T)> {
     return _when([pu.asVoid(), pv.asVoid()]).map(on: nil) { (pu.value!, pv.value!) }
 }
 
 /// Wait for all promises in a set to fulfill.
-public func when<U: Thenable, V: Thenable, W: Thenable>(thenables pu: U, _ pv: V, _ pw: W) -> Promise<(U.T, V.T, W.T)> {
+public func when<U: Thenable, V: Thenable, W: Thenable>(fulfilled pu: U, _ pv: V, _ pw: W) -> Promise<(U.T, V.T, W.T)> {
     return _when([pu.asVoid(), pv.asVoid(), pw.asVoid()]).map(on: nil) { (pu.value!, pv.value!, pw.value!) }
 }
 
 /// Wait for all promises in a set to fulfill.
-public func when<U: Thenable, V: Thenable, W: Thenable, X: Thenable>(thenables pu: U, _ pv: V, _ pw: W, _ px: X) -> Promise<(U.T, V.T, W.T, X.T)> {
+public func when<U: Thenable, V: Thenable, W: Thenable, X: Thenable>(fulfilled pu: U, _ pv: V, _ pw: W, _ px: X) -> Promise<(U.T, V.T, W.T, X.T)> {
     return _when([pu.asVoid(), pv.asVoid(), pw.asVoid(), px.asVoid()]).map(on: nil) { (pu.value!, pv.value!, pw.value!, px.value!) }
 }
 
 /// Wait for all promises in a set to fulfill.
-public func when<U: Thenable, V: Thenable, W: Thenable, X: Thenable, Y: Thenable>(thenables pu: U, _ pv: V, _ pw: W, _ px: X, _ py: Y) -> Promise<(U.T, V.T, W.T, X.T, Y.T)> {
+public func when<U: Thenable, V: Thenable, W: Thenable, X: Thenable, Y: Thenable>(fulfilled pu: U, _ pv: V, _ pw: W, _ px: X, _ py: Y) -> Promise<(U.T, V.T, W.T, X.T, Y.T)> {
     return _when([pu.asVoid(), pv.asVoid(), pw.asVoid(), px.asVoid(), py.asVoid()]).map(on: nil) { (pu.value!, pv.value!, pw.value!, px.value!, py.value!) }
 }
 
