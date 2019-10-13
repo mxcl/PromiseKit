@@ -260,6 +260,39 @@ class WhenTests: XCTestCase {
             ex2.fulfill()
         }
 
-        wait(for: [ex1, ex2], timeout: 10)
+        let ex3 = expectation(description: "")
+        guaranteed(Guarantee<Int>.value(10), Guarantee<String>.value("20")).done {
+            XCTAssertEqual($0.0, 10)
+            XCTAssertEqual($0.1, "20")
+            ex3.fulfill()
+        }
+
+        let ex4 = expectation(description: "")
+        guaranteed(Guarantee<Int>.value(10), Guarantee<String>.value("20"), Guarantee<Double>.value(30.0)).done {
+            XCTAssertEqual($0.0, 10)
+            XCTAssertEqual($0.1, "20")
+            XCTAssertEqual($0.2, 30.0)
+            ex4.fulfill()
+        }
+
+        let ex5 = expectation(description: "")
+        guaranteed(Guarantee<Int>.value(10), Guarantee<String>.value("20"), Guarantee<Double>.value(30.0), Guarantee<Bool>.value(true)).done {
+            XCTAssertEqual($0.0, 10)
+            XCTAssertEqual($0.1, "20")
+            XCTAssertEqual($0.2, 30.0)
+            XCTAssertEqual($0.3, true)
+            ex5.fulfill()
+        }
+
+        let ex6 = expectation(description: "")
+        guaranteed(Guarantee<Int>.value(10), Guarantee<String>.value("20"), Guarantee<Double>.value(30.0), Guarantee<Bool>.value(true), Guarantee<Void>.value).done {
+            XCTAssertEqual($0.0, 10)
+            XCTAssertEqual($0.1, "20")
+            XCTAssertEqual($0.2, 30.0)
+            XCTAssertEqual($0.3, true)
+            ex6.fulfill()
+        }
+
+        wait(for: [ex1, ex2, ex3, ex4, ex5, ex6], timeout: 10)
     }
 }
