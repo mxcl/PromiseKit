@@ -133,7 +133,7 @@ jobs:
       name: 'Linux / Swift 5.0 / +Tests'
       script: swift test -Xswiftc -swift-version -Xswiftc $SWIFT_BUILD_VERSION
     - <<: *linux
-      env: SWIFT_BUILD_VERSION=5 SWIFT_VERSION=5.1-DEVELOPMENT-SNAPSHOT-2019-07-03-a
+      env: SWIFT_BUILD_VERSION=5 SWIFT_VERSION=5.1
       name: Linux / Swift 5.1
 
     - &test
