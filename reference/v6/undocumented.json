@@ -204,8 +204,15 @@
       "warning": "undocumented"
     },
     {
+      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Guarantee.swift",
+      "line": 284,
+      "symbol": "Guarantee.value",
+      "symbol_kind": "source.lang.swift.decl.var.static",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Promise.swift",
-      "line": 174,
+      "line": 179,
       "symbol": "PMKNamespacer.promise",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
