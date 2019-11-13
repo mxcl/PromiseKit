@@ -178,7 +178,7 @@ class LoggingTests: XCTestCase {
     func testPendingGuaranteeDeallocatedIsLogged() {
         
         var logOutput: String? = nil
-        let loggingClosure: (PromiseKit.LogEvent) -> () = { event in
+        let loggingClosure: (PromiseKit.LogEvent) -> Void = { event in
             switch event {
             case .waitOnMainThread, .pendingPromiseDeallocated, .pendingGuaranteeDeallocated:
                 logOutput = "\(event)"

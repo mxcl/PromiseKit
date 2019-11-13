@@ -6,7 +6,7 @@ class Test226: XCTestCase {
         describe("2.2.6: `then` may be called multiple times on the same promise.") {
             describe("2.2.6.1: If/when `promise` is fulfilled, all respective `onFulfilled` callbacks must execute in the order of their originating calls to `then`.") {
                 describe("multiple boring fulfillment handlers") {
-                    testFulfilled(withExpectationCount: 4) { promise, exes, sentinel -> () in
+                    testFulfilled(withExpectationCount: 4) { promise, exes, sentinel -> Void in
                         var orderValidator = 0
                         promise.done {
                             XCTAssertEqual($0, sentinel)
