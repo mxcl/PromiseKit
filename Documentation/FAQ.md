@@ -258,7 +258,7 @@ You want `recover`.
 Often people are confused about when Promises “start”. Is it immediately? Is it
 later? Is it when you call `then`?
 
-The answer is: The promise **body** executes right after the promise is created, on the current thread.
+The answer is: The promise **body** executes during initialization of the promise, on the current thread.
 As an example, `"Executing the promise body"` will be printed to the console right after the promise is created,
 without having to call `then` on the promise.
 
@@ -282,7 +282,7 @@ let testPromise = Promise<Bool> { seal in
 }
 ```
 
-The message `Executing the promise body.` is being logged right away, but the message `Executing asyncAfter.`
+The message `"Executing the promise body."` is being logged right away, but the message `"Executing asyncAfter."`
 is only logged three seconds later. In this case `DispatchQueue` is responsible for deciding when to execute
 the task you pass to it, PromiseKit has nothing to do with it.
 
