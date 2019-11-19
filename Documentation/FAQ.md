@@ -256,25 +256,35 @@ You want `recover`.
 ## When do promises “start”?
 
 Often people are confused about when Promises “start”. Is it immediately? Is it
-later? Is it when you call then?
+later? Is it when you call `then`?
 
-The answer is: promises do not choose when the underlying task they represent
-starts. That is up to that task. For example here is the code for a simple
-promise that wraps Alamofire:
-
+The answer is: The promise **body** executes during initialization of the promise, on the current thread.
+As an example, `"Executing the promise body"` will be printed to the console right after the promise is created,
+without having to call `then` on the promise.
 
 ```swift
-func foo() -> Promise<Any>
-    return Promise { seal in
-        Alamofire.request(rq).responseJSON { rsp in
-            seal.resolve(rsp.value, rsp.error)
-        }
+let testPromise = Promise<Bool> {
+    print("Executing the promise body.")
+    return $0.fulfill(true)
+}
+```
+
+But what about asynchronous tasks that you create in your promise's body? They behave the same way as they would
+without using PromiseKit. Here's a simple example:
+
+```swift
+let testPromise = Promise<Bool> { seal in
+    print("Executing the promise body.")
+    DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+        print("Executing asyncAfter.")
+        return seal.fulfill(true)
     }
 }
 ```
 
-Who chooses when this promise starts? The answer is: Alamofire does, and in this
-case, it “starts” immediately when `foo()` is called.
+The message `"Executing the promise body."` is being logged right away, but the message `"Executing asyncAfter."`
+is only logged three seconds later. In this case `DispatchQueue` is responsible for deciding when to execute
+the task you pass to it, PromiseKit has nothing to do with it.
 
 ## What is a good way to use Firebase with PromiseKit
 
