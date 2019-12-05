@@ -188,6 +188,10 @@ became true, but nowadays it isn’t really necessary.
 Please check our [Troubleshooting Guide](Documentation/Troubleshooting.md), and
 if after that you still have a question, ask at our [Gitter chat channel] or on [our bug tracker].
 
+## Security & Vulnerability Reporting or Disclosure
+
+https://tidelift.com/security
+
 
 [badge-pod]: https://img.shields.io/cocoapods/v/PromiseKit.svg?label=version
 [badge-pms]: https://img.shields.io/badge/supports-CocoaPods%20%7C%20Carthage%20%7C%20Accio%20%7C%20SwiftPM-green.svg
