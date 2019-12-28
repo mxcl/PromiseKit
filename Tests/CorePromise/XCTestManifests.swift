@@ -59,6 +59,8 @@ extension GuaranteeTests {
         ("testFilterValues", testFilterValues),
         ("testFlatMapValues", testFlatMapValues),
         ("testInit", testInit),
+        ("testMap", testMap),
+        ("testMapByKeyPath", testMapByKeyPath),
         ("testMapValues", testMapValues),
         ("testNoAmbiguityForValue", testNoAmbiguityForValue),
         ("testSorted", testSorted),
@@ -66,8 +68,6 @@ extension GuaranteeTests {
         ("testThenFlatMap", testThenFlatMap),
         ("testThenMap", testThenMap),
         ("testWait", testWait),
-        ("testMap", testMap),
-        ("testMapByKeyPath", testMapByKeyPath),
     ]
 }
 
@@ -195,12 +195,12 @@ extension ThenableTests {
         ("testGet", testGet),
         ("testLastValueForEmpty", testLastValueForEmpty),
         ("testPMKErrorCompactMap", testPMKErrorCompactMap),
+        ("testMap", testMap),
+        ("testMapByKeyPath", testMapByKeyPath),
         ("testRejectedPromiseCompactMap", testRejectedPromiseCompactMap),
         ("testThenFlatMap", testThenFlatMap),
         ("testThenMap", testThenMap),
         ("testThenOffRejected", testThenOffRejected),
-        ("testMap", testMap),
-        ("testMapByKeyPath", testMapByKeyPath),
     ]
 }
 
