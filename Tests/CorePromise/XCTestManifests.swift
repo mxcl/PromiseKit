@@ -8,7 +8,7 @@ extension AfterTests {
     static let __allTests__AfterTests = [
         ("testNegative", testNegative),
         ("testPositive", testPositive),
-        ("testZero", testZero),
+        ("testZero", testZero)
     ]
 }
 
@@ -22,7 +22,7 @@ extension CancellationTests {
         ("testFoundationBridging2", testFoundationBridging2),
         ("testIsCancelled", testIsCancelled),
         ("testRecoverWithCancellation", testRecoverWithCancellation),
-        ("testThrowCancellableErrorThatIsNotCancelled", testThrowCancellableErrorThatIsNotCancelled),
+        ("testThrowCancellableErrorThatIsNotCancelled", testThrowCancellableErrorThatIsNotCancelled)
     ]
 }
 
@@ -46,7 +46,7 @@ extension CatchableTests {
         ("testCauterize", testCauterize),
         ("testEnsureThen_Error", testEnsureThen_Error),
         ("testEnsureThen_Value", testEnsureThen_Value),
-        ("testFinally", testFinally),
+        ("testFinally", testFinally)
     ]
 }
 
@@ -66,6 +66,10 @@ extension GuaranteeTests {
         ("testThenFlatMap", testThenFlatMap),
         ("testThenMap", testThenMap),
         ("testWait", testWait),
+        ("testMap", testMap),
+        #if swift(>=4)
+        ("testMapByKeyPath", testMapByKeyPath)
+        #endif
     ]
 }
 
@@ -75,7 +79,7 @@ extension HangTests {
     // to regenerate.
     static let __allTests__HangTests = [
         ("test", test),
-        ("testError", testError),
+        ("testError", testError)
     ]
 }
 
@@ -85,7 +89,7 @@ extension JoinTests {
     // to regenerate.
     static let __allTests__JoinTests = [
         ("testFulfilledAfterAllResolve", testFulfilledAfterAllResolve),
-        ("testImmediates", testImmediates),
+        ("testImmediates", testImmediates)
     ]
 }
 
@@ -99,7 +103,7 @@ extension LoggingTests {
         ("testLogging", testLogging),
         ("testPendingGuaranteeDeallocatedIsLogged", testPendingGuaranteeDeallocatedIsLogged),
         ("testPendingPromiseDeallocatedIsLogged", testPendingPromiseDeallocatedIsLogged),
-        ("testPromiseWaitOnMainThreadLogged", testPromiseWaitOnMainThreadLogged),
+        ("testPromiseWaitOnMainThreadLogged", testPromiseWaitOnMainThreadLogged)
     ]
 }
 
@@ -110,7 +114,7 @@ extension PMKDefaultDispatchQueueTest {
     static let __allTests__PMKDefaultDispatchQueueTest = [
         ("testOverrodeDefaultAlwaysQueue", testOverrodeDefaultAlwaysQueue),
         ("testOverrodeDefaultCatchQueue", testOverrodeDefaultCatchQueue),
-        ("testOverrodeDefaultThenQueue", testOverrodeDefaultThenQueue),
+        ("testOverrodeDefaultThenQueue", testOverrodeDefaultThenQueue)
     ]
 }
 
@@ -120,7 +124,7 @@ extension PMKErrorTests {
     // to regenerate.
     static let __allTests__PMKErrorTests = [
         ("testCustomDebugStringConvertible", testCustomDebugStringConvertible),
-        ("testCustomStringConvertible", testCustomStringConvertible),
+        ("testCustomStringConvertible", testCustomStringConvertible)
     ]
 }
 
@@ -142,7 +146,7 @@ extension PromiseTests {
         ("testPipeForResolved", testPipeForResolved),
         ("testThrowInFirstly", testThrowInFirstly),
         ("testThrowInInitializer", testThrowInInitializer),
-        ("testWait", testWait),
+        ("testWait", testWait)
     ]
 }
 
@@ -155,7 +159,7 @@ extension RaceTests {
         ("test1Array", test1Array),
         ("test2", test2),
         ("test2Array", test2Array),
-        ("testEmptyArray", testEmptyArray),
+        ("testEmptyArray", testEmptyArray)
     ]
 }
 
@@ -164,7 +168,7 @@ extension RegressionTests {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__RegressionTests = [
-        ("testReturningPreviousPromiseWorks", testReturningPreviousPromiseWorks),
+        ("testReturningPreviousPromiseWorks", testReturningPreviousPromiseWorks)
     ]
 }
 
@@ -175,7 +179,7 @@ extension StressTests {
     static let __allTests__StressTests = [
         ("testThenDataRace", testThenDataRace),
         ("testThensAreSequentialForLongTime", testThensAreSequentialForLongTime),
-        ("testZalgoDataRace", testZalgoDataRace),
+        ("testZalgoDataRace", testZalgoDataRace)
     ]
 }
 
@@ -196,7 +200,7 @@ extension ThenableTests {
         ("testRejectedPromiseCompactMap", testRejectedPromiseCompactMap),
         ("testThenFlatMap", testThenFlatMap),
         ("testThenMap", testThenMap),
-        ("testThenOffRejected", testThenOffRejected),
+        ("testThenOffRejected", testThenOffRejected)
     ]
 }
 
@@ -210,7 +214,7 @@ extension WhenConcurrentTestCase_Swift {
         ("testWhenConcurrency", testWhenConcurrency),
         ("testWhenConcurrencyLessThanZero", testWhenConcurrencyLessThanZero),
         ("testWhenEmptyGenerator", testWhenEmptyGenerator),
-        ("testWhenGeneratorError", testWhenGeneratorError),
+        ("testWhenGeneratorError", testWhenGeneratorError)
     ]
 }
 
@@ -232,7 +236,7 @@ extension WhenTests {
         ("testTripleTuple", testTripleTuple),
         ("testUnhandledErrorHandlerDoesNotFire", testUnhandledErrorHandlerDoesNotFire),
         ("testUnhandledErrorHandlerDoesNotFireForStragglers", testUnhandledErrorHandlerDoesNotFireForStragglers),
-        ("testVoid", testVoid),
+        ("testVoid", testVoid)
     ]
 }
 
@@ -249,7 +253,7 @@ extension WrapTests {
         ("testPendingPromiseDeallocated", testPendingPromiseDeallocated),
         ("testSuccess", testSuccess),
         ("testVoidCompletionValue", testVoidCompletionValue),
-        ("testVoidResolverFulfillAmbiguity", testVoidResolverFulfillAmbiguity),
+        ("testVoidResolverFulfillAmbiguity", testVoidResolverFulfillAmbiguity)
     ]
 }
 
@@ -261,7 +265,7 @@ extension ZalgoTests {
         ("test1", test1),
         ("test2", test2),
         ("test3", test3),
-        ("test4", test4),
+        ("test4", test4)
     ]
 }
 
@@ -284,7 +288,7 @@ public func __allTests() -> [XCTestCaseEntry] {
         testCase(WhenConcurrentTestCase_Swift.__allTests__WhenConcurrentTestCase_Swift),
         testCase(WhenTests.__allTests__WhenTests),
         testCase(WrapTests.__allTests__WrapTests),
-        testCase(ZalgoTests.__allTests__ZalgoTests),
+        testCase(ZalgoTests.__allTests__ZalgoTests)
     ]
 }
 #endif
