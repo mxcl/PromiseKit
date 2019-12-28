@@ -105,6 +105,7 @@ public extension Guarantee {
         return rg
     }
 
+    #if swift(>=4)
     func map<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ keyPath: KeyPath<T, U>) -> Guarantee<U> {
         let rg = Guarantee<U>(.pending)
         pipe { value in
@@ -114,6 +115,7 @@ public extension Guarantee {
         }
         return rg
     }
+    #endif
 
 	@discardableResult
     func then<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(T) -> Guarantee<U>) -> Guarantee<U> {
