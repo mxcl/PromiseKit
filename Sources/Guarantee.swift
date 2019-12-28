@@ -105,6 +105,16 @@ public extension Guarantee {
         return rg
     }
 
+    func map<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ keyPath: KeyPath<T, U>) -> Guarantee<U> {
+        let rg = Guarantee<U>(.pending)
+        pipe { value in
+            on.async(flags: flags) {
+                rg.box.seal(value[keyPath: keyPath])
+            }
+        }
+        return rg
+    }
+
 	@discardableResult
     func then<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(T) -> Guarantee<U>) -> Guarantee<U> {
         let rg = Guarantee<U>(.pending)
