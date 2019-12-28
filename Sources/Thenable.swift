@@ -87,6 +87,30 @@ public extension Thenable {
         return rp
     }
 
+    #if swift(>=4)
+    /**
+     Similar to func `map<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(T) throws -> U) -> Promise<U>`, but accepts a key path instead of a closure.
+     
+     - Parameter on: The queue to which the provided key path for value dispatches.
+     - Parameter keyPath: The key path to the value that is using when this Promise is fulfilled.
+     - Returns: A new promise that is fulfilled with the value for the provided key path.
+     */
+    func map<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ keyPath: KeyPath<T, U>) -> Promise<U> {
+        let rp = Promise<U>(.pending)
+        pipe {
+            switch $0 {
+            case .fulfilled(let value):
+                on.async(flags: flags) {
+                    rp.box.seal(.fulfilled(value[keyPath: keyPath]))
+                }
+            case .rejected(let error):
+                rp.box.seal(.rejected(error))
+            }
+        }
+        return rp
+    }
+    #endif
+
     /**
       The provided closure is executed when this promise is fulfilled.
 
