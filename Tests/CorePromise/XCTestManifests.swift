@@ -67,9 +67,7 @@ extension GuaranteeTests {
         ("testThenMap", testThenMap),
         ("testWait", testWait),
         ("testMap", testMap),
-        #if swift(>=4)
         ("testMapByKeyPath", testMapByKeyPath),
-        #endif
     ]
 }
 
@@ -202,9 +200,7 @@ extension ThenableTests {
         ("testThenMap", testThenMap),
         ("testThenOffRejected", testThenOffRejected),
         ("testMap", testMap),
-        #if swift(>=4)
         ("testMapByKeyPath", testMapByKeyPath),
-        #endif
     ]
 }
 
