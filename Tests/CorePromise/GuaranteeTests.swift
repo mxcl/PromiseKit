@@ -13,6 +13,32 @@ class GuaranteeTests: XCTestCase {
         wait(for: [ex], timeout: 10)
     }
 
+    func testMap() {
+        let ex = expectation(description: "")
+
+        Guarantee.value(1).map {
+            $0 * 2
+        }.done {
+            XCTAssertEqual(2, $0)
+            ex.fulfill()
+        }
+
+        wait(for: [ex], timeout: 10)
+    }
+
+    #if swift(>=4)
+    func testMapByKeyPath() {
+        let ex = expectation(description: "")
+
+        Guarantee.value("Hello world").map(\.count).done {
+            XCTAssertEqual(11, $0)
+            ex.fulfill()
+        }
+
+        wait(for: [ex], timeout: 10)
+    }
+    #endif
+
     func testWait() {
         XCTAssertEqual(after(.milliseconds(100)).map(on: nil){ 1 }.wait(), 1)
     }

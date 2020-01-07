@@ -16,6 +16,28 @@ class ThenableTests: XCTestCase {
         wait(for: [ex1, ex2], timeout: 10)
     }
 
+    func testMap() {
+        let ex = expectation(description: "")
+        Promise.value(1).map {
+            $0 * 2
+        }.done {
+            XCTAssertEqual($0, 2)
+            ex.fulfill()
+        }.silenceWarning()
+        wait(for: [ex], timeout: 10)
+    }
+
+    #if swift(>=4)
+    func testMapByKeyPath() {
+        let ex = expectation(description: "")
+        Promise.value("Hello world").map(\.count).done {
+            XCTAssertEqual($0, 11)
+            ex.fulfill()
+        }.silenceWarning()
+        wait(for: [ex], timeout: 10)
+    }
+    #endif
+
     func testCompactMap() {
         let ex = expectation(description: "")
         Promise.value(1.0).compactMap {
