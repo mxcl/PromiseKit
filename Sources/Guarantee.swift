@@ -105,7 +105,7 @@ public extension Guarantee {
         return rg
     }
 
-    #if swift(>=4)
+    #if swift(>=4) && !swift(>=5.2)
     func map<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ keyPath: KeyPath<T, U>) -> Guarantee<U> {
         let rg = Guarantee<U>(.pending)
         pipe { value in
@@ -169,7 +169,7 @@ public extension Guarantee where T: Sequence {
         return map(on: on, flags: flags) { $0.map(transform) }
     }
 
-    #if swift(>=4)
+    #if swift(>=4) && !swift(>=5.2)
     /**
      `Guarantee<[T]>` => `KeyPath<T, U>` => `Guarantee<[U]>`
 
@@ -218,7 +218,7 @@ public extension Guarantee where T: Sequence {
         }
     }
 
-    #if swift(>=4)
+    #if swift(>=4) && !swift(>=5.2)
     /**
      `Guarantee<[T]>` => `KeyPath<T, U?>` => `Guarantee<[U]>`
 
@@ -292,7 +292,7 @@ public extension Guarantee where T: Sequence {
         }
     }
 
-    #if swift(>=4)
+    #if swift(>=4) && !swift(>=5.2)
     /**
      `Guarantee<[T]>` => `KeyPath<T, Bool>` => `Guarantee<[T]>`
 
