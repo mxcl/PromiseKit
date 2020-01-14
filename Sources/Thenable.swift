@@ -87,7 +87,7 @@ public extension Thenable {
         return rp
     }
 
-    #if swift(>=4)
+    #if swift(>=4) && !swift(>=5.2)
     /**
      Similar to func `map<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(T) throws -> U) -> Promise<U>`, but accepts a key path instead of a closure.
      
@@ -149,7 +149,7 @@ public extension Thenable {
         return rp
     }
 
-    #if swift(>=4)
+    #if swift(>=4) && !swift(>=5.2)
     /**
     Similar to func `compactMap<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(T) throws -> U?) -> Promise<U>`, but accepts a key path instead of a closure.
     
@@ -346,7 +346,7 @@ public extension Thenable where T: Sequence {
         return map(on: on, flags: flags){ try $0.map(transform) }
     }
 
-    #if swift(>=4)
+    #if swift(>=4) && !swift(>=5.2)
     /**
      `Promise<[T]>` => `KeyPath<T, U>` => `Promise<[U]>`
 
@@ -399,7 +399,7 @@ public extension Thenable where T: Sequence {
         }
     }
 
-    #if swift(>=4)
+    #if swift(>=4) && !swift(>=5.2)
     /**
      `Promise<[T]>` => `KeyPath<T, U?>` => `Promise<[U]>`
 
@@ -473,7 +473,7 @@ public extension Thenable where T: Sequence {
         }
     }
 
-    #if swift(>=4)
+    #if swift(>=4) && !swift(>=5.2)
     /**
      `Promise<[T]>` => `KeyPath<T, Bool>` => `Promise<[T]>`
 
