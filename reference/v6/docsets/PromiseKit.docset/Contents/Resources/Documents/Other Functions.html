@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="index.html">
-          PromiseKit 6.12.0 Docs
+          PromiseKit 6.13.0 Docs
         </a>
          (80% documented)
       </p>
@@ -125,10 +125,7 @@
                 <a class="nav-group-task-link" href="Extensions/Error.html">Error</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Extensions/PromiseKit.html">PromiseKit</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="Extensions/PromiseKit/Result.html">– Result</a>
+                <a class="nav-group-task-link" href="Other%20Extensions.html#/PromiseKit">PromiseKit</a>
               </li>
             </ul>
           </li>
@@ -233,7 +230,7 @@
       <article class="main-content">
 
         <section class="section">
-          <div class="section-content">
+          <div class="section-content top-matter">
             <h1>Other Functions</h1>
             <p>The following functions are available globally.</p>
 
@@ -379,10 +376,6 @@
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
@@ -451,10 +444,6 @@
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
@@ -536,10 +525,6 @@
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
@@ -562,8 +547,7 @@
     <p class="aside-title">Throws</p>
     An error, should the promise be rejected
 
-</div>
-<div class="aside aside-see">
+</div><div class="aside aside-see">
     <p class="aside-title">See</p>
     <code>wait()</code>
 
@@ -585,10 +569,6 @@
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
@@ -651,8 +631,7 @@
     <p class="aside-title">Warning</p>
     If the first resolution is a rejection, the returned promise is rejected
 
-</div>
-<div class="aside aside-remark">
+</div><div class="aside aside-remark">
     <p class="aside-title">Remark</p>
     If the provided array is empty the returned promise is rejected with PMKError.badInput
 
@@ -709,10 +688,6 @@
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
@@ -744,18 +719,15 @@
     <p class="aside-title">Note</p>
     If <em>any</em> of the provided promises reject, the returned promise is immediately rejected with that error.
 
-</div>
-<div class="aside aside-warning">
+</div><div class="aside aside-warning">
     <p class="aside-title">Warning</p>
     In the event of rejection the other promises will continue to resolve and, as per any other promise, will either fulfill or reject. This is the right pattern for <code>getter</code> style asynchronous tasks, but often for <code>setter</code> tasks (eg. storing data on a server), you most likely will need to wait on all tasks and then act based on which have succeeded and which have failed, in such situations use <code><a href="Other%20Functions.html#/s:10PromiseKit4when8resolvedAA9GuaranteeCySayAA6ResultOyxGGGAA0A0CyxGd_tlF">when(resolved:)</a></code>.
 
-</div>
-<div class="aside aside-note">
+</div><div class="aside aside-note">
     <p class="aside-title">Note</p>
     <code>when</code> provides <code>NSProgress</code>.
 
-</div>
-<div class="aside aside-see-also">
+</div><div class="aside aside-see-also">
     <p class="aside-title">See also</p>
     <code><a href="Other%20Functions.html#/s:10PromiseKit4when8resolvedAA9GuaranteeCySayAA6ResultOyxGGGAA0A0CyxGd_tlF">when(resolved:)</a></code>
 
@@ -1021,8 +993,7 @@
     <p class="aside-title">Note</p>
     we do not provide tuple variants for <code>when(resolved:)</code> but will accept a pull-request
 
-</div>
-<div class="aside aside-remark">
+</div><div class="aside aside-remark">
     <p class="aside-title">Remark</p>
     Doesn&rsquo;t take Thenable due to protocol <code>associatedtype</code> paradox
 
@@ -1137,8 +1108,8 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2019-11-07)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2020 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2020-01-15)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>

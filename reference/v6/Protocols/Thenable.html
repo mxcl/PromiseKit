@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          PromiseKit 6.12.0 Docs
+          PromiseKit 6.13.0 Docs
         </a>
          (80% documented)
       </p>
@@ -125,10 +125,7 @@
                 <a class="nav-group-task-link" href="../Extensions/Error.html">Error</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Extensions/PromiseKit.html">PromiseKit</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Extensions/PromiseKit/Result.html">– Result</a>
+                <a class="nav-group-task-link" href="../Other%20Extensions.html#/PromiseKit">PromiseKit</a>
               </li>
             </ul>
           </li>
@@ -233,7 +230,7 @@
       <article class="main-content">
 
         <section class="section">
-          <div class="section-content">
+          <div class="section-content top-matter">
             <h1>Thenable</h1>
               <div class="declaration">
                 <div class="language">
@@ -297,7 +294,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">pipe</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="kd">@escaping(Result&lt;T&gt;)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">pipe</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Enums/Result.html">Result</a></span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
 
                         </div>
                       </div>
@@ -331,142 +328,6 @@
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10PromiseKit8ThenablePAAST1TRpzrlE6filter2on4testAA0A0CySayAD_7ElementQZGGSo17OS_dispatch_queueCSg_SbALctF"></a>
-                    <a name="//apple_ref/swift/Method/filter(on:test:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10PromiseKit8ThenablePAAST1TRpzrlE6filter2on4testAA0A0CySayAD_7ElementQZGGSo17OS_dispatch_queueCSg_SbALctF">filter(on:test:)</a>
-                    </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">filter</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">test</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10PromiseKit8ThenablePAASl1TRpzrlE5firstAA0A0CyAD_7ElementQZGvp"></a>
-                    <a name="//apple_ref/swift/Property/first" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10PromiseKit8ThenablePAASl1TRpzrlE5firstAA0A0CyAD_7ElementQZGvp">first</a>
-                    </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">first</span><span class="p">:</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10PromiseKit8ThenablePAASl1TRpzrlE4lastAA0A0CyAD_7ElementQZGvp"></a>
-                    <a name="//apple_ref/swift/Property/last" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10PromiseKit8ThenablePAASl1TRpzrlE4lastAA0A0CyAD_7ElementQZGvp">last</a>
-                    </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">last</span><span class="p">:</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
-                <li class="item">
-                  <div>
-                    <code>
-                    <a name="/s:10PromiseKit8ThenablePAAST1TRpzSLAD_7ElementRPzrlE6sorted2onAA0A0CySayAGGGSo17OS_dispatch_queueCSg_tF"></a>
-                    <a name="//apple_ref/swift/Method/sorted(on:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10PromiseKit8ThenablePAAST1TRpzSLAD_7ElementRPzrlE6sorted2onAA0A0CySayAGGGSo17OS_dispatch_queueCSg_tF">sorted(on:)</a>
-                    </code>
-                      <span class="declaration-note">
-                        Extension method
-                      </span>
-                  </div>
-                  <div class="height-container">
-                    <div class="pointer-container"></div>
-                    <section class="section">
-                      <div class="pointer"></div>
-                      <div class="abstract">
-                        <p>Undocumented</p>
-
-                      </div>
-                      <div class="declaration">
-                        <h4>Declaration</h4>
-                        <div class="language">
-                          <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">sorted</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
-
-                        </div>
-                      </div>
-                    </section>
-                  </div>
-                </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
@@ -492,7 +353,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">then</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">:</span> <span class="kt">Thenable</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping(T)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">U</span><span class="o">.</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">then</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">U</span><span class="o">.</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt">Thenable</span></code></pre>
 
                         </div>
                       </div>
@@ -567,7 +428,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">map</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">map</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -620,6 +481,71 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:10PromiseKit8ThenablePAAE3map2on5flags_AA0A0Cyqd__GSo17OS_dispatch_queueCSg_8Dispatch0J13WorkItemFlagsVSgs7KeyPathCy1TQzqd__GtlF"></a>
+                    <a name="//apple_ref/swift/Method/map(on:flags:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAE3map2on5flags_AA0A0Cyqd__GSo17OS_dispatch_queueCSg_8Dispatch0J13WorkItemFlagsVSgs7KeyPathCy1TQzqd__GtlF">map(on:flags:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Similar to func <code>map&lt;U&gt;(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(T) throws -&gt; U) -&gt; Promise&lt;U&gt;</code>, but accepts a key path instead of a closure.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">map</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">keyPath</span><span class="p">:</span> <span class="kt">KeyPath</span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="p">,</span> <span class="kt">U</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue to which the provided key path for value dispatches.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>keyPath</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The key path to the value that is using when this Promise is fulfilled.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new promise that is fulfilled with the value for the provided key path.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:10PromiseKit8ThenablePAAE10compactMap2on5flags_AA0A0Cyqd__GSo17OS_dispatch_queueCSg_8Dispatch0K13WorkItemFlagsVSgqd__Sg1TQzKctlF"></a>
                     <a name="//apple_ref/swift/Method/compactMap(on:flags:_:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:10PromiseKit8ThenablePAAE10compactMap2on5flags_AA0A0Cyqd__GSo17OS_dispatch_queueCSg_8Dispatch0K13WorkItemFlagsVSgqd__Sg1TQzKctlF">compactMap(on:flags:_:)</a>
@@ -652,9 +578,74 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">compactMap</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">compactMap</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span></code></pre>
 
                         </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAE10compactMap2on5flags_AA0A0Cyqd__GSo17OS_dispatch_queueCSg_8Dispatch0K13WorkItemFlagsVSgs7KeyPathCy1TQzqd__SgGtlF"></a>
+                    <a name="//apple_ref/swift/Method/compactMap(on:flags:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAE10compactMap2on5flags_AA0A0Cyqd__GSo17OS_dispatch_queueCSg_8Dispatch0K13WorkItemFlagsVSgs7KeyPathCy1TQzqd__SgGtlF">compactMap(on:flags:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Similar to func <code>compactMap&lt;U&gt;(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(T) throws -&gt; U?) -&gt; Promise&lt;U&gt;</code>, but accepts a key path instead of a closure.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">compactMap</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">keyPath</span><span class="p">:</span> <span class="kt">KeyPath</span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="p">,</span> <span class="kt">U</span><span class="p">?</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Parameters</h4>
+                        <table class="graybox">
+                          <tbody>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>on</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The queue to which the provided key path for value dispatches.</p>
+                                </div>
+                              </td>
+                            </tr>
+                            <tr>
+                              <td>
+                                <code>
+                                <em>keyPath</em>
+                                </code>
+                              </td>
+                              <td>
+                                <div>
+                                  <p>The key path to the value that is using when this Promise is fulfilled. If the value for <code>keyPath</code> is <code>nil</code> the resulting promise is rejected with <code>PMKError.compactMap</code>.</p>
+                                </div>
+                              </td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>A new promise that is fulfilled with the value for the provided key path.</p>
                       </div>
                     </section>
                   </div>
@@ -685,7 +676,7 @@ is happier and gives you less hassle about your closure’s qualification.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">done</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="k">return</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping(T)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">done</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="k">return</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -801,11 +792,11 @@ is happier and gives you less hassle about your closure’s qualification.</p>
 <p>firstly {
       .value(1)
   }.get { foo in
-      print(foo, <q>is 1</q>)
+      print(foo, &ldquo; is 1&rdquo;)
   }.done { foo in
-      print(foo, <q>is 1</q>)
+      print(foo, &ldquo; is 1&rdquo;)
   }.done { foo in
-      print(foo, <q>is Void</q>)
+      print(foo, &ldquo; is Void&rdquo;)
   }</p>
                       </div>
                     </section>
@@ -838,7 +829,7 @@ is happier and gives you less hassle about your closure’s qualification.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">tap</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping(Result&lt;T&gt;)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">tap</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Enums/Result.html">Result</a></span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -913,10 +904,6 @@ is happier and gives you less hassle about your closure’s qualification.</p>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
@@ -1118,6 +1105,174 @@ is happier and gives you less hassle about your closure’s qualification.</p>
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Available%20where%20%60T%60:%20%60Sequence%60"></a>
+                <a name="//apple_ref/swift/Section/Available where `T`: `Sequence`" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Available%20where%20%60T%60:%20%60Sequence%60"></a>
+                  <h3 class="section-name"><p>Available where <code><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></code>: <code>Sequence</code></p>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAST1TRpzrlE6filter2on4testAA0A0CySayAD_7ElementQZGGSo17OS_dispatch_queueCSg_SbALctF"></a>
+                    <a name="//apple_ref/swift/Method/filter(on:test:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAST1TRpzrlE6filter2on4testAA0A0CySayAD_7ElementQZGGSo17OS_dispatch_queueCSg_SbALctF">filter(on:test:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">filter</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">test</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Bool</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Available%20where%20%60T%60:%20%60Collection%60"></a>
+                <a name="//apple_ref/swift/Section/Available where `T`: `Collection`" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Available%20where%20%60T%60:%20%60Collection%60"></a>
+                  <h3 class="section-name"><p>Available where <code><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></code>: <code>Collection</code></p>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAASl1TRpzrlE5firstAA0A0CyAD_7ElementQZGvp"></a>
+                    <a name="//apple_ref/swift/Property/first" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAASl1TRpzrlE5firstAA0A0CyAD_7ElementQZGvp">first</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">first</span><span class="p">:</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAASl1TRpzrlE4lastAA0A0CyAD_7ElementQZGvp"></a>
+                    <a name="//apple_ref/swift/Property/last" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAASl1TRpzrlE4lastAA0A0CyAD_7ElementQZGvp">last</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="k">var</span> <span class="nv">last</span><span class="p">:</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="o">&gt;</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Available%20where%20%60T%60:%20%60Sequence%60,%20%60T.Iterator.Element%60:%20%60Comparable%60"></a>
+                <a name="//apple_ref/swift/Section/Available where `T`: `Sequence`, `T.Iterator.Element`: `Comparable`" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Available%20where%20%60T%60:%20%60Sequence%60,%20%60T.Iterator.Element%60:%20%60Comparable%60"></a>
+                  <h3 class="section-name"><p>Available where <code><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></code>: <code>Sequence</code>, <code>T.Iterator.Element</code>: <code>Comparable</code></p>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAST1TRpzSLAD_7ElementRPzrlE6sorted2onAA0A0CySayAGGGSo17OS_dispatch_queueCSg_tF"></a>
+                    <a name="//apple_ref/swift/Method/sorted(on:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAST1TRpzSLAD_7ElementRPzrlE6sorted2onAA0A0CySayAGGGSo17OS_dispatch_queueCSg_tF">sorted(on:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">sorted</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Available%20where%20%60T%60:%20%60Sequence%602"></a>
+                <a name="//apple_ref/swift/Section/Available where `T`: `Sequence`" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Available%20where%20%60T%60:%20%60Sequence%602"></a>
+                  <h3 class="section-name"><p>Available where <code><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></code>: <code>Sequence</code></p>
+</h3>
+                </div>
+              </div>
               <ul class="item-container">
                 <li class="item">
                   <div>
@@ -1150,7 +1305,43 @@ is happier and gives you less hassle about your closure’s qualification.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">mapValues</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T.Iterator.Element)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">mapValues</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAST1TRpzrlE9mapValues2on5flags_AA0A0CySayqd__GGSo17OS_dispatch_queueCSg_8Dispatch0K13WorkItemFlagsVSgs7KeyPathCyAD_7ElementQZqd__GtlF"></a>
+                    <a name="//apple_ref/swift/Method/mapValues(on:flags:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAST1TRpzrlE9mapValues2on5flags_AA0A0CySayqd__GGSo17OS_dispatch_queueCSg_8Dispatch0K13WorkItemFlagsVSgs7KeyPathCyAD_7ElementQZqd__GtlF">mapValues(on:flags:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code><a href="../Classes/Promise.html">Promise&lt;[T]&gt;</a></code> =&gt; <code>KeyPath&lt;T, U&gt;</code> =&gt; <code><a href="../Classes/Promise.html">Promise&lt;[U]&gt;</a></code></p>
+<pre class="highlight swift"><code><span class="n">firstly</span> <span class="p">{</span>
+    <span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="kt">Person</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="s">"Max"</span><span class="p">),</span> <span class="kt">Person</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="s">"Roman"</span><span class="p">),</span> <span class="kt">Person</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="s">"John"</span><span class="p">)])</span>
+<span class="p">}</span><span class="o">.</span><span class="nf">mapValues</span><span class="p">(</span><span class="err">\</span><span class="o">.</span><span class="n">name</span><span class="p">)</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+    <span class="c1">// $0 =&gt; ["Max", "Roman", "John"]</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">mapValues</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">keyPath</span><span class="p">:</span> <span class="kt">KeyPath</span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">,</span> <span class="kt">U</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -1188,7 +1379,7 @@ is happier and gives you less hassle about your closure’s qualification.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">flatMapValues</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">:</span> <span class="kt">Sequence</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T.Iterator.Element)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">flatMapValues</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">]</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt">Sequence</span></code></pre>
 
                         </div>
                       </div>
@@ -1226,7 +1417,43 @@ is happier and gives you less hassle about your closure’s qualification.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">compactMapValues</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T.Iterator.Element)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">compactMapValues</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">?)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAST1TRpzrlE16compactMapValues2on5flags_AA0A0CySayqd__GGSo17OS_dispatch_queueCSg_8Dispatch0L13WorkItemFlagsVSgs7KeyPathCyAD_7ElementQZqd__SgGtlF"></a>
+                    <a name="//apple_ref/swift/Method/compactMapValues(on:flags:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAST1TRpzrlE16compactMapValues2on5flags_AA0A0CySayqd__GGSo17OS_dispatch_queueCSg_8Dispatch0L13WorkItemFlagsVSgs7KeyPathCyAD_7ElementQZqd__SgGtlF">compactMapValues(on:flags:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code><a href="../Classes/Promise.html">Promise&lt;[T]&gt;</a></code> =&gt; <code>KeyPath&lt;T, U?&gt;</code> =&gt; <code><a href="../Classes/Promise.html">Promise&lt;[U]&gt;</a></code></p>
+<pre class="highlight swift"><code><span class="n">firstly</span> <span class="p">{</span>
+    <span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="kt">Person</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="s">"Max"</span><span class="p">),</span> <span class="kt">Person</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="s">"Roman"</span><span class="p">,</span> <span class="nv">age</span><span class="p">:</span> <span class="mi">26</span><span class="p">),</span> <span class="kt">Person</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="s">"John"</span><span class="p">,</span> <span class="nv">age</span><span class="p">:</span> <span class="mi">23</span><span class="p">)])</span>
+<span class="p">}</span><span class="o">.</span><span class="nf">compactMapValues</span><span class="p">(</span><span class="err">\</span><span class="o">.</span><span class="n">age</span><span class="p">)</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+    <span class="c1">// $0 =&gt; [26, 23]</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">compactMapValues</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">keyPath</span><span class="p">:</span> <span class="kt">KeyPath</span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">,</span> <span class="kt">U</span><span class="p">?</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -1264,7 +1491,7 @@ is happier and gives you less hassle about your closure’s qualification.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">thenMap</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">:</span> <span class="kt">Thenable</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T.Iterator.Element)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="o">.</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">thenMap</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="o">.</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="p">]</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt">Thenable</span></code></pre>
 
                         </div>
                       </div>
@@ -1302,7 +1529,7 @@ is happier and gives you less hassle about your closure’s qualification.</p>
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">thenFlatMap</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">:</span> <span class="kt">Thenable</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping(T.Iterator.Element)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="o">.</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">]</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span><span class="o">.</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="p">:</span> <span class="kt">Sequence</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">thenFlatMap</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">transform</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">U</span><span class="o">.</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">]</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt">Thenable</span><span class="p">,</span> <span class="kt">U</span><span class="o">.</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span> <span class="p">:</span> <span class="kt">Sequence</span></code></pre>
 
                         </div>
                       </div>
@@ -1347,9 +1574,54 @@ is happier and gives you less hassle about your closure’s qualification.</p>
                     </section>
                   </div>
                 </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit8ThenablePAAST1TRpzrlE12filterValues2on5flags_AA0A0CySayAD_7ElementQZGGSo17OS_dispatch_queueCSg_8Dispatch0L13WorkItemFlagsVSgs7KeyPathCyALSbGtF"></a>
+                    <a name="//apple_ref/swift/Method/filterValues(on:flags:_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit8ThenablePAAST1TRpzrlE12filterValues2on5flags_AA0A0CySayAD_7ElementQZGGSo17OS_dispatch_queueCSg_8Dispatch0L13WorkItemFlagsVSgs7KeyPathCyALSbGtF">filterValues(on:flags:_:)</a>
+                    </code>
+                      <span class="declaration-note">
+                        Extension method
+                      </span>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p><code><a href="../Classes/Promise.html">Promise&lt;[T]&gt;</a></code> =&gt; <code>KeyPath&lt;T, Bool&gt;</code> =&gt; <code><a href="../Classes/Promise.html">Promise&lt;[T]&gt;</a></code></p>
+<pre class="highlight swift"><code><span class="n">firstly</span> <span class="p">{</span>
+    <span class="o">.</span><span class="nf">value</span><span class="p">([</span><span class="kt">Person</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="s">"Max"</span><span class="p">),</span> <span class="kt">Person</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="s">"Roman"</span><span class="p">,</span> <span class="nv">age</span><span class="p">:</span> <span class="mi">26</span><span class="p">,</span> <span class="nv">isStudent</span><span class="p">:</span> <span class="kc">false</span><span class="p">),</span> <span class="kt">Person</span><span class="p">(</span><span class="nv">name</span><span class="p">:</span> <span class="s">"John"</span><span class="p">,</span> <span class="nv">age</span><span class="p">:</span> <span class="mi">23</span><span class="p">,</span> <span class="nv">isStudent</span><span class="p">:</span> <span class="kc">true</span><span class="p">)])</span>
+<span class="p">}</span><span class="o">.</span><span class="nf">filterValues</span><span class="p">(</span><span class="err">\</span><span class="o">.</span><span class="n">isStudent</span><span class="p">)</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span>
+    <span class="c1">// $0 =&gt; [Person(name: "John", age: 23, isStudent: true)]</span>
+<span class="p">}</span>
+</code></pre>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">filterValues</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">keyPath</span><span class="p">:</span> <span class="kt">KeyPath</span><span class="o">&lt;</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">,</span> <span class="kt">Bool</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></span><span class="o">.</span><span class="kt">Iterator</span><span class="o">.</span><span class="kt">Element</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Available%20where%20%60T%60:%20%60Collection%602"></a>
+                <a name="//apple_ref/swift/Section/Available where `T`: `Collection`" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Available%20where%20%60T%60:%20%60Collection%602"></a>
+                  <h3 class="section-name"><p>Available where <code><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></code>: <code>Collection</code></p>
+</h3>
+                </div>
+              </div>
               <ul class="item-container">
                 <li class="item">
                   <div>
@@ -1450,6 +1722,15 @@ is happier and gives you less hassle about your closure’s qualification.</p>
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Available%20where%20%60T%60:%20%60Sequence%60,%20%60T.Iterator.Element%60:%20%60Comparable%602"></a>
+                <a name="//apple_ref/swift/Section/Available where `T`: `Sequence`, `T.Iterator.Element`: `Comparable`" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Available%20where%20%60T%60:%20%60Sequence%60,%20%60T.Iterator.Element%60:%20%60Comparable%602"></a>
+                  <h3 class="section-name"><p>Available where <code><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP1TQa">T</a></code>: <code>Sequence</code>, <code>T.Iterator.Element</code>: <code>Comparable</code></p>
+</h3>
+                </div>
+              </div>
               <ul class="item-container">
                 <li class="item">
                   <div>
@@ -1492,8 +1773,8 @@ is happier and gives you less hassle about your closure’s qualification.</p>
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2019-11-07)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2020 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2020-01-15)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>

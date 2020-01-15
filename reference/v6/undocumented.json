@@ -185,27 +185,34 @@
     {
       "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Guarantee.swift",
       "line": 109,
+      "symbol": "Guarantee.map(on:flags:_:)",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Guarantee.swift",
+      "line": 121,
       "symbol": "Guarantee.then(on:flags:_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Guarantee.swift",
-      "line": 119,
+      "line": 131,
       "symbol": "Guarantee.asVoid()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Guarantee.swift",
-      "line": 280,
+      "line": 345,
       "symbol": "Guarantee.init()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
       "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Guarantee.swift",
-      "line": 284,
+      "line": 349,
       "symbol": "Guarantee.value",
       "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"
@@ -240,13 +247,6 @@
     },
     {
       "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Resolver.swift",
-      "line": 90,
-      "symbol": "PromiseKit.Result",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Resolver.swift",
       "line": 91,
       "symbol": "PromiseKit.Result.isFulfilled",
       "symbol_kind": "source.lang.swift.decl.var.instance",
@@ -254,7 +254,7 @@
     },
     {
       "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Thenable.swift",
-      "line": 397,
+      "line": 506,
       "symbol": "Thenable.firstValue(on:flags:where:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"

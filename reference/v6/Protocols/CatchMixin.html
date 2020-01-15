@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          PromiseKit 6.12.0 Docs
+          PromiseKit 6.13.0 Docs
         </a>
          (80% documented)
       </p>
@@ -125,10 +125,7 @@
                 <a class="nav-group-task-link" href="../Extensions/Error.html">Error</a>
               </li>
               <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Extensions/PromiseKit.html">PromiseKit</a>
-              </li>
-              <li class="nav-group-task">
-                <a class="nav-group-task-link" href="../Extensions/PromiseKit/Result.html">– Result</a>
+                <a class="nav-group-task-link" href="../Other%20Extensions.html#/PromiseKit">PromiseKit</a>
               </li>
             </ul>
           </li>
@@ -233,7 +230,7 @@
       <article class="main-content">
 
         <section class="section">
-          <div class="section-content">
+          <div class="section-content top-matter">
             <h1>CatchMixin</h1>
               <div class="declaration">
                 <div class="language">
@@ -284,7 +281,7 @@ delegating the error handling to the caller.</p>
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
-<span class="kd">func</span> <span class="err">`</span><span class="k">catch</span><span class="err">`</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="k">return</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">policy</span><span class="p">:</span> <span class="kt"><a href="../Enums/CatchPolicy.html">CatchPolicy</a></span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="n">catchPolicy</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping(Error)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/PMKFinalizer.html">PMKFinalizer</a></span></code></pre>
+<span class="kd">func</span> <span class="err">`</span><span class="k">catch</span><span class="err">`</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="k">return</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">policy</span><span class="p">:</span> <span class="kt"><a href="../Enums/CatchPolicy.html">CatchPolicy</a></span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="n">catchPolicy</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Error</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/PMKFinalizer.html">PMKFinalizer</a></span></code></pre>
 
                         </div>
                       </div>
@@ -338,10 +335,6 @@ delegating the error handling to the caller.</p>
                     </section>
                   </div>
                 </li>
-              </ul>
-            </div>
-            <div class="task-group">
-              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
@@ -380,7 +373,7 @@ Use <code>recover</code> in circumstances where recovering the chain from certai
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">recover</span><span class="o">&lt;</span><span class="kt">U</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Thenable.html">Thenable</a></span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">policy</span><span class="p">:</span> <span class="kt"><a href="../Enums/CatchPolicy.html">CatchPolicy</a></span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="n">catchPolicy</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping(Error)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span><span class="o">.</span><span class="kt">T</span> <span class="o">==</span> <span class="kt">T</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="n">recover</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">policy</span><span class="p">:</span> <span class="kt"><a href="../Enums/CatchPolicy.html">CatchPolicy</a></span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="n">catchPolicy</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Error</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">U</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/Thenable.html">Thenable</a></span><span class="p">,</span> <span class="k">Self</span><span class="o">.</span><span class="kt">T</span> <span class="o">==</span> <span class="kt">U</span><span class="o">.</span><span class="kt">T</span></code></pre>
 
                         </div>
                       </div>
@@ -440,8 +433,7 @@ This variant of <code>recover</code> requires the handler to return a Guarantee,
     <p class="aside-title">Note</p>
     Note it is logically impossible for this to take a <code>catchPolicy</code>, thus <code>allErrors</code> are handled.
 
-</div>
-<div class="aside aside-see-also">
+</div><div class="aside aside-see-also">
     <p class="aside-title">See also</p>
     <a href="https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation">Cancellation</a>
 
@@ -453,7 +445,7 @@ This variant of <code>recover</code> requires the handler to return a Guarantee,
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
-<span class="kd">func</span> <span class="nf">recover</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping(Error)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+<span class="kd">func</span> <span class="nf">recover</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Error</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -681,6 +673,15 @@ The chain waits on the returned <code><a href="../Classes/Guarantee.html">Guaran
               </ul>
             </div>
             <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Available%20where%20%60T%60%20==%20%60Void%60"></a>
+                <a name="//apple_ref/swift/Section/Available where `T` == `Void`" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Available%20where%20%60T%60%20==%20%60Void%60"></a>
+                  <h3 class="section-name"><p>Available where <code>T</code> == <code>Void</code></p>
+</h3>
+                </div>
+              </div>
               <ul class="item-container">
                 <li class="item">
                   <div>
@@ -713,7 +714,7 @@ The chain waits on the returned <code><a href="../Classes/Guarantee.html">Guaran
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@discardableResult</span>
-<span class="kd">func</span> <span class="nf">recover</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping(Error)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
+<span class="kd">func</span> <span class="nf">recover</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Error</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -781,7 +782,7 @@ The chain waits on the returned <code><a href="../Classes/Guarantee.html">Guaran
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">recover</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">policy</span><span class="p">:</span> <span class="kt"><a href="../Enums/CatchPolicy.html">CatchPolicy</a></span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="n">catchPolicy</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping(Error)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">recover</span><span class="p">(</span><span class="nv">on</span><span class="p">:</span> <span class="kt">DispatchQueue</span><span class="p">?</span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="kt">Q</span><span class="o">.</span><span class="n">map</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">policy</span><span class="p">:</span> <span class="kt"><a href="../Enums/CatchPolicy.html">CatchPolicy</a></span> <span class="o">=</span> <span class="n"><a href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a></span><span class="o">.</span><span class="n">catchPolicy</span><span class="p">,</span> <span class="n">_</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Error</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -827,8 +828,8 @@ The chain waits on the returned <code><a href="../Classes/Guarantee.html">Guaran
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2019 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2019-11-07)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.11.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+      <p>&copy; 2020 <a class="link" href="" target="_blank" rel="external"></a>. All rights reserved. (Last updated: 2020-01-15)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
     </section>
   </body>
 </div>
