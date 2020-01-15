@@ -26,12 +26,12 @@ class GuaranteeTests: XCTestCase {
         wait(for: [ex], timeout: 10)
     }
 
-    #if swift(>=4)
+    #if swift(>=4) && !swift(>=5.2)
     func testMapByKeyPath() {
         let ex = expectation(description: "")
 
-        Guarantee.value("Hello world").map(\.count).done {
-            XCTAssertEqual(11, $0)
+        Guarantee.value(Person(name: "Max")).map(\.name).done {
+            XCTAssertEqual("Max", $0)
             ex.fulfill()
         }
 
@@ -55,6 +55,21 @@ class GuaranteeTests: XCTestCase {
 
         wait(for: [ex], timeout: 10)
     }
+
+    #if swift(>=4) && !swift(>=5.2)
+    func testMapValuesByKeyPath() {
+        let ex = expectation(description: "")
+
+        Guarantee.value([Person(name: "Max"), Person(name: "Roman"), Person(name: "John")])
+            .mapValues(\.name)
+            .done { values in
+                XCTAssertEqual(["Max", "Roman", "John"], values)
+                ex.fulfill()
+            }
+
+        wait(for: [ex], timeout: 10)
+    }
+    #endif
 
     func testFlatMapValues() {
         let ex = expectation(description: "")
@@ -81,6 +96,21 @@ class GuaranteeTests: XCTestCase {
 
         wait(for: [ex], timeout: 10)
     }
+
+    #if swift(>=4) && !swift(>=5.2)
+    func testCompactMapValuesByKeyPath() {
+        let ex = expectation(description: "")
+
+        Guarantee.value([Person(name: "Max"), Person(name: "Roman", age: 26), Person(name: "John", age: 23)])
+            .compactMapValues(\.age)
+            .done { values in
+                XCTAssertEqual([26, 23], values)
+                ex.fulfill()
+            }
+
+        wait(for: [ex], timeout: 10)
+    }
+    #endif
 
     func testThenMap() {
 
@@ -123,6 +153,22 @@ class GuaranteeTests: XCTestCase {
 
         wait(for: [ex], timeout: 10)
     }
+
+    #if swift(>=4) && !swift(>=5.2)
+    func testFilterValuesByKeyPath() {
+
+        let ex = expectation(description: "")
+
+        Guarantee.value([Person(name: "Max"), Person(name: "Roman", age: 26, isStudent: false), Person(name: "John", age: 23, isStudent: true)])
+            .filterValues(\.isStudent)
+            .done { values in
+                XCTAssertEqual([Person(name: "John", age: 23, isStudent: true)], values)
+                ex.fulfill()
+            }
+
+        wait(for: [ex], timeout: 10)
+    }
+    #endif
 
     func testSorted() {
 
