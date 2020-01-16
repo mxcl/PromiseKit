@@ -54,10 +54,10 @@ jobs:
       name: Swift 4.1.50 / Xcode 10.1
     - <<: *carthage
       osx_image: xcode10.3
-      name: Swift 4.1.51 / Xcode 10.2
+      name: Swift 4.1.51 / Xcode 10.3
     - <<: *carthage
       osx_image: xcode11
-      name: Swift 4.1.52 / Xcode 10.2
+      name: Swift 4.1.52 / Xcode 11
 
     - &pod
       stage: lint
