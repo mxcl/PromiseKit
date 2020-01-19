@@ -239,6 +239,8 @@ extension WhenTests {
         ("testInt", testInt),
         ("testProgress", testProgress),
         ("testProgressDoesNotExceed100Percent", testProgressDoesNotExceed100Percent),
+        ("testPromiseWithMaxFulfilledCount", testPromiseWithMaxFulfilledCount),
+        ("testPromiseWithMaxFulfilledCountOverflow", testPromiseWithMaxFulfilledCountOverflow),
         ("testQuadrupleTuple", testQuadrupleTuple),
         ("testQuintupleTuple", testQuintupleTuple),
         ("testRejected", testRejected),
@@ -246,6 +248,8 @@ extension WhenTests {
         ("testUnhandledErrorHandlerDoesNotFire", testUnhandledErrorHandlerDoesNotFire),
         ("testUnhandledErrorHandlerDoesNotFireForStragglers", testUnhandledErrorHandlerDoesNotFireForStragglers),
         ("testVoid", testVoid),
+        ("testVoidGuaranteeWithMaxFulfilledCount", testVoidGuaranteeWithMaxFulfilledCount),
+        ("testVoidPromiseWithMaxFulfilledCount", testVoidPromiseWithMaxFulfilledCount),
     ]
 }
 
