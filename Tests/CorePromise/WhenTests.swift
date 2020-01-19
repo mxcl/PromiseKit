@@ -37,6 +37,79 @@ class WhenTests: XCTestCase {
         waitForExpectations(timeout: 1, handler: nil)
     }
 
+    func testPromiseWithMaxFulfilledCount() {
+        enum Error: Swift.Error { case dummy }
+
+        let ex1 = expectation(description: "")
+
+        let promise1 = after(seconds: 1).then { Promise.value(1) }
+        let promise2 = after(seconds: 3).then { Promise<Int>(error: Error.dummy) }
+        let promise3 = after(seconds: 4).then { Promise.value(2) }
+        let promise4 = after(seconds: 5).then { Promise<Int>(error: Error.dummy) }
+        let promise5 = after(seconds: 6).then { Promise<Int>(error: Error.dummy) }
+        let promise6 = after(seconds: 2).then { Promise.value(3) }
+        when(fulfilled: [promise1, promise2, promise3, promise4, promise5, promise6], maxFulfilledCount: 2).done {
+            XCTAssertEqual($0.count, 2)
+            XCTAssertEqual($0[0], 1)
+            XCTAssertEqual($0[1], 3)
+            ex1.fulfill()
+        }.catch { _ in
+            XCTAssert(false)
+            ex1.fulfill()
+        }
+
+        wait(for: [ex1], timeout: 10)
+    }
+
+    func testPromiseWithMaxFulfilledCountOverflow() {
+        enum Error: Swift.Error { case dummy }
+
+        let ex1 = expectation(description: "")
+
+        let promise1 = after(seconds: 1).then { Promise.value(1) }
+        let promise2 = after(seconds: 4).then { Promise.value(2) }
+        let promise3 = after(seconds: 2).then { Promise.value(3) }
+        when(fulfilled: [promise1, promise2, promise3], maxFulfilledCount: 10).done {
+            XCTAssertEqual($0.count, 3)
+            XCTAssertEqual($0[0], 1)
+            XCTAssertEqual($0[1], 2)
+            XCTAssertEqual($0[2], 3)
+            ex1.fulfill()
+        }.catch { _ in
+            XCTAssert(false)
+            ex1.fulfill()
+        }
+
+        wait(for: [ex1], timeout: 10)
+    }
+
+    func testVoidPromiseWithMaxFulfilledCount() {
+        enum Error: Swift.Error { case dummy }
+
+        let ex1 = expectation(description: "")
+
+        let promise1 = after(seconds: 1).then { Promise.value }
+        let promise2 = after(seconds: 3).then { Promise<Void>(error: Error.dummy) }
+        let promise3 = after(seconds: 4).then { Promise.value }
+        let promise4 = after(seconds: 5).then { Promise<Void>(error: Error.dummy) }
+        let promise5 = after(seconds: 6).then { Promise<Void>(error: Error.dummy) }
+        let promise6 = after(seconds: 2).then { Promise.value }
+        when(fulfilled: [promise1, promise2, promise3, promise4, promise5, promise6], maxFulfilledCount: 2).done {
+            XCTAssertTrue(promise1.isFulfilled)
+            XCTAssertTrue(promise2.isPending)
+            XCTAssertTrue(promise3.isPending)
+            XCTAssertTrue(promise4.isPending)
+            XCTAssertTrue(promise5.isPending)
+            XCTAssertTrue(promise6.isFulfilled)
+            ex1.fulfill()
+        }.catch { _ in
+            XCTAssert(false)
+            ex1.fulfill()
+        }
+
+        wait(for: [ex1], timeout: 10)
+    }
+
     func testDoubleTuple() {
         let e1 = expectation(description: "")
         let p1 = Promise.value(1)
@@ -261,5 +334,21 @@ class WhenTests: XCTestCase {
         }
 
         wait(for: [ex1, ex2], timeout: 10)
+    }
+
+    func testVoidGuaranteeWithMaxFulfilledCount() {
+        let ex1 = expectation(description: "")
+
+        let guarantee1 = after(seconds: 1).then { Guarantee.value }
+        let guarantee2 = after(seconds: 2).then { Guarantee.value }
+        let guarantee3 = after(seconds: 3).then { Guarantee.value }
+        when(guarantees: [guarantee1, guarantee2, guarantee3], maxFulfilledCount: 2).done {
+            XCTAssertTrue(guarantee1.isFulfilled)
+            XCTAssertTrue(guarantee2.isFulfilled)
+            XCTAssertFalse(guarantee3.isFulfilled)
+            ex1.fulfill()
+        }
+
+        wait(for: [ex1], timeout: 10)
     }
 }
