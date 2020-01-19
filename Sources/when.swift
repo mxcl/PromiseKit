@@ -1,8 +1,8 @@
 import Foundation
 import Dispatch
 
-private func _when<U: Thenable>(_ thenables: [U]) -> Promise<Void> {
-    var countdown = thenables.count
+private func _when<U: Thenable>(_ thenables: [U], maxFulfilledCount: Int? = nil) -> Promise<Void> {
+    var countdown = min(maxFulfilledCount ?? thenables.count, thenables.count)
     guard countdown > 0 else {
         return .value(Void())
     }
@@ -12,7 +12,7 @@ private func _when<U: Thenable>(_ thenables: [U]) -> Promise<Void> {
 #if PMKDisableProgress || os(Linux)
     var progress: (completedUnitCount: Int, totalUnitCount: Int) = (0, 0)
 #else
-    let progress = Progress(totalUnitCount: Int64(thenables.count))
+    let progress = Progress(totalUnitCount: Int64(countdown))
     progress.isCancellable = false
     progress.isPausable = false
 #endif
@@ -66,8 +66,10 @@ private func _when<U: Thenable>(_ thenables: [U]) -> Promise<Void> {
  - Note: `when` provides `NSProgress`.
  - SeeAlso: `when(resolved:)`
 */
-public func when<U: Thenable>(fulfilled thenables: [U]) -> Promise<[U.T]> {
-    return _when(thenables).map(on: nil) { thenables.map{ $0.value! } }
+public func when<U: Thenable>(fulfilled thenables: [U], maxFulfilledCount: Int? = nil) -> Promise<[U.T]> {
+    return _when(thenables, maxFulfilledCount: maxFulfilledCount).map(on: nil) {
+        maxFulfilledCount == nil ? thenables.map { $0.value! } : thenables.compactMap { $0.value }
+    }
 }
 
 /// Wait for all promises in a set to fulfill.
@@ -76,8 +78,8 @@ public func when<U: Thenable>(fulfilled promises: U...) -> Promise<Void> where U
 }
 
 /// Wait for all promises in a set to fulfill.
-public func when<U: Thenable>(fulfilled promises: [U]) -> Promise<Void> where U.T == Void {
-    return _when(promises)
+public func when<U: Thenable>(fulfilled promises: [U], maxFulfilledCount: Int? = nil) -> Promise<Void> where U.T == Void {
+    return _when(promises, maxFulfilledCount: maxFulfilledCount)
 }
 
 /// Wait for all promises in a set to fulfill.
@@ -257,6 +259,6 @@ public func when(_ guarantees: Guarantee<Void>...) -> Guarantee<Void> {
 }
 
 // Waits on all provided Guarantees.
-public func when(guarantees: [Guarantee<Void>]) -> Guarantee<Void> {
-    return when(fulfilled: guarantees).recover{ _ in }.asVoid()
+public func when(guarantees: [Guarantee<Void>], maxFulfilledCount: Int? = nil) -> Guarantee<Void> {
+    return when(fulfilled: guarantees, maxFulfilledCount: maxFulfilledCount).recover{ _ in }.asVoid()
 }
