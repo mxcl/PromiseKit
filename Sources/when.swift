@@ -68,7 +68,15 @@ private func _when<U: Thenable>(_ thenables: [U], maxFulfilledCount: Int? = nil)
 */
 public func when<U: Thenable>(fulfilled thenables: [U], maxFulfilledCount: Int? = nil) -> Promise<[U.T]> {
     return _when(thenables, maxFulfilledCount: maxFulfilledCount).map(on: nil) {
-        maxFulfilledCount == nil ? thenables.map { $0.value! } : thenables.compactMap { $0.value }
+        if maxFulfilledCount == nil {
+            return thenables.map { $0.value! }
+        } else {
+            #if !swift(>=3.3) || (swift(>=4) && !swift(>=4.1))
+            return thenables.flatMap { $0.value }
+            #else
+            return thenables.compactMap { $0.value }
+            #endif
+        }
     }
 }
 
