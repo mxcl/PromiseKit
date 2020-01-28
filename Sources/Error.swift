@@ -32,6 +32,9 @@ public enum PMKError: Error {
      Also used if all values of this collection failed the test passed to `firstValue(where:)`.
      */
     case emptySequence
+
+    /// no winner in `race(fulfilled:)`
+    case noWinner
 }
 
 extension PMKError: CustomDebugStringConvertible {
@@ -51,6 +54,8 @@ extension PMKError: CustomDebugStringConvertible {
             return "The asynchronous sequence was cancelled"
         case .emptySequence:
             return "The first or last element was requested for an empty sequence"
+        case .noWinner:
+            return "All thenables passed to race(fulfilled:) were rejected"
         }
     }
 }
