@@ -1,3 +1,5 @@
+import Dispatch
+
 @inline(__always)
 private func _race<U: Thenable>(_ thenables: [U]) -> Promise<U.T> {
     let rp = Promise<U.T>(.pending)
