@@ -203,10 +203,11 @@ public extension CatchMixin where T == Void {
      
      - Parameter on: The queue to which the provided closure dispatches.
      - Parameter body: The handler to execute if this promise is rejected.
+     - Parameter policy: The default policy does not execute your handler for cancellation errors.
      - SeeAlso: [Cancellation](https://github.com/mxcl/PromiseKit/blob/master/Documentation/CommonPatterns.md#cancellation)
      */
     @discardableResult
-    func recover(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(Error) -> Void) -> Guarantee<Void> {
+    func recover(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, policy: CatchPolicy = conf.catchPolicy, _ body: @escaping(Error) -> Void) -> Guarantee<Void> {
         let rg = Guarantee<Void>(.pending)
         pipe {
             switch $0 {
@@ -214,8 +215,12 @@ public extension CatchMixin where T == Void {
                 rg.box.seal(())
             case .rejected(let error):
                 on.async(flags: flags) {
-                    body(error)
-                    rg.box.seal(())
+                    if policy == .allErrors || !error.isCancelled {
+                        body(error)
+                        rg.box.seal(())
+                    } else {
+                        rg.box.seal(())
+                    }
                 }
             }
         }
