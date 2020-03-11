@@ -3,7 +3,7 @@ import Foundation
 /**
  __AnyPromise is an implementation detail.
 
- Because of how ObjC/Swift compatability work we have to compose our AnyPromise
+ Because of how ObjC/Swift compatibility work we have to compose our AnyPromise
  with this internal object, however this is still part of the public interface.
  Sadly. Please don’t use it.
 */
