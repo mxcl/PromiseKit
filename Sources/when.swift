@@ -251,6 +251,111 @@ public func when<T>(resolved promises: [Promise<T>]) -> Guarantee<[Result<T>]> {
     return rg
 }
 
+/**
+Generate promises at a limited rate and wait for all to resolve.
+
+For example:
+
+    func downloadFile(url: URL) -> Promise<Data> {
+        // ...
+    }
+
+    let urls: [URL] = /*…*/
+    let urlGenerator = urls.makeIterator()
+
+    let generator = AnyIterator<Promise<Data>> {
+        guard url = urlGenerator.next() else {
+            return nil
+        }
+        return downloadFile(url)
+    }
+
+    when(resolved: generator, concurrently: 3).done { results in
+        // ...
+    }
+
+No more than three downloads will occur simultaneously. Downloads will continue if one of them fails
+
+- Note: The generator is called *serially* on a *background* queue.
+- Warning: Refer to the warnings on `when(resolved:)`
+- Parameter promiseGenerator: Generator of promises.
+- Returns: A new promise that resolves once all the provided promises resolve. The array is ordered the same as the input, ie. the result order is *not* resolution order.
+- SeeAlso: `when(resolved:)`
+*/
+public func when<It: IteratorProtocol>(resolved promiseIterator: It, concurrently: Int)
+    -> Guarantee<[Result<It.Element.T>]> where It.Element: Thenable {
+
+    guard concurrently > 0 else {
+        return Guarantee.value([Result.rejected(PMKError.badInput)])
+    }
+
+    var generator = promiseIterator
+    var root = Guarantee<[Result<It.Element.T>]>.pending()
+    var pendingPromises = 0
+    var promises: [It.Element] = []
+
+    let barrier = DispatchQueue(label: "org.promisekit.barrier.when", attributes: [.concurrent])
+
+    func dequeue() {
+        guard root.guarantee.isPending else {
+            return
+        }  // don’t continue dequeueing if root has been rejected
+
+        var shouldDequeue = false
+        barrier.sync {
+            shouldDequeue = pendingPromises < concurrently
+        }
+        guard shouldDequeue else {
+            return
+        }
+
+        var promise: It.Element!
+
+        barrier.sync(flags: .barrier) {
+            guard let next = generator.next() else {
+                return
+            }
+
+            promise = next
+
+            pendingPromises += 1
+            promises.append(next)
+        }
+
+        func testDone() {
+            barrier.sync {
+                if pendingPromises == 0 {
+                  #if !swift(>=3.3) || (swift(>=4) && !swift(>=4.1))
+                    root.resolve(promises.flatMap { $0.result })
+                  #else
+                    root.resolve(promises.compactMap { $0.result })
+                  #endif
+                }
+            }
+        }
+
+        guard promise != nil else {
+            return testDone()
+        }
+
+        promise.pipe { _ in
+            barrier.sync(flags: .barrier) {
+                pendingPromises -= 1
+            }
+
+            dequeue()
+            testDone()
+        }
+
+        dequeue()
+    }
+
+    dequeue()
+
+    return root.guarantee
+}
+
+
 /// Waits on all provided Guarantees.
 public func when(_ guarantees: Guarantee<Void>...) -> Guarantee<Void> {
     return when(guarantees: guarantees)
