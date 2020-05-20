@@ -21,6 +21,21 @@ class CancellationTests: XCTestCase {
 
         waitForExpectations(timeout: 60)
     }
+    
+    func testThrowCancellableNsErrorThatIsNotCancelled() {
+        let expct = expectation(description: "")
+
+        after(seconds: 0).done { _ in
+            throw NSError()
+        }.done {
+            XCTFail()
+        }.catch {
+            XCTAssertFalse($0.isCancelled)
+            expct.fulfill()
+        }
+
+        waitForExpectations(timeout: 1)
+    }
 
     func testThrowCancellableErrorThatIsNotCancelled() {
         let expct = expectation(description: "")

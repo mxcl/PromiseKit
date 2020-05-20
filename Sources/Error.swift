@@ -84,10 +84,19 @@ extension Error {
             return true
         } catch {
         #if os(macOS) || os(iOS) || os(tvOS)
-            let pair = { ($0.domain, $0.code) }(error as NSError)
-            return ("SKErrorDomain", 2) == pair
+            do {
+                /** Throw again the error  to handle NSError()
+                    The error message from NSError is shown only once.
+                **/
+                throw self
+            } catch let error as NSError {
+                let pair = { ($0.domain, $0.code) }(error as NSError)
+                return ("SKErrorDomain", 2) == pair
+            } catch {
+                return false
+            }
         #else
-            return false
+        return false
         #endif
         }
     }
