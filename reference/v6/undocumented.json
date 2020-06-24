@@ -261,7 +261,7 @@
     },
     {
       "file": "/Users/travis/build/mxcl/PromiseKit/Sources/when.swift",
-      "line": 260,
+      "line": 258,
       "symbol": "when(guarantees:)",
       "symbol_kind": "source.lang.swift.decl.function.free",
       "warning": "undocumented"
