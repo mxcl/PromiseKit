@@ -7,7 +7,7 @@ pkg.platforms = [
    .macOS(.v10_10), .iOS(.v8), .tvOS(.v9), .watchOS(.v2)
 ]
 pkg.products = [
-    .library(name: "PromiseKit", targets: ["PromiseKit"]),
+    .library(name: "PromiseKit", type: .dynamic, targets: ["PromiseKit"]),
 ]
 
 let pmk: Target = .target(name: "PromiseKit")
