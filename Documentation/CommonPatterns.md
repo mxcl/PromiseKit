@@ -173,7 +173,7 @@ When you have a series of tasks to perform on an array of data:
 ```swift
 // fade all visible table cells one by one in a “cascading” effect
 
-let fade = Guarantee()
+var fade = Guarantee()
 for cell in tableView.visibleCells {
     fade = fade.then {
         UIView.animate(.promise, duration: 0.1) {
