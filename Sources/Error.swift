@@ -1,4 +1,7 @@
 import Foundation
+#if canImport(StoreKit)
+import StoreKit
+#endif
 
 public enum PMKError: Error {
     /**
@@ -83,12 +86,17 @@ extension Error {
         } catch CocoaError.userCancelled {
             return true
         } catch {
-        #if os(macOS) || os(iOS) || os(tvOS)
-            let pair = { ($0.domain, $0.code) }(error as NSError)
-            return ("SKErrorDomain", 2) == pair
-        #else
+            #if canImport(StoreKit)
+            do {
+                throw self
+            } catch SKError.paymentCancelled {
+                return true
+            } catch {
+                return false
+            }
+            #else
             return false
-        #endif
+            #endif
         }
     }
 }
