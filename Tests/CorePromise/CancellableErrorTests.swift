@@ -1,6 +1,9 @@
 import Foundation
 import PromiseKit
 import XCTest
+#if canImport(StoreKit)
+import StoreKit
+#endif
 
 class CancellationTests: XCTestCase {
     func testCancellation() {
@@ -101,6 +104,13 @@ class CancellationTests: XCTestCase {
         XCTAssertTrue(URLError.cancelled.isCancelled)
         XCTAssertTrue(CocoaError.cancelled.isCancelled)
         XCTAssertFalse(CocoaError(_nsError: NSError(domain: NSCocoaErrorDomain, code: CocoaError.Code.coderInvalidValue.rawValue)).isCancelled)
+        #if canImport(StoreKit)
+        XCTAssertTrue(SKError(.paymentCancelled).isCancelled)
+        XCTAssertFalse(SKError(.paymentInvalid).isCancelled)
+        XCTAssertTrue(NSError(domain: SKErrorDomain, code: SKError.paymentCancelled.rawValue, userInfo: nil).isCancelled)
+        XCTAssertFalse(NSError(domain: "Any other domain", code: SKError.paymentCancelled.rawValue, userInfo: nil).isCancelled)
+        #endif
+        XCTAssertFalse(NSError().isCancelled)
     }
 #endif
 }
