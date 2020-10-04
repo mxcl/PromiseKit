@@ -25,6 +25,6 @@ pmk.exclude = [
 pkg.swiftLanguageVersions = [3, 4, 5]
 pkg.targets = [
     pmk,
-    .testTarget(name: "A+", dependencies: ["PromiseKit"]),
+    .testTarget(name: "APlus", dependencies: ["PromiseKit"], path: "Tests/A+"),
     .testTarget(name: "CorePromise", dependencies: ["PromiseKit"], path: "Tests/CorePromise"),
 ]

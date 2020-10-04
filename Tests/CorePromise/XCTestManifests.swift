@@ -18,6 +18,7 @@ extension CancellationTests {
     // to regenerate.
     static let __allTests__CancellationTests = [
         ("testCancellation", testCancellation),
+        ("testDoesntCrashSwift", testDoesntCrashSwift),
         ("testFoundationBridging1", testFoundationBridging1),
         ("testFoundationBridging2", testFoundationBridging2),
         ("testIsCancelled", testIsCancelled),

@@ -41,6 +41,5 @@ jobs:
     needs: auto-cancel
     steps:
     - uses: actions/checkout@v2
-    # we’re using the Swift 4 engine because otherwise some tests don’t make it in
-    - run: swift test --generate-linuxmain -Xswiftc -swift-version -Xswiftc 4
+    - run: swift test --generate-linuxmain
     - run: git diff --exit-code
