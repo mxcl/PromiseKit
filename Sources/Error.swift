@@ -83,9 +83,10 @@ extension Error {
         } catch CocoaError.userCancelled {
             return true
         } catch {
-        #if os(macOS) || os(iOS) || os(tvOS)
-            let pair = { ($0.domain, $0.code) }(error as NSError)
-            return ("SKErrorDomain", 2) == pair
+        #if canImport(StoreKit)
+            let domain = (error as AnyObject).value(forKey: "domain") as? String
+            let code = (error as AnyObject).value(forKey: "code") as? Int
+            return ("SKErrorDomain", 2) == (domain, code)
         #else
             return false
         #endif
