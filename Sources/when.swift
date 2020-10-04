@@ -158,9 +158,7 @@ public func when<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrent
 
         barrier.sync(flags: .barrier) {
             guard let next = generator.next() else { return }
-
             promise = next
-
             pendingPromises += 1
             promises.append(next)
         }
