@@ -34,6 +34,18 @@ class WrapTests: XCTestCase {
                 block(self.error)
             }
         }
+
+#if swift(>=5.0)
+        func fetchWithCompletionBlock5(block: @escaping(Swift.Result<Int, Error>) -> Void) {
+            after(.milliseconds(20)).done {
+                if let value = self.value {
+                    block(.success(value))
+                } else {
+                    block(.failure(self.error!))
+                }
+            }
+        }
+#endif
     }
 
     func testSuccess() {
@@ -129,6 +141,37 @@ class WrapTests: XCTestCase {
         }.catch { _ in ex2.fulfill() }
 
         wait(for: [ex1, ex2], timeout: 1)
+    }
+#endif
+
+#if swift(>=5.0)
+    func testSwiftResultSuccess() {
+        let ex = expectation(description: "")
+        let kittenFetcher = KittenFetcher(value: 2, error: nil)
+        Promise { seal in
+            kittenFetcher.fetchWithCompletionBlock5(block: seal.resolve)
+        }.done {
+            XCTAssertEqual($0, 2)
+            ex.fulfill()
+        }.silenceWarning()
+
+        waitForExpectations(timeout: 1)
+    }
+
+    func testSwiftResultError() {
+        let ex = expectation(description: "")
+
+        let kittenFetcher = KittenFetcher(value: nil, error: Error.test)
+        Promise { seal in
+            kittenFetcher.fetchWithCompletionBlock5(block: seal.resolve)
+        }.catch { error in
+            defer { ex.fulfill() }
+            guard case Error.test = error else {
+                return XCTFail()
+            }
+        }
+
+        waitForExpectations(timeout: 1)
     }
 #endif
 
