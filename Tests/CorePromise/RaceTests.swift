@@ -81,7 +81,9 @@ class RaceTests: XCTestCase {
             XCTFail()
             ex.fulfill()
         }.catch {
-            guard case PMKError.noWinner = $0 else { return XCTFail() }
+            guard let pmkError = $0 as? PMKError else { return XCTFail() }
+            guard case .noWinner = pmkError else { return XCTFail() }
+            guard pmkError.debugDescription == "All thenables passed to race(fulfilled:) were rejected" else { return XCTFail() }
             ex.fulfill()
         }
         wait(for: [ex], timeout: 10)
