@@ -28,8 +28,10 @@ func toggleNetworkSpinnerWithPromise<T>(funcToCall: () -> Promise<T>) -> Promise
     return firstly {
         setNetworkActivityIndicatorVisible(true)
         return funcToCall()
-    }.always {
-        setNetworkActivityIndicatorVisible(false)
+    }.recover { err -> Promise<T> in
+        return setNetworkActivityIndicatorVisible(false)
+        // or wrap the error with stack
+        // throw OtherError(stack: err)
     }
 }
 ```
@@ -63,7 +65,7 @@ error type for this condition:
 ```swift
 return firstly {
     getItems()
-}.map { items -> [Item]> in
+}.map { items -> [Item] in
     guard !items.isEmpty else {
         throw MyError.emptyItems
     }
