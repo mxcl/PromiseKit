@@ -10,7 +10,7 @@ import Foundation
 */
 @objc public class AnyPromise: NSObject {
 
-    fileprivate let box: Box<Any?>
+    let box: Box<Any?>
 
     @objc public init(resolver_ body: (@escaping (Any?) -> Void) -> Void) {
         box = EmptyBox<Any?>()
