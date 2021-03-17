@@ -2,6 +2,27 @@
 #import <dispatch/dispatch.h>
 #import <PromiseKit/fwd.h>
 
+// Different ways to make AnyPromise available
+//
+// Import the Swift-Module if it was created already
+//
+// If building a Swift-Package just import PromiseKit
+//
+// In all other cases AnyPromise is still just a foward
+// declaration and needs to be defined. This is just to
+// silence a compile error which would avoid building
+// the Swift-Module on first builds.
+#if __has_include("PromiseKit-Swift.h")
+	#import "PromiseKit-Swift.h"
+#elif __has_include("PromiseKit/PromiseKit-Swift.h")
+	#import <PromiseKit/PromiseKit-Swift.h>
+#elif SWIFT_PACKAGE
+@import PromiseKit;
+#else
+@interface AnyPromise
+@end
+#endif
+
 /// Provided to simplify some usage sites
 typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
 
