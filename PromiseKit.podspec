@@ -4,7 +4,7 @@ Pod::Spec.new do |s|
   s.version = '6.15.2'
 
   s.source = {
-    :git => "https://github.com/DG0BAB/#{s.name}.git",
+    :git => "https://github.com/mxcl/#{s.name}.git",
     :tag => s.version,
     :submodules => true
   }
