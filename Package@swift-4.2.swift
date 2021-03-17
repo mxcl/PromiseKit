@@ -24,6 +24,8 @@ pmk.exclude = [
 
 let pmkObjc: Target = .target(name: "PromiseKitObjC")
 pmkObjc.dependencies = [.target(name: "PromiseKit")]
+pmkObjc.path = "Sources"
+pmkObjc.publicHeadersPath = "."
 pmkObjc.exclude = [
 	"PMKCallVariadicBlock.m",
 	"after.swift",
@@ -45,6 +47,7 @@ pmkObjc.exclude = [
 	"Thenable.swift",
 	"when.swift"
 ]
+
 pkg.swiftLanguageVersions = [.v3, .v4, .v4_2]
 pkg.targets = [
     pmk,

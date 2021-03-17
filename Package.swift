@@ -24,6 +24,8 @@ pmk.exclude = [
 
 let pmkObjc: Target = .target(name: "PromiseKitObjC")
 pmkObjc.dependencies = [.target(name: "PromiseKit")]
+pmkObjc.path = "Sources"
+pmkObjc.publicHeadersPath = "."
 pmkObjc.exclude = [
 	"PMKCallVariadicBlock.m",
 	"after.swift",
