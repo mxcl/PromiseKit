@@ -2,15 +2,13 @@
 #import <dispatch/dispatch.h>
 #import <PromiseKit/fwd.h>
 
-/// INTERNAL DO NOT USE
-@class __AnyPromise;
-
 /// Provided to simplify some usage sites
 typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
 
 
 /// An Objective-C implementation of the promise pattern.
-@interface AnyPromise: NSObject
+@interface AnyPromise (ObjC)
+
 
 /**
  Create a new promise that resolves with the provided block.
@@ -33,9 +31,6 @@ typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
  */
 + (instancetype __nonnull)promiseWithResolverBlock:(void (^ __nonnull)(__nonnull PMKResolver))resolveBlock NS_REFINED_FOR_SWIFT;
 
-
-/// INTERNAL DO NOT USE
-- (instancetype __nonnull)initWith__D:(__AnyPromise * __nonnull)d;
 
 /**
  Creates a resolved promise.

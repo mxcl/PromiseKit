@@ -1,7 +1,8 @@
 #import <Foundation/NSDate.h>
 #import <dispatch/dispatch.h>
 
-@class AnyPromise;
+@import PromiseKit;
+
 extern NSString * __nonnull const PMKErrorDomain;
 
 #define PMKFailingPromiseIndexKey @"PMKFailingPromiseIndexKey"
@@ -103,11 +104,11 @@ AnyPromise *__nonnull PMKJoin(NSArray * __nonnull promises) NS_REFINED_FOR_SWIFT
 
 /**
  Literally hangs this thread until the promise has resolved.
- 
+
  Do not use hang… unless you are testing, playing or debugging.
- 
+
  If you use it in production code I will literally and honestly cry like a child.
- 
+
  @return The resolved value of the promise.
 
  @warning T SAFE. IT IS NOT SAFE. IT IS NOT SAFE. IT IS NOT SAFE. IT IS NO
