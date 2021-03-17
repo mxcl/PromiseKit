@@ -1,7 +1,7 @@
 #import <Foundation/NSDate.h>
 #import <dispatch/dispatch.h>
 
-@import PromiseKit;
+@class AnyPromise;
 
 extern NSString * __nonnull const PMKErrorDomain;
 
