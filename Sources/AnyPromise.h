@@ -12,11 +12,12 @@
 // declaration and needs to be defined. This is just to
 // silence a compile error which would avoid building
 // the Swift-Module on first builds.
+
 #if __has_include("PromiseKit-Swift.h")
 	#import "PromiseKit-Swift.h"
 #elif __has_include("PromiseKit/PromiseKit-Swift.h")
 	#import <PromiseKit/PromiseKit-Swift.h>
-#elif SWIFT_PACKAGE
+#elif SWIFT_PACKAGE && __has_feature(modules)
 @import PromiseKit;
 #else
 @interface AnyPromise
