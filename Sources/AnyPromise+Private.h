@@ -26,7 +26,3 @@
 #import "AnyPromise.h"
 
 @class PMKArray;
-
-@interface AnyPromise ()
-- (void)__pipe:(void(^ __nonnull)(__nullable id))block NS_REFINED_FOR_SWIFT;
-@end
