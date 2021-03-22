@@ -17,7 +17,7 @@
 	#import "PromiseKit-Swift.h"
 #elif __has_include("PromiseKit/PromiseKit-Swift.h")
 	#import <PromiseKit/PromiseKit-Swift.h>
-#elif SWIFT_PACKAGE && __has_feature(modules)
+#elif SWIFT_PACKAGE
 @import PromiseKit;
 #else
 @interface AnyPromise
