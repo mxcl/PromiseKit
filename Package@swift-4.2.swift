@@ -23,7 +23,7 @@ pmk.exclude = [
 ]
 
 let pmkObjc: Target = .target(name: "PromiseKitObjC")
-pmkObjc.dependencies = ["PromisedKit"]
+pmkObjc.dependencies = ["PromiseKit"]
 pmkObjc.path = "Sources"
 pmkObjc.publicHeadersPath = "."
 pmkObjc.exclude = [
