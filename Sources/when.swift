@@ -138,8 +138,8 @@ public func when<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrent
         return Promise(error: PMKError.badInput)
     }
 
+    let root = Promise<[It.Element.T]>.pending()
     var generator = promiseIterator
-    var root = Promise<[It.Element.T]>.pending()
     var pendingPromises = 0
     var promises: [It.Element] = []
 
