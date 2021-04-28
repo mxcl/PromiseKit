@@ -22,7 +22,7 @@ pmk.exclude = [
     "race.m",
     "Deprecations.swift"
 ]
-pkg.swiftLanguageVersions = [3, 4]
+pkg.swiftLanguageVersions = [3, 4, 5]
 pkg.targets = [
     pmk,
     .testTarget(name: "A+", dependencies: ["PromiseKit"]),
