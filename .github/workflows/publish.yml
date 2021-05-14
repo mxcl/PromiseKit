@@ -1,0 +1,47 @@
+name: Publish
+on:
+  release:
+    types: [draft]
+jobs:
+  # ideally would be multi-job, but YEAH good luck
+  go:
+    runs-on: macos-latest
+    steps:
+    - name: Start Deployment
+      uses: bobheadxi/deployments@v1
+      id: deployment
+      with:
+        step: start
+        token: ${{ secrets.GITHUB_TOKEN }}
+        env: pods
+
+    - uses: actions/checkout@v2
+
+    # have to do first or CocoaPods will fail to push to trunk :-/
+    - uses: eregon/publish-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        release_id: ${{ github.event.release.id }}
+
+    - run: pod trunk push --allow-warnings --skip-tests --skip-import-validation
+      env:
+        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+
+    - name: Seal Deployment
+      uses: bobheadxi/deployments@v1
+      if: always()
+      with:
+        step: finish
+        token: ${{ secrets.GITHUB_TOKEN }}
+        status: ${{ job.status }}
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+
+    tidy:
+      runs-on: macos-latest
+      steps:
+      - uses: actions/checkout@v2
+        with:
+          depth: 0
+      - run: git push origin :rc/${{ github.event.release.tag_name }}
+      - run: git push origin :rc/${{ github.event.release.tag_name }}/step-2

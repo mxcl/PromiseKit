@@ -1,0 +1,185 @@
+name: CI (exhaustive)
+on:
+  push:
+    tags:
+    - 'deploy/[0-9]+.[0-9]+.[0-9]+'
+jobs:
+  auto-cancel:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: technote-space/auto-cancel-redundant-job@v1
+
+  build-linux-swift-3-2:
+    needs: auto-cancel
+    runs-on: ubuntu-16.04
+    steps:
+    - uses: fwal/setup-swift@v1
+      with: {swift-version: 4.0.3}
+    - uses: actions/checkout@v2
+    - run: swift build -Xswiftc -warnings-as-errors -Xswiftc -swift-version -Xswiftc 3
+
+  build-linux-swift-3-3:
+    needs: auto-cancel
+    runs-on: ubuntu-16.04
+    steps:
+    - uses: fwal/setup-swift@v1
+      with: {swift-version: 4.1.3}
+    - uses: actions/checkout@v2
+    - run: swift build -Xswiftc -warnings-as-errors -Xswiftc -swift-version -Xswiftc 3
+
+  build-linux-swift-3-4:
+    needs: auto-cancel
+    runs-on: ubuntu-16.04
+    steps:
+    - uses: fwal/setup-swift@v1
+      with: {swift-version: 4.2.4}
+    - uses: actions/checkout@v2
+    - run: swift build -Xswiftc -warnings-as-errors -Xswiftc -swift-version -Xswiftc 3
+
+  build-linux-swift-4:
+    needs: auto-cancel
+    runs-on: ubuntu-16.04
+    strategy:
+      matrix:
+        swift:
+        - "4.0"
+        - "4.1"
+        - "4.2"
+    steps:
+    - uses: fwal/setup-swift@v1
+      with:
+        swift-version: ${{ matrix.swift }}
+    - uses: actions/checkout@v2
+    - run: swift build -Xswiftc -warnings-as-errors
+
+  build-linux-swift-5:
+    needs: auto-cancel
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        swift:
+        - "5.0"
+        - "5.1"
+        - "5.2"
+        - "5.3"
+        - "5.4"
+    steps:
+    - uses: fwal/setup-swift@v1
+      with:
+        swift-version: ${{ matrix.swift }}
+    - uses: actions/checkout@v2
+    - run: swift build -Xswiftc -warnings-as-errors
+
+  test:
+    needs: [build-linux-swift-5]
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        dst:
+        - platform=macOS
+        - platform=tvOS Simulator,OS=14.3,name=Apple TV
+        - platform=iOS Simulator,OS=14.4,name=iPhone 12
+    steps:
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: ^12
+    - run: swift --version
+    - uses: actions/checkout@v2
+    - uses: sersoft-gmbh/xcodebuild-action@v1
+      with:
+        project: PromiseKit.xcodeproj
+        scheme: PromiseKit
+        destination: ${{ matrix.dst }}
+        action: test
+        enable-code-coverage: true
+    - uses: codecov/codecov-action@v1
+
+  carthage:
+    needs: auto-cancel
+    runs-on: macos-latest
+    steps:
+    - run: swift --version
+    - uses: actions/checkout@v2
+    - run: carthage build --no-skip-current --configuration Release --use-xcframeworks
+
+  # Repeated ∵ GHA doesn’t support YAML anchors yet (or some kind of multi matrix)
+  cocoapods-4-3:
+    needs: build-linux-swift-4
+    runs-on: macos-10.15
+    steps:
+    - uses: maxim-lobanov/setup-xcode@v1
+      with: {xcode-version: 10.3}
+    - uses: actions/checkout@v2
+    - run: pod lib lint --subspec=PromiseKit/CorePromise --fail-fast --swift-version=4.3
+
+  cocoapods-5-0:
+    needs: build-linux-swift-5
+    runs-on: macos-10.15
+    steps:
+    - uses: maxim-lobanov/setup-xcode@v1
+      with: {xcode-version: 10.3}
+    - uses: actions/checkout@v2
+    - run: pod lib lint --subspec=PromiseKit/CorePromise --fail-fast --swift-version=5.0
+
+  cocoapods-5-1:
+    needs: build-linux-swift-5
+    runs-on: macos-10.15
+    steps:
+    - uses: maxim-lobanov/setup-xcode@v1
+      with: {xcode-version: 11.2}
+    - uses: actions/checkout@v2
+    - run: pod lib lint --subspec=PromiseKit/CorePromise --fail-fast --swift-version=5.1
+
+  cocoapods-5-2:
+    needs: build-linux-swift-5
+    runs-on: macos-10.15
+    steps:
+    - uses: maxim-lobanov/setup-xcode@v1
+      with: {xcode-version: 11.7}
+    - uses: actions/checkout@v2
+    - run: pod lib lint --subspec=PromiseKit/CorePromise --fail-fast --swift-version=5.2
+
+  cocoapods-5-3:
+    needs: build-linux-swift-5
+    runs-on: macos-10.15
+    steps:
+    - uses: maxim-lobanov/setup-xcode@v1
+      with: {xcode-version: 12.3}
+    - uses: actions/checkout@v2
+    - run: pod lib lint --subspec=PromiseKit/CorePromise --fail-fast --swift-version=5.3
+
+  cocoapods-5-4:
+    needs: build-linux-swift-5
+    runs-on: macos-10.15
+    steps:
+    - uses: maxim-lobanov/setup-xcode@v1
+      with: {xcode-version: ^12}
+    - uses: actions/checkout@v2
+    - run: pod lib lint --subspec=PromiseKit/CorePromise --fail-fast --swift-version=5.4
+
+  create-release:
+    runs-on: ubuntu-latest
+    needs:
+      - test
+      - carthage
+      - build-linux-swift-5
+      - cocoapods-5-4
+    steps:
+    - uses: jungwinter/split@v1
+      id: split
+      with:
+        seperator: '/'  # this is correct, the action is typo’d despite warning
+        msg: ${{ github.ref }}
+
+    - uses: actions/checkout@v2
+      with:
+        fetch-depth: 0  # zero means “all” (or push fails)
+
+    - name: Tag RC
+      run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git tag rc/$v
+        git push origin rc/$v
+      env:
+        v: ${{ steps.split.outputs._3 }}
