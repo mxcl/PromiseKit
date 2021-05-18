@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: technote-space/auto-cancel-redundant-job@v1
   test-linux:
-    needs: auto-cancel
+    needs: verify-generated-linuxmain
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -36,3 +36,10 @@ jobs:
         scheme: PromiseKit
         destination: platform=macOS
         action: test
+  verify-generated-linuxmain:
+    runs-on: macos-latest
+    needs: auto-cancel
+    steps:
+    - uses: actions/checkout@v2
+    - run: swift test --generate-linuxmain -Xswiftc -swift-version -Xswiftc 4
+    - run: git diff --exit-code
