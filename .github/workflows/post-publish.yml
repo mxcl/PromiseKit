@@ -1,0 +1,59 @@
+# separate since this can be re-run without concern
+# stuff in publish should abort to allow re-tagging if it fails
+
+name: Post-Publish
+on:
+  release:
+    types: [published]
+jobs:
+  carthage:
+    runs-on: macos-latest
+    steps:
+    - run: carthage build --no-skip-current --use-xcframeworks
+    - run: carthage archive PromiseKit
+    - run: mv PromiseKit.framework.zip PromiseKit-$v.framework.zip
+    - uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ github.event.release.upload_url }}
+        asset_path: ./PromiseKit-$v.framework.zip
+        asset_name: PromiseKit-$v.framework.zip
+        asset_content_type: application/zip
+      env:
+        v: ${{ github.event.release.tag_name }}
+        GITHUB_TOKEN: ${{ github.token }}
+
+  docs:
+    runs-on: macos-latest
+    steps:
+    - name: Start Deployment
+      uses: bobheadxi/deployments@v1
+      id: deployment
+      with:
+        step: start
+        token: ${{ secrets.GITHUB_TOKEN }}
+        env: docs
+    - uses: actions/checkout@v2
+      with:
+        ref: gh-pages
+    - run: |
+        jazzy --config .github/jazzy.yml \
+          --github_url 'https://github.com/mxcl/PromiseKit' \
+          --module-version ${{ github.event.release.tag_name }}
+    - run: git remote update
+    - run: git checkout gh-pages
+    - run: rm -rf reference/v6
+    - run: mv output reference/v6
+    - run: git add reference/v6
+    - run: git config user.name Travis
+    - run: git config user.email "jazzy@travis-ci.com"
+    - run: git commit -m 'Updated docs for v${{ github.event.release.tag_name }}'
+    - run: git remote add secure-origin https://${{ JAZZY_PAT }}@github.com/mxcl/PromiseKit.git
+    - run: git push secure-origin gh-pages
+    - name: Seal Deployment
+      uses: bobheadxi/deployments@v1
+      if: always()
+      with:
+        step: finish
+        token: ${{ secrets.GITHUB_TOKEN }}
+        status: ${{ job.status }}
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}

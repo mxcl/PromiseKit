@@ -1,0 +1,38 @@
+name: CI (shallow)
+on:
+  pull_request:
+    paths-ignore:
+      - README.md
+      - .gitignore
+      - Documentation/**
+jobs:
+  auto-cancel:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: technote-space/auto-cancel-redundant-job@v1
+  test-linux:
+    needs: auto-cancel
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    # or fails due to some tests not being done for newer Swifts
+    - run: find -name XCTestManifests.swift -o -name LinuxMain.swift | xargs rm
+    - run: swift test -Xswiftc -warnings-as-errors
+  test-macos:
+    needs: auto-cancel
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: sersoft-gmbh/xcodebuild-action@v1
+      with:
+        project: PromiseKit.xcodeproj
+        scheme: PromiseKit
+        destination: platform=macOS
+        action: build
+        build-settings: SWIFT_TREAT_WARNINGS_AS_ERRORS=YES
+    - uses: sersoft-gmbh/xcodebuild-action@v1
+      with:
+        project: PromiseKit.xcodeproj
+        scheme: PromiseKit
+        destination: platform=macOS
+        action: test
