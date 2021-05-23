@@ -1,14 +1,50 @@
-# separate since this can be re-run without concern
-# stuff in publish should abort to allow re-tagging if it fails
-
 name: Post-Publish
 on:
   release:
-    types: [published]
+    types: published
 jobs:
+  pods:
+    runs-on: macos-latest
+    steps:
+
+    - name: Start Deployment
+      uses: bobheadxi/deployments@v1
+      id: deployment
+      with:
+        step: start
+        token: ${{ secrets.GITHUB_TOKEN }}
+        env: pods
+
+    - uses: actions/checkout@v2
+      with:
+        submodules: true
+
+    - run: pod trunk push --allow-warnings --skip-tests --skip-import-validation
+      env:
+        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+
+    - name: Seal Deployment
+      uses: bobheadxi/deployments@v1
+      if: always()
+      with:
+        step: finish
+        token: ${{ secrets.GITHUB_TOKEN }}
+        status: ${{ job.status }}
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+
   carthage:
     runs-on: macos-latest
     steps:
+
+    - name: Start Deployment
+      uses: bobheadxi/deployments@v1
+      id: deployment
+      with:
+        step: start
+        token: ${{ secrets.GITHUB_TOKEN }}
+        env: carthage
+
+    - uses: actions/checkout@v2
     - run: carthage build --no-skip-current --use-xcframeworks
     - run: carthage archive PromiseKit
     - run: mv PromiseKit.framework.zip PromiseKit-$v.framework.zip
@@ -22,9 +58,19 @@ jobs:
         v: ${{ github.event.release.tag_name }}
         GITHUB_TOKEN: ${{ github.token }}
 
+    - name: Seal Deployment
+      uses: bobheadxi/deployments@v1
+      if: always()
+      with:
+        step: finish
+        token: ${{ secrets.GITHUB_TOKEN }}
+        status: ${{ job.status }}
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+
   docs:
     runs-on: macos-latest
     steps:
+
     - name: Start Deployment
       uses: bobheadxi/deployments@v1
       id: deployment
@@ -32,9 +78,11 @@ jobs:
         step: start
         token: ${{ secrets.GITHUB_TOKEN }}
         env: docs
+
     - uses: actions/checkout@v2
       with:
         ref: gh-pages
+
     - run: |
         jazzy --config .github/jazzy.yml \
           --github_url 'https://github.com/mxcl/PromiseKit' \
@@ -49,6 +97,7 @@ jobs:
     - run: git commit -m 'Updated docs for v${{ github.event.release.tag_name }}'
     - run: git remote add secure-origin https://${{ JAZZY_PAT }}@github.com/mxcl/PromiseKit.git
     - run: git push secure-origin gh-pages
+
     - name: Seal Deployment
       uses: bobheadxi/deployments@v1
       if: always()

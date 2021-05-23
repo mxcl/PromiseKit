@@ -1,47 +1,63 @@
 name: Publish
 on:
-  release:
-    types: [draft]
+  push:
+    tags:
+    - 'rc/[0-9]+.[0-9]+.[0-9]+'
 jobs:
-  # ideally would be multi-job, but YEAH good luck
-  go:
+  lint:
     runs-on: macos-latest
     steps:
-    - name: Start Deployment
-      uses: bobheadxi/deployments@v1
-      id: deployment
+    - uses: actions/checkout@v2
       with:
-        step: start
-        token: ${{ secrets.GITHUB_TOKEN }}
-        env: pods
+        submodules: true
+    - run: pod lib lint
+
+  create-release:
+    runs-on: ubuntu-latest
+    needs: lint
+    steps:
+
+    - uses: jungwinter/split@v1
+      id: split
+      with:
+        seperator: /
+        msg: ${{ github.ref }}
 
     - uses: actions/checkout@v2
+      with:
+        ref: master
+        fetch-depth: 0  # zero means “all” (or push fails)
 
-    # have to do first or CocoaPods will fail to push to trunk :-/
-    - uses: eregon/publish-release@v1
+    - name: Update committed versions
+      run: |
+        ruby -i -pe "sub(/CURRENT_PROJECT_VERSION = [0-9.]+/, 'CURRENT_PROJECT_VERSION = $v')" PromiseKit.xcodeproj/project.pbxproj
+        ruby -i -pe "sub(/s.version = '[0-9.]+'/, 's.version = \"$v\"')" PromiseKit.podspec
+      env:
+        v: ${{ steps.split.outputs._3 }}
+    - run: |
+        ! (git diff --quiet)
+    - run: |
+        git config user.name github-actions
+        git config user.email github-actions@github.com
+        git commit -am "PromiseKit $v"
+        git push
+      env:
+        v: ${{ steps.split.outputs._3 }}
+
+    - uses: softprops/action-gh-release@v1
+      id: release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
-        release_id: ${{ github.event.release.id }}
+        tag_name: ${{ steps.split.outputs._3 }}
+        name: ${{ steps.split.outputs._3 }}
 
-    - run: pod trunk push --allow-warnings --skip-tests --skip-import-validation
-      env:
-        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
-
-    - name: Seal Deployment
-      uses: bobheadxi/deployments@v1
-      if: always()
+  tidy:
+    runs-on: ubuntu-latest
+    needs: create-release
+    steps:
+    - uses: actions/checkout@v2
       with:
-        step: finish
-        token: ${{ secrets.GITHUB_TOKEN }}
-        status: ${{ job.status }}
-        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
-
-    tidy:
-      runs-on: macos-latest
-      steps:
-      - uses: actions/checkout@v2
-        with:
-          depth: 0
-      - run: git push origin :rc/${{ github.event.release.tag_name }}
-      - run: git push origin :rc/${{ github.event.release.tag_name }}/step-2
+        depth: 0
+    - run: git push origin :deploy/${{ github.event.release.tag_name }}
+    - run: git push origin :rc/${{ github.event.release.tag_name }}
