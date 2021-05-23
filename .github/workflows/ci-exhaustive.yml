@@ -1,8 +1,5 @@
 name: CI (exhaustive)
-on:
-  push:
-    tags:
-    - 'deploy/[0-9]+.[0-9]+.[0-9]+'
+on: workflow_dispatch
 jobs:
   auto-cancel:
     runs-on: ubuntu-latest
@@ -165,22 +162,7 @@ jobs:
       - build-linux-swift-5
       - cocoapods-5-4
     steps:
-    - uses: jungwinter/split@v1
-      id: split
-      with:
-        seperator: '/'  # this is correct, the action is typo’d despite warning
-        msg: ${{ github.ref }}
-
     - uses: actions/checkout@v2
       with:
         fetch-depth: 0  # zero means “all” (or push fails)
         token: ${{ secrets.JAZZY_PAT }}  # or won’t trigger our workflow
-
-    - name: Tag RC
-      run: |
-        git config user.name github-actions
-        git config user.email github-actions@github.com
-        git tag rc/$v --force
-        git push origin rc/$v --force
-      env:
-        v: ${{ steps.split.outputs._3 }}

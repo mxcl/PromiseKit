@@ -1,14 +1,14 @@
 name: Post-Publish
 on:
   release:
-    types: published
+    types: [created]
 jobs:
   pods:
     runs-on: macos-latest
     steps:
 
     - name: Start Deployment
-      uses: bobheadxi/deployments@v1
+      uses: bobheadxi/deployments@v0.5.2
       id: deployment
       with:
         step: start
@@ -24,7 +24,7 @@ jobs:
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
 
     - name: Seal Deployment
-      uses: bobheadxi/deployments@v1
+      uses: bobheadxi/deployments@v0.5.2
       if: always()
       with:
         step: finish
@@ -37,7 +37,7 @@ jobs:
     steps:
 
     - name: Start Deployment
-      uses: bobheadxi/deployments@v1
+      uses: bobheadxi/deployments@v0.5.2
       id: deployment
       with:
         step: start
@@ -59,7 +59,7 @@ jobs:
         GITHUB_TOKEN: ${{ github.token }}
 
     - name: Seal Deployment
-      uses: bobheadxi/deployments@v1
+      uses: bobheadxi/deployments@v0.5.2
       if: always()
       with:
         step: finish
@@ -72,7 +72,7 @@ jobs:
     steps:
 
     - name: Start Deployment
-      uses: bobheadxi/deployments@v1
+      uses: bobheadxi/deployments@v0.5.2
       id: deployment
       with:
         step: start
@@ -95,11 +95,11 @@ jobs:
     - run: git config user.name Travis
     - run: git config user.email "jazzy@travis-ci.com"
     - run: git commit -m 'Updated docs for v${{ github.event.release.tag_name }}'
-    - run: git remote add secure-origin https://${{ JAZZY_PAT }}@github.com/mxcl/PromiseKit.git
+    - run: git remote add secure-origin https://${{ secrets.JAZZY_PAT }}@github.com/mxcl/PromiseKit.git
     - run: git push secure-origin gh-pages
 
     - name: Seal Deployment
-      uses: bobheadxi/deployments@v1
+      uses: bobheadxi/deployments@v0.5.2
       if: always()
       with:
         step: finish
