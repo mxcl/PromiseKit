@@ -161,6 +161,9 @@ extension RaceTests {
         ("test2", test2),
         ("test2Array", test2Array),
         ("testEmptyArray", testEmptyArray),
+        ("testFulfilled", testFulfilled),
+        ("testFulfilledEmptyArray", testFulfilledEmptyArray),
+        ("testFulfilledWithNoWinner", testFulfilledWithNoWinner),
     ]
 }
 
