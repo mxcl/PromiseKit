@@ -1,7 +1,7 @@
 Pod::Spec.new do |s|
   s.name = "PromiseKit"
 
-  s.version = '0.0.1'
+  s.version = "6.14.0"
 
   s.source = {
     :git => "https://github.com/mxcl/#{s.name}.git",
@@ -18,8 +18,8 @@ Pod::Spec.new do |s|
   s.documentation_url = 'http://mxcl.dev/PromiseKit/reference/v6/Classes/Promise.html'
   s.default_subspecs = 'CorePromise', 'UIKit', 'Foundation'
   s.requires_arc = true
-  
-  s.swift_versions = ['3.1', '3.2', '3.3', '3.4', '4.0', '4.1', '4.2', '4.3', '4.4', '5.0', '5.1']
+
+  s.swift_versions = ['3.1', '3.2', '3.3', '3.4', '4.0', '4.1', '4.2', '4.3', '4.4', '5.0', '5.1', '5.2', '5.3', '5.4']
 
   # CocoaPods requires us to specify the root deployment targets
   # even though for us it is nonsense. Our root spec has no
@@ -28,7 +28,7 @@ Pod::Spec.new do |s|
   s.osx.deployment_target = '10.10'
   s.watchos.deployment_target = '2.0'
   s.tvos.deployment_target = '9.0'
-  
+
   s.pod_target_xcconfig = {
     'OTHER_SWIFT_FLAGS' => '-DPMKCocoaPods',
   }
@@ -107,12 +107,12 @@ Pod::Spec.new do |s|
     cc = Dir['Sources/*.swift'] - ['Sources/SwiftPM.swift']
     cc << 'Sources/{after,AnyPromise,GlobalState,dispatch_promise,hang,join,PMKPromise,when,race}.m'
     cc += hh
-    
+
     ss.source_files = cc
     ss.public_header_files = hh
     ss.preserve_paths = 'Sources/AnyPromise+Private.h', 'Sources/PMKCallVariadicBlock.m', 'Sources/NSMethodSignatureForBlock.m'
     ss.frameworks = 'Foundation'
-    
+
     ss.ios.deployment_target = '8.0'
     ss.osx.deployment_target = '10.10'
     ss.watchos.deployment_target = '2.0'
@@ -140,7 +140,7 @@ Pod::Spec.new do |s|
     ss.osx.deployment_target = '10.10'
     ss.watchos.deployment_target = '2.0'
   end
-  
+
   s.subspec 'Foundation' do |ss|
     ss.source_files = Dir['Extensions/Foundation/Sources/*']
     ss.dependency 'PromiseKit/CorePromise'
@@ -199,7 +199,7 @@ Pod::Spec.new do |s|
     ss.ios.source_files = ss.tvos.source_files = ss.osx.source_files = 'Extensions/Photos/Sources/*'
     ss.ios.frameworks = ss.tvos.frameworks = ss.osx.frameworks = 'Photos'
     ss.dependency 'PromiseKit/CorePromise'
-    
+
     ss.ios.deployment_target = '8.0'
     ss.osx.deployment_target = '10.13'
     ss.tvos.deployment_target = '10.0'
@@ -242,7 +242,7 @@ Pod::Spec.new do |s|
   end
 
   picker_cc = 'Extensions/UIKit/Sources/UIImagePickerController+Promise.swift'
-  
+
   s.subspec 'UIKit' do |ss|
     ss.ios.source_files = ss.tvos.source_files = Dir['Extensions/UIKit/Sources/*'] - [picker_cc]
     ss.tvos.frameworks = ss.ios.frameworks = 'UIKit'

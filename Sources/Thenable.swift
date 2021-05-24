@@ -1,7 +1,7 @@
 import Dispatch
 
 /// Thenable represents an asynchronous operation that can be chained.
-public protocol Thenable: class {
+public protocol Thenable: AnyObject {
     /// The type of the wrapped value
     associatedtype T
 

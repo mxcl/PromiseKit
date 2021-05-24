@@ -1,6 +1,6 @@
 #import <Foundation/Foundation.h>
 #import <dispatch/dispatch.h>
-#import "fwd.h"
+#import <PromiseKit/fwd.h>
 
 /// INTERNAL DO NOT USE
 @class __AnyPromise;
@@ -53,7 +53,7 @@ typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
  A promise has `nil` value if the asynchronous task it represents has not finished. If the value is `nil` the promise is still `pending`.
 
  - Warning: *Note* Our Swift variant’s value property returns nil if the promise is rejected where AnyPromise will return the error object. This fits with the pattern where AnyPromise is not strictly typed and is more dynamic, but you should be aware of the distinction.
- 
+
  - Note: If the AnyPromise was fulfilled with a `PMKManifold`, returns only the first fulfillment object.
 
  - Returns: The value with which this promise was resolved or `nil` if this promise is pending.
@@ -124,9 +124,9 @@ typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
  Provide a block of form `^(NSError *){}` or simply `^{}`. The parameter has type `id` to give you the freedom to choose either.
 
  The provided block always runs on the main queue.
- 
+
  @warning *Note* Cancellation errors are not caught.
- 
+
  @warning *Note* Since catch is a c++ keyword, this method is not available in Objective-C++ files. Instead use catchOn.
 
  @see catchOn
@@ -137,15 +137,15 @@ typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
 
 /**
  The provided block is executed when the receiver is rejected.
- 
+
  Provide a block of form `^(NSError *){}` or simply `^{}`. The parameter has type `id` to give you the freedom to choose either.
- 
+
  The provided block always runs on the global background queue.
- 
+
  @warning *Note* Cancellation errors are not caught.
- 
+
  @warning *Note* Since catch is a c++ keyword, this method is not available in Objective-C++ files. Instead use catchWithPolicy.
- 
+
  @see catch
  @see catchOn
  */
@@ -154,13 +154,13 @@ typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
 
 /**
  The provided block is executed when the receiver is rejected.
- 
+
  Provide a block of form `^(NSError *){}` or simply `^{}`. The parameter has type `id` to give you the freedom to choose either.
- 
+
  The provided block always runs on queue provided.
- 
+
  @warning *Note* Cancellation errors are not caught.
- 
+
  @see catch
  @see catchInBackground
  */

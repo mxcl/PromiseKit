@@ -264,6 +264,8 @@ extension WrapTests {
         ("testNonOptionalFirstParameter", testNonOptionalFirstParameter),
         ("testPendingPromiseDeallocated", testPendingPromiseDeallocated),
         ("testSuccess", testSuccess),
+        ("testSwiftResultError", testSwiftResultError),
+        ("testSwiftResultSuccess", testSwiftResultSuccess),
         ("testVoidCompletionValue", testVoidCompletionValue),
         ("testVoidResolverFulfillAmbiguity", testVoidResolverFulfillAmbiguity),
     ]

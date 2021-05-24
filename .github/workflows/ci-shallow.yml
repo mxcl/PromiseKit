@@ -1,0 +1,46 @@
+name: CI (shallow)
+on:
+  pull_request:
+    paths-ignore:
+      - README.md
+      - .gitignore
+      - Documentation/**
+jobs:
+  auto-cancel:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: technote-space/auto-cancel-redundant-job@v1
+  test-linux:
+    needs: verify-generated-linuxmain
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    # or fails due to some tests not being done for newer Swifts
+    - run: find -name XCTestManifests.swift -o -name LinuxMain.swift | xargs rm
+    - run: swift test -Xswiftc -warnings-as-errors
+  test-macos:
+    needs: auto-cancel
+    runs-on: macos-latest
+    steps:
+    - uses: actions/checkout@v2
+    - uses: sersoft-gmbh/xcodebuild-action@v1
+      with:
+        project: PromiseKit.xcodeproj
+        scheme: PromiseKit
+        destination: platform=macOS
+        action: build
+        build-settings: SWIFT_TREAT_WARNINGS_AS_ERRORS=YES
+    - uses: sersoft-gmbh/xcodebuild-action@v1
+      with:
+        project: PromiseKit.xcodeproj
+        scheme: PromiseKit
+        destination: platform=macOS
+        action: test
+  verify-generated-linuxmain:
+    runs-on: macos-latest
+    needs: auto-cancel
+    steps:
+    - uses: actions/checkout@v2
+    # we’re using the Swift 4 engine because otherwise some tests don’t make it in
+    - run: swift test --generate-linuxmain -Xswiftc -swift-version -Xswiftc 4
+    - run: git diff --exit-code
