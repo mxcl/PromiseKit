@@ -158,6 +158,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
     }
 
     func testWhenResolvedContinuesWhenRejected() {
+    #if swift(>=5.3)
         let ex = expectation(description: "")
         enum Error: Swift.Error { case dummy }
 
@@ -184,5 +185,6 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
         }
 
         waitForExpectations(timeout: 3)
+    #endif
     }
 }
