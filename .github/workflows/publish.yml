@@ -27,7 +27,7 @@ jobs:
     - name: Update committed versions
       run: |
         ruby -i -pe "sub(/CURRENT_PROJECT_VERSION = [0-9.]+/, 'CURRENT_PROJECT_VERSION = $v')" PromiseKit.xcodeproj/project.pbxproj
-        ruby -i -pe "sub(/s.version = '[0-9.]+'/, 's.version = \"$v\"')" PromiseKit.podspec
+        ruby -i -pe "sub(/s.version = '[0-9.]+'/, 's.version = \'$v\'')" PromiseKit.podspec
     - run: |
         ! (git diff --quiet)
     - name: Commit
@@ -51,6 +51,6 @@ jobs:
       with:
         workflow: CD
         token: ${{ secrets.JAZZY_PAT }}
-        inputs: "{\"version\": \'${{ github.event.inputs.version }}\"}"
+        inputs: "{\"version\": \"${{ github.event.inputs.version }}\"}"
         ref: master  # or doesn’t use our new commit above
         wait-for-completion: true
