@@ -152,17 +152,4 @@ jobs:
     - uses: maxim-lobanov/setup-xcode@v1
       with: {xcode-version: ^12}
     - uses: actions/checkout@v2
-    - run: pod lib lint --subspec=PromiseKit/CorePromise --fail-fast --swift-version=5.4
-
-  create-release:
-    runs-on: ubuntu-latest
-    needs:
-      - test
-      - carthage
-      - build-linux-swift-5
-      - cocoapods-5-4
-    steps:
-    - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0  # zero means “all” (or push fails)
-        token: ${{ secrets.JAZZY_PAT }}  # or won’t trigger our workflow
+    - run: pod lib lint

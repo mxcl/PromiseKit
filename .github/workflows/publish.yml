@@ -6,50 +6,51 @@ on:
         description: Version to publish
         required: true
 jobs:
-  lint:
-    runs-on: macos-latest
+  ci:
+    runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+    - uses: aurelien-baudet/workflow-dispatch@v2
       with:
-        submodules: true
-    - run: pod lib lint
+        workflow: CI (exhaustive)
+        token: ${{ secrets.JAZZY_PAT }}
+      wait-for-completion: true
 
   create-release:
     runs-on: ubuntu-latest
     needs: lint
+    env:
+      v: ${{ github.event.inputs.version }}
     steps:
-
-    - uses: jungwinter/split@v1
-      id: split
-      with:
-        seperator: /
-        msg: ${{ github.ref }}
-
     - uses: actions/checkout@v2
       with:
-        ref: master
         fetch-depth: 0  # zero means “all” (or push fails)
-
     - name: Update committed versions
       run: |
         ruby -i -pe "sub(/CURRENT_PROJECT_VERSION = [0-9.]+/, 'CURRENT_PROJECT_VERSION = $v')" PromiseKit.xcodeproj/project.pbxproj
         ruby -i -pe "sub(/s.version = '[0-9.]+'/, 's.version = \"$v\"')" PromiseKit.podspec
-      env:
-        v: ${{ github.event.inputs.version }}
     - run: |
         ! (git diff --quiet)
-    - run: |
+    - name: Commit
+      run: |
         git config user.name github-actions
         git config user.email github-actions@github.com
         git commit -am "PromiseKit $v"
         git push
-      env:
-        v: ${{ github.event.inputs.version }}
-
     - uses: softprops/action-gh-release@v1
-      id: release
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ github.event.inputs.version }}
         name: ${{ github.event.inputs.version }}
+
+  cd:
+    needs: create-release
+    runs-on: ubuntu-latest
+    steps:
+    - uses: aurelien-baudet/workflow-dispatch@v2
+      with:
+        workflow: CD
+        token: ${{ secrets.JAZZY_PAT }}
+        inputs: "{\"version\": \'${{ github.event.inputs.version }}\"}"
+        ref: master  # or doesn’t use our new commit above
+      wait-for-completion: true
