@@ -82,6 +82,18 @@ extension Resolver where T == Void {
 }
 #endif
 
+#if swift(>=5.0)
+extension Resolver {
+    /// Resolves the promise with the provided result
+    public func resolve<E: Error>(_ result: Swift.Result<T, E>) {
+        switch result {
+        case .failure(let error): self.reject(error)
+        case .success(let value): self.fulfill(value)
+        }
+    }
+}
+#endif
+
 public enum Result<T> {
     case fulfilled(T)
     case rejected(Error)

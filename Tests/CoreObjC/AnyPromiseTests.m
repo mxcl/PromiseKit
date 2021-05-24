@@ -35,7 +35,7 @@ static inline AnyPromise *fulfillLater() {
 
 - (void)test_01_resolve {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     AnyPromise *promise = [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         resolve(@1);
     }];
@@ -46,13 +46,13 @@ static inline AnyPromise *fulfillLater() {
     promise.catch(^{
         XCTFail();
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_02_reject {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     AnyPromise *promise = [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         resolve(dummyWithCode(2));
     }];
@@ -63,13 +63,13 @@ static inline AnyPromise *fulfillLater() {
         XCTAssertEqualObjects(error.localizedDescription, @"2");
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_03_return_error {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     AnyPromise *promise = [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         resolve(@2);
     }];
@@ -82,13 +82,13 @@ static inline AnyPromise *fulfillLater() {
     promise.catch(^{
         XCTFail();
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_04_return_error_doesnt_compromise_result {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     AnyPromise *promise = [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         resolve(@4);
     }].then(^{
@@ -100,13 +100,13 @@ static inline AnyPromise *fulfillLater() {
     promise.catch(^{
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_05_throw_and_bubble {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         resolve(@5);
     }].then(^(id ii){
@@ -116,13 +116,13 @@ static inline AnyPromise *fulfillLater() {
         XCTAssertEqual(e.code, 5);
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_05_throw_and_bubble_more {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         resolve(@5);
     }].then(^{
@@ -133,13 +133,13 @@ static inline AnyPromise *fulfillLater() {
         [ex1 fulfill];
         XCTAssertEqualObjects(e.domain, PMKTestErrorDomain);
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_06_return_error {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         resolve(@5);
     }].then(^{
@@ -147,39 +147,39 @@ static inline AnyPromise *fulfillLater() {
     }).catch(^{
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_07_can_then_resolved {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         resolve(@1);
     }].then(^(id o){
         [ex1 fulfill];
         XCTAssertEqualObjects(@1, o);
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_07a_can_fail_rejected {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         resolve(dummyWithCode(1));
     }].catch(^(NSError *e){
         [ex1 fulfill];
         XCTAssertEqualObjects(@"1", e.localizedDescription);
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_09_async {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     __block int x = 0;
     [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         resolve(@1);
@@ -201,15 +201,15 @@ static inline AnyPromise *fulfillLater() {
 
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
-    
+
     XCTAssertEqual(x, 5);
 }
 
 - (void)test_10_then_returns_resolved_promise {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         resolve(@10);
     }].then(^(id o){
@@ -221,13 +221,13 @@ static inline AnyPromise *fulfillLater() {
         XCTAssertEqualObjects(@100, o);
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_11_then_returns_pending_promise {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         resolve(@1);
     }].then(^{
@@ -235,14 +235,14 @@ static inline AnyPromise *fulfillLater() {
     }).then(^(id o){
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_12_then_returns_recursive_promises {
     id ex1 = [self expectationWithDescription:@""];
     id ex2 = [self expectationWithDescription:@""];
-    
+
     __block int x = 0;
     fulfillLater().then(^{
         NSLog(@"1");
@@ -267,16 +267,16 @@ static inline AnyPromise *fulfillLater() {
         XCTAssertEqual(x++, 4);
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
-    
+
     XCTAssertEqual(x, 5);
 }
 
  - (void)test_13_then_returns_recursive_promises_that_fails {
      id ex1 = [self expectationWithDescription:@""];
      id ex2 = [self expectationWithDescription:@""];
-     
+
      fulfillLater().then(^{
          return fulfillLater().then(^{
              return fulfillLater().then(^{
@@ -298,7 +298,7 @@ static inline AnyPromise *fulfillLater() {
 
 - (void)test_14_fail_returns_value {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         resolve(@1);
     }].then(^{
@@ -310,13 +310,13 @@ static inline AnyPromise *fulfillLater() {
         XCTAssertEqualObjects(o, @2);
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_15_fail_returns_promise {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         resolve(@1);
     }].then(^{
@@ -329,26 +329,26 @@ static inline AnyPromise *fulfillLater() {
         XCTAssertEqualObjects(o, @123);
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_23_add_another_fail_to_already_rejected {
     id ex1 = [self expectationWithDescription:@""];
     id ex2 = [self expectationWithDescription:@""];
-    
+
     PMKResolver resolve;
     AnyPromise *promise = [[AnyPromise alloc] initWithResolver:&resolve];
-    
+
     promise.then(^{
         XCTFail();
     }).catch(^(NSError *e){
         XCTAssertEqualObjects(e.localizedDescription, @"23");
         [ex1 fulfill];
     });
-    
+
     resolve(dummyWithCode(23));
-    
+
     promise.then(^{
         XCTFail();
     }).catch(^(NSError *e){
@@ -362,7 +362,7 @@ static inline AnyPromise *fulfillLater() {
     id ex1 = [self expectationWithDescription:@""];
     id ex2 = [self expectationWithDescription:@""];
     id ex3 = [self expectationWithDescription:@""];
-    
+
     fulfillLater().then(^(id o){
         [ex1 fulfill];
         return fulfillLater().then(^{
@@ -377,13 +377,13 @@ static inline AnyPromise *fulfillLater() {
     }).catch(^{
         XCTFail();
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_26_promise_then_promise_fail_promise_fail {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     fulfillLater().then(^{
         return fulfillLater().then(^{
             return dummy();
@@ -397,12 +397,12 @@ static inline AnyPromise *fulfillLater() {
     }).catch(^{
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];}
 
 - (void)test_27_eat_failure {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     fulfillLater().then(^{
         return dummy();
     }).catch(^{
@@ -410,7 +410,7 @@ static inline AnyPromise *fulfillLater() {
     }).then(^{
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
@@ -426,14 +426,14 @@ static inline AnyPromise *fulfillLater() {
     }).catch(^{
         XCTFail();
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_29_deferred_rejected_catch_promise {
     id ex1 = [self expectationWithDescription:@""];
     id ex2 = [self expectationWithDescription:@""];
-    
+
     rejectLater().catch(^{
         [ex1 fulfill];
         return fulfillLater().then(^{
@@ -446,7 +446,7 @@ static inline AnyPromise *fulfillLater() {
     }).catch(^{
         XCTFail(@"2");
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
@@ -504,7 +504,7 @@ static inline AnyPromise *fulfillLater() {
 - (void)test_33a_return_nil {
     id ex1 = [self expectationWithDescription:@""];
     id ex2 = [self expectationWithDescription:@""];
-    
+
     [AnyPromise promiseWithValue:@"HI"].then(^(id o){
         XCTAssertEqualObjects(o, @"HI");
         [ex1 fulfill];
@@ -515,13 +515,13 @@ static inline AnyPromise *fulfillLater() {
         [ex2 fulfill];
         return nil;
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_36_promise_with_value_nil {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     [AnyPromise promiseWithValue:nil].then(^(id o){
         XCTAssertNil(o);
         [ex1 fulfill];
@@ -531,32 +531,32 @@ static inline AnyPromise *fulfillLater() {
 
 - (void)test_42 {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     [AnyPromise promiseWithValue:@1].then(^{
         return fulfillLater();
     }).then(^{
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_43_return_promise_from_itself {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     AnyPromise *p = fulfillLater().then(^{ return @1; });
     p.then(^{
         return p;
     }).then(^{
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_44_reseal {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         resolve(@123);
         resolve(@234);
@@ -564,16 +564,16 @@ static inline AnyPromise *fulfillLater() {
         XCTAssertEqualObjects(o, @123);
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_46_test_then_on {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     dispatch_queue_t q1 = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_LOW, 0);
     dispatch_queue_t q2 = dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_HIGH, 0);
-    
+
 #pragma clang diagnostic push
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
     [AnyPromise promiseWithValue:@1].thenOn(q1, ^{
@@ -585,19 +585,19 @@ static inline AnyPromise *fulfillLater() {
         [ex1 fulfill];
     });
 #pragma clang diagnostic pop
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_47_finally_plus {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     [AnyPromise promiseWithValue:@1].then(^{
         return @1;
     }).ensure(^{
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
@@ -615,14 +615,14 @@ static inline AnyPromise *fulfillLater() {
             [ex2 fulfill];
         });
     }
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_49_finally_negative_later {
     id ex1 = [self expectationWithDescription:@""];
     __block int x = 0;
-    
+
     [AnyPromise promiseWithValue:@1].then(^{
         XCTAssertEqual(++x, 1);
         return dummy();
@@ -634,33 +634,33 @@ static inline AnyPromise *fulfillLater() {
         XCTAssertEqual(++x, 4);
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_50_fulfill_with_pending_promise {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         resolve(fulfillLater().then(^{ return @"HI"; }));
     }].then(^(id hi){
         XCTAssertEqualObjects(hi, @"HI");
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_51_fulfill_with_fulfilled_promise {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         resolve([AnyPromise promiseWithValue:@1]);
     }].then(^(id o){
         XCTAssertEqualObjects(o, @1);
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
@@ -690,7 +690,7 @@ static inline AnyPromise *fulfillLater() {
 
 - (void)test_54_reject_with_rejected_promise {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         id err = [NSError errorWithDomain:@"a" code:123 userInfo:nil];
         resolve([AnyPromise promiseWithValue:err]);
@@ -698,33 +698,33 @@ static inline AnyPromise *fulfillLater() {
         XCTAssertEqual(err.code, 123);
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_58_just_finally {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     AnyPromise *promise = fulfillLater().then(^{
         return nil;
     }).ensure(^{
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
-    
+
     id ex2 = [self expectationWithDescription:@""];
-    
+
     promise.ensure(^{
         [ex2 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_59_catch_in_background {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         id err = [NSError errorWithDomain:@"a" code:123 userInfo:nil];
         resolve(err);
@@ -733,16 +733,16 @@ static inline AnyPromise *fulfillLater() {
         XCTAssertFalse([NSThread isMainThread]);
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
 - (void)test_60_catch_on_specific_queue {
     id ex1 = [self expectationWithDescription:@""];
-    
+
     NSString *expectedQueueName = @"specific queue 123";
     dispatch_queue_t q = dispatch_queue_create(expectedQueueName.UTF8String, DISPATCH_QUEUE_SERIAL);
-    
+
     [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         id err = [NSError errorWithDomain:@"a" code:123 userInfo:nil];
         resolve(err);
@@ -753,15 +753,15 @@ static inline AnyPromise *fulfillLater() {
         XCTAssertEqualObjects(expectedQueueName, currentQueueName);
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 
-- (void)test_61_wait_for_value {    
+- (void)test_61_wait_for_value {
     id o = [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         resolve(@1);
     }].wait;
-    
+
     XCTAssertEqualObjects(o, @1);
 }
 
@@ -769,7 +769,7 @@ static inline AnyPromise *fulfillLater() {
     NSError* err = [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         resolve([NSError errorWithDomain:@"a" code:123 userInfo:nil]);
     }].wait;
-    
+
     XCTAssertEqual(err.code, 123);
 }
 
@@ -792,7 +792,7 @@ static inline AnyPromise *fulfillLater() {
 - (void)test_race {
     id ex = [self expectationWithDescription:@""];
     id p = PMKAfter(0.1).then(^{ return @2; });
-    PMKRace(@[PMKAfter(0.2), PMKAfter(0.5), p]).then(^(id obj){
+    PMKRace(@[PMKAfter(10), PMKAfter(20), p]).then(^(id obj){
         XCTAssertEqual(2, [obj integerValue]);
         [ex fulfill];
     });
@@ -892,7 +892,7 @@ static NSHashTable *errorArray;
     }).ensure(^{
         [ex1 fulfill];
     });
-    
+
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 

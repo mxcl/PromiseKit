@@ -38,10 +38,14 @@ github "mxcl/PromiseKit" ~> 6.8
 ```
 
 > Please note, since PromiseKit 6.8.1 our Carthage support has transitioned to
-Swift 4 and above only. Strictly we *do* still support Swift 3.1 for Carthage,
-and if you like you could edit the PromiseKit `project.pbxproj` file during
-`carthage bootstrap` to make this possible. This change was involuntary and due
-to Xcode 10.2 dropping support for Swift 3.
+> Swift 4 and above only. Strictly we *do* still support Swift 3.1 for Carthage,
+> and if you like you could edit the PromiseKit `project.pbxproj` file during
+> `carthage bootstrap` to make this possible. This change was involuntary and due
+> to Xcode 10.2 dropping support for Swift 3.
+
+From Xcode 12, you will likely need to build using `--use-xcframeworks`, eg:
+
+    carthage build --use-xcframeworks
 
 ## Accio
 
