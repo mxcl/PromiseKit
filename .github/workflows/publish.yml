@@ -13,11 +13,11 @@ jobs:
       with:
         workflow: CI (exhaustive)
         token: ${{ secrets.JAZZY_PAT }}
-      wait-for-completion: true
+        wait-for-completion: true
 
   create-release:
     runs-on: ubuntu-latest
-    needs: lint
+    needs: ci
     env:
       v: ${{ github.event.inputs.version }}
     steps:
@@ -53,4 +53,4 @@ jobs:
         token: ${{ secrets.JAZZY_PAT }}
         inputs: "{\"version\": \'${{ github.event.inputs.version }}\"}"
         ref: master  # or doesn’t use our new commit above
-      wait-for-completion: true
+        wait-for-completion: true
