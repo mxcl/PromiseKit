@@ -21,9 +21,9 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="index.html">
-          PromiseKit 6.14.0 Docs
+          PromiseKit 6.15.0 Docs
         </a>
-         (80% documented)
+         (81% documented)
       </p>
     
       <p class="header-col--secondary">
@@ -67,6 +67,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Classes/Resolver.html">Resolver</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Extensions/Resolver.html">Resolver</a>
               </li>
             </ul>
           </li>
@@ -157,6 +160,9 @@
                 <a class="nav-group-task-link" href="Other%20Functions.html#/s:10PromiseKit4raceyAA9GuaranteeCyxGAEd_tlF">race(_:)</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other%20Functions.html#/s:10PromiseKit4race9fulfilledAA0A0Cy1TQzGSayxG_tAA8ThenableRzlF">race(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Other%20Functions.html#/s:10PromiseKit4whenyAA9GuaranteeCyytGAEd_tF">when(_:)</a>
               </li>
               <li class="nav-group-task">
@@ -191,6 +197,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Other%20Functions.html#/s:10PromiseKit4when8resolvedAA9GuaranteeCySayAA6ResultOyxGGGSayAA0A0CyxGG_tlF">when(resolved:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other%20Functions.html#/when(resolved:concurrently:)">when(resolved:concurrently:)</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Other%20Functions.html#/s:10PromiseKit4wrapyAA0A0CyxGyys5Error_pSg_xSgtcKXElF">wrap(_:)</a>
@@ -691,6 +700,50 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:10PromiseKit4race9fulfilledAA0A0Cy1TQzGSayxG_tAA8ThenableRzlF"></a>
+                    <a name="//apple_ref/swift/Function/race(fulfilled:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit4race9fulfilledAA0A0Cy1TQzGSayxG_tAA8ThenableRzlF">race(fulfilled:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Waits for one promise to fulfill</p>
+<pre class="highlight swift"><code><span class="nf">race</span><span class="p">(</span><span class="nv">fulfilled</span><span class="p">:</span> <span class="p">[</span><span class="n">promise1</span><span class="p">,</span> <span class="n">promise2</span><span class="p">,</span> <span class="n">promise3</span><span class="p">])</span><span class="o">.</span><span class="n">then</span> <span class="p">{</span> <span class="n">winner</span> <span class="k">in</span>
+    <span class="c1">//…</span>
+<span class="p">}</span>
+</code></pre>
+<div class="aside aside-warning">
+    <p class="aside-title">Warning</p>
+    Skips all rejected promises.
+
+</div><div class="aside aside-remark">
+    <p class="aside-title">Remark</p>
+    If the provided array is empty, the returned promise is rejected with <code><a href="Enums/PMKError.html#/s:10PromiseKit8PMKErrorO8badInputyA2CmF">PMKError.badInput</a></code>. If there are no fulfilled promises, the returned promise is rejected with <code><a href="Enums/PMKError.html#/s:10PromiseKit8PMKErrorO8noWinneryA2CmF">PMKError.noWinner</a></code>.
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">race</span><span class="o">&lt;</span><span class="kt">U</span><span class="o">&gt;</span><span class="p">(</span><span class="n">fulfilled</span> <span class="nv">thenables</span><span class="p">:</span> <span class="p">[</span><span class="kt">U</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">U</span><span class="o">.</span><span class="kt">T</span><span class="o">&gt;</span> <span class="k">where</span> <span class="kt">U</span> <span class="p">:</span> <span class="kt"><a href="Protocols/Thenable.html">Thenable</a></span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The promise that was fulfilled first.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:10PromiseKit4when9fulfilledAA0A0CySay1TQzGGSayxG_tAA8ThenableRzlF"></a>
                     <a name="//apple_ref/swift/Function/when(fulfilled:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:10PromiseKit4when9fulfilledAA0A0CySay1TQzGGSayxG_tAA8ThenableRzlF">when(fulfilled:<wbr>)</a>
@@ -1042,6 +1095,33 @@
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">when</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">resolved</span> <span class="nv">promises</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt"><a href="Enums/Result.html">Result</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
 
                         </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/"></a>
+                    <a name="//apple_ref/swift/Function/when(resolved:concurrently:)" class="dashAnchor"></a>
+                    <a class="token" href="#/">when(resolved:<wbr>concurrently:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Generate promises at a limited rate and wait for all to resolve.</p>
+
+<p>For example:</p>
+<pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">downloadFile</span><span class="p">(</span><span class="nv">url</span><span class="p">:</span> <span class="kt">URL</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Promise</span><span class="o">&lt;</span><span class="kt">Data</span><span class="o">&gt;</span> <span class="p">{</span>
+    <span class="c1">// ...</span>
+<span class="p">}</span>
+
+<span class="k">let</span> <span class="nv">urls</span><span class="p">:</span> <span class="p">[</span><span class="kt">URL</span><span class="p">]</span> <span class="o">=</span> <span class="cm">/*…
+</span></code></pre>
+
                       </div>
                     </section>
                   </div>

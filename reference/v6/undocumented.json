@@ -142,21 +142,21 @@
     },
     {
       "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Error.swift",
-      "line": 37,
+      "line": 40,
       "symbol": "PMKError",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Error.swift",
-      "line": 58,
+      "line": 63,
       "symbol": "PMKError",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Error.swift",
-      "line": 74,
+      "line": 79,
       "symbol": "Error.isCancelled",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
@@ -226,28 +226,28 @@
     },
     {
       "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Resolver.swift",
-      "line": 85,
+      "line": 97,
       "symbol": "Result",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Resolver.swift",
-      "line": 86,
+      "line": 98,
       "symbol": "Result.fulfilled(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Resolver.swift",
-      "line": 87,
+      "line": 99,
       "symbol": "Result.rejected(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
       "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Resolver.swift",
-      "line": 91,
+      "line": 103,
       "symbol": "PromiseKit.Result.isFulfilled",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
@@ -261,7 +261,7 @@
     },
     {
       "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/when.swift",
-      "line": 258,
+      "line": 361,
       "symbol": "when(guarantees:)",
       "symbol_kind": "source.lang.swift.decl.function.free",
       "warning": "undocumented"
