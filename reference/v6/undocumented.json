@@ -1,271 +1,271 @@
 {
   "warnings": [
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/AnyPromise.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/AnyPromise.swift",
       "line": 13,
       "symbol": "__AnyPromise.init(resolver:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/AnyPromise.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/AnyPromise.swift",
       "line": 25,
       "symbol": "__AnyPromise.__thenOn(_:execute:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/AnyPromise.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/AnyPromise.swift",
       "line": 39,
       "symbol": "__AnyPromise.__catchOn(_:execute:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/AnyPromise.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/AnyPromise.swift",
       "line": 53,
       "symbol": "__AnyPromise.__ensureOn(_:execute:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/AnyPromise.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/AnyPromise.swift",
       "line": 64,
       "symbol": "__AnyPromise.__wait()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/AnyPromise.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/AnyPromise.swift",
       "line": 110,
       "symbol": "__AnyPromise.__value",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/AnyPromise.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/AnyPromise.swift",
       "line": 119,
       "symbol": "__AnyPromise.__pending",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/AnyPromise.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/AnyPromise.swift",
       "line": 203,
       "symbol": "Promise.init(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Catchable.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Catchable.swift",
       "line": 44,
       "symbol": "PMKFinalizer",
       "symbol_kind": "source.lang.swift.decl.class",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Deprecations.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Deprecations.swift",
       "line": 4,
       "symbol": "wrap(_:)",
       "symbol_kind": "source.lang.swift.decl.function.free",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Deprecations.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Deprecations.swift",
       "line": 11,
       "symbol": "wrap(_:)",
       "symbol_kind": "source.lang.swift.decl.function.free",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Deprecations.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Deprecations.swift",
       "line": 18,
       "symbol": "wrap(_:)",
       "symbol_kind": "source.lang.swift.decl.function.free",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Deprecations.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Deprecations.swift",
       "line": 25,
       "symbol": "wrap(_:)",
       "symbol_kind": "source.lang.swift.decl.function.free",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Deprecations.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Deprecations.swift",
       "line": 32,
       "symbol": "wrap(_:)",
       "symbol_kind": "source.lang.swift.decl.function.free",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Deprecations.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Deprecations.swift",
       "line": 40,
       "symbol": "Promise.always(on:execute:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Deprecations.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Deprecations.swift",
       "line": 71,
       "symbol": "Thenable.filter(on:test:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Deprecations.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Deprecations.swift",
       "line": 78,
       "symbol": "Thenable.first",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Deprecations.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Deprecations.swift",
       "line": 83,
       "symbol": "Thenable.last",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Deprecations.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Deprecations.swift",
       "line": 90,
       "symbol": "Thenable.sorted(on:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Error.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Error.swift",
       "line": 3,
       "symbol": "PMKError",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Error.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Error.swift",
       "line": 37,
       "symbol": "PMKError",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Error.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Error.swift",
       "line": 58,
       "symbol": "PMKError",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Error.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Error.swift",
       "line": 74,
       "symbol": "Error.isCancelled",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Guarantee.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Guarantee.swift",
       "line": 80,
       "symbol": "Guarantee.done(on:flags:_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Guarantee.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Guarantee.swift",
       "line": 91,
       "symbol": "Guarantee.get(on:flags:_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Guarantee.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Guarantee.swift",
       "line": 98,
       "symbol": "Guarantee.map(on:flags:_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Guarantee.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Guarantee.swift",
       "line": 109,
       "symbol": "Guarantee.map(on:flags:_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Guarantee.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Guarantee.swift",
       "line": 121,
       "symbol": "Guarantee.then(on:flags:_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Guarantee.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Guarantee.swift",
       "line": 131,
       "symbol": "Guarantee.asVoid()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Guarantee.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Guarantee.swift",
       "line": 345,
       "symbol": "Guarantee.init()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Guarantee.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Guarantee.swift",
       "line": 349,
       "symbol": "Guarantee.value",
       "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Promise.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Promise.swift",
       "line": 179,
       "symbol": "PMKNamespacer.promise",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Resolver.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Resolver.swift",
       "line": 85,
       "symbol": "Result",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Resolver.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Resolver.swift",
       "line": 86,
       "symbol": "Result.fulfilled(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Resolver.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Resolver.swift",
       "line": 87,
       "symbol": "Result.rejected(_:)",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Resolver.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Resolver.swift",
       "line": 91,
       "symbol": "PromiseKit.Result.isFulfilled",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/Thenable.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Thenable.swift",
       "line": 506,
       "symbol": "Thenable.firstValue(on:flags:where:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/travis/build/mxcl/PromiseKit/Sources/when.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/when.swift",
       "line": 258,
       "symbol": "when(guarantees:)",
       "symbol_kind": "source.lang.swift.decl.function.free",
       "warning": "undocumented"
     }
   ],
-  "source_directory": "/Users/travis/build/mxcl/PromiseKit"
+  "source_directory": "/Users/runner/work/PromiseKit/PromiseKit"
 }
