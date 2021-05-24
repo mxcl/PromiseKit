@@ -43,7 +43,6 @@ class ThenableTests: XCTestCase {
         wait(for: [ex], timeout: 10)
     }
 
-    #if swift(>=4) && !swift(>=5.2)
     func testMapByKeyPath() {
         let ex = expectation(description: "")
         Promise.value(Person(name: "Max")).map(\.name).done {
@@ -52,7 +51,6 @@ class ThenableTests: XCTestCase {
         }.silenceWarning()
         wait(for: [ex], timeout: 10)
     }
-    #endif
 
     func testCompactMap() {
         let ex = expectation(description: "")
@@ -110,7 +108,6 @@ class ThenableTests: XCTestCase {
         wait(for: [ex], timeout: 10)
     }
 
-    #if swift(>=4) && !swift(>=5.2)
     func testCompactMapByKeyPath() {
         let ex = expectation(description: "")
         Promise.value(Person(name: "Roman", age: 26)).compactMap(\.age).done {
@@ -119,7 +116,6 @@ class ThenableTests: XCTestCase {
         }.silenceWarning()
         wait(for: [ex], timeout: 10)
     }
-    #endif
 
     func testMapValues() {
         let ex = expectation(description: "")
@@ -132,7 +128,6 @@ class ThenableTests: XCTestCase {
         wait(for: [ex], timeout: 10)
     }
 
-    #if swift(>=4) && !swift(>=5.2)
     func testMapValuesByKeyPath() {
         let ex = expectation(description: "")
         Promise.value([Person(name: "Max"), Person(name: "Roman"), Person(name: "John")]).mapValues(\.name).done {
@@ -141,7 +136,6 @@ class ThenableTests: XCTestCase {
         }.silenceWarning()
         wait(for: [ex], timeout: 10)
     }
-    #endif
 
     func testCompactMapValues() {
         let ex = expectation(description: "")
@@ -154,7 +148,6 @@ class ThenableTests: XCTestCase {
         wait(for: [ex], timeout: 10)
     }
 
-    #if swift(>=4) && !swift(>=5.2)
     func testCompactMapValuesByKeyPath() {
         let ex = expectation(description: "")
         Promise.value([Person(name: "Max"), Person(name: "Roman", age: 26), Person(name: "John", age: 23)]).compactMapValues(\.age).done {
@@ -163,7 +156,6 @@ class ThenableTests: XCTestCase {
         }.silenceWarning()
         wait(for: [ex], timeout: 10)
     }
-    #endif
 
     func testThenMap() {
         let ex = expectation(description: "")
@@ -198,7 +190,6 @@ class ThenableTests: XCTestCase {
         wait(for: [ex], timeout: 10)
     }
 
-    #if swift(>=4) && !swift(>=5.2)
     func testFilterValuesByKeyPath() {
         let ex = expectation(description: "")
         Promise.value([Person(name: "Max"), Person(name: "Roman", age: 26, isStudent: false), Person(name: "John", age: 23, isStudent: true)]).filterValues(\.isStudent).done {
@@ -207,8 +198,7 @@ class ThenableTests: XCTestCase {
         }.silenceWarning()
         wait(for: [ex], timeout: 10)
     }
-    #endif
-    
+
     func testLastValueForEmpty() {
         XCTAssertTrue(Promise.value([]).lastValue.isRejected)
     }
