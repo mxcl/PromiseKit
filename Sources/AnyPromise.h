@@ -213,6 +213,17 @@ typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
 */
 - (instancetype __nonnull)initWithResolver:(PMKResolver __strong __nonnull * __nonnull)resolver NS_REFINED_FOR_SWIFT;
 
+/**
+ Unavailable methods
+ */
+
+- (instancetype __nonnull)init __attribute__((unavailable("It is illegal to create an unresolvable promise.")));
++ (instancetype __nonnull)new __attribute__((unavailable("It is illegal to create an unresolvable promise.")));
+- (AnyPromise * __nonnull(^ __nonnull)(dispatch_block_t __nonnull))always __attribute__((unavailable("See -ensure")));
+- (AnyPromise * __nonnull(^ __nonnull)(dispatch_block_t __nonnull))alwaysOn __attribute__((unavailable("See -ensureOn")));
+- (AnyPromise * __nonnull(^ __nonnull)(dispatch_block_t __nonnull))finally __attribute__((unavailable("See -ensure")));
+- (AnyPromise * __nonnull(^ __nonnull)(dispatch_block_t __nonnull, dispatch_block_t __nonnull))finallyOn __attribute__((unavailable("See -ensureOn")));
+
 @end
 
 
@@ -290,16 +301,7 @@ extern id __nonnull __PMKArrayWithCount(NSUInteger, ...);
 #endif
 
 
-@interface AnyPromise (Unavailable)
 
-- (instancetype __nonnull)init __attribute__((unavailable("It is illegal to create an unresolvable promise.")));
-+ (instancetype __nonnull)new __attribute__((unavailable("It is illegal to create an unresolvable promise.")));
-- (AnyPromise * __nonnull(^ __nonnull)(dispatch_block_t __nonnull))always __attribute__((unavailable("See -ensure")));
-- (AnyPromise * __nonnull(^ __nonnull)(dispatch_block_t __nonnull))alwaysOn __attribute__((unavailable("See -ensureOn")));
-- (AnyPromise * __nonnull(^ __nonnull)(dispatch_block_t __nonnull))finally __attribute__((unavailable("See -ensure")));
-- (AnyPromise * __nonnull(^ __nonnull)(dispatch_block_t __nonnull, dispatch_block_t __nonnull))finallyOn __attribute__((unavailable("See -ensureOn")));
-
-@end
 
 __attribute__((unavailable("See AnyPromise")))
 @interface PMKPromise
