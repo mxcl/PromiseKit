@@ -228,6 +228,7 @@ extension WhenConcurrentTestCase_Swift {
         ("testWhenConcurrencyLessThanZero", testWhenConcurrencyLessThanZero),
         ("testWhenEmptyGenerator", testWhenEmptyGenerator),
         ("testWhenGeneratorError", testWhenGeneratorError),
+        ("testWhenResolvedContinuesWhenRejected", testWhenResolvedContinuesWhenRejected),
     ]
 }
 
