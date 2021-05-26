@@ -144,8 +144,8 @@ class WrapTests: XCTestCase {
     }
 #endif
 
-#if swift(>=5.0)
     func testSwiftResultSuccess() {
+    #if swift(>=5.0)
         let ex = expectation(description: "")
         let kittenFetcher = KittenFetcher(value: 2, error: nil)
         Promise { seal in
@@ -156,9 +156,11 @@ class WrapTests: XCTestCase {
         }.silenceWarning()
 
         waitForExpectations(timeout: 1)
+    #endif
     }
 
     func testSwiftResultError() {
+    #if swift(>=5.0)
         let ex = expectation(description: "")
 
         let kittenFetcher = KittenFetcher(value: nil, error: Error.test)
@@ -172,8 +174,8 @@ class WrapTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 1)
+    #endif
     }
-#endif
 
     func testIsFulfilled() {
         XCTAssertTrue(Promise.value(()).result?.isFulfilled ?? false)

@@ -15,8 +15,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    # or fails due to some tests not being done for newer Swifts
     - run: find -name XCTestManifests.swift -o -name LinuxMain.swift | xargs rm
+    # ^^ or fails due to some tests not being done for newer Swifts
     - run: swift test -Xswiftc -warnings-as-errors
   test-macos:
     needs: auto-cancel
@@ -36,6 +36,8 @@ jobs:
         scheme: PromiseKit
         destination: platform=macOS
         action: test
+        enable-code-coverage: true
+    - uses: codecov/codecov-action@v1
   verify-generated-linuxmain:
     runs-on: macos-latest
     needs: auto-cancel
