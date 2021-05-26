@@ -17,6 +17,7 @@ extension CancellationTests {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__CancellationTests = [
+        ("testBridgeToNSError", testBridgeToNSError),
         ("testCancellation", testCancellation),
         ("testDoesntCrashSwift", testDoesntCrashSwift),
         ("testFoundationBridging1", testFoundationBridging1),
