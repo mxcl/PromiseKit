@@ -121,6 +121,17 @@ class CancellationTests: XCTestCase {
       #endif
     }
 
+    func testBridgeToNSError() {
+        // Swift.Error types must be cast to NSError for the bridging to occur.
+        // The below would throw an expection about an invalid selector without a cast:
+        // `(error as AnyObject).value(forKey: "domain")`
+        // This simply checks to make sure `isCancelled` is not making that mistake.
+
+        class TestingError: Error { }
+
+        XCTAssertFalse(TestingError().isCancelled)
+    }
+
 #if swift(>=3.2)
     func testIsCancelled() {
         XCTAssertTrue(PMKError.cancelled.isCancelled)

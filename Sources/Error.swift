@@ -89,8 +89,9 @@ extension Error {
             return true
         } catch {
         #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
-            let domain = (error as AnyObject).value(forKey: "domain") as? String
-            let code = (error as AnyObject).value(forKey: "code") as? Int
+            let error = error as NSError
+            let domain = error.domain
+            let code = error.code
             return ("SKErrorDomain", 2) == (domain, code)
         #else
             return false
