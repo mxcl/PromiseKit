@@ -95,6 +95,8 @@ extension Error {
             #else
                 return false
             #endif
+        } catch {
+            return false
         }
     }
 }
