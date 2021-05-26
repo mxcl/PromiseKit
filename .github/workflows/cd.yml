@@ -64,7 +64,7 @@ jobs:
 
     - uses: actions/upload-release-asset@v1
       with:
-        upload_url: ${{ steps.outputs.release.upload_url }}
+        upload_url: ${{ steps.release.outputs.upload_url }}
         asset_path: ./PromiseKit-$v.framework.zip
         asset_name: PromiseKit-$v.framework.zip
         asset_content_type: application/zip

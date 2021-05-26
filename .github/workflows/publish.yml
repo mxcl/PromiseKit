@@ -15,9 +15,26 @@ jobs:
         token: ${{ secrets.JAZZY_PAT }}
         wait-for-completion: true
 
+  lint:
+    runs-on: macos-10.15
+    strategy:
+      matrix:
+        xcode:
+          - ^10
+          - ^11
+          - ^12
+    steps:
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: ${{ matrix.xcode }}
+    - uses: actions/checkout@v2
+      with:
+        submodules: true
+    - run: pod lib lint --fail-fast
+
   create-release:
     runs-on: ubuntu-latest
-    needs: ci
+    needs: [ci, lint]
     env:
       v: ${{ github.event.inputs.version }}
     steps:

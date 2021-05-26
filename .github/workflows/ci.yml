@@ -1,10 +1,33 @@
-name: CI (exhaustive)
-on: workflow_dispatch
+name: CI
+on:
+  workflow_dispatch:
+  pull_request:
+    paths-ignore:
+      - README.md
+      - .gitignore
+      - Documentation/**
 jobs:
   auto-cancel:
     runs-on: ubuntu-latest
     steps:
     - uses: technote-space/auto-cancel-redundant-job@v1
+
+  verify-generated-linuxmain:
+    runs-on: macos-latest
+    needs: auto-cancel
+    steps:
+    - uses: actions/checkout@v2
+    - run: swift test --generate-linuxmain
+    - run: git diff --exit-code
+
+  test-linux:
+    needs: verify-generated-linuxmain
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v2
+    - run: find -name XCTestManifests.swift -o -name LinuxMain.swift | xargs rm
+    # ^^ or fails due to some tests not being done for newer Swifts
+    - run: swift test -Xswiftc -warnings-as-errors
 
   build-linux:
     runs-on: ubuntu-18.04
@@ -48,7 +71,7 @@ jobs:
     steps:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: ^12
+        xcode-version: 12.4
     - uses: actions/checkout@v2
     - uses: sersoft-gmbh/xcodebuild-action@v1
       with:
@@ -81,20 +104,3 @@ jobs:
           echo "CARTHAGE_ARGS=--use-xcframeworks" >> $GITHUB_ENV
         fi
     - run: carthage build --no-skip-current --no-use-binaries $CARTHAGE_ARGS
-
-  lint:
-    runs-on: macos-10.15
-    strategy:
-      matrix:
-        xcode:
-          - ^10
-          - ^11
-          - ^12
-    steps:
-    - uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: ${{ matrix.xcode }}
-    - uses: actions/checkout@v2
-      with:
-        submodules: true
-    - run: pod lib lint --fail-fast
