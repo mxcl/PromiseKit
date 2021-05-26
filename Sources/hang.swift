@@ -14,7 +14,7 @@ import CoreFoundation
 */
 public func hang<T>(_ promise: Promise<T>) throws -> T {
 #if os(Linux) || os(Android)
-#if swift(>=4.2)
+#if swift(>=4)
     let runLoopMode: CFRunLoopMode = kCFRunLoopDefaultMode
 #else
     // isMainThread is not yet implemented on Linux.
