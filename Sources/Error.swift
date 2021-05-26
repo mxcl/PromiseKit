@@ -87,15 +87,16 @@ extension Error {
             return true
         } catch CocoaError.userCancelled {
             return true
+        } catch let error as NSError {
+            #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
+                let domain = error.domain
+                let code = error.code
+                return ("SKErrorDomain", 2) == (domain, code)
+            #else
+                return false
+            #endif
         } catch {
-        #if os(macOS) || os(iOS) || os(tvOS) || os(watchOS)
-            let error = error as NSError
-            let domain = error.domain
-            let code = error.code
-            return ("SKErrorDomain", 2) == (domain, code)
-        #else
             return false
-        #endif
         }
     }
 }
