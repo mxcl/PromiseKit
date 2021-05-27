@@ -11,7 +11,7 @@ jobs:
     steps:
     - uses: aurelien-baudet/workflow-dispatch@v2
       with:
-        workflow: CI (exhaustive)
+        workflow: CI
         token: ${{ secrets.JAZZY_PAT }}
         wait-for-completion: true
 
