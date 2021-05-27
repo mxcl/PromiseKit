@@ -12,24 +12,8 @@ jobs:
     steps:
     - uses: technote-space/auto-cancel-redundant-job@v1
 
-  verify-generated-linuxmain:
-    runs-on: macos-latest
+  linux:
     needs: auto-cancel
-    steps:
-    - uses: actions/checkout@v2
-    - run: swift test --generate-linuxmain
-    - run: git diff --exit-code
-
-  test-linux:
-    needs: verify-generated-linuxmain
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@v2
-    - run: find -name XCTestManifests.swift -o -name LinuxMain.swift | xargs rm
-    # ^^ or fails due to some tests not being done for newer Swifts
-    - run: swift test -Xswiftc -warnings-as-errors
-
-  build-linux:
     runs-on: ubuntu-18.04
     strategy:
       matrix:
@@ -37,28 +21,55 @@ jobs:
         - 4.0.3
         - 4.1.3
         - 4.2.4
-        - 5.0.3
-        - 5.1.5
-        - 5.2.5
-        - 5.3.3
-        - 5.4.0
     container:
       image: swift:${{ matrix.swift }}
     steps:
     - uses: actions/checkout@v2
-    - run: |
-        if [ ${v:0:1} == 4 ]; then
-          echo "VERSIONS=3 4" >> $GITHUB_ENV
-        else
-          echo "VERSIONS=4 4.2 5" >> $GITHUB_ENV
-        fi
-      shell: bash
-      env:
-        v: ${{ matrix.swift }}
-    - run: |
-        for v in $VERSIONS; do
-          swift build -Xswiftc -warnings-as-errors -Xswiftc -swift-version -Xswiftc $v
-        done
+    - run: swift build -Xswiftc -warnings-as-errors -Xswiftc -swift-version -Xswiftc 3
+    - run: swift build  # generated linuxmain requires Swift 5 sadly
+
+  linux-code-cov:
+    name: linux
+    needs: auto-cancel
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        swift:
+        - 5.0.3
+        - 5.1.5
+        - 5.2.5
+        - 5.3.3
+        - 5.4.1
+    container:
+      image: swift:${{ matrix.swift }}
+    steps:
+    - uses: actions/checkout@v2
+    - run: swift build -Xswiftc -warnings-as-errors -Xswiftc -swift-version -Xswiftc 4
+    - run: swift build -Xswiftc -warnings-as-errors -Xswiftc -swift-version -Xswiftc 4.2
+    - run: swift test --enable-code-coverage
+
+    - name: Generate Coverage Report
+      if: ${{ matrix.swift != '5.4.1' }}  # fails for SOME REASON
+      run: |
+        apt-get -qq update
+        apt-get -qq install llvm-10 curl
+        export b=$(swift build --show-bin-path) && llvm-cov-10 \
+          export -format lcov \
+          -instr-profile=$b/codecov/default.profdata \
+          --ignore-filename-regex='\.build/' \
+          $b/*.xctest \
+          > info.lcov
+    - uses: codecov/codecov-action@v1
+      with:
+        file: ./info.lcov
+
+  verify-linuxmain:
+    runs-on: macos-latest
+    name: linux (validate manifests)
+    steps:
+    - uses: actions/checkout@v2
+    - run: swift test --generate-linuxmain
+    - run: git diff --exit-code
 
   test:
     runs-on: macos-latest
@@ -83,7 +94,7 @@ jobs:
     - uses: codecov/codecov-action@v1
 
   carthage:
-    runs-on: macos-10.15
+    runs-on: macos-latest
     strategy:
       matrix:
         xcode: [^10, ^11, ^12]
