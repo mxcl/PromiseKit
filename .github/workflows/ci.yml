@@ -46,7 +46,7 @@ jobs:
     - uses: actions/checkout@v2
     - run: swift build -Xswiftc -warnings-as-errors -Xswiftc -swift-version -Xswiftc 4
     - run: swift build -Xswiftc -warnings-as-errors -Xswiftc -swift-version -Xswiftc 4.2
-    - run: swift test --enable-code-coverage
+    - run: swift test --enable-code-coverage --parallel
 
     - name: Generate Coverage Report
       if: ${{ matrix.swift != '5.4.1' }}  # fails for SOME REASON
