@@ -2,10 +2,10 @@ name: CI
 on:
   workflow_dispatch:
   pull_request:
-    paths-ignore:
-      - README.md
-      - .gitignore
-      - Documentation/**
+    paths:
+      - Sources/**
+      - Tests/**
+      - .github/workflows/ci.yml
 jobs:
   auto-cancel:
     runs-on: ubuntu-latest
