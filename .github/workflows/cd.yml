@@ -65,11 +65,10 @@ jobs:
     - uses: actions/upload-release-asset@v1
       with:
         upload_url: ${{ steps.release.outputs.upload_url }}
-        asset_path: ./PromiseKit-$v.framework.zip
-        asset_name: PromiseKit-$v.framework.zip
+        asset_path: ./PromiseKit-${{ github.event.inputs.version }}.framework.zip
+        asset_name: PromiseKit-${{ github.event.inputs.version }}.framework.zip
         asset_content_type: application/zip
       env:
-        v: ${{ github.event.inputs.version }}
         GITHUB_TOKEN: ${{ github.token }}
 
     - name: Seal Deployment
