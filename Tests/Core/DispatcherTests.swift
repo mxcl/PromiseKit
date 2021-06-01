@@ -121,7 +121,7 @@ class DispatcherTests: XCTestCase {
             ex.fulfill()
         }.cauterize()
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
         PromiseKit.conf.D = oldConf
         
     }

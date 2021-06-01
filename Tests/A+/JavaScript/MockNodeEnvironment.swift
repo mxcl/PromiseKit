@@ -5,8 +5,7 @@
 //  Created by Lois Di Qual on 3/1/18.
 //
 
-#if !os(Linux)
-// can disable better when we don’t need --generate-linuxmain
+#if !os(Linux) && !os(watchOS)
 import JavaScriptCore
 import Foundation
 

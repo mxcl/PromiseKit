@@ -5,12 +5,11 @@
 //  Created by Lois Di Qual on 3/1/18.
 //
 
-#if !os(Linux)
+#if !os(Linux) && !os(watchOS)
 // can disable better when we don’t need --generate-linuxmain
-import Foundation
-import XCTest
-import PromiseKit
 import JavaScriptCore
+import PromiseKit
+import XCTest
 
 @objc protocol JSPromiseProtocol: JSExport {
     func then(_: JSValue, _: JSValue) -> JSPromise

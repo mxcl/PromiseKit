@@ -1,0 +1,5 @@
+xcuserdata
+*.xcscmblueprint
+/Carthage
+/.build
+.DS_Store

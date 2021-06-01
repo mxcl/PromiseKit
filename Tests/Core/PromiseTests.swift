@@ -207,7 +207,6 @@ class PromiseTests: XCTestCase {
         wait(for: [ex], timeout: 10)
     }
 
-    #if swift(>=3.1)
     func testNoAmbiguityForValue() {
         let ex = expectation(description: "")
         let a = Promise<Void>.value
@@ -218,5 +217,4 @@ class PromiseTests: XCTestCase {
         }.cauterize()
         wait(for: [ex], timeout: 10)
     }
-    #endif
 }

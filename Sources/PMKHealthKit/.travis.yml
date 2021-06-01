@@ -1,0 +1,76 @@
+osx_image: xcode10.2
+language: swift
+os: osx
+
+branches:
+  only: 
+    - master
+stages:
+  - lint
+  - test
+jobs:
+  include:
+    - &pod
+      stage: lint
+      osx_image: xcode8.3
+      env: SWIFT=3.1
+      cache: cocoapods
+      before_install:
+        gem install cocoapods --prerelease --version 1.7.0.beta.3
+      install:
+        carthage bootstrap --no-build PromiseKit
+      script: |
+        cd Carthage/Checkouts/PromiseKit
+        mv .github/PromiseKit.podspec .
+        rm -rf Extensions/HealthKit/Sources
+        cp -R ../../../Sources Extensions/HealthKit
+        pod lib lint --subspec=PromiseKit/HealthKit --fail-fast --swift-version=$SWIFT
+    - <<: *pod
+      osx_image: xcode9.2
+      env: SWIFT=3.2
+    - <<: *pod
+      osx_image: xcode9.4
+      env: SWIFT=3.3
+    - <<: *pod
+      osx_image: xcode10.1
+      env: SWIFT=3.4
+    - <<: *pod
+      osx_image: xcode9.2
+      env: SWIFT=4.0
+    - <<: *pod
+      osx_image: xcode9.4
+      env: SWIFT=4.1
+    - <<: *pod
+      osx_image: xcode10.1
+      env: SWIFT=4.2
+    - <<: *pod
+      osx_image: xcode10.2
+      env: SWIFT=4.3
+    - <<: *pod
+      osx_image: xcode10.2
+      env: SWIFT=5.0
+
+    - &carthage
+      stage: carthage
+      osx_image: xcode9.2
+      script: |
+        carthage bootstrap --cache-builds --platform iOS,macOS
+        sed -i '' "s/SWIFT_TREAT_WARNINGS_AS_ERRORS = NO;/SWIFT_TREAT_WARNINGS_AS_ERRORS = YES;/" *.xcodeproj/project.pbxproj
+        carthage build --no-skip-current
+      cache.directories:
+        - Carthage
+    - <<: *carthage
+      osx_image: xcode9.4
+    - <<: *carthage
+      osx_image: xcode10.1
+    - <<: *carthage
+      osx_image: xcode10.2
+
+    - stage: test
+      xcode_scheme: PMKHealthKit
+      xcode_project: PMKHealthKit.xcodeproj
+      xcode_destination: 'platform=iOS Simulator,OS=12.2,name=iPhone SE'
+      cache.directories:
+        - Carthage
+      before_install:
+        carthage bootstrap --cache-builds --no-use-binaries

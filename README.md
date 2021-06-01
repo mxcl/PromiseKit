@@ -27,27 +27,17 @@ firstly {
 ```
 
 PromiseKit is a thoughtful and complete implementation of promises for any
-platform that has a `swiftc`. It has *excellent* Objective-C bridging and
+platform that has a `swiftc`. It has
 *delightful* specializations for iOS, macOS, tvOS and watchOS. It is a top-100
 pod used in many of the most popular apps in the world.
 
 [![codecov](https://codecov.io/gh/mxcl/PromiseKit/branch/master/graph/badge.svg)](https://codecov.io/gh/mxcl/PromiseKit)
 
-# PromiseKit 7 Alpha
+# Requirements
 
-PromiseKit 7 is prerelease, if you’re using it: beware!
+Xcode >= 12.0 or Swift >= 5.3.
 
-PromiseKit 7 uses Swift 5’s `Result`, PromiseKit <7 use our own `Result` type.
-
-PromiseKit 7 generalizes `DispatchQueue`s to a `Dispatcher` protocol. However,
-`DispatchQueue`s are `Dispatcher`-conformant, so existing code should not need
-to change. Please report any issues related to this transition.
-
-PromiseKit 7 adds support for cancelling promises and promise chains.
-
-# PromiseKit 6
-
-[Release notes and migration guide][PMK6].
+For earlier Swifts, Xcodes or for Objective-C support, use [PromiseKit 6](https://github.com/mxcl/PromiseKit/blob/v6/README.md).
 
 # Quick Start
 
@@ -55,19 +45,12 @@ In your `Package.swift`:
 
 ```swift
 package.dependencies.append(
-    .package(url: "https://github.com/mxcl/PromiseKit", from: Version(7, 0, 0, prereleaseIdentifiers: [“alpha”, “1”]))
+    .package(url: "https://github.com/mxcl/PromiseKit", from: "7.0.0")
 )
 ```
 
-PromiseKit 7 supports Swift >= 5.3; Xcode >= 12; iOS, macOS, tvOS, watchOS, Linux
-and Android; SwiftPM.
-
-PromiseKits 6 and 4 support Xcode 8.3, 9.x and 10.0; Swift 3.1, 3.2, 3.3, 3.4,
-4.0, 4.1, 4.2 and 5.0; iOS, macOS, tvOS, watchOS, Linux and Android; CocoaPods,
-Carthage and SwiftPM; ([CI Matrix](https://travis-ci.org/mxcl/PromiseKit)).
-
-For Carthage, SwiftPM, Accio, etc., or for instructions when using older Swifts
-or Xcodes, see our [Installation Guide].
+For more detailed installation instructions or for other package managers see our
+[Installation Guide].
 
 # Professionally Supported PromiseKit is Now Available
 
@@ -92,7 +75,6 @@ sponsor it either via Tidelift or GitHub Sponsors.
   * [Frequently Asked Questions](Documents/FAQ.md)
 * Manual
   * [Installation Guide](Documents/Installation.md)
-  * [Objective-C Guide](Documents/ObjectiveC.md)
   * [Troubleshooting](Documents/Troubleshooting.md) (e.g., solutions to common compile errors)
   * [Appendix](Documents/Appendix.md)
 * [API Reference](https://mxcl.dev/PromiseKit/reference/v7/Classes/Promise.html)
@@ -100,73 +82,13 @@ sponsor it either via Tidelift or GitHub Sponsors.
 # Extensions
 
 Promises are only as useful as the asynchronous tasks they represent. Thus, we
-have converted (almost) all of Apple’s APIs to promises. The default CocoaPod
-provides Promises and the extensions for Foundation and UIKit. The other
-extensions are available by specifying additional subspecs in your `Podfile`,
-e.g.:
+have converted (almost) all of Apple’s APIs to promises. You can use the
+extensions by adding the appropriate library to your `Package.swift` and then
+importing it (eg. `import PMKFoundation`).
 
-```ruby
-pod "PMKMapKit"          # MKDirections().calculate().then { /*…*/ }
-pod "PMKCoreLocation"    # CLLocationManager.requestLocation().then { /*…*/ }
-```
+See our [Installation Guide](Documents/Installation.md) for usage details.
 
-All our extensions are separate repositories at the [PromiseKit organization].
-
-## Choose Your Networking Library
-
-Promise chains commonly start with a network operation. Thus, we offer
-extensions for `URLSession`:
-
-```swift
-// pod 'PMKFoundation'  # https://github.com/PromiseKit/PMKFoundation
-
-firstly {
-    URLSession.shared.dataTask(.promise, with: try makeUrlRequest()).validate()
-    // ^^ we provide `.validate()` so that eg. 404s get converted to errors
-}.map {
-    try JSONDecoder().decode(Foo.self, with: $0.data)
-}.done { foo in
-    //…
-}.catch { error in
-    //…
-}
-
-func makeUrlRequest() throws -> URLRequest {
-    var rq = URLRequest(url: url)
-    rq.httpMethod = "POST"
-    rq.addValue("application/json", forHTTPHeaderField: "Content-Type")
-    rq.addValue("application/json", forHTTPHeaderField: "Accept")
-    rq.httpBody = try JSONEncoder().encode(obj)
-    return rq
-}
-```
-
-And [Alamofire]:
-
-```swift
-// pod 'PMKAlamofire'  # https://github.com/PromiseKit/PMKAlamofire
-
-firstly {
-    Alamofire
-        .request("http://example.com", method: .post, parameters: params)
-        .responseDecodable(Foo.self)
-}.done { foo in
-    //…
-}.catch { error in
-    //…
-}
-```
-
-Nowadays, considering that:
-
-* We almost always POST JSON
-* We now have `JSONDecoder`
-* PromiseKit now has `map` and other functional primitives
-* PromiseKit (like Alamofire, but not raw-`URLSession`) also defaults to having
-    callbacks go to the main thread
-
-We recommend vanilla `URLSession`. It uses fewer black boxes and sticks closer to the metal. Alamofire was essential until the three bullet points above
-became true, but nowadays it isn’t really necessary.
+Browse the `Sources` folder here for a list of available extensions.
 
 # Support
 
