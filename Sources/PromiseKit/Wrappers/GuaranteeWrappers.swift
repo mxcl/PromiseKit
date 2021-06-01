@@ -10,8 +10,19 @@ public extension Guarantee {
         let dispatcher = selectDispatcher(given: on, configured: conf.D.map, flags: flags)
         return then(on: dispatcher, body)
     }
+
+    @discardableResult
+    func then<U>(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(T) throws -> Guarantee<U>) -> Promise<U> {
+        let dispatcher = selectDispatcher(given: on, configured: conf.D.map, flags: flags)
+        return then(on: dispatcher, body)
+    }
     
     func map<U>(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(T) -> U) -> Guarantee<U> {
+        let dispatcher = selectDispatcher(given: on, configured: conf.D.map, flags: flags)
+        return map(on: dispatcher, body)
+    }
+
+    func map<U>(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(T) throws -> U) -> Promise<U> {
         let dispatcher = selectDispatcher(given: on, configured: conf.D.map, flags: flags)
         return map(on: dispatcher, body)
     }
@@ -21,8 +32,19 @@ public extension Guarantee {
         let dispatcher = selectDispatcher(given: on, configured: conf.D.return, flags: flags)
         return done(on: dispatcher, body)
     }
+
+    @discardableResult
+    func done(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping(T) throws -> Void) -> Promise<Void> {
+        let dispatcher = selectDispatcher(given: on, configured: conf.D.return, flags: flags)
+        return done(on: dispatcher, body)
+    }
     
     func get(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping (T) -> Void) -> Guarantee<T> {
+        let dispatcher = selectDispatcher(given: on, configured: conf.D.return, flags: flags)
+        return get(on: dispatcher, body)
+    }
+
+    func get(on: DispatchQueue? = .pmkDefault, flags: DispatchWorkItemFlags? = nil, _ body: @escaping (T) throws -> Void) -> Promise<T> {
         let dispatcher = selectDispatcher(given: on, configured: conf.D.return, flags: flags)
         return get(on: dispatcher, body)
     }
