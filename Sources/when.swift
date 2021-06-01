@@ -276,13 +276,13 @@ No more than three downloads will occur simultaneously. Downloads will continue 
 */
 #if swift(>=5.3)
 public func when<It: IteratorProtocol>(resolved promiseIterator: It, concurrently: Int)
-    -> Guarantee<[Result<It.Element.T>]> where It.Element: Thenable {
+    -> Guarantee<[Result<It.Element.T, Error>]> where It.Element: Thenable {
     guard concurrently > 0 else {
-        return Guarantee.value([Result.rejected(PMKError.badInput)])
+        return Guarantee.value([Result.failure(PMKError.badInput)])
     }
 
     var generator = promiseIterator
-    let root = Guarantee<[Result<It.Element.T>]>.pending()
+    let root = Guarantee<[Result<It.Element.T, Error>]>.pending()
     var pendingPromises = 0
     var promises: [It.Element] = []
 

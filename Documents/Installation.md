@@ -1,8 +1,21 @@
-# Xcode 8.3, 9.x or 10.x / Swift 3 or 4
+# PromiseKit v7
+
+We only support SwiftPM since supporting all package managers is untennable and
+SwiftPM is the easiest.
+
+```swift
+package.dependencies.append(
+    .package(url: "https://github.com/mxcl/PromiseKit", from: "7.0.0-alpha.1")
+)
+```
+
+# PromiseKit v6
+
+## Xcode 8.3, 9.x or 10.x / Swift 3 or 4
 
 We recommend Carthage over CocoaPods, but both installation methods are supported.
 
-## CocoaPods
+### CocoaPods
 
 ```ruby
 use_frameworks!
@@ -31,7 +44,7 @@ Adjust the value for `SWIFT_VERSION` as needed.
 
 CocoaPods are aware of this [issue](https://github.com/CocoaPods/CocoaPods/issues/7134).
 
-## Carthage
+### Carthage
 
 ```ruby
 github "mxcl/PromiseKit" ~> 6.8
@@ -47,7 +60,7 @@ From Xcode 12, you will likely need to build using `--use-xcframeworks`, eg:
 
     carthage build --use-xcframeworks
 
-## Accio
+### Accio
 
 Add the following to your `Package.swift`:
 
@@ -68,7 +81,7 @@ Next, add `PromiseKit` to your App targets dependencies like so:
 
 Then run `accio update`.
 
-## SwiftPM
+### SwiftPM
 
 ```swift
 package.dependencies.append(
@@ -76,7 +89,7 @@ package.dependencies.append(
 )
 ```
 
-## Manually
+### Manually
 
 You can just drop `PromiseKit.xcodeproj` into your project and then add
 `PromiseKit.framework` to your app’s embedded frameworks.
@@ -86,14 +99,15 @@ You can just drop `PromiseKit.xcodeproj` into your project and then add
 
 PromiseKit contains Swift, so there have been rev-lock issues with Xcode:
 
-| PromiseKit | Swift                   | Xcode    |   CI Status  |   Release Notes   |
-| ---------- | ----------------------- | -------- | ------------ | ----------------- |
-|      6     |      3.2, 3.3, 4.x, 5.x | 8.3, 9.x, 10.x | ![ci-master] | [2018/02][news-6] |
-|      5     | 3.1, 3.2, 3.3, 4.x      | 8.3, 9.x, 10.1 | *Deprecated* |       *n/a*       |
+| PromiseKit | Swift                   | Xcode          |   CI Status  |   Release Notes   |
+| ---------- | ----------------------- | -------------- | ------------ | ----------------- |
+|      7     | >=5.3                   | 12.x           | ![ci-master] |                   |
+|      6     | 3.2, 3.3, 4.x, 5.x      | 8.3, 9.x, 10.x | ![ci-master] | [2018/02][news-6] |
+|      5     | *Deprecated*            | *n/a*          | *n/a*        |       *n/a*       |
 |      4     | 3.0, 3.1, 3.2, 3.3, 4.x | 8.x, 9.x, 10.1 | ![ci-master] | [2016/09][news-4] |
-|      3     | 2.x                     | 7.x, 8.0 | ![ci-swift2] | [2015/10][news-3] |
-|      2     | 1.x                     | 7.x      | *Deprecated* | [2015/10][news-3] |
-|      1†    | *N/A*                   | *        | ![ci-legacy] |         –         |
+|      3     | 2.x                     | 7.x, 8.0       | ![ci-swift2] | [2015/10][news-3] |
+|      2     | 1.x                     | 7.x            | *Deprecated* | [2015/10][news-3] |
+|      1†    | *N/A*                   | *              | ![ci-legacy] |         –         |
 
 † PromiseKit 1 is pure Objective-C and thus can be used with any Xcode, it is
 also your only choice if you need to support iOS 7 or below.

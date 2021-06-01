@@ -28,16 +28,7 @@ public struct PMKConfiguration {
     /// Not thread safe; change before processing any promises.
     /// - Note: The default handler calls `print()`
     public var logHandler: (LogEvent) -> Void = { event in
-        switch event {
-        case .waitOnMainThread:
-            print("PromiseKit: warning: `wait()` called on main thread!")
-        case .pendingPromiseDeallocated:
-            print("PromiseKit: warning: pending promise deallocated")
-        case .pendingGuaranteeDeallocated:
-            print("PromiseKit: warning: pending guarantee deallocated")
-        case .cauterized (let error):
-            print("PromiseKit:cauterized-error: \(error)")
-        }
+        print("PromiseKit:", event.description)
     }
 }
 

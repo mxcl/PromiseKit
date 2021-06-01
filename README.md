@@ -1,6 +1,6 @@
 ![PromiseKit](../gh-pages/public/img/logo-tight.png)
 
-[![badge-pod][]][cocoapods] ![badge-languages][] ![badge-pms][] ![badge-platforms][] [![badge-travis][]][travis]
+![badge-languages][] ![badge-platforms][]
 
 ---
 
@@ -59,14 +59,15 @@ package.dependencies.append(
 )
 ```
 
-PromiseKit 7 supports Swift 5.x; Xcode >= 10.2; iOS, macOS, tvOS, watchOS, Linux
+PromiseKit 7 supports Swift >= 5.3; Xcode >= 12; iOS, macOS, tvOS, watchOS, Linux
 and Android; SwiftPM.
 
 PromiseKits 6 and 4 support Xcode 8.3, 9.x and 10.0; Swift 3.1, 3.2, 3.3, 3.4,
 4.0, 4.1, 4.2 and 5.0; iOS, macOS, tvOS, watchOS, Linux and Android; CocoaPods,
 Carthage and SwiftPM; ([CI Matrix](https://travis-ci.org/mxcl/PromiseKit)).
 
-For Carthage, SwiftPM, Accio, etc., or for instructions when using older Swifts or Xcodes, see our [Installation Guide].
+For Carthage, SwiftPM, Accio, etc., or for instructions when using older Swifts
+or Xcodes, see our [Installation Guide].
 
 # Professionally Supported PromiseKit is Now Available
 
@@ -77,20 +78,10 @@ tools.
 
 [Get Professional Support for PromiseKit with TideLift](https://tidelift.com/subscription/pkg/cocoapods-promisekit?utm_source=cocoapods-promisekit&utm_medium=referral&utm_campaign=readme).
 
-# PromiseKit is Thousands of Hours of Work
+## Other Sponsorship
 
-Hey there, I’m Max Howell. I’m a prolific producer of open source software and
-probably you already use some of it (I created [`brew`]). I work full-time on
-open source and it’s hard; currently *I earn less than minimum wage*. Please
-help me continue my work, I appreciate it 🙏🏻
-
-<a href="https://www.patreon.com/mxcl">
-	<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
-</a>
-
-[Other ways to say thanks](http://mxcl.dev/#donate).
-
-[`brew`]: https://brew.sh
+Maintaining this project is work, if your company uses this project please
+sponsor it either via Tidelift or GitHub Sponsors.
 
 # Documentation
 
@@ -189,7 +180,7 @@ https://tidelift.com/security
 
 [badge-pod]: https://img.shields.io/cocoapods/v/PromiseKit.svg?label=version
 [badge-pms]: https://img.shields.io/badge/supports-CocoaPods%20%7C%20Carthage%20%7C%20Accio%20%7C%20SwiftPM-green.svg
-[badge-languages]: https://img.shields.io/badge/languages-Swift%20%7C%20ObjC-orange.svg
+[badge-languages]: https://img.shields.io/badge/languages-Swift-orange.svg
 [badge-platforms]: https://img.shields.io/badge/platforms-macOS%20%7C%20iOS%20%7C%20watchOS%20%7C%20tvOS%20%7C%20Linux-lightgrey.svg
 [badge-mit]: https://img.shields.io/badge/license-MIT-blue.svg
 [OMGHTTPURLRQ]: https://github.com/PromiseKit/OMGHTTPURLRQ

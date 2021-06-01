@@ -146,16 +146,16 @@ public func race<U: Thenable>(fulfilled thenables: [U]) -> Promise<U.T> {
         promise.pipe { result in
             barrier.sync(flags: .barrier) {
                 switch result {
-                case .rejected:
+                case .failure:
                     guard rp.isPending else { return }
                     countdown -= 1
                     if countdown == 0 {
-                        rp.box.seal(.rejected(PMKError.noWinner))
+                        rp.box.seal(.failure(PMKError.noWinner))
                     }
-                case .fulfilled(let value):
+                case .success(let value):
                     guard rp.isPending else { return }
                     countdown = 0
-                    rp.box.seal(.fulfilled(value))
+                    rp.box.seal(.success(value))
                 }
             }
         }

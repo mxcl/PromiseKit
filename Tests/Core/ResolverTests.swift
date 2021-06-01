@@ -11,7 +11,7 @@ class WrapTests: XCTestCase {
             self.error = error
         }
 
-        func fetchWithCompletionBlock(block: @escaping(Int?, Error?) -> Void) {
+        func fetchWithCompletionBlock(block: @escaping(Int?, Swift.Error?) -> Void) {
             after(.milliseconds(20)).done {
                 block(self.value, self.error)
             }
@@ -23,7 +23,7 @@ class WrapTests: XCTestCase {
             }
         }
 
-        func fetchWithCompletionBlock3(block: @escaping(Int, Error?) -> Void) {
+        func fetchWithCompletionBlock3(block: @escaping(Int, Swift.Error?) -> Void) {
             after(.milliseconds(20)).done {
                 block(self.value ?? -99, self.error)
             }
@@ -35,8 +35,7 @@ class WrapTests: XCTestCase {
             }
         }
 
-#if swift(>=5.0)
-        func fetchWithCompletionBlock5(block: @escaping(Swift.Result<Int, Error>) -> Void) {
+        func fetchWithCompletionBlock5(block: @escaping(Swift.Result<Int, Swift.Error>) -> Void) {
             after(.milliseconds(20)).done {
                 if let value = self.value {
                     block(.success(value))
@@ -45,7 +44,6 @@ class WrapTests: XCTestCase {
                 }
             }
         }
-#endif
     }
 
     func testSuccess() {
@@ -146,7 +144,7 @@ class WrapTests: XCTestCase {
     #if swift(>=5.0)
         let ex = expectation(description: "")
         let kittenFetcher = KittenFetcher(value: 2, error: nil)
-        Promise { seal in
+        Promise<Int> { seal in
             kittenFetcher.fetchWithCompletionBlock5(block: seal.resolve)
         }.done {
             XCTAssertEqual($0, 2)

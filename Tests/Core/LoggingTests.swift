@@ -2,6 +2,19 @@
 import Dispatch
 import XCTest
 
+private extension LogEvent {
+    var rawDescription: String {
+        switch self {
+            case .waitOnMainThread: return "waitOnMainThread"
+            case .pendingPromiseDeallocated: return "pendingPromiseDeallocated"
+            case .pendingGuaranteeDeallocated: return "pendingGuaranteeDeallocated"
+            case .cauterized(let a): return "cauterized(\(a))"
+            case .nilDispatchQueueWithFlags: return "nilDispatchQueueWithFlags"
+            case .extraneousFlagsSpecified: return "extraneousFlagsSpecified"
+        }
+    }
+}
+
 class LoggingTests: XCTestCase {
 
     enum ForTesting: Error, CustomDebugStringConvertible {
@@ -14,7 +27,7 @@ class LoggingTests: XCTestCase {
     var logOutput: String? = nil
 
     func captureLogger(_ event: LogEvent) {
-        logOutput = "\(event)"
+        logOutput = event.rawDescription
     }
 
     /**
@@ -130,22 +143,12 @@ class LoggingTests: XCTestCase {
 
     // Verify pendingGuaranteeDeallocated is logged
     func testPendingGuaranteeDeallocatedIsLogged() {
-        var logOutput: String? = nil
-        let loggingClosure: (PromiseKit.LogEvent) -> Void = { event in
-            switch event {
-            case .waitOnMainThread, .pendingPromiseDeallocated, .pendingGuaranteeDeallocated:
-                logOutput = "\(event)"
-            case .cauterized:
-                // Using an enum with associated value does not convert to a string properly in
-                // earlier versions of swift
-                logOutput = "cauterized"
-            }
-        }
-        conf.logHandler = loggingClosure
+        var logOutput = ""
+        conf.logHandler = { logOutput = $0.rawDescription }
         do {
-            let _ = Guarantee<Int>.pending()
+            _ = Guarantee<Int>.pending()
         }
-        XCTAssertEqual ("pendingGuaranteeDeallocated", logOutput!)
+        XCTAssertEqual ("pendingGuaranteeDeallocated", logOutput)
     }
 
     // Verify nilDispatchQueueWithFlags is logged
