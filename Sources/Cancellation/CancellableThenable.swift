@@ -3,7 +3,7 @@ import Dispatch
 /**
  CancellableThenable represents an asynchronous operation that can be both chained and cancelled.  When chained, all CancellableThenable members of the chain are cancelled when `cancel` is called on the associated CancelContext.
  */
-public protocol CancellableThenable: class {
+public protocol CancellableThenable: AnyObject {
     /// Type of the delegate `thenable`
     associatedtype U: Thenable
     

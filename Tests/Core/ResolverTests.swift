@@ -11,7 +11,7 @@ class WrapTests: XCTestCase {
             self.error = error
         }
 
-        func fetchWithCompletionBlock(block: @escaping(Int?, Error?) -> Void) {
+        func fetchWithCompletionBlock(block: @escaping(Int?, Swift.Error?) -> Void) {
             after(.milliseconds(20)).done {
                 block(self.value, self.error)
             }
@@ -23,7 +23,7 @@ class WrapTests: XCTestCase {
             }
         }
 
-        func fetchWithCompletionBlock3(block: @escaping(Int, Error?) -> Void) {
+        func fetchWithCompletionBlock3(block: @escaping(Int, Swift.Error?) -> Void) {
             after(.milliseconds(20)).done {
                 block(self.value ?? -99, self.error)
             }
@@ -32,6 +32,16 @@ class WrapTests: XCTestCase {
         func fetchWithCompletionBlock4(block: @escaping(Error?) -> Void) {
             after(.milliseconds(20)).done {
                 block(self.error)
+            }
+        }
+
+        func fetchWithCompletionBlock5(block: @escaping(Swift.Result<Int, Swift.Error>) -> Void) {
+            after(.milliseconds(20)).done {
+                if let value = self.value {
+                    block(.success(value))
+                } else {
+                    block(.failure(self.error!))
+                }
             }
         }
     }
@@ -128,6 +138,39 @@ class WrapTests: XCTestCase {
         }.catch { _ in ex2.fulfill() }
 
         wait(for: [ex1, ex2], timeout: 1)
+    }
+
+    func testSwiftResultSuccess() {
+    #if swift(>=5.0)
+        let ex = expectation(description: "")
+        let kittenFetcher = KittenFetcher(value: 2, error: nil)
+        Promise<Int> { seal in
+            kittenFetcher.fetchWithCompletionBlock5(block: seal.resolve)
+        }.done {
+            XCTAssertEqual($0, 2)
+            ex.fulfill()
+        }.silenceWarning()
+
+        waitForExpectations(timeout: 1)
+    #endif
+    }
+
+    func testSwiftResultError() {
+    #if swift(>=5.0)
+        let ex = expectation(description: "")
+
+        let kittenFetcher = KittenFetcher(value: nil, error: Error.test)
+        Promise { seal in
+            kittenFetcher.fetchWithCompletionBlock5(block: seal.resolve)
+        }.catch { error in
+            defer { ex.fulfill() }
+            guard case Error.test = error else {
+                return XCTFail()
+            }
+        }
+
+        waitForExpectations(timeout: 1)
+    #endif
     }
 
     func testIsFulfilled() {

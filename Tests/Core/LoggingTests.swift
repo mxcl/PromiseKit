@@ -2,6 +2,19 @@
 import Dispatch
 import XCTest
 
+private extension LogEvent {
+    var rawDescription: String {
+        switch self {
+            case .waitOnMainThread: return "waitOnMainThread"
+            case .pendingPromiseDeallocated: return "pendingPromiseDeallocated"
+            case .pendingGuaranteeDeallocated: return "pendingGuaranteeDeallocated"
+            case .cauterized(let a): return "cauterized(\(a))"
+            case .nilDispatchQueueWithFlags: return "nilDispatchQueueWithFlags"
+            case .extraneousFlagsSpecified: return "extraneousFlagsSpecified"
+        }
+    }
+}
+
 class LoggingTests: XCTestCase {
 
     enum ForTesting: Error, CustomDebugStringConvertible {
@@ -10,23 +23,23 @@ class LoggingTests: XCTestCase {
             return "purposes"
         }
     }
-    
+
     var logOutput: String? = nil
-    
+
     func captureLogger(_ event: LogEvent) {
-        logOutput = "\(event)"
+        logOutput = event.rawDescription
     }
-    
+
     /**
      The test should emit the following log messages:
-     
+
      PromiseKit: warning: `wait()` called on main thread!
      PromiseKit: warning: pending promise deallocated
      PromiseKit: warning: pending guarantee deallocated
      PromiseKit:cauterized-error: purposes
     */
     func testLogging() {
-        
+
         // Test Logging to Console, the default behavior
         conf.logHandler(.waitOnMainThread)
         conf.logHandler(.pendingPromiseDeallocated)
@@ -54,7 +67,7 @@ class LoggingTests: XCTestCase {
 
     // Verify waiting on main thread in Promise is logged
     func testPromiseWaitOnMainThreadLogged() throws {
-        
+
         conf.logHandler = captureLogger
         let promiseResolver = Promise<String>.pending()
         let workQueue = DispatchQueue(label: "worker")
@@ -65,14 +78,14 @@ class LoggingTests: XCTestCase {
         XCTAssertEqual("PromiseFulfilled", promisedString)
         XCTAssertEqual(logOutput!, "waitOnMainThread")
     }
-    
+
     // Verify Promise.cauterize() is logged
     func testCauterizeIsLogged() {
-        
+
         conf.logHandler = captureLogger
         func createPromise() -> Promise<String> {
             let promiseResolver = Promise<String>.pending()
-            
+
             let queue = DispatchQueue(label: "workQueue")
             queue.async {
                 promiseResolver.resolver.reject(ForTesting.purposes)
@@ -106,7 +119,7 @@ class LoggingTests: XCTestCase {
 
     // Verify waiting on main thread in Guarantee is logged
     func testGuaranteeWaitOnMainThreadLogged() {
-        
+
         conf.logHandler = captureLogger
         let guaranteeResolve = Guarantee<String>.pending()
         let workQueue = DispatchQueue(label: "worker")
@@ -117,42 +130,42 @@ class LoggingTests: XCTestCase {
         XCTAssertEqual("GuaranteeFulfilled", guaranteedString)
         XCTAssertEqual(logOutput!, "waitOnMainThread")
     }
-    
+
     // Verify pendingPromiseDeallocated is logged
     func testPendingPromiseDeallocatedIsLogged() {
-        
+
         conf.logHandler = captureLogger
         do {
             let _ = Promise<Int>.pending()
         }
         XCTAssertEqual ("pendingPromiseDeallocated", logOutput!)
     }
-    
+
     // Verify pendingGuaranteeDeallocated is logged
     func testPendingGuaranteeDeallocatedIsLogged() {
-        
-        conf.logHandler = captureLogger
+        var logOutput = ""
+        conf.logHandler = { logOutput = $0.rawDescription }
         do {
-            let _ = Guarantee<Int>.pending()
+            _ = Guarantee<Int>.pending()
         }
-        XCTAssertEqual ("pendingGuaranteeDeallocated", logOutput!)
+        XCTAssertEqual ("pendingGuaranteeDeallocated", logOutput)
     }
-    
+
     // Verify nilDispatchQueueWithFlags is logged
     func testNilDispatchQueueWithFlags() {
-        
+
         conf.logHandler = captureLogger
         Guarantee.value(42).done(on: nil, flags: .barrier) { _ in }
         XCTAssertEqual ("nilDispatchQueueWithFlags", logOutput!)
     }
-    
+
     // Verify extraneousFlagsSpecified is logged
     func testExtraneousFlagsSpecified() {
-        
+
         conf.logHandler = captureLogger
         conf.D.return = CurrentThreadDispatcher()
         Guarantee.value(42).done(flags: .barrier) { _ in }
         XCTAssertEqual ("extraneousFlagsSpecified", logOutput!)
     }
-    
+
 }

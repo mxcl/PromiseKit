@@ -109,14 +109,14 @@ class PromiseTests: XCTestCase {
     @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
     func testDispatcherDispatchExtensionDoesNotInterfereWithRegularDispatch() {
         let dispatcher: Dispatcher = DispatchQueue.global()
-        
+
         let plain = expectation(description: "plain closure")
         let plainReturn: Any = dispatcher.dispatch {
             plain.fulfill()
         }
         // This is statically determined, but we want to promote it into something that fits into XCTest
         XCTAssert(plainReturn is Void, "Dispatcher.dispatch() returns something other than Void")
-        
+
         // With a throwing closure, the return should be a Promise, even without a return value.
         // There's no standard Dispatcher API that accepts throwing closures for dispatch.
         let throwing = expectation(description: "throwing closure")
@@ -206,4 +206,17 @@ class PromiseTests: XCTestCase {
         }.silenceWarning()
         wait(for: [ex], timeout: 10)
     }
+
+    #if swift(>=3.1)
+    func testNoAmbiguityForValue() {
+        let ex = expectation(description: "")
+        let a = Promise<Void>.value
+        let b = Promise<Void>.value(Void())
+        let c = Promise<Void>.value(())
+        when(fulfilled: a, b, c).done {
+            ex.fulfill()
+        }.cauterize()
+        wait(for: [ex], timeout: 10)
+    }
+    #endif
 }

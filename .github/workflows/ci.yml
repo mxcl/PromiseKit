@@ -1,0 +1,65 @@
+name: CI
+on:
+  pull_request:
+    paths:
+      - Sources/**
+      - Tests/**
+      - .github/workflows/ci.yml
+  workflow_dispatch:
+jobs:
+  auto-cancel:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: technote-space/auto-cancel-redundant-job@v1
+
+  linux:
+    name: linux
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        swift:
+        - 5.3
+        - 5.4
+    container:
+      image: swift:${{ matrix.swift }}
+    steps:
+    - uses: actions/checkout@v2
+    - run: swift test --enable-code-coverage --parallel --enable-test-discovery
+
+    - name: Generate Coverage Report
+      if: ${{ matrix.swift == '5.3' }}  # 5.4 and above needs llvm-cov-12
+      run: |
+        apt-get -qq update
+        apt-get -qq install curl
+        b=$(swift build --show-bin-path)
+        llvm-cov export \
+          -format lcov \
+          -instr-profile="$b"/codecov/default.profdata \
+          --ignore-filename-regex='\.build/' \
+          "$b"/*.xctest \
+          > info.lcov
+    - uses: codecov/codecov-action@v1
+      with:
+        file: ./info.lcov
+
+  macOS:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        dst:
+        - platform=macOS
+        - platform=tvOS Simulator,OS=latest,name=Apple TV
+        - platform=iOS Simulator,OS=latest,name=iPhone 12
+    steps:
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: ^12
+    - uses: actions/checkout@v2
+    - uses: sersoft-gmbh/xcodebuild-action@v1
+      with:
+        spm-package: ./
+        scheme: PromiseKit
+        destination: ${{ matrix.dst }}
+        action: test
+        enable-code-coverage: true
+    - uses: codecov/codecov-action@v1

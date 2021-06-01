@@ -33,23 +33,23 @@ public enum LogEvent {
     
     /// DispatchWorkItem flags specified for non-DispatchQueue Dispatcher
     case extraneousFlagsSpecified
-    
-    public func asString() -> String {
-        var message: String
+}
+
+extension LogEvent: CustomStringConvertible {
+    public var description: String {
         switch self {
-            case .waitOnMainThread:
-                message = " warning: `wait()` called on main thread!"
-            case .pendingPromiseDeallocated:
-                message = " warning: pending promise deallocated"
-            case .pendingGuaranteeDeallocated:
-                message = " warning: pending guarantee deallocated"
-            case .cauterized(let error):
-                message = "cauterized-error: \(error)"
-            case .nilDispatchQueueWithFlags:
-                message = " warning: nil DispatchQueue specified, but DispatchWorkItemFlags were also supplied (ignored)"
-            case .extraneousFlagsSpecified:
-                message = " warning: DispatchWorkItemFlags flags specified, but default Dispatcher is not a DispatchQueue (ignored)"
+        case .waitOnMainThread:
+            return "warning: `wait()` called on main thread!"
+        case .pendingPromiseDeallocated:
+            return "warning: pending promise deallocated"
+        case .pendingGuaranteeDeallocated:
+            return "warning: pending guarantee deallocated"
+        case .cauterized(let error):
+            return "cauterized-error: \(error)"
+        case .nilDispatchQueueWithFlags:
+            return "warning: nil DispatchQueue specified, but DispatchWorkItemFlags were also supplied (ignored)"
+        case .extraneousFlagsSpecified:
+            return "warning: DispatchWorkItemFlags flags specified, but default Dispatcher is not a DispatchQueue (ignored)"
         }
-        return "PromiseKit:\(message)"
     }
 }

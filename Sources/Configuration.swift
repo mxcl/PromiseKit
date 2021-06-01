@@ -23,12 +23,12 @@ public struct PMKConfiguration {
 
     /// The default catch-policy for all `catch` and `resolve`
     public var catchPolicy = CatchPolicy.allErrorsExceptCancellation
-    
+
     /// The closure used to log PromiseKit events.
     /// Not thread safe; change before processing any promises.
     /// - Note: The default handler calls `print()`
-    public var logHandler: (LogEvent) -> () = { event in
-        print(event.asString())
+    public var logHandler: (LogEvent) -> Void = { event in
+        print("PromiseKit:", event.description)
     }
 }
 

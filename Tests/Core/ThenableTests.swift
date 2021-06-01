@@ -2,6 +2,22 @@ import PromiseKit
 import Dispatch
 import XCTest
 
+struct Person: Equatable {
+    let name: String
+    let age: Int?
+    let isStudent: Bool
+
+    init(
+        name: String = "",
+        age: Int? = nil,
+        isStudent: Bool = false
+    ) {
+        self.name = name
+        self.age = age
+        self.isStudent = isStudent
+    }
+}
+
 class ThenableTests: XCTestCase {
     func testGet() {
         let ex1 = expectation(description: "")
@@ -14,6 +30,26 @@ class ThenableTests: XCTestCase {
             ex2.fulfill()
         }.silenceWarning()
         wait(for: [ex1, ex2], timeout: 10)
+    }
+
+    func testMap() {
+        let ex = expectation(description: "")
+        Promise.value(1).map {
+            $0 * 2
+        }.done {
+            XCTAssertEqual($0, 2)
+            ex.fulfill()
+        }.silenceWarning()
+        wait(for: [ex], timeout: 10)
+    }
+
+    func testMapByKeyPath() {
+        let ex = expectation(description: "")
+        Promise.value(Person(name: "Max")).map(\.name).done {
+            XCTAssertEqual($0, "Max")
+            ex.fulfill()
+        }.silenceWarning()
+        wait(for: [ex], timeout: 10)
     }
 
     func testCompactMap() {
@@ -72,12 +108,50 @@ class ThenableTests: XCTestCase {
         wait(for: [ex], timeout: 10)
     }
 
+    func testCompactMapByKeyPath() {
+        let ex = expectation(description: "")
+        Promise.value(Person(name: "Roman", age: 26)).compactMap(\.age).done {
+            XCTAssertEqual($0, 26)
+            ex.fulfill()
+        }.silenceWarning()
+        wait(for: [ex], timeout: 10)
+    }
+
+    func testMapValues() {
+        let ex = expectation(description: "")
+        Promise.value([14, 20, 45]).mapValues {
+            $0 * 2
+        }.done {
+            XCTAssertEqual([28, 40, 90], $0)
+            ex.fulfill()
+        }.silenceWarning()
+        wait(for: [ex], timeout: 10)
+    }
+
+    func testMapValuesByKeyPath() {
+        let ex = expectation(description: "")
+        Promise.value([Person(name: "Max"), Person(name: "Roman"), Person(name: "John")]).mapValues(\.name).done {
+            XCTAssertEqual(["Max", "Roman", "John"], $0)
+            ex.fulfill()
+        }.silenceWarning()
+        wait(for: [ex], timeout: 10)
+    }
+
     func testCompactMapValues() {
         let ex = expectation(description: "")
         Promise.value(["1","2","a","4"]).compactMapValues {
             Int($0)
         }.done {
             XCTAssertEqual([1,2,4], $0)
+            ex.fulfill()
+        }.silenceWarning()
+        wait(for: [ex], timeout: 10)
+    }
+
+    func testCompactMapValuesByKeyPath() {
+        let ex = expectation(description: "")
+        Promise.value([Person(name: "Max"), Person(name: "Roman", age: 26), Person(name: "John", age: 23)]).compactMapValues(\.age).done {
+            XCTAssertEqual([26, 23], $0)
             ex.fulfill()
         }.silenceWarning()
         wait(for: [ex], timeout: 10)
@@ -100,6 +174,26 @@ class ThenableTests: XCTestCase {
             Promise.value([$0, $0])
         }.done {
             XCTAssertEqual([1,1,2,2,3,3,4,4], $0)
+            ex.fulfill()
+        }.silenceWarning()
+        wait(for: [ex], timeout: 10)
+    }
+
+    func testFilterValues() {
+        let ex = expectation(description: "")
+        Promise.value([Person(name: "Max"), Person(name: "Roman", age: 26, isStudent: false), Person(name: "John", age: 23, isStudent: true)]).filterValues {
+            $0.isStudent
+        }.done {
+            XCTAssertEqual([Person(name: "John", age: 23, isStudent: true)], $0)
+            ex.fulfill()
+        }.silenceWarning()
+        wait(for: [ex], timeout: 10)
+    }
+
+    func testFilterValuesByKeyPath() {
+        let ex = expectation(description: "")
+        Promise.value([Person(name: "Max"), Person(name: "Roman", age: 26, isStudent: false), Person(name: "John", age: 23, isStudent: true)]).filterValues(\.isStudent).done {
+            XCTAssertEqual([Person(name: "John", age: 23, isStudent: true)], $0)
             ex.fulfill()
         }.silenceWarning()
         wait(for: [ex], timeout: 10)
