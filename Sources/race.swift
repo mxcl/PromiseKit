@@ -1,4 +1,5 @@
 import struct Foundation.TimeInterval
+import Dispatch
 
 @inline(__always)
 private func _race<U: Thenable>(_ thenables: [U]) -> Promise<U.T> {
@@ -68,9 +69,9 @@ public func race<T>(_ guarantees: Guarantee<T>...) -> Guarantee<T> {
      let racePromise = race(promise1, promise2, promise3).then { winner in
          //…
      }
- 
+
      //…
- 
+
      racePromise.cancel()
 
  - Returns: A new promise that resolves when the first promise in the provided promises resolves.
@@ -88,9 +89,9 @@ public func race<V: CancellableThenable>(_ thenables: V...) -> CancellablePromis
      let racePromise = race(promise1, promise2, promise3).then { winner in
          //…
      }
- 
+
      //…
- 
+
      racePromise.cancel()
 
  - Returns: A new promise that resolves when the first promise in the provided promises resolves.
@@ -101,7 +102,7 @@ public func race<V: CancellableThenable>(_ thenables: [V]) -> CancellablePromise
     guard !thenables.isEmpty else {
         return CancellablePromise(error: PMKError.badInput)
     }
-    
+
     let cancelThenables: (Result<V.U.T, Error>) -> Void = { result in
         if case .failure = result {
             for t in thenables {
@@ -111,7 +112,7 @@ public func race<V: CancellableThenable>(_ thenables: [V]) -> CancellablePromise
             }
         }
     }
-    
+
     let promise = CancellablePromise(race(asThenables(thenables)))
     for t in thenables {
         t.thenable.pipe(to: cancelThenables)
@@ -121,8 +122,51 @@ public func race<V: CancellableThenable>(_ thenables: [V]) -> CancellablePromise
 }
 
 /**
+ Waits for one promise to fulfill
+
+     race(fulfilled: [promise1, promise2, promise3]).then { winner in
+         //…
+     }
+
+ - Returns: The promise that was fulfilled first.
+ - Warning: Skips all rejected promises.
+ - Remark: If the provided array is empty, the returned promise is rejected with `PMKError.badInput`. If there are no fulfilled promises, the returned promise is rejected with `PMKError.noWinner`.
+*/
+public func race<U: Thenable>(fulfilled thenables: [U]) -> Promise<U.T> {
+    var countdown = thenables.count
+    guard countdown > 0 else {
+        return Promise(error: PMKError.badInput)
+    }
+
+    let rp = Promise<U.T>(.pending)
+
+    let barrier = DispatchQueue(label: "org.promisekit.barrier.race", attributes: .concurrent)
+
+    for promise in thenables {
+        promise.pipe { result in
+            barrier.sync(flags: .barrier) {
+                switch result {
+                case .rejected:
+                    guard rp.isPending else { return }
+                    countdown -= 1
+                    if countdown == 0 {
+                        rp.box.seal(.rejected(PMKError.noWinner))
+                    }
+                case .fulfilled(let value):
+                    guard rp.isPending else { return }
+                    countdown = 0
+                    rp.box.seal(.fulfilled(value))
+                }
+            }
+        }
+    }
+
+    return rp
+}
+
+/**
  Returns a promise that can be used to set a timeout for `race`.
- 
+
      let promise1, promise2: Promise<Void>
      race(promise1, promise2, timeout(seconds: 1.0)).done { winner in
          //…
@@ -130,10 +174,10 @@ public func race<V: CancellableThenable>(_ thenables: [V]) -> CancellablePromise
          // Rejects with `PMKError.timedOut` if the timeout is exceeded before either `promise1` or
          // `promise2` succeeds.
      }
- 
+
  When used with cancellable promises, all promises will be cancelled if the timeout is
  exceeded or any promise rejects:
- 
+
      let promise1, promise2: CancellablePromise<Void>
      race(promise1, promise2, cancellize(timeout(seconds: 1.0))).done { winner in
          //…

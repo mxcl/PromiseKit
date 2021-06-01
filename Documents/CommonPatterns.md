@@ -175,7 +175,7 @@ When you have a series of tasks to perform on an array of data:
 ```swift
 // fade all visible table cells one by one in a “cascading” effect
 
-let fade = Guarantee()
+var fade = Guarantee()
 for cell in tableView.visibleCells {
     fade = fade.then {
         UIView.animate(.promise, duration: 0.1) {
@@ -188,12 +188,14 @@ fade.done {
 }
 ```
 
-Or if you have an array of promises:
+Or if you have an array of closures that return promises:
 
 ```swift
 var foo = Promise()
-for nextPromise in arrayOfPromises {
-    foo = foo.then { nextPromise }
+for nextPromise in arrayOfClosuresThatReturnPromises {
+    foo = foo.then(nextPromise)
+    // ^^ you rarely would want an array of promises instead, since then
+    // they have all already started, you may as well use `when()`
 }
 foo.done {
     // finish
@@ -291,7 +293,7 @@ func attempt<T>(maximumRetryCount: Int = 3, delayBeforeRetry: DispatchTimeInterv
         attempts += 1
         return body().recover { error -> Promise<T> in
             guard attempts < maximumRetryCount else { throw error }
-            return after(delayBeforeRetry).then(on: nil, attempt)
+            return after(delayBeforeRetry).then(attempt)
         }
     }
     return attempt()

@@ -21,7 +21,7 @@ import Dispatch
          URLSession.shared.dataTask(url: url3)
      }
 
- - Note: the block you pass excecutes immediately on the current thread/queue.
+ - Note: the block you pass executes immediately on the current thread/queue.
  */
 public func firstly<U: Thenable>(execute body: () throws -> U) -> Promise<U.T> {
     do {

@@ -112,10 +112,10 @@ public final class Promise<T>: Thenable, CatchMixin {
     init(_: PMKUnambiguousInitializer) {
         box = EmptyBox()
     }
-    
+
     var cancellable: Cancellable?
     var rejectIfCancelled: ((Error) -> Void)?
-    
+
     public func setCancellable(_ cancellable: Cancellable?, reject: ((Error) -> Void)? = nil) {
         self.cancellable = cancellable
         rejectIfCancelled = reject
@@ -150,6 +150,11 @@ extension Promise where T == Void {
     /// Initializes a new promise fulfilled with `Void`
     public convenience init() {
         self.init(box: SealedBox(value: .success(Void())))
+    }
+
+    /// Returns a new promise fulfilled with `Void`
+    public static var value: Promise<Void> {
+        return .value(Void())
     }
 }
 
@@ -189,13 +194,13 @@ public extension Dispatcher {
     /**
      Executes the provided closure on a `Dispatcher`, yielding a `Promise`
      that represents the value ultimately returned by the closure.
-     
+
          dispatcher.dispatch {
             try md5(input)
          }.done { md5 in
             //…
          }
-     
+
      - Parameter body: A closure that yields a value to resolve the promise.
      - Returns: A new `Promise` resolved by the result of the provided closure.
      */

@@ -156,4 +156,35 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
 
         waitForExpectations(timeout: 3)
     }
+
+    func testWhenResolvedContinuesWhenRejected() {
+    #if swift(>=5.3)
+        let ex = expectation(description: "")
+        enum Error: Swift.Error { case dummy }
+
+        var x: UInt = 0
+        let generator = AnyIterator<Promise<Void>> {
+            x += 1
+            switch x {
+            case 0:
+                fatalError()
+            case 1:
+                return Promise()
+            case 2:
+                return Promise(error: Error.dummy)
+            case 3:
+                return Promise()
+            case _:
+                return nil
+            }
+        }
+
+        when(resolved: generator, concurrently: 1).done { results in
+            XCTAssertEqual(results.count, 3)
+            ex.fulfill()
+        }
+
+        waitForExpectations(timeout: 3)
+    #endif
+    }
 }

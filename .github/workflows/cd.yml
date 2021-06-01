@@ -1,0 +1,119 @@
+name: CD
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        required: true
+jobs:
+  pods:
+    runs-on: macos-latest
+    steps:
+
+    - name: Start Deployment
+      uses: bobheadxi/deployments@v0.5.2
+      id: deployment
+      with:
+        step: start
+        token: ${{ secrets.GITHUB_TOKEN }}
+        env: pods
+
+    - uses: actions/checkout@v2
+      with:
+        submodules: true
+
+    - run: pod trunk push --allow-warnings --skip-tests --skip-import-validation
+      env:
+        COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+
+    - name: Seal Deployment
+      uses: bobheadxi/deployments@v0.5.2
+      if: always()
+      with:
+        step: finish
+        token: ${{ secrets.GITHUB_TOKEN }}
+        status: ${{ job.status }}
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+
+  carthage:
+    runs-on: macos-latest
+    steps:
+
+    - name: Start Deployment
+      uses: bobheadxi/deployments@v0.5.2
+      id: deployment
+      with:
+        step: start
+        token: ${{ secrets.GITHUB_TOKEN }}
+        env: carthage
+
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: ^11
+        # Waiting on https://github.com/Carthage/Carthage/issues/3103 for Xcode 12
+
+    - uses: joutvhu/get-release@v1
+      id: release
+      with:
+        tag_name: ${{ github.event.inputs.version }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - uses: actions/checkout@v2
+    - run: carthage build --no-skip-current --platform macOS,iOS,watchOS,tvOS --archive
+    - run: mv PromiseKit.framework.zip PromiseKit-$v.framework.zip
+
+    - uses: actions/upload-release-asset@v1
+      with:
+        upload_url: ${{ steps.release.outputs.upload_url }}
+        asset_path: ./PromiseKit-${{ github.event.inputs.version }}.framework.zip
+        asset_name: PromiseKit-${{ github.event.inputs.version }}.framework.zip
+        asset_content_type: application/zip
+      env:
+        GITHUB_TOKEN: ${{ github.token }}
+
+    - name: Seal Deployment
+      uses: bobheadxi/deployments@v0.5.2
+      if: always()
+      with:
+        step: finish
+        token: ${{ secrets.GITHUB_TOKEN }}
+        status: ${{ job.status }}
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+
+  docs:
+    runs-on: macos-latest
+    steps:
+
+    - name: Start Deployment
+      uses: bobheadxi/deployments@v0.5.2
+      id: deployment
+      with:
+        step: start
+        token: ${{ secrets.GITHUB_TOKEN }}
+        env: docs
+
+    - uses: actions/checkout@v2
+    - run: gem install jazzy
+    - run: |
+        jazzy --config .github/jazzy.yml \
+          --github_url 'https://github.com/mxcl/PromiseKit' \
+          --module-version ${{ github.event.inputs.version }}
+    - run: git remote update
+    - run: git checkout gh-pages
+    - run: rm -rf reference/v6
+    - run: mv output reference/v6
+    - run: git add reference/v6
+    - run: git config user.name github-actions
+    - run: git config user.email github-actions@github.com
+    - run: git commit -m 'Updated docs for v${{ github.event.inputs.version }}'
+    - run: git remote add secure-origin https://${{ secrets.JAZZY_PAT }}@github.com/mxcl/PromiseKit.git
+    - run: git push secure-origin gh-pages
+
+    - name: Seal Deployment
+      uses: bobheadxi/deployments@v0.5.2
+      if: always()
+      with:
+        step: finish
+        token: ${{ secrets.GITHUB_TOKEN }}
+        status: ${{ job.status }}
+        deployment_id: ${{ steps.deployment.outputs.deployment_id }}

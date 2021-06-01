@@ -38,10 +38,14 @@ github "mxcl/PromiseKit" ~> 6.8
 ```
 
 > Please note, since PromiseKit 6.8.1 our Carthage support has transitioned to
-Swift 4 and above only. Strictly we *do* still support Swift 3.1 for Carthage,
-and if you like you could edit the PromiseKit `project.pbxproj` file during
-`carthage bootstrap` to make this possible. This change was involuntary and due
-to Xcode 10.2 dropping support for Swift 3.
+> Swift 4 and above only. Strictly we *do* still support Swift 3.1 for Carthage,
+> and if you like you could edit the PromiseKit `project.pbxproj` file during
+> `carthage bootstrap` to make this possible. This change was involuntary and due
+> to Xcode 10.2 dropping support for Swift 3.
+
+From Xcode 12, you will likely need to build using `--use-xcframeworks`, eg:
+
+    carthage build --use-xcframeworks
 
 ## Accio
 
@@ -84,13 +88,13 @@ PromiseKit contains Swift, so there have been rev-lock issues with Xcode:
 
 | PromiseKit | Swift                   | Xcode    |   CI Status  |   Release Notes   |
 | ---------- | ----------------------- | -------- | ------------ | ----------------- |
-|      6     | 3.1, 3.2, 3.3, 4.x, 5.x | 8.3, 9.x, 10.x | ![ci-master] | [2018/02][news-6] |
+|      6     |      3.2, 3.3, 4.x, 5.x | 8.3, 9.x, 10.x | ![ci-master] | [2018/02][news-6] |
 |      5     | 3.1, 3.2, 3.3, 4.x      | 8.3, 9.x, 10.1 | *Deprecated* |       *n/a*       |
 |      4     | 3.0, 3.1, 3.2, 3.3, 4.x | 8.x, 9.x, 10.1 | ![ci-master] | [2016/09][news-4] |
 |      3     | 2.x                     | 7.x, 8.0 | ![ci-swift2] | [2015/10][news-3] |
 |      2     | 1.x                     | 7.x      | *Deprecated* | [2015/10][news-3] |
 |      1†    | *N/A*                   | *        | ![ci-legacy] |         –         |
-                                     
+
 † PromiseKit 1 is pure Objective-C and thus can be used with any Xcode, it is
 also your only choice if you need to support iOS 7 or below.
 
@@ -148,7 +152,7 @@ extension) then all your final products that use PromiseKit will have forced
 dependencies on all the Apple frameworks that PromiseKit provides extensions
 for.
 
-This isn’t that bad, but every framework that loads entails overhead and 
+This isn’t that bad, but every framework that loads entails overhead and
 lengthens startup time.
 
 It’s both better and worse with Carthage. We build individual micro-frameworks

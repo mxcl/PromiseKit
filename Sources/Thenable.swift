@@ -1,7 +1,7 @@
 import Dispatch
 
 /// Thenable represents an asynchronous operation that can be chained.
-public protocol Thenable: class {
+public protocol Thenable: AnyObject {
     /// The type of the wrapped value
     associatedtype T
 
@@ -14,10 +14,10 @@ public protocol Thenable: class {
 
 public extension Thenable {
     /**
-     The provided closure executes when this promise resolves.
-     
+     The provided closure executes when this promise is fulfilled.
+
      This allows chaining promises. The promise returned by the provided closure is resolved before the promise returned by this closure resolves.
-     
+
      - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The closure that executes when this promise fulfills. It must return a promise.
      - Returns: A new promise that resolves when the promise returned from the provided closure resolves. For example:
@@ -52,13 +52,13 @@ public extension Thenable {
     }
 
     /**
-     The provided closure is executed when this promise is resolved.
-     
+     The provided closure is executed when this promise is fulfilled.
+
      This is like `then` but it requires the closure to return a non-promise.
-     
+
      - Parameter on: The dispatcher that executes the provided closure.
      - Parameter transform: The closure that is executed when this Promise is fulfilled. It must return a non-promise.
-     - Returns: A new promise that is resolved with the value returned from the provided closure. For example:
+     - Returns: A new promise that is fulfilled with the value returned from the provided closure or rejected if the provided closure throws. For example:
 
            firstly {
                URLSession.shared.dataTask(.promise, with: url1)
@@ -87,8 +87,32 @@ public extension Thenable {
         return rp
     }
 
+    #if swift(>=4) && !swift(>=5.2)
     /**
-      The provided closure is executed when this promise is resolved.
+     Similar to func `map<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(T) throws -> U) -> Promise<U>`, but accepts a key path instead of a closure.
+
+     - Parameter on: The queue to which the provided key path for value dispatches.
+     - Parameter keyPath: The key path to the value that is using when this Promise is fulfilled.
+     - Returns: A new promise that is fulfilled with the value for the provided key path.
+     */
+    func map<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ keyPath: KeyPath<T, U>) -> Promise<U> {
+        let rp = Promise<U>(.pending)
+        pipe {
+            switch $0 {
+            case .fulfilled(let value):
+                on.async(flags: flags) {
+                    rp.box.seal(.fulfilled(value[keyPath: keyPath]))
+                }
+            case .rejected(let error):
+                rp.box.seal(.rejected(error))
+            }
+        }
+        return rp
+    }
+    #endif
+
+    /**
+      The provided closure is executed when this promise is fulfilled.
 
       In your closure return an `Optional`, if you return `nil` the resulting promise is rejected with `PMKError.compactMap`, otherwise the promise is fulfilled with the unwrapped value.
 
@@ -125,16 +149,48 @@ public extension Thenable {
         return rp
     }
 
+    #if swift(>=4) && !swift(>=5.2)
     /**
-     The provided closure is executed when this promise is resolved.
-     
+    Similar to func `compactMap<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(T) throws -> U?) -> Promise<U>`, but accepts a key path instead of a closure.
+
+    - Parameter on: The queue to which the provided key path for value dispatches.
+    - Parameter keyPath: The key path to the value that is using when this Promise is fulfilled. If the value for `keyPath` is `nil` the resulting promise is rejected with `PMKError.compactMap`.
+    - Returns: A new promise that is fulfilled with the value for the provided key path.
+    */
+    func compactMap<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ keyPath: KeyPath<T, U?>) -> Promise<U> {
+        let rp = Promise<U>(.pending)
+        pipe {
+            switch $0 {
+            case .fulfilled(let value):
+                on.async(flags: flags) {
+                    do {
+                        if let rv = value[keyPath: keyPath] {
+                            rp.box.seal(.fulfilled(rv))
+                        } else {
+                            throw PMKError.compactMap(value, U.self)
+                        }
+                    } catch {
+                        rp.box.seal(.rejected(error))
+                    }
+                }
+            case .rejected(let error):
+                rp.box.seal(.rejected(error))
+            }
+        }
+        return rp
+    }
+    #endif
+
+    /**
+     The provided closure is executed when this promise is fulfilled.
+
      Equivalent to `map { x -> Void in`, but since we force the `Void` return Swift
      is happier and gives you less hassle about your closure’s qualification.
-     
+
      - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The closure that is executed when this Promise is fulfilled.
-     - Returns: A new promise fulfilled as `Void`.
-     
+     - Returns: A new promise fulfilled as `Void` or rejected if the provided closure throws.
+
            firstly {
                URLSession.shared.dataTask(.promise, with: url)
            }.done { response in
@@ -162,15 +218,15 @@ public extension Thenable {
     }
 
     /**
-     The provided closure is executed when this promise is resolved.
-     
+     The provided closure is executed when this promise is fulfilled.
+
      This is like `done` but it returns the same value that the handler is fed.
      `get` immutably accesses the fulfilled value; the returned Promise maintains that value.
-     
+
      - Parameter on: The dispatcher that executes the provided closure.
      - Parameter body: The closure that is executed when this Promise is fulfilled.
-     - Returns: A new promise that is resolved with the value that the handler is fed. For example:
-     
+     - Returns: A new promise that is fulfilled with the value that the handler is fed or rejected if the provided closure throws. For example:
+
            firstly {
                .value(1)
            }.get { foo in
@@ -302,6 +358,21 @@ public extension Thenable where T: Sequence {
         return map(on: on) { try $0.map(transform) }
     }
 
+    #if swift(>=4) && !swift(>=5.2)
+    /**
+     `Promise<[T]>` => `KeyPath<T, U>` => `Promise<[U]>`
+
+         firstly {
+             .value([Person(name: "Max"), Person(name: "Roman"), Person(name: "John")])
+         }.mapValues(\.name).done {
+             // $0 => ["Max", "Roman", "John"]
+         }
+     */
+    func mapValues<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ keyPath: KeyPath<T.Iterator.Element, U>) -> Promise<[U]> {
+        return map(on: on, flags: flags){ $0.map { $0[keyPath: keyPath] } }
+    }
+    #endif
+
     /**
      `Promise<[T]>` => `T` -> `[U]` => `Promise<[U]>`
 
@@ -336,6 +407,27 @@ public extension Thenable where T: Sequence {
             return try foo.compactMap(transform)
         }
     }
+
+    #if swift(>=4) && !swift(>=5.2)
+    /**
+     `Promise<[T]>` => `KeyPath<T, U?>` => `Promise<[U]>`
+
+         firstly {
+             .value([Person(name: "Max"), Person(name: "Roman", age: 26), Person(name: "John", age: 23)])
+         }.compactMapValues(\.age).done {
+             // $0 => [26, 23]
+         }
+     */
+    func compactMapValues<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ keyPath: KeyPath<T.Iterator.Element, U?>) -> Promise<[U]> {
+        return map(on: on, flags: flags) { foo -> [U] in
+          #if !swift(>=4.1)
+            return foo.flatMap { $0[keyPath: keyPath] }
+          #else
+            return foo.compactMap { $0[keyPath: keyPath] }
+          #endif
+        }
+    }
+    #endif
 
     /**
      `Promise<[T]>` => `T` -> `Promise<U>` => `Promise<[U]>`
@@ -374,7 +466,7 @@ public extension Thenable where T: Sequence {
     }
 
     /**
-     `Promise<[T]>` => `T` -> Bool => `Promise<[U]>`
+     `Promise<[T]>` => `T` -> Bool => `Promise<[T]>`
 
          firstly {
              .value([1,2,3])
@@ -389,6 +481,23 @@ public extension Thenable where T: Sequence {
             $0.filter(isIncluded)
         }
     }
+
+    #if swift(>=4) && !swift(>=5.2)
+    /**
+     `Promise<[T]>` => `KeyPath<T, Bool>` => `Promise<[T]>`
+
+         firstly {
+             .value([Person(name: "Max"), Person(name: "Roman", age: 26, isStudent: false), Person(name: "John", age: 23, isStudent: true)])
+         }.filterValues(\.isStudent).done {
+             // $0 => [Person(name: "John", age: 23, isStudent: true)]
+         }
+     */
+    func filterValues(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ keyPath: KeyPath<T.Iterator.Element, Bool>) -> Promise<[T.Iterator.Element]> {
+        return map(on: on, flags: flags) {
+            $0.filter { $0[keyPath: keyPath] }
+        }
+    }
+    #endif
 }
 
 public extension Thenable where T: Collection {

@@ -1,0 +1,117 @@
+name: CI
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - Sources/**
+      - Tests/**
+      - .github/workflows/ci.yml
+jobs:
+  auto-cancel:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: technote-space/auto-cancel-redundant-job@v1
+
+  linux:
+    needs: auto-cancel
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        swift:
+        - 4.0.3
+        - 4.1.3
+        - 4.2.4
+    container:
+      image: swift:${{ matrix.swift }}
+    steps:
+    - uses: actions/checkout@v2
+    - run: swift build -Xswiftc -warnings-as-errors -Xswiftc -swift-version -Xswiftc 3
+    - run: swift build  # generated linuxmain requires Swift 5 sadly
+
+  linux-code-cov:
+    name: linux
+    needs: auto-cancel
+    runs-on: ubuntu-18.04
+    strategy:
+      matrix:
+        swift:
+        - 5.0.3
+        - 5.1.5
+        - 5.2.5
+        - 5.3.3
+        - 5.4.1
+    container:
+      image: swift:${{ matrix.swift }}
+    steps:
+    - uses: actions/checkout@v2
+    - run: swift build -Xswiftc -warnings-as-errors -Xswiftc -swift-version -Xswiftc 4
+    - run: swift build -Xswiftc -warnings-as-errors -Xswiftc -swift-version -Xswiftc 4.2
+    - run: swift test --enable-code-coverage --parallel
+
+    - name: Generate Coverage Report
+      if: ${{ matrix.swift != '5.4.1' }}  # fails for SOME REASON
+      run: |
+        apt-get -qq update
+        apt-get -qq install llvm-10 curl
+        export b=$(swift build --show-bin-path) && llvm-cov-10 \
+          export -format lcov \
+          -instr-profile=$b/codecov/default.profdata \
+          --ignore-filename-regex='\.build/' \
+          $b/*.xctest \
+          > info.lcov
+    - uses: codecov/codecov-action@v1
+      with:
+        file: ./info.lcov
+
+  verify-linuxmain:
+    runs-on: macos-latest
+    name: linux (validate manifests)
+    steps:
+    - uses: actions/checkout@v2
+    - run: swift test --generate-linuxmain
+    - run: git diff --exit-code
+
+  test:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        dst:
+        - platform=macOS
+        - platform=tvOS Simulator,OS=14.3,name=Apple TV
+        - platform=iOS Simulator,OS=14.4,name=iPhone 12
+    steps:
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: 12.4
+    - uses: actions/checkout@v2
+    - uses: sersoft-gmbh/xcodebuild-action@v1
+      with:
+        project: PromiseKit.xcodeproj
+        scheme: PromiseKit
+        destination: ${{ matrix.dst }}
+        action: test
+        enable-code-coverage: true
+    - uses: codecov/codecov-action@v1
+
+  carthage:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        xcode: [^10, ^11, ^12]
+    steps:
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: ${{ matrix.xcode }}
+    - uses: actions/checkout@v2
+
+    - uses: mingjun97/file-regex-replace@v1
+      with:
+        regex: SWIFT_TREAT_WARNINGS_AS_ERRORS = NO
+        replacement: SWIFT_TREAT_WARNINGS_AS_ERRORS = YES
+        include: project.pbxproj
+
+    - run: |
+        if [ ${{ matrix.xcode }} == ^12 ]; then
+          echo "CARTHAGE_ARGS=--use-xcframeworks" >> $GITHUB_ENV
+        fi
+    - run: carthage build --no-skip-current --no-use-binaries $CARTHAGE_ARGS
