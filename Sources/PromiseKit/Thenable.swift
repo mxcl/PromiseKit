@@ -87,30 +87,6 @@ public extension Thenable {
         return rp
     }
 
-    #if swift(>=4) && !swift(>=5.2)
-    /**
-     Similar to func `map<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(T) throws -> U) -> Promise<U>`, but accepts a key path instead of a closure.
-
-     - Parameter on: The queue to which the provided key path for value dispatches.
-     - Parameter keyPath: The key path to the value that is using when this Promise is fulfilled.
-     - Returns: A new promise that is fulfilled with the value for the provided key path.
-     */
-    func map<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ keyPath: KeyPath<T, U>) -> Promise<U> {
-        let rp = Promise<U>(.pending)
-        pipe {
-            switch $0 {
-            case .fulfilled(let value):
-                on.async(flags: flags) {
-                    rp.box.seal(.fulfilled(value[keyPath: keyPath]))
-                }
-            case .rejected(let error):
-                rp.box.seal(.rejected(error))
-            }
-        }
-        return rp
-    }
-    #endif
-
     /**
       The provided closure is executed when this promise is fulfilled.
 
@@ -148,38 +124,6 @@ public extension Thenable {
         }
         return rp
     }
-
-    #if swift(>=4) && !swift(>=5.2)
-    /**
-    Similar to func `compactMap<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ transform: @escaping(T) throws -> U?) -> Promise<U>`, but accepts a key path instead of a closure.
-
-    - Parameter on: The queue to which the provided key path for value dispatches.
-    - Parameter keyPath: The key path to the value that is using when this Promise is fulfilled. If the value for `keyPath` is `nil` the resulting promise is rejected with `PMKError.compactMap`.
-    - Returns: A new promise that is fulfilled with the value for the provided key path.
-    */
-    func compactMap<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ keyPath: KeyPath<T, U?>) -> Promise<U> {
-        let rp = Promise<U>(.pending)
-        pipe {
-            switch $0 {
-            case .fulfilled(let value):
-                on.async(flags: flags) {
-                    do {
-                        if let rv = value[keyPath: keyPath] {
-                            rp.box.seal(.fulfilled(rv))
-                        } else {
-                            throw PMKError.compactMap(value, U.self)
-                        }
-                    } catch {
-                        rp.box.seal(.rejected(error))
-                    }
-                }
-            case .rejected(let error):
-                rp.box.seal(.rejected(error))
-            }
-        }
-        return rp
-    }
-    #endif
 
     /**
      The provided closure is executed when this promise is fulfilled.
@@ -358,21 +302,6 @@ public extension Thenable where T: Sequence {
         return map(on: on) { try $0.map(transform) }
     }
 
-    #if swift(>=4) && !swift(>=5.2)
-    /**
-     `Promise<[T]>` => `KeyPath<T, U>` => `Promise<[U]>`
-
-         firstly {
-             .value([Person(name: "Max"), Person(name: "Roman"), Person(name: "John")])
-         }.mapValues(\.name).done {
-             // $0 => ["Max", "Roman", "John"]
-         }
-     */
-    func mapValues<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ keyPath: KeyPath<T.Iterator.Element, U>) -> Promise<[U]> {
-        return map(on: on, flags: flags){ $0.map { $0[keyPath: keyPath] } }
-    }
-    #endif
-
     /**
      `Promise<[T]>` => `T` -> `[U]` => `Promise<[U]>`
 
@@ -407,27 +336,6 @@ public extension Thenable where T: Sequence {
             return try foo.compactMap(transform)
         }
     }
-
-    #if swift(>=4) && !swift(>=5.2)
-    /**
-     `Promise<[T]>` => `KeyPath<T, U?>` => `Promise<[U]>`
-
-         firstly {
-             .value([Person(name: "Max"), Person(name: "Roman", age: 26), Person(name: "John", age: 23)])
-         }.compactMapValues(\.age).done {
-             // $0 => [26, 23]
-         }
-     */
-    func compactMapValues<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ keyPath: KeyPath<T.Iterator.Element, U?>) -> Promise<[U]> {
-        return map(on: on, flags: flags) { foo -> [U] in
-          #if !swift(>=4.1)
-            return foo.flatMap { $0[keyPath: keyPath] }
-          #else
-            return foo.compactMap { $0[keyPath: keyPath] }
-          #endif
-        }
-    }
-    #endif
 
     /**
      `Promise<[T]>` => `T` -> `Promise<U>` => `Promise<[U]>`
@@ -481,23 +389,6 @@ public extension Thenable where T: Sequence {
             $0.filter(isIncluded)
         }
     }
-
-    #if swift(>=4) && !swift(>=5.2)
-    /**
-     `Promise<[T]>` => `KeyPath<T, Bool>` => `Promise<[T]>`
-
-         firstly {
-             .value([Person(name: "Max"), Person(name: "Roman", age: 26, isStudent: false), Person(name: "John", age: 23, isStudent: true)])
-         }.filterValues(\.isStudent).done {
-             // $0 => [Person(name: "John", age: 23, isStudent: true)]
-         }
-     */
-    func filterValues(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ keyPath: KeyPath<T.Iterator.Element, Bool>) -> Promise<[T.Iterator.Element]> {
-        return map(on: on, flags: flags) {
-            $0.filter { $0[keyPath: keyPath] }
-        }
-    }
-    #endif
 }
 
 public extension Thenable where T: Collection {

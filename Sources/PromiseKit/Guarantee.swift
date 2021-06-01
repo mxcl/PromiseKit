@@ -143,18 +143,6 @@ public extension Guarantee {
         return rg
     }
 
-    #if swift(>=4) && !swift(>=5.2)
-    func map<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ keyPath: KeyPath<T, U>) -> Guarantee<U> {
-        let rg = Guarantee<U>(.pending)
-        pipe { value in
-            on.async(flags: flags) {
-                rg.box.seal(value[keyPath: keyPath])
-            }
-        }
-        return rg
-    }
-    #endif
-
 	@discardableResult
     func then<U>(on: Dispatcher = conf.D.map, _ body: @escaping(T) -> Guarantee<U>) -> Guarantee<U> {
         let rg = Guarantee<U>(.pending)
@@ -207,21 +195,6 @@ public extension Guarantee where T: Sequence {
         return map(on: on, flags: flags) { $0.map(transform) }
     }
 
-    #if swift(>=4) && !swift(>=5.2)
-    /**
-     `Guarantee<[T]>` => `KeyPath<T, U>` => `Guarantee<[U]>`
-
-         Guarantee.value([Person(name: "Max"), Person(name: "Roman"), Person(name: "John")])
-            .mapValues(\.name)
-            .done {
-                // $0 => ["Max", "Roman", "John"]
-            }
-     */
-    func mapValues<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ keyPath: KeyPath<T.Iterator.Element, U>) -> Guarantee<[U]> {
-        return map(on: on, flags: flags) { $0.map { $0[keyPath: keyPath] } }
-    }
-    #endif
-
     /**
      `Guarantee<[T]>` => `T` -> `[U]` => `Guarantee<[U]>`
 
@@ -255,27 +228,6 @@ public extension Guarantee where T: Sequence {
             #endif
         }
     }
-
-    #if swift(>=4) && !swift(>=5.2)
-    /**
-     `Guarantee<[T]>` => `KeyPath<T, U?>` => `Guarantee<[U]>`
-
-         Guarantee.value([Person(name: "Max"), Person(name: "Roman", age: 26), Person(name: "John", age: 23)])
-            .compactMapValues(\.age)
-            .done {
-                // $0 => [26, 23]
-            }
-     */
-    func compactMapValues<U>(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ keyPath: KeyPath<T.Iterator.Element, U?>) -> Guarantee<[U]> {
-        return map(on: on, flags: flags) { foo -> [U] in
-            #if !swift(>=4.1)
-            return foo.flatMap { $0[keyPath: keyPath] }
-            #else
-            return foo.compactMap { $0[keyPath: keyPath] }
-            #endif
-        }
-    }
-    #endif
 
     /**
      `Guarantee<[T]>` => `T` -> `Guarantee<U>` => `Guarantee<[U]>`
@@ -330,23 +282,6 @@ public extension Guarantee where T: Sequence {
         }
     }
 
-    #if swift(>=4) && !swift(>=5.2)
-    /**
-     `Guarantee<[T]>` => `KeyPath<T, Bool>` => `Guarantee<[T]>`
-
-         Guarantee.value([Person(name: "Max"), Person(name: "Roman", age: 26, isStudent: false), Person(name: "John", age: 23, isStudent: true)])
-            .filterValues(\.isStudent)
-            .done {
-                // $0 => [Person(name: "John", age: 23, isStudent: true)]
-            }
-     */
-    func filterValues(on: DispatchQueue? = conf.Q.map, flags: DispatchWorkItemFlags? = nil, _ keyPath: KeyPath<T.Iterator.Element, Bool>) -> Guarantee<[T.Iterator.Element]> {
-        return map(on: on, flags: flags) {
-            $0.filter { $0[keyPath: keyPath] }
-        }
-    }
-    #endif
-
     /**
      `Guarantee<[T]>` => (`T`, `T`) -> Bool => `Guarantee<[T]>`
 
@@ -387,8 +322,6 @@ public extension Guarantee where T == Void {
         return .value(Void())
     }
 
-#if swift(>=5.1)
-    // ^^ ambiguous in Swift 5.0, testing again in next version
     convenience init(resolver body: (@escaping() -> Void) -> Void) {
         self.init(resolver: { seal in
             body {
@@ -396,7 +329,6 @@ public extension Guarantee where T == Void {
             }
         })
     }
-#endif
 }
 
 public extension DispatchQueue {

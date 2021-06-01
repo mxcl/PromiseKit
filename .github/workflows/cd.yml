@@ -18,12 +18,11 @@ jobs:
         env: pods
 
     - uses: actions/checkout@v2
-      with:
-        submodules: true
 
     - run: pod trunk push --allow-warnings --skip-tests --skip-import-validation
       env:
         COCOAPODS_TRUNK_TOKEN: ${{ secrets.COCOAPODS_TRUNK_TOKEN }}
+        PMKVersion: ${{ github.event.inputs.version }}
 
     - name: Seal Deployment
       uses: bobheadxi/deployments@v0.5.2
@@ -46,6 +45,10 @@ jobs:
         token: ${{ secrets.GITHUB_TOKEN }}
         env: docs
 
+    - run: echo "v=${v:0:1}" >> $GITHUB_ENV
+      env:
+        v: ${{ github.event.inputs.version }}
+
     - uses: actions/checkout@v2
     - run: gem install jazzy
     - run: |
@@ -54,9 +57,9 @@ jobs:
           --module-version ${{ github.event.inputs.version }}
     - run: git remote update
     - run: git checkout gh-pages
-    - run: rm -rf reference/v6
-    - run: mv output reference/v6
-    - run: git add reference/v6
+    - run: rm -rf reference/v$v
+    - run: mv output reference/v$v
+    - run: git add reference/v$v
     - run: git config user.name github-actions
     - run: git config user.email github-actions@github.com
     - run: git commit -m 'Updated docs for v${{ github.event.inputs.version }}'

@@ -24,7 +24,7 @@ What’s the real problem? `then` *must* return a `Promise`, and you're trying t
 
 ```swift
 return firstly {
-      URLSession.shared.dataTask(.promise, with: url)
+    URLSession.shared.dataTask(.promise, with: url)
 }.compactMap {
     JSONSerialization.jsonObject(with: $0.data) as? [String: Any]
 }.map { dict in

@@ -99,6 +99,7 @@ class CancellationTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
+    @available(watchOS 6.2, *)
     func testDoesntCrashSwift() {
       #if os(macOS)
         // Previously exposed a bridging crash in Swift

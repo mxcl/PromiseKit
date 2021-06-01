@@ -141,7 +141,6 @@ class WrapTests: XCTestCase {
     }
 
     func testSwiftResultSuccess() {
-    #if swift(>=5.0)
         let ex = expectation(description: "")
         let kittenFetcher = KittenFetcher(value: 2, error: nil)
         Promise<Int> { seal in
@@ -152,11 +151,9 @@ class WrapTests: XCTestCase {
         }.silenceWarning()
 
         waitForExpectations(timeout: 1)
-    #endif
     }
 
     func testSwiftResultError() {
-    #if swift(>=5.0)
         let ex = expectation(description: "")
 
         let kittenFetcher = KittenFetcher(value: nil, error: Error.test)
@@ -170,7 +167,6 @@ class WrapTests: XCTestCase {
         }
 
         waitForExpectations(timeout: 1)
-    #endif
     }
 
     func testIsFulfilled() {
@@ -218,14 +214,12 @@ class WrapTests: XCTestCase {
         bar().done(ex.fulfill).cauterize()
         wait(for: [ex], timeout: 10)
 
-    #if swift(>=5.2)
         // ^^ ambiguous in Swift 5.0 & 5.1, testing again in next version
         let ex2 = expectation(description: "")
         Guarantee<Void> { seal in
             after(.microseconds(10)).done(seal)
         }.done(ex2.fulfill)
         wait(for: [ex2], timeout: 10)
-    #endif
     }
 }
 

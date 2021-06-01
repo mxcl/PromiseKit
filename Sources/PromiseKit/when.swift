@@ -274,7 +274,6 @@ No more than three downloads will occur simultaneously. Downloads will continue 
 - Returns: A new promise that resolves once all the provided promises resolve. The array is ordered the same as the input, ie. the result order is *not* resolution order.
 - SeeAlso: `when(resolved:)`
 */
-#if swift(>=5.3)
 public func when<It: IteratorProtocol>(resolved promiseIterator: It, concurrently: Int)
     -> Guarantee<[Result<It.Element.T, Error>]> where It.Element: Thenable {
     guard concurrently > 0 else {
@@ -346,7 +345,6 @@ public func when<It: IteratorProtocol>(resolved promiseIterator: It, concurrentl
 
     return root.guarantee
 }
-#endif
 
 /// Waits on all provided Guarantees.
 public func when(_ guarantees: Guarantee<Void>...) -> Guarantee<Void> {

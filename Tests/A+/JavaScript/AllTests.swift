@@ -5,18 +5,13 @@
 //  Created by Lois Di Qual on 2/28/18.
 //
 
-import XCTest
-import PromiseKit
-
-#if !os(Linux)
-// can disable better when we don’t need --generate-linuxmain
+#if !os(Linux) && !os(watchOS)
 import JavaScriptCore
-#endif
+import PromiseKit
+import XCTest
 
 class AllTests: XCTestCase {
-    
     func testAll() {
-    #if !os(Linux)        
         let scriptPath = URL(fileURLWithPath: #file).deletingLastPathComponent().appendingPathComponent("build/build.js")
         guard FileManager.default.fileExists(atPath: scriptPath.path) else {
             return print("Skipping A+.js: see README for instructions on how to build")
@@ -80,6 +75,7 @@ class AllTests: XCTestCase {
         // Call `runTests`
         runTests.call(withArguments: [adapter, onFailValue, onDoneValue, testName])
         self.wait(for: [expectation], timeout: 60)
-    #endif
     }
 }
+
+#endif
