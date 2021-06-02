@@ -10,7 +10,7 @@ class GuaranteeTests: XCTestCase {
             XCTAssertEqual(1, $0)
             ex.fulfill()
         }
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testMap() {
@@ -23,7 +23,7 @@ class GuaranteeTests: XCTestCase {
             ex.fulfill()
         }
 
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testMapByKeyPath() {
@@ -34,7 +34,7 @@ class GuaranteeTests: XCTestCase {
             ex.fulfill()
         }
 
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testWait() {
@@ -51,7 +51,7 @@ class GuaranteeTests: XCTestCase {
                 ex.fulfill()
             }
 
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testMapValuesByKeyPath() {
@@ -64,7 +64,7 @@ class GuaranteeTests: XCTestCase {
                 ex.fulfill()
             }
 
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testFlatMapValues() {
@@ -77,7 +77,7 @@ class GuaranteeTests: XCTestCase {
                 ex.fulfill()
             }
 
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testCompactMapValues() {
@@ -90,7 +90,7 @@ class GuaranteeTests: XCTestCase {
                 ex.fulfill()
             }
 
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testCompactMapValuesByKeyPath() {
@@ -103,7 +103,7 @@ class GuaranteeTests: XCTestCase {
                 ex.fulfill()
             }
 
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testThenMap() {
@@ -117,7 +117,7 @@ class GuaranteeTests: XCTestCase {
                 ex.fulfill()
             }
 
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testThenFlatMap() {
@@ -131,7 +131,7 @@ class GuaranteeTests: XCTestCase {
                 ex.fulfill()
             }
 
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testFilterValues() {
@@ -145,7 +145,7 @@ class GuaranteeTests: XCTestCase {
                 ex.fulfill()
             }
 
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testFilterValuesByKeyPath() {
@@ -159,7 +159,7 @@ class GuaranteeTests: XCTestCase {
                 ex.fulfill()
             }
 
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testSorted() {
@@ -173,7 +173,7 @@ class GuaranteeTests: XCTestCase {
                 ex.fulfill()
             }
 
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testSortedBy() {
@@ -187,7 +187,7 @@ class GuaranteeTests: XCTestCase {
                 ex.fulfill()
             }
 
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testNoAmbiguityForValue() {
@@ -198,6 +198,6 @@ class GuaranteeTests: XCTestCase {
         when(fulfilled: a, b, c).done {
             ex.fulfill()
         }.cauterize()
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 }

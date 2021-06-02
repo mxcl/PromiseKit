@@ -11,7 +11,7 @@ class ThenableTests: XCTestCase {
         }.catch(policy: .allErrors) {
             $0.isCancelled ? ex1.fulfill() : XCTFail()
         }.cancel()
-        wait(for: [ex1], timeout: 1)
+        wait(for: [ex1], timeout: 5)
     }
 
     func testCompactMap() {
@@ -23,7 +23,7 @@ class ThenableTests: XCTestCase {
         }.catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 
     func testCompactMapThrows() {
@@ -41,7 +41,7 @@ class ThenableTests: XCTestCase {
             }
             ex.fulfill()
         }
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 
     func testRejectedPromiseCompactMap() {
@@ -57,7 +57,7 @@ class ThenableTests: XCTestCase {
             }
             ex.fulfill()
         }.cancel()
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 
     func testPMKErrorCompactMap() {
@@ -67,7 +67,7 @@ class ThenableTests: XCTestCase {
         }.catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 
     func testCompactMapValues() {
@@ -82,7 +82,7 @@ class ThenableTests: XCTestCase {
         }.catch(policy: .allErrors) { _ in
             XCTFail()
         }
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 
     func testThenMap() {
@@ -96,7 +96,7 @@ class ThenableTests: XCTestCase {
         }.catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail()
         }
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 
     func testThenFlatMap() {
@@ -111,7 +111,7 @@ class ThenableTests: XCTestCase {
         }.catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 
     func testLastValueForEmpty() {
@@ -133,7 +133,7 @@ class ThenableTests: XCTestCase {
         }.catch(policy: .allErrors) {
             $0.isCancelled ? XCTFail() : ex.fulfill()
         }.cancel()
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 
     func testBarrier() {
@@ -146,7 +146,7 @@ class ThenableTests: XCTestCase {
         }.catch { _ in
             XCTFail()
         }
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testDispatchFlagsSyntax() {
@@ -159,6 +159,6 @@ class ThenableTests: XCTestCase {
         }.catch { _ in
             XCTFail()
         }
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 }

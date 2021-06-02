@@ -21,7 +21,7 @@ class CLGeocoderTests: XCTestCase {
             XCTAssertEqual(x, [dummyPlacemark])
             ex.fulfill()
         }.cauterize()
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func test_geocodeAddressDictionary() {
@@ -38,7 +38,7 @@ class CLGeocoderTests: XCTestCase {
             XCTAssertEqual(x, [dummyPlacemark])
             ex.fulfill()
         }.cauterize()
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func test_geocodeAddressString() {
@@ -55,7 +55,7 @@ class CLGeocoderTests: XCTestCase {
             XCTAssertEqual(x, [dummyPlacemark])
             ex.fulfill()
         }.cauterize()
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
 #if !os(tvOS) && swift(>=3.2)
@@ -75,7 +75,7 @@ class CLGeocoderTests: XCTestCase {
             XCTAssertEqual(x, [dummyPlacemark])
             ex.fulfill()
         }.cauterize()
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func test_geocodePostalAddressLocale() {
@@ -94,7 +94,7 @@ class CLGeocoderTests: XCTestCase {
             XCTAssertEqual(x, [dummyPlacemark])
             ex.fulfill()
         }.cauterize()
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
     
     func test_reverseGeocodeLocationLocale() {
@@ -113,7 +113,7 @@ class CLGeocoderTests: XCTestCase {
             XCTAssertEqual(x, [dummyPlacemark])
             ex.fulfill()
         }.cauterize()
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 #endif
 }

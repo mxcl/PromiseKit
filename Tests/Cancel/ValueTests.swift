@@ -10,7 +10,7 @@ class ValueTests: XCTestCase {
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
         }.cancel()
         
-        wait(for: [exComplete], timeout: 1)
+        wait(for: [exComplete], timeout: 5)
     }
     
     func testValueDone() {
@@ -21,7 +21,7 @@ class ValueTests: XCTestCase {
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
         }.cancel()
         
-        wait(for: [exComplete], timeout: 1)
+        wait(for: [exComplete], timeout: 5)
     }
     
     func testValueThen() {
@@ -36,7 +36,7 @@ class ValueTests: XCTestCase {
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
         }.cancel()
         
-        wait(for: [exComplete], timeout: 1)
+        wait(for: [exComplete], timeout: 5)
     }
     
     func testFirstlyValueDone() {
@@ -50,7 +50,7 @@ class ValueTests: XCTestCase {
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
         }.cancel()
         
-        wait(for: [exComplete], timeout: 1)
+        wait(for: [exComplete], timeout: 5)
     }
     
     func testFirstlyThenValueDone() {
@@ -67,7 +67,7 @@ class ValueTests: XCTestCase {
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
         }.cancel()
 
-        wait(for: [exComplete], timeout: 1)
+        wait(for: [exComplete], timeout: 5)
     }
     
     func testFirstlyValueDifferentContextDone() {
@@ -82,7 +82,7 @@ class ValueTests: XCTestCase {
         }
         p.cancel()
         
-        wait(for: [exComplete], timeout: 1)
+        wait(for: [exComplete], timeout: 5)
     }
     
     func testFirstlyValueDoneDifferentContext() {
@@ -96,7 +96,7 @@ class ValueTests: XCTestCase {
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
         }.cancel()
         
-        wait(for: [exComplete], timeout: 1)
+        wait(for: [exComplete], timeout: 5)
     }
     
     func testCancelForPromise_Then() {
@@ -115,7 +115,7 @@ class ValueTests: XCTestCase {
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
         }.cancel()
         
-        wait(for: [exComplete], timeout: 1)
+        wait(for: [exComplete], timeout: 5)
     }
 
     func testCancelForPromise_ThenDone() {
@@ -134,6 +134,6 @@ class ValueTests: XCTestCase {
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
         }.cancel()
 
-        wait(for: [exComplete], timeout: 1)
+        wait(for: [exComplete], timeout: 5)
     }
 }

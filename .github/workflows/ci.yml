@@ -5,7 +5,6 @@ on:
       - Sources/**
       - Tests/**
       - .github/workflows/ci.yml
-  workflow_dispatch:
 jobs:
   auto-cancel:
     runs-on: ubuntu-latest
@@ -14,12 +13,12 @@ jobs:
 
   linux:
     name: linux
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         swift:
         - 5.3
-        - 5.4
+        - 5.4-focal  # Swift 5.4 requires llvm-cov v11
     container:
       image: swift:${{ matrix.swift }}
     steps:
@@ -27,10 +26,9 @@ jobs:
     - run: swift test --enable-code-coverage --parallel --enable-test-discovery
 
     - name: Generate Coverage Report
-      if: ${{ matrix.swift == '5.3' }}  # 5.4 and above needs llvm-cov-12
       run: |
         apt-get -qq update
-        apt-get -qq install curl
+        apt-get -qq install curl  # for codecov action 🙄
         b=$(swift build --show-bin-path)
         llvm-cov export \
           -format lcov \

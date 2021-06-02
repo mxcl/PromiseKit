@@ -40,7 +40,7 @@ class DispatcherTests: XCTestCase {
         }.catch(on: dispatcher) { _ in
             ex.fulfill()
         }
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
         XCTAssertEqual(self.dispatcher.dispatchCount, 2)
     }
     
@@ -88,7 +88,7 @@ class DispatcherTests: XCTestCase {
             ex.fulfill()
         }.cauterize()
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
         PromiseKit.conf.D = oldConf
         
     }
@@ -182,7 +182,7 @@ class DispatcherTests: XCTestCase {
             XCTFail()
         }
 
-       waitForExpectations(timeout: 1)
+       waitForExpectations(timeout: 5)
     }
     
     func testRecoverIsCancelled() {
@@ -217,7 +217,7 @@ class DispatcherTests: XCTestCase {
             XCTFail()
         }
 
-       waitForExpectations(timeout: 1)
+       waitForExpectations(timeout: 5)
     }
     
     func testCatchOnly() {
@@ -270,7 +270,7 @@ class DispatcherTests: XCTestCase {
             XCTFail()
         }
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
     
      func testCatchOnlyIsCancelled() {
@@ -323,7 +323,7 @@ class DispatcherTests: XCTestCase {
             XCTFail()
         }
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
     
    func testRecoverOnly() {
@@ -383,7 +383,7 @@ class DispatcherTests: XCTestCase {
             XCTFail()
         }
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
    func testRecoverOnlyIsCancelled() {
@@ -458,7 +458,7 @@ class DispatcherTests: XCTestCase {
         }.catch { _ in
             XCTFail()
         }
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
     
     @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
@@ -471,7 +471,7 @@ class DispatcherTests: XCTestCase {
         }.catch { _ in
             ex.fulfill()
         }
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
 }

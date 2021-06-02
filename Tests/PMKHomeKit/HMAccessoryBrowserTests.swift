@@ -25,7 +25,7 @@ class HMAccessoryBrowserTests: XCTestCase {
                 ex.fulfill()
             }.cauterize()
             
-            waitForExpectations(timeout: 1, handler: nil)
+            waitForExpectations(timeout: 5, handler: nil)
         }
     }
     
@@ -38,7 +38,7 @@ class HMAccessoryBrowserTests: XCTestCase {
             ex.fulfill()
         }
         
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 }
 

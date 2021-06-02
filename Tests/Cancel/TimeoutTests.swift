@@ -17,7 +17,7 @@ class TimeoutTests: XCTestCase {
                 XCTFail()
             }
         }
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testReset() {
@@ -35,7 +35,7 @@ class TimeoutTests: XCTestCase {
                 XCTFail()
             }
         }
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
         XCTAssert(p.isCancelled)
     }
     
@@ -53,7 +53,7 @@ class TimeoutTests: XCTestCase {
                     XCTFail()
                 }
         }
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
         XCTAssert(p.isCancelled)
     }
     
@@ -65,7 +65,7 @@ class TimeoutTests: XCTestCase {
         }.catch(policy: .allErrors) { _ in
             XCTFail()
         }
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testCancelBeforeTimeout() {
@@ -84,7 +84,7 @@ class TimeoutTests: XCTestCase {
             }
         }
         p.cancel()
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testCancelRaceBeforeTimeout() {
@@ -102,7 +102,7 @@ class TimeoutTests: XCTestCase {
             }
         }.cancelContext
         ctxt.cancel()
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testMixTypes() {
@@ -120,6 +120,6 @@ class TimeoutTests: XCTestCase {
         }.catch(policy: .allErrors) { _ in
             XCTFail()
         }
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 }

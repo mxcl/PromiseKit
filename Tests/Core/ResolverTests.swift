@@ -56,7 +56,7 @@ class WrapTests: XCTestCase {
             ex.fulfill()
         }.silenceWarning()
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testError() {
@@ -72,7 +72,7 @@ class WrapTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testInvalidCallingConvention() {
@@ -88,7 +88,7 @@ class WrapTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testInvertedCallingConvention() {
@@ -101,7 +101,7 @@ class WrapTests: XCTestCase {
             ex.fulfill()
         }.silenceWarning()
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
 
     }
 
@@ -121,7 +121,7 @@ class WrapTests: XCTestCase {
             kf2.fetchWithCompletionBlock3(block: seal.resolve)
         }.catch { _ in ex2.fulfill() }
 
-        wait(for: [ex1, ex2] ,timeout: 1)
+        wait(for: [ex1, ex2] ,timeout: 5)
     }
 
     func testVoidCompletionValue() {
@@ -137,7 +137,7 @@ class WrapTests: XCTestCase {
             kf2.fetchWithCompletionBlock4(block: seal.resolve)
         }.catch { _ in ex2.fulfill() }
 
-        wait(for: [ex1, ex2], timeout: 1)
+        wait(for: [ex1, ex2], timeout: 5)
     }
 
     func testSwiftResultSuccess() {
@@ -150,7 +150,7 @@ class WrapTests: XCTestCase {
             ex.fulfill()
         }.silenceWarning()
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testSwiftResultError() {
@@ -166,7 +166,7 @@ class WrapTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testIsFulfilled() {
@@ -194,7 +194,7 @@ class WrapTests: XCTestCase {
             let foo = Foo()
             foo.ex = ex
         }
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testVoidResolverFulfillAmbiguity() {
@@ -212,14 +212,14 @@ class WrapTests: XCTestCase {
 
         let ex = expectation(description: "")
         bar().done(ex.fulfill).cauterize()
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
 
         // ^^ ambiguous in Swift 5.0 & 5.1, testing again in next version
         let ex2 = expectation(description: "")
         Guarantee<Void> { seal in
             after(.microseconds(10)).done(seal)
         }.done(ex2.fulfill)
-        wait(for: [ex2], timeout: 10)
+        wait(for: [ex2], timeout: 5)
     }
 }
 

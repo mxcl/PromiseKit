@@ -35,7 +35,7 @@ class CancellableDefaultDispatchQueueTest: XCTestCase {
 
         XCTAssertTrue(Thread.isMainThread)
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testOverrodeDefaultCatchQueue() {
@@ -50,7 +50,7 @@ class CancellableDefaultDispatchQueueTest: XCTestCase {
 
         XCTAssertTrue(Thread.isMainThread)
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testOverrodeDefaultAlwaysQueue() {
@@ -69,6 +69,6 @@ class CancellableDefaultDispatchQueueTest: XCTestCase {
 
         XCTAssertTrue(Thread.isMainThread)
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 }

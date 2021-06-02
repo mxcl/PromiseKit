@@ -5,7 +5,9 @@ PromiseKit 7 adds clear and concise cancellation abilities to promises and to th
 ```swift
 UIApplication.shared.isNetworkActivityIndicatorVisible = true
 
-let fetchImage = URLSession.shared.dataTask(.promise, with: url).cancellize().compactMap{ UIImage(data: $0.data) }
+let fetchImage = URLSession.shared.dataTask(.promise, with: url)
+    .cancellize()
+    .compactMap{ UIImage(data: $0.data) }
 let fetchLocation = CLLocationManager.requestLocation().cancellize().lastValue
 
 let finalizer = firstly {
@@ -16,20 +18,23 @@ let finalizer = firstly {
 }.ensure {
     UIApplication.shared.isNetworkActivityIndicatorVisible = false
 }.catch(policy: .allErrors) { error in
-    /* 'catch' will be invoked with 'PMKError.cancelled' when cancel is called on the context.
-       Use the default policy of '.allErrorsExceptCancellation' to ignore cancellation errors. */
+    // `catch` will be invoked with `PMKError.cancelled` when cancel is called
+    // on the context. Use the default policy of `.allErrorsExceptCancellation`
+    // to ignore cancellation errors.
     self.show(UIAlertController(for: error), sender: self)
 }
 
 //…
 
-// Cancel currently active tasks and reject all cancellable promises with 'PMKError.cancelled'.
-// 'cancel()' can be called from any thread at any time.
+// Cancel currently active tasks and reject all cancellable promises
+// with 'PMKError.cancelled'.  `cancel()` can be called from any thread
+// at any time.
 finalizer.cancel()
 
-/* 'finalizer' here refers to the 'CancellableFinalizer' for the chain.  Calling 'cancel' on
-   any promise in the chain or on the finalizer cancels the entire chain.  Therefore
-   calling 'cancel' on the finalizer cancels everything. */
+// `finalizer` here refers to the `CancellableFinalizer` for the chain.
+// Calling 'cancel' on any promise in the chain or on the finalizer
+// cancels the entire chain.  Therefore calling `cancel` on the finalizer
+// cancels everything.
 ```
 
 # Cancel Chains

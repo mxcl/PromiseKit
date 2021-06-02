@@ -98,7 +98,7 @@ class WrapTests: XCTestCase {
         }.catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testError() {
@@ -111,7 +111,7 @@ class WrapTests: XCTestCase {
             $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
     
     func testErrorNoDelay() {
@@ -126,7 +126,7 @@ class WrapTests: XCTestCase {
             }
         }.cancel()
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
     
     func testErrorCancellableKitten() {
@@ -139,7 +139,7 @@ class WrapTests: XCTestCase {
             error.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
     
     func testInvalidCallingConvention() {
@@ -152,7 +152,7 @@ class WrapTests: XCTestCase {
             error.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testInvalidCallingConventionCancellableKitten() {
@@ -165,7 +165,7 @@ class WrapTests: XCTestCase {
             error.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testInvertedCallingConvention() {
@@ -180,7 +180,7 @@ class WrapTests: XCTestCase {
             error.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testInvertedCallingConventionCancellableKitten() {
@@ -195,7 +195,7 @@ class WrapTests: XCTestCase {
             error.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testNonOptionalFirstParameter() {
@@ -218,7 +218,7 @@ class WrapTests: XCTestCase {
             error.isCancelled ? ex2.fulfill() : XCTFail()
         }.cancel()
 
-        wait(for: [ex1, ex2] ,timeout: 1)
+        wait(for: [ex1, ex2] ,timeout: 5)
     }
 
     func testNonOptionalFirstParameterCancellableKitten() {
@@ -241,7 +241,7 @@ class WrapTests: XCTestCase {
             error.isCancelled ? ex2.fulfill() : XCTFail()
         }.cancel()
 
-        wait(for: [ex1, ex2] ,timeout: 1)
+        wait(for: [ex1, ex2] ,timeout: 5)
     }
 
     func testVoidCompletionValue() {
@@ -261,7 +261,7 @@ class WrapTests: XCTestCase {
             error.isCancelled ? ex2.fulfill() : XCTFail()
         }.cancel()
 
-        wait(for: [ex1, ex2], timeout: 1)
+        wait(for: [ex1, ex2], timeout: 5)
     }
 
     func testVoidCompletionValueCancellableKitten() {
@@ -281,7 +281,7 @@ class WrapTests: XCTestCase {
             error.isCancelled ? ex2.fulfill() : XCTFail()
         }.cancel()
 
-        wait(for: [ex1, ex2], timeout: 1)
+        wait(for: [ex1, ex2], timeout: 5)
     }
 
     func testIsFulfilled() {
@@ -329,7 +329,7 @@ class WrapTests: XCTestCase {
             let foo = Foo()
             foo.ex = ex
         }
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 }
 

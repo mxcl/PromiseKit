@@ -18,7 +18,7 @@ class RegressionTests: XCTestCase {
                     XCTFail()
                 }
             }
-            wait(for: [ex], timeout: 1)
+            wait(for: [ex], timeout: 5)
         }
         
         do {
@@ -35,7 +35,7 @@ class RegressionTests: XCTestCase {
                     XCTFail()
                 }
             }
-            wait(for: [ex], timeout: 1)
+            wait(for: [ex], timeout: 5)
         }
         
         do {
@@ -51,7 +51,7 @@ class RegressionTests: XCTestCase {
                 }
                 ex.fulfill()
             }
-            wait(for: [ex], timeout: 1)
+            wait(for: [ex], timeout: 5)
         }
     }
 }

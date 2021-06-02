@@ -12,7 +12,7 @@ class GuaranteeTests: XCTestCase {
         }.catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 
     func testWait() {
@@ -25,7 +25,7 @@ class GuaranteeTests: XCTestCase {
         } catch {
             error.isCancelled ? ex.fulfill() : XCTFail()
         }
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
     
     func testThenMap() {
@@ -39,7 +39,7 @@ class GuaranteeTests: XCTestCase {
             $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
 
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
     
     func testCancellable() {
@@ -64,7 +64,7 @@ class GuaranteeTests: XCTestCase {
             $0.isCancelled ? ex.fulfill() : XCTFail("\($0)")
         } .cancel()
 
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 
     func testSetCancellable() {
@@ -90,7 +90,7 @@ class GuaranteeTests: XCTestCase {
             $0.isCancelled ? ex.fulfill() : XCTFail("\($0)")
         } .cancel()
 
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 }
 

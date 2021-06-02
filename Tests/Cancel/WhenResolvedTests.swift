@@ -59,7 +59,7 @@ class JoinTests: XCTestCase {
         seal2.fulfill(())
         seal3.fulfill(())
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
 
         XCTAssert(cancelled, "Cancel error caught")
         XCTAssert(promise1.isCancelled, "Promise 1 cancelled")

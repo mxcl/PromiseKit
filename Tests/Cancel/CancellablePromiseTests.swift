@@ -37,7 +37,7 @@ class CancellablePromiseTests: XCTestCase {
         
         promise.cancel()
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
     
     func testReturnTypeForAMultiLineClosureIsNotExplicitlyStated() {
@@ -56,7 +56,7 @@ class CancellablePromiseTests: XCTestCase {
             XCTFail()
         }
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
     
     func testTryingToCancelAStandardPromiseChain() {
@@ -83,7 +83,7 @@ class CancellablePromiseTests: XCTestCase {
         
         promise.cancel()  /// <-- ERROR: Value of type 'PMKFinalizer' has no member 'cancel'
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
     
     func testCancel() {
@@ -100,7 +100,7 @@ class CancellablePromiseTests: XCTestCase {
         p.resolver.fulfill(3)
         p.promise.cancel()
 
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
     
     func testFirstly() {
@@ -116,7 +116,7 @@ class CancellablePromiseTests: XCTestCase {
             $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
         
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
     
     func testFirstlyWithPromise() {
@@ -132,7 +132,7 @@ class CancellablePromiseTests: XCTestCase {
             $0.isCancelled ? ex.fulfill() : XCTFail("\($0)")
         }.cancel()
         
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
     
     func testThenMapSuccess() {
@@ -147,7 +147,7 @@ class CancellablePromiseTests: XCTestCase {
         }.catch(policy: .allErrors) { _ in
             XCTFail()
         }
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
     
     func testThenMapCancel() {
@@ -163,7 +163,7 @@ class CancellablePromiseTests: XCTestCase {
         }.catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
     
     func testChain() {
@@ -178,7 +178,7 @@ class CancellablePromiseTests: XCTestCase {
         }.catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
     
     func testBridge() {
@@ -200,6 +200,6 @@ class CancellablePromiseTests: XCTestCase {
             XCTFail()
         }
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 }

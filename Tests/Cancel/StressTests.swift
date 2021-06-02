@@ -25,7 +25,7 @@ class StressTests: XCTestCase {
             }.cancel()
         }, fulfill: { "ok" })
 
-        waitForExpectations(timeout: 10, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
@@ -48,7 +48,7 @@ class StressTests: XCTestCase {
             $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
         
-        waitForExpectations(timeout: 10, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testZalgoDataRace() {
@@ -73,7 +73,7 @@ class StressTests: XCTestCase {
             return "ok"
         })
 
-        waitForExpectations(timeout: 10, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
     
     class StressTask: Cancellable {
@@ -98,7 +98,7 @@ class StressTests: XCTestCase {
             context.cancel()
         })
         
-        waitForExpectations(timeout: 10, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
     
     func testCancelContextConcurrentAppend() {
@@ -113,7 +113,7 @@ class StressTests: XCTestCase {
             context.append(cancellable: task, reject: nil, thenable: promise)
         })
         
-        waitForExpectations(timeout: 10, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testCancelContextConcurrentCancel() {
@@ -128,7 +128,7 @@ class StressTests: XCTestCase {
             context.cancel()
         })
         
-        waitForExpectations(timeout: 10, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 }
 

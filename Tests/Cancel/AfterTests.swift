@@ -15,36 +15,36 @@ class AfterTests: XCTestCase {
         let ex2 = expectation(description: "")
         let cc2 = after(seconds: 0).cancellize().done(fail).catch(policy: .allErrors, ex2.fulfill)
         cc2.cancel()
-        waitForExpectations(timeout: 2, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
         
         let ex3 = expectation(description: "")
         let cc3 = after(.seconds(0)).cancellize().done(fail).catch(policy: .allErrors, ex3.fulfill)
         cc3.cancel()
-        waitForExpectations(timeout: 2, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
     
     func testNegative() {
         let ex2 = expectation(description: "")
         let cc2 = after(seconds: -1).cancellize().done(fail).catch(policy: .allErrors, ex2.fulfill)
         cc2.cancel()
-        waitForExpectations(timeout: 2, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
         
         let ex3 = expectation(description: "")
         let cc3 = after(.seconds(-1)).cancellize().done(fail).catch(policy: .allErrors, ex3.fulfill)
         cc3.cancel()
-        waitForExpectations(timeout: 2, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
     
     func testPositive() {
         let ex2 = expectation(description: "")
         let cc2 = after(seconds: 1).cancellize().done(fail).catch(policy: .allErrors, ex2.fulfill)
         cc2.cancel()
-        waitForExpectations(timeout: 2, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
         
         let ex3 = expectation(description: "")
         let cc3 = after(.seconds(1)).cancellize().done(fail).catch(policy: .allErrors, ex3.fulfill)
         cc3.cancel()
-        waitForExpectations(timeout: 2, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testCancellableAfter() {
@@ -87,7 +87,7 @@ class AfterTests: XCTestCase {
             error.isCancelled ? exCancel.fulfill() : XCTFail("unexpected error \(error)")
         }.cancel()
         
-        wait(for: [exComplete, exCancelComplete, exCancel], timeout: 1)
+        wait(for: [exComplete, exCancelComplete, exCancel], timeout: 5)
     }
     
     func testCancelForPromise_Done() {
@@ -104,7 +104,7 @@ class AfterTests: XCTestCase {
         
         promise.cancel()
         
-        wait(for: [exComplete], timeout: 1)
+        wait(for: [exComplete], timeout: 5)
     }
     
     func testCancelForGuarantee_Done() {
@@ -116,6 +116,6 @@ class AfterTests: XCTestCase {
             error.isCancelled ? exComplete.fulfill() : XCTFail("error: \(error)")
         }.cancel()
         
-        wait(for: [exComplete], timeout: 1)
+        wait(for: [exComplete], timeout: 5)
     }
 }

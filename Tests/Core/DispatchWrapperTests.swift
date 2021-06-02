@@ -44,7 +44,7 @@ class DispatchWrapperTests: XCTestCase {
         }.catch(on: .global()) { _ in
             XCTFail()
         }
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
     
     func testWrappedPromiseRecoverAPI() {
@@ -97,7 +97,7 @@ class DispatchWrapperTests: XCTestCase {
             value += 1_000_000
             ex.fulfill()
         }
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
         XCTAssert(value == 1_111_111)
         
         let g: Any = Promise.value(42).recover(on: .global()) { error in
@@ -121,7 +121,7 @@ class DispatchWrapperTests: XCTestCase {
             XCTAssert(error == .errorOne)
             ex.fulfill()
         }.cauterize()
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testWrappedPromiseEnsureAPI() {
@@ -136,7 +136,7 @@ class DispatchWrapperTests: XCTestCase {
             value += 100
             ex.fulfill()
         }.cauterize()
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
         XCTAssert(value == 111)
     }
     
@@ -163,7 +163,7 @@ class DispatchWrapperTests: XCTestCase {
             XCTAssert(v == [72, 82])
             ex.fulfill()
         }.cauterize()
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testWrappedGuaranteeAPI() {
@@ -182,6 +182,6 @@ class DispatchWrapperTests: XCTestCase {
             XCTAssert($0 == [72, 72])
             ex.fulfill()
         }
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 }

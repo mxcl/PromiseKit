@@ -50,7 +50,7 @@ class DispatcherTests: XCTestCase {
             XCTAssertEqual(self.dispatcherB.dispatchCount, 1, "return dispatcher count != 1")
             ex.fulfill()
         }.cauterize()
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
         let testQueue = DispatchQueue(label: "test queue")
         PromiseKit.conf.D.map = testQueue  // Assign DispatchQueue to Dispatcher variable
         PromiseKit.conf.Q.return = testQueue   // Assign DispatchQueue to DispatchQueue variable
@@ -73,7 +73,7 @@ class DispatcherTests: XCTestCase {
         }.catch(on: dispatcher) { _ in
             ex.fulfill()
         }
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
         XCTAssertEqual(self.dispatcher.dispatchCount, 2)
     }
     
@@ -198,7 +198,7 @@ class DispatcherTests: XCTestCase {
             XCTFail()
         }
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
@@ -213,7 +213,7 @@ class DispatcherTests: XCTestCase {
             XCTAssertEqual(one, 1)
             ex.fulfill()
         }
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
     
     @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
@@ -228,7 +228,7 @@ class DispatcherTests: XCTestCase {
         }.catch { _ in
             ex.fulfill()
         }
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
 }
