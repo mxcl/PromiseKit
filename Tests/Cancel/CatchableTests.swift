@@ -27,7 +27,7 @@ class CatchableTests: XCTestCase {
 
             p.cancel(with: error)
 
-            wait(for: [ex.0, ex.1], timeout: 10)
+            wait(for: [ex.0, ex.1], timeout: 5)
         }
 
         helper(error: Error.dummy)
@@ -50,7 +50,7 @@ class CatchableTests: XCTestCase {
 
         p.cancel(with: Error.dummy)
 
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 }
 
@@ -61,7 +61,7 @@ extension CatchableTests {
         func helper(policy: CatchPolicy, error: Swift.Error, line: UInt = #line) {
             let ex = expectation(description: "error caught")
             CancellablePromise(error: error).recover { _ in }.done { _ in XCTFail() }.catch(policy: .allErrors, ex.fulfill).cancel()
-            wait(for: [ex], timeout: 1)
+            wait(for: [ex], timeout: 5)
         }
 
         helper(policy: .allErrorsExceptCancellation, error: Error.dummy)
@@ -72,7 +72,7 @@ extension CatchableTests {
         let ex2 = expectation(description: "cancel caught")
         let d2 = CancellablePromise(error: Error.cancelled).recover(policy: .allErrors) { _ in }.done(ex2.fulfill)
         d2.cancel()
-        wait(for: [ex2], timeout: 1)
+        wait(for: [ex2], timeout: 5)
     }
 
     func test__void_specialized_full_recover__fulfilled_path() {
@@ -84,13 +84,13 @@ extension CatchableTests {
         }.catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
 
         let ex2 = expectation(description: "")
         let promise = CancellablePromise()
         promise.cancel()
         promise.recover(policy: .allErrors) { _ in }.done(ex2.fulfill).catch(policy: .allErrors) { _ in XCTFail() }
-        wait(for: [ex2], timeout: 1)
+        wait(for: [ex2], timeout: 5)
     }
 
     func test__void_specialized_conditional_recover() {
@@ -104,7 +104,7 @@ extension CatchableTests {
                 XCTFail()
             }
             promise.cancel()
-            wait(for: [ex], timeout: 1)
+            wait(for: [ex], timeout: 5)
         }
 
         func helperCatch(policy: CatchPolicy, error: Swift.Error, line: UInt = #line) {
@@ -119,7 +119,7 @@ extension CatchableTests {
                 $0.isCancelled ? ex.fulfill() : XCTFail()
             }
             promise.cancel()
-            wait(for: [ex], timeout: 1)
+            wait(for: [ex], timeout: 5)
         }
 
         for error in [Error.dummy as Swift.Error, Error.cancelled] {
@@ -137,7 +137,7 @@ extension CatchableTests {
             }.catch(policy: .allErrors) { _ in
                 ex.fulfill()
             }.cancel()
-            wait(for: [ex], timeout: 1)
+            wait(for: [ex], timeout: 5)
         }
 
         for error in [Error.dummy, Error.cancelled] {
@@ -154,7 +154,7 @@ extension CatchableTests {
             XCTAssertEqual(Error.cancelled, $0 as? Error)
             ex.fulfill()
         }.cancel()
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 
     func test__void_specialized_conditional_recover__fulfilled_path() {
@@ -167,7 +167,7 @@ extension CatchableTests {
             ex.fulfill()
         }
         p.cancel()
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 }
 
@@ -181,7 +181,7 @@ extension CatchableTests {
             }.done { _ in
                 XCTFail()
             }.catch(policy: .allErrors, ex.fulfill).cancel()
-            wait(for: [ex], timeout: 1)
+            wait(for: [ex], timeout: 5)
         }
 
         helper(error: Error.dummy)
@@ -198,7 +198,7 @@ extension CatchableTests {
         }.catch(policy: .allErrors) { error in
             error.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 
     func test__conditional_recover() {
@@ -220,7 +220,7 @@ extension CatchableTests {
                     XCTFail()
                 }
             }.cancel()
-            wait(for: [ex], timeout: 1)
+            wait(for: [ex], timeout: 5)
         }
 
         for error in [Error.dummy as Swift.Error, Error.cancelled] {
@@ -241,7 +241,7 @@ extension CatchableTests {
                 }
                 ex.fulfill()
             }.cancel()
-            wait(for: [ex], timeout: 1)
+            wait(for: [ex], timeout: 5)
         }
 
         for error in [Error.dummy, Error.cancelled] {
@@ -259,7 +259,7 @@ extension CatchableTests {
             XCTAssertEqual(Error.cancelled, $0 as? Error)
             ex.fulfill()
         }.cancel()
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 
     func test__conditional_recover__fulfilled_path() {
@@ -273,7 +273,7 @@ extension CatchableTests {
         }.catch(policy: .allErrors) { error in
             error.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 
     func test__cancellable_conditional_recover__fulfilled_path() {
@@ -287,7 +287,7 @@ extension CatchableTests {
         }.catch(policy: .allErrors) { error in
             error.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 
     func testEnsureThen_Error() {
@@ -305,7 +305,7 @@ extension CatchableTests {
         }
         p.cancel()
 
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 
     func testEnsureThen_Value() {
@@ -323,7 +323,7 @@ extension CatchableTests {
             ex.fulfill()
         }.cancel()
 
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
     
     func testEnsureThen_Value_NotCancelled() {
@@ -339,7 +339,7 @@ extension CatchableTests {
             ex.fulfill()
         }
 
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
     
     func testCancellableFinalizerHelpers() {
@@ -356,7 +356,7 @@ extension CatchableTests {
         XCTAssertEqual(f.cancelAttempted, true)
         XCTAssert(f.cancelledError?.isCancelled ?? false)
 
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 
     func testCancellableRecoverFromError() {
@@ -377,7 +377,7 @@ extension CatchableTests {
         XCTAssert(f.cancelledError == nil)
         XCTAssert(p.cancelledError == nil)
         
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
 
         XCTAssertEqual(p.isPending, false)
         XCTAssertEqual(p.isResolved, true)

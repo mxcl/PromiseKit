@@ -22,7 +22,7 @@ class Test_MKDirections_Swift: XCTestCase {
             ex.fulfill()
         }.cauterize()
 
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
 
@@ -40,7 +40,7 @@ class Test_MKDirections_Swift: XCTestCase {
             ex.fulfill()
         }.cauterize()
 
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
 }
@@ -60,7 +60,7 @@ class Test_MKSnapshotter_Swift: XCTestCase {
             ex.fulfill()
         }.cauterize()
 
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 }
 

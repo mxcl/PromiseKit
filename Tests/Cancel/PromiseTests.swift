@@ -42,7 +42,7 @@ class PromiseTests: XCTestCase {
             $0.isCancelled ? ex.fulfill() : XCTFail("Error: \($0)")
         }.cancel()
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
@@ -57,7 +57,7 @@ class PromiseTests: XCTestCase {
             ex.fulfill()
         }.cancel()
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testCustomStringConvertible() {
@@ -114,7 +114,7 @@ class PromiseTests: XCTestCase {
             ex.fulfill()
         }.cancel()
 
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 
     func testWait() throws {
@@ -145,7 +145,7 @@ class PromiseTests: XCTestCase {
         }.catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail("\($0)")
         }.cancel()
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
     
     func testCancellable() {
@@ -170,7 +170,7 @@ class PromiseTests: XCTestCase {
             $0.isCancelled ? ex.fulfill() : XCTFail("\($0)")
         }.cancel()
 
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
     
     func testSetCancellable() {
@@ -198,7 +198,7 @@ class PromiseTests: XCTestCase {
             $0.isCancelled ? ex.fulfill() : XCTFail("\($0)")
         }.cancel()
 
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
     
     func testInitCancellable() {
@@ -223,7 +223,7 @@ class PromiseTests: XCTestCase {
             $0.isCancelled ? ex.fulfill() : XCTFail("\($0)")
         }.cancel()
 
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
     
     func testInitVoidCancellable() {
@@ -239,7 +239,7 @@ class PromiseTests: XCTestCase {
             $0.isCancelled ? ex.fulfill() : XCTFail("\($0)")
         }.cancel()
 
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
     
     func testBodyThrowsError() {
@@ -259,7 +259,7 @@ class PromiseTests: XCTestCase {
             $0.isCancelled ? XCTFail("\($0)") : ex.fulfill()
         }.cancel()
 
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 }
 

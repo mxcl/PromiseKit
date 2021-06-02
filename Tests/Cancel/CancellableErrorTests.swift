@@ -19,7 +19,7 @@ class CancellationTests: XCTestCase {
         
         p.cancel(with: LocalError.cancel)
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testThrowCancellableErrorThatIsNotCancelled() {
@@ -34,7 +34,7 @@ class CancellationTests: XCTestCase {
         
         cc.cancel(with: LocalError.notCancel)
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testRecoverWithCancellation() {
@@ -60,7 +60,7 @@ class CancellationTests: XCTestCase {
         
         p.cancel(with: CocoaError.cancelled)
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testFoundationBridging1() {
@@ -79,7 +79,7 @@ class CancellationTests: XCTestCase {
 
         p.cancel(with: CocoaError.cancelled)
         
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testFoundationBridging2() {
@@ -98,7 +98,7 @@ class CancellationTests: XCTestCase {
         
         p.cancel(with: URLError.cancelled)
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testIsCancelled() {

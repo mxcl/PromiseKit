@@ -15,7 +15,7 @@ class NSNotificationCenterTests: XCTestCase {
 
         NotificationCenter.default.post(name: PMKTestNotification, object: nil, userInfo: userInfo)
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 }
 

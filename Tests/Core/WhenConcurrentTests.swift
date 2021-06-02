@@ -25,7 +25,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             }
         }.silenceWarning()
 
-        waitForExpectations(timeout: 3, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testWhenEmptyGenerator() {
@@ -41,7 +41,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             }
         }.silenceWarning()
 
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testWhenGeneratorError() {
@@ -82,7 +82,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
                 e.fulfill()
             }
 
-        waitForExpectations(timeout: 3, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testWhenConcurrency() {
@@ -113,7 +113,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             e.fulfill()
         }.silenceWarning()
 
-        waitForExpectations(timeout: 3)
+        waitForExpectations(timeout: 5)
     }
 
     func testWhenConcurrencyLessThanZero() {
@@ -154,7 +154,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             ex.fulfill()
         }
 
-        waitForExpectations(timeout: 3)
+        waitForExpectations(timeout: 5)
     }
 
     func testWhenResolvedContinuesWhenRejected() {
@@ -183,6 +183,6 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             ex.fulfill()
         }
 
-        waitForExpectations(timeout: 3)
+        waitForExpectations(timeout: 5)
     }
 }

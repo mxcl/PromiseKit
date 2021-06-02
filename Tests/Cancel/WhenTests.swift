@@ -21,7 +21,7 @@ class WhenTests: XCTestCase {
             $0.isCancelled ? e2.fulfill() : XCTFail()
         }.cancel()
 
-        wait(for: [e1, e2], timeout: 1)
+        wait(for: [e1, e2], timeout: 5)
     }
 
     func testInt() {
@@ -36,7 +36,7 @@ class WhenTests: XCTestCase {
         }.catch(policy: .allErrors) {
             $0.isCancelled ? e1.fulfill() : XCTFail()
         }.cancel()
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testIntAlt() {
@@ -51,7 +51,7 @@ class WhenTests: XCTestCase {
         }.catch(policy: .allErrors) {
             $0.isCancelled ? e1.fulfill() : XCTFail()
         }.cancel()
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testDoubleTupleSucceed() {
@@ -63,7 +63,7 @@ class WhenTests: XCTestCase {
             XCTAssertEqual(y, "abc")
             e1.fulfill()
         }.silenceWarning()
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testDoubleTupleCancel() {
@@ -75,7 +75,7 @@ class WhenTests: XCTestCase {
         }.catch(policy: .allErrors) {
             $0.isCancelled ? e1.fulfill() : XCTFail()
         }.cancel()
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testTripleTuple() {
@@ -88,7 +88,7 @@ class WhenTests: XCTestCase {
         }.catch(policy: .allErrors) {
             $0.isCancelled ? e1.fulfill() : XCTFail()
         }.cancel()
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testQuadrupleTuple() {
@@ -102,7 +102,7 @@ class WhenTests: XCTestCase {
         }.catch(policy: .allErrors) {
             $0.isCancelled ? e1.fulfill() : XCTFail()
         }.cancel()
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testQuintupleTuple() {
@@ -117,7 +117,7 @@ class WhenTests: XCTestCase {
         }.catch(policy: .allErrors) {
             $0.isCancelled ? e1.fulfill() : XCTFail()
         }.cancel()
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testVoid() {
@@ -133,7 +133,7 @@ class WhenTests: XCTestCase {
             $0.isCancelled ? e1.fulfill() : XCTFail()
         }.cancel()
 
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
     
     func testRejected() {
@@ -148,7 +148,7 @@ class WhenTests: XCTestCase {
             $0.isCancelled ? e1.fulfill() : XCTFail()
         }.cancel()
         
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testProgress() {
@@ -173,7 +173,7 @@ class WhenTests: XCTestCase {
 
         progress.resignCurrent()
         
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testProgressDoesNotExceed100PercentSucceed() {
@@ -214,7 +214,7 @@ class WhenTests: XCTestCase {
         p3.done(on: q, finally).silenceWarning()
         p4.done(on: q, finally).silenceWarning()
 
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testProgressDoesNotExceed100PercentCancel() {
@@ -267,7 +267,7 @@ class WhenTests: XCTestCase {
         p3.done(on: q, finally).catch(policy: .allErrors, catchall)
         p4.done(on: q, finally).catch(policy: .allErrors, catchall)
 
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testUnhandledErrorHandlerDoesNotFire() {
@@ -282,7 +282,7 @@ class WhenTests: XCTestCase {
             $0.isCancelled ? XCTFail() : ex.fulfill()
         }.cancel()
 
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testUnhandledErrorHandlerDoesNotFireForStragglers() {
@@ -306,7 +306,7 @@ class WhenTests: XCTestCase {
         p2.ensure { after(.milliseconds(100)).done(ex2.fulfill) }.silenceWarning()
         p3.ensure { after(.milliseconds(100)).done(ex3.fulfill) }.silenceWarning()
 
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testAllSealedRejectedFirstOneRejects() {
@@ -325,7 +325,7 @@ class WhenTests: XCTestCase {
             $0.isCancelled ? XCTFail() : ex.fulfill()
         }.cancel()
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testGuaranteeWhen() {
@@ -343,6 +343,6 @@ class WhenTests: XCTestCase {
             $0.isCancelled ? ex2.fulfill() : XCTFail()
         }.cancel()
 
-        wait(for: [ex1, ex2], timeout: 10)
+        wait(for: [ex1, ex2], timeout: 5)
     }
 }

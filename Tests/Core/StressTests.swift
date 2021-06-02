@@ -14,7 +14,7 @@ class StressTests: XCTestCase {
             }.silenceWarning()
         }, fulfill: { "ok" })
 
-        waitForExpectations(timeout: 10, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     @available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)
@@ -35,7 +35,7 @@ class StressTests: XCTestCase {
             XCTAssertEqual(values, (0..<N).map{ $0 })
             ex.fulfill()
         }
-        waitForExpectations(timeout: 10, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testZalgoDataRace() {
@@ -50,7 +50,7 @@ class StressTests: XCTestCase {
             return "ok"
         })
 
-        waitForExpectations(timeout: 10, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 }
 

@@ -43,7 +43,7 @@ class ZalgoTests: XCTestCase {
             guard case PMKError.returnedSelf = err else { return XCTFail() }
         }
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     // return a sealed promise from its own zalgo’d then handler doesn’t hang
@@ -54,6 +54,6 @@ class ZalgoTests: XCTestCase {
             ex.fulfill()
             return p1
         }.silenceWarning()
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 }

@@ -39,7 +39,7 @@ class PMKDefaultDispatchQueueTest: XCTestCase {
 
         XCTAssertTrue(Thread.isMainThread)
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testOverrodeDefaultCatchQueue() {
@@ -52,7 +52,7 @@ class PMKDefaultDispatchQueueTest: XCTestCase {
 
         XCTAssertTrue(Thread.isMainThread)
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testOverrodeDefaultAlwaysQueue() {
@@ -65,6 +65,6 @@ class PMKDefaultDispatchQueueTest: XCTestCase {
 
         XCTAssertTrue(Thread.isMainThread)
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 }

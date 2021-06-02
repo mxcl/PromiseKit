@@ -33,7 +33,7 @@ class ZalgoTests: XCTestCase {
         XCTAssertEqual(x, 0)
         
         seal.fulfill(1)
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
         XCTAssertEqual(x, 2)
     }
 
@@ -53,7 +53,7 @@ class ZalgoTests: XCTestCase {
             guard case PMKError.returnedSelf = err else { return XCTFail() }
         }
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     // returning a pending promise from its own zalgo’d then handler doesn’t hang
@@ -71,7 +71,7 @@ class ZalgoTests: XCTestCase {
             $0.isCancelled ? ex.fulfill() : XCTFail()
         }
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     // return a sealed promise from its own zalgo’d then handler doesn’t hang
@@ -84,6 +84,6 @@ class ZalgoTests: XCTestCase {
         }.catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 }

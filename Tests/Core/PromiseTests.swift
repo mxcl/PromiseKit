@@ -41,7 +41,7 @@ class PromiseTests: XCTestCase {
                 XCTAssertEqual(one, 1)
                 ex.fulfill()
             }
-            waitForExpectations(timeout: 1)
+            waitForExpectations(timeout: 5)
        }
     }
 
@@ -60,7 +60,7 @@ class PromiseTests: XCTestCase {
                 XCTAssertEqual(one, 1)
                 ex.fulfill()
             }
-            waitForExpectations(timeout: 1)
+            waitForExpectations(timeout: 5)
         }
     }
 
@@ -79,7 +79,7 @@ class PromiseTests: XCTestCase {
             }.catch { _ in
                 ex.fulfill()
             }
-            waitForExpectations(timeout: 1)
+            waitForExpectations(timeout: 5)
         } else {
             XCTFail("Could not recover Promise<Int> from Any")
         }
@@ -100,7 +100,7 @@ class PromiseTests: XCTestCase {
                 }.catch { _ in
                     ex.fulfill()
             }
-            waitForExpectations(timeout: 1)
+            waitForExpectations(timeout: 5)
         } else {
             XCTFail("Could not recover Promise<Int> from Any")
         }
@@ -126,7 +126,7 @@ class PromiseTests: XCTestCase {
         }
         // This is statically determined, but we want to promote it into something that fits into XCTest
         XCTAssert(throwingReturn is Promise<Void>, "Dispatcher.dispatch() returns something other than Promise<Void> with plain throwing closure")
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testCustomStringConvertible() {
@@ -182,7 +182,7 @@ class PromiseTests: XCTestCase {
             ex.fulfill()
         }
 
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testWait() throws {
@@ -204,7 +204,7 @@ class PromiseTests: XCTestCase {
             XCTAssertEqual(1, $0)
             ex.fulfill()
         }.silenceWarning()
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testNoAmbiguityForValue() {
@@ -215,6 +215,6 @@ class PromiseTests: XCTestCase {
         when(fulfilled: a, b, c).done {
             ex.fulfill()
         }.cauterize()
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 }

@@ -16,7 +16,7 @@ class NSTaskTests: XCTestCase {
             XCTAssertEqual(stdout, "bar\n")
             ex.fulfill()
         }.cauterize()
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 5)
     }
 
     func test2() {
@@ -43,7 +43,7 @@ class NSTaskTests: XCTestCase {
             }
             ex.fulfill()
         }
-        waitForExpectations(timeout: 10)
+        waitForExpectations(timeout: 5)
     }
 }
 

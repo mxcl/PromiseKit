@@ -25,7 +25,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             }
         }.silenceWarning()
 
-        waitForExpectations(timeout: 3, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
      func testWhenCancel() {
@@ -54,7 +54,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             $0.isCancelled ? e.fulfill() : XCTFail()
         }.cancel()
 
-        waitForExpectations(timeout: 3, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
    func testWhenEmptyGeneratorSucceed() {
@@ -70,7 +70,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             }
         }.silenceWarning()
 
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testWhenEmptyGeneratorCancel() {
@@ -88,7 +88,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             $0.isCancelled ? e.fulfill() : XCTFail()
         }.cancel()
         
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
     
     func testWhenGeneratorErrorSucceed() {
@@ -128,7 +128,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             e.fulfill()
         }
 
-        waitForExpectations(timeout: 3, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testWhenGeneratorErrorCancel() {
@@ -162,7 +162,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             error.isCancelled ? e.fulfill() : XCTFail()
         }.cancel()
 
-        waitForExpectations(timeout: 3, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testWhenConcurrencySucceed() {
@@ -193,7 +193,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             e.fulfill()
         }.silenceWarning()
 
-        waitForExpectations(timeout: 3)
+        waitForExpectations(timeout: 5)
     }
 
      func testWhenConcurrencyCancel() {
@@ -227,7 +227,7 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             $0.isCancelled ? e.fulfill() : XCTFail()
         }.cancel()
 
-        waitForExpectations(timeout: 3)
+        waitForExpectations(timeout: 5)
     }
 
    func testWhenConcurrencyLessThanZero() {
@@ -270,6 +270,6 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
             $0.isCancelled ? XCTFail() : ex.fulfill()
         }.cancel()
 
-        waitForExpectations(timeout: 3)
+        waitForExpectations(timeout: 5)
     }
 }

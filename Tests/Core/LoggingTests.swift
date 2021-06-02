@@ -98,7 +98,7 @@ class LoggingTests: XCTestCase {
         }.ensure {
             ex.fulfill()
         }.cauterize()
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
         ex = expectation(description: "read")
         let readQueue = DispatchQueue(label: "readQueue")
         readQueue.async {
@@ -114,7 +114,7 @@ class LoggingTests: XCTestCase {
                 }
             }
         }
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     // Verify waiting on main thread in Guarantee is logged

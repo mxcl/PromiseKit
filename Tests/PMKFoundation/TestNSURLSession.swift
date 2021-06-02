@@ -24,7 +24,7 @@ class NSURLSessionTests: XCTestCase {
             XCTAssertEqual(json, rsp)
             ex.fulfill()
         }.cauterize()
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func test2() {
@@ -48,7 +48,7 @@ class NSURLSessionTests: XCTestCase {
             ex.fulfill()
         }.cauterize()
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     /// test that our convenience String constructor applies
@@ -70,7 +70,7 @@ class NSURLSessionTests: XCTestCase {
             ex.fulfill()
         }.cauterize()
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     override func tearDown() {

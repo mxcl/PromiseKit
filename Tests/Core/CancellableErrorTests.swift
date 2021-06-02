@@ -38,7 +38,7 @@ class CancellationTests: XCTestCase {
             expct.fulfill()
         }
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testRecoverWithCancellation() {
@@ -62,7 +62,7 @@ class CancellationTests: XCTestCase {
             ex2.fulfill()
         }
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testFoundationBridging1() {
@@ -79,7 +79,7 @@ class CancellationTests: XCTestCase {
             ex.fulfill()
         }
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testFoundationBridging2() {
@@ -96,7 +96,7 @@ class CancellationTests: XCTestCase {
             ex.fulfill()
         }
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     @available(watchOS 6.2, *)

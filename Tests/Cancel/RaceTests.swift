@@ -16,7 +16,7 @@ class RaceTests: XCTestCase {
         XCTAssert(after2.isCancelled)
         XCTAssert(after1.cancelAttempted)
         XCTAssert(after2.cancelAttempted)
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
     
     func test2() {
@@ -33,7 +33,7 @@ class RaceTests: XCTestCase {
         XCTAssert(after2.isCancelled)
         XCTAssert(after1.cancelAttempted)
         XCTAssert(after2.cancelAttempted)
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func test1Array() {
@@ -49,7 +49,7 @@ class RaceTests: XCTestCase {
             XCTAssert(p.cancelAttempted)
             XCTAssert(p.isCancelled)
         }
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
     
     func test2Array() {
@@ -66,7 +66,7 @@ class RaceTests: XCTestCase {
         XCTAssert(after2.isCancelled)
         XCTAssert(after1.cancelAttempted)
         XCTAssert(after2.cancelAttempted)
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testEmptyArray() {
@@ -76,7 +76,7 @@ class RaceTests: XCTestCase {
             guard case PMKError.badInput = $0 else { return XCTFail() }
             ex.fulfill()
         }
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 
     func testReject() {
@@ -86,7 +86,7 @@ class RaceTests: XCTestCase {
         }.catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail()
         }
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testCancelInner() {
@@ -102,6 +102,6 @@ class RaceTests: XCTestCase {
             $0.isCancelled ? ex.fulfill() : XCTFail()
         }
         after1.cancel()
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 }

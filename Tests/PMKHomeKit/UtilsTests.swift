@@ -36,7 +36,7 @@ class UtilsTests: XCTestCase {
             XCTAssertNotNil(weakVar)
             exp.fulfill()
         }
-        waitForExpectations(timeout: 1.0, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
     
     // Once resolved, the proxy should break the retain cycle
@@ -53,7 +53,7 @@ class UtilsTests: XCTestCase {
             XCTAssertNil(weakVar)
             exp.fulfill()
         }
-        waitForExpectations(timeout: 1.0, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
     
     // Cancel should reject with a PMKError

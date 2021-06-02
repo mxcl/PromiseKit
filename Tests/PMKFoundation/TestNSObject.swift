@@ -18,7 +18,7 @@ class NSObjectTests: XCTestCase {
         }
         foo.bar = "moo"
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testAfterlife() {
@@ -42,7 +42,7 @@ class NSObjectTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 
     func testMultiObserveAfterlife() {
@@ -69,7 +69,7 @@ class NSObjectTests: XCTestCase {
             }
         }
 
-        waitForExpectations(timeout: 1)
+        waitForExpectations(timeout: 5)
     }
 }
 

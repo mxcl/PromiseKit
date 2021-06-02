@@ -16,7 +16,7 @@ class HangTests: XCTestCase {
         } catch {
             error.isCancelled ? ex.fulfill() : XCTFail("Unexpected error")
         }
-        waitForExpectations(timeout: 0)
+        waitForExpectations(timeout: 5)
     }
 
     enum Error: Swift.Error {

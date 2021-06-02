@@ -29,7 +29,7 @@ class ThenableTests: XCTestCase {
             XCTAssertEqual($0, 1)
             ex2.fulfill()
         }.silenceWarning()
-        wait(for: [ex1, ex2], timeout: 10)
+        wait(for: [ex1, ex2], timeout: 5)
     }
 
     func testMap() {
@@ -40,7 +40,7 @@ class ThenableTests: XCTestCase {
             XCTAssertEqual($0, 2)
             ex.fulfill()
         }.silenceWarning()
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testMapByKeyPath() {
@@ -49,7 +49,7 @@ class ThenableTests: XCTestCase {
             XCTAssertEqual($0, "Max")
             ex.fulfill()
         }.silenceWarning()
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testCompactMap() {
@@ -60,7 +60,7 @@ class ThenableTests: XCTestCase {
             XCTAssertEqual($0, 1)
             ex.fulfill()
         }.silenceWarning()
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testCompactMapThrows() {
@@ -76,7 +76,7 @@ class ThenableTests: XCTestCase {
             }
             ex.fulfill()
         }
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testRejectedPromiseCompactMap() {
@@ -92,7 +92,7 @@ class ThenableTests: XCTestCase {
             }
             ex.fulfill()
         }
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testPMKErrorCompactMap() {
@@ -105,7 +105,7 @@ class ThenableTests: XCTestCase {
             }
             ex.fulfill()
         }
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testCompactMapByKeyPath() {
@@ -114,7 +114,7 @@ class ThenableTests: XCTestCase {
             XCTAssertEqual($0, 26)
             ex.fulfill()
         }.silenceWarning()
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testMapValues() {
@@ -125,7 +125,7 @@ class ThenableTests: XCTestCase {
             XCTAssertEqual([28, 40, 90], $0)
             ex.fulfill()
         }.silenceWarning()
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testMapValuesByKeyPath() {
@@ -134,7 +134,7 @@ class ThenableTests: XCTestCase {
             XCTAssertEqual(["Max", "Roman", "John"], $0)
             ex.fulfill()
         }.silenceWarning()
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testCompactMapValues() {
@@ -145,7 +145,7 @@ class ThenableTests: XCTestCase {
             XCTAssertEqual([1,2,4], $0)
             ex.fulfill()
         }.silenceWarning()
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testCompactMapValuesByKeyPath() {
@@ -154,7 +154,7 @@ class ThenableTests: XCTestCase {
             XCTAssertEqual([26, 23], $0)
             ex.fulfill()
         }.silenceWarning()
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testThenMap() {
@@ -165,7 +165,7 @@ class ThenableTests: XCTestCase {
             XCTAssertEqual([1,2,3,4], $0)
             ex.fulfill()
         }.silenceWarning()
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testThenFlatMap() {
@@ -176,7 +176,7 @@ class ThenableTests: XCTestCase {
             XCTAssertEqual([1,1,2,2,3,3,4,4], $0)
             ex.fulfill()
         }.silenceWarning()
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testFilterValues() {
@@ -187,7 +187,7 @@ class ThenableTests: XCTestCase {
             XCTAssertEqual([Person(name: "John", age: 23, isStudent: true)], $0)
             ex.fulfill()
         }.silenceWarning()
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testFilterValuesByKeyPath() {
@@ -196,7 +196,7 @@ class ThenableTests: XCTestCase {
             XCTAssertEqual([Person(name: "John", age: 23, isStudent: true)], $0)
             ex.fulfill()
         }.silenceWarning()
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testLastValueForEmpty() {
@@ -218,7 +218,7 @@ class ThenableTests: XCTestCase {
         }.catch { _ in
             ex.fulfill()
         }
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testBarrier() {
@@ -231,7 +231,7 @@ class ThenableTests: XCTestCase {
         }.catch { _ in
             XCTFail()
         }
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testDispatchFlagsSyntax() {
@@ -244,6 +244,6 @@ class ThenableTests: XCTestCase {
             }.catch { _ in
                 XCTFail()
         }
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 }

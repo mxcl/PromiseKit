@@ -24,7 +24,7 @@ class CatchableTests: XCTestCase {
                 x += 1
                 ex.1.fulfill()
             }
-            wait(for: [ex.0, ex.1], timeout: 10)
+            wait(for: [ex.0, ex.1], timeout: 5)
         }
 
         helper(error: Error.dummy)
@@ -44,7 +44,7 @@ class CatchableTests: XCTestCase {
         p.catch { _ in
             ex.fulfill()
         }
-        wait(for: [ex], timeout: 1)
+        wait(for: [ex], timeout: 5)
     }
 }
 
@@ -56,7 +56,7 @@ extension CatchableTests {
         func helper(error: Swift.Error) {
             let ex = expectation(description: "")
             Promise<Void>(error: error).recover { _ in }.done(ex.fulfill)
-            wait(for: [ex], timeout: 10)
+            wait(for: [ex], timeout: 5)
         }
 
         helper(error: Error.dummy)
@@ -66,7 +66,7 @@ extension CatchableTests {
     func test__void_specialized_full_recover__fulfilled_path() {
         let ex = expectation(description: "")
         Promise().recover { _ in XCTFail() }.done(ex.fulfill)
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func test__void_specialized_conditional_recover() {
@@ -77,7 +77,7 @@ extension CatchableTests {
                 guard x < 1 else { throw err }
                 x += 1
             }.done(ex.fulfill).silenceWarning()
-            wait(for: [ex], timeout: 10)
+            wait(for: [ex], timeout: 5)
         }
 
         for error in [Error.dummy as Swift.Error, Error.cancelled] {
@@ -96,7 +96,7 @@ extension CatchableTests {
                 XCTAssertEqual(error, $0 as? Error)
                 ex.fulfill()
             }
-            wait(for: [ex], timeout: 10)
+            wait(for: [ex], timeout: 5)
         }
 
         for error in [Error.dummy, Error.cancelled] {
@@ -113,7 +113,7 @@ extension CatchableTests {
             XCTAssertEqual(Error.cancelled, $0 as? Error)
             ex.fulfill()
         }
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func test__void_specialized_conditional_recover__fulfilled_path() {
@@ -125,7 +125,7 @@ extension CatchableTests {
         }.finally {
             ex.fulfill()
         }
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 }
 
@@ -140,7 +140,7 @@ extension CatchableTests {
                 XCTAssertEqual($0, 2)
                 ex.fulfill()
             }
-            wait(for: [ex], timeout: 10)
+            wait(for: [ex], timeout: 5)
         }
 
         helper(error: Error.dummy)
@@ -153,7 +153,7 @@ extension CatchableTests {
             XCTAssertEqual($0, 1)
             ex.fulfill()
         }
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
 
@@ -169,7 +169,7 @@ extension CatchableTests {
                 XCTAssertEqual($0, x)
                 ex.fulfill()
             }.silenceWarning()
-            wait(for: [ex], timeout: 10)
+            wait(for: [ex], timeout: 5)
         }
 
         for error in [Error.dummy as Swift.Error, Error.cancelled] {
@@ -188,7 +188,7 @@ extension CatchableTests {
                 XCTAssertEqual(error, $0 as? Error)
                 ex.fulfill()
             }
-            wait(for: [ex], timeout: 10)
+            wait(for: [ex], timeout: 5)
         }
 
         for error in [Error.dummy, Error.cancelled] {
@@ -206,7 +206,7 @@ extension CatchableTests {
             XCTAssertEqual(Error.cancelled, $0 as? Error)
             ex.fulfill()
         }
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func test__conditional_recover__fulfilled_path() {
@@ -220,7 +220,7 @@ extension CatchableTests {
         }.catch { _ in
             XCTFail()   // this `catch` to ensure we are calling the `recover` variant we think we are
         }
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testEnsureThen_Error() {
@@ -237,7 +237,7 @@ extension CatchableTests {
             ex.fulfill()
         }
 
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testEnsureThen_Value() {
@@ -253,7 +253,7 @@ extension CatchableTests {
             ex.fulfill()
         }
 
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 }
 

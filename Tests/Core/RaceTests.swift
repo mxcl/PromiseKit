@@ -8,7 +8,7 @@ class RaceTests: XCTestCase {
             XCTAssertEqual(index, 1)
             ex.fulfill()
         }.silenceWarning()
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func test2() {
@@ -17,7 +17,7 @@ class RaceTests: XCTestCase {
             XCTAssertEqual(index, 2)
             ex.fulfill()
         }
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func test1Array() {
@@ -27,7 +27,7 @@ class RaceTests: XCTestCase {
             XCTAssertEqual(index, 1)
             ex.fulfill()
         }.silenceWarning()
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func test2Array() {
@@ -36,7 +36,7 @@ class RaceTests: XCTestCase {
             XCTAssertEqual(index, 2)
             ex.fulfill()
         }
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testEmptyArray() {
@@ -46,7 +46,7 @@ class RaceTests: XCTestCase {
             guard case PMKError.badInput = $0 else { return XCTFail() }
             ex.fulfill()
         }
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testReject() {
@@ -56,7 +56,7 @@ class RaceTests: XCTestCase {
         }.catch(policy: .allErrors) {
             $0.isCancelled ? ex.fulfill() : XCTFail()
         }
-        waitForExpectations(timeout: 1, handler: nil)
+        waitForExpectations(timeout: 5, handler: nil)
     }
 
     func testFulfilled() {
@@ -70,7 +70,7 @@ class RaceTests: XCTestCase {
             XCTFail()
             ex.fulfill()
         }
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testFulfilledEmptyArray() {
@@ -80,7 +80,7 @@ class RaceTests: XCTestCase {
             guard case PMKError.badInput = $0 else { return XCTFail() }
             ex.fulfill()
         }
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 
     func testFulfilledWithNoWinner() {
@@ -96,6 +96,6 @@ class RaceTests: XCTestCase {
             guard pmkError.debugDescription == "All thenables passed to race(fulfilled:) were rejected" else { return XCTFail() }
             ex.fulfill()
         }
-        wait(for: [ex], timeout: 10)
+        wait(for: [ex], timeout: 5)
     }
 }
