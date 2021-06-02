@@ -32,7 +32,7 @@ readability. The promise chain above is easy to scan and understand: one asynchr
 operation leads into the other, line by line. It's as close to
 procedural code as we can easily come given the current state of Swift.
 
-`done` is the same as `then` but you cannot return a promise. It is 
+`done` is the same as `then` but you cannot return a promise. It is
 typically the end of the “success” part of the chain. Above, you can see that we
 receive the final image in our `done` and use it to set up the UI.
 
@@ -40,15 +40,15 @@ Let’s compare the signatures of the two login methods:
 
 ```swift
 func login() -> Promise<Creds>
-    
+
 // Compared with:
 
 func login(completion: (Creds?, Error?) -> Void)
                         // ^^ ugh. Optionals. Double optionals.
 ```
 
-The distinction is that with promises, your functions return *promises* instead 
-of accepting and running callbacks. Each handler in a chain returns a promise. 
+The distinction is that with promises, your functions return *promises* instead
+of accepting and running callbacks. Each handler in a chain returns a promise.
 `Promise` objects define the `then` method, which waits for the completion of the
 promise before continuing the chain. Chains resolve procedurally, one promise
 at a time.
@@ -60,7 +60,7 @@ of `Creds`.
 
 > *Note*: `done` was introduced in PromiseKit 5. We previously defined a variant of `then` that
 did not require you to return a promise. Unfortunately, this convention often confused
-Swift and led to odd and hard-to-debug error messages. It also made using PromiseKit 
+Swift and led to odd and hard-to-debug error messages. It also made using PromiseKit
 more painful. The introduction of `done` lets you type out promise chains that
 compile without additional qualification to help the compiler figure out type information.
 
@@ -158,9 +158,9 @@ login { creds, error in
 }
 ```
 
-It would be very easy for someone to amend this code and forget to unset 
+It would be very easy for someone to amend this code and forget to unset
 the activity indicator, leading to a bug. With promises, this type of error is
-almost impossible: the Swift compiler resists your supplementing the chain without 
+almost impossible: the Swift compiler resists your supplementing the chain without
 using promises. You almost won’t need to review the pull requests.
 
 > *Note*: PromiseKit has perhaps capriciously switched between the names `always`
@@ -234,7 +234,7 @@ As with any promise chain, if any of the component promises fail, the chain call
 
 # PromiseKit Extensions
 
-When we made PromiseKit, we understood that we wanted to use *only* promises to implement 
+When we made PromiseKit, we understood that we wanted to use *only* promises to implement
 asynchronous behavior. So wherever possible, we offer extensions to Apple’s APIs that reframe
 the API in terms of promises. For example:
 
@@ -256,12 +256,7 @@ pod "PromiseKit/CoreLocation"
 pod "PromiseKit/MapKit"
 ```
 
-All of these extensions are available at the [PromiseKit organization](https://github.com/PromiseKit).
-Go there to see what's available and to read the source code and documentation. Every file and function
-has been copiously documented.
-
-> We also provide extensions for common libraries such as [Alamofire](https://github.com/PromiseKit/Alamofire-).
-
+To see what is available, check our [sources](https://github.com/mxcl/PromiseKit/tree/master/Sources).
 
 # Making Promises
 
@@ -296,9 +291,9 @@ func fetch() -> Promise<String> {
 }
 ```
 
-The `seal` object that the `Promise` initializer provides to you defines 
-many methods for handling garden-variety completion handlers. It even 
-covers a variety of rarer situations, thus making it easy for you to add 
+The `seal` object that the `Promise` initializer provides to you defines
+many methods for handling garden-variety completion handlers. It even
+covers a variety of rarer situations, thus making it easy for you to add
 promises to an existing codebase.
 
 > *Note*: We tried to make it so that you could just do `Promise(fetch)`, but we
@@ -333,8 +328,8 @@ firstly {
 ```
 
 Swift warns you if you don’t terminate a regular `Promise` chain (i.e., not
-a `Guarantee` chain). You're expected to silence this warning by supplying 
-either a `catch` or a `return`. (In the latter case, you will then have to `catch` 
+a `Guarantee` chain). You're expected to silence this warning by supplying
+either a `catch` or a `return`. (In the latter case, you will then have to `catch`
 at the point where you receive that promise.)
 
 Use `Guarantee`s wherever possible so that your code has error handling where
@@ -471,12 +466,12 @@ Here is a key understanding: `login()` returns a `Promise`, and all `Promise`s h
 `when` is one of PromiseKit’s more useful functions, and so we offer several variants.
 
 * The default `when`, and the one you should typically use, is `when(fulfilled:)`. This variant
-waits on all its component promises, but if any fail, `when` fails too, and thus the chain *rejects*. 
+waits on all its component promises, but if any fail, `when` fails too, and thus the chain *rejects*.
 It's important to note that all promises in the `when` *continue*. Promises have *no* control over
 the tasks they represent. Promises are just wrappers around tasks.
 
 * `when(resolved:)` waits even if one or more of its component promises fails. The value produced
-by this variant of `when` is an array of `Result<T>`. Consequently, this variant requires all its 
+by this variant of `when` is an array of `Result<T>`. Consequently, this variant requires all its
 component promises to have the same generic type. See our advanced patterns guide for work-arounds
 for this limitation.
 
