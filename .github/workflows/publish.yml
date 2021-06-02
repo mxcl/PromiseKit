@@ -3,56 +3,41 @@ on:
   workflow_dispatch:
     inputs:
       version:
-        description: Version to publish
+        description: Version 🚀
         required: true
 jobs:
-  ci:
+  build:
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        swift:
+        - 5.3
+        - 5.4
+    container:
+      image: swift:${{ matrix.swift }}
     steps:
-    - uses: aurelien-baudet/workflow-dispatch@v2
-      with:
-        workflow: CI
-        token: ${{ secrets.JAZZY_PAT }}
-        wait-for-completion: true
+    - uses: actions/checkout@v2
+    - run: swift build
 
   lint:
-    runs-on: macos-10.15
+    runs-on: macos-latest
     strategy:
       matrix:
         xcode:
-          - ^10
-          - ^11
-          - ^12
+          - '12.0'
+          - '12.4'
     steps:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
         xcode-version: ${{ matrix.xcode }}
     - uses: actions/checkout@v2
-      with:
-        submodules: true
     - run: pod lib lint --fail-fast
 
   create-release:
     runs-on: ubuntu-latest
-    needs: [ci, lint]
-    env:
-      v: ${{ github.event.inputs.version }}
+    needs: [lint, build]
     steps:
     - uses: actions/checkout@v2
-      with:
-        fetch-depth: 0  # zero means “all” (or push fails)
-    - name: Update committed versions
-      run: |
-        ruby -i -pe "sub(/CURRENT_PROJECT_VERSION = [0-9.]+/, 'CURRENT_PROJECT_VERSION = $v')" PromiseKit.xcodeproj/project.pbxproj
-        ruby -i -pe "sub(/s.version = '[0-9.]+'/, 's.version = \'$v\'')" PromiseKit.podspec
-    - run: |
-        ! (git diff --quiet)
-    - name: Commit
-      run: |
-        git config user.name github-actions
-        git config user.email github-actions@github.com
-        git commit -am "PromiseKit $v"
-        git push
     - uses: softprops/action-gh-release@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -69,5 +54,4 @@ jobs:
         workflow: CD
         token: ${{ secrets.JAZZY_PAT }}
         inputs: "{\"version\": \"${{ github.event.inputs.version }}\"}"
-        ref: master  # or doesn’t use our new commit above
-        wait-for-completion: true
+        wait-for-completion: false
