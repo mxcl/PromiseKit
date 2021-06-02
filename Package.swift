@@ -60,6 +60,6 @@ pkg.targets += [
     .testTarget(name: "Cancel", dependencies: ["PromiseKit"]),
     .testTarget(name: "APlusSwiftTests", dependencies: ["PromiseKit"], path: "Tests/A+/Swift"),
     .testTarget(name: "APlusJSTests", dependencies: ["PromiseKit"], path: "Tests/A+/JavaScript", exclude: [
-        "index.js", "package-lock.json", "package.json", "README.md", "webpack.config.js"
+        "index.js", "package-lock.json", "package.json", "README.md", "webpack.config.js", "build", "node_modules"
     ]),
 ]
