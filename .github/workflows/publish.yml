@@ -40,18 +40,7 @@ jobs:
     - uses: actions/checkout@v2
     - uses: softprops/action-gh-release@v1
       env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.JAZZY_PAT }}
       with:
         tag_name: ${{ github.event.inputs.version }}
         name: ${{ github.event.inputs.version }}
-
-  cd:
-    needs: create-release
-    runs-on: ubuntu-latest
-    steps:
-    - uses: aurelien-baudet/workflow-dispatch@v2
-      with:
-        workflow: CD
-        token: ${{ secrets.JAZZY_PAT }}
-        inputs: "{\"version\": \"${{ github.event.inputs.version }}\"}"
-        wait-for-completion: false

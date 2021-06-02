@@ -1,3 +1,5 @@
+# Installing PromiseKit
+
 We support [SwiftPM]:
 
 ```swift
@@ -15,6 +17,9 @@ package.targets.append(
 ```
 
 And CocoaPods:
+
+> Please note, we have not released this CocoaPod yet. You *can* still use it
+> but you will need to specify the podspec URL manually, see the Cocoapods docs.
 
 ```ruby
 pod "PromiseKit", "~> 7.0.0-rc1"

@@ -4,8 +4,11 @@ on:
     inputs:
       version:
         required: true
+      pods:
+        required: false
 jobs:
   pods:
+    if: ${{ github.event.inputs.pods != 'false' }}
     runs-on: macos-latest
     steps:
 

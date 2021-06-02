@@ -1,0 +1,13 @@
+on:
+  release:
+    types: published
+jobs:
+  cd:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: aurelien-baudet/workflow-dispatch@v2
+      with:
+        workflow: CD
+        token: ${{ secrets.JAZZY_PAT }}
+        inputs: "{\"version\": \"${{ github.event.release.tag_name }}\"}"
+        wait-for-completion: false
