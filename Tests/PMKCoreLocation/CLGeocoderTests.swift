@@ -20,7 +20,7 @@ class CLGeocoderTests: XCTestCase {
         MockGeocoder().reverseGeocode(location: CLLocation()).done { x in
             XCTAssertEqual(x, [dummyPlacemark])
             ex.fulfill()
-        }
+        }.cauterize()
         waitForExpectations(timeout: 1)
     }
 
@@ -37,7 +37,7 @@ class CLGeocoderTests: XCTestCase {
         MockGeocoder().geocode([:]).done { x in
             XCTAssertEqual(x, [dummyPlacemark])
             ex.fulfill()
-        }
+        }.cauterize()
         waitForExpectations(timeout: 1)
     }
 
@@ -54,7 +54,7 @@ class CLGeocoderTests: XCTestCase {
         MockGeocoder().geocode("").done { x in
             XCTAssertEqual(x, [dummyPlacemark])
             ex.fulfill()
-        }
+        }.cauterize()
         waitForExpectations(timeout: 1)
     }
 
@@ -74,7 +74,7 @@ class CLGeocoderTests: XCTestCase {
         MockGeocoder().geocodePostalAddress(CNPostalAddress()).done { x in
             XCTAssertEqual(x, [dummyPlacemark])
             ex.fulfill()
-        }
+        }.cauterize()
         waitForExpectations(timeout: 1)
     }
 
@@ -93,7 +93,7 @@ class CLGeocoderTests: XCTestCase {
         MockGeocoder().geocodePostalAddress(CNPostalAddress(), preferredLocale: nil).done { x in
             XCTAssertEqual(x, [dummyPlacemark])
             ex.fulfill()
-        }
+        }.cauterize()
         waitForExpectations(timeout: 1)
     }
     
@@ -112,7 +112,7 @@ class CLGeocoderTests: XCTestCase {
         MockGeocoder().reverseGeocode(location: CLLocation(), preferredLocale: nil).done { x in
             XCTAssertEqual(x, [dummyPlacemark])
             ex.fulfill()
-        }
+        }.cauterize()
         waitForExpectations(timeout: 1)
     }
 #endif

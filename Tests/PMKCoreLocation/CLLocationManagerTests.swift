@@ -14,7 +14,7 @@ class Test_CLLocationManager_Swift: XCTestCase {
                 CLLocationManager.requestLocation().done { x in
                     XCTAssertEqual(x, dummy)
                     ex.fulfill()
-                }
+                }.cauterize()
 
                 waitForExpectations(timeout: 1)
             }
@@ -31,7 +31,7 @@ class Test_CLLocationManager_Swift: XCTestCase {
                 CLLocationManager.requestLocation(satisfying: block).done({ locations in
                     locations.forEach { XCTAssert(block($0) == true, "Block should be successful for returned values") }
                     ex.fulfill()
-                })
+                }).cauterize()
                 waitForExpectations(timeout: 1)
             }
         }
