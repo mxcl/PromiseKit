@@ -32,6 +32,7 @@ public extension CKContainer {
     }
 
     /// Retrieves information about a single user based on the ID of the corresponding user record.
+    @available(macOS 10.12, iOS 10, tvOS 10, *)
     func discoverUserIdentity(withUserRecordID recordID: CKRecord.ID) -> Promise<CKUserIdentity> {
         return Promise { discoverUserIdentity(withUserRecordID: recordID, completionHandler: $0.resolve) }
     }
@@ -43,6 +44,7 @@ public extension CKContainer {
 }
 
 #if !os(tvOS)
+@available(macOS 10.12, iOS 10, tvOS 10, *)
 public extension CKContainer {
     func discoverAllIdentities() -> Promise<[CKUserIdentity]> {
         return Promise { discoverAllIdentities(completionHandler: $0.resolve) }

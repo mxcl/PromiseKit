@@ -23,7 +23,7 @@ class HMAccessoryBrowserTests: XCTestCase {
             .done { accessories in
                 XCTAssertEqual(accessories.count, 1)
                 ex.fulfill()
-            }
+            }.cauterize()
             
             waitForExpectations(timeout: 1, handler: nil)
         }

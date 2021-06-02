@@ -4,9 +4,9 @@ import PackageDescription
 
 let pkg = Package(name: "PromiseKit")
 pkg.platforms = [
-    .macOS(.v10_12), //FIXME strictly 10.10 (only tests need 10.12)
-    .iOS(.v10),      //FIXME strictly 8.0
-    .tvOS(.v10),     //FIXME strictly 9.0
+    .macOS(.v10_10),
+    .iOS(.v10),       //FIXME strictly 8.0, but Tests require 10
+    .tvOS(.v10),      //FIXME strictly 9.0, but Tests require 10
     .watchOS(.v3)
 ]
 pkg.swiftLanguageVersions = [.v5]

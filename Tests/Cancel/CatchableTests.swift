@@ -470,11 +470,12 @@ extension CatchableTests {
     func testCatchOnly_Type_Ignored() {
         let x = expectation(description: #file + #function)
 
-        enum Foo: Swift.Error {}
+        enum Foo: Swift.Error {
+            case a
+        }
 
         Promise<Int>(error: Error.dummy).cancellize().catch(only: Foo.self) { _ in
             XCTFail()
-            x.fulfill()
         }.catch { _ in
             x.fulfill()
         }
@@ -647,10 +648,12 @@ extension CatchableTests {
     func testRecoverOnly_Type_PatternMatch() {
         let x = expectation(description: #file + #function)
 
-        enum Foo: Swift.Error {}
+        enum Foo: Swift.Error {
+            case a
+        }
 
         Promise<Int>(error: Error.dummy).cancellize().recover(only: Foo.self) { _ in
-            return Promise.value(1)
+            Promise.value(1)
         }.done { _ in
             XCTFail()
             x.fulfill()

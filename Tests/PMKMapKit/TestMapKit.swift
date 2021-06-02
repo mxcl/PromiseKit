@@ -1,3 +1,5 @@
+#if !os(watchOS)
+
 import PromiseKit
 import PMKMapKit
 import MapKit
@@ -61,3 +63,5 @@ class Test_MKSnapshotter_Swift: XCTestCase {
         waitForExpectations(timeout: 1, handler: nil)
     }
 }
+
+#endif
