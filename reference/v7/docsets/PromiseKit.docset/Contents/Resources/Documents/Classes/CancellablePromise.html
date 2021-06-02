@@ -1,0 +1,913 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <title>CancellablePromise Class Reference</title>
+    <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
+    <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
+    <meta charset="utf-8">
+    <script src="../js/jquery.min.js" defer></script>
+    <script src="../js/jazzy.js" defer></script>
+    
+    <script src="../js/lunr.min.js" defer></script>
+    <script src="../js/typeahead.jquery.js" defer></script>
+    <script src="../js/jazzy.search.js" defer></script>
+  </head>
+  <body>
+
+    <a name="//apple_ref/swift/Class/CancellablePromise" class="dashAnchor"></a>
+
+    <a title="CancellablePromise Class Reference"></a>
+
+    <header class="header">
+      <p class="header-col header-col--primary">
+        <a class="header-link" href="../index.html">
+          PromiseKit 7.0.0-rc1 Docs
+        </a>
+         (80% documented)
+      </p>
+    
+      <p class="header-col--secondary">
+        <form role="search" action="../search.json">
+          <input type="text" placeholder="Search documentation" data-typeahead>
+        </form>
+      </p>
+    
+        <p class="header-col header-col--secondary">
+          <a class="header-link" href="https://github.com/mxcl/PromiseKit">
+            <img class="header-icon" src="../img/gh.png"/>
+            View on GitHub
+          </a>
+        </p>
+    
+    </header>
+
+    <p class="breadcrumbs">
+      <a class="breadcrumb" href="../index.html">PromiseKit Reference</a>
+      <img class="carat" src="../img/carat.png" />
+      CancellablePromise Class Reference
+    </p>
+
+    <div class="content-wrapper">
+      <nav class="navigation">
+        <ul class="nav-groups">
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Core%20Components.html">Core Components</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Promise.html">Promise</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Guarantee.html">Guarantee</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/Thenable.html">Thenable</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CatchMixin.html">CatchMixin</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/Resolver.html">Resolver</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Other%20Classes.html">Other Classes</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/CancelContext.html">CancelContext</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/CancelContextFinalizer.html">CancelContextFinalizer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Classes.html#/s:10PromiseKit14CancelItemListC">CancelItemList</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/CancellableCascadingFinalizer.html">CancellableCascadingFinalizer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/CancellableFinalizer.html">CancellableFinalizer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/CancellablePromise.html">CancellablePromise</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/ConcurrencyLimitedDispatcher.html">ConcurrencyLimitedDispatcher</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/PMKCascadingFinalizer.html">PMKCascadingFinalizer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/PMKFinalizer.html">PMKFinalizer</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/RateLimitedDispatcher.html">RateLimitedDispatcher</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/RateLimitedDispatcherBase.html">RateLimitedDispatcherBase</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Classes/StrictRateLimitedDispatcher.html">StrictRateLimitedDispatcher</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Other%20Global%20Variables.html">Other Global Variables</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Global%20Variables.html#/s:10PromiseKit4confAA16PMKConfigurationVvp">conf</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Other%20Enums.html">Other Enumerations</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/CatchPolicy.html">CatchPolicy</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/LogEvent.html">LogEvent</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/PMKError.html">PMKError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Enums/PMKNamespacer.html">PMKNamespacer</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Other%20Extensions.html">Other Extensions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/DispatchQueue.html">DispatchQueue</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Extensions.html#/s:8Dispatch0A8WorkItemC">DispatchWorkItem</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/Error.html">Error</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Extensions/NSManagedObjectContext.html">NSManagedObjectContext</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Other%20Functions.html">Other Functions</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit5afteryAA9GuaranteeCyytG8Dispatch0E12TimeIntervalOF">after(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit5after7secondsAA9GuaranteeCyytGSd_tF">after(seconds:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit15cancellableWhen9fulfilled_AA011CancellableA0Cy1U_1TQZ_AF_AGQY_tGx_q_tAA0F8ThenableRzAaKR_r0_lF">cancellableWhen(fulfilled:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit15cancellableWhen9fulfilled__AA011CancellableA0Cy1U_1TQZ_AF_AGQY_AF_AGQY0_tGx_q_q0_tAA0F8ThenableRzAaLR_AaLR0_r1_lF">cancellableWhen(fulfilled:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit15cancellableWhen9fulfilled___AA011CancellableA0Cy1U_1TQZ_AF_AGQY_AF_AGQY0_AF_AGQY1_tGx_q_q0_q1_tAA0F8ThenableRzAaMR_AaMR0_AaMR1_r2_lF">cancellableWhen(fulfilled:_:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit15cancellableWhen9fulfilled____AA011CancellableA0Cy1U_1TQZ_AF_AGQY_AF_AGQY0_AF_AGQY1_AF_AGQY2_tGx_q_q0_q1_q2_tAA0F8ThenableRzAaNR_AaNR0_AaNR1_AaNR2_r3_lF">cancellableWhen(fulfilled:_:_:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit7firstly7executeAA011CancellableA0Cy1U_1TQZGxyKXE_tAA0E8ThenableRzlF">firstly(execute:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit7firstly7executeAA0A0Cy1TQzGxyKXE_tAA8ThenableRzlF">firstly(execute:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit7firstly7executeAA9GuaranteeCyxGAFyXE_tlF">firstly(execute:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4hangyxAA011CancellableA0CyxGKlF">hang(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4hangyxAA0A0CyxGKlF">hang(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4raceyAA011CancellableA0Cy1U_1TQZGSayxGAA0D8ThenableRzlF">race(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4raceyAA011CancellableA0Cy1U_1TQZGxd_tAA0D8ThenableRzlF">race(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4raceyAA0A0Cy1TQzGSayxGAA8ThenableRzlF">race(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4raceyAA0A0Cy1TQzGxd_tAA8ThenableRzlF">race(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4raceyAA9GuaranteeCyxGAEd_tlF">race(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4race9fulfilledAA0A0Cy1TQzGSayxG_tAA8ThenableRzlF">race(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit7timeout7secondsAA0A0CyytGSd_tF">timeout(seconds:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4whenyAA9GuaranteeCyytGAEd_tF">when(_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4when9fulfilledAA011CancellableA0CySay1U_1TQZGGSayxG_tAA0E8ThenableRzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4when9fulfilledAA011CancellableA0CySay1U_1TQZGGxd_tAA0E8ThenableRzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4when9fulfilledAA011CancellableA0CyytGSayxG_tAA0E8ThenableRzyt1U_1TRTzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4when9fulfilledAA011CancellableA0CyytGxd_tAA0E8ThenableRzyt1U_1TRTzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4when9fulfilledAA0A0CySay1TQzGGSayxG_tAA8ThenableRzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4when9fulfilledAA0A0CyytGSayxG_tAA8ThenableRzyt1TRtzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4when9fulfilledAA0A0CyytGxd_tAA8ThenableRzyt1TRtzlF">when(fulfilled:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4when9fulfilled_AA0A0Cy1TQz_AFQy_tGx_q_tAA8ThenableRzAaJR_r0_lF">when(fulfilled:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4when9fulfilled__AA0A0Cy1TQz_AFQy_AFQy0_tGx_q_q0_tAA8ThenableRzAaKR_AaKR0_r1_lF">when(fulfilled:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4when9fulfilled___AA0A0Cy1TQz_AFQy_AFQy0_AFQy1_tGx_q_q0_q1_tAA8ThenableRzAaLR_AaLR0_AaLR1_r2_lF">when(fulfilled:_:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4when9fulfilled____AA0A0Cy1TQz_AFQy_AFQy0_AFQy1_AFQy2_tGx_q_q0_q1_q2_tAA8ThenableRzAaMR_AaMR0_AaMR1_AaMR2_r3_lF">when(fulfilled:_:_:_:_:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4when9fulfilled12concurrentlyAA011CancellableA0CySay7Element_1U1TQZGGx_SitStRzAA0F8ThenableAGRpzlF">when(fulfilled:concurrently:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4when9fulfilled12concurrentlyAA0A0CySay7Element_1TQZGGx_SitStRzAA8ThenableAGRpzlF">when(fulfilled:concurrently:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4when10guaranteesAA9GuaranteeCyytGSayAFG_tF">when(guarantees:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4when8resolvedAA011CancellableA0CySays6ResultOyxs5Error_pGGGAEyxGd_tlF">when(resolved:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4when8resolvedAA011CancellableA0CySays6ResultOyxs5Error_pGGGSayAEyxGG_tlF">when(resolved:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4when8resolvedAA9GuaranteeCySays6ResultOyxs5Error_pGGGAA0A0CyxGd_tlF">when(resolved:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4when8resolvedAA9GuaranteeCySays6ResultOyxs5Error_pGGGSayAA0A0CyxGG_tlF">when(resolved:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Other%20Functions.html#/s:10PromiseKit4when8resolved12concurrentlyAA9GuaranteeCySays6ResultOy7Element_1TQZs5Error_pGGGx_SitStRzAA8ThenableAIRpzlF">when(resolved:concurrently:)</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Other%20Protocols.html">Other Protocols</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/Cancellable.html">Cancellable</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CancellableCatchMixin.html">CancellableCatchMixin</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CancellableError.html">CancellableError</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/CancellableThenable.html">CancellableThenable</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/Dispatcher.html">Dispatcher</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/_PMKCatchWrappers.html">_PMKCatchWrappers</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/_PMKFinallyWrappers.html">_PMKFinallyWrappers</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/_PMKSharedVoidWrappers.html">_PMKSharedVoidWrappers</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Protocols/_PMKSharedWrappers.html">_PMKSharedWrappers</a>
+              </li>
+            </ul>
+          </li>
+          <li class="nav-group-name">
+            <a class="nav-group-name-link" href="../Other%20Structs.html">Other Structures</a>
+            <ul class="nav-group-tasks">
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/CoreDataDispatcher.html">CoreDataDispatcher</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/CurrentThreadDispatcher.html">CurrentThreadDispatcher</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/DispatchQueueDispatcher.html">DispatchQueueDispatcher</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="../Structs/PMKConfiguration.html">PMKConfiguration</a>
+              </li>
+            </ul>
+          </li>
+        </ul>
+      </nav>
+      <article class="main-content">
+
+        <section class="section">
+          <div class="section-content top-matter">
+            <h1>CancellablePromise</h1>
+              <div class="declaration">
+                <div class="language">
+                  
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kt">CancellablePromise</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span> <span class="p">:</span> <span class="kt"><a href="../Protocols/CancellableThenable.html">CancellableThenable</a></span><span class="p">,</span> <span class="kt"><a href="../Protocols/CancellableCatchMixin.html">CancellableCatchMixin</a></span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">CancellablePromise</span><span class="p">:</span> <span class="n"><a href="../Protocols/_PMKSharedWrappers.html">_PMKSharedWrappers</a></span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">CancellablePromise</span><span class="p">:</span> <span class="n"><a href="../Protocols/_PMKCatchWrappers.html">_PMKCatchWrappers</a></span></code></pre>
+<pre class="highlight swift"><code><span class="kd">extension</span> <span class="kt">CancellablePromise</span><span class="p">:</span> <span class="n"><a href="../Protocols/_PMKSharedVoidWrappers.html">_PMKSharedVoidWrappers</a></span> <span class="k">where</span> <span class="kt">C</span><span class="o">.</span><span class="kt">T</span> <span class="o">==</span> <span class="kt">Void</span></code></pre>
+
+                </div>
+              </div>
+            <p>A <code>CancellablePromise</code> is a functional abstraction around a failable and cancellable asynchronous operation.</p>
+
+<p>At runtime the promise can become a member of a chain of promises, where the <code>cancelContext</code> is used to track and cancel (if desired) all promises in this chain.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <code><a href="../Protocols/CancellableThenable.html">CancellableThenable</a></code>
+
+</div>
+
+          </div>
+        </section>
+
+        <section class="section">
+          <div class="section-content">
+            <div class="task-group">
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit011CancellableA0C7promiseAA0A0CyxGvp"></a>
+                    <a name="//apple_ref/swift/Property/promise" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit011CancellableA0C7promiseAA0A0CyxGvp">promise</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Delegate <code>promise</code> for this CancellablePromise</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">let</span> <span class="nv">promise</span><span class="p">:</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt"><a href="../Classes/CancellablePromise.html#/s:10PromiseKit011CancellableA0C1Ta">T</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit011CancellableA0C1Ua"></a>
+                    <a name="//apple_ref/swift/Alias/U" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit011CancellableA0C1Ua">U</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Type of the delegate <code><a href="../Classes/CancellablePromise.html#/s:10PromiseKit011CancellableA0C8thenableAA0A0CyxGvp">thenable</a></code></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">U</span> <span class="o">=</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt"><a href="../Classes/CancellablePromise.html#/s:10PromiseKit011CancellableA0C1Ta">T</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit011CancellableA0C8thenableAA0A0CyxGvp"></a>
+                    <a name="//apple_ref/swift/Property/thenable" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit011CancellableA0C8thenableAA0A0CyxGvp">thenable</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Delegate <code>thenable</code> for this CancellablePromise</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">thenable</span><span class="p">:</span> <span class="kt"><a href="../Classes/CancellablePromise.html#/s:10PromiseKit011CancellableA0C1Ua">U</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit011CancellableA0C1Ca"></a>
+                    <a name="//apple_ref/swift/Alias/C" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit011CancellableA0C1Ca">C</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Type of the delegate <code><a href="../Classes/CancellablePromise.html#/s:10PromiseKit011CancellableA0C9catchableAA0A0CyxGvp">catchable</a></code></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">C</span> <span class="o">=</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt"><a href="../Classes/CancellablePromise.html#/s:10PromiseKit011CancellableA0C1Ta">T</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit011CancellableA0C9catchableAA0A0CyxGvp"></a>
+                    <a name="//apple_ref/swift/Property/catchable" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit011CancellableA0C9catchableAA0A0CyxGvp">catchable</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Delegate <code>catchable</code> for this CancellablePromise</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">catchable</span><span class="p">:</span> <span class="kt"><a href="../Classes/CancellablePromise.html#/s:10PromiseKit011CancellableA0C1Ca">C</a></span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit011CancellableA0C13cancelContextAA06CancelE0Cvp"></a>
+                    <a name="//apple_ref/swift/Property/cancelContext" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit011CancellableA0C13cancelContextAA06CancelE0Cvp">cancelContext</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>The CancelContext associated with this CancellablePromise</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">cancelContext</span><span class="p">:</span> <span class="kt"><a href="../Classes/CancelContext.html">CancelContext</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit011CancellableA0C14cancelItemListAA06CanceleF0Cvp"></a>
+                    <a name="//apple_ref/swift/Property/cancelItemList" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit011CancellableA0C14cancelItemListAA06CanceleF0Cvp">cancelItemList</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Tracks the cancel items for this CancellablePromise.  These items are removed from the associated CancelContext when the promise resolves.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">cancelItemList</span><span class="p">:</span> <span class="kt"><a href="../Other%20Classes.html#/s:10PromiseKit14CancelItemListC">CancelItemList</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit011CancellableA0C11cancellable5errorACyxGAA0C0_pSg_s5Error_ptcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(cancellable:error:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit011CancellableA0C11cancellable5errorACyxGAA0C0_pSg_s5Error_ptcfc">init(cancellable:<wbr>error:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initialize a new rejected cancellable promise.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="n">convenience</span> <span class="nf">init</span><span class="p">(</span><span class="nv">cancellable</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Cancellable.html">Cancellable</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">error</span><span class="p">:</span> <span class="kt">Error</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit011CancellableA0C_13cancelContextACyxGqd___AA06CancelE0CSgtc1TQyd__RszAA8ThenableRd__lufc"></a>
+                    <a name="//apple_ref/swift/Method/init(_:cancelContext:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit011CancellableA0C_13cancelContextACyxGqd___AA06CancelE0CSgtc1TQyd__RszAA8ThenableRd__lufc">init(_:<wbr>cancelContext:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initialize a new cancellable promise bound to the provided <code><a href="../Protocols/Thenable.html">Thenable</a></code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="n">convenience</span> <span class="kd">init</span><span class="o">&lt;</span><span class="kt"><a href="../Classes/CancellablePromise.html#/s:10PromiseKit011CancellableA0C1Ua">U</a></span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">bridge</span><span class="p">:</span> <span class="kt"><a href="../Classes/CancellablePromise.html#/s:10PromiseKit011CancellableA0C1Ua">U</a></span><span class="p">,</span> <span class="nv">cancelContext</span><span class="p">:</span> <span class="kt"><a href="../Classes/CancelContext.html">CancelContext</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">)</span> <span class="k">where</span> <span class="kt"><a href="../Classes/CancellablePromise.html#/s:10PromiseKit011CancellableA0C1Ta">T</a></span> <span class="o">==</span> <span class="kt"><a href="../Classes/CancellablePromise.html#/s:10PromiseKit011CancellableA0C1Ua">U</a></span><span class="o">.</span><span class="kt"><a href="../Classes/CancellablePromise.html#/s:10PromiseKit011CancellableA0C1Ta">T</a></span><span class="p">,</span> <span class="kt"><a href="../Classes/CancellablePromise.html#/s:10PromiseKit011CancellableA0C1Ua">U</a></span> <span class="p">:</span> <span class="kt"><a href="../Protocols/Thenable.html">Thenable</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit011CancellableA0C11cancellable8resolverACyxGAA0C0_pSg_yAA8ResolverCyxGKXEtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(cancellable:resolver:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit011CancellableA0C11cancellable8resolverACyxGAA0C0_pSg_yAA8ResolverCyxGKXEtcfc">init(cancellable:<wbr>resolver:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initialize a new cancellable promise that can be resolved with the provided <code><a href="../Classes/Resolver.html">Resolver</a></code>.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="n">convenience</span> <span class="nf">init</span><span class="p">(</span><span class="nv">cancellable</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Cancellable.html">Cancellable</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="n">resolver</span> <span class="nv">body</span><span class="p">:</span> <span class="p">(</span><span class="kt"><a href="../Classes/Resolver.html">Resolver</a></span><span class="o">&lt;</span><span class="kt"><a href="../Classes/CancellablePromise.html#/s:10PromiseKit011CancellableA0C1Ta">T</a></span><span class="o">&gt;</span><span class="p">)</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit011CancellableA0C11cancellable7promise8resolverACyxGAA0C0_pSg_AA0A0CyxGAA8ResolverCyxGtcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(cancellable:promise:resolver:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit011CancellableA0C11cancellable7promise8resolverACyxGAA0C0_pSg_AA0A0CyxGAA8ResolverCyxGtcfc">init(cancellable:<wbr>promise:<wbr>resolver:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initialize a new cancellable promise using the given Promise and its Resolver.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="n">convenience</span> <span class="nf">init</span><span class="p">(</span><span class="nv">cancellable</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Cancellable.html">Cancellable</a></span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">promise</span><span class="p">:</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt"><a href="../Classes/CancellablePromise.html#/s:10PromiseKit011CancellableA0C1Ta">T</a></span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">resolver</span><span class="p">:</span> <span class="kt"><a href="../Classes/Resolver.html">Resolver</a></span><span class="o">&lt;</span><span class="kt"><a href="../Classes/CancellablePromise.html#/s:10PromiseKit011CancellableA0C1Ta">T</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit011CancellableA0C7pendingACyxG7promise_AA8ResolverCyxG8resolvertyFZ"></a>
+                    <a name="//apple_ref/swift/Method/pending()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit011CancellableA0C7pendingACyxG7promise_AA8ResolverCyxG8resolvertyFZ">pending()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">class</span> <span class="kd">func</span> <span class="nf">pending</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="p">(</span><span class="nv">promise</span><span class="p">:</span> <span class="kt">CancellablePromise</span><span class="o">&lt;</span><span class="kt"><a href="../Classes/CancellablePromise.html#/s:10PromiseKit011CancellableA0C1Ta">T</a></span><span class="o">&gt;</span><span class="p">,</span> <span class="nv">resolver</span><span class="p">:</span> <span class="kt"><a href="../Classes/Resolver.html">Resolver</a></span><span class="o">&lt;</span><span class="kt"><a href="../Classes/CancellablePromise.html#/s:10PromiseKit011CancellableA0C1Ta">T</a></span><span class="o">&gt;</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>a tuple of a new cancellable pending promise and its <code><a href="../Classes/Resolver.html">Resolver</a></code>.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit011CancellableA0C4pipe2toyys6ResultOyxs5Error_pGc_tF"></a>
+                    <a name="//apple_ref/swift/Method/pipe(to:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit011CancellableA0C4pipe2toyys6ResultOyxs5Error_pGc_tF">pipe(to:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Internal function required for <code><a href="../Protocols/Thenable.html">Thenable</a></code> conformance.</p>
+<div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <code>Thenable.pipe</code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">pipe</span><span class="p">(</span><span class="nv">to</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">(</span><span class="kt">Result</span><span class="o">&lt;</span><span class="kt"><a href="../Classes/CancellablePromise.html#/s:10PromiseKit011CancellableA0C1Ta">T</a></span><span class="p">,</span> <span class="kt">Error</span><span class="o">&gt;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt">Void</span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit011CancellableA0C6results6ResultOyxs5Error_pGSgvp"></a>
+                    <a name="//apple_ref/swift/Property/result" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit011CancellableA0C6results6ResultOyxs5Error_pGSgvp">result</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <div class="aside aside-see">
+    <p class="aside-title">See</p>
+    <code><a href="../Protocols/Thenable.html#/s:10PromiseKit8ThenableP6results6ResultOy1TQzs5Error_pGSgvp">Thenable.result</a></code>
+
+</div>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="k">var</span> <span class="nv">result</span><span class="p">:</span> <span class="kt">Result</span><span class="o">&lt;</span><span class="kt"><a href="../Classes/CancellablePromise.html#/s:10PromiseKit011CancellableA0C1Ta">T</a></span><span class="p">,</span> <span class="kt">Error</span><span class="o">&gt;</span><span class="p">?</span> <span class="p">{</span> <span class="k">get</span> <span class="p">}</span></code></pre>
+
+                        </div>
+                      </div>
+                      <div>
+                        <h4>Return Value</h4>
+                        <p>The current <code>Result</code> for this cancellable promise.</p>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit011CancellableA0C4waitxyKF"></a>
+                    <a name="//apple_ref/swift/Method/wait()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit011CancellableA0C4waitxyKF">wait()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Blocks this thread, so—you know—don’t call this on a serial thread that
+any part of your chain may use. Like the main thread for example.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">wait</span><span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/CancellablePromise.html#/s:10PromiseKit011CancellableA0C1Ta">T</a></span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit011CancellableA0C1Ta"></a>
+                    <a name="//apple_ref/swift/Alias/T" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit011CancellableA0C1Ta">T</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">T</span> <span class="o">=</span> <span class="kt">T</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit011CancellableA0C7BaseOfTa"></a>
+                    <a name="//apple_ref/swift/Alias/BaseOfT" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit011CancellableA0C7BaseOfTa">BaseOfT</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Undocumented</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">typealias</span> <span class="kt">BaseOfT</span> <span class="o">=</span> <span class="kt">CancellablePromise</span><span class="o">&lt;</span><span class="kt"><a href="../Classes/CancellablePromise.html#/s:10PromiseKit011CancellableA0C1Ta">T</a></span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Available%20where%20%60T%60%20%3D%3D%20%60Void%60"></a>
+                <a name="//apple_ref/swift/Section/Available where `T` == `Void`" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Available%20where%20%60T%60%20%3D%3D%20%60Void%60"></a>
+                  <h3 class="section-name"><p>Available where <code><a href="../Classes/CancellablePromise.html#/s:10PromiseKit011CancellableA0C1Ta">T</a></code> == <code>Void</code></p>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit011CancellableA0CAAytRszlEACyytGycfc"></a>
+                    <a name="//apple_ref/swift/Method/init()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit011CancellableA0CAAytRszlEACyytGycfc">init()</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initializes a new cancellable promise fulfilled with <code>Void</code></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="n">convenience</span> <span class="nf">init</span><span class="p">()</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit011CancellableA0CAAytRszlE11cancellableACyytGAA0C0_p_tcfc"></a>
+                    <a name="//apple_ref/swift/Method/init(cancellable:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit011CancellableA0CAAytRszlE11cancellableACyytGAA0C0_p_tcfc">init(cancellable:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Initializes a new cancellable promise fulfilled with <code>Void</code> and with the given <code><a href="../Protocols/Cancellable.html">Cancellable</a></code></p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="n">convenience</span> <span class="nf">init</span><span class="p">(</span><span class="nv">cancellable</span><span class="p">:</span> <span class="kt"><a href="../Protocols/Cancellable.html">Cancellable</a></span><span class="p">)</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </section>
+
+      </article>
+    </div>
+    <section class="footer">
+      <p>&copy; 2021 <a class="link" href="http://mxcl.dev/PromiseKit/" target="_blank" rel="external">Max Howell</a>. All rights reserved. (Last updated: 2021-06-02)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external">jazzy ♪♫ v0.13.7</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external">Realm</a> project.</p>
+    </section>
+  </body>
+</div>
+</html>
