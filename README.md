@@ -45,7 +45,7 @@ In your `Package.swift`:
 
 ```swift
 package.dependencies.append(
-    .package(url: "https://github.com/mxcl/PromiseKit", from: "7.0.0")
+    .package(url: "https://github.com/mxcl/PromiseKit", from: "7.0.0-rc1")
 )
 ```
 
