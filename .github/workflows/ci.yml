@@ -53,6 +53,11 @@ jobs:
       with:
         xcode-version: ^12
     - uses: actions/checkout@v2
+    - run: |
+        cd Tests/A+/JavaScript
+        npm ci
+        npm run build
+      if: ${{ endsWith(matrix.dst, 'macOS') }}
     - uses: sersoft-gmbh/xcodebuild-action@v1
       with:
         spm-package: ./
@@ -80,9 +85,3 @@ jobs:
         scheme: PromiseKit-Package
         destination: platform=watchOS Simulator,OS=latest,name=Apple Watch Series 5 - 40mm
         action: build
-
-  lint:
-    runs-on: macos-latest
-    steps:
-    - uses: actions/checkout@v2
-    - run: pod lib lint --fail-fast
