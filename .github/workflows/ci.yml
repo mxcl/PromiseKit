@@ -6,10 +6,11 @@ on:
       - Tests/**
       - .github/workflows/ci.yml
 jobs:
-  auto-cancel:
+  smoke:
     runs-on: ubuntu-latest
     steps:
     - uses: technote-space/auto-cancel-redundant-job@v1
+    - uses: harupy/find-trailing-whitespace@v1.0
 
   linux:
     name: linux
