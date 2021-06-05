@@ -45,44 +45,20 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        dst:
-          - platform=macOS
-          - platform=tvOS Simulator,OS=latest,name=Apple TV
-          - platform=iOS Simulator,OS=latest,name=iPhone 12
+        platform:
+          - macOS
+          - tvOS
+          - iOS
+          - watchOS
     steps:
-    - uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: ^12
     - uses: actions/checkout@v2
     - run: |
         cd Tests/A+/JavaScript
         npm ci
         npm run build
-      if: ${{ endsWith(matrix.dst, 'macOS') }}
-    - uses: sersoft-gmbh/xcodebuild-action@v1
+      if: ${{ matrix.platform == 'macOS' }}
+    - uses: mxcl/xcodebuild@v1
       with:
-        spm-package: ./
-        scheme: PromiseKit-Package
-        destination: ${{ matrix.dst }}
-        action: test
-        enable-code-coverage: true
+        platform: ${{ matrix.platform }}
+        code-coverage: true
     - uses: codecov/codecov-action@v1
-
-  watchOS:
-    runs-on: macos-latest
-    name: apple (watchOS)
-    steps:
-    - uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: ^12
-    - uses: actions/checkout@v2
-    # with Xcode 12.5 we can use the above matrix, but with 12.4
-    # testing is not supported and trying to build with the Package.swift
-    # tries to build the tests too 🙄
-    - run: swift package generate-xcodeproj
-    - uses: sersoft-gmbh/xcodebuild-action@v1
-      with:
-        project: PromiseKit.xcodeproj
-        scheme: PromiseKit-Package
-        destination: platform=watchOS Simulator,OS=latest,name=Apple Watch Series 5 - 40mm
-        action: build
