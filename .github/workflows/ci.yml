@@ -5,11 +5,13 @@ on:
       - Sources/**
       - Tests/**
       - .github/workflows/ci.yml
+concurrency:
+  group: ${{ github.head_ref }}
+  cancel-in-progress: true
 jobs:
   smoke:
     runs-on: ubuntu-latest
     steps:
-    - uses: technote-space/auto-cancel-redundant-job@v1
     - uses: harupy/find-trailing-whitespace@v1.0
 
   linux:
