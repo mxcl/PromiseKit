@@ -52,6 +52,9 @@ jobs:
           - tvOS
           - iOS
           - watchOS
+        xcode:
+          - ~12.4
+          - ^12.5
     steps:
     - uses: actions/checkout@v2
     - run: |
@@ -61,6 +64,9 @@ jobs:
       if: ${{ matrix.platform == 'macOS' }}
     - uses: mxcl/xcodebuild@v1
       with:
+        xcode: ${{ matrix.xcode }}
         platform: ${{ matrix.platform }}
         code-coverage: true
+        warnings-as-errors: true
+      continue-on-error: ${{ matrix.xcode == '^12.5' }}
     - uses: codecov/codecov-action@v1
