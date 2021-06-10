@@ -167,7 +167,15 @@ import func Glibc.random
 func arc4random() -> UInt32 {
     return UInt32(random())
 }
+#endif
 
+#if os(Windows)
+func arc4random() -> UInt32 {
+    return UInt32.random(in: UInt32.min...UInt32.max)
+}
+#endif
+
+#if os(Linux) || os(Windows)
 extension XCTestExpectation {
     func fulfill() {
         fulfill(#file, line: #line)

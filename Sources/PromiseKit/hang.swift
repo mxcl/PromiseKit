@@ -1,3 +1,5 @@
+#if canImport(CoreFoundation)
+
 import Foundation
 import CoreFoundation
 
@@ -64,3 +66,5 @@ public func hang<T>(_ promise: Promise<T>) throws -> T {
 public func hang<T>(_ promise: CancellablePromise<T>) throws -> T {
     return try hang(promise.promise)
 }
+
+#endif

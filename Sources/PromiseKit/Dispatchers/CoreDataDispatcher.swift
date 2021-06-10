@@ -1,4 +1,4 @@
-#if !os(Linux)
+#if canImport(CoreData)
 
 import Foundation
 import CoreData
@@ -28,4 +28,3 @@ public struct CoreDataDispatcher: Dispatcher {
 }
 
 #endif
-

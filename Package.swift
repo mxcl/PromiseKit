@@ -11,7 +11,7 @@ pkg.platforms = [
 ]
 pkg.swiftLanguageVersions = [.v5]
 
-#if !os(Linux)
+#if !os(Linux) && !os(Windows)
 pkg.dependencies = [
     .package(url: "https://github.com/AliSoftware/OHHTTPStubs", from: "9.1.0")
 ]
@@ -30,7 +30,7 @@ func has(tests name: String) -> Target? {
     switch name {
     case "PMKFoundation":
         var deps = [Target.Dependency.target(name: "PMKFoundation")]
-      #if !os(Linux)
+      #if !os(Linux) && !os(Windows)
         deps.append(.product(name: "OHHTTPStubsSwift", package: "OHHTTPStubs"))
       #endif
         return .testTarget(name: "\(name)Tests", dependencies: deps, path: "Tests/\(name)")
@@ -43,7 +43,7 @@ func has(tests name: String) -> Target? {
 
 for name in ["PMKCloudKit", "PMKCoreLocation", "PMKFoundation", "PMKHealthKit", "PMKHomeKit", "PMKMapKit", "PMKPhotos", "PMKStoreKit", "PromiseKit"] {
 
-  #if os(Linux)
+  #if os(Linux) || os(Windows)
     guard name == "PromiseKit" || name == "PMKFoundation" else { continue }
   #endif
 
