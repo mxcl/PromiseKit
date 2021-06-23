@@ -47,7 +47,6 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
-        include:
         platform:
           - macOS
           - tvOS
