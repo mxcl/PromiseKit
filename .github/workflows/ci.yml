@@ -20,10 +20,11 @@ jobs:
     strategy:
       matrix:
         swift:
-        - 5.3
-        - 5.4-focal  # Swift 5.4 requires llvm-cov v11
+        - swift:5.3
+        - swift:5.4
+        - swiftlang/swift:nightly-5.5
     container:
-      image: swift:${{ matrix.swift }}
+      image: ${{ matrix.swift }}
     steps:
     - uses: actions/checkout@v2
     - run: swift test --enable-code-coverage --parallel --enable-test-discovery
@@ -44,7 +45,7 @@ jobs:
         file: ./info.lcov
 
   apple:
-    runs-on: macos-latest
+    runs-on: ${{ matrix.swift == '5.3' && 'macos-10.15' || 'macos-11' }}
     strategy:
       matrix:
         platform:
@@ -55,6 +56,7 @@ jobs:
         swift:
           - 5.3
           - 5.4
+          - 5.5
     steps:
     - uses: actions/checkout@v2
     - run: |
@@ -68,5 +70,4 @@ jobs:
         platform: ${{ matrix.platform }}
         code-coverage: true
         warnings-as-errors: true
-      continue-on-error: ${{ matrix.swift == '5.4' }}
     - uses: codecov/codecov-action@v1
