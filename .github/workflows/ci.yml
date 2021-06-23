@@ -46,7 +46,6 @@ jobs:
 
   apple:
     runs-on: ${{ matrix.swift == '5.3' && 'macos-10.15' || 'macos-11' }}
-    continue-on-error: ${{ matrix.swift == '5.5' }}
     strategy:
       matrix:
         platform:
