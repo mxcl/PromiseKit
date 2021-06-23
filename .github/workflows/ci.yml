@@ -47,6 +47,7 @@ jobs:
     runs-on: macos-latest
     strategy:
       matrix:
+        include:
         platform:
           - macOS
           - tvOS
@@ -55,6 +56,7 @@ jobs:
         swift:
           - 5.3
           - 5.4
+          - 5.5
     steps:
     - uses: actions/checkout@v2
     - run: |
@@ -68,5 +70,4 @@ jobs:
         platform: ${{ matrix.platform }}
         code-coverage: true
         warnings-as-errors: true
-      continue-on-error: ${{ matrix.swift == '5.4' }}
     - uses: codecov/codecov-action@v1
