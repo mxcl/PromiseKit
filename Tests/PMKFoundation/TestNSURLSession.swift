@@ -1,4 +1,4 @@
-#if !os(Linux)
+#if !os(Linux) && !os(watchOS)
 
 import OHHTTPStubsSwift
 import PMKFoundation
