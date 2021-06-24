@@ -84,7 +84,10 @@ class ThenableTests: XCTestCase {
         enum E: Error { case dummy }
 
         let ex = expectation(description: "")
-        Promise(error: E.dummy).compactMap {
+
+        let p = Promise<Int>(error: E.dummy)
+
+        p.compactMap {
             Int($0)
         }.catch {
             if case E.dummy = $0 {} else {
