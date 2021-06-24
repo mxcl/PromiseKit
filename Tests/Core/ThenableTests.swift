@@ -87,8 +87,8 @@ class ThenableTests: XCTestCase {
 
         let p = Promise<Int>(error: E.dummy)
 
-        p.compactMap {
-            Int($0)
+        p.compactMap { (x: Int) -> Int? in
+            Int(x)
         }.catch {
             if case E.dummy = $0 {} else {
                 XCTFail()
