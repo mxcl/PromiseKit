@@ -1,3 +1,5 @@
+#if canImport(CoreFoundation)
+
 import PromiseKit
 import XCTest
 
@@ -36,3 +38,5 @@ class HangTests: XCTestCase {
         XCTFail("Expected error but no error was thrown")
     }
 }
+
+#endif

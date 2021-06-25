@@ -128,7 +128,7 @@ extension URL: URLRequestConvertible {
 }
 
 
-#if !os(Linux)
+#if !os(Linux) && !os(Windows)
 public extension String {
     /**
       - Remark: useful when converting a `URLSession` response into a `String`

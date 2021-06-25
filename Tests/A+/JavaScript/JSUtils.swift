@@ -5,7 +5,7 @@
 //  Created by Lois Di Qual on 3/2/18.
 //
 
-#if !os(Linux) && !os(watchOS)
+#if !os(Linux) && !os(watchOS) && !os(Windows)
 import JavaScriptCore
 
 enum JSUtils {
