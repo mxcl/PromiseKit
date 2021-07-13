@@ -1,6 +1,6 @@
 #import <Foundation/Foundation.h>
 #import <dispatch/dispatch.h>
-#import <PromiseKit/fwd.h>
+#import <fwd.h>
 
 // Different ways to make AnyPromise available
 //
