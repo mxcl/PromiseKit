@@ -1,31 +1,32 @@
-import PromiseKit
 import Dispatch
+import PromiseKit
 import XCTest
 
 class WhenTests: XCTestCase {
 
     func testEmpty() {
-        let e1 = expectation(description: "")
+        let ex = expectation(description: "")
+        ex.expectedFulfillmentCount = 2
         let promises: [CancellablePromise<Void>] = []
+
         when(fulfilled: promises).done { _ in
             XCTFail()
         }.catch(policy: .allErrors) {
-            $0.isCancelled ? e1.fulfill() : XCTFail()
+            $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
 
-        let e2 = expectation(description: "")
         when(resolved: promises).done { _ in
             XCTFail()
-            e2.fulfill()
         }.catch(policy: .allErrors) {
-            $0.isCancelled ? e2.fulfill() : XCTFail()
+            $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
 
-        wait(for: [e1, e2], timeout: 5)
+        waitForExpectations()
     }
 
     func testInt() {
-        let e1 = expectation(description: "")
+        let ex = expectation(description: "")
+        ex.expectedFulfillmentCount = 2
         let p1 = Promise.value(1).cancellize()
         let p2 = Promise.value(2).cancellize()
         let p3 = Promise.value(3).cancellize()
@@ -34,121 +35,497 @@ class WhenTests: XCTestCase {
         when(fulfilled: [p1, p2, p3, p4]).done { _ in
             XCTFail()
         }.catch(policy: .allErrors) {
-            $0.isCancelled ? e1.fulfill() : XCTFail()
+            $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
-        waitForExpectations(timeout: 5, handler: nil)
-    }
 
-    func testIntAlt() {
-        let e1 = expectation(description: "")
-        let p1 = Promise.value(1).cancellize()
-        let p2 = Promise.value(2).cancellize()
-        let p3 = Promise.value(3).cancellize()
-        let p4 = Promise.value(4).cancellize()
-
-        when(fulfilled: p1, p2, p3, p4).done { _ in
+        when(resolved: [p1, p2, p3, p4]).done { _ in
             XCTFail()
         }.catch(policy: .allErrors) {
-            $0.isCancelled ? e1.fulfill() : XCTFail()
+            $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
-        waitForExpectations(timeout: 5, handler: nil)
+
+        waitForExpectations()
     }
 
-    func testDoubleTupleSucceed() {
-        let e1 = expectation(description: "")
+    func testBinaryTuple() {
+        let ex = expectation(description: "")
+        ex.expectedFulfillmentCount = 2
         let p1 = Promise.value(1).cancellize()
         let p2 = Promise.value("abc").cancellize()
-        cancellableWhen(fulfilled: p1, p2).done{ x, y in
-            XCTAssertEqual(x, 1)
-            XCTAssertEqual(y, "abc")
-            e1.fulfill()
+
+        when(fulfilled: p1, p2).done{ v1, v2 in
+            XCTAssertEqual(v1, 1)
+            XCTAssertEqual(v2, "abc")
+            ex.fulfill()
         }.silenceWarning()
-        waitForExpectations(timeout: 5, handler: nil)
+
+        when(resolved: p1, p2).done{ r1, r2 in
+            XCTAssertEqual(try r1.get(), 1)
+            XCTAssertEqual(try r2.get(), "abc")
+            ex.fulfill()
+        }.silenceWarning()
+
+        waitForExpectations()
     }
 
-    func testDoubleTupleCancel() {
-        let e1 = expectation(description: "")
+    func testBinaryTupleCancel() {
+        let ex = expectation(description: "")
+        ex.expectedFulfillmentCount = 2
         let p1 = Promise.value(1).cancellize()
         let p2 = Promise.value("abc").cancellize()
-        cancellableWhen(fulfilled: p1, p2).done{ _, _ in
+
+        when(fulfilled: p1, p2).done{ _, _ in
             XCTFail()
         }.catch(policy: .allErrors) {
-            $0.isCancelled ? e1.fulfill() : XCTFail()
+            $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
-        waitForExpectations(timeout: 5, handler: nil)
-    }
 
-    func testTripleTuple() {
-        let e1 = expectation(description: "")
+        when(resolved: p1, p2).done{ _, _ in
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
+        }.cancel()
+
+        waitForExpectations()
+    }
+    
+    func testTernaryTuple() {
+        let ex = expectation(description: "")
+        ex.expectedFulfillmentCount = 2
         let p1 = Promise.value(1).cancellize()
         let p2 = Promise.value("abc").cancellize()
         let p3 = Promise.value(1.0).cancellize()
-        cancellableWhen(fulfilled: p1, p2, p3).done { _, _, _ in
-            XCTFail()
-        }.catch(policy: .allErrors) {
-            $0.isCancelled ? e1.fulfill() : XCTFail()
-        }.cancel()
-        waitForExpectations(timeout: 5, handler: nil)
+
+        when(fulfilled: p1, p2, p3).done{ v1, v2, v3 in
+            XCTAssertEqual(v1, 1)
+            XCTAssertEqual(v2, "abc")
+            XCTAssertEqual(v3, 1.0)
+            ex.fulfill()
+        }.silenceWarning()
+
+        when(resolved: p1, p2, p3).done { r1, r2, r3 in
+            XCTAssertEqual(try r1.get(), 1)
+            XCTAssertEqual(try r2.get(), "abc")
+            XCTAssertEqual(try r3.get(), 1.0)
+            ex.fulfill()
+        }.silenceWarning()
+
+        waitForExpectations()
     }
 
-    func testQuadrupleTuple() {
-        let e1 = expectation(description: "")
+    func testTernaryTupleCancel() {
+        let ex = expectation(description: "")
+        ex.expectedFulfillmentCount = 2
+        let p1 = Promise.value(1).cancellize()
+        let p2 = Promise.value("abc").cancellize()
+        let p3 = Promise.value(1.0).cancellize()
+
+        when(fulfilled: p1, p2, p3).done { _, _, _ in
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
+        }.cancel()
+
+        when(resolved: p1, p2, p3).done { _, _, _ in
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
+        }.cancel()
+
+        waitForExpectations()
+    }
+
+    func testQuaternaryTuple() {
+        let ex = expectation(description: "")
+        ex.expectedFulfillmentCount = 2
         let p1 = Promise.value(1).cancellize()
         let p2 = Promise.value("abc").cancellize()
         let p3 = Promise.value(1.0).cancellize()
         let p4 = Promise.value(true).cancellize()
-        cancellableWhen(fulfilled: p1, p2, p3, p4).done { _, _, _, _ in
-            XCTFail()
-        }.catch(policy: .allErrors) {
-            $0.isCancelled ? e1.fulfill() : XCTFail()
-        }.cancel()
-        waitForExpectations(timeout: 5, handler: nil)
+
+        when(fulfilled: p1, p2, p3, p4).done{ v1, v2, v3, v4 in
+            XCTAssertEqual(v1, 1)
+            XCTAssertEqual(v2, "abc")
+            XCTAssertEqual(v3, 1.0)
+            XCTAssertEqual(v4, true)
+            ex.fulfill()
+        }.silenceWarning()
+
+        when(resolved: p1, p2, p3, p4).done { r1, r2, r3, r4 in
+            XCTAssertEqual(try r1.get(), 1)
+            XCTAssertEqual(try r2.get(), "abc")
+            XCTAssertEqual(try r3.get(), 1.0)
+            XCTAssertEqual(try r4.get(), true)
+            ex.fulfill()
+        }.silenceWarning()
+
+        waitForExpectations()
     }
 
-    func testQuintupleTuple() {
-        let e1 = expectation(description: "")
+    func testQuaternaryTupleCancel() {
+        let ex = expectation(description: "")
+        ex.expectedFulfillmentCount = 2
+        let p1 = Promise.value(1).cancellize()
+        let p2 = Promise.value("abc").cancellize()
+        let p3 = Promise.value(1.0).cancellize()
+        let p4 = Promise.value(true).cancellize()
+
+        when(fulfilled: p1, p2, p3, p4).done { _, _, _, _ in
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
+        }.cancel()
+
+        when(resolved: p1, p2, p3, p4).done { _, _, _, _ in
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
+        }.cancel()
+
+        waitForExpectations()
+    }
+
+    func testQuinaryTuple() {
+        let ex = expectation(description: "")
+        ex.expectedFulfillmentCount = 2
         let p1 = Promise.value(1).cancellize()
         let p2 = Promise.value("abc").cancellize()
         let p3 = Promise.value(1.0).cancellize()
         let p4 = Promise.value(true).cancellize()
         let p5 = Promise.value("a" as Character).cancellize()
-        cancellableWhen(fulfilled: p1, p2, p3, p4, p5).done { _, _, _, _, _ in
-            XCTFail()
-        }.catch(policy: .allErrors) {
-            $0.isCancelled ? e1.fulfill() : XCTFail()
-        }.cancel()
-        waitForExpectations(timeout: 5, handler: nil)
+
+        when(fulfilled: p1, p2, p3, p4, p5).done{ v1, v2, v3, v4, v5 in
+            XCTAssertEqual(v1, 1)
+            XCTAssertEqual(v2, "abc")
+            XCTAssertEqual(v3, 1.0)
+            XCTAssertEqual(v4, true)
+            XCTAssertEqual(v5, "a" as Character)
+            ex.fulfill()
+        }.silenceWarning()
+
+        when(resolved: p1, p2, p3, p4, p5).done { r1, r2, r3, r4, r5 in
+            XCTAssertEqual(try r1.get(), 1)
+            XCTAssertEqual(try r2.get(), "abc")
+            XCTAssertEqual(try r3.get(), 1.0)
+            XCTAssertEqual(try r4.get(), true)
+            XCTAssertEqual(try r5.get(), "a" as Character)
+            ex.fulfill()
+        }.silenceWarning()
+
+        waitForExpectations()
     }
 
-    func testVoid() {
-        let e1 = expectation(description: "")
+    func testQuinaryTupleCancel() {
+        let ex = expectation(description: "")
+        ex.expectedFulfillmentCount = 2
+        let p1 = Promise.value(1).cancellize()
+        let p2 = Promise.value("abc").cancellize()
+        let p3 = Promise.value(1.0).cancellize()
+        let p4 = Promise.value(true).cancellize()
+        let p5 = Promise.value("a" as Character).cancellize()
+
+        when(fulfilled: p1, p2, p3, p4, p5).done { _, _, _, _, _ in
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
+        }.cancel()
+
+        when(resolved: p1, p2, p3, p4, p5).done { _, _, _, _, _ in
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
+        }.cancel()
+
+        waitForExpectations()
+    }
+
+    func testSenaryTuple() {
+        let ex = expectation(description: "")
+        ex.expectedFulfillmentCount = 2
+        let p1 = Promise.value(1).cancellize()
+        let p2 = Promise.value("abc").cancellize()
+        let p3 = Promise.value(1.0).cancellize()
+        let p4 = Promise.value(true).cancellize()
+        let p5 = Promise.value("a" as Character).cancellize()
+        let p6 = Promise.value(CGFloat(6)).cancellize()
+        
+        when(fulfilled: p1, p2, p3, p4, p5, p6).done { v1, v2, v3, v4, v5, v6 in
+            XCTAssertEqual(v1, 1)
+            XCTAssertEqual(v2, "abc")
+            XCTAssertEqual(v3, 1.0)
+            XCTAssertEqual(v4, true)
+            XCTAssertEqual(v5, "a" as Character)
+            XCTAssertEqual(v6, CGFloat(6))
+            ex.fulfill()
+        }.silenceWarning()
+        
+        when(resolved: p1, p2, p3, p4, p5, p6).done { r1, r2, r3, r4, r5, r6 in
+            XCTAssertEqual(try r1.get(), 1)
+            XCTAssertEqual(try r2.get(), "abc")
+            XCTAssertEqual(try r3.get(), 1.0)
+            XCTAssertEqual(try r4.get(), true)
+            XCTAssertEqual(try r5.get(), "a" as Character)
+            XCTAssertEqual(try r6.get(), CGFloat(6))
+            ex.fulfill()
+        }.silenceWarning()
+        
+        waitForExpectations()
+    }
+
+    func testSenaryTupleCancel() {
+        let ex = expectation(description: "")
+        ex.expectedFulfillmentCount = 2
+        let p1 = Promise.value(1).cancellize()
+        let p2 = Promise.value("abc").cancellize()
+        let p3 = Promise.value(1.0).cancellize()
+        let p4 = Promise.value(true).cancellize()
+        let p5 = Promise.value("a" as Character).cancellize()
+        let p6 = Promise.value(CGFloat(6)).cancellize()
+        
+        when(fulfilled: p1, p2, p3, p4, p5, p6).done { _, _, _, _, _, _ in
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
+        }.cancel()
+
+        when(resolved: p1, p2, p3, p4, p5, p6).done { _, _, _, _, _, _ in
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
+        }.cancel()
+        
+        waitForExpectations()
+    }
+
+    func testSeptenaryTuple() {
+        let ex = expectation(description: "")
+        ex.expectedFulfillmentCount = 2
+        let p1 = Promise.value(1).cancellize()
+        let p2 = Promise.value("abc").cancellize()
+        let p3 = Promise.value(1.0).cancellize()
+        let p4 = Promise.value(true).cancellize()
+        let p5 = Promise.value("a" as Character).cancellize()
+        let p6 = Promise.value(CGFloat(6)).cancellize()
+        let p7 = Promise.value(1 as Int?).cancellize()
+        
+        when(fulfilled: p1, p2, p3, p4, p5, p6, p7).done { v1, v2, v3, v4, v5, v6, v7 in
+            XCTAssertEqual(v1, 1)
+            XCTAssertEqual(v2, "abc")
+            XCTAssertEqual(v3, 1.0)
+            XCTAssertEqual(v4, true)
+            XCTAssertEqual(v5, "a" as Character)
+            XCTAssertEqual(v6, CGFloat(6))
+            XCTAssertEqual(v7, 1 as Int?)
+            ex.fulfill()
+        }.silenceWarning()
+        
+        when(resolved: p1, p2, p3, p4, p5, p6, p7).done { r1, r2, r3, r4, r5, r6, r7 in
+            XCTAssertEqual(try r1.get(), 1)
+            XCTAssertEqual(try r2.get(), "abc")
+            XCTAssertEqual(try r3.get(), 1.0)
+            XCTAssertEqual(try r4.get(), true)
+            XCTAssertEqual(try r5.get(), "a" as Character)
+            XCTAssertEqual(try r6.get(), CGFloat(6))
+            XCTAssertEqual(try r7.get(), 1 as Int?)
+            ex.fulfill()
+        }.silenceWarning()
+        
+        waitForExpectations()
+    }
+
+    func testSeptenaryTupleCancel() {
+        let ex = expectation(description: "")
+        ex.expectedFulfillmentCount = 2
+        let p1 = Promise.value(1).cancellize()
+        let p2 = Promise.value("abc").cancellize()
+        let p3 = Promise.value(1.0).cancellize()
+        let p4 = Promise.value(true).cancellize()
+        let p5 = Promise.value("a" as Character).cancellize()
+        let p6 = Promise.value(CGFloat(6)).cancellize()
+        let p7 = Promise.value(1 as Int?).cancellize()
+        
+        when(fulfilled: p1, p2, p3, p4, p5, p6, p7).done { _, _, _, _, _, _, _ in
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
+        }.cancel()
+
+        when(resolved: p1, p2, p3, p4, p5, p6, p7).done { _, _, _, _, _, _, _ in
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
+        }.cancel()
+        
+        waitForExpectations()
+    }
+
+    func testOctonaryTuple() {
+        let ex = expectation(description: "")
+        ex.expectedFulfillmentCount = 2
+        let p1 = Promise.value(1).cancellize()
+        let p2 = Promise.value("abc").cancellize()
+        let p3 = Promise.value(1.0).cancellize()
+        let p4 = Promise.value(true).cancellize()
+        let p5 = Promise.value("a" as Character).cancellize()
+        let p6 = Promise.value(CGFloat(6)).cancellize()
+        let p7 = Promise.value(1 as Int?).cancellize()
+        let p8 = Promise.value("abc" as String?).cancellize()
+        
+        when(fulfilled: p1, p2, p3, p4, p5, p6, p7, p8).done { v1, v2, v3, v4, v5, v6, v7, v8 in
+            XCTAssertEqual(v1, 1)
+            XCTAssertEqual(v2, "abc")
+            XCTAssertEqual(v3, 1.0)
+            XCTAssertEqual(v4, true)
+            XCTAssertEqual(v5, "a" as Character)
+            XCTAssertEqual(v6, CGFloat(6))
+            XCTAssertEqual(v7, 1 as Int?)
+            XCTAssertEqual(v8, "abc" as String?)
+            ex.fulfill()
+        }.silenceWarning()
+        
+        when(resolved: p1, p2, p3, p4, p5, p6, p7, p8).done { r1, r2, r3, r4, r5, r6, r7, r8 in
+            XCTAssertEqual(try r1.get(), 1)
+            XCTAssertEqual(try r2.get(), "abc")
+            XCTAssertEqual(try r3.get(), 1.0)
+            XCTAssertEqual(try r4.get(), true)
+            XCTAssertEqual(try r5.get(), "a" as Character)
+            XCTAssertEqual(try r6.get(), CGFloat(6))
+            XCTAssertEqual(try r7.get(), 1 as Int?)
+            XCTAssertEqual(try r8.get(), "abc" as String?)
+            ex.fulfill()
+        }.silenceWarning()
+        
+        waitForExpectations()
+    }
+
+    func testOctonaryTupleCancel() {
+        let ex = expectation(description: "")
+        ex.expectedFulfillmentCount = 2
+        let p1 = Promise.value(1).cancellize()
+        let p2 = Promise.value("abc").cancellize()
+        let p3 = Promise.value(1.0).cancellize()
+        let p4 = Promise.value(true).cancellize()
+        let p5 = Promise.value("a" as Character).cancellize()
+        let p6 = Promise.value(CGFloat(6)).cancellize()
+        let p7 = Promise.value(1 as Int?).cancellize()
+        let p8 = Promise.value("abc" as String?).cancellize()
+        
+        when(fulfilled: p1, p2, p3, p4, p5, p6, p7, p8).done { _, _, _, _, _, _, _, _ in
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
+        }.cancel()
+
+        when(resolved: p1, p2, p3, p4, p5, p6, p7, p8).done { _, _, _, _, _, _, _, _ in
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
+        }.cancel()
+        
+        waitForExpectations()
+    }
+
+    func testNovenaryTuple() {
+        let ex = expectation(description: "")
+        ex.expectedFulfillmentCount = 2
+        let p1 = Promise.value(1).cancellize()
+        let p2 = Promise.value("abc").cancellize()
+        let p3 = Promise.value(1.0).cancellize()
+        let p4 = Promise.value(true).cancellize()
+        let p5 = Promise.value("a" as Character).cancellize()
+        let p6 = Promise.value(CGFloat(6)).cancellize()
+        let p7 = Promise.value(1 as Int?).cancellize()
+        let p8 = Promise.value("abc" as String?).cancellize()
+        let p9 = Promise.value(nil as Double?).cancellize()
+        
+        when(fulfilled: p1, p2, p3, p4, p5, p6, p7, p8, p9).done { v1, v2, v3, v4, v5, v6, v7, v8, v9 in
+            XCTAssertEqual(v1, 1)
+            XCTAssertEqual(v2, "abc")
+            XCTAssertEqual(v3, 1.0)
+            XCTAssertEqual(v4, true)
+            XCTAssertEqual(v5, "a" as Character)
+            XCTAssertEqual(v6, CGFloat(6))
+            XCTAssertEqual(v7, 1 as Int?)
+            XCTAssertEqual(v8, "abc" as String?)
+            XCTAssertEqual(v9, nil)
+            ex.fulfill()
+        }.silenceWarning()
+        
+        when(resolved: p1, p2, p3, p4, p5, p6, p7, p8, p9).done { r1, r2, r3, r4, r5, r6, r7, r8, r9 in
+            XCTAssertEqual(try r1.get(), 1)
+            XCTAssertEqual(try r2.get(), "abc")
+            XCTAssertEqual(try r3.get(), 1.0)
+            XCTAssertEqual(try r4.get(), true)
+            XCTAssertEqual(try r5.get(), "a" as Character)
+            XCTAssertEqual(try r6.get(), CGFloat(6))
+            XCTAssertEqual(try r7.get(), 1 as Int?)
+            XCTAssertEqual(try r8.get(), "abc" as String?)
+            XCTAssertEqual(try r9.get(), nil)
+            ex.fulfill()
+        }.silenceWarning()
+        
+        waitForExpectations()
+    }
+
+    func testNovenaryTupleCancel() {
+        let ex = expectation(description: "")
+        ex.expectedFulfillmentCount = 2
+        let p1 = Promise.value(1).cancellize()
+        let p2 = Promise.value("abc").cancellize()
+        let p3 = Promise.value(1.0).cancellize()
+        let p4 = Promise.value(true).cancellize()
+        let p5 = Promise.value("a" as Character).cancellize()
+        let p6 = Promise.value(CGFloat(6)).cancellize()
+        let p7 = Promise.value(1 as Int?).cancellize()
+        let p8 = Promise.value("abc" as String?).cancellize()
+        let p9 = Promise.value(nil as Double?).cancellize()
+        
+        when(fulfilled: p1, p2, p3, p4, p5, p6, p7, p8, p9).done { _, _, _, _, _, _, _, _, _ in
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
+        }.cancel()
+
+        when(resolved: p1, p2, p3, p4, p5, p6, p7, p8, p9).done { _, _, _, _, _, _, _, _, _ in
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
+        }.cancel()
+        
+        waitForExpectations()
+    }
+
+    func testVoidCancel() {
+        let ex = expectation(description: "")
         let p1 = Promise.value(1).cancellize().done { _ in }
         let p2 = Promise.value(2).cancellize().done { _ in }
         let p3 = Promise.value(3).cancellize().done { _ in }
         let p4 = Promise.value(4).cancellize().done { _ in }
 
-        when(fulfilled: p1, p2, p3, p4).done {
+        when(fulfilled: [p1, p2, p3, p4]).done {
             XCTFail()
         }.catch(policy: .allErrors) {
-            $0.isCancelled ? e1.fulfill() : XCTFail()
+            $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
 
-        waitForExpectations(timeout: 5, handler: nil)
+        waitForExpectations()
     }
     
     func testRejected() {
-        enum Error: Swift.Error { case dummy }
-
-        let e1 = expectation(description: "")
+        let ex = expectation(description: "")
+        ex.expectedFulfillmentCount = 2
         let p1 = after(.milliseconds(100)).cancellize().map{ true }
-        let p2: CancellablePromise<Bool> = after(.milliseconds(200)).cancellize().map{ throw Error.dummy }
+        let p2: CancellablePromise<Bool> = after(.milliseconds(200)).cancellize().map{ throw TestError.dummy }
         let p3 = Promise.value(false).cancellize()
             
-        cancellableWhen(fulfilled: p1, p2, p3).catch(policy: .allErrors) {
-            $0.isCancelled ? e1.fulfill() : XCTFail()
+        when(fulfilled: p1, p2, p3).catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
+        }.cancel()
+        when(resolved: p1, p2, p3).catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
         
-        waitForExpectations(timeout: 5, handler: nil)
+        waitForExpectations()
     }
 
     func testProgress() {
@@ -173,7 +550,7 @@ class WhenTests: XCTestCase {
 
         progress.resignCurrent()
         
-        waitForExpectations(timeout: 5, handler: nil)
+        waitForExpectations()
     }
 
     func testProgressDoesNotExceed100PercentSucceed() {
@@ -214,7 +591,7 @@ class WhenTests: XCTestCase {
         p3.done(on: q, finally).silenceWarning()
         p4.done(on: q, finally).silenceWarning()
 
-        waitForExpectations(timeout: 5, handler: nil)
+        waitForExpectations()
     }
 
     func testProgressDoesNotExceed100PercentCancel() {
@@ -267,82 +644,125 @@ class WhenTests: XCTestCase {
         p3.done(on: q, finally).catch(policy: .allErrors, catchall)
         p4.done(on: q, finally).catch(policy: .allErrors, catchall)
 
-        waitForExpectations(timeout: 5, handler: nil)
+        waitForExpectations()
     }
 
     func testUnhandledErrorHandlerDoesNotFire() {
-        enum Error: Swift.Error {
-            case test
-        }
-
         let ex = expectation(description: "")
-        let p1 = CancellablePromise<Int>(error: Error.test)
+        let p1 = CancellablePromise<Int>(error: TestError.dummy)
         let p2 = after(.milliseconds(100)).cancellize()
-        cancellableWhen(fulfilled: p1, p2).done{ _ in XCTFail() }.catch(policy: .allErrors) {
+        when(fulfilled: p1, p2).done{ _ in XCTFail() }.catch(policy: .allErrors) {
             $0.isCancelled ? XCTFail() : ex.fulfill()
         }.cancel()
 
-        waitForExpectations(timeout: 5, handler: nil)
+        waitForExpectations()
     }
 
     func testUnhandledErrorHandlerDoesNotFireForStragglers() {
-        enum Error: Swift.Error {
-            case test
-            case straggler
-        }
-
-        let ex1 = expectation(description: "")
-        let ex2 = expectation(description: "")
-        let ex3 = expectation(description: "")
-
-        let p1 = CancellablePromise<Void>(error: Error.test)
-        let p2 = after(.milliseconds(100)).cancellize().done { throw Error.straggler }
-        let p3 = after(.milliseconds(200)).cancellize().done { throw Error.straggler }
-
-        cancellableWhen(fulfilled: p1, p2, p3).catch(policy: .allErrors) {
-            $0.isCancelled ? XCTFail() : ex1.fulfill()
-        }.cancel()
-
-        p2.ensure { after(.milliseconds(100)).done(ex2.fulfill) }.silenceWarning()
-        p3.ensure { after(.milliseconds(100)).done(ex3.fulfill) }.silenceWarning()
-
-        waitForExpectations(timeout: 5, handler: nil)
-    }
-
-    func testAllSealedRejectedFirstOneRejects() {
-        enum Error: Swift.Error {
-            case test1
-            case test2
-            case test3
-        }
-
         let ex = expectation(description: "")
-        let p1 = CancellablePromise<Void>(error: Error.test1)
-        let p2 = CancellablePromise<Void>(error: Error.test2)
-        let p3 = CancellablePromise<Void>(error: Error.test3)
+        ex.expectedFulfillmentCount = 3
+        let p1 = CancellablePromise<Void>(error: TestError.dummy)
+        let p2 = after(.milliseconds(100)).cancellize().done { throw TestError.straggler }
+        let p3 = after(.milliseconds(200)).cancellize().done { throw TestError.straggler }
 
         when(fulfilled: p1, p2, p3).catch(policy: .allErrors) {
             $0.isCancelled ? XCTFail() : ex.fulfill()
         }.cancel()
 
-        waitForExpectations(timeout: 5)
+        p2.ensure { after(.milliseconds(100)).done(ex.fulfill) }.silenceWarning()
+        p3.ensure { after(.milliseconds(100)).done(ex.fulfill) }.silenceWarning()
+
+        waitForExpectations()
+    }
+
+    func testAllSealedRejectedFirstOneRejects() {
+        let ex = expectation(description: "")
+        let p1 = CancellablePromise<Void>(error: TestError.dummy)
+        let p2 = CancellablePromise<Void>(error: TestError.straggler)
+        let p3 = CancellablePromise<Void>(error: TestError.stub)
+
+        when(fulfilled: p1, p2, p3).catch(policy: .allErrors) {
+            $0.isCancelled ? XCTFail() : ex.fulfill()
+        }.cancel()
+
+        waitForExpectations()
     }
 
     func testGuaranteeWhen() {
-        let ex1 = expectation(description: "")
+        let ex = expectation(description: "")
+        ex.expectedFulfillmentCount = 2
+
         when(resolved: Guarantee().cancellize(), Guarantee().cancellize()).done { _ in
             XCTFail()
         }.catch(policy: .allErrors) {
-            $0.isCancelled ? ex1.fulfill() : XCTFail()
+            $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
 
-        let ex2 = expectation(description: "")
         when(resolved: [Guarantee().cancellize(), Guarantee().cancellize()]).done { _ in
             XCTFail()
         }.catch(policy: .allErrors) {
-            $0.isCancelled ? ex2.fulfill() : XCTFail()
+            $0.isCancelled ? ex.fulfill() : XCTFail()
         }.cancel()
 
-        wait(for: [ex1, ex2], timeout: 5)
+        waitForExpectations()
+    }
+
+    func testMixedThenables() {
+        let ex = expectation(description: "")
+        ex.expectedFulfillmentCount = 2
+        let p1 = Promise.value(true).cancellize()
+        let p2 = Promise.value(2).cancellize()
+        let g1 = Guarantee.value("abc").cancellize()
+        
+        when(fulfilled: p1, p2, g1).done { v1, v2, v3 in
+            XCTAssertEqual(v1, true)
+            XCTAssertEqual(v2, 2)
+            XCTAssertEqual(v3, "abc")
+            ex.fulfill()
+        }.silenceWarning()
+        
+        when(resolved: p1, p2, g1).done { r1, r2, r3 in
+            XCTAssertEqual(try r1.get(), true)
+            XCTAssertEqual(try r2.get(), 2)
+            XCTAssertEqual(try r3.get(), "abc")
+            ex.fulfill()
+        }.silenceWarning()
+        
+        waitForExpectations()
+    }
+
+    func testMixedThenablesCancel() {
+        let ex = expectation(description: "")
+        ex.expectedFulfillmentCount = 2
+        let p1 = Promise.value(true).cancellize()
+        let p2 = Promise.value(2).cancellize()
+        let g1 = Guarantee.value("abc").cancellize()
+        
+        when(fulfilled: p1, p2, g1).done { _ in
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
+        }.cancel()
+        
+        when(resolved: p1, p2, g1).done { _ in
+            XCTFail()
+        }.catch(policy: .allErrors) {
+            $0.isCancelled ? ex.fulfill() : XCTFail()
+        }.cancel()
+        
+        waitForExpectations()
+    }
+}
+
+private enum TestError: Error {
+    case dummy
+    case straggler
+    case stub
+}
+
+private extension XCTestCase {
+    
+    func waitForExpectations() {
+        waitForExpectations(timeout: 5)
     }
 }

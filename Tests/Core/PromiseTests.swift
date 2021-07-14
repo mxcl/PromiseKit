@@ -212,7 +212,7 @@ class PromiseTests: XCTestCase {
         let a = Promise<Void>.value
         let b = Promise<Void>.value(Void())
         let c = Promise<Void>.value(())
-        when(fulfilled: a, b, c).done {
+        when(fulfilled: [a, b, c]).done {
             ex.fulfill()
         }.cauterize()
         wait(for: [ex], timeout: 5)

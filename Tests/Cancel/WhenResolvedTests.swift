@@ -9,7 +9,7 @@ class JoinTests: XCTestCase {
         let successPromise = CancellablePromise()
 
         var joinFinished = false
-        when(resolved: successPromise).done(on: nil) { _ in joinFinished = true }.cancel()
+        when(resolved: [successPromise]).done(on: nil) { joinFinished = true }.cancel()
         XCTAssert(joinFinished, "Join immediately finishes on fulfilled promise")
         
         let promise2 = Promise.value(2)
