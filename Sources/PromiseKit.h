@@ -1,5 +1,5 @@
-#import <PromiseKit/fwd.h>
-#import <PromiseKit/AnyPromise.h>
+#import <fwd.h>
+#import <AnyPromise.h>
 
 #import <Foundation/NSObjCRuntime.h>  // `FOUNDATION_EXPORT`
 

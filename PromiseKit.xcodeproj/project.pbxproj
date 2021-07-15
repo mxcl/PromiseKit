@@ -39,7 +39,6 @@
 		632FBBE51F33B338008F8FBB /* CatchableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 632FBBE41F33B338008F8FBB /* CatchableTests.swift */; };
 		633027E6203CC0060037E136 /* PromiseKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 63B0AC571D595E1B00FA21D9 /* PromiseKit.framework */; };
 		6330B5E11F2E991200D60528 /* Configuration.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6330B5E01F2E991200D60528 /* Configuration.swift */; };
-		634AAD2B1EAE517C00B17855 /* fwd.h in Headers */ = {isa = PBXBuildFile; fileRef = 634AAD2A1EAE517C00B17855 /* fwd.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		635D641D1D59635300BC0AF5 /* PromiseTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D64081D59635300BC0AF5 /* PromiseTests.swift */; };
 		635D641E1D59635300BC0AF5 /* CancellableErrorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D64091D59635300BC0AF5 /* CancellableErrorTests.swift */; };
 		635D64221D59635300BC0AF5 /* ZalgoTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 635D640D1D59635300BC0AF5 /* ZalgoTests.swift */; };
@@ -60,7 +59,6 @@
 		639BF757203DF03100FA577B /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 639BF755203DF02C00FA577B /* Utilities.swift */; };
 		63B0AC7F1D595E6300FA21D9 /* after.m in Sources */ = {isa = PBXBuildFile; fileRef = 63B0AC611D595E6300FA21D9 /* after.m */; };
 		63B0AC801D595E6300FA21D9 /* after.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B0AC621D595E6300FA21D9 /* after.swift */; };
-		63B0AC811D595E6300FA21D9 /* AnyPromise.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B0AC631D595E6300FA21D9 /* AnyPromise.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63B0AC821D595E6300FA21D9 /* AnyPromise.m in Sources */ = {isa = PBXBuildFile; fileRef = 63B0AC641D595E6300FA21D9 /* AnyPromise.m */; };
 		63B0AC831D595E6300FA21D9 /* AnyPromise.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B0AC651D595E6300FA21D9 /* AnyPromise.swift */; };
 		63B0AC841D595E6300FA21D9 /* AnyPromise+Private.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B0AC661D595E6300FA21D9 /* AnyPromise+Private.h */; settings = {ATTRIBUTES = (Private, ); }; };
@@ -68,7 +66,6 @@
 		63B0AC871D595E6300FA21D9 /* Error.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B0AC691D595E6300FA21D9 /* Error.swift */; };
 		63B0AC891D595E6300FA21D9 /* hang.m in Sources */ = {isa = PBXBuildFile; fileRef = 63B0AC6B1D595E6300FA21D9 /* hang.m */; };
 		63B0AC8B1D595E6300FA21D9 /* join.m in Sources */ = {isa = PBXBuildFile; fileRef = 63B0AC6D1D595E6300FA21D9 /* join.m */; };
-		63B0AC931D595E6300FA21D9 /* PromiseKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B0AC761D595E6300FA21D9 /* PromiseKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		63B0AC991D595E6300FA21D9 /* when.m in Sources */ = {isa = PBXBuildFile; fileRef = 63B0AC7C1D595E6300FA21D9 /* when.m */; };
 		63B0AC9A1D595E6300FA21D9 /* when.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B0AC7D1D595E6300FA21D9 /* when.swift */; };
 		63B18AEC1F2D205C00B79E37 /* CustomStringConvertible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63B18AEB1F2D205C00B79E37 /* CustomStringConvertible.swift */; };
@@ -80,6 +77,9 @@
 		63CF6D80203CD19200EC8927 /* ThenableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CF6D7F203CD19200EC8927 /* ThenableTests.swift */; };
 		63D9B2EF203385FD0075C00B /* race.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D9B2EE203385FD0075C00B /* race.m */; };
 		63D9B2F120338D5D0075C00B /* Deprecations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D9B2F020338D5D0075C00B /* Deprecations.swift */; };
+		797714D2260296910076AAD8 /* PromiseKit.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B0AC761D595E6300FA21D9 /* PromiseKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		797714E52602992E0076AAD8 /* AnyPromise.h in Headers */ = {isa = PBXBuildFile; fileRef = 63B0AC631D595E6300FA21D9 /* AnyPromise.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		797714F2260299AA0076AAD8 /* fwd.h in Headers */ = {isa = PBXBuildFile; fileRef = 634AAD2A1EAE517C00B17855 /* fwd.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		C013F7382048E3B6006B57B1 /* MockNodeEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F7372048E3B6006B57B1 /* MockNodeEnvironment.swift */; };
 		C013F73A2049076A006B57B1 /* JSPromise.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F7392049076A006B57B1 /* JSPromise.swift */; };
 		C013F73C20494291006B57B1 /* JSAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F73B20494291006B57B1 /* JSAdapter.swift */; };
@@ -432,6 +432,7 @@
 			isa = PBXGroup;
 			children = (
 				636A29191F1C156B001229C2 /* Promise.swift */,
+				63B0AC651D595E6300FA21D9 /* AnyPromise.swift */,
 				636A29221F1C17A6001229C2 /* Guarantee.swift */,
 				636A29201F1C1716001229C2 /* Thenable.swift */,
 				632FBBE21F33B273008F8FBB /* Catchable.swift */,
@@ -461,7 +462,6 @@
 			isa = PBXGroup;
 			children = (
 				63B0AC641D595E6300FA21D9 /* AnyPromise.m */,
-				63B0AC651D595E6300FA21D9 /* AnyPromise.swift */,
 				63B0AC671D595E6300FA21D9 /* dispatch_promise.m */,
 				630B60C01F2F73B000A1AEFE /* Headers */,
 				630B60BF1F2F739E00A1AEFE /* Features */,
@@ -501,9 +501,9 @@
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				63B0AC931D595E6300FA21D9 /* PromiseKit.h in Headers */,
-				634AAD2B1EAE517C00B17855 /* fwd.h in Headers */,
-				63B0AC811D595E6300FA21D9 /* AnyPromise.h in Headers */,
+				797714D2260296910076AAD8 /* PromiseKit.h in Headers */,
+				797714E52602992E0076AAD8 /* AnyPromise.h in Headers */,
+				797714F2260299AA0076AAD8 /* fwd.h in Headers */,
 				63B0AC841D595E6300FA21D9 /* AnyPromise+Private.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -741,6 +741,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				63B0AC831D595E6300FA21D9 /* AnyPromise.swift in Sources */,
 				636A29251F1C3089001229C2 /* race.swift in Sources */,
 				63B0AC9A1D595E6300FA21D9 /* when.swift in Sources */,
 				636A29271F1C3927001229C2 /* Resolver.swift in Sources */,
@@ -760,7 +761,6 @@
 				636A291A1F1C156B001229C2 /* Promise.swift in Sources */,
 				63B0AC8B1D595E6300FA21D9 /* join.m in Sources */,
 				63B0AC891D595E6300FA21D9 /* hang.m in Sources */,
-				63B0AC831D595E6300FA21D9 /* AnyPromise.swift in Sources */,
 				63D9B2F120338D5D0075C00B /* Deprecations.swift in Sources */,
 				63B0AC871D595E6300FA21D9 /* Error.swift in Sources */,
 				0CC3AF2B1FCF84F7000E98C9 /* hang.swift in Sources */,

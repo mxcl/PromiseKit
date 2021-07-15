@@ -1,21 +1,23 @@
 import Foundation
 
 /**
- __AnyPromise is an implementation detail.
+ Swift implementation for the `AnyPromise`
 
- Because of how ObjC/Swift compatibility work we have to compose our AnyPromise
- with this internal object, however this is still part of the public interface.
+ Because of how ObjC/Swift compatibility work we have to compose our `AnyPromise`
+ with this internal object. This is soley used for bridging `Promise` between
+ Swift/ObjC and vice versa. However this is still part of the public interface.
  Sadly. Please don’t use it.
 */
-@objc(__AnyPromise) public class __AnyPromise: NSObject {
-    fileprivate let box: Box<Any?>
+@objc public class AnyPromise: NSObject {
 
-    @objc public init(resolver body: (@escaping (Any?) -> Void) -> Void) {
+    let box: Box<Any?>
+
+    @objc public init(resolver_ body: (@escaping (Any?) -> Void) -> Void) {
         box = EmptyBox<Any?>()
         super.init()
         body {
             if let p = $0 as? AnyPromise {
-                p.d.__pipe(self.box.seal)
+                p.__pipe(self.box.seal)
             } else {
                 self.box.seal($0)
             }
@@ -23,7 +25,7 @@ import Foundation
     }
 
     @objc public func __thenOn(_ q: DispatchQueue, execute: @escaping (Any?) -> Any?) -> AnyPromise {
-        return AnyPromise(__D: __AnyPromise(resolver: { resolve in
+        return AnyPromise(resolver_: { resolve in
             self.__pipe { obj in
                 if !(obj is NSError) {
                     q.async {
@@ -33,11 +35,11 @@ import Foundation
                     resolve(obj)
                 }
             }
-        }))
+        })
     }
 
     @objc public func __catchOn(_ q: DispatchQueue, execute: @escaping (Any?) -> Any?) -> AnyPromise {
-        return AnyPromise(__D: __AnyPromise(resolver: { resolve in
+        return AnyPromise(resolver_: { resolve in
             self.__pipe { obj in
                 if obj is NSError {
                     q.async {
@@ -47,27 +49,27 @@ import Foundation
                     resolve(obj)
                 }
             }
-        }))
+        })
     }
 
     @objc public func __ensureOn(_ q: DispatchQueue, execute: @escaping () -> Void) -> AnyPromise {
-        return AnyPromise(__D: __AnyPromise(resolver: { resolve in
+        return AnyPromise(resolver_: { resolve in
             self.__pipe { obj in
                 q.async {
                     execute()
                     resolve(obj)
                 }
             }
-        }))
+        })
     }
 
     @objc public func __wait() -> Any? {
         if Thread.isMainThread {
             conf.logHandler(.waitOnMainThread)
         }
-        
+
         var result = __value
-        
+
         if result == nil {
             let group = DispatchGroup()
             group.enter()
@@ -77,10 +79,10 @@ import Foundation
             }
             group.wait()
         }
-        
+
         return result
     }
- 
+
     /// Internal, do not use! Some behaviors undefined.
     @objc public func __pipe(_ to: @escaping (Any?) -> Void) {
         let to = { (obj: Any?) -> Void in
@@ -130,7 +132,7 @@ extension AnyPromise: Thenable, CatchMixin {
 
     /// - Returns: A new `AnyPromise` bound to a `Promise<Any>`.
     public convenience init<U: Thenable>(_ bridge: U) {
-        self.init(__D: __AnyPromise(resolver: { resolve in
+        self.init(resolver_: { resolve in
             bridge.pipe {
                 switch $0 {
                 case .rejected(let error):
@@ -139,7 +141,7 @@ extension AnyPromise: Thenable, CatchMixin {
                     resolve(value)
                 }
             }
-        }))
+        })
     }
 
     public func pipe(to body: @escaping (Result<Any?>) -> Void) {
@@ -175,14 +177,6 @@ extension AnyPromise: Thenable, CatchMixin {
         }
     }
 
-    fileprivate var d: __AnyPromise {
-        return value(forKey: "__d") as! __AnyPromise
-    }
-
-    var box: Box<Any?> {
-        return d.box
-    }
-
     public var result: Result<Any?>? {
         guard let value = __value else {
             return nil
@@ -207,7 +201,7 @@ public extension Promise where T == Any? {
     }
 }
 #else
-extension AnyPromise {
+public extension AnyPromise {
     public func asPromise() -> Promise<Any?> {
         return Promise(.pending, resolver: { resolve in
             pipe { result in
