@@ -195,7 +195,7 @@ class GuaranteeTests: XCTestCase {
         let a = Guarantee<Void>.value
         let b = Guarantee<Void>.value(Void())
         let c = Guarantee<Void>.value(())
-        when(fulfilled: a, b, c).done {
+        when(fulfilled: [a, b, c]).done {
             ex.fulfill()
         }.cauterize()
         wait(for: [ex], timeout: 5)
