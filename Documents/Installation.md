@@ -27,6 +27,8 @@ pod "PromiseKit/Foundation", "~> 7.0.0-rc1"
 pod "PromiseKit/MapKit", "~> 7.0.0-rc1"
 ```
 
+Considering 7.0 is still a release candidate, you may prefer to use [v6](https://github.com/mxcl/PromiseKit/blob/v6/README.md).
+
 ## Carthage
 
 We will support [Carthage] if you can PR an automated solution for generating
