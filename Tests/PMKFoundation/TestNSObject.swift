@@ -3,7 +3,7 @@ import Foundation
 import PromiseKit
 import XCTest
 
-#if !os(Linux)
+#if !os(Linux) && !os(Windows)
 
 class NSObjectTests: XCTestCase {
     func testKVO() {
