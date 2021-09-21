@@ -33,11 +33,6 @@ pod used in many of the most popular apps in the world.
 
 [![codecov](https://codecov.io/gh/mxcl/PromiseKit/branch/master/graph/badge.svg)](https://codecov.io/gh/mxcl/PromiseKit)
 
-# PromiseKit 7 Alpha
-
-We are testing PromiseKit 7 alpha, it is Swift 5 only. It is tagged and thus
-importable in all package managers.
-
 # PromiseKit 6
 
 [Release notes and migration guide][PMK6].
