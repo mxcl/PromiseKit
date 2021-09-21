@@ -286,6 +286,11 @@ If the thread is blocked the handlers cannot execute. Commonly you can see this
 if you are using our `wait()` function. Please read the documentation for `wait()`
 for suggestions and caveats.
 
+#### 4. Your promise returned a cancellation error
+
+Cancelation is neither success nor failure. So this is the correct behavior. 
+Use a `finally` if you need to do some clean up.
+
 ### `Result of call to 'done(on:_:)' is unused`, `Result of call to 'then(on:_:)' is unused`
 
 PromiseKit deliberately avoids the `@discardableResult` annotation because the
