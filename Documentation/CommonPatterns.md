@@ -299,6 +299,8 @@ asynchronous task. Promises are wrappers around asynchronicity, but they have no
 control over the underlying tasks. If you need to cancel an underlying task, you
 need to cancel the underlying task!
 
+**Important**: Errors which conform to the `CancellableError` protocol do *not* trigger the `.catch` block. Cancelation is neither success nor failure. Hence this behavior. Instead use a finally if you need to do some clean up.
+
 > The library [CancellablePromiseKit](https://github.com/johannesd/CancellablePromiseKit) extends the concept of Promises to fully cover cancellable tasks.
 
 ## Retry / Polling
