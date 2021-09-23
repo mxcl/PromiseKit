@@ -13,6 +13,7 @@ extern NSString * __nonnull const PMKErrorDomain;
 #define PMKOperationFailed 8l
 #define PMKTaskError 9l
 #define PMKJoinError 10l
+#define PMKNoWinnerError 11l
 
 
 #ifdef __cplusplus
@@ -159,6 +160,11 @@ extern AnyPromise * __nonnull dispatch_promise_on(dispatch_queue_t __nonnull que
  Returns a new promise that resolves when the value of the first resolved promise in the provided array of promises.
 */
 extern AnyPromise * __nonnull PMKRace(NSArray * __nonnull promises) NS_REFINED_FOR_SWIFT;
+
+/**
+ Returns a new promise that resolves with the value of the first fulfilled promise in the provided array of promises.
+*/
+extern AnyPromise * __nonnull PMKRaceFulfilled(NSArray * __nonnull promises) NS_REFINED_FOR_SWIFT;
 
 #ifdef __cplusplus
 }   // Extern C
