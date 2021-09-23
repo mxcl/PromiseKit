@@ -1,4 +1,9 @@
 #import "AnyPromise+Private.h"
+#import <libkern/OSAtomic.h>
+
+#pragma clang diagnostic push
+#pragma clang diagnostic ignored "-Wdeprecated-declarations"
+// ^^ OSAtomicDecrement32 is deprecated on watchOS
 
 AnyPromise *PMKRace(NSArray *promises) {
     return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
@@ -33,3 +38,5 @@ AnyPromise *PMKRaceFulfilled(NSArray *promises) {
         }
     }];
 }
+
+#pragma GCC diagnostic pop
