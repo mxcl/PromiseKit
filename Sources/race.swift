@@ -91,6 +91,7 @@ public func race<U: Thenable>(fulfilled thenables: [U]) -> Promise<U.T> {
                     }
                 case .fulfilled(let value):
                     guard rp.isPending else { return }
+                    countdown = 0
                     rp.box.seal(.fulfilled(value))
                 }
             }
