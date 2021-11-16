@@ -80,6 +80,7 @@
 		63CF6D80203CD19200EC8927 /* ThenableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CF6D7F203CD19200EC8927 /* ThenableTests.swift */; };
 		63D9B2EF203385FD0075C00B /* race.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D9B2EE203385FD0075C00B /* race.m */; };
 		63D9B2F120338D5D0075C00B /* Deprecations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D9B2F020338D5D0075C00B /* Deprecations.swift */; };
+		9E66231626FE5A8C00FA25CB /* RaceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E66231526FE5A8C00FA25CB /* RaceTests.m */; };
 		C013F7382048E3B6006B57B1 /* MockNodeEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F7372048E3B6006B57B1 /* MockNodeEnvironment.swift */; };
 		C013F73A2049076A006B57B1 /* JSPromise.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F7392049076A006B57B1 /* JSPromise.swift */; };
 		C013F73C20494291006B57B1 /* JSAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F73B20494291006B57B1 /* JSAdapter.swift */; };
@@ -223,6 +224,7 @@
 		63CF6D7F203CD19200EC8927 /* ThenableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThenableTests.swift; sourceTree = "<group>"; };
 		63D9B2EE203385FD0075C00B /* race.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = race.m; path = Sources/race.m; sourceTree = "<group>"; };
 		63D9B2F020338D5D0075C00B /* Deprecations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Deprecations.swift; path = Sources/Deprecations.swift; sourceTree = "<group>"; };
+		9E66231526FE5A8C00FA25CB /* RaceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RaceTests.m; sourceTree = "<group>"; };
 		C013F7372048E3B6006B57B1 /* MockNodeEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockNodeEnvironment.swift; path = "Tests/JS-A+/MockNodeEnvironment.swift"; sourceTree = "<group>"; };
 		C013F7392049076A006B57B1 /* JSPromise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JSPromise.swift; path = "Tests/JS-A+/JSPromise.swift"; sourceTree = "<group>"; };
 		C013F73B20494291006B57B1 /* JSAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JSAdapter.swift; path = "Tests/JS-A+/JSAdapter.swift"; sourceTree = "<group>"; };
@@ -291,6 +293,7 @@
 				630A8053203CEF6800D25F23 /* JoinTests.m */,
 				630A8054203CEF6800D25F23 /* HangTests.m */,
 				630A8055203CEF6800D25F23 /* WhenTests.m */,
+				9E66231526FE5A8C00FA25CB /* RaceTests.m */,
 			);
 			name = CoreObjC;
 			path = Tests/CoreObjC;
@@ -684,6 +687,7 @@
 				630A805B203CF67800D25F23 /* DefaultDispatchQueueTests.swift in Sources */,
 				635D641D1D59635300BC0AF5 /* PromiseTests.swift in Sources */,
 				63CF6D7C203CCDAB00EC8927 /* GuaranteeTests.swift in Sources */,
+				9E66231626FE5A8C00FA25CB /* RaceTests.m in Sources */,
 				639BF757203DF03100FA577B /* Utilities.swift in Sources */,
 				635D64261D59635300BC0AF5 /* WhenResolvedTests.swift in Sources */,
 				635D64231D59635300BC0AF5 /* AfterTests.swift in Sources */,

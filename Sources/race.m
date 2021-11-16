@@ -6,6 +6,9 @@
 // ^^ OSAtomicDecrement32 is deprecated on watchOS
 
 AnyPromise *PMKRace(NSArray *promises) {
+    if (promises == nil || promises.count == 0)
+        return [AnyPromise promiseWithValue:[NSError errorWithDomain:PMKErrorDomain code:PMKInvalidUsageError userInfo:@{NSLocalizedDescriptionKey: @"PMKRace(nil)"}]];
+
     return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         for (AnyPromise *promise in promises) {
             [promise __pipe:resolve];
@@ -21,6 +24,9 @@ AnyPromise *PMKRace(NSArray *promises) {
  @return The promise that was fulfilled first.
 */
 AnyPromise *PMKRaceFulfilled(NSArray *promises) {
+    if (promises == nil || promises.count == 0)
+        return [AnyPromise promiseWithValue:[NSError errorWithDomain:PMKErrorDomain code:PMKInvalidUsageError userInfo:@{NSLocalizedDescriptionKey: @"PMKRaceFulfilled(nil)"}]];
+
     __block int32_t countdown = (int32_t)[promises count];
 
     return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
