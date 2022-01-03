@@ -1,0 +1,13 @@
+on:
+  workflow_dispatch:
+  pull_request:
+    paths:
+      - PromiseKit.podspec
+jobs:
+  lint:
+    runs-on: macos-10.15
+    steps:
+    - uses: actions/checkout@v2
+      with:
+        submodules: true
+    - run: pod lib lint --fail-fast
