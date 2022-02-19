@@ -98,6 +98,13 @@ typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
 */
 - (AnyPromise * __nonnull (^ __nonnull)(id __nonnull))then NS_REFINED_FOR_SWIFT;
 
+/**
+ The provided block is executed on the dispatch queue of your choice when the receiver is fulfilled.
+
+ @see then
+ @see thenInBackground
+*/
+- (AnyPromise * __nonnull(^ __nonnull)(dispatch_queue_t __nonnull, id __nonnull))thenOn NS_REFINED_FOR_SWIFT;
 
 /**
  The provided block is executed on the default queue when the receiver is fulfilled.
@@ -108,14 +115,6 @@ typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
  @see thenOn
 */
 - (AnyPromise * __nonnull(^ __nonnull)(id __nonnull))thenInBackground NS_REFINED_FOR_SWIFT;
-
-/**
- The provided block is executed on the dispatch queue of your choice when the receiver is fulfilled.
-
- @see then
- @see thenInBackground
-*/
-- (AnyPromise * __nonnull(^ __nonnull)(dispatch_queue_t __nonnull, id __nonnull))thenOn NS_REFINED_FOR_SWIFT;
 
 #ifndef __cplusplus
 /**
@@ -140,6 +139,20 @@ typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
 
  Provide a block of form `^(NSError *){}` or simply `^{}`. The parameter has type `id` to give you the freedom to choose either.
 
+ The provided block always runs on queue provided.
+
+ @warning *Note* Cancellation errors are not caught.
+
+ @see catch
+ @see catchInBackground
+ */
+- (AnyPromise * __nonnull(^ __nonnull)(dispatch_queue_t __nonnull, id __nonnull))catchOn NS_REFINED_FOR_SWIFT;
+
+/**
+ The provided block is executed when the receiver is rejected.
+
+ Provide a block of form `^(NSError *){}` or simply `^{}`. The parameter has type `id` to give you the freedom to choose either.
+
  The provided block always runs on the global background queue.
 
  @warning *Note* Cancellation errors are not caught.
@@ -150,21 +163,6 @@ typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
  @see catchOn
  */
 - (AnyPromise * __nonnull(^ __nonnull)(id __nonnull))catchInBackground NS_REFINED_FOR_SWIFT;
-
-
-/**
- The provided block is executed when the receiver is rejected.
-
- Provide a block of form `^(NSError *){}` or simply `^{}`. The parameter has type `id` to give you the freedom to choose either.
-
- The provided block always runs on queue provided.
-
- @warning *Note* Cancellation errors are not caught.
-
- @see catch
- @see catchInBackground
- */
-- (AnyPromise * __nonnull(^ __nonnull)(dispatch_queue_t __nonnull, id __nonnull))catchOn NS_REFINED_FOR_SWIFT;
 
 /**
  The provided block is executed when the receiver is resolved.
@@ -181,6 +179,13 @@ typedef void (^PMKResolver)(id __nullable) NS_REFINED_FOR_SWIFT;
  @see ensure
  */
 - (AnyPromise * __nonnull(^ __nonnull)(dispatch_queue_t __nonnull, dispatch_block_t __nonnull))ensureOn NS_REFINED_FOR_SWIFT;
+
+/**
+ The provided block is executed on the global background queue when the receiver is resolved.
+
+ @see ensure
+ */
+- (AnyPromise * __nonnull(^ __nonnull)(dispatch_block_t __nonnull))ensureInBackground NS_REFINED_FOR_SWIFT;
 
 /**
  Wait until the promise is resolved.
