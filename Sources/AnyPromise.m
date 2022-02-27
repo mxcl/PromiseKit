@@ -70,15 +70,7 @@ NSString *const PMKErrorDomain = @"PMKErrorDomain";
 
 - (AnyPromise *(^)(id))thenInBackground {
     return ^(id block) {
-        return [self->d __thenOn:dispatch_get_global_queue(QOS_CLASS_UNSPECIFIED, 0) execute:^(id obj) {
-            return PMKCallVariadicBlock(block, obj);
-        }];
-    };
-}
-
-- (AnyPromise *(^)(id))catch {
-    return ^(id block) {
-        return [self->d __catchOn:dispatch_get_main_queue() execute:^(id obj) {
+        return [self->d __thenOn:dispatch_get_global_queue(0, 0) execute:^(id obj) {
             return PMKCallVariadicBlock(block, obj);
         }];
     };
@@ -92,9 +84,17 @@ NSString *const PMKErrorDomain = @"PMKErrorDomain";
     };
 }
 
+- (AnyPromise *(^)(id))catch {
+    return ^(id block) {
+        return [self->d __catchOn:dispatch_get_main_queue() execute:^(id obj) {
+            return PMKCallVariadicBlock(block, obj);
+        }];
+    };
+}
+
 - (AnyPromise *(^)(id))catchInBackground {
     return ^(id block) {
-        return [self->d __catchOn:dispatch_get_global_queue(QOS_CLASS_UNSPECIFIED, 0) execute:^(id obj) {
+        return [self->d __catchOn:dispatch_get_global_queue(0, 0) execute:^(id obj) {
             return PMKCallVariadicBlock(block, obj);
         }];
     };
