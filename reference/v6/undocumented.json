@@ -1,625 +1,268 @@
 {
   "warnings": [
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Cancellation/CancellableCatchable.swift",
-      "line": 70,
-      "symbol": "CancelContextFinalizer",
-      "symbol_kind": "source.lang.swift.decl.class",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Cancellation/CancellableCatchable.swift",
-      "line": 72,
-      "symbol": "CancellableCascadingFinalizer",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Cancellation/CancellableCatchable.swift",
-      "line": 128,
-      "symbol": "CancellableCascadingFinalizer",
-      "symbol_kind": "source.lang.swift.decl.class",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Cancellation/CancellableThenable.swift",
-      "line": 493,
-      "symbol": "CancellableThenable.firstValue(on:where:)",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/AnyPromise.swift",
+      "line": 13,
+      "symbol": "__AnyPromise.init(resolver:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Catchable.swift",
-      "line": 70,
-      "symbol": "PMKCascadingFinalizer",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Catchable.swift",
-      "line": 81,
-      "symbol": "PMKFinalizer",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Catchable.swift",
-      "line": 114,
-      "symbol": "PMKFinalizer",
-      "symbol_kind": "source.lang.swift.decl.class",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Catchable.swift",
-      "line": 125,
-      "symbol": "PMKCascadingFinalizer",
-      "symbol_kind": "source.lang.swift.decl.class",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Dispatcher.swift",
-      "line": 14,
-      "symbol": "Dispatcher.dispatch(_:)",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/AnyPromise.swift",
+      "line": 25,
+      "symbol": "__AnyPromise.__thenOn(_:execute:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Dispatcher.swift",
-      "line": 30,
-      "symbol": "DispatchQueueDispatcher.init(queue:group:qos:flags:)",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/AnyPromise.swift",
+      "line": 39,
+      "symbol": "__AnyPromise.__catchOn(_:execute:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Dispatcher.swift",
-      "line": 37,
-      "symbol": "DispatchQueueDispatcher.dispatch(_:)",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/AnyPromise.swift",
+      "line": 53,
+      "symbol": "__AnyPromise.__ensureOn(_:execute:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Dispatcher.swift",
-      "line": 54,
-      "symbol": "CurrentThreadDispatcher.dispatch(_:)",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/AnyPromise.swift",
+      "line": 64,
+      "symbol": "__AnyPromise.__wait()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Dispatcher.swift",
-      "line": 60,
-      "symbol": "DispatchQueue.dispatch(_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Dispatcher.swift",
-      "line": 71,
-      "symbol": "DispatchQueue.pmkDefault",
-      "symbol_kind": "source.lang.swift.decl.var.static",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Dispatchers/ConcurrencyLimitedDispatcher.swift",
-      "line": 26,
-      "symbol": "ConcurrencyLimitedDispatcher.init(limit:queue:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Dispatchers/ConcurrencyLimitedDispatcher.swift",
-      "line": 30,
-      "symbol": "ConcurrencyLimitedDispatcher.dispatch(_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Dispatchers/CoreDataDispatcher.swift",
-      "line": 7,
-      "symbol": "NSManagedObjectContext.dispatcher",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/AnyPromise.swift",
+      "line": 110,
+      "symbol": "__AnyPromise.__value",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Dispatchers/CoreDataDispatcher.swift",
-      "line": 20,
-      "symbol": "CoreDataDispatcher.init(_:)",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/AnyPromise.swift",
+      "line": 119,
+      "symbol": "__AnyPromise.__pending",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/AnyPromise.swift",
+      "line": 203,
+      "symbol": "Promise.init(_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Dispatchers/CoreDataDispatcher.swift",
-      "line": 24,
-      "symbol": "CoreDataDispatcher.dispatch(_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Dispatchers/RateLimitedDispatcher.swift",
-      "line": 48,
-      "symbol": "RateLimitedDispatcher.init(maxDispatches:perInterval:queue:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Dispatchers/RateLimitedDispatcherBase.swift",
-      "line": 3,
-      "symbol": "RateLimitedDispatcherBase",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Catchable.swift",
+      "line": 44,
+      "symbol": "PMKFinalizer",
       "symbol_kind": "source.lang.swift.decl.class",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Dispatchers/RateLimitedDispatcherBase.swift",
-      "line": 17,
-      "symbol": "RateLimitedDispatcherBase.init(maxDispatches:perInterval:queue:)",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Deprecations.swift",
+      "line": 4,
+      "symbol": "wrap(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Deprecations.swift",
+      "line": 11,
+      "symbol": "wrap(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Deprecations.swift",
+      "line": 18,
+      "symbol": "wrap(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Deprecations.swift",
+      "line": 25,
+      "symbol": "wrap(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Deprecations.swift",
+      "line": 32,
+      "symbol": "wrap(_:)",
+      "symbol_kind": "source.lang.swift.decl.function.free",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Deprecations.swift",
+      "line": 40,
+      "symbol": "Promise.always(on:execute:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Dispatchers/RateLimitedDispatcherBase.swift",
-      "line": 23,
-      "symbol": "RateLimitedDispatcherBase.dispatch(_:)",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Deprecations.swift",
+      "line": 71,
+      "symbol": "Thenable.filter(on:test:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Dispatchers/StrictRateLimitedDispatcher.swift",
-      "line": 46,
-      "symbol": "StrictRateLimitedDispatcher.init(maxDispatches:perInterval:queue:)",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Deprecations.swift",
+      "line": 78,
+      "symbol": "Thenable.first",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Deprecations.swift",
+      "line": 83,
+      "symbol": "Thenable.last",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Deprecations.swift",
+      "line": 90,
+      "symbol": "Thenable.sorted(on:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Error.swift",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Error.swift",
       "line": 3,
       "symbol": "PMKError",
       "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Error.swift",
-      "line": 43,
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Error.swift",
+      "line": 40,
       "symbol": "PMKError",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Error.swift",
-      "line": 68,
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Error.swift",
+      "line": 63,
       "symbol": "PMKError",
       "symbol_kind": "source.lang.swift.decl.extension",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Error.swift",
-      "line": 84,
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Error.swift",
+      "line": 79,
       "symbol": "Error.isCancelled",
       "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Guarantee.swift",
-      "line": 88,
-      "symbol": "Guarantee.setCancellable(_:)",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Guarantee.swift",
+      "line": 80,
+      "symbol": "Guarantee.done(on:flags:_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Guarantee.swift",
-      "line": 118,
-      "symbol": "Guarantee.done(on:_:)",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Guarantee.swift",
+      "line": 91,
+      "symbol": "Guarantee.get(on:flags:_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Guarantee.swift",
-      "line": 129,
-      "symbol": "Guarantee.get(on:_:)",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Guarantee.swift",
+      "line": 98,
+      "symbol": "Guarantee.map(on:flags:_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Guarantee.swift",
-      "line": 136,
-      "symbol": "Guarantee.map(on:_:)",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Guarantee.swift",
+      "line": 109,
+      "symbol": "Guarantee.map(on:flags:_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Guarantee.swift",
-      "line": 147,
-      "symbol": "Guarantee.then(on:_:)",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Guarantee.swift",
+      "line": 121,
+      "symbol": "Guarantee.then(on:flags:_:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Guarantee.swift",
-      "line": 157,
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Guarantee.swift",
+      "line": 131,
       "symbol": "Guarantee.asVoid()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Guarantee.swift",
-      "line": 317,
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Guarantee.swift",
+      "line": 345,
       "symbol": "Guarantee.init()",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Guarantee.swift",
-      "line": 321,
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Guarantee.swift",
+      "line": 349,
       "symbol": "Guarantee.value",
       "symbol_kind": "source.lang.swift.decl.var.static",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Guarantee.swift",
-      "line": 325,
-      "symbol": "Guarantee.init(resolver:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Promise.swift",
-      "line": 119,
-      "symbol": "Promise.setCancellable(_:reject:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Promise.swift",
-      "line": 222,
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Promise.swift",
+      "line": 179,
       "symbol": "PMKNamespacer.promise",
       "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Thenable.swift",
-      "line": 406,
-      "symbol": "Thenable.firstValue(on:where:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Resolver.swift",
+      "line": 97,
+      "symbol": "Result",
+      "symbol_kind": "source.lang.swift.decl.enum",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/GuaranteeWrappers.swift",
-      "line": 9,
-      "symbol": "Guarantee.then(on:flags:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Resolver.swift",
+      "line": 98,
+      "symbol": "Result.fulfilled(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/GuaranteeWrappers.swift",
-      "line": 15,
-      "symbol": "Guarantee.then(on:flags:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Resolver.swift",
+      "line": 99,
+      "symbol": "Result.rejected(_:)",
+      "symbol_kind": "source.lang.swift.decl.enumelement",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/GuaranteeWrappers.swift",
-      "line": 20,
-      "symbol": "Guarantee.map(on:flags:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Resolver.swift",
+      "line": 103,
+      "symbol": "PromiseKit.Result.isFulfilled",
+      "symbol_kind": "source.lang.swift.decl.var.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/GuaranteeWrappers.swift",
-      "line": 25,
-      "symbol": "Guarantee.map(on:flags:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/GuaranteeWrappers.swift",
-      "line": 31,
-      "symbol": "Guarantee.done(on:flags:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/GuaranteeWrappers.swift",
-      "line": 37,
-      "symbol": "Guarantee.done(on:flags:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/GuaranteeWrappers.swift",
-      "line": 42,
-      "symbol": "Guarantee.get(on:flags:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/GuaranteeWrappers.swift",
-      "line": 47,
-      "symbol": "Guarantee.get(on:flags:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/GuaranteeWrappers.swift",
-      "line": 55,
-      "symbol": "Guarantee.thenMap(on:flags:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/SequenceWrappers.swift",
-      "line": 102,
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Thenable.swift",
+      "line": 506,
       "symbol": "Thenable.firstValue(on:flags:where:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
     },
     {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/SequenceWrappers.swift",
-      "line": 247,
-      "symbol": "CancellableThenable.firstValue(on:flags:where:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 3,
-      "symbol": "_PMKCatchWrappers",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 3,
-      "symbol": "_PMKFinallyWrappers",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 3,
-      "symbol": "_PMKSharedWrappers",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 3,
-      "symbol": "_PMKSharedWrappers",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 3,
-      "symbol": "_PMKSharedWrappers",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 18,
-      "symbol": "_PMKSharedWrappers",
-      "symbol_kind": "source.lang.swift.decl.protocol",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 20,
-      "symbol": "_PMKSharedWrappers.T",
-      "symbol_kind": "source.lang.swift.decl.associatedtype",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 21,
-      "symbol": "_PMKSharedWrappers.BaseOfT",
-      "symbol_kind": "source.lang.swift.decl.associatedtype",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 22,
-      "symbol": "_PMKSharedWrappers.BaseOfVoid",
-      "symbol_kind": "source.lang.swift.decl.associatedtype",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 23,
-      "symbol": "_PMKSharedWrappers.VoidReturn",
-      "symbol_kind": "source.lang.swift.decl.associatedtype",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 25,
-      "symbol": "_PMKSharedWrappers.done(on:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 26,
-      "symbol": "_PMKSharedWrappers.get(on:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 27,
-      "symbol": "_PMKSharedWrappers.tap(on:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 29,
-      "symbol": "_PMKSharedWrappers.recover(on:policy:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 30,
-      "symbol": "_PMKSharedWrappers.recover(only:on:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 31,
-      "symbol": "_PMKSharedWrappers.recover(only:on:policy:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 33,
-      "symbol": "_PMKSharedWrappers.ensure(on:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 34,
-      "symbol": "_PMKSharedWrappers.ensureThen(on:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 39,
-      "symbol": "Promise.BaseOfT",
-      "symbol_kind": "source.lang.swift.decl.typealias",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 43,
-      "symbol": "CancellablePromise.T",
-      "symbol_kind": "source.lang.swift.decl.typealias",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 44,
-      "symbol": "CancellablePromise.BaseOfT",
-      "symbol_kind": "source.lang.swift.decl.typealias",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 47,
-      "symbol": "_PMKSharedVoidWrappers",
-      "symbol_kind": "source.lang.swift.decl.protocol",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 49,
-      "symbol": "_PMKSharedVoidWrappers.BaseOfT",
-      "symbol_kind": "source.lang.swift.decl.associatedtype",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 51,
-      "symbol": "_PMKSharedVoidWrappers.recover(on:policy:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 52,
-      "symbol": "_PMKSharedVoidWrappers.recover(only:on:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 53,
-      "symbol": "_PMKSharedVoidWrappers.recover(only:on:policy:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 59,
-      "symbol": "_PMKCatchWrappers",
-      "symbol_kind": "source.lang.swift.decl.protocol",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 61,
-      "symbol": "_PMKCatchWrappers.Finalizer",
-      "symbol_kind": "source.lang.swift.decl.associatedtype",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 62,
-      "symbol": "_PMKCatchWrappers.CascadingFinalizer",
-      "symbol_kind": "source.lang.swift.decl.associatedtype",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 64,
-      "symbol": "_PMKCatchWrappers.catch(on:policy:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 65,
-      "symbol": "_PMKCatchWrappers.catch(only:on:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 66,
-      "symbol": "_PMKCatchWrappers.catch(only:on:policy:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 74,
-      "symbol": "_PMKFinallyWrappers",
-      "symbol_kind": "source.lang.swift.decl.protocol",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 76,
-      "symbol": "_PMKFinallyWrappers.FinallyReturn",
-      "symbol_kind": "source.lang.swift.decl.associatedtype",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 78,
-      "symbol": "_PMKFinallyWrappers.finally(on:_:)",
-      "symbol_kind": "source.lang.swift.decl.function.method.instance",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/Wrappers/WrapperProtocols.swift",
-      "line": 86,
-      "symbol": "_PMKSharedVoidWrappers",
-      "symbol_kind": "source.lang.swift.decl.extension",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/when.swift",
-      "line": 355,
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/when.swift",
+      "line": 361,
       "symbol": "when(guarantees:)",
-      "symbol_kind": "source.lang.swift.decl.function.free",
-      "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/PromiseKit/when.swift",
-      "line": 396,
-      "symbol": "when(fulfilled:)",
       "symbol_kind": "source.lang.swift.decl.function.free",
       "warning": "undocumented"
     }
