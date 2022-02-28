@@ -23,7 +23,7 @@ static inline AnyPromise *rejectLater() {
 
 static inline AnyPromise *fulfillLater() {
     return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
-        dispatch_async(dispatch_get_global_queue(0, 0), ^{
+        dispatch_async(dispatch_get_global_queue(QOS_CLASS_UNSPECIFIED, 0), ^{
             resolve(@1);
         });
     }];
@@ -797,7 +797,13 @@ static inline AnyPromise *fulfillLater() {
 
 - (void)testEnsureOn {
     id ex = [self expectationWithDescription:@""];
-    PMKAfter(0.1).ensureOn(dispatch_get_global_queue(0, 0), ^{ [ex fulfill]; });
+    PMKAfter(0.1).ensureOn(dispatch_get_global_queue(QOS_CLASS_UNSPECIFIED, 0), ^{ [ex fulfill]; });
+    [self waitForExpectationsWithTimeout:1 handler:nil];
+}
+
+- (void)testEnsureInBackground {
+    id ex = [self expectationWithDescription:@""];
+    PMKAfter(0.1).ensureInBackground(^{ [ex fulfill]; });
     [self waitForExpectationsWithTimeout:1 handler:nil];
 }
 

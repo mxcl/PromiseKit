@@ -112,6 +112,12 @@ NSString *const PMKErrorDomain = @"PMKErrorDomain";
     };
 }
 
+- (AnyPromise *(^)(dispatch_block_t))ensureInBackground {
+    return ^(dispatch_block_t block) {
+        return [self->d __ensureOn:dispatch_get_global_queue(QOS_CLASS_UNSPECIFIED, 0) execute:block];
+    };
+}
+
 - (id)wait {
     return [d __wait];
 }

@@ -7,7 +7,7 @@
 AnyPromise *PMKAfter(NSTimeInterval duration) {
     return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, (int64_t)(duration * NSEC_PER_SEC));
-        dispatch_after(time, dispatch_get_global_queue(0, 0), ^{
+        dispatch_after(time, dispatch_get_global_queue(QOS_CLASS_UNSPECIFIED, 0), ^{
             resolve(@(duration));
         });
     }];
