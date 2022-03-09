@@ -60,6 +60,10 @@ For Carthage, SwiftPM, Accio, etc., or for instructions when using older Swifts 
 [Carthage](https://github.com/Carthage/Carthage) or
 [Accio](https://github.com/JamitLabs/Accio).
 
+# PromiseKit and Swift 5.5+ Async/Await 
+
+As of Swift 5.5, the Swift language now offers support for [built-in concurrency with async / await](https://docs.swift.org/swift-book/LanguageGuide/Concurrency.html).  See [Async+](https://github.com/async-plus/async-plus) for a port of PromiseKit's most useful patterns to this new paradigm.
+
 # Professionally Supported PromiseKit is Now Available
 
 TideLift gives software development teams a single source for purchasing
