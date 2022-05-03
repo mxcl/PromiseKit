@@ -34,51 +34,51 @@ jobs:
         status: ${{ job.status }}
         deployment_id: ${{ steps.deployment.outputs.deployment_id }}
 
-  carthage:
-    runs-on: macos-latest
-    steps:
+  # carthage:
+  #   runs-on: macos-latest
+  #   steps:
 
-    - name: Start Deployment
-      uses: bobheadxi/deployments@v0.5.2
-      id: deployment
-      with:
-        step: start
-        token: ${{ secrets.GITHUB_TOKEN }}
-        env: carthage
+  #   - name: Start Deployment
+  #     uses: bobheadxi/deployments@v0.5.2
+  #     id: deployment
+  #     with:
+  #       step: start
+  #       token: ${{ secrets.GITHUB_TOKEN }}
+  #       env: carthage
 
-    - uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: ^11
-        # Waiting on https://github.com/Carthage/Carthage/issues/3103 for Xcode 12
+  #   - uses: maxim-lobanov/setup-xcode@v1
+  #     with:
+  #       xcode-version: ^11
+  #       # Waiting on https://github.com/Carthage/Carthage/issues/3103 for Xcode 12
 
-    - uses: joutvhu/get-release@v1
-      id: release
-      with:
-        tag_name: ${{ github.event.inputs.version }}
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+  #   - uses: joutvhu/get-release@v1
+  #     id: release
+  #     with:
+  #       tag_name: ${{ github.event.inputs.version }}
+  #     env:
+  #       GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
-    - uses: actions/checkout@v2
-    - run: carthage build --no-skip-current --platform macOS,iOS,watchOS,tvOS --archive
-    - run: mv PromiseKit.framework.zip PromiseKit-$v.framework.zip
+  #   - uses: actions/checkout@v2
+  #   - run: carthage build --no-skip-current --platform macOS,iOS,watchOS,tvOS --archive
+  #   - run: mv PromiseKit.framework.zip PromiseKit-$v.framework.zip
 
-    - uses: actions/upload-release-asset@v1
-      with:
-        upload_url: ${{ steps.release.outputs.upload_url }}
-        asset_path: ./PromiseKit-${{ github.event.inputs.version }}.framework.zip
-        asset_name: PromiseKit-${{ github.event.inputs.version }}.framework.zip
-        asset_content_type: application/zip
-      env:
-        GITHUB_TOKEN: ${{ github.token }}
+  #   - uses: actions/upload-release-asset@v1
+  #     with:
+  #       upload_url: ${{ steps.release.outputs.upload_url }}
+  #       asset_path: ./PromiseKit-${{ github.event.inputs.version }}.framework.zip
+  #       asset_name: PromiseKit-${{ github.event.inputs.version }}.framework.zip
+  #       asset_content_type: application/zip
+  #     env:
+  #       GITHUB_TOKEN: ${{ github.token }}
 
-    - name: Seal Deployment
-      uses: bobheadxi/deployments@v0.5.2
-      if: always()
-      with:
-        step: finish
-        token: ${{ secrets.GITHUB_TOKEN }}
-        status: ${{ job.status }}
-        deployment_id: ${{ steps.deployment.outputs.deployment_id }}
+  #   - name: Seal Deployment
+  #     uses: bobheadxi/deployments@v0.5.2
+  #     if: always()
+  #     with:
+  #       step: finish
+  #       token: ${{ secrets.GITHUB_TOKEN }}
+  #       status: ${{ job.status }}
+  #       deployment_id: ${{ steps.deployment.outputs.deployment_id }}
 
   docs:
     runs-on: macos-latest

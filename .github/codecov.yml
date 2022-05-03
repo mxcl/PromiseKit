@@ -15,7 +15,9 @@ coverage:
 
   status:
     project: yes
-    patch: yes
+    patch:
+      default:
+        threshold: 0.2%
     changes: no
 
 parsers:
