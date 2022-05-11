@@ -69,5 +69,5 @@ jobs:
         workflow: CD
         token: ${{ secrets.JAZZY_PAT }}
         inputs: "{\"version\": \"${{ github.event.inputs.version }}\"}"
-        ref: {{ env.GITHUB_REF_NAME }}  # or uses the SHA rather than branch and thus the above commit is not used
+        ref: ${{ env.GITHUB_REF_NAME }}  # or uses the SHA rather than branch and thus the above commit is not used
         wait-for-completion: true
