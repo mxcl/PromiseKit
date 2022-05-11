@@ -586,9 +586,9 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 63B0AC5F1D595E1B00FA21D9 /* Build configuration list for PBXNativeTarget "PromiseKit" */;
 			buildPhases = (
+				63B0AC541D595E1B00FA21D9 /* Headers */,
 				63B0AC521D595E1B00FA21D9 /* Sources */,
 				63B0AC531D595E1B00FA21D9 /* Frameworks */,
-				63B0AC541D595E1B00FA21D9 /* Headers */,
 			);
 			buildRules = (
 			);
