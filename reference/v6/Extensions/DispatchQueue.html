@@ -21,7 +21,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="../index.html">
-          PromiseKit 6.17.0 Docs
+          PromiseKit 6.17.1 Docs
         </a>
          (81% documented)
       </p>
@@ -270,7 +270,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Asynchronously executes the provided closure on a dispatch queue.</p>
-<pre class="highlight swift"><code><span class="kt">DispatchQueue</span><span class="o">.</span><span class="nf">global</span><span class="p">()</span><span class="o">.</span><span class="k">async</span><span class="p">(</span><span class="o">.</span><span class="n">promise</span><span class="p">)</span> <span class="p">{</span>
+<pre class="highlight swift"><code><span class="kt">DispatchQueue</span><span class="o">.</span><span class="nf">global</span><span class="p">()</span><span class="o">.</span><span class="nf">async</span><span class="p">(</span><span class="o">.</span><span class="n">promise</span><span class="p">)</span> <span class="p">{</span>
     <span class="nf">md5</span><span class="p">(</span><span class="n">input</span><span class="p">)</span>
 <span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span> <span class="n">md5</span> <span class="k">in</span>
     <span class="c1">//…</span>
@@ -288,7 +288,7 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@available(macOS 10.10, iOS 2.0, tvOS 10.0, watchOS 2.0, *)</span>
-<span class="kd">final</span> <span class="kd">func</span> <span class="k">async</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">_</span><span class="p">:</span> <span class="kt"><a href="../Enums/PMKNamespacer.html">PMKNamespacer</a></span><span class="p">,</span> <span class="nv">group</span><span class="p">:</span> <span class="kt">DispatchGroup</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">qos</span><span class="p">:</span> <span class="kt">DispatchQoS</span> <span class="o">=</span> <span class="o">.</span><span class="k">default</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">execute</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+<span class="kd">final</span> <span class="kd">func</span> <span class="n">async</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">_</span><span class="p">:</span> <span class="kt"><a href="../Enums/PMKNamespacer.html">PMKNamespacer</a></span><span class="p">,</span> <span class="nv">group</span><span class="p">:</span> <span class="kt">DispatchGroup</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">qos</span><span class="p">:</span> <span class="kt">DispatchQoS</span> <span class="o">=</span> <span class="o">.</span><span class="k">default</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">execute</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -332,7 +332,7 @@
                       <div class="pointer"></div>
                       <div class="abstract">
                         <p>Asynchronously executes the provided closure on a dispatch queue.</p>
-<pre class="highlight swift"><code><span class="kt">DispatchQueue</span><span class="o">.</span><span class="nf">global</span><span class="p">()</span><span class="o">.</span><span class="k">async</span><span class="p">(</span><span class="o">.</span><span class="n">promise</span><span class="p">)</span> <span class="p">{</span>
+<pre class="highlight swift"><code><span class="kt">DispatchQueue</span><span class="o">.</span><span class="nf">global</span><span class="p">()</span><span class="o">.</span><span class="nf">async</span><span class="p">(</span><span class="o">.</span><span class="n">promise</span><span class="p">)</span> <span class="p">{</span>
     <span class="k">try</span> <span class="nf">md5</span><span class="p">(</span><span class="n">input</span><span class="p">)</span>
 <span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span> <span class="n">md5</span> <span class="k">in</span>
     <span class="c1">//…</span>
@@ -350,7 +350,7 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">@available(macOS 10.10, iOS 8.0, tvOS 9.0, watchOS 2.0, *)</span>
-<span class="kd">final</span> <span class="kd">func</span> <span class="k">async</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">_</span><span class="p">:</span> <span class="kt"><a href="../Enums/PMKNamespacer.html">PMKNamespacer</a></span><span class="p">,</span> <span class="nv">group</span><span class="p">:</span> <span class="kt">DispatchGroup</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">qos</span><span class="p">:</span> <span class="kt">DispatchQoS</span> <span class="o">=</span> <span class="o">.</span><span class="k">default</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">execute</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+<span class="kd">final</span> <span class="kd">func</span> <span class="n">async</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">_</span><span class="p">:</span> <span class="kt"><a href="../Enums/PMKNamespacer.html">PMKNamespacer</a></span><span class="p">,</span> <span class="nv">group</span><span class="p">:</span> <span class="kt">DispatchGroup</span><span class="p">?</span> <span class="o">=</span> <span class="kc">nil</span><span class="p">,</span> <span class="nv">qos</span><span class="p">:</span> <span class="kt">DispatchQoS</span> <span class="o">=</span> <span class="o">.</span><span class="k">default</span><span class="p">,</span> <span class="nv">flags</span><span class="p">:</span> <span class="kt">DispatchWorkItemFlags</span> <span class="o">=</span> <span class="p">[],</span> <span class="n">execute</span> <span class="nv">body</span><span class="p">:</span> <span class="kd">@escaping</span> <span class="p">()</span> <span class="k">throws</span> <span class="o">-&gt;</span> <span class="kt">T</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -388,8 +388,8 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2022 <a class="link" href="http://mxcl.dev/PromiseKit/" target="_blank" rel="external noopener">Max Howell</a>. All rights reserved. (Last updated: 2022-02-28)</p>
-      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.1</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
+      <p>&copy; 2022 <a class="link" href="http://mxcl.dev/PromiseKit/" target="_blank" rel="external noopener">Max Howell</a>. All rights reserved. (Last updated: 2022-05-11)</p>
+      <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.2</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
 </html>
