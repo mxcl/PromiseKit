@@ -6,7 +6,7 @@ on:
       - Sources/**
       - Tests/**
       - .github/workflows/ci.yml
-      - PromiseKit.xcodeproj
+      - PromiseKit.xcodeproj/**
 jobs:
   auto-cancel:
     runs-on: ubuntu-latest
