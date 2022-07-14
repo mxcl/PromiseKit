@@ -28,7 +28,12 @@ class AsyncTests: XCTestCase {
             try await _ = promise.async()
             XCTAssert(false)
         } catch {
-            XCTAssert(true)
+            switch error as? Error {
+            case .dummy:
+                XCTAssert(true)
+            default:
+                XCTAssert(false)
+            }
         }
     }
 }
