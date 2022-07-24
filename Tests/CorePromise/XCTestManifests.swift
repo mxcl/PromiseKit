@@ -18,7 +18,10 @@ extension AsyncTests {
     // to regenerate.
     static let __allTests__AsyncTests = [
         ("testAsyncGuaranteeValue", testAsyncGuaranteeValue),
+        ("testAsyncGuaranteeValue", testAsyncGuaranteeValue),
         ("testAsyncPromiseThrow", testAsyncPromiseThrow),
+        ("testAsyncPromiseThrow", testAsyncPromiseThrow),
+        ("testAsyncPromiseValue", testAsyncPromiseValue),
         ("testAsyncPromiseValue", testAsyncPromiseValue),
     ]
 }
