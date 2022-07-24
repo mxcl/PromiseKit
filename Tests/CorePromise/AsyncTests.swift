@@ -13,6 +13,14 @@ class AsyncTests: XCTestCase {
         let value = try await promise.async()
         XCTAssertEqual(value, 1)
     }
+    
+    @available(iOS, deprecated: 13.0)
+    @available(macOS, deprecated: 10.15)
+    @available(tvOS, deprecated: 13.0)
+    @available(watchOS, deprecated: 6.0)
+    func testAsyncPromiseValue() {
+
+    }
     #else
     func testAsyncPromiseValue() {
 
@@ -25,6 +33,14 @@ class AsyncTests: XCTestCase {
         let guarantee = after(.milliseconds(100)).then(on: nil){ Guarantee.value(1) }
         let value = await guarantee.async()
         XCTAssertEqual(value, 1)
+    }
+    
+    @available(iOS, deprecated: 13.0)
+    @available(macOS, deprecated: 10.15)
+    @available(tvOS, deprecated: 13.0)
+    @available(watchOS, deprecated: 6.0)
+    func testAsyncGuaranteeValue() {
+
     }
     #else
     func testAsyncGuaranteeValue() {
@@ -47,6 +63,14 @@ class AsyncTests: XCTestCase {
                 XCTAssert(false)
             }
         }
+    }
+    
+    @available(iOS, deprecated: 13.0)
+    @available(macOS, deprecated: 10.15)
+    @available(tvOS, deprecated: 13.0)
+    @available(watchOS, deprecated: 6.0)
+    func testAsyncPromiseThrow() {
+
     }
     #else
     func testAsyncPromiseThrow() {
