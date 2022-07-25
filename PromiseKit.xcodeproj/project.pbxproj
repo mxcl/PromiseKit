@@ -80,6 +80,8 @@
 		63CF6D80203CD19200EC8927 /* ThenableTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63CF6D7F203CD19200EC8927 /* ThenableTests.swift */; };
 		63D9B2EF203385FD0075C00B /* race.m in Sources */ = {isa = PBXBuildFile; fileRef = 63D9B2EE203385FD0075C00B /* race.m */; };
 		63D9B2F120338D5D0075C00B /* Deprecations.swift in Sources */ = {isa = PBXBuildFile; fileRef = 63D9B2F020338D5D0075C00B /* Deprecations.swift */; };
+		9E4170F9287D88C900A3B4B5 /* Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4170F8287D88C800A3B4B5 /* Async.swift */; };
+		9E4170FC287D8DF900A3B4B5 /* AsyncTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4170FA287D8DBD00A3B4B5 /* AsyncTests.swift */; };
 		9E66231626FE5A8C00FA25CB /* RaceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E66231526FE5A8C00FA25CB /* RaceTests.m */; };
 		C013F7382048E3B6006B57B1 /* MockNodeEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F7372048E3B6006B57B1 /* MockNodeEnvironment.swift */; };
 		C013F73A2049076A006B57B1 /* JSPromise.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F7392049076A006B57B1 /* JSPromise.swift */; };
@@ -224,6 +226,8 @@
 		63CF6D7F203CD19200EC8927 /* ThenableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThenableTests.swift; sourceTree = "<group>"; };
 		63D9B2EE203385FD0075C00B /* race.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = race.m; path = Sources/race.m; sourceTree = "<group>"; };
 		63D9B2F020338D5D0075C00B /* Deprecations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Deprecations.swift; path = Sources/Deprecations.swift; sourceTree = "<group>"; };
+		9E4170F8287D88C800A3B4B5 /* Async.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Async.swift; path = Sources/Async.swift; sourceTree = "<group>"; };
+		9E4170FA287D8DBD00A3B4B5 /* AsyncTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncTests.swift; sourceTree = "<group>"; };
 		9E66231526FE5A8C00FA25CB /* RaceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RaceTests.m; sourceTree = "<group>"; };
 		C013F7372048E3B6006B57B1 /* MockNodeEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockNodeEnvironment.swift; path = "Tests/JS-A+/MockNodeEnvironment.swift"; sourceTree = "<group>"; };
 		C013F7392049076A006B57B1 /* JSPromise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JSPromise.swift; path = "Tests/JS-A+/JSPromise.swift"; sourceTree = "<group>"; };
@@ -336,6 +340,7 @@
 		6317518A1D59765700A9DDDC /* Core */ = {
 			isa = PBXGroup;
 			children = (
+				9E4170FA287D8DBD00A3B4B5 /* AsyncTests.swift */,
 				63CF6D7F203CD19200EC8927 /* ThenableTests.swift */,
 				632FBBE41F33B338008F8FBB /* CatchableTests.swift */,
 				635D64081D59635300BC0AF5 /* PromiseTests.swift */,
@@ -434,6 +439,7 @@
 		63B0AC601D595E4C00FA21D9 /* Sources.swift */ = {
 			isa = PBXGroup;
 			children = (
+				9E4170F8287D88C800A3B4B5 /* Async.swift */,
 				636A29191F1C156B001229C2 /* Promise.swift */,
 				636A29221F1C17A6001229C2 /* Guarantee.swift */,
 				636A29201F1C1716001229C2 /* Thenable.swift */,
@@ -689,6 +695,7 @@
 				63CF6D7C203CCDAB00EC8927 /* GuaranteeTests.swift in Sources */,
 				9E66231626FE5A8C00FA25CB /* RaceTests.m in Sources */,
 				639BF757203DF03100FA577B /* Utilities.swift in Sources */,
+				9E4170FC287D8DF900A3B4B5 /* AsyncTests.swift in Sources */,
 				635D64261D59635300BC0AF5 /* WhenResolvedTests.swift in Sources */,
 				635D64231D59635300BC0AF5 /* AfterTests.swift in Sources */,
 				63CF6D7A203CC66000EC8927 /* ErrorTests.swift in Sources */,
@@ -753,6 +760,7 @@
 				63B0AC801D595E6300FA21D9 /* after.swift in Sources */,
 				63B18AEC1F2D205C00B79E37 /* CustomStringConvertible.swift in Sources */,
 				085B96BF21A9B37C00E5E22F /* LogEvent.swift in Sources */,
+				9E4170F9287D88C900A3B4B5 /* Async.swift in Sources */,
 				6330B5E11F2E991200D60528 /* Configuration.swift in Sources */,
 				63B912AA1F1D7B1300D49110 /* firstly.swift in Sources */,
 				636A29211F1C1716001229C2 /* Thenable.swift in Sources */,
