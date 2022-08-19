@@ -7,6 +7,7 @@ private enum Error: Swift.Error { case dummy }
 class AsyncTests: XCTestCase {
     
     #if swift(>=5.5)
+    #if canImport(_Concurrency)
     @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
     func testAsyncPromiseValue() async throws {
         let promise = after(.milliseconds(100)).then(on: nil){ Promise.value(1) }
@@ -26,8 +27,14 @@ class AsyncTests: XCTestCase {
 
     }
     #endif
+    #else
+    func testAsyncPromiseValue() {
+
+    }
+    #endif
     
     #if swift(>=5.5)
+    #if canImport(_Concurrency)
     @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
     func testAsyncGuaranteeValue() async {
         let guarantee = after(.milliseconds(100)).then(on: nil){ Guarantee.value(1) }
@@ -47,8 +54,14 @@ class AsyncTests: XCTestCase {
 
     }
     #endif
+    #else
+    func testAsyncGuaranteeValue() {
+
+    }
+    #endif
     
     #if swift(>=5.5)
+    #if canImport(_Concurrency)
     @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
     func testAsyncPromiseThrow() async throws {
         do {
@@ -72,6 +85,11 @@ class AsyncTests: XCTestCase {
     func testAsyncPromiseThrow() {
 
     }
+    #else
+    func testAsyncPromiseThrow() {
+
+    }
+    #endif
     #else
     func testAsyncPromiseThrow() {
 

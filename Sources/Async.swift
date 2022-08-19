@@ -1,4 +1,5 @@
 #if swift(>=5.5)
+#if canImport(_Concurrency)
 @available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 public extension Guarantee {
     func async() async -> T {
@@ -22,5 +23,6 @@ public extension Promise {
         }
     }
 }
+#endif
 #endif
 
