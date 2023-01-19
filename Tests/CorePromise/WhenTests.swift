@@ -264,4 +264,16 @@ class WhenTests: XCTestCase {
 
         wait(for: [ex1, ex2], timeout: 10)
     }
+    
+    func testDoubleTupleGuarantees() {
+        let e1 = expectation(description: "")
+        let g1 = Guarantee.value(1)
+        let g2 = Guarantee.value("abc")
+        when(guarantees: g1, g2).done { x, y in
+            XCTAssertEqual(x, 1)
+            XCTAssertEqual(y, "abc")
+            e1.fulfill()
+        }
+        waitForExpectations(timeout: 1, handler: nil)
+    }
 }

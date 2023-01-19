@@ -254,6 +254,7 @@ extension WhenTests {
     static let __allTests__WhenTests = [
         ("testAllSealedRejectedFirstOneRejects", testAllSealedRejectedFirstOneRejects),
         ("testDoubleTuple", testDoubleTuple),
+        ("testDoubleTupleGuarantees", testDoubleTupleGuarantees),
         ("testEmpty", testEmpty),
         ("testGuaranteeWhen", testGuaranteeWhen),
         ("testInt", testInt),
