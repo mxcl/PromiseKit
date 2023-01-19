@@ -258,13 +258,6 @@
       "symbol": "Thenable.firstValue(on:flags:where:)",
       "symbol_kind": "source.lang.swift.decl.function.method.instance",
       "warning": "undocumented"
-    },
-    {
-      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/when.swift",
-      "line": 361,
-      "symbol": "when(guarantees:)",
-      "symbol_kind": "source.lang.swift.decl.function.free",
-      "warning": "undocumented"
     }
   ],
   "source_directory": "/Users/runner/work/PromiseKit/PromiseKit"
