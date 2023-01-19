@@ -266,6 +266,7 @@ extension WhenTests {
         ("testUnhandledErrorHandlerDoesNotFire", testUnhandledErrorHandlerDoesNotFire),
         ("testUnhandledErrorHandlerDoesNotFireForStragglers", testUnhandledErrorHandlerDoesNotFireForStragglers),
         ("testVoid", testVoid),
+        ("testDoubleTupleGuarantees", testDoubleTupleGuarantees),
     ]
 }
 
