@@ -85,7 +85,7 @@ jobs:
     steps:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
-        xcode-version: 12.4
+        xcode-version: 13.1
     - uses: actions/checkout@v2
     - uses: sersoft-gmbh/xcodebuild-action@v1
       with:
