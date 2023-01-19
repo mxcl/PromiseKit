@@ -80,8 +80,8 @@ jobs:
       matrix:
         dst:
         - platform=macOS
-        - platform=tvOS Simulator,OS=14.3,name=Apple TV
-        - platform=iOS Simulator,OS=14.4,name=iPhone 12
+        - platform=tvOS Simulator,OS=15.0,name=Apple TV
+        - platform=iOS Simulator,OS=15.0,name=iPhone 12
     steps:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
