@@ -392,8 +392,18 @@ public func when(_ guarantees: Guarantee<Void>...) -> Guarantee<Void> {
 }
 
 /// Waits on all provided Guarantees.
+public func when<T>(_ guarantees: Guarantee<T>...) -> Guarantee<[T]> {
+    return when(guarantees: guarantees)
+}
+
+/// Waits on all provided Guarantees.
 public func when(guarantees: [Guarantee<Void>]) -> Guarantee<Void> {
     return when(fulfilled: guarantees).recover{ _ in }.asVoid()
+}
+
+/// Waits on all provided Guarantees.
+public func when<T>(guarantees: [Guarantee<T>]) -> Guarantee<[T]> {
+    return __when(guarantees).map(on: nil) { guarantees.map { $0.value! } }
 }
 
 /// Waits on all provided Guarantees.
