@@ -251,18 +251,64 @@ class WhenTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
-    func testGuaranteeWhen() {
+    func testGuaranteesWhenVoidVarArgs() {
         let ex1 = expectation(description: "")
-        when(Guarantee(), Guarantee()).done {
+        var someNumber = 0
+        let g1 = Guarantee<Void> { resolver in
+            someNumber += 1
+            resolver(())
+        }
+        let g2 = Guarantee<Void> { resolver in
+            someNumber += 2
+            resolver(())
+        }
+        when(g1, g2).done {
+            XCTAssertEqual(someNumber, 3)
+            ex1.fulfill()
+        }
+        wait(for: [ex1], timeout: 10)
+    }
+    
+    func testGuaranteesWhenVarArgs() {
+        let ex1 = expectation(description: "")
+        let g1 = Guarantee<Int>.value(1)
+        let g2 = Guarantee<Int>.value(4)
+        let g3 = Guarantee<Int>.value(2)
+        let g4 = Guarantee<Int>.value(5)
+        let g5 = Guarantee<Int>.value(3)
+        when(g1, g2, g3, g4, g5).done {
+            XCTAssertEqual($0, [1, 4, 2, 5, 3])
+            ex1.fulfill()
+        }
+        wait(for: [ex1], timeout: 10)
+    }
+    
+    func testGuaranteesWhenVoidArray() {
+        let ex1 = expectation(description: "")
+        var someNumber = 0
+        when(guarantees: (0..<100).map { _ in
+            Guarantee<Void> { resolver in
+                someNumber += 1
+                resolver(())
+            }
+        }).done {
+            XCTAssertEqual(someNumber, 100)
             ex1.fulfill()
         }
 
-        let ex2 = expectation(description: "")
-        when(guarantees: [Guarantee(), Guarantee()]).done {
-            ex2.fulfill()
+        wait(for: [ex1], timeout: 10)
+    }
+    
+    func testGuaranteesWhenArray() {
+        let ex1 = expectation(description: "")
+        when(guarantees: (0..<100).map {
+            Guarantee<Int>.value($0)
+        }).done {
+            XCTAssertEqual($0, Array(0..<100))
+            ex1.fulfill()
         }
 
-        wait(for: [ex1, ex2], timeout: 10)
+        wait(for: [ex1], timeout: 10)
     }
     
     func testDoubleTupleGuarantees() {
