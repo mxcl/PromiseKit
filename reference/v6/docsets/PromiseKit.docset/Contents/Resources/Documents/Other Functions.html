@@ -21,9 +21,9 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="index.html">
-          PromiseKit 6.20.0 Docs
+          PromiseKit 6.21.0 Docs
         </a>
-         (81% documented)
+         (82% documented)
       </p>
     
       <div class="header-col--secondary">
@@ -163,6 +163,9 @@
                 <a class="nav-group-task-link" href="Other%20Functions.html#/s:10PromiseKit4race9fulfilledAA0A0Cy1TQzGSayxG_tAA8ThenableRzlF">race(fulfilled:)</a>
               </li>
               <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other%20Functions.html#/s:10PromiseKit4whenyAA9GuaranteeCySayxGGADyxGd_tlF">when(_:)</a>
+              </li>
+              <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Other%20Functions.html#/s:10PromiseKit4whenyAA9GuaranteeCyytGAEd_tF">when(_:)</a>
               </li>
               <li class="nav-group-task">
@@ -188,6 +191,9 @@
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Other%20Functions.html#/s:10PromiseKit4when9fulfilled12concurrentlyAA0A0CySay7Element_1TQZGGx_SitStRzAA8ThenableAGRpzlF">when(fulfilled:concurrently:)</a>
+              </li>
+              <li class="nav-group-task">
+                <a class="nav-group-task-link" href="Other%20Functions.html#/s:10PromiseKit4when10guaranteesAA9GuaranteeCySayxGGSayAEyxGG_tlF">when(guarantees:)</a>
               </li>
               <li class="nav-group-task">
                 <a class="nav-group-task-link" href="Other%20Functions.html#/s:10PromiseKit4when10guaranteesAA9GuaranteeCyytGSayAFG_tF">when(guarantees:)</a>
@@ -1168,6 +1174,33 @@
                 <li class="item">
                   <div>
                     <code>
+                    <a name="/s:10PromiseKit4whenyAA9GuaranteeCySayxGGADyxGd_tlF"></a>
+                    <a name="//apple_ref/swift/Function/when(_:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit4whenyAA9GuaranteeCySayxGGADyxGd_tlF">when(_:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Waits on all provided Guarantees.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">when</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="n">_</span> <span class="nv">guarantees</span><span class="p">:</span> <span class="kt"><a href="Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;...</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">T</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
                     <a name="/s:10PromiseKit4when10guaranteesAA9GuaranteeCyytGSayAFG_tF"></a>
                     <a name="//apple_ref/swift/Function/when(guarantees:)" class="dashAnchor"></a>
                     <a class="token" href="#/s:10PromiseKit4when10guaranteesAA9GuaranteeCyytGSayAFG_tF">when(guarantees:<wbr>)</a>
@@ -1186,6 +1219,33 @@
                         <div class="language">
                           <p class="aside-title">Swift</p>
                           <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="nf">when</span><span class="p">(</span><span class="nv">guarantees</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="kt">Void</span><span class="o">&gt;</span></code></pre>
+
+                        </div>
+                      </div>
+                    </section>
+                  </div>
+                </li>
+                <li class="item">
+                  <div>
+                    <code>
+                    <a name="/s:10PromiseKit4when10guaranteesAA9GuaranteeCySayxGGSayAEyxGG_tlF"></a>
+                    <a name="//apple_ref/swift/Function/when(guarantees:)" class="dashAnchor"></a>
+                    <a class="token" href="#/s:10PromiseKit4when10guaranteesAA9GuaranteeCySayxGGSayAEyxGG_tlF">when(guarantees:<wbr>)</a>
+                    </code>
+                  </div>
+                  <div class="height-container">
+                    <div class="pointer-container"></div>
+                    <section class="section">
+                      <div class="pointer"></div>
+                      <div class="abstract">
+                        <p>Waits on all provided Guarantees.</p>
+
+                      </div>
+                      <div class="declaration">
+                        <h4>Declaration</h4>
+                        <div class="language">
+                          <p class="aside-title">Swift</p>
+                          <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">func</span> <span class="n">when</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">(</span><span class="nv">guarantees</span><span class="p">:</span> <span class="p">[</span><span class="kt"><a href="Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kt"><a href="Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="p">[</span><span class="kt">T</span><span class="p">]</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
@@ -1308,7 +1368,7 @@
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2023 <a class="link" href="http://mxcl.dev/PromiseKit/" target="_blank" rel="external noopener">Max Howell</a>. All rights reserved. (Last updated: 2023-01-24)</p>
+      <p>&copy; 2023 <a class="link" href="http://mxcl.dev/PromiseKit/" target="_blank" rel="external noopener">Max Howell</a>. All rights reserved. (Last updated: 2023-02-05)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
