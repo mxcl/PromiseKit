@@ -14,9 +14,15 @@ class CombineTests: XCTestCase {
     private var cancellable: Any?
     
     override func tearDown() {
+        #if !os(Linux)
+        #if swift(>=4.1)
+        #if canImport(Combine)
         if #available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *) {
             (cancellable as? AnyCancellable)?.cancel()
         }
+        #endif
+        #endif
+        #endif
     }
     
     func testCombinePromiseValue() {
