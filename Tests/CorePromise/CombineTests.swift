@@ -17,6 +17,8 @@ class CombineTests: XCTestCase {
     
     func testCombinePromiseValue() {
         let ex = expectation(description: "")
+        #if swift(>=4.1)
+        #if canImport(Combine)
         if #available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *) {
             let promise = after(.milliseconds(100)).then(on: nil){ Promise.value(1) }
             cancellable = promise.future().sink { result in
@@ -33,12 +35,20 @@ class CombineTests: XCTestCase {
         } else {
             ex.fulfill()
         }
+        #else
+        ex.fulfill()
+        #endif
+        #else
+        ex.fulfill()
+        #endif
 
         wait(for: [ex], timeout: 1)
     }
     
     func testCombineGuaranteeValue() {
         let ex = expectation(description: "")
+        #if swift(>=4.1)
+        #if canImport(Combine)
         if #available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *) {
             let promise = after(.milliseconds(100)).then(on: nil){ Guarantee.value(1) }
             cancellable = promise.future().sink { result in
@@ -55,12 +65,20 @@ class CombineTests: XCTestCase {
         } else {
             ex.fulfill()
         }
+        #else
+        ex.fulfill()
+        #endif
+        #else
+        ex.fulfill()
+        #endif
 
         wait(for: [ex], timeout: 1)
     }
     
     func testCombinePromiseThrow() {
         let ex = expectation(description: "")
+        #if swift(>=4.1)
+        #if canImport(Combine)
         if #available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *) {
             let promise = after(.milliseconds(100)).then(on: nil){ Promise(error: Error.dummy) }.then(on: nil){ Promise.value(1) }
             cancellable = promise.future().sink { result in
@@ -82,6 +100,12 @@ class CombineTests: XCTestCase {
         } else {
             ex.fulfill()
         }
+        #else
+        ex.fulfill()
+        #endif
+        #else
+        ex.fulfill()
+        #endif
 
         wait(for: [ex], timeout: 1)
     }
