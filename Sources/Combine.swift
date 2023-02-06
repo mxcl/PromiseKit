@@ -1,4 +1,3 @@
-#if !os(Linux)
 #if swift(>=4.1)
 #if canImport(Combine)
 import Combine
@@ -26,6 +25,5 @@ public extension Promise {
         }
     }
 }
-#endif
 #endif
 #endif

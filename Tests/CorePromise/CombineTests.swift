@@ -1,8 +1,6 @@
-#if !os(Linux)
 #if swift(>=4.1)
 #if canImport(Combine)
 import Combine
-#endif
 #endif
 #endif
 import PromiseKit
@@ -14,7 +12,6 @@ class CombineTests: XCTestCase {
     private var cancellable: Any?
     
     override func tearDown() {
-        #if !os(Linux)
         #if swift(>=4.1)
         #if canImport(Combine)
         if #available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *) {
@@ -22,12 +19,10 @@ class CombineTests: XCTestCase {
         }
         #endif
         #endif
-        #endif
     }
     
     func testCombinePromiseValue() {
         let ex = expectation(description: "")
-        #if !os(Linux)
         #if swift(>=4.1)
         #if canImport(Combine)
         if #available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *) {
@@ -52,16 +47,12 @@ class CombineTests: XCTestCase {
         #else
         ex.fulfill()
         #endif
-        #else
-        ex.fulfill()
-        #endif
 
         wait(for: [ex], timeout: 1)
     }
     
     func testCombineGuaranteeValue() {
         let ex = expectation(description: "")
-        #if !os(Linux)
         #if swift(>=4.1)
         #if canImport(Combine)
         if #available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *) {
@@ -86,16 +77,12 @@ class CombineTests: XCTestCase {
         #else
         ex.fulfill()
         #endif
-        #else
-        ex.fulfill()
-        #endif
 
         wait(for: [ex], timeout: 1)
     }
     
     func testCombinePromiseThrow() {
         let ex = expectation(description: "")
-        #if !os(Linux)
         #if swift(>=4.1)
         #if canImport(Combine)
         if #available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *) {
@@ -119,9 +106,6 @@ class CombineTests: XCTestCase {
         } else {
             ex.fulfill()
         }
-        #else
-        ex.fulfill()
-        #endif
         #else
         ex.fulfill()
         #endif
