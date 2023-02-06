@@ -1,6 +1,8 @@
 #if swift(>=4.1)
 #if canImport(Combine)
 import Combine
+#endif
+#endif
 import PromiseKit
 import XCTest
 
@@ -110,5 +112,3 @@ class CombineTests: XCTestCase {
         wait(for: [ex], timeout: 1)
     }
 }
-#endif
-#endif
