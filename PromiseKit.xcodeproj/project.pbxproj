@@ -83,6 +83,8 @@
 		9E4170F9287D88C900A3B4B5 /* Async.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4170F8287D88C800A3B4B5 /* Async.swift */; };
 		9E4170FC287D8DF900A3B4B5 /* AsyncTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9E4170FA287D8DBD00A3B4B5 /* AsyncTests.swift */; };
 		9E66231626FE5A8C00FA25CB /* RaceTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 9E66231526FE5A8C00FA25CB /* RaceTests.m */; };
+		9EC774272991495C00803027 /* Combine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC774262991495C00803027 /* Combine.swift */; };
+		9EC7742A2991498200803027 /* CombineTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9EC774282991497900803027 /* CombineTests.swift */; };
 		C013F7382048E3B6006B57B1 /* MockNodeEnvironment.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F7372048E3B6006B57B1 /* MockNodeEnvironment.swift */; };
 		C013F73A2049076A006B57B1 /* JSPromise.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F7392049076A006B57B1 /* JSPromise.swift */; };
 		C013F73C20494291006B57B1 /* JSAdapter.swift in Sources */ = {isa = PBXBuildFile; fileRef = C013F73B20494291006B57B1 /* JSAdapter.swift */; };
@@ -229,6 +231,8 @@
 		9E4170F8287D88C800A3B4B5 /* Async.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Async.swift; path = Sources/Async.swift; sourceTree = "<group>"; };
 		9E4170FA287D8DBD00A3B4B5 /* AsyncTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncTests.swift; sourceTree = "<group>"; };
 		9E66231526FE5A8C00FA25CB /* RaceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RaceTests.m; sourceTree = "<group>"; };
+		9EC774262991495C00803027 /* Combine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Combine.swift; path = Sources/Combine.swift; sourceTree = "<group>"; };
+		9EC774282991497900803027 /* CombineTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CombineTests.swift; sourceTree = "<group>"; };
 		C013F7372048E3B6006B57B1 /* MockNodeEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockNodeEnvironment.swift; path = "Tests/JS-A+/MockNodeEnvironment.swift"; sourceTree = "<group>"; };
 		C013F7392049076A006B57B1 /* JSPromise.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JSPromise.swift; path = "Tests/JS-A+/JSPromise.swift"; sourceTree = "<group>"; };
 		C013F73B20494291006B57B1 /* JSAdapter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = JSAdapter.swift; path = "Tests/JS-A+/JSAdapter.swift"; sourceTree = "<group>"; };
@@ -341,6 +345,7 @@
 			isa = PBXGroup;
 			children = (
 				9E4170FA287D8DBD00A3B4B5 /* AsyncTests.swift */,
+				9EC774282991497900803027 /* CombineTests.swift */,
 				63CF6D7F203CD19200EC8927 /* ThenableTests.swift */,
 				632FBBE41F33B338008F8FBB /* CatchableTests.swift */,
 				635D64081D59635300BC0AF5 /* PromiseTests.swift */,
@@ -440,6 +445,7 @@
 			isa = PBXGroup;
 			children = (
 				9E4170F8287D88C800A3B4B5 /* Async.swift */,
+				9EC774262991495C00803027 /* Combine.swift */,
 				636A29191F1C156B001229C2 /* Promise.swift */,
 				636A29221F1C17A6001229C2 /* Guarantee.swift */,
 				636A29201F1C1716001229C2 /* Thenable.swift */,
@@ -686,6 +692,7 @@
 				630A8056203CEF6800D25F23 /* AnyPromiseTests.m in Sources */,
 				635D64221D59635300BC0AF5 /* ZalgoTests.swift in Sources */,
 				635D64271D59635300BC0AF5 /* RaceTests.swift in Sources */,
+				9EC7742A2991498200803027 /* CombineTests.swift in Sources */,
 				632FBBE51F33B338008F8FBB /* CatchableTests.swift in Sources */,
 				63CF6D80203CD19200EC8927 /* ThenableTests.swift in Sources */,
 				635D642B1D59635300BC0AF5 /* StressTests.swift in Sources */,
@@ -773,6 +780,7 @@
 				63B0AC8B1D595E6300FA21D9 /* join.m in Sources */,
 				63B0AC891D595E6300FA21D9 /* hang.m in Sources */,
 				63B0AC831D595E6300FA21D9 /* AnyPromise.swift in Sources */,
+				9EC774272991495C00803027 /* Combine.swift in Sources */,
 				63D9B2F120338D5D0075C00B /* Deprecations.swift in Sources */,
 				63B0AC871D595E6300FA21D9 /* Error.swift in Sources */,
 				0CC3AF2B1FCF84F7000E98C9 /* hang.swift in Sources */,
