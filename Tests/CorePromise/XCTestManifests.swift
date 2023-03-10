@@ -74,6 +74,9 @@ extension CombineTests {
         ("testCombineGuaranteeValue", testCombineGuaranteeValue),
         ("testCombinePromiseThrow", testCombinePromiseThrow),
         ("testCombinePromiseValue", testCombinePromiseValue),
+        ("testGuaranteeCombineValue", testGuaranteeCombineValue),
+        ("testPromiseCombineThrows", testPromiseCombineThrows),
+        ("testPromiseCombineValue", testPromiseCombineValue),
     ]
 }
 
