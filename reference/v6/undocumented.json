@@ -64,6 +64,34 @@
       "warning": "undocumented"
     },
     {
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Combine.swift",
+      "line": 7,
+      "symbol": "Guarantee.future()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Combine.swift",
+      "line": 18,
+      "symbol": "Promise.future()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Combine.swift",
+      "line": 31,
+      "symbol": "Future.promise()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
+      "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Combine.swift",
+      "line": 54,
+      "symbol": "Future.guarantee()",
+      "symbol_kind": "source.lang.swift.decl.function.method.instance",
+      "warning": "undocumented"
+    },
+    {
       "file": "/Users/runner/work/PromiseKit/PromiseKit/Sources/Deprecations.swift",
       "line": 4,
       "symbol": "wrap(_:)",

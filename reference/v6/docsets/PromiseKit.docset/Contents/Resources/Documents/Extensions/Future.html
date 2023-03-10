@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Result Enumeration Reference</title>
+    <title>Future Extension Reference</title>
     <link rel="stylesheet" type="text/css" href="../css/jazzy.css" />
     <link rel="stylesheet" type="text/css" href="../css/highlight.css" />
     <meta charset="utf-8">
@@ -14,9 +14,9 @@
   </head>
   <body>
 
-    <a name="//apple_ref/swift/Enum/Result" class="dashAnchor"></a>
+    <a name="//apple_ref/swift/Extension/Future" class="dashAnchor"></a>
 
-    <a title="Result Enumeration Reference"></a>
+    <a title="Future Extension Reference"></a>
 
     <header class="header">
       <p class="header-col header-col--primary">
@@ -44,7 +44,7 @@
     <p class="breadcrumbs">
       <a class="breadcrumb" href="../index.html">PromiseKit Reference</a>
       <img class="carat" src="../img/carat.png" alt=""/>
-      Result Enumeration Reference
+      Future Extension Reference
     </p>
 
     <div class="content-wrapper">
@@ -261,16 +261,16 @@
 
         <section class="section">
           <div class="section-content top-matter">
-            <h1>Result</h1>
+            <h1>Future</h1>
               <div class="declaration">
                 <div class="language">
                   
-                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">enum</span> <span class="kt">Result</span><span class="o">&lt;</span><span class="kt">T</span><span class="o">&gt;</span></code></pre>
+                  <pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">extension</span> <span class="kt">Future</span></code></pre>
+<pre class="highlight swift"><code><span class="kd">public</span> <span class="kd">extension</span> <span class="kt">Future</span> <span class="k">where</span> <span class="kt">Failure</span> <span class="o">==</span> <span class="kt">Never</span></code></pre>
 
                 </div>
               </div>
-            <p>Undocumented</p>
-
+            
           </div>
         </section>
 
@@ -281,9 +281,9 @@
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10PromiseKit6ResultO9fulfilledyACyxGxcAEmlF"></a>
-                    <a name="//apple_ref/swift/Element/fulfilled(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10PromiseKit6ResultO9fulfilledyACyxGxcAEmlF">fulfilled(_:<wbr>)</a>
+                    <a name="/s:7Combine6FutureC10PromiseKitE7promiseAD0C0CyxGyF"></a>
+                    <a name="//apple_ref/swift/Method/promise()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Combine6FutureC10PromiseKitE7promiseAD0C0CyxGyF">promise()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -298,19 +298,32 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="nf">fulfilled</span><span class="p">(</span><span class="kt">T</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">promise</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt">PromiseKit</span><span class="o">.</span><span class="kt"><a href="../Classes/Promise.html">Promise</a></span><span class="o">&lt;</span><span class="kt">Output</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
                     </section>
                   </div>
                 </li>
+              </ul>
+            </div>
+            <div class="task-group">
+              <div class="task-name-container">
+                <a name="/Available%20where%20%60Failure%60%20%3D%3D%20%60Never%60"></a>
+                <a name="//apple_ref/swift/Section/Available where `Failure` == `Never`" class="dashAnchor"></a>
+                <div class="section-name-container">
+                  <a class="section-name-link" href="#/Available%20where%20%60Failure%60%20%3D%3D%20%60Never%60"></a>
+                  <h3 class="section-name"><span>Available where <code>Failure</code> == <code>Never</code></span>
+</h3>
+                </div>
+              </div>
+              <ul class="item-container">
                 <li class="item">
                   <div>
                     <code>
-                    <a name="/s:10PromiseKit6ResultO8rejectedyACyxGs5Error_pcAEmlF"></a>
-                    <a name="//apple_ref/swift/Element/rejected(_:)" class="dashAnchor"></a>
-                    <a class="token" href="#/s:10PromiseKit6ResultO8rejectedyACyxGs5Error_pcAEmlF">rejected(_:<wbr>)</a>
+                    <a name="/s:7Combine6FutureC10PromiseKits5NeverORs_rlE9guaranteeAD9GuaranteeCyxGyF"></a>
+                    <a name="//apple_ref/swift/Method/guarantee()" class="dashAnchor"></a>
+                    <a class="token" href="#/s:7Combine6FutureC10PromiseKits5NeverORs_rlE9guaranteeAD9GuaranteeCyxGyF">guarantee()</a>
                     </code>
                   </div>
                   <div class="height-container">
@@ -325,7 +338,7 @@
                         <h4>Declaration</h4>
                         <div class="language">
                           <p class="aside-title">Swift</p>
-                          <pre class="highlight swift"><code><span class="k">case</span> <span class="nf">rejected</span><span class="p">(</span><span class="kt">Error</span><span class="p">)</span></code></pre>
+                          <pre class="highlight swift"><code><span class="kd">func</span> <span class="nf">guarantee</span><span class="p">()</span> <span class="o">-&gt;</span> <span class="kt"><a href="../Classes/Guarantee.html">Guarantee</a></span><span class="o">&lt;</span><span class="kt">Output</span><span class="o">&gt;</span></code></pre>
 
                         </div>
                       </div>
