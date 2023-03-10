@@ -205,7 +205,10 @@ class CombineTests: XCTestCase {
     }
 }
 
+#if swift(>=4.1)
+#if canImport(Combine)
 /// https://stackoverflow.com/a/60444607/2229783
+@available(iOS 13.0, macOS 10.15, tvOS 13.0, watchOS 6.0, *)
 private extension Publisher {
     func future() -> Future<Output, Failure> {
         return Future { promise in
@@ -230,3 +233,5 @@ private extension Publisher {
         }
     }
 }
+#endif
+#endif
