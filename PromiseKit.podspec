@@ -19,15 +19,15 @@ Pod::Spec.new do |s|
   s.default_subspecs = 'CorePromise', 'UIKit', 'Foundation'
   s.requires_arc = true
 
-  s.swift_versions = ['3.2', '3.3', '3.4', '4.0', '4.1', '4.2', '4.3', '4.4', '5.0', '5.1', '5.2', '5.3', '5.4', '5.5']
+  s.swift_versions = ['3.2', '3.3', '3.4', '4.0', '4.1', '4.2', '4.3', '4.4', '5.0', '5.1', '5.2', '5.3', '5.4', '5.5', '5.8']
 
   # CocoaPods requires us to specify the root deployment targets
   # even though for us it is nonsense. Our root spec has no
   # sources.
-  s.ios.deployment_target = '8.0'
-  s.osx.deployment_target = '10.10'
-  s.watchos.deployment_target = '2.0'
-  s.tvos.deployment_target = '9.0'
+  s.ios.deployment_target = '11.0'
+  s.osx.deployment_target = '10.13'
+  s.watchos.deployment_target = '4.0'
+  s.tvos.deployment_target = '11.0'
 
   s.pod_target_xcconfig = {
     'OTHER_SWIFT_FLAGS' => '-DPMKCocoaPods',
@@ -38,8 +38,8 @@ Pod::Spec.new do |s|
     ss.exclude_files = 'Extensions/Accounts/Sources/*.plist'
     ss.ios.frameworks = ss.osx.frameworks = 'Accounts'
     ss.dependency 'PromiseKit/CorePromise'
-    ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
+    ss.ios.deployment_target = '11.0'
+    ss.osx.deployment_target = '10.13'
   end
 
   s.subspec 'Alamofire' do |ss|
@@ -47,10 +47,10 @@ Pod::Spec.new do |s|
     ss.exclude_files = 'Extensions/Alamofire/Sources/*.plist'
     ss.dependency 'Alamofire', '~> 4.0'
     ss.dependency 'PromiseKit/CorePromise'
-    ss.ios.deployment_target = '8.0'
+    ss.ios.deployment_target = '11.0'
     ss.osx.deployment_target = '10.11'
-    ss.watchos.deployment_target = '2.0'
-    ss.tvos.deployment_target = '9.0'
+    ss.watchos.deployment_target = '4.0'
+    ss.tvos.deployment_target = '11.0'
   end
 
   s.subspec 'AddressBook' do |ss|
@@ -58,7 +58,7 @@ Pod::Spec.new do |s|
     ss.exclude_files = 'Extensions/AddressBook/Sources/*.plist'
     ss.ios.frameworks = 'AddressBook'
     ss.dependency 'PromiseKit/CorePromise'
-    ss.ios.deployment_target = '8.0'
+    ss.ios.deployment_target = '11.0'
   end
 
   s.subspec 'AssetsLibrary' do |ss|
@@ -66,7 +66,7 @@ Pod::Spec.new do |s|
     ss.exclude_files = 'Extensions/AssetsLibrary/Sources/*.plist'
     ss.ios.frameworks = 'AssetsLibrary'
     ss.dependency 'PromiseKit/CorePromise'
-    ss.ios.deployment_target = '8.0'
+    ss.ios.deployment_target = '11.0'
   end
 
   s.subspec 'AVFoundation' do |ss|
@@ -74,7 +74,7 @@ Pod::Spec.new do |s|
     ss.exclude_files = 'Extensions/AVFoundation/Sources/*.plist'
     ss.ios.frameworks = 'AVFoundation'
     ss.dependency 'PromiseKit/CorePromise'
-    ss.ios.deployment_target = '8.0'
+    ss.ios.deployment_target = '11.0'
   end
 
   s.subspec 'Bolts' do |ss|
@@ -82,10 +82,10 @@ Pod::Spec.new do |s|
     ss.exclude_files = 'Extensions/Bolts/Sources/*.plist'
     ss.dependency 'PromiseKit/CorePromise'
     ss.dependency 'Bolts', '~> 1.9.0'
-    ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
-    ss.watchos.deployment_target = '2.0'
-    ss.tvos.deployment_target = '9.0'
+    ss.ios.deployment_target = '11.0'
+    ss.osx.deployment_target = '10.13'
+    ss.watchos.deployment_target = '4.0'
+    ss.tvos.deployment_target = '11.0'
   end
 
   s.subspec 'CloudKit' do |ss|
@@ -96,7 +96,7 @@ Pod::Spec.new do |s|
     ss.ios.deployment_target = '10.0'
     ss.osx.deployment_target = '10.12'
     ss.tvos.deployment_target = '10.0'
-    ss.watchos.deployment_target = '3.0'
+    ss.watchos.deployment_target = '4.0'
   end
 
   s.subspec 'CoreBluetooth' do |ss|
@@ -104,9 +104,9 @@ Pod::Spec.new do |s|
     ss.exclude_files = 'Extensions/CoreBluetooth/Sources/*.plist'
     ss.ios.frameworks = ss.osx.frameworks = ss.tvos.frameworks = 'CoreBluetooth'
     ss.dependency 'PromiseKit/CorePromise'
-    ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
-    ss.tvos.deployment_target = '9.0'
+    ss.ios.deployment_target = '11.0'
+    ss.osx.deployment_target = '10.13'
+    ss.tvos.deployment_target = '11.0'
   end
 
   s.subspec 'CorePromise' do |ss|
@@ -122,10 +122,10 @@ Pod::Spec.new do |s|
     ss.preserve_paths = 'Sources/AnyPromise+Private.h', 'Sources/PMKCallVariadicBlock.m', 'Sources/NSMethodSignatureForBlock.m'
     ss.frameworks = 'Foundation'
 
-    ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
-    ss.watchos.deployment_target = '2.0'
-    ss.tvos.deployment_target = '9.0'
+    ss.ios.deployment_target = '11.0'
+    ss.osx.deployment_target = '10.13'
+    ss.watchos.deployment_target = '4.0'
+    ss.tvos.deployment_target = '11.0'
   end
 
   s.subspec 'CoreLocation' do |ss|
@@ -135,10 +135,10 @@ Pod::Spec.new do |s|
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'CoreLocation'
 
-    ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
-    ss.watchos.deployment_target = '3.0'
-    ss.tvos.deployment_target = '9.0'
+    ss.ios.deployment_target = '11.0'
+    ss.osx.deployment_target = '10.13'
+    ss.watchos.deployment_target = '4.0'
+    ss.tvos.deployment_target = '11.0'
   end
 
   s.subspec 'EventKit' do |ss|
@@ -147,9 +147,9 @@ Pod::Spec.new do |s|
     ss.ios.frameworks = ss.osx.frameworks = ss.watchos.frameworks = 'EventKit'
     ss.dependency 'PromiseKit/CorePromise'
 
-    ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
-    ss.watchos.deployment_target = '2.0'
+    ss.ios.deployment_target = '11.0'
+    ss.osx.deployment_target = '10.13'
+    ss.watchos.deployment_target = '4.0'
   end
 
   s.subspec 'Foundation' do |ss|
@@ -157,10 +157,10 @@ Pod::Spec.new do |s|
     ss.exclude_files = 'Extensions/Foundation/Sources/*.plist'
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'Foundation'
-    ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
-    ss.watchos.deployment_target = '2.0'
-    ss.tvos.deployment_target = '9.0'
+    ss.ios.deployment_target = '11.0'
+    ss.osx.deployment_target = '10.13'
+    ss.watchos.deployment_target = '4.0'
+    ss.tvos.deployment_target = '11.0'
   end
 
   s.subspec 'HealthKit' do |ss|
@@ -169,7 +169,7 @@ Pod::Spec.new do |s|
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'HealthKit'
     ss.ios.deployment_target = '9.0'
-    ss.watchos.deployment_target = '2.0'
+    ss.watchos.deployment_target = '4.0'
   end
 
   s.subspec 'HomeKit' do |ss|
@@ -177,9 +177,9 @@ Pod::Spec.new do |s|
     ss.exclude_files = 'Extensions/HomeKit/Sources/*.plist'
     ss.dependency 'PromiseKit/CorePromise'
     ss.frameworks = 'HomeKit'
-    ss.ios.deployment_target = '8.0'
-    ss.watchos.deployment_target = '3.0'
-    ss.tvos.deployment_target = '9.0'
+    ss.ios.deployment_target = '11.0'
+    ss.watchos.deployment_target = '4.0'
+    ss.tvos.deployment_target = '11.0'
   end
 
   s.subspec 'MapKit' do |ss|
@@ -187,9 +187,9 @@ Pod::Spec.new do |s|
     ss.exclude_files = 'Extensions/MapKit/Sources/*.plist'
     ss.ios.frameworks = ss.osx.frameworks = ss.tvos.frameworks = 'MapKit'
     ss.dependency 'PromiseKit/CorePromise'
-    ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
-    ss.watchos.deployment_target = '2.0'
+    ss.ios.deployment_target = '11.0'
+    ss.osx.deployment_target = '10.13'
+    ss.watchos.deployment_target = '4.0'
     ss.tvos.deployment_target = '9.2'
   end
 
@@ -198,7 +198,7 @@ Pod::Spec.new do |s|
     ss.exclude_files = 'Extensions/MessagesUI/Sources/*.plist'
     ss.ios.frameworks = 'MessageUI'
     ss.dependency 'PromiseKit/CorePromise'
-    ss.ios.deployment_target = '8.0'
+    ss.ios.deployment_target = '11.0'
   end
 
   s.subspec 'OMGHTTPURLRQ' do |ss|
@@ -206,10 +206,10 @@ Pod::Spec.new do |s|
     ss.exclude_files = 'Extensions/OMGHTTPURLRQ/Sources/*.plist'
     ss.dependency 'PromiseKit/Foundation'
     ss.dependency 'OMGHTTPURLRQ', '~> 3.2'
-    ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
-    ss.watchos.deployment_target = '2.0'
-    ss.tvos.deployment_target = '9.0'
+    ss.ios.deployment_target = '11.0'
+    ss.osx.deployment_target = '10.13'
+    ss.watchos.deployment_target = '4.0'
+    ss.tvos.deployment_target = '11.0'
   end
 
   s.subspec 'Photos' do |ss|
@@ -218,7 +218,7 @@ Pod::Spec.new do |s|
     ss.ios.frameworks = ss.tvos.frameworks = ss.osx.frameworks = 'Photos'
     ss.dependency 'PromiseKit/CorePromise'
 
-    ss.ios.deployment_target = '8.0'
+    ss.ios.deployment_target = '11.0'
     ss.osx.deployment_target = '10.13'
     ss.tvos.deployment_target = '10.0'
   end
@@ -228,9 +228,9 @@ Pod::Spec.new do |s|
     ss.exclude_files = 'Extensions/QuartzCore/Sources/*.plist'
     ss.osx.frameworks = ss.ios.frameworks = ss.tvos.frameworks = 'QuartzCore'
     ss.dependency 'PromiseKit/CorePromise'
-    ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
-    ss.tvos.deployment_target = '9.0'
+    ss.ios.deployment_target = '11.0'
+    ss.osx.deployment_target = '10.13'
+    ss.tvos.deployment_target = '11.0'
   end
 
   s.subspec 'Social' do |ss|
@@ -239,8 +239,8 @@ Pod::Spec.new do |s|
     ss.osx.source_files = Dir['Extensions/Social/Sources/*'] - ['Categories/Social/Sources/*SLComposeViewController+Promise.swift']
     ss.ios.frameworks = ss.osx.frameworks = 'Social'
     ss.dependency 'PromiseKit/Foundation'
-    ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
+    ss.ios.deployment_target = '11.0'
+    ss.osx.deployment_target = '10.13'
   end
 
   s.subspec 'StoreKit' do |ss|
@@ -248,9 +248,9 @@ Pod::Spec.new do |s|
     ss.exclude_files = 'Extensions/StoreKit/Sources/*.plist'
     ss.ios.frameworks = ss.osx.frameworks = ss.tvos.frameworks = 'StoreKit'
     ss.dependency 'PromiseKit/CorePromise'
-    ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
-    ss.tvos.deployment_target = '9.0'
+    ss.ios.deployment_target = '11.0'
+    ss.osx.deployment_target = '10.13'
+    ss.tvos.deployment_target = '11.0'
   end
 
   s.subspec 'SystemConfiguration' do |ss|
@@ -258,9 +258,9 @@ Pod::Spec.new do |s|
     ss.exclude_files = 'Extensions/SystemConfiguration/Sources/*.plist'
     ss.ios.frameworks = ss.osx.frameworks = ss.tvos.frameworks = 'SystemConfiguration'
     ss.dependency 'PromiseKit/CorePromise'
-    ss.ios.deployment_target = '8.0'
-    ss.osx.deployment_target = '10.10'
-    ss.tvos.deployment_target = '9.0'
+    ss.ios.deployment_target = '11.0'
+    ss.osx.deployment_target = '10.13'
+    ss.tvos.deployment_target = '11.0'
   end
 
   picker_cc = 'Extensions/UIKit/Sources/UIImagePickerController+Promise.swift'
@@ -270,8 +270,8 @@ Pod::Spec.new do |s|
     ss.exclude_files = 'Extensions/UIKit/Sources/*.plist'
     ss.tvos.frameworks = ss.ios.frameworks = 'UIKit'
     ss.dependency 'PromiseKit/CorePromise'
-    ss.ios.deployment_target = '8.0'
-    ss.tvos.deployment_target = '9.0'
+    ss.ios.deployment_target = '11.0'
+    ss.tvos.deployment_target = '11.0'
   end
 
   s.subspec 'UIImagePickerController' do |ss|
@@ -288,7 +288,7 @@ Pod::Spec.new do |s|
     ss.ios.frameworks = 'UIKit'
     ss.ios.xcconfig = { "GCC_PREPROCESSOR_DEFINITIONS" => '$(inherited) PMKImagePickerController=1' }
     ss.dependency 'PromiseKit/UIKit'
-    ss.ios.deployment_target = '8.0'
+    ss.ios.deployment_target = '11.0'
   end
 
   s.subspec 'WatchConnectivity' do |ss|
@@ -296,7 +296,7 @@ Pod::Spec.new do |s|
     ss.exclude_files = 'Extensions/WatchConnectivity/Sources/*.plist'
     ss.ios.frameworks = ss.watchos.frameworks = 'WatchConnectivity'
     ss.dependency 'PromiseKit/CorePromise'
-    ss.ios.deployment_target = '8.0'
-    ss.watchos.deployment_target = '2.0'
+    ss.ios.deployment_target = '11.0'
+    ss.watchos.deployment_target = '4.0'
   end
 end
