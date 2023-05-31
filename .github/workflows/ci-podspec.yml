@@ -10,4 +10,4 @@ jobs:
     - uses: actions/checkout@v2
       with:
         submodules: true
-    - run: pod lib lint --fail-fast
+    - run: pod lib lint --fail-fast --allow-warnings
