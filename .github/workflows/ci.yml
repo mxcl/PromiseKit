@@ -32,7 +32,7 @@ jobs:
   linux-code-cov:
     name: linux
     needs: auto-cancel
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     strategy:
       matrix:
         swift:
@@ -115,7 +115,7 @@ jobs:
         include: project.pbxproj
 
     - run: |
-        if [ ${{ matrix.xcode }} == ^12 ]; then
+        if [ ${{ matrix.xcode }} != ^11 ]; then
           echo "CARTHAGE_ARGS=--use-xcframeworks" >> $GITHUB_ENV
         fi
     - run: carthage build --no-skip-current --no-use-binaries $CARTHAGE_ARGS
