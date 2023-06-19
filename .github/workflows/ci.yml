@@ -1,20 +1,21 @@
 name: CI
+
 on:
   workflow_dispatch:
+  workflow_call:
   pull_request:
     paths:
       - Sources/**
       - Tests/**
       - .github/workflows/ci.yml
       - PromiseKit.xcodeproj/**
-jobs:
-  auto-cancel:
-    runs-on: ubuntu-latest
-    steps:
-    - uses: technote-space/auto-cancel-redundant-job@v1
 
+concurrency:
+  group: ${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
   linux:
-    needs: auto-cancel
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -31,7 +32,6 @@ jobs:
 
   linux-code-cov:
     name: linux
-    needs: auto-cancel
     runs-on: ubuntu-latest
     strategy:
       matrix:
