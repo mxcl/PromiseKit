@@ -7,11 +7,11 @@ static inline NSError *dummyWithCode(NSInteger code) {
     return [NSError errorWithDomain:PMKTestErrorDomain code:rand() userInfo:@{NSLocalizedDescriptionKey: @(code).stringValue}];
 }
 
-static inline NSError *dummy() {
+static inline NSError *dummy(void) {
     return dummyWithCode(rand());
 }
 
-static inline AnyPromise *rejectLater() {
+static inline AnyPromise *rejectLater(void) {
     return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
             dispatch_async(dispatch_get_main_queue(), ^{
@@ -21,7 +21,7 @@ static inline AnyPromise *rejectLater() {
     }];
 }
 
-static inline AnyPromise *fulfillLater() {
+static inline AnyPromise *fulfillLater(void) {
     return [AnyPromise promiseWithResolverBlock:^(PMKResolver resolve) {
         dispatch_async(dispatch_get_global_queue(QOS_CLASS_UNSPECIFIED, 0), ^{
             resolve(@1);

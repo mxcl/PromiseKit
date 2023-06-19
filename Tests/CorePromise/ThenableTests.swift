@@ -200,11 +200,13 @@ class ThenableTests: XCTestCase {
     }
 
     func testLastValueForEmpty() {
-        XCTAssertTrue(Promise.value([]).lastValue.isRejected)
+        let values = [String]()
+        XCTAssertTrue(Promise.value(values).lastValue.isRejected)
     }
 
     func testFirstValueForEmpty() {
-        XCTAssertTrue(Promise.value([]).firstValue.isRejected)
+        let values = [String]()
+        XCTAssertTrue(Promise.value(values).firstValue.isRejected)
     }
 
     func testThenOffRejected() {

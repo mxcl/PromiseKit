@@ -2,15 +2,15 @@
 @import PromiseKit;
 #import "Infrastructure.h"
 
-AnyPromise *PMKDummyAnyPromise_YES() {
+AnyPromise *PMKDummyAnyPromise_YES(void) {
     return [AnyPromise promiseWithValue:@YES];
 }
 
-AnyPromise *PMKDummyAnyPromise_Manifold() {
+AnyPromise *PMKDummyAnyPromise_Manifold(void) {
     return [AnyPromise promiseWithValue:PMKManifold(@YES, @NO, @NO)];
 }
 
-AnyPromise *PMKDummyAnyPromise_Error() {
+AnyPromise *PMKDummyAnyPromise_Error(void) {
     return [AnyPromise promiseWithValue:[NSError errorWithDomain:@"a" code:1 userInfo:nil]];
 }
 
@@ -28,7 +28,7 @@ AnyPromise *PMKDummyAnyPromise_Error() {
 
 #import "PMKBridgeTests-Swift.h"
 
-AnyPromise *testCase626() {
+AnyPromise *testCase626(void) {
     return PMKWhen(@[[TestPromise626 promise], [TestPromise626 promise]]).then(^(id value){
         NSLog(@"Success: %@", value);
     }).catch(^(NSError *error) {
