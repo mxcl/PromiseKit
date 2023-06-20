@@ -20,7 +20,7 @@
     <header class="header">
       <p class="header-col header-col--primary">
         <a class="header-link" href="index.html">
-          PromiseKit 6.22.1 Docs
+          PromiseKit 8.0.0 Docs
         </a>
          (80% documented)
       </p>
@@ -263,7 +263,7 @@
             
             <p><img src="../gh-pages/public/img/logo-tight.png" alt="PromiseKit"></p>
 
-<p><a href="https://cocoapods.org/pods/PromiseKit"><img src="https://img.shields.io/cocoapods/v/PromiseKit.svg?label=version" alt="badge-pod"></a> <img src="https://img.shields.io/badge/languages-Swift%20%7C%20ObjC-orange.svg" alt="badge-languages"> <img src="https://img.shields.io/badge/supports-CocoaPods%20%7C%20Carthage%20%7C%20Accio%20%7C%20SwiftPM-green.svg" alt="badge-pms"> <img src="https://img.shields.io/badge/platforms-macOS%20%7C%20iOS%20%7C%20watchOS%20%7C%20tvOS%20%7C%20Linux-lightgrey.svg" alt="badge-platforms"> <a href="https://travis-ci.org/mxcl/PromiseKit"><img src="https://travis-ci.org/mxcl/PromiseKit.svg?branch=master" alt="badge-travis"></a></p>
+<p><a href="https://cocoapods.org/pods/PromiseKit"><img src="https://img.shields.io/cocoapods/v/PromiseKit.svg?label=version" alt="badge-pod"></a> <img src="https://img.shields.io/badge/languages-Swift%20%7C%20ObjC-orange.svg" alt="badge-languages"> <img src="https://img.shields.io/badge/supports-CocoaPods%20%7C%20Carthage%20%7C%20Accio%20%7C%20SwiftPM-green.svg" alt="badge-pms"> <img src="https://img.shields.io/badge/platforms-macOS%20%7C%20iOS%20%7C%20watchOS%20%7C%20tvOS%20%7C%20Linux-lightgrey.svg" alt="badge-platforms"> <a href="https://codecov.io/gh/mxcl/PromiseKit"><img src="https://codecov.io/gh/mxcl/PromiseKit/branch/master/graph/badge.svg?token=wHSAz7N8WA" alt="codecov"></a></p>
 
 <hr>
 
@@ -293,22 +293,19 @@ platform that has a <code>swiftc</code>. It has <em>excellent</em> Objective-C b
 pod used in many of the most popular apps in the world.</p>
 
 <p><a href="https://codecov.io/gh/mxcl/PromiseKit"><img src="https://codecov.io/gh/mxcl/PromiseKit/branch/master/graph/badge.svg" alt="codecov"></a></p>
-<h1 id='promisekit-6' class='heading'>PromiseKit 6</h1>
-
-<p><a href="http://mxcl.dev/PromiseKit/news/2018/02/PromiseKit-6.0-Released/">Release notes and migration guide</a>.</p>
 <h1 id='quick-start' class='heading'>Quick Start</h1>
 
 <p>In your <a href="https://guides.cocoapods.org/syntax/podfile.html">Podfile</a>:</p>
 <pre class="highlight ruby"><code><span class="n">use_frameworks!</span>
 
 <span class="n">target</span> <span class="s2">"Change Me!"</span> <span class="k">do</span>
-  <span class="n">pod</span> <span class="s2">"PromiseKit"</span><span class="p">,</span> <span class="s2">"~&gt; 6.8"</span>
+  <span class="n">pod</span> <span class="s2">"PromiseKit"</span><span class="p">,</span> <span class="s2">"~&gt; 8"</span>
 <span class="k">end</span>
 </code></pre>
 
-<blockquote>
-<p>The above gives an Xcode warning? See our <a href="Documentation/Installation.md">Installation Guide</a>.</p>
-</blockquote>
+<p>PromiseKit 8 supports recent Xcodes (13+). Some Podspecs were
+<a href="https://github.com/mxcl/PromiseKit/pull/1318">dropped as a result</a>.
+Pull requests are welcome.</p>
 
 <p>PromiseKit 6, 5 and 4 support Xcode 8.3, 9.x and 10.0; Swift 3.1,
 3.2, 3.3, 3.4, 4.0, 4.1, 4.2, 4.3 and 5.0 (development snapshots); iOS, macOS,
@@ -329,18 +326,6 @@ the experts who know it best, while seamlessly integrating with existing
 tools.</p>
 
 <p><a href="https://tidelift.com/subscription/pkg/cocoapods-promisekit?utm_source=cocoapods-promisekit&utm_medium=referral&utm_campaign=readme">Get Professional Support for PromiseKit with TideLift</a>.</p>
-<h1 id='promisekit-is-thousands-of-hours-of-work' class='heading'>PromiseKit is Thousands of Hours of Work</h1>
-
-<p>Hey there, I’m Max Howell. I’m a prolific producer of open source software and
-probably you already use some of it (I created <a href="https://brew.sh"><code>brew</code></a>). I work full-time on
-open source and it’s hard; currently <em>I earn less than minimum wage</em>. Please
-help me continue my work, I appreciate it 🙏🏻</p>
-
-<p><a href="https://www.patreon.com/mxcl">
-    <img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
-</a></p>
-
-<p><a href="http://mxcl.dev/#donate">Other ways to say thanks</a>.</p>
 <h1 id='documentation' class='heading'>Documentation</h1>
 
 <ul>
@@ -376,13 +361,13 @@ e.g.:</p>
 <h2 id='i-don-39-t-want-the-extensions' class='heading'>I don&rsquo;t want the extensions!</h2>
 
 <p>Then don’t have them:</p>
-<pre class="highlight ruby"><code><span class="n">pod</span> <span class="s2">"PromiseKit/CorePromise"</span><span class="p">,</span> <span class="s2">"~&gt; 6.8"</span>
+<pre class="highlight ruby"><code><span class="n">pod</span> <span class="s2">"PromiseKit/CorePromise"</span><span class="p">,</span> <span class="s2">"~&gt; 8"</span>
 </code></pre>
 
 <blockquote>
 <p><em>Note:</em> Carthage installations come with no extensions by default.</p>
 </blockquote>
-<h2 id='choose-your-networking-library' class='heading'>Choose Your Networking Library</h2>
+<h2 id='networking' class='heading'>Networking</h2>
 
 <p>Promise chains commonly start with a network operation. Thus, we offer
 extensions for <code>URLSession</code>:</p>
@@ -409,32 +394,7 @@ extensions for <code>URLSession</code>:</p>
 <span class="p">}</span>
 </code></pre>
 
-<p>And <a href="http://github.com/PromiseKit/Alamofire-">Alamofire</a>:</p>
-<pre class="highlight swift"><code><span class="c1">// pod 'PromiseKit/Alamofire'  # https://github.com/PromiseKit/Alamofire-</span>
-
-<span class="n">firstly</span> <span class="p">{</span>
-    <span class="kt">Alamofire</span>
-        <span class="o">.</span><span class="nf">request</span><span class="p">(</span><span class="s">"http://example.com"</span><span class="p">,</span> <span class="nv">method</span><span class="p">:</span> <span class="o">.</span><span class="n">post</span><span class="p">,</span> <span class="nv">parameters</span><span class="p">:</span> <span class="n">params</span><span class="p">)</span>
-        <span class="o">.</span><span class="nf">responseDecodable</span><span class="p">(</span><span class="kt">Foo</span><span class="o">.</span><span class="k">self</span><span class="p">)</span>
-<span class="p">}</span><span class="o">.</span><span class="n">done</span> <span class="p">{</span> <span class="n">foo</span> <span class="k">in</span>
-    <span class="c1">//…</span>
-<span class="p">}</span><span class="o">.</span><span class="k">catch</span> <span class="p">{</span> <span class="n">error</span> <span class="k">in</span>
-    <span class="c1">//…</span>
-<span class="p">}</span>
-</code></pre>
-
-<p>Nowadays, considering that:</p>
-
-<ul>
-<li>We almost always POST JSON</li>
-<li>We now have <code>JSONDecoder</code></li>
-<li>PromiseKit now has <code>map</code> and other functional primitives</li>
-<li>PromiseKit (like Alamofire, but not raw-<code>URLSession</code>) also defaults to having
-callbacks go to the main thread</li>
-</ul>
-
-<p>We recommend vanilla <code>URLSession</code>. It uses fewer black boxes and sticks closer to the metal. Alamofire was essential until the three bullet points above
-became true, but nowadays it isn’t really necessary.</p>
+<p>Support for Alamofire is welcome, please submit a PR.</p>
 <h1 id='support' class='heading'>Support</h1>
 
 <p>Please check our <a href="Documentation/Troubleshooting.md">Troubleshooting Guide</a>, and
@@ -450,7 +410,7 @@ if after that you still have a question, ask at our <a href="https://gitter.im/m
       </article>
     </div>
     <section class="footer">
-      <p>&copy; 2023 <a class="link" href="http://mxcl.dev/PromiseKit/" target="_blank" rel="external noopener">Max Howell</a>. All rights reserved. (Last updated: 2023-04-01)</p>
+      <p>&copy; 2023 <a class="link" href="http://mxcl.dev/PromiseKit/" target="_blank" rel="external noopener">Max Howell</a>. All rights reserved. (Last updated: 2023-06-20)</p>
       <p>Generated by <a class="link" href="https://github.com/realm/jazzy" target="_blank" rel="external noopener">jazzy ♪♫ v0.14.3</a>, a <a class="link" href="https://realm.io" target="_blank" rel="external noopener">Realm</a> project.</p>
     </section>
   </body>
