@@ -296,13 +296,6 @@ public extension CancellableThenable {
 
 public extension CancellableThenable {
     /**
-     - Returns: The error with which this cancellable promise was rejected; `nil` if this promise is not rejected.
-     */
-    var error: Error? {
-        return thenable.error
-    }
-
-    /**
      - Returns: `true` if the cancellable promise has not yet resolved.
      */
     var isPending: Bool {
@@ -324,10 +317,10 @@ public extension CancellableThenable {
     }
 
     /**
-     - Returns: `true` if the cancellable promise was rejected.
-     */
-    var isRejected: Bool {
-        return thenable.isRejected
+     - Returns: The result with which this cancellable promise was resolved or `nil` if this cancellable promise is pending.
+    */
+    var result: U.R? {
+        return thenable.result
     }
 
     /**
@@ -335,6 +328,22 @@ public extension CancellableThenable {
      */
     var value: U.T? {
         return thenable.value
+    }
+}
+
+public extension CancellableThenable where U.R == Result<U.T, Error> {
+    /**
+     - Returns: The error with which this cancellable promise was rejected; `nil` if this promise is not rejected.
+     */
+    var error: Error? {
+        return thenable.error
+    }
+
+    /**
+     - Returns: `true` if the cancellable promise was rejected.
+     */
+    var isRejected: Bool {
+        return thenable.isRejected
     }
 }
 
@@ -517,4 +526,8 @@ public extension CancellableThenable where U.T: Sequence, U.T.Iterator.Element: 
     func sortedValues(on: Dispatcher = conf.D.map) -> CancellablePromise<[U.T.Iterator.Element]> {
         return map(on: on) { $0.sorted() }
     }
+}
+
+func asThenables<CT: CancellableThenable>(_ cancellableThenables: [CT]) -> [CT.U] {
+    cancellableThenables.map { $0.thenable }
 }

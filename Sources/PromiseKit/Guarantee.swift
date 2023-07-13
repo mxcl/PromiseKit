@@ -51,12 +51,12 @@ public final class Guarantee<T>: Thenable {
     }
 
     /// - See: `Thenable.result`
-    public var result: Result<T, Error>? {
+    public var result: T? {
         switch box.inspect() {
         case .pending:
             return nil
         case .resolved(let value):
-            return .success(value)
+            return value
         }
     }
 
@@ -163,7 +163,6 @@ public extension Guarantee {
      any part of your chain may use. Like the main thread for example.
      */
     func wait() -> T {
-
         if Thread.isMainThread {
             conf.logHandler(.waitOnMainThread)
         }

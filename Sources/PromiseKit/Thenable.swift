@@ -4,15 +4,21 @@ import Dispatch
 public protocol Thenable: AnyObject {
     /// The type of the wrapped value
     associatedtype T
+    /// The type of the result
+    associatedtype R
 
     /// `pipe` is immediately executed when this `Thenable` is resolved
     func pipe(to: @escaping(Result<T, Error>) -> Void)
 
     /// The resolved result or nil if pending.
-    var result: Result<T, Error>? { get }
+    var result: R? { get }
+    
+    /// The resolved result's value or nil if pending.
+    var value: T? { get }
 }
 
 public extension Thenable {
+    
     /**
      The provided closure executes when this promise is fulfilled.
 
@@ -218,17 +224,10 @@ public extension Thenable {
 
 public extension Thenable {
     /**
-     - Returns: The error with which this promise was rejected; `nil` if this promise is not rejected.
+     - Returns: `true` if the promise was fulfilled.
      */
-    var error: Error? {
-        switch result {
-        case .none:
-            return nil
-        case .some(.success):
-            return nil
-        case .some(.failure(let error)):
-            return error
-        }
+    var isFulfilled: Bool {
+        return value != nil
     }
 
     /**
@@ -244,33 +243,37 @@ public extension Thenable {
     var isResolved: Bool {
         return !isPending
     }
+}
 
-    /**
-     - Returns: `true` if the promise was fulfilled.
-     */
-    var isFulfilled: Bool {
-        return value != nil
-    }
-
-    /**
-     - Returns: `true` if the promise was rejected.
-     */
-    var isRejected: Bool {
-        return error != nil
-    }
-
+public extension Thenable where R == T {
     /**
      - Returns: The value with which this promise was fulfilled or `nil` if this promise is pending or rejected.
      */
     var value: T? {
-        switch result {
-        case .none:
-            return nil
-        case .some(.success(let value)):
-            return value
-        case .some(.failure):
-            return nil
-        }
+        return result
+    }
+}
+
+public extension Thenable where R == Result<Self.T, Error> {
+    /**
+     - Returns: The value with which this promise was fulfilled or `nil` if this promise is pending or rejected.
+     */
+    var value: T? {
+        return try? result?.get()
+    }
+    
+    /**
+     - Returns: `true` if this promise was rejected.
+     */
+    var isRejected: Bool {
+        return error != nil
+    }
+    
+    /**
+     - Returns: The error with which this promise was rejected; `nil` if this promise is not rejected.
+     */
+    var error: Error? {
+        return result?.error
     }
 }
 
