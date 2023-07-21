@@ -104,6 +104,12 @@ public func when<U: Thenable>(fulfilled thenables: [U]) -> Promise<[U.T]> {
     return _when(thenables).map(on: nil) { thenables.map{ $0.value! } }
 }
 
+#if swift(>=5.7)
+public func when(fulfilled thenables: [any Thenable]) -> Promise<[Any]> {
+    return _when(thenables.map { $0.asVoid()}).map(on: nil) { thenables.map { $0.value! } }
+}
+#endif
+
 /// Wait for all promises in a set to fulfill.
 public func when<U: Thenable>(fulfilled promises: U...) -> Promise<Void> where U.T == Void {
     return _when(promises)

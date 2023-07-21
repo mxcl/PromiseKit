@@ -37,6 +37,26 @@ class WhenTests: XCTestCase {
         waitForExpectations(timeout: 1, handler: nil)
     }
 
+    func testAnyInt() {
+        #if swift(>=5.7)
+        let e1 = expectation(description: "")
+        let p1 = Promise.value(1)
+        let g2 = Guarantee.value(2)
+        let p3 = Promise.value(3)
+        let g4 = Guarantee.value(4)
+
+        when(fulfilled: [p1, g2, p3, g4]).done { x in
+            XCTAssertEqual(x[0] as? Int, 1)
+            XCTAssertEqual(x[1] as? Int, 2)
+            XCTAssertEqual(x[2] as? Int, 3)
+            XCTAssertEqual(x[3] as? Int, 4)
+            XCTAssertEqual(x.count, 4)
+            e1.fulfill()
+        }.silenceWarning()
+        waitForExpectations(timeout: 1, handler: nil)
+        #endif
+    }
+    
     func testDoubleTuple() {
         let e1 = expectation(description: "")
         let p1 = Promise.value(1)

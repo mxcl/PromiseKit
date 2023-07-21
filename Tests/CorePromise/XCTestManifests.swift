@@ -267,6 +267,7 @@ extension WhenTests {
     // to regenerate.
     static let __allTests__WhenTests = [
         ("testAllSealedRejectedFirstOneRejects", testAllSealedRejectedFirstOneRejects),
+        ("testAnyInt", testAnyInt),
         ("testDoubleTuple", testDoubleTuple),
         ("testDoubleTupleGuarantees", testDoubleTupleGuarantees),
         ("testEmpty", testEmpty),
