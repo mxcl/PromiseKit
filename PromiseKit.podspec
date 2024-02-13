@@ -19,7 +19,7 @@ Pod::Spec.new do |s|
   s.default_subspecs = 'CorePromise', 'UIKit', 'Foundation'
   s.requires_arc = true
 
-  s.swift_version = ['3.2', '3.3', '3.4', '4.0', '4.1', '4.2', '4.3', '4.4', '5.0', '5.1', '5.2', '5.3', '5.4', '5.5']
+  s.swift_version = '3.2', '3.3', '3.4', '4.0', '4.1', '4.2', '4.3', '4.4', '5.0', '5.1', '5.2', '5.3', '5.4', '5.5'
 
   # CocoaPods requires us to specify the root deployment targets
   # even though for us it is nonsense. Our root spec has no
