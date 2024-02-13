@@ -7,9 +7,9 @@ jobs:
   lint:
     runs-on: macos-14
     steps:
-    - uses: maxim-lobanov/setup-xcode@v1
+    - uses: maxim-lobanov/setup-cocoapods@v1
       with:
-        xcode-version: 15.2
+        version: 1.5.0
     - uses: actions/checkout@v2
       with:
         submodules: true
