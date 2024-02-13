@@ -100,8 +100,8 @@ jobs:
     runs-on: ${{ matrix.macos }}
     strategy:
       matrix:
-        xcode: [^11, ^12, ^13]
-        macos: [macos-11]
+        xcode: [^15]
+        macos: [macos-14]
     steps:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
