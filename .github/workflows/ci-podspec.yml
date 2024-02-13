@@ -7,6 +7,9 @@ jobs:
   lint:
     runs-on: macos-14
     steps:
+    - uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: 15.2
     - uses: maxim-lobanov/setup-cocoapods@v1
       with:
         version: 1.15.0
