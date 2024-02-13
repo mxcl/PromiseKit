@@ -5,11 +5,8 @@ on:
       - PromiseKit.podspec
 jobs:
   lint:
-    runs-on: macos-latest
+    runs-on: macos-14
     steps:
-    - uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: 15.2
     - uses: actions/checkout@v2
       with:
         submodules: true
