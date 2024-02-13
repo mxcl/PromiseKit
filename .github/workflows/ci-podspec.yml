@@ -9,7 +9,7 @@ jobs:
     steps:
     - uses: maxim-lobanov/setup-cocoapods@v1
       with:
-        version: 1.5.0
+        version: 1.15.0
     - uses: actions/checkout@v2
       with:
         submodules: true
