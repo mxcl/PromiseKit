@@ -108,12 +108,6 @@ jobs:
         xcode-version: ${{ matrix.xcode }}
     - uses: actions/checkout@v2
 
-    - uses: mingjun97/file-regex-replace@v1
-      with:
-        regex: SWIFT_TREAT_WARNINGS_AS_ERRORS = NO
-        replacement: SWIFT_TREAT_WARNINGS_AS_ERRORS = YES
-        include: project.pbxproj
-
     - run: |
         if [ ${{ matrix.xcode }} != ^11 ]; then
           echo "CARTHAGE_ARGS=--use-xcframeworks" >> $GITHUB_ENV
