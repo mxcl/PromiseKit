@@ -79,11 +79,10 @@ jobs:
     strategy:
       matrix:
         dst:
-        - platform=macOS
-        - platform=tvOS
-        - platform=iOS
-        - platform=watchOS
-        - platform=visionOS
+        - platform=macOS,name=Any Mac
+        - platform=tvOS,name=Any tvOS Device
+        - platform=iOS,name=Any iOS Device
+        - platform=watchOS,name=Any watchOS Device
     steps:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
