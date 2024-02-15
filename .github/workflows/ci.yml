@@ -95,21 +95,3 @@ jobs:
         action: test
         enable-code-coverage: true
     - uses: codecov/codecov-action@v1
-
-  carthage:
-    runs-on: ${{ matrix.macos }}
-    strategy:
-      matrix:
-        xcode: [^15]
-        macos: [macos-14]
-    steps:
-    - uses: maxim-lobanov/setup-xcode@v1
-      with:
-        xcode-version: ${{ matrix.xcode }}
-    - uses: actions/checkout@v2
-
-    - run: |
-        if [ ${{ matrix.xcode }} != ^11 ]; then
-          echo "CARTHAGE_ARGS=--use-xcframeworks" >> $GITHUB_ENV
-        fi
-    - run: carthage build --no-skip-current --no-use-binaries $CARTHAGE_ARGS
