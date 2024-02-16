@@ -82,7 +82,6 @@ jobs:
         - "platform=macOS,arch=arm64,id=0000FE00-392BB8A41C01F642"
         - "platform=iOS Simulator,OS=17.0.1,name=iPhone 14"
         - "platform=tvOS Simulator,OS=17.2,name=Apple TV"
-        - "platform=watchOS Simulator,OS=9.4,name=Apple Watch Series 5 (40mm)"
     steps:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
