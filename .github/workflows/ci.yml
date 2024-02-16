@@ -80,9 +80,9 @@ jobs:
       matrix:
         dst:
         - platform=macOS,arch=arm64,id=0000FE00-392BB8A41C01F642
-        - platform=tvOS,name=Any tvOS Device
-        - platform=iOS,name=Any iOS Device
-        - platform=watchOS,name=Any watchOS Device
+        - platform=tvOS Simulator,id=0EB16E3F-8F5F-4EEF-BFEC-18C3A4FAB91C,OS=17.2,name=Apple TV
+        - platform=iOS Simulator,id=5AC1B28F-A59B-4ADC-B89A-9A7DBC14C752,OS=17.0.1,name=iPhone 15
+        - platform=watchOS Simulator,id=821F9864-6742-4DE4-BD95-A5A252620E09,OS=10.2,name=Apple Watch Series 9 (45mm)
     steps:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
