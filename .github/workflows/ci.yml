@@ -79,7 +79,7 @@ jobs:
     strategy:
       matrix:
         dst:
-        - platform=macOS,name="Any Ma"
+        - platform=macOS,arch=arm64,id=0000FE00-392BB8A41C01F642
         - platform=tvOS,name=Any tvOS Device
         - platform=iOS,name=Any iOS Device
         - platform=watchOS,name=Any watchOS Device
