@@ -79,7 +79,7 @@ jobs:
     strategy:
       matrix:
         dst:
-        - platform=macOS,name=Any Mac
+        - platform=macOS,name=Any Ma
         - platform=tvOS,name=Any tvOS Device
         - platform=iOS,name=Any iOS Device
         - platform=watchOS,name=Any watchOS Device
