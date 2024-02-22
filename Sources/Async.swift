@@ -17,7 +17,7 @@ public extension Promise {
         try await withCheckedThrowingContinuation { continuation in
             done { value in
                 continuation.resume(returning: value)
-            }.catch { error in
+            }.catch(policy: .allErrors) { error in
                 continuation.resume(throwing: error)
             }
         }
