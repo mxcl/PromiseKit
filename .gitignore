@@ -6,3 +6,4 @@
 DerivedData
 /Extensions/Carthage
 /Tests/JS-A+/build
+.swiftpm/

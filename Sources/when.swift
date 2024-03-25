@@ -43,6 +43,40 @@ private func _when<U: Thenable>(_ thenables: [U]) -> Promise<Void> {
     return rp
 }
 
+private func __when<T>(_ guarantees: [Guarantee<T>]) -> Guarantee<Void> {
+    var countdown = guarantees.count
+    guard countdown > 0 else {
+        return .value(Void())
+    }
+
+    let rg = Guarantee<Void>(.pending)
+
+#if PMKDisableProgress || os(Linux)
+    var progress: (completedUnitCount: Int, totalUnitCount: Int) = (0, 0)
+#else
+    let progress = Progress(totalUnitCount: Int64(guarantees.count))
+    progress.isCancellable = false
+    progress.isPausable = false
+#endif
+
+    let barrier = DispatchQueue(label: "org.promisekit.barrier.when", attributes: .concurrent)
+
+    for guarantee in guarantees {
+        guarantee.pipe { (_: T) in
+            barrier.sync(flags: .barrier) {
+                guard rg.isPending else { return }
+                progress.completedUnitCount += 1
+                countdown -= 1
+                if countdown == 0 {
+                    rg.box.seal(())
+                }
+            }
+        }
+    }
+
+    return rg
+}
+
 /**
  Wait for all promises in a set to fulfill.
 
@@ -69,6 +103,12 @@ private func _when<U: Thenable>(_ thenables: [U]) -> Promise<Void> {
 public func when<U: Thenable>(fulfilled thenables: [U]) -> Promise<[U.T]> {
     return _when(thenables).map(on: nil) { thenables.map{ $0.value! } }
 }
+
+#if swift(>=5.7)
+public func when(fulfilled thenables: [any Thenable]) -> Promise<[Any]> {
+    return _when(thenables.map { $0.asVoid()}).map(on: nil) { thenables.map { $0.value! } }
+}
+#endif
 
 /// Wait for all promises in a set to fulfill.
 public func when<U: Thenable>(fulfilled promises: U...) -> Promise<Void> where U.T == Void {
@@ -357,7 +397,37 @@ public func when(_ guarantees: Guarantee<Void>...) -> Guarantee<Void> {
     return when(guarantees: guarantees)
 }
 
-// Waits on all provided Guarantees.
+/// Waits on all provided Guarantees.
+public func when<T>(_ guarantees: Guarantee<T>...) -> Guarantee<[T]> {
+    return when(guarantees: guarantees)
+}
+
+/// Waits on all provided Guarantees.
 public func when(guarantees: [Guarantee<Void>]) -> Guarantee<Void> {
     return when(fulfilled: guarantees).recover{ _ in }.asVoid()
+}
+
+/// Waits on all provided Guarantees.
+public func when<T>(guarantees: [Guarantee<T>]) -> Guarantee<[T]> {
+    return __when(guarantees).map(on: nil) { guarantees.map { $0.value! } }
+}
+
+/// Waits on all provided Guarantees.
+public func when<U, V>(guarantees gu: Guarantee<U>, _ gv: Guarantee<V>) -> Guarantee<(U, V)> {
+    return __when([gu.asVoid(), gv.asVoid()]).map(on: nil) { (gu.value!, gv.value!) }
+}
+
+/// Waits on all provided Guarantees.
+public func when<U, V, W>(guarantees gu: Guarantee<U>, _ gv: Guarantee<V>, _ gw: Guarantee<W>) -> Guarantee<(U, V, W)> {
+    return __when([gu.asVoid(), gv.asVoid(), gw.asVoid()]).map(on: nil) { (gu.value!, gv.value!, gw.value!) }
+}
+
+/// Waits on all provided Guarantees.
+public func when<U, V, W, X>(guarantees gu: Guarantee<U>, _ gv: Guarantee<V>, _ gw: Guarantee<W>, _ gx: Guarantee<X>) -> Guarantee<(U, V, W, X)> {
+    return __when([gu.asVoid(), gv.asVoid(), gw.asVoid(), gx.asVoid()]).map(on: nil) { (gu.value!, gv.value!, gw.value!, gx.value!) }
+}
+
+/// Waits on all provided Guarantees.
+public func when<U, V, W, X, Y>(guarantees gu: Guarantee<U>, _ gv: Guarantee<V>, _ gw: Guarantee<W>, _ gx: Guarantee<X>, _ gy: Guarantee<Y>) -> Guarantee<(U, V, W, X, Y)> {
+    return __when([gu.asVoid(), gv.asVoid(), gw.asVoid(), gx.asVoid(), gy.asVoid()]).map(on: nil) { (gu.value!, gv.value!, gw.value!, gx.value!, gy.value!) }
 }

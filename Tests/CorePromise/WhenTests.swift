@@ -37,6 +37,26 @@ class WhenTests: XCTestCase {
         waitForExpectations(timeout: 1, handler: nil)
     }
 
+    func testAnyInt() {
+        #if swift(>=5.7)
+        let e1 = expectation(description: "")
+        let p1 = Promise.value(1)
+        let g2 = Guarantee.value(2)
+        let p3 = Promise.value(3)
+        let g4 = Guarantee.value(4)
+
+        when(fulfilled: [p1, g2, p3, g4]).done { x in
+            XCTAssertEqual(x[0] as? Int, 1)
+            XCTAssertEqual(x[1] as? Int, 2)
+            XCTAssertEqual(x[2] as? Int, 3)
+            XCTAssertEqual(x[3] as? Int, 4)
+            XCTAssertEqual(x.count, 4)
+            e1.fulfill()
+        }.silenceWarning()
+        waitForExpectations(timeout: 1, handler: nil)
+        #endif
+    }
+    
     func testDoubleTuple() {
         let e1 = expectation(description: "")
         let p1 = Promise.value(1)
@@ -137,10 +157,10 @@ class WhenTests: XCTestCase {
         let progress = Progress(totalUnitCount: 1)
         progress.becomeCurrent(withPendingUnitCount: 1)
 
-        when(fulfilled: p1, p2, p3, p4).done { _ in
+        when(guarantees: p1, p2, p3, p4).done { _ in
             XCTAssertEqual(progress.completedUnitCount, 1)
             ex.fulfill()
-        }.silenceWarning()
+        }
 
         progress.resignCurrent()
         
@@ -251,17 +271,123 @@ class WhenTests: XCTestCase {
         waitForExpectations(timeout: 1)
     }
 
-    func testGuaranteeWhen() {
+    func testGuaranteesWhenVoidVarArgs() {
         let ex1 = expectation(description: "")
-        when(Guarantee(), Guarantee()).done {
+        var someNumber = 0
+        let g1 = Guarantee<Void> { resolver in
+            someNumber += 1
+            resolver(())
+        }
+        let g2 = Guarantee<Void> { resolver in
+            someNumber += 2
+            resolver(())
+        }
+        when(g1, g2).done {
+            XCTAssertEqual(someNumber, 3)
+            ex1.fulfill()
+        }
+        wait(for: [ex1], timeout: 10)
+    }
+    
+    func testGuaranteesWhenVarArgs() {
+        let ex1 = expectation(description: "")
+        let g1 = Guarantee<Int>.value(1)
+        let g2 = Guarantee<Int>.value(4)
+        let g3 = Guarantee<Int>.value(2)
+        let g4 = Guarantee<Int>.value(5)
+        let g5 = Guarantee<Int>.value(3)
+        when(g1, g2, g3, g4, g5).done {
+            XCTAssertEqual($0, [1, 4, 2, 5, 3])
+            ex1.fulfill()
+        }
+        wait(for: [ex1], timeout: 10)
+    }
+    
+    func testGuaranteesWhenVoidArray() {
+        let ex1 = expectation(description: "")
+        var someNumber = 0
+        when(guarantees: (0..<100).map { _ in
+            Guarantee<Void> { resolver in
+                someNumber += 1
+                resolver(())
+            }
+        }).done {
+            XCTAssertEqual(someNumber, 100)
             ex1.fulfill()
         }
 
-        let ex2 = expectation(description: "")
-        when(guarantees: [Guarantee(), Guarantee()]).done {
-            ex2.fulfill()
+        wait(for: [ex1], timeout: 10)
+    }
+    
+    func testGuaranteesWhenArray() {
+        let ex1 = expectation(description: "")
+        when(guarantees: (0..<100).map {
+            Guarantee<Int>.value($0)
+        }).done {
+            XCTAssertEqual($0, Array(0..<100))
+            ex1.fulfill()
         }
 
-        wait(for: [ex1, ex2], timeout: 10)
+        wait(for: [ex1], timeout: 10)
+    }
+    
+    func testDoubleTupleGuarantees() {
+        let e1 = expectation(description: "")
+        let g1 = Guarantee.value(1)
+        let g2 = Guarantee.value("abc")
+        when(guarantees: g1, g2).done { x, y in
+            XCTAssertEqual(x, 1)
+            XCTAssertEqual(y, "abc")
+            e1.fulfill()
+        }
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+    
+    func testTripleTupleGuarantees() {
+        let e1 = expectation(description: "")
+        let g1 = Guarantee.value(1)
+        let g2 = Guarantee.value("abc")
+        let g3 = Guarantee.value(     1.0)
+        when(guarantees: g1, g2, g3).done { u, v, w in
+            XCTAssertEqual(1, u)
+            XCTAssertEqual("abc", v)
+            XCTAssertEqual(1.0, w)
+            e1.fulfill()
+        }
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+    
+    func testQuadrupleTupleGuarantees() {
+        let e1 = expectation(description: "")
+        let g1 = Guarantee.value(1)
+        let g2 = Guarantee.value("abc")
+        let g3 = Guarantee.value(1.0)
+        let g4 = Guarantee.value(true)
+        when(guarantees: g1, g2, g3, g4).done { u, v, w, x in
+            XCTAssertEqual(1, u)
+            XCTAssertEqual("abc", v)
+            XCTAssertEqual(1.0, w)
+            XCTAssertEqual(true, x)
+            e1.fulfill()
+        }
+        waitForExpectations(timeout: 1, handler: nil)
+    }
+    
+    func testQuintupleTupleGuarantees() {
+        let e1 = expectation(description: "")
+        let g1 = Guarantee.value(1)
+        let g2 = Guarantee.value("abc")
+        let g3 = Guarantee.value(1.0)
+        let g4 = Guarantee.value(true)
+        let g5 = Guarantee.value("a" as Character)
+        when(guarantees: g1, g2, g3, g4, g5).done { u, v, w, x, y in
+            XCTAssertEqual(1, u)
+            XCTAssertEqual("abc", v)
+            XCTAssertEqual(1.0, w)
+            XCTAssertEqual(true, x)
+            XCTAssertEqual("a" as Character, y)
+            e1.fulfill()
+        }
+        waitForExpectations(timeout: 1, handler: nil)
     }
 }

@@ -5,9 +5,9 @@ on:
       - PromiseKit.podspec
 jobs:
   lint:
-    runs-on: macos-10.15
+    runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
       with:
         submodules: true
-    - run: pod lib lint --fail-fast
+    - run: pod lib lint --fail-fast --allow-warnings

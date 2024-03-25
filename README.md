@@ -1,6 +1,6 @@
 ![PromiseKit](../gh-pages/public/img/logo-tight.png)
 
-[![badge-pod][]][cocoapods] ![badge-languages][] ![badge-pms][] ![badge-platforms][] [![badge-travis][]][travis]
+[![badge-pod][]][cocoapods] ![badge-languages][] ![badge-pms][] ![badge-platforms][] [![codecov](https://codecov.io/gh/mxcl/PromiseKit/branch/master/graph/badge.svg?token=wHSAz7N8WA)](https://codecov.io/gh/mxcl/PromiseKit)
 
 ---
 
@@ -33,10 +33,6 @@ pod used in many of the most popular apps in the world.
 
 [![codecov](https://codecov.io/gh/mxcl/PromiseKit/branch/master/graph/badge.svg)](https://codecov.io/gh/mxcl/PromiseKit)
 
-# PromiseKit 6
-
-[Release notes and migration guide][PMK6].
-
 # Quick Start
 
 In your [Podfile]:
@@ -45,11 +41,13 @@ In your [Podfile]:
 use_frameworks!
 
 target "Change Me!" do
-  pod "PromiseKit", "~> 6.8"
+  pod "PromiseKit", "~> 8"
 end
 ```
 
-> The above gives an Xcode warning? See our [Installation Guide].
+PromiseKit 8 supports recent Xcodes (13+). Some Podspecs were
+[dropped as a result](https://github.com/mxcl/PromiseKit/pull/1318).
+Pull requests are welcome.
 
 PromiseKit 6, 5 and 4 support Xcode 8.3, 9.x and 10.0; Swift 3.1,
 3.2, 3.3, 3.4, 4.0, 4.1, 4.2, 4.3 and 5.0 (development snapshots); iOS, macOS,
@@ -60,7 +58,7 @@ For Carthage, SwiftPM, Accio, etc., or for instructions when using older Swifts 
 [Carthage](https://github.com/Carthage/Carthage) or
 [Accio](https://github.com/JamitLabs/Accio).
 
-# PromiseKit and Swift 5.5+ Async/Await 
+# PromiseKit and Swift 5.5+ Async/Await
 
 As of Swift 5.5, the Swift language now offers support for [built-in concurrency with async / await](https://docs.swift.org/swift-book/LanguageGuide/Concurrency.html).  See [Async+](https://github.com/async-plus/async-plus) for a port of PromiseKit's most useful patterns to this new paradigm.
 
@@ -73,20 +71,6 @@ tools.
 
 [Get Professional Support for PromiseKit with TideLift](https://tidelift.com/subscription/pkg/cocoapods-promisekit?utm_source=cocoapods-promisekit&utm_medium=referral&utm_campaign=readme).
 
-# PromiseKit is Thousands of Hours of Work
-
-Hey there, I’m Max Howell. I’m a prolific producer of open source software and
-probably you already use some of it (I created [`brew`]). I work full-time on
-open source and it’s hard; currently *I earn less than minimum wage*. Please
-help me continue my work, I appreciate it 🙏🏻
-
-<a href="https://www.patreon.com/mxcl">
-	<img src="https://c5.patreon.com/external/logo/become_a_patron_button@2x.png" width="160">
-</a>
-
-[Other ways to say thanks](http://mxcl.dev/#donate).
-
-[`brew`]: https://brew.sh
 
 # Documentation
 
@@ -121,12 +105,12 @@ All our extensions are separate repositories at the [PromiseKit organization].
 Then don’t have them:
 
 ```ruby
-pod "PromiseKit/CorePromise", "~> 6.8"
+pod "PromiseKit/CorePromise", "~> 8"
 ```
 
 > *Note:* Carthage installations come with no extensions by default.
 
-## Choose Your Networking Library
+## Networking
 
 Promise chains commonly start with a network operation. Thus, we offer
 extensions for `URLSession`:
@@ -155,32 +139,8 @@ func makeUrlRequest() throws -> URLRequest {
 }
 ```
 
-And [Alamofire]:
+Support for Alamofire is welcome, please submit a PR.
 
-```swift
-// pod 'PromiseKit/Alamofire'  # https://github.com/PromiseKit/Alamofire-
-
-firstly {
-    Alamofire
-        .request("http://example.com", method: .post, parameters: params)
-        .responseDecodable(Foo.self)
-}.done { foo in
-    //…
-}.catch { error in
-    //…
-}
-```
-
-Nowadays, considering that:
-
-* We almost always POST JSON
-* We now have `JSONDecoder`
-* PromiseKit now has `map` and other functional primitives
-* PromiseKit (like Alamofire, but not raw-`URLSession`) also defaults to having
-    callbacks go to the main thread
-
-We recommend vanilla `URLSession`. It uses fewer black boxes and sticks closer to the metal. Alamofire was essential until the three bullet points above
-became true, but nowadays it isn’t really necessary.
 
 # Support
 
