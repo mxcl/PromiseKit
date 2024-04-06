@@ -228,6 +228,7 @@
 		63CF6D7F203CD19200EC8927 /* ThenableTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ThenableTests.swift; sourceTree = "<group>"; };
 		63D9B2EE203385FD0075C00B /* race.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; name = race.m; path = Sources/race.m; sourceTree = "<group>"; };
 		63D9B2F020338D5D0075C00B /* Deprecations.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = Deprecations.swift; path = Sources/Deprecations.swift; sourceTree = "<group>"; };
+		9E21AEED2BC1599400494E96 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		9E4170F8287D88C800A3B4B5 /* Async.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Async.swift; path = Sources/Async.swift; sourceTree = "<group>"; };
 		9E4170FA287D8DBD00A3B4B5 /* AsyncTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncTests.swift; sourceTree = "<group>"; };
 		9E66231526FE5A8C00FA25CB /* RaceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RaceTests.m; sourceTree = "<group>"; };
@@ -421,6 +422,7 @@
 				635893971D5BE4F900F14B55 /* README.md */,
 				635893921D5BE4E000F14B55 /* PromiseKit.playground */,
 				63B0AC761D595E6300FA21D9 /* PromiseKit.h */,
+				9E21AEEC2BC1596F00494E96 /* Resources */,
 				63B0AC601D595E4C00FA21D9 /* Sources.swift */,
 				63B912AB1F1E657400D49110 /* Sources.objc */,
 				635D64061D59630200BC0AF5 /* Tests */,
@@ -495,6 +497,14 @@
 				63B0AC7D1D595E6300FA21D9 /* when.swift */,
 			);
 			name = Features;
+			sourceTree = "<group>";
+		};
+		9E21AEEC2BC1596F00494E96 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				9E21AEED2BC1599400494E96 /* PrivacyInfo.xcprivacy */,
+			);
+			name = Resources;
 			sourceTree = "<group>";
 		};
 		C0244E6B2047ACAF00ACB4AC /* JS/A+ */ = {
