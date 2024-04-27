@@ -33,6 +33,10 @@ Pod::Spec.new do |s|
     'OTHER_SWIFT_FLAGS' => '-DPMKCocoaPods',
   }
 
+  s.resource_bundles = {
+    'SwifterSwift_Privacy' => 'Resources/PrivacyInfo.xcprivacy'
+  }
+
   s.subspec 'Accounts' do |ss|
     ss.ios.source_files = ss.osx.source_files = 'Extensions/Accounts/Sources/**/*'
     ss.exclude_files = 'Extensions/Accounts/Sources/*.plist'
