@@ -9,9 +9,6 @@ pkg.products = [
 
 let pmk: Target = .target(name: "PromiseKit")
 pmk.path = "Sources"
-pmk.resources = [
-    .process("Resources/PrivacyInfo.xcprivacy")
-]
 pmk.exclude = [
     "AnyPromise.swift",
     "AnyPromise.m",
