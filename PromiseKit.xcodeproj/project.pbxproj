@@ -231,6 +231,7 @@
 		9E4170F8287D88C800A3B4B5 /* Async.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Async.swift; path = Sources/Async.swift; sourceTree = "<group>"; };
 		9E4170FA287D8DBD00A3B4B5 /* AsyncTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AsyncTests.swift; sourceTree = "<group>"; };
 		9E66231526FE5A8C00FA25CB /* RaceTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = RaceTests.m; sourceTree = "<group>"; };
+		9E8028F72BDCEDBC0081E2D1 /* PrivacyInfo.xcprivacy */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.xml; path = PrivacyInfo.xcprivacy; sourceTree = "<group>"; };
 		9EC774262991495C00803027 /* Combine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Combine.swift; path = Sources/Combine.swift; sourceTree = "<group>"; };
 		9EC774282991497900803027 /* CombineTests.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CombineTests.swift; sourceTree = "<group>"; };
 		C013F7372048E3B6006B57B1 /* MockNodeEnvironment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MockNodeEnvironment.swift; path = "Tests/JS-A+/MockNodeEnvironment.swift"; sourceTree = "<group>"; };
@@ -458,6 +459,7 @@
 				63B18AEB1F2D205C00B79E37 /* CustomStringConvertible.swift */,
 				63D9B2F020338D5D0075C00B /* Deprecations.swift */,
 				085B96BE21A9B37C00E5E22F /* LogEvent.swift */,
+				9E8028F82BDCEDBC0081E2D1 /* Resources */,
 			);
 			name = Sources.swift;
 			sourceTree = "<group>";
@@ -495,6 +497,15 @@
 				63B0AC7D1D595E6300FA21D9 /* when.swift */,
 			);
 			name = Features;
+			sourceTree = "<group>";
+		};
+		9E8028F82BDCEDBC0081E2D1 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				9E8028F72BDCEDBC0081E2D1 /* PrivacyInfo.xcprivacy */,
+			);
+			name = Resources;
+			path = Sources/Resources;
 			sourceTree = "<group>";
 		};
 		C0244E6B2047ACAF00ACB4AC /* JS/A+ */ = {
