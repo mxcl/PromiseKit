@@ -20,8 +20,8 @@ jobs:
     strategy:
       matrix:
         xcode:
-          - ^13
           - ^14
+          - ^15
     steps:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
