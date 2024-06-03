@@ -19,6 +19,8 @@ extension AsyncTests {
     static let __allTests__AsyncTests = [
         ("testAsyncGuaranteeValue", testAsyncGuaranteeValue),
         ("testAsyncGuaranteeValue", testAsyncGuaranteeValue),
+        ("testAsyncPromiseCancel", testAsyncPromiseCancel),
+        ("testAsyncPromiseCancel", testAsyncPromiseCancel),
         ("testAsyncPromiseThrow", testAsyncPromiseThrow),
         ("testAsyncPromiseThrow", testAsyncPromiseThrow),
         ("testAsyncPromiseValue", testAsyncPromiseValue),
