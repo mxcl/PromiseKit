@@ -91,14 +91,16 @@ class RaceTests: XCTestCase {
         race(fulfilled: promises).done { _ in
             XCTFail()
             ex.fulfill()
-        }.catch { _ in
-            /*switch $0 {
-                case
+        }.catch {
+            guard let pmkError = $0 as? PMKError<Void> else { return XCTFail() }
+            switch pmkError {
+            case .noWinner:
+                break
+            default:
+                return XCTFail()
             }
-            guard let pmkError = $0 as? PMKError else { return XCTFail() }
-            guard case .noWinner = pmkError else { return XCTFail() }
             guard pmkError.debugDescription == "All thenables passed to race(fulfilled:) were rejected" else { return XCTFail() }
-            ex.fulfill()*/
+            ex.fulfill()
         }
         wait(for: [ex], timeout: 10)
     }

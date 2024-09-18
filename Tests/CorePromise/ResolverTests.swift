@@ -85,9 +85,12 @@ class WrapTests: XCTestCase {
             kittenFetcher.fetchWithCompletionBlock(block: seal.resolve)
         }.catch { error in
             defer { ex.fulfill() }
-            /*guard case PMKError.invalidCallingConvention = error else {
+            switch error {
+            case PMKError<Void>.invalidCallingConvention:
+                break
+            default:
                 return XCTFail()
-            }*/
+            }
         }
 
         waitForExpectations(timeout: 1)

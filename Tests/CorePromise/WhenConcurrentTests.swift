@@ -124,8 +124,12 @@ class WhenConcurrentTestCase_Swift: XCTestCase {
 
         guard let e1 = p1.error else { return XCTFail() }
         guard let e2 = p2.error else { return XCTFail() }
-        //guard case PMKError.badInput = e1 else { return XCTFail() }
-        //guard case PMKError.badInput = e2 else { return XCTFail() }
+        switch (e1, e2) {
+            case (PMKError<Void>.badInput, PMKError<Void>.badInput):
+                break
+            default:
+                return XCTFail()
+        }
     }
 
     func testStopsDequeueingOnceRejected() {
