@@ -99,11 +99,14 @@ class ThenableTests: XCTestCase {
         let ex = expectation(description: "")
         Promise.value("a").compactMap {
             Int($0)
-        }.catch { _ in
-            /*if case PMKError<Vo.compactMap = $0 {} else {
-                XCTFail()
+        }.catch {
+            switch $0 {
+            case PMKError<String>.compactMap:
+                break
+            default:
+                return XCTFail()
             }
-            ex.fulfill()*/
+            ex.fulfill()
         }
         wait(for: [ex], timeout: 10)
     }

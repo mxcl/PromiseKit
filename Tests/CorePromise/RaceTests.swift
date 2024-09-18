@@ -78,7 +78,6 @@ class RaceTests: XCTestCase {
             default:
                 return XCTFail()
             }
-            //guard case PMKError.badInput = $0 else { return XCTFail() }
             ex.fulfill()
         }
         wait(for: [ex], timeout: 10)

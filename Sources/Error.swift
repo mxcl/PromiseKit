@@ -21,7 +21,7 @@ public enum PMKError<T: Sendable>: Error {
 
     /// `nil` was returned from `flatMap`
     @available(*, deprecated, message: "See: `compactMap`")
-    case flatMap(T, T.Type)
+    case flatMap(Any, Any.Type)
 
     /// `nil` was returned from `compactMap`
     case compactMap(T)
@@ -36,10 +36,6 @@ public enum PMKError<T: Sendable>: Error {
     /// no winner in `race(fulfilled:)`
     case noWinner
 }
-
-//extension PMKError: Sendable {
-
-//}
 
 extension PMKError: CustomDebugStringConvertible {
     public var debugDescription: String {
