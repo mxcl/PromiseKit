@@ -40,7 +40,7 @@ class ZalgoTests: XCTestCase {
 
         p1.catch { err in
             defer{ ex.1.fulfill() }
-            guard case PMKError.returnedSelf = err else { return XCTFail() }
+            guard case PMKError<Void>.returnedSelf = err else { return XCTFail() }
         }
 
         waitForExpectations(timeout: 1)

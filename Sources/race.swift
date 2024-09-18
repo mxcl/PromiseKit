@@ -36,7 +36,7 @@ public func race<U: Thenable>(_ thenables: U...) -> Promise<U.T> {
 */
 public func race<U: Thenable>(_ thenables: [U]) -> Promise<U.T> {
     guard !thenables.isEmpty else {
-        return Promise(error: PMKError.badInput)
+        return Promise(error: PMKError<Void>.badInput)
     }
     return _race(thenables)
 }
@@ -72,7 +72,7 @@ public func race<T>(_ guarantees: Guarantee<T>...) -> Guarantee<T> {
 public func race<U: Thenable>(fulfilled thenables: [U]) -> Promise<U.T> {
     var countdown = thenables.count
     guard countdown > 0 else {
-        return Promise(error: PMKError.badInput)
+        return Promise(error: PMKError<Void>.badInput)
     }
 
     let rp = Promise<U.T>(.pending)
@@ -87,7 +87,7 @@ public func race<U: Thenable>(fulfilled thenables: [U]) -> Promise<U.T> {
                     guard rp.isPending else { return }
                     countdown -= 1
                     if countdown == 0 {
-                        rp.box.seal(.rejected(PMKError.noWinner))
+                        rp.box.seal(.rejected(PMKError<Void>.noWinner))
                     }
                 case .fulfilled(let value):
                     guard rp.isPending else { return }

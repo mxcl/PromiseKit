@@ -32,4 +32,8 @@ public struct PMKConfiguration {
 }
 
 /// Modify this as soon as possible in your application’s lifetime
+#if swift(>=6.0)
+nonisolated(unsafe) public var conf = PMKConfiguration()
+#else
 public var conf = PMKConfiguration()
+#endif
