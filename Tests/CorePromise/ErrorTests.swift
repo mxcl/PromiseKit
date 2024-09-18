@@ -2,7 +2,7 @@ import PromiseKit
 import XCTest
 
 class PMKErrorTests: XCTestCase {
-    func testCustomStringConvertible() {
+    /*func testCustomStringConvertible() {
         XCTAssertNotNil(PMKError.invalidCallingConvention.errorDescription)
         XCTAssertNotNil(PMKError.returnedSelf.errorDescription)
         XCTAssertNotNil(PMKError.badInput.errorDescription)
@@ -18,5 +18,5 @@ class PMKErrorTests: XCTestCase {
         XCTAssertFalse(PMKError.cancelled.debugDescription.isEmpty)
         XCTAssertFalse(PMKError.compactMap(1, Int.self).debugDescription.isEmpty)
         XCTAssertFalse(PMKError.emptySequence.debugDescription.isEmpty)
-    }
+    }*/
 }

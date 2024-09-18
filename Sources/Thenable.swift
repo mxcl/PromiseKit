@@ -38,7 +38,7 @@ public extension Thenable {
                 on.async(flags: flags) {
                     do {
                         let rv = try body(value)
-                        guard rv !== rp else { throw PMKError.returnedSelf }
+                        guard rv !== rp else { throw PMKError<Void>.returnedSelf }
                         rv.pipe(to: rp.box.seal)
                     } catch {
                         rp.box.seal(.rejected(error))
@@ -136,7 +136,7 @@ public extension Thenable {
                         if let rv = try transform(value) {
                             rp.box.seal(.fulfilled(rv))
                         } else {
-                            throw PMKError.compactMap(value, U.self)
+                            throw PMKError.compactMap(value)
                         }
                     } catch {
                         rp.box.seal(.rejected(error))
@@ -167,7 +167,7 @@ public extension Thenable {
                         if let rv = value[keyPath: keyPath] {
                             rp.box.seal(.fulfilled(rv))
                         } else {
-                            throw PMKError.compactMap(value, U.self)
+                            throw PMKError.compactMap(value)
                         }
                     } catch {
                         rp.box.seal(.rejected(error))
@@ -498,7 +498,7 @@ public extension Thenable where T: Collection {
             if let a1 = aa.first {
                 return a1
             } else {
-                throw PMKError.emptySequence
+                throw PMKError<Void>.emptySequence
             }
         }
     }
@@ -508,7 +508,7 @@ public extension Thenable where T: Collection {
             for x in $0 where test(x) {
                 return x
             }
-            throw PMKError.emptySequence
+            throw PMKError<Void>.emptySequence
         }
     }
 
@@ -516,7 +516,7 @@ public extension Thenable where T: Collection {
     var lastValue: Promise<T.Iterator.Element> {
         return map(on: nil) { aa in
             if aa.isEmpty {
-                throw PMKError.emptySequence
+                throw PMKError<Void>.emptySequence
             } else {
                 let i = aa.index(aa.endIndex, offsetBy: -1)
                 return aa[i]

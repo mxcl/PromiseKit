@@ -83,7 +83,7 @@ public extension CatchMixin {
                     on.async(flags: flags) {
                         do {
                             let rv = try body(error)
-                            guard rv !== rp else { throw PMKError.returnedSelf }
+                            guard rv !== rp else { throw PMKError<Void>.returnedSelf }
                             rv.pipe(to: rp.box.seal)
                         } catch {
                             rp.box.seal(.rejected(error))

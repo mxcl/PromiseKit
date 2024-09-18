@@ -18,8 +18,11 @@ class RegressionTests: XCTestCase {
             let promise1 = Promise<Void>(error: Error.dummy)
             let promise2 = promise1.recover(on: nil) { _ in promise1 }
             promise2.catch(on: nil) { err in
-                if case PMKError.returnedSelf = err {
+                switch err {
+                case PMKError<Void>.returnedSelf:
                     XCTFail()
+                default:
+                    break
                 }
             }
         }

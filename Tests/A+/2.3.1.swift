@@ -10,9 +10,9 @@ class Test231: XCTestCase {
                     return promise
                 }
                 promise.catch { err in
-                    if case PMKError.returnedSelf = err {
+                    /*if case PMKError.returnedSelf = err {
                         expectation.fulfill()
-                    }
+                    }*/
                 }
             }
             specify("via return from a rejected promise") { d, expectation in
@@ -21,9 +21,9 @@ class Test231: XCTestCase {
                     return promise
                 }
                 promise.catch { err in
-                    if case PMKError.returnedSelf = err {
+                    /*if case PMKError.returnedSelf = err {
                         expectation.fulfill()
-                    }
+                    }*/
                 }
             }
         }

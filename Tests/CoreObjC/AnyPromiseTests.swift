@@ -12,7 +12,7 @@ class AnyPromiseTests: XCTestCase {
     }
 
     func testRejectedResult() {
-        switch AnyPromise(Promise<Int>(error: PMKError.badInput)).result {
+        switch AnyPromise(Promise<Int>(error: PMKError<Void>.badInput)).result {
         case .rejected(let err)?:
             print(err)
             break

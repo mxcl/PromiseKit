@@ -1,6 +1,6 @@
 import Foundation
 
-public enum PMKError: Error {
+public enum PMKError<T: Sendable>: Error {
     /**
      The completionHandler with form `(T?, Error?)` was called with `(nil, nil)`.
      This is invalid as per Cocoa/Apple calling conventions.
@@ -21,10 +21,10 @@ public enum PMKError: Error {
 
     /// `nil` was returned from `flatMap`
     @available(*, deprecated, message: "See: `compactMap`")
-    case flatMap(Any, Any.Type)
+    case flatMap(T, T.Type)
 
     /// `nil` was returned from `compactMap`
-    case compactMap(Any, Any.Type)
+    case compactMap(T)
 
     /**
      The lastValue or firstValue of a sequence was requested but the sequence was empty.
@@ -37,13 +37,17 @@ public enum PMKError: Error {
     case noWinner
 }
 
+//extension PMKError: Sendable {
+
+//}
+
 extension PMKError: CustomDebugStringConvertible {
     public var debugDescription: String {
         switch self {
         case .flatMap(let obj, let type):
             return "Could not `flatMap<\(type)>`: \(obj)"
-        case .compactMap(let obj, let type):
-            return "Could not `compactMap<\(type)>`: \(obj)"
+        case .compactMap(let obj):
+            return "Could not `compactMap<>`: \(obj)"
         case .invalidCallingConvention:
             return "A closure was called with an invalid calling convention, probably (nil, nil)"
         case .returnedSelf:
@@ -79,7 +83,7 @@ extension Error {
     public var isCancelled: Bool {
         do {
             throw self
-        } catch PMKError.cancelled {
+        } catch PMKError<Void>.cancelled {
             return true
         } catch let error as CancellableError {
             return error.isCancelled
