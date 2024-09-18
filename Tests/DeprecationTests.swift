@@ -148,7 +148,7 @@ class DeprecationTests: XCTestCase {
     }
 
     func testPMKErrorFlatMap() {
-        XCTAssertNotNil(PMKError.flatMap(1, Int.self).errorDescription)
+        XCTAssertNotNil(PMKError<Int>.flatMap(1, Int.self).errorDescription)
     }
 }
 
