@@ -35,7 +35,7 @@ Pod::Spec.new do |s|
   }
 
   s.resource_bundles = {
-    'SwifterSwift_Privacy' => 'Sources/Resources/PrivacyInfo.xcprivacy'
+    'PromiseKit_Privacy' => 'Sources/Resources/PrivacyInfo.xcprivacy'
   }
 
   s.subspec 'Accounts' do |ss|
