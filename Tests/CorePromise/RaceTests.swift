@@ -43,7 +43,12 @@ class RaceTests: XCTestCase {
         let ex = expectation(description: "")
         let empty = [Promise<Int>]()
         race(empty).catch {
-            guard case PMKError.badInput = $0 else { return XCTFail() }
+            switch $0 {
+                case PMKError<Void>.badInput:
+                    break
+                default:
+                    XCTFail()
+            }
             ex.fulfill()
         }
         wait(for: [ex], timeout: 10)
@@ -67,7 +72,12 @@ class RaceTests: XCTestCase {
         let ex = expectation(description: "")
         let empty = [Promise<Int>]()
         race(fulfilled: empty).catch {
-            guard case PMKError.badInput = $0 else { return XCTFail() }
+            switch $0 {
+            case PMKError<Void>.badInput:
+                break
+            default:
+                return XCTFail()
+            }
             ex.fulfill()
         }
         wait(for: [ex], timeout: 10)
@@ -81,8 +91,13 @@ class RaceTests: XCTestCase {
             XCTFail()
             ex.fulfill()
         }.catch {
-            guard let pmkError = $0 as? PMKError else { return XCTFail() }
-            guard case .noWinner = pmkError else { return XCTFail() }
+            guard let pmkError = $0 as? PMKError<Void> else { return XCTFail() }
+            switch pmkError {
+            case .noWinner:
+                break
+            default:
+                return XCTFail()
+            }
             guard pmkError.debugDescription == "All thenables passed to race(fulfilled:) were rejected" else { return XCTFail() }
             ex.fulfill()
         }
