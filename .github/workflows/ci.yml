@@ -69,14 +69,6 @@ jobs:
       with:
         file: ./info.lcov
 
-  verify-linuxmain:
-    runs-on: macos-latest
-    name: linux (validate manifests)
-    steps:
-    - uses: actions/checkout@v4.2.1
-    - run: swift test --generate-linuxmain
-    - run: git diff --exit-code
-
   test:
     runs-on: macos-14
     strategy:
