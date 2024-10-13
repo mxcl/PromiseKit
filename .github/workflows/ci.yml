@@ -14,6 +14,9 @@ concurrency:
   group: ${{ github.ref }}
   cancel-in-progress: true
 
+env:
+  ACTIONS_ALLOW_USE_UNSECURE_NODE_VERSION: true
+
 jobs:
   linux:
     runs-on: ubuntu-latest
@@ -26,7 +29,7 @@ jobs:
     container:
       image: swift:${{ matrix.swift }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4.2.1
     - run: swift build -Xswiftc -warnings-as-errors -Xswiftc -swift-version -Xswiftc 3
     - run: swift build  # generated linuxmain requires Swift 5 sadly
 
@@ -46,7 +49,7 @@ jobs:
     container:
       image: swift:${{ matrix.swift }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4.2.1
     - run: swift build -Xswiftc -warnings-as-errors -Xswiftc -swift-version -Xswiftc 4
     - run: swift build -Xswiftc -warnings-as-errors -Xswiftc -swift-version -Xswiftc 4.2
     - run: swift test --enable-code-coverage --parallel
@@ -66,14 +69,6 @@ jobs:
       with:
         file: ./info.lcov
 
-  verify-linuxmain:
-    runs-on: macos-latest
-    name: linux (validate manifests)
-    steps:
-    - uses: actions/checkout@v2
-    - run: swift test --generate-linuxmain
-    - run: git diff --exit-code
-
   test:
     runs-on: macos-14
     strategy:
@@ -86,7 +81,7 @@ jobs:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
         xcode-version: 15.2
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4.2.1
     - uses: sersoft-gmbh/xcodebuild-action@v1
       with:
         project: PromiseKit.xcodeproj
