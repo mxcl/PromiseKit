@@ -16,7 +16,7 @@ concurrency:
 
 jobs:
   linux:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         swift:
@@ -26,13 +26,13 @@ jobs:
     container:
       image: swift:${{ matrix.swift }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4.1.7
     - run: swift build -Xswiftc -warnings-as-errors -Xswiftc -swift-version -Xswiftc 3
     - run: swift build  # generated linuxmain requires Swift 5 sadly
 
   linux-code-cov:
     name: linux
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-20.04
     strategy:
       matrix:
         swift:
@@ -46,7 +46,7 @@ jobs:
     container:
       image: swift:${{ matrix.swift }}
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4.1.7
     - run: swift build -Xswiftc -warnings-as-errors -Xswiftc -swift-version -Xswiftc 4
     - run: swift build -Xswiftc -warnings-as-errors -Xswiftc -swift-version -Xswiftc 4.2
     - run: swift test --enable-code-coverage --parallel
@@ -70,7 +70,7 @@ jobs:
     runs-on: macos-latest
     name: linux (validate manifests)
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4.1.7
     - run: swift test --generate-linuxmain
     - run: git diff --exit-code
 
@@ -86,7 +86,7 @@ jobs:
     - uses: maxim-lobanov/setup-xcode@v1
       with:
         xcode-version: 15.2
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v4.1.7
     - uses: sersoft-gmbh/xcodebuild-action@v1
       with:
         project: PromiseKit.xcodeproj
