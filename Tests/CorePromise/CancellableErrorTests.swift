@@ -134,7 +134,7 @@ class CancellationTests: XCTestCase {
 
 #if swift(>=3.2)
     func testIsCancelled() {
-        XCTAssertTrue(PMKError.cancelled.isCancelled)
+        XCTAssertTrue(PMKError<Void>.cancelled.isCancelled)
         XCTAssertTrue(URLError.cancelled.isCancelled)
         XCTAssertTrue(CocoaError.cancelled.isCancelled)
         XCTAssertFalse(CocoaError(_nsError: NSError(domain: NSCocoaErrorDomain, code: CocoaError.Code.coderInvalidValue.rawValue)).isCancelled)

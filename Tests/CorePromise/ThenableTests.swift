@@ -100,8 +100,11 @@ class ThenableTests: XCTestCase {
         Promise.value("a").compactMap {
             Int($0)
         }.catch {
-            if case PMKError.compactMap = $0 {} else {
-                XCTFail()
+            switch $0 {
+            case PMKError<String>.compactMap:
+                break
+            default:
+                return XCTFail()
             }
             ex.fulfill()
         }
@@ -214,7 +217,7 @@ class ThenableTests: XCTestCase {
         // extensive use of `done` in A+ tests since PMK 5
 
         let ex = expectation(description: "")
-        Promise<Int>(error: PMKError.badInput).then { x -> Promise<Int> in
+        Promise<Int>(error: PMKError<Void>.badInput).then { x -> Promise<Int> in
             XCTFail()
             return .value(x)
         }.catch { _ in

@@ -175,7 +175,7 @@ public func when<U: Thenable, V: Thenable, W: Thenable, X: Thenable, Y: Thenable
 public func when<It: IteratorProtocol>(fulfilled promiseIterator: It, concurrently: Int) -> Promise<[It.Element.T]> where It.Element: Thenable {
 
     guard concurrently > 0 else {
-        return Promise(error: PMKError.badInput)
+        return Promise(error: PMKError<Void>.badInput)
     }
 
     var generator = promiseIterator

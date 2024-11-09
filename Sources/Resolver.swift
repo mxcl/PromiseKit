@@ -36,7 +36,7 @@ public extension Resolver {
         } else if let obj = obj {
             fulfill(obj)
         } else {
-            reject(PMKError.invalidCallingConvention)
+            reject(PMKError<Void>.invalidCallingConvention)
         }
     }
 
