@@ -183,10 +183,7 @@ class WrapTests: XCTestCase {
     }
 
     func testPendingPromiseDeallocated() throws {
-        #if os(Android)
-        throw XCTSkip()
-        #endif
-
+        #if !os(Android)
         // NOTE this doesn't seem to register the `deinit` as covered :(
         // BUT putting a breakpoint in the deinit CLEARLY shows it getting covered…
 
@@ -195,7 +192,7 @@ class WrapTests: XCTestCase {
             var ex: XCTestExpectation!
 
             deinit {
-                after(.milliseconds(100)).done({ self.ex.fulfill() })
+                after(.milliseconds(100)).done(ex.fulfill)
             }
         }
 
@@ -206,6 +203,7 @@ class WrapTests: XCTestCase {
             foo.ex = ex
         }
         wait(for: [ex], timeout: 10)
+        #endif
     }
 
     func testVoidResolverFulfillAmbiguity() {
