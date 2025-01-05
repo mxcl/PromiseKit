@@ -55,7 +55,7 @@ extension CatchableTests {
 
         func helper(error: Swift.Error) {
             let ex = expectation(description: "")
-            Promise<Void>(error: error).recover { _ in }.done(ex.fulfill)
+            Promise<Void>(error: error).recover { _ in }.done({ ex.fulfill() })
             wait(for: [ex], timeout: 10)
         }
 
@@ -65,7 +65,7 @@ extension CatchableTests {
 
     func test__void_specialized_full_recover__fulfilled_path() {
         let ex = expectation(description: "")
-        Promise().recover { _ in XCTFail() }.done(ex.fulfill)
+        Promise().recover { _ in XCTFail() }.done({ ex.fulfill() })
         wait(for: [ex], timeout: 10)
     }
 
@@ -76,7 +76,7 @@ extension CatchableTests {
             Promise<Void>(error: error).recover(policy: policy) { err in
                 guard x < 1 else { throw err }
                 x += 1
-            }.done(ex.fulfill).silenceWarning()
+            }.done({ ex.fulfill() }).silenceWarning()
             wait(for: [ex], timeout: 10)
         }
 

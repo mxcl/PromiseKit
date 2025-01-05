@@ -131,13 +131,13 @@ class WrapTests: XCTestCase {
         let ex1 = expectation(description: "")
         let kf1 = KittenFetcher(value: nil, error: nil)
         Promise { seal in
-            kf1.fetchWithCompletionBlock4(block: seal.resolve)
-        }.done(ex1.fulfill).silenceWarning()
+            kf1.fetchWithCompletionBlock4(block: { seal.resolve($0) })
+        }.done({ ex1.fulfill() }).silenceWarning()
 
         let ex2 = expectation(description: "")
         let kf2 = KittenFetcher(value: nil, error: Error.test)
         Promise { seal in
-            kf2.fetchWithCompletionBlock4(block: seal.resolve)
+            kf2.fetchWithCompletionBlock4(block: { seal.resolve($0) })
         }.catch { _ in ex2.fulfill() }
 
         wait(for: [ex1, ex2], timeout: 1)
@@ -182,7 +182,10 @@ class WrapTests: XCTestCase {
         XCTAssertFalse(Promise<Int>(error: Error.test).result?.isFulfilled ?? true)
     }
 
-    func testPendingPromiseDeallocated() {
+    func testPendingPromiseDeallocated() throws {
+        #if os(Android)
+        throw XCTSkip()
+        #endif
 
         // NOTE this doesn't seem to register the `deinit` as covered :(
         // BUT putting a breakpoint in the deinit CLEARLY shows it getting covered…
@@ -192,7 +195,7 @@ class WrapTests: XCTestCase {
             var ex: XCTestExpectation!
 
             deinit {
-                after(.milliseconds(100)).done(ex.fulfill)
+                after(.milliseconds(100)).done({ self.ex.fulfill() })
             }
         }
 

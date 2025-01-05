@@ -95,3 +95,8 @@ jobs:
         action: test
         enable-code-coverage: true
     - uses: codecov/codecov-action@v1
+  test-android:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v4
+    - uses: skiptools/swift-android-action@v2

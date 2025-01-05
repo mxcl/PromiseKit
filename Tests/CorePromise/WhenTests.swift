@@ -124,7 +124,7 @@ class WhenTests: XCTestCase {
         let p3 = Promise.value(3).done { _ in }
         let p4 = Promise.value(4).done { _ in }
 
-        when(fulfilled: p1, p2, p3, p4).done(e1.fulfill).silenceWarning()
+        when(fulfilled: p1, p2, p3, p4).done({ e1.fulfill() }).silenceWarning()
 
         waitForExpectations(timeout: 1, handler: nil)
     }
@@ -244,8 +244,8 @@ class WhenTests: XCTestCase {
             ex1.fulfill()
         }
 
-        p2.ensure { after(.milliseconds(100)).done(ex2.fulfill) }.silenceWarning()
-        p3.ensure { after(.milliseconds(100)).done(ex3.fulfill) }.silenceWarning()
+        p2.ensure { after(.milliseconds(100)).done({ ex2.fulfill() }) }.silenceWarning()
+        p3.ensure { after(.milliseconds(100)).done({ ex3.fulfill() }) }.silenceWarning()
 
         waitForExpectations(timeout: 1, handler: nil)
     }

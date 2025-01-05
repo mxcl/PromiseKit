@@ -1,6 +1,9 @@
 @testable import PromiseKit
 import Dispatch
 import XCTest
+#if canImport(Android)
+import Android
+#endif
 
 class LoggingTests: XCTestCase {
     /**

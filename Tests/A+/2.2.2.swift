@@ -27,7 +27,7 @@ class Test222: XCTestCase {
                 }
                 specify("never fulfilled") { d, expectation in
                     d.promise.done{ XCTFail() }.silenceWarning()
-                    after(ticks: 1000, execute: expectation.fulfill)
+                    after(ticks: 1000, execute: { expectation.fulfill() })
                 }
             }
 
@@ -42,12 +42,12 @@ class Test222: XCTestCase {
                     }
                 }
                 specify("trying to fulfill a pending promise more than once, immediately") { d, expectation in
-                    d.promise.done(expectation.fulfill).silenceWarning()
+                    d.promise.done({ expectation.fulfill() }).silenceWarning()
                     d.fulfill()
                     d.fulfill()
                 }
                 specify("trying to fulfill a pending promise more than once, delayed") { d, expectation in
-                    d.promise.done(expectation.fulfill).silenceWarning()
+                    d.promise.done({ expectation.fulfill() }).silenceWarning()
                     after(ticks: 5) {
                         d.fulfill()
                         d.fulfill()
@@ -55,24 +55,24 @@ class Test222: XCTestCase {
                 }
                 specify("trying to fulfill a pending promise more than once, immediately then delayed") { d, expectation in
                     let ex = (expectation, mkex())
-                    d.promise.done(ex.0.fulfill).silenceWarning()
+                    d.promise.done({ ex.0.fulfill() }).silenceWarning()
                     d.fulfill()
                     after(ticks: 5) {
                         d.fulfill()
                     }
-                    after(ticks: 10, execute: ex.1.fulfill)
+                    after(ticks: 10, execute: { ex.1.fulfill() })
                 }
                 specify("when multiple `then` calls are made, spaced apart in time") { d, expectation in
                     let ex = (expectation, self.expectation(description: ""), self.expectation(description: ""), self.expectation(description: ""))
 
                     do {
-                        d.promise.done(ex.0.fulfill).silenceWarning()
+                        d.promise.done({ ex.0.fulfill() }).silenceWarning()
                     }
                     after(ticks: 5) {
-                        d.promise.done(ex.1.fulfill).silenceWarning()
+                        d.promise.done({ ex.1.fulfill() }).silenceWarning()
                     }
                     after(ticks: 10) {
-                        d.promise.done(ex.2.fulfill).silenceWarning()
+                        d.promise.done({ ex.2.fulfill() }).silenceWarning()
                     }
                     after(ticks: 15) {
                         d.fulfill()
@@ -82,9 +82,9 @@ class Test222: XCTestCase {
                 specify("when `then` is interleaved with fulfillment") { d, expectation in
                     let ex = (expectation, self.expectation(description: ""), self)
 
-                    d.promise.done(ex.0.fulfill).silenceWarning()
+                    d.promise.done({ ex.0.fulfill() }).silenceWarning()
                     d.fulfill()
-                    d.promise.done(ex.1.fulfill).silenceWarning()
+                    d.promise.done({ ex.1.fulfill() }).silenceWarning()
                 }
             }
         }
