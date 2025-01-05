@@ -30,7 +30,7 @@ class Test223: XCTestCase {
                 }
                 specify("never rejected") { d, expectation in
                     d.promise.catch { _ in XCTFail() }
-                    after(ticks: 1, execute: { expectation.fulfill() })
+                    after(ticks: 1, execute: expectation.fulfill)
                 }
             }
             describe("2.2.3.3: it must not be called more than once.") {

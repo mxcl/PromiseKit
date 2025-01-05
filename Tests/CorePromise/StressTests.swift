@@ -74,5 +74,5 @@ private func stressDataRace<T: Equatable>(expectation e1: XCTestExpectation, ite
         }
     }
 
-    group.notify(queue: queue, execute: { e1.fulfill() })
+    group.notify(queue: queue, execute: e1.fulfill)
 }
