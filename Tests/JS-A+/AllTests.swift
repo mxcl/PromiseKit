@@ -5,7 +5,7 @@
 //  Created by Lois Di Qual on 2/28/18.
 //
 
-#if swift(>=3.2)
+#if swift(>=3.2) && !os(watchOS)
 
 import XCTest
 import PromiseKit

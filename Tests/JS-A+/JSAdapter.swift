@@ -5,6 +5,8 @@
 //  Created by Lois Di Qual on 3/2/18.
 //
 
+#if !os(watchOS)
+
 import Foundation
 import JavaScriptCore
 import PromiseKit
@@ -51,3 +53,5 @@ enum JSAdapter {
         return object
     }
 }
+
+#endif

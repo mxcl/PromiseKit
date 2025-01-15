@@ -108,16 +108,17 @@ class CancellationTests: XCTestCase {
       #endif
 
       #if canImport(StoreKit)
-        do {
-            let err = SKError(.paymentCancelled)
-            XCTAssertTrue(err.isCancelled)
-            throw err
-        } catch {
-            XCTAssertTrue(error.isCancelled)
+        if #available(watchOS 6.2, *) {
+            do {
+                let err = SKError(.paymentCancelled)
+                XCTAssertTrue(err.isCancelled)
+                throw err
+            } catch {
+                XCTAssertTrue(error.isCancelled)
+            }
+            
+            XCTAssertFalse(SKError(.clientInvalid).isCancelled)
         }
-
-        XCTAssertFalse(SKError(.clientInvalid).isCancelled)
-
       #endif
     }
 

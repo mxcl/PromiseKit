@@ -5,7 +5,7 @@
 //  Created by Lois Di Qual on 3/1/18.
 //
 
-#if swift(>=3.2)
+#if swift(>=3.2) && !os(watchOS)
 
 import Foundation
 import JavaScriptCore
