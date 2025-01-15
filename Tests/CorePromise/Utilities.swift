@@ -4,7 +4,7 @@ extension Promise {
     func silenceWarning() {}
 }
 
-#if os(Linux)
+#if os(Linux) || os(Android)
 import func CoreFoundation._CFIsMainThread
 
 extension Thread {
