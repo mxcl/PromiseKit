@@ -5,6 +5,8 @@
 //  Created by Lois Di Qual on 3/1/18.
 //
 
+#if !os(watchOS)
+
 import Foundation
 import XCTest
 import PromiseKit
@@ -92,3 +94,5 @@ class JSPromise: NSObject, JSPromiseProtocol {
         return JSPromise(promise: newPromise)
     }
 }
+
+#endif

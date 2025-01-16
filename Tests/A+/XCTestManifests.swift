@@ -1,7 +1,7 @@
 #if !canImport(ObjectiveC)
 import XCTest
 
-#if os(Linux) || os(Android)
+#if os(Android)
 extension XCTestExpectation {
     func fulfill() {
         fulfill(#file, line: #line)

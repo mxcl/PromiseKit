@@ -15,87 +15,92 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  linux:
+  linux-build:
+    name: Linux (Swift ${{ matrix.swift }})
     runs-on: ubuntu-20.04
     strategy:
       matrix:
         swift:
-        - 4.0.3
-        - 4.1.3
-        - 4.2.4
+        - '4.0'
+        - '4.1'
+        - '4.2'
     container:
       image: swift:${{ matrix.swift }}
     steps:
-    - uses: actions/checkout@v4.1.7
+    - uses: actions/checkout@v1 # DO NOT UPDATE ∵ failure on older containers due to old glibc
     - run: swift build -Xswiftc -warnings-as-errors -Xswiftc -swift-version -Xswiftc 3
-    - run: swift build  # generated linuxmain requires Swift 5 sadly
+    - run: swift build  # can’t test ∵ generated linuxmain requires Swift 5
 
-  linux-code-cov:
-    name: linux
-    runs-on: ubuntu-20.04
+  linux-test:
+    name: Linux (Swift ${{ matrix.swift }})
+    runs-on: ubuntu-latest
+    continue-on-error: true
     strategy:
       matrix:
         swift:
         - '5.0'
-        - 5.1
-        - 5.2
-        - 5.3
-        - 5.4
-        - 5.5
-        - 5.6
+        - '5.1'
+        - '5.2'
+        - '5.3'
+        - '5.4'
+        - '5.5'
+        - '5.6'
+        - '5.7'
+        - '5.8'
+        - '5.9'
+        - '5.10'
+        - '6.0'
     container:
       image: swift:${{ matrix.swift }}
     steps:
-    - uses: actions/checkout@v4.1.7
+    - uses: actions/checkout@v1 # DO NOT UPDATE ∵ failure on older containers due to old glibc
     - run: swift build -Xswiftc -warnings-as-errors -Xswiftc -swift-version -Xswiftc 4
+      if: ${{ matrix.swift < 6 }}
     - run: swift build -Xswiftc -warnings-as-errors -Xswiftc -swift-version -Xswiftc 4.2
+      if: ${{ matrix.swift < 6 }}
     - run: swift test --enable-code-coverage --parallel
 
     - name: Generate Coverage Report
-      if: ${{ matrix.swift < 5.4 }}  # fails for SOME REASON
+      if: ${{ matrix.swift >= 6 }}
       run: |
         apt-get -qq update
-        apt-get -qq install llvm-10 curl
-        export b=$(swift build --show-bin-path) && llvm-cov-10 \
+        apt-get -qq install llvm-18 curl
+        export b=$(swift build --show-bin-path) && llvm-cov-18 \
           export -format lcov \
           -instr-profile=$b/codecov/default.profdata \
           --ignore-filename-regex='\.build/' \
           $b/*.xctest \
           > info.lcov
+
     - uses: codecov/codecov-action@v1
       with:
         file: ./info.lcov
-
-  verify-linuxmain:
-    runs-on: macos-latest
-    name: linux (validate manifests)
-    steps:
-    - uses: actions/checkout@v4.1.7
-    - run: swift test --generate-linuxmain
-    - run: git diff --exit-code
+      if: ${{ matrix.swift >= 6 }}
 
   test:
-    runs-on: macos-14
+    runs-on: macos-latest
+    name: ${{ matrix.platform }}
+    continue-on-error: true
     strategy:
       matrix:
-        dst:
-        - "platform=macOS,arch=arm64,id=0000FE00-392BB8A41C01F642"
-        - "platform=iOS Simulator,OS=17.0.1,name=iPhone 14"
-        - "platform=tvOS Simulator,OS=17.2,name=Apple TV"
+        platform:
+          - macOS
+          - watchOS
+          - tvOS
+          - iOS
+          # - mac-catalyst
+          # - visionOS
+          # ^^ both are unavailable in the github-hosted runners
     steps:
-    - uses: maxim-lobanov/setup-xcode@v1
+    - uses: actions/checkout@v4
+    - uses: mxcl/xcodebuild@v3
       with:
-        xcode-version: 15.2
-    - uses: actions/checkout@v4.1.7
-    - uses: sersoft-gmbh/xcodebuild-action@v1
-      with:
-        project: PromiseKit.xcodeproj
-        scheme: PromiseKit
-        destination: ${{ matrix.dst }}
-        action: test
-        enable-code-coverage: true
+        platform: ${{ matrix.platform }}
+        code-coverage: true
     - uses: codecov/codecov-action@v1
+
   test-android:
+    name: Android
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4

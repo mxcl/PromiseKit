@@ -5,6 +5,8 @@
 //  Created by Lois Di Qual on 3/2/18.
 //
 
+#if !os(watchOS)
+
 import Foundation
 import JavaScriptCore
 
@@ -113,4 +115,6 @@ extension String {
         return characters.first
     }
 }
+#endif
+
 #endif
