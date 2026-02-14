@@ -57,6 +57,25 @@ class WhenTests: XCTestCase {
         #endif
     }
     
+    func testParameterPacks() {
+        #if swift(>=5.9)
+        let e1 = expectation(description: "")
+        let p1 = Promise.value(1)
+        let g2 = Guarantee.value(2)
+        let p3 = Promise.value(3)
+        let g4 = Guarantee.value(4)
+
+        when(fulfilled: p1, g2, p3, g4).done { x1, x2, x3, x4 in
+            XCTAssertEqual(x1, 1)
+            XCTAssertEqual(x2, 2)
+            XCTAssertEqual(x3, 3)
+            XCTAssertEqual(x4, 4)
+            e1.fulfill()
+        }.silenceWarning()
+        waitForExpectations(timeout: 1, handler: nil)
+        #endif
+    }
+    
     func testDoubleTuple() {
         let e1 = expectation(description: "")
         let p1 = Promise.value(1)
