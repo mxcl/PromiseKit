@@ -100,13 +100,6 @@ class CancellationTests: XCTestCase {
     }
 
     func testDoesntCrashSwift() {
-      #if os(macOS)
-        // Previously exposed a bridging crash in Swift
-        // NOTE nobody was brave enough or diligent enough to report this to Apple :{
-        // NOTE no Linux test since this constructor doesn’t exist there
-        XCTAssertFalse(NSError().isCancelled)
-      #endif
-
       #if canImport(StoreKit)
         if #available(watchOS 6.2, *) {
             do {

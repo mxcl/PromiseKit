@@ -76,14 +76,17 @@ class RaceTests: XCTestCase {
     func testFulfilledWithNoWinner() {
         enum Error: Swift.Error { case test1, test2 }
         let ex = expectation(description: "")
-        let promises: [Promise<Int>] = [after(seconds: 1).map { _ in throw Error.test1 }, after(seconds: 2).map { _ in throw Error.test2 }]
+        let promises: [Promise<Int>] = [
+            after(seconds: 1).map { _ in throw Error.test1 },
+            after(seconds: 2).map { _ in throw Error.test2 }
+        ]
         race(fulfilled: promises).done { _ in
-            XCTFail()
+            XCTFail("Done with error")
             ex.fulfill()
         }.catch {
-            guard let pmkError = $0 as? PMKError else { return XCTFail() }
-            guard case .noWinner = pmkError else { return XCTFail() }
-            guard pmkError.debugDescription == "All thenables passed to race(fulfilled:) were rejected" else { return XCTFail() }
+            guard let pmkError = $0 as? PMKError else { return XCTFail("error is not PMKError") }
+            guard case .noWinner = pmkError else { return XCTFail("error is not .noWinner") }
+            guard pmkError.debugDescription == "All thenables passed to race(fulfilled:) were rejected" else { return XCTFail("Not all thenables passed to race(fulfilled:) were rejected") }
             ex.fulfill()
         }
         wait(for: [ex], timeout: 10)

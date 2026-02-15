@@ -78,7 +78,7 @@ jobs:
       if: ${{ matrix.swift >= 6 }}
 
   test:
-    runs-on: macos-26
+    runs-on: macos-latest
     name: ${{ matrix.platform }}
     continue-on-error: true
     strategy:
@@ -101,7 +101,7 @@ jobs:
 
   test-android:
     name: Android
-    runs-on: ubuntu-22.04
+    runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v4
     - uses: skiptools/swift-android-action@v2
