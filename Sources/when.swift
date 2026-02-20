@@ -110,6 +110,14 @@ public func when(fulfilled thenables: [any Thenable]) -> Promise<[Any]> {
 }
 #endif
 
+#if swift(>=5.9)
+public func when<each U: Thenable>(fulfilled: repeat each U) -> Promise<(repeat (each U).T)> {
+    var voidPromises: [Promise<Void>] = []
+    repeat voidPromises.append((each fulfilled).asVoid())
+    return _when(voidPromises).map(on: nil) { (repeat (each fulfilled).value!) }
+}
+#endif
+
 /// Wait for all promises in a set to fulfill.
 public func when<U: Thenable>(fulfilled promises: U...) -> Promise<Void> where U.T == Void {
     return _when(promises)
